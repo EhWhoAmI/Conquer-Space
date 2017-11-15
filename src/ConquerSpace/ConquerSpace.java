@@ -22,7 +22,7 @@ public class ConquerSpace {
         loading.dispose();
         
         //New Game Menu
-        //MainMenu menu = new MainMenu();
-        //menu.setVisible(true);
+        MainMenu menu = new MainMenu();
+        menu.setVisible(true);
     }
 }

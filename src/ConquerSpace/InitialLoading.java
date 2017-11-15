@@ -1,7 +1,6 @@
 package ConquerSpace;
 
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
