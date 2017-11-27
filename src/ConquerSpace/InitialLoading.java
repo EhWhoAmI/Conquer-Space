@@ -4,12 +4,16 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import java.util.logging.Logger;
+
+import ConquerSpace.util.CQSPLogger;
 
 /**
  *
  * @author Zyun
  */
 public class InitialLoading extends JFrame{
+	private static final Logger LOGGER = CQSPLogger.getLogger(InitialLoading.class.getName());
     private Runnable r;
     private JProgressBar progressBar;
     private JLabel text;
