@@ -10,18 +10,34 @@ import java.util.logging.Logger;
 
 import ConquerSpace.start.gui.Manual;
 import ConquerSpace.util.CQSPLogger;
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.logging.Level;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Zyun
  */
 public class MainMenu extends JFrame{
-	private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
     public MainMenu(){
 		setTitle("Conquer Space");
+                addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        dispose();
+                        LOGGER.log(Level.INFO, "Frames: {0}", Frame.getFrames().length);
+                        if (Frame.getFrames().length == 0) {
+                            System.exit(0);
+                        }
+                    }
+                });
 		setLayout(new GridLayout(2, 1, 10, 10));
 		add(new TopBanner());
 		add(new BottomMenu());
 		pack();
+                
     }
     
     private class TopBanner extends JPanel {
@@ -55,6 +71,14 @@ public class MainMenu extends JFrame{
 				Manual man = Manual.getInstance();
 				man.setVisible(true);
 			});
+                        
+                        about.addActionListener(e -> {
+                            JOptionPane.showMessageDialog(this, "About:\nVersion: " + ConquerSpace.VERSION.toString(), "About", JOptionPane.INFORMATION_MESSAGE);
+			});
+                        
+                        credits.addActionListener(e -> {
+                             JOptionPane.showMessageDialog(this, "Coding:\nZyun\nConcept:\nZyun", "Credits", JOptionPane.INFORMATION_MESSAGE);
+                        });
 			add(startGame);
 			add(resumeGame);
 			add(about);

@@ -22,6 +22,7 @@ public class ManualContent extends JFrame {
 		setSize(500,400);
 		text = new JTextPane();
 		text.setContentType("text/html");
+                text.setEditable(false);
 		add(text);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent arg0) {

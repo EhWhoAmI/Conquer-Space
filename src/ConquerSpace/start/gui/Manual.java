@@ -16,6 +16,10 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import ConquerSpace.util.CQSPLogger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
 
 public class Manual extends JFrame implements ListSelectionListener{
 	/**
@@ -69,8 +73,12 @@ public class Manual extends JFrame implements ListSelectionListener{
 		while (keys.hasMoreElements()) {
 			String str = (String) keys.nextElement();
 			if(prop.getProperty(str) == list.getSelectedValue()) {
-				value = ManualContent.getInstance(str);
-				break;
+                            try {
+                                value = ManualContent.getInstance(new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
+                                break;
+                            } catch (IOException ex) {
+                                Logger.getLogger(Manual.class.getName()).log(Level.SEVERE, null, ex);
+                            }
 			}
 		}
 		
