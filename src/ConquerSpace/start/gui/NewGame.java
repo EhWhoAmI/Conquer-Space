@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 public class NewGame extends JFrame {
     private JLabel universeSizeLabel;
     private JComboBox<String> universeSizeBox;
+    private JLabel universeTypeLabel;
+    private JComboBox<String> universeTypeComboBox;
+    private JLabel universeHistoryLabel;
     public NewGame() {
         setSize(500, 400);
         setLayout(new GridLayout(3, 4));
@@ -21,8 +24,12 @@ public class NewGame extends JFrame {
         universeSizeBox.addItem("Small");
         universeSizeBox.addItem("Medium");
         
+        universeTypeLabel = new JLabel("Universe Type");
+        universeTypeComboBox = new JComboBox<>();
         add(universeSizeLabel);
         add(universeSizeBox);
+        add(universeTypeLabel);
+        add(universeTypeComboBox);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 }
