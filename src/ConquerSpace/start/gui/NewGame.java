@@ -1,5 +1,7 @@
 package ConquerSpace.start.gui;
 
+import ConquerSpace.ConquerSpace;
+import ConquerSpace.util.Version;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -46,10 +49,12 @@ public class NewGame extends JFrame implements ActionListener{
         
         universeTypeLabel = new JLabel("Universe Type");
         universeTypeComboBox = new JComboBox<>();
-        universeTypeComboBox.addItem("Spiral");
+        //Remove spiral and elliptical for now because it is easier
+        //universeTypeComboBox.addItem("Spiral");
         universeTypeComboBox.addItem("Irregular");
-        universeTypeComboBox.addItem("Elliptical");
+        //universeTypeComboBox.addItem("Elliptical");
         
+        //Doesnt make a difference for now...
         universeHistoryLabel = new JLabel("Universe Age");
         universeHistoryComboBox = new JComboBox<>();
         universeHistoryComboBox.addItem("Short");
@@ -105,12 +110,16 @@ public class NewGame extends JFrame implements ActionListener{
             ScriptEngine engine = manager.getEngineByName("python");
             
             engine.put("universeConfig", config);
+            engine.put("version", ConquerSpace.VERSION);
             reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
             engine.eval(reader);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
         } catch (ScriptException ex) {
             Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
+
         } finally {
             try {
                 if (reader != null)
