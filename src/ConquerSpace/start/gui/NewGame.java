@@ -113,12 +113,14 @@ public class NewGame extends JFrame implements ActionListener{
             engine.put("version", ConquerSpace.VERSION);
             reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
             engine.eval(reader);
+            setVisible(false);
+            // Show universe
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
         } catch (ScriptException ex) {
             Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
 
         } finally {
             try {

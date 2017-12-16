@@ -5,8 +5,6 @@ import java.util.logging.Logger;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
 import com.alee.laf.WebLookAndFeel;
-import java.io.IOException;
-import java.util.logging.Level;
 
 /**
  *
