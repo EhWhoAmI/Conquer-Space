@@ -1,10 +1,13 @@
-package ConquerSpace.start.gui;
+package ConquerSpace.script;
 
 import ConquerSpace.ConquerSpace;
-import ConquerSpace.util.Version;
+import ConquerSpace.start.gui.NewGame;
+import ConquerSpace.start.gui.UniverseConfig;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,12 +21,20 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.ParsingException;
+import nu.xom.Serializer;
+import nu.xom.ValidityException;
 
 /**
  *
  * @author Zyun
  */
-public class NewGame extends JFrame implements ActionListener{
+public class UniverseGenTest extends JFrame implements ActionListener{
+    private volatile static boolean waiting = false;
     private JLabel universeSizeLabel;
     private JComboBox<String> universeSizeBox;
     private JLabel universeTypeLabel;
@@ -36,7 +47,8 @@ public class NewGame extends JFrame implements ActionListener{
     private JComboBox<String>civilazitionComboBox;
     private JLabel quoteLabel;
     private JButton exitButton;
-    public NewGame() {
+    public UniverseGenTest() {
+        waiting = true;
         setSize(500, 400);
         setTitle("New Game");
         setLayout(new GridLayout(3, 4, 10, 10));
@@ -89,7 +101,7 @@ public class NewGame extends JFrame implements ActionListener{
         add(quoteLabel);
         add(exitButton);
         
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
     }
 
@@ -97,6 +109,7 @@ public class NewGame extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         FileReader reader = null;
         try {
+            waiting = false;
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
             UniverseConfig config = new UniverseConfig();
@@ -106,7 +119,6 @@ public class NewGame extends JFrame implements ActionListener{
             config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
             config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
             
-            //Init script
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName("python");
             
@@ -116,8 +128,6 @@ public class NewGame extends JFrame implements ActionListener{
             engine.eval(reader);
             setVisible(false);
             // Show universe
-            
-            //Read it...
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
@@ -132,7 +142,31 @@ public class NewGame extends JFrame implements ActionListener{
             } catch (IOException ex) {
                 Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
     }
     
+    public static void main(String[] args) throws FileNotFoundException, ParsingException, ValidityException, IOException {
+        while (true) {
+            UniverseGenTest test = new UniverseGenTest();
+            test.setVisible(true);
+            while (UniverseGenTest.waiting);
+            //Get all xml.
+            File xmlFile = new File(System.getProperty("user.home") + "/.conquerspace/save1.xml");
+            if (!xmlFile.exists()) {
+                throw new FileNotFoundException("The file " + xmlFile + " was not found");
+            }
+            Builder xmlBuilder = new Builder();
+            Document build = xmlBuilder.build(xmlFile);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Serializer serializer = new Serializer(baos);
+            serializer.setIndent(4);
+            serializer.write(build);
+            
+            JTextArea area = new JTextArea(baos.toString(), 10, 50);
+            JScrollPane sampleScrollPane = new JScrollPane (area,     JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            JOptionPane.showMessageDialog(null, sampleScrollPane);
+            test = null;
+        }
+    }
 }

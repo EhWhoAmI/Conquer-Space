@@ -33,7 +33,7 @@ dateE = ET.SubElement(root, 'date')
 dateE.text = str(datetime.now())
 
 # Set universe
-universeE = ET.SubElement(versionE, 'universe')
+universeE = ET.SubElement(root, 'universe')
 sectors = 0
 if universeSize == 1:
     #small -- 2 sectors
@@ -45,11 +45,17 @@ else:
     sectors = 4
 
 for i in range(sectors):
-    sectorE = ET.SubElement(universeE, 'sector', {'id':str(i)})
+    # For sectors, create galatic location
+    sectorDegrees = (random.randint(0, 90) * 4) #90 for 360/4
+    sectorDistance = random.randint(1, 100)
+    sectorE = ET.SubElement(universeE, 'sector', {'id':str(i), 'degs':str(sectorDegrees), 'dist':str(sectorDistance)})
     # Add Starsystems
     starSystems = random.randint(10, 20)
     for n in range(starSystems):
-        starSystem = ET.SubElement(sectorE, 'star-system', {'id':str(n)})
+        # For star systems, create galatic location
+        systemDegrees = (random.randint(0, 90) * 4) #90 for 360/4
+        systemDistance = random.randint(1, 100)
+        starSystem = ET.SubElement(sectorE, 'star-system', {'id':str(n), 'degs':str(systemDegrees), 'dist':str(systemDistance)})
         # Stars
         stars = 1
         for b in range(stars):

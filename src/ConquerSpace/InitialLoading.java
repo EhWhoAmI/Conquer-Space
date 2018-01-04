@@ -1,16 +1,15 @@
 package ConquerSpace;
 
-import java.awt.GridLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import java.util.logging.Logger;
-
 import ConquerSpace.util.CQSPLogger;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 
 /**
  *

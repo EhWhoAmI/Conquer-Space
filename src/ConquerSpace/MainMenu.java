@@ -11,10 +11,6 @@ import java.util.logging.Logger;
 import ConquerSpace.start.gui.Manual;
 import ConquerSpace.start.gui.NewGame;
 import ConquerSpace.util.CQSPLogger;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 /**
@@ -63,25 +59,33 @@ public class MainMenu extends JFrame {
             options = new JButton("Options");
 
             //Action Listeners
+            startGame.addActionListener(e -> {
+                dispose();
+                NewGame game = new NewGame();
+                game.setVisible(true);
+            });
+            
+            resumeGame.addActionListener(e -> {
+                JOptionPane.showMessageDialog(this, "Forgot to implement LOL :P", "Oops", JOptionPane.INFORMATION_MESSAGE);
+            });
+            
+            about.addActionListener(e -> {
+                JOptionPane.showMessageDialog(this, "About:\nVersion: " + ConquerSpace.VERSION.toString(), "About", JOptionPane.INFORMATION_MESSAGE);
+            });
+            
             manual.addActionListener(e -> {
                 Manual man = Manual.getInstance();
                 man.setVisible(true);
-            });
-
-            about.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, "About:\nVersion: " + ConquerSpace.VERSION.toString(), "About", JOptionPane.INFORMATION_MESSAGE);
             });
 
             credits.addActionListener(e -> {
                 JOptionPane.showMessageDialog(this, "Coding:\nZyun\nConcept:\nZyun", "Credits", JOptionPane.INFORMATION_MESSAGE);
             });
 
-            startGame.addActionListener(e -> {
-                dispose();
-                NewGame game = new NewGame();
-                game.setVisible(true);
+            options.addActionListener(e -> {
+                JOptionPane.showMessageDialog(this, "Forgot to implement LOL :P", "Oops", JOptionPane.INFORMATION_MESSAGE);
             });
-
+            
             add(startGame);
             add(resumeGame);
             add(manual);
