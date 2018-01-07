@@ -41,4 +41,27 @@ public class StarSystem {
     public int getStarCount() {
         return (stars.size());
     }
+
+    public GalaticLocation getGalaticLocation(){
+        return location;
+    }
+    
+    public String toReadableString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Star system " + this.id + " Location-" + location.toString() + ": [\n");
+        //Display stars
+        builder.append("Stars: <");
+        for (Star s: stars) {
+            builder.append(s.toReadableString());
+        }
+        builder.append(">\n");
+        
+        //Display planets
+        builder.append("Planets: <");
+        for (Planet p : planets) {
+            builder.append(p.toReadableString());
+        }
+        builder.append(">\n");
+        return (builder.toString());
+    }
 }

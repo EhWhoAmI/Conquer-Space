@@ -10,6 +10,16 @@ package ConquerSpace.game.universe;
  * @author Zyun
  */
 public class GalaticLocation {
-    float degrees;
-    int distance;
+    private float degrees;
+    private int distance;
+
+    public GalaticLocation(float degrees, int distance) {
+        this.degrees = degrees;
+        this.distance = distance;
+    }
+
+    @Override
+    public String toString() {
+        return("(Degrees: " + degrees + " Distance: " + distance + ")");
+    }
 }
