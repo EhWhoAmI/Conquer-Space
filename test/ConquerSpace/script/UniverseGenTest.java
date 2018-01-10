@@ -1,6 +1,7 @@
 package ConquerSpace.script;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.game.universe.Universe;
 import ConquerSpace.start.gui.NewGame;
 import ConquerSpace.start.gui.UniverseConfig;
 import java.awt.GridLayout;
@@ -34,6 +35,8 @@ import nu.xom.ValidityException;
  * @author Zyun
  */
 public class UniverseGenTest extends JFrame implements ActionListener{
+    
+    private static Universe universe;
     private volatile static boolean waiting = false;
     private JLabel universeSizeLabel;
     private JComboBox<String> universeSizeBox;
@@ -109,7 +112,6 @@ public class UniverseGenTest extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         FileReader reader = null;
         try {
-            waiting = false;
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
             UniverseConfig config = new UniverseConfig();
@@ -126,6 +128,7 @@ public class UniverseGenTest extends JFrame implements ActionListener{
             engine.put("version", ConquerSpace.VERSION);
             reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
             engine.eval(reader);
+            universe = (Universe) engine.get("universeObject");
             setVisible(false);
             // Show universe
         } catch (FileNotFoundException ex) {
@@ -144,29 +147,22 @@ public class UniverseGenTest extends JFrame implements ActionListener{
             }
             
         }
+        waiting = false;
     }
     
     public static void main(String[] args) throws FileNotFoundException, ParsingException, ValidityException, IOException {
         while (true) {
             UniverseGenTest test = new UniverseGenTest();
             test.setVisible(true);
-            while (UniverseGenTest.waiting);
-            //Get all xml.
-            File xmlFile = new File(System.getProperty("user.home") + "/.conquerspace/save1.xml");
-            if (!xmlFile.exists()) {
-                throw new FileNotFoundException("The file " + xmlFile + " was not found");
-            }
-            Builder xmlBuilder = new Builder();
-            Document build = xmlBuilder.build(xmlFile);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Serializer serializer = new Serializer(baos);
-            serializer.setIndent(4);
-            serializer.write(build);
+            while (waiting && universe == null);
             
-            JTextArea area = new JTextArea(baos.toString(), 10, 50);
+            System.out.println(universe.toReadableString());
+            JTextArea area = new JTextArea(universe.toReadableString(), 10, 50);
             JScrollPane sampleScrollPane = new JScrollPane (area,     JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             JOptionPane.showMessageDialog(null, sampleScrollPane);
             test = null;
+            universe = null;
+            waiting = true;
         }
     }
 }

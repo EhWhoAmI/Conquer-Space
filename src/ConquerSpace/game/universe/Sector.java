@@ -38,6 +38,7 @@ public class Sector {
     public Sector(GalaticLocation location, int id) {
         loc = location;
         this.id = id;
+        starSystems = new ArrayList<>();
     }
     public void addStarSystem(StarSystem e) {
         starSystems.add(e);
@@ -57,7 +58,7 @@ public class Sector {
     
     public String toReadableString(){
         StringBuilder builder = new StringBuilder();
-        builder.append("Sector " + this.id + "Position-" + loc.toString() + ": {");
+        builder.append("Sector " + this.id + " Position-" + loc.toString() + ": {");
         for (StarSystem s : starSystems){
             builder.append(s.toReadableString());
         }

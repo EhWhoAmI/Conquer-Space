@@ -12,8 +12,9 @@ public class StarSystem {
     private int id;
     private GalaticLocation location;
     
-    public StarSystem(int id) {
+    public StarSystem(int id, GalaticLocation location) {
         this.id = id;
+        this.location = location;
         planets = new ArrayList<>();
         stars = new ArrayList<>();
     }

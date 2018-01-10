@@ -11,6 +11,7 @@ public class Universe {
     private ArrayList<Sector> sectors;
 
     public Universe() {
+        sectors = new ArrayList<>();
     }
     
     public String toReadableString() {
@@ -21,5 +22,17 @@ public class Universe {
             builder.append(s.toReadableString());
         }
         return (builder.toString());
+    }
+    
+    public void addSector(Sector s) {
+        sectors.add(s);
+    }
+    
+    public Sector getSector(int i) {
+        return (sectors.get(i));
+    }
+    
+    public int getSectorCount() {
+        return(sectors.size());
     }
 }
