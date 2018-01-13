@@ -7,8 +7,6 @@ import ConquerSpace.start.gui.UniverseConfig;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,20 +22,19 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import nu.xom.Builder;
-import nu.xom.Document;
 import nu.xom.ParsingException;
-import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
 /**
- *
+ * This is a test for universe generation. Might add the future universe render function here.
  * @author Zyun
  */
 public class UniverseGenTest extends JFrame implements ActionListener{
-    
+    //
     private static Universe universe;
     private volatile static boolean waiting = false;
+    
+    //Components copied from NewGame.java
     private JLabel universeSizeLabel;
     private JComboBox<String> universeSizeBox;
     private JLabel universeTypeLabel;
@@ -50,6 +47,11 @@ public class UniverseGenTest extends JFrame implements ActionListener{
     private JComboBox<String>civilazitionComboBox;
     private JLabel quoteLabel;
     private JButton exitButton;
+    ///////////////////////////
+    
+    /**
+     * Constructor that creates the universe se
+     */
     public UniverseGenTest() {
         waiting = true;
         setSize(500, 400);
@@ -150,6 +152,14 @@ public class UniverseGenTest extends JFrame implements ActionListener{
         waiting = false;
     }
     
+    /**
+     *
+     * @param args
+     * @throws FileNotFoundException
+     * @throws ParsingException
+     * @throws ValidityException
+     * @throws IOException
+     */
     public static void main(String[] args) throws FileNotFoundException, ParsingException, ValidityException, IOException {
         while (true) {
             UniverseGenTest test = new UniverseGenTest();

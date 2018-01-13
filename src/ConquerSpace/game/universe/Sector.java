@@ -35,27 +35,54 @@ public class Sector {
     private GalaticLocation loc;
     int id;
     
+    /**
+     *
+     * @param location
+     * @param id
+     */
     public Sector(GalaticLocation location, int id) {
         loc = location;
         this.id = id;
         starSystems = new ArrayList<>();
     }
+
+    /**
+     *
+     * @param e
+     */
     public void addStarSystem(StarSystem e) {
         starSystems.add(e);
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public StarSystem getStarSystem(int i) {
         return (starSystems.get(i));
     }
 
+    /**
+     *
+     * @return
+     */
     public int getStarSystemCount() {
         return (starSystems.size());
     }
     
+    /**
+     *
+     * @return
+     */
     public GalaticLocation getGalaticLocation(){
         return loc;
     }
     
+    /**
+     *
+     * @return
+     */
     public String toReadableString(){
         StringBuilder builder = new StringBuilder();
         builder.append("Sector " + this.id + " Position-" + loc.toString() + ": {");

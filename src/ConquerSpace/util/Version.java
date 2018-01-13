@@ -11,6 +11,13 @@ public class Version {
     private int patch;
     private String extras;
 
+    /**
+     *
+     * @param major
+     * @param minor
+     * @param patch
+     * @param extras
+     */
     public Version(int major, int minor, int patch, String extras) {
         this.major = major;
         this.minor = minor;

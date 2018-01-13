@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe;
 
 /**
- *
+ * Planet class
  * @author Zyun
  */
 public class Planet {
@@ -10,6 +10,13 @@ public class Planet {
     private int planetSize;
     private int id;
     
+    /**
+     * Creates planet
+     * @param planetType
+     * @param orbitalDistance
+     * @param planetSize
+     * @param id
+     */
     public Planet(int planetType, int orbitalDistance, int planetSize, int id) {
         this.planetType = planetType;
         this.orbitalDistance = orbitalDistance;
@@ -17,6 +24,10 @@ public class Planet {
         this.id = id;
     }
 
+    /**
+     * Returns a human-readable string
+     * @return a human-readable string.
+     */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
         //Parse planet type.

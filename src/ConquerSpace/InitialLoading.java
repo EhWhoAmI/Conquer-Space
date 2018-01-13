@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 /**
- *
+ * Initial loading screen. Loads everything.
  * @author Zyun
  */
 public class InitialLoading extends JFrame {
@@ -21,6 +21,9 @@ public class InitialLoading extends JFrame {
     private JProgressBar progressBar;
     private JLabel text;
 
+    /**
+     * Constructor to show window.
+     */
     public InitialLoading() {
         setTitle("Conquer Space");
         setLayout(new GridLayout(2, 1, 10, 10));
@@ -34,6 +37,9 @@ public class InitialLoading extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    /**
+     * Run function for the content of the loading.
+     */
     public void run() {
         try {
             //Load the file check.

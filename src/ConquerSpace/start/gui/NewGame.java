@@ -36,6 +36,10 @@ public class NewGame extends JFrame implements ActionListener{
     private JComboBox<String>civilazitionComboBox;
     private JLabel quoteLabel;
     private JButton exitButton;
+
+    /**
+     *
+     */
     public NewGame() {
         setSize(500, 400);
         setTitle("New Game");

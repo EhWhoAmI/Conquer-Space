@@ -14,13 +14,16 @@ import ConquerSpace.util.CQSPLogger;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Main menu.
  * @author Zyun
  */
 public class MainMenu extends JFrame {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
 
+    /**
+     * Constructor, show main menu.
+     */
     public MainMenu() {
         setTitle("Conquer Space");
         setLayout(new GridLayout(2, 1, 10, 10));
@@ -30,6 +33,9 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    /**
+     * 
+     */
     private class TopBanner extends JPanel {
 
         @Override

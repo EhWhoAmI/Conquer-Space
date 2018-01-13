@@ -12,6 +12,11 @@ public class StarSystem {
     private int id;
     private GalaticLocation location;
     
+    /**
+     *
+     * @param id
+     * @param location
+     */
     public StarSystem(int id, GalaticLocation location) {
         this.id = id;
         this.location = location;
@@ -19,34 +24,68 @@ public class StarSystem {
         stars = new ArrayList<>();
     }
     
+    /**
+     *
+     * @param star
+     */
     public void addStar(Star star) {
         stars.add(star);
     }
     
+    /**
+     *
+     * @param planet
+     */
     public void addPlanet(Planet planet) {
         planets.add(planet);
     }
     
+    /**
+     *
+     * @param i
+     * @return
+     */
     public Planet getPlanet(int i) {
         return (planets.get(i));
     }
     
+    /**
+     *
+     * @return
+     */
     public int getPlanetCount() {
         return (planets.size());
     }
     
+    /**
+     *
+     * @param i
+     * @return
+     */
     public Star getStar(int i) {
         return (stars.get(i));
     }
     
+    /**
+     *
+     * @return
+     */
     public int getStarCount() {
         return (stars.size());
     }
 
+    /**
+     *
+     * @return
+     */
     public GalaticLocation getGalaticLocation(){
         return location;
     }
     
+    /**
+     *
+     * @return
+     */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Star system " + this.id + " Location-" + location.toString() + ": [\n");

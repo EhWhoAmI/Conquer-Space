@@ -9,12 +9,22 @@ public class Star {
     private int starSize;
     private int id;
 
+    /**
+     *
+     * @param type
+     * @param starSize
+     * @param id
+     */
     public Star(int type, int starSize, int id) {
         this.type = type;
         this.starSize = starSize;
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Star: " + id + "(type=");

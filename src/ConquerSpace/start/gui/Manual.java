@@ -19,6 +19,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 
+/**
+ *
+ * @author hoong
+ */
 public class Manual extends JFrame implements ListSelectionListener {
     private static final long serialVersionUID = -2589166556749207075L;
     private static Manual current;
@@ -55,6 +59,10 @@ public class Manual extends JFrame implements ListSelectionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    /**
+     *
+     * @return
+     */
     public static Manual getInstance() {
         if (current == null) {
             current = new Manual();

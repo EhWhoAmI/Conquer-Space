@@ -5,6 +5,11 @@ package ConquerSpace.game.universe;
  * @author Zyun
  */
 public class UniverseToReadableStringTest {
+
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         //Create universe
         Universe universe = new Universe();

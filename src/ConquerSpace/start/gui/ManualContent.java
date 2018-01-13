@@ -6,11 +6,20 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
 
+/**
+ *
+ * @author hoong
+ */
 public class ManualContent extends JFrame {
 
     private static ManualContent instance;
     private JTextPane text;
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     public static ManualContent getInstance(String file) {
         if (instance == null) {
             instance = new ManualContent();
