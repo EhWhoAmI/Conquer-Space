@@ -2,7 +2,6 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.ui.UniverseRenderer;
-import ConquerSpace.start.gui.NewGame;
 import ConquerSpace.start.gui.UniverseConfig;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -17,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -26,7 +26,7 @@ public final class UniverseRenderTest {
 
     public static void main(String[] args) throws FileNotFoundException, ScriptException {
         //Select universe
-        JPanel pan = new JPanel(new GridLayout(3, 4, 10, 10));
+        JPanel pan = new JPanel(new GridLayout(4, 4, 10, 10));
         //Init components
         JLabel universeSizeLabel;
         JComboBox<String> universeSizeBox;
@@ -38,6 +38,8 @@ public final class UniverseRenderTest {
         JComboBox<String> planetCommonalityComboBox;
         JLabel civilizationsLabel;
         JComboBox<String> civilazitionComboBox;
+        JLabel seedLabel;
+        JTextField seedText;
         JLabel quoteLabel;
         
         //Add components.
@@ -67,6 +69,10 @@ public final class UniverseRenderTest {
         planetCommonalityComboBox.addItem("Common");
         planetCommonalityComboBox.addItem("Sparse");
         
+        seedLabel = new JLabel("Seed");
+        seedText = new JTextField();
+        seedText.setText("" + System.currentTimeMillis());
+        
         civilizationsLabel = new JLabel("Civilization Count");
         civilazitionComboBox = new JComboBox<>();
         civilazitionComboBox.addItem("Sparse");
@@ -85,6 +91,8 @@ public final class UniverseRenderTest {
         pan.add(planetCommonalityComboBox);
         pan.add(civilizationsLabel);
         pan.add(civilazitionComboBox);
+        pan.add(seedLabel);
+        pan.add(seedText);
         pan.add(quoteLabel);
         //Show a option pane
         JOptionPane.showMessageDialog(null, pan);
@@ -96,6 +104,12 @@ public final class UniverseRenderTest {
         config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
         config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
         config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
+        int seed;
+        try {
+            seed = Integer.parseInt(seedText.getText()); // This will pass a nfe.
+        } catch (NumberFormatException nfe) {
+                seed = seedText.getText().hashCode();
+        }
             
         //Init script
         ScriptEngineManager manager = new ScriptEngineManager();

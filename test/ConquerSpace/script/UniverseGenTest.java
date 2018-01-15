@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
@@ -45,6 +46,8 @@ public class UniverseGenTest extends JFrame implements ActionListener{
     private JComboBox<String> planetCommonalityComboBox;
     private JLabel civilizationsLabel;
     private JComboBox<String>civilazitionComboBox;
+    private JLabel seedLabel;
+    private JTextField seedText;
     private JLabel quoteLabel;
     private JButton exitButton;
     ///////////////////////////
@@ -56,7 +59,7 @@ public class UniverseGenTest extends JFrame implements ActionListener{
         waiting = true;
         setSize(500, 400);
         setTitle("New Game");
-        setLayout(new GridLayout(3, 4, 10, 10));
+        setLayout(new GridLayout(4, 4, 10, 10));
         //Add components
         universeSizeLabel = new JLabel("Universe Size");
         universeSizeBox = new JComboBox<>();
@@ -89,6 +92,10 @@ public class UniverseGenTest extends JFrame implements ActionListener{
         civilazitionComboBox.addItem("Sparse");
         civilazitionComboBox.addItem("Common");
         
+        seedLabel = new JLabel("Seed");
+        seedText = new JTextField();
+        seedText.setText("" + System.currentTimeMillis());
+        
         quoteLabel = new JLabel("Good luck -- Have Fun!");
         exitButton = new JButton("Done!");
         exitButton.addActionListener(this);
@@ -103,6 +110,8 @@ public class UniverseGenTest extends JFrame implements ActionListener{
         add(planetCommonalityComboBox);
         add(civilizationsLabel);
         add(civilazitionComboBox);
+        add(seedLabel);
+        add(seedText);
         add(quoteLabel);
         add(exitButton);
         
@@ -123,6 +132,12 @@ public class UniverseGenTest extends JFrame implements ActionListener{
             config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
             config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
             
+            int seed;
+            try {
+                seed = Integer.parseInt(seedText.getText()); // This will pass a nfe.
+            } catch (NumberFormatException nfe) {
+                seed = seedText.getText().hashCode();
+            }
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName("python");
             

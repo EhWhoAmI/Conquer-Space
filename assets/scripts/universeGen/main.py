@@ -25,7 +25,7 @@ civCount = {'Sparse': 1, 'Common': 2}[universeConfig.getCivilizationCount()]
 planetCommonality = {'Common': 1, 'Sparse': 2}[universeConfig.getPlanetCommonality()]
 
 # Random seed
-seed = time.time()
+seed = universeConfig.getSeed();
 # Seed random
 random.seed(seed)
 

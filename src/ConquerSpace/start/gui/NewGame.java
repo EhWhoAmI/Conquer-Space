@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,6 +38,8 @@ public class NewGame extends JFrame implements ActionListener{
     private JComboBox<String> planetCommonalityComboBox;
     private JLabel civilizationsLabel;
     private JComboBox<String>civilazitionComboBox;
+    private JLabel seedLabel;
+    private JTextField seedText;
     private JLabel quoteLabel;
     private JButton exitButton;
     
@@ -48,7 +51,7 @@ public class NewGame extends JFrame implements ActionListener{
     public NewGame() {
         setSize(500, 400);
         setTitle("New Game");
-        setLayout(new GridLayout(3, 4, 10, 10));
+        setLayout(new GridLayout(4, 4, 10, 10));
         //Add components
         universeSizeLabel = new JLabel("Universe Size");
         universeSizeBox = new JComboBox<>();
@@ -81,6 +84,10 @@ public class NewGame extends JFrame implements ActionListener{
         civilazitionComboBox.addItem("Sparse");
         civilazitionComboBox.addItem("Common");
         
+        seedLabel = new JLabel("Seed");
+        seedText = new JTextField();
+        seedText.setText("" + System.currentTimeMillis());
+        
         quoteLabel = new JLabel("Good luck -- Have Fun!");
         exitButton = new JButton("Done!");
         exitButton.addActionListener(this);
@@ -95,6 +102,8 @@ public class NewGame extends JFrame implements ActionListener{
         add(planetCommonalityComboBox);
         add(civilizationsLabel);
         add(civilazitionComboBox);
+        add(seedLabel);
+        add(seedText);
         add(quoteLabel);
         add(exitButton);
         
@@ -115,6 +124,19 @@ public class NewGame extends JFrame implements ActionListener{
             config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
             config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
             config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
+            
+            int seed;
+            LOGGER.info("Parsing seed.");
+            try {
+                seed = Integer.parseInt(seedText.getText()); // This will pass a nfe.
+                LOGGER.info("Seed is int value.");
+            } catch (NumberFormatException nfe) {
+                seed = seedText.getText().hashCode();
+                LOGGER.info("Seed is string literal.");
+            }
+            LOGGER.info("Seed: " + seed);
+            
+            config.setSeed(seed);
             long loadingStart = System.currentTimeMillis();
             //Init script
             ScriptEngineManager manager = new ScriptEngineManager();

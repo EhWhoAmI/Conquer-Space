@@ -30,6 +30,8 @@ public class UniverseConfig {
      *
      */
     public String civilizationCount;
+    
+    public int seed;
 
     /**
      *
@@ -70,6 +72,10 @@ public class UniverseConfig {
     public void setUniverseSize(String universeSize) {
         this.universeSize = universeSize;
     }
+    
+    public void setSeed(int seed) {
+        this.seed = seed;
+    }
 
     /**
      *
@@ -109,5 +115,9 @@ public class UniverseConfig {
      */
     public String getUniverseSize() {
         return universeSize;
+    }
+    
+    public int getSeed() {
+        return seed;
     }
 }
