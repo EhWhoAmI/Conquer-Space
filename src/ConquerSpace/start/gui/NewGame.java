@@ -1,15 +1,14 @@
 package ConquerSpace.start.gui;
 
 import ConquerSpace.ConquerSpace;
-import ConquerSpace.util.Version;
+import ConquerSpace.game.universe.Universe;
+import ConquerSpace.util.CQSPLogger;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -18,12 +17,16 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author Zyun
  */
 public class NewGame extends JFrame implements ActionListener{
+    private static final Logger LOGGER = CQSPLogger.getLogger(NewGame.class.getName());
+    
     private JLabel universeSizeLabel;
     private JComboBox<String> universeSizeBox;
     private JLabel universeTypeLabel;
@@ -36,6 +39,8 @@ public class NewGame extends JFrame implements ActionListener{
     private JComboBox<String>civilazitionComboBox;
     private JLabel quoteLabel;
     private JButton exitButton;
+    
+    private Universe universe = null;
 
     /**
      *
@@ -95,6 +100,7 @@ public class NewGame extends JFrame implements ActionListener{
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
+        LOGGER.info("Loaded new game UI.");
     }
 
     @Override
@@ -109,7 +115,7 @@ public class NewGame extends JFrame implements ActionListener{
             config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
             config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
             config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
-            
+            long loadingStart = System.currentTimeMillis();
             //Init script
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName("python");
@@ -118,25 +124,30 @@ public class NewGame extends JFrame implements ActionListener{
             engine.put("version", ConquerSpace.VERSION);
             reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
             engine.eval(reader);
-            setVisible(false);
-            // Show universe
+            Universe universe = (Universe) engine.get("universeObject");
+            long loadingEnd = System.currentTimeMillis();
+            LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe.");
             
-            //Read it...
+            // Log info
+            LOGGER.info("Universe:" + universe.toReadableString());
+            
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger("ErrorLog").error("Error!", ex);
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
         } catch (ScriptException ex) {
-            Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger("ErrorLog").error("Error!", ex);
             JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
-
         } finally {
             try {
                 if (reader != null)
                 reader.close();
             } catch (IOException ex) {
-                Logger.getLogger(NewGame.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.error("Error!", ex);
             }
         }
     }
     
+    public Universe getUniverse() {
+        return universe;
+    }
 }

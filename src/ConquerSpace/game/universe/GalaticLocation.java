@@ -23,4 +23,12 @@ public class GalaticLocation {
     public String toString() {
         return("(Degrees: " + degrees + " Distance: " + distance + ")");
     }
+    
+    public float getDegrees() {
+        return (degrees);
+    }
+    
+    public float getDistance() {
+        return (distance);
+    }
 }

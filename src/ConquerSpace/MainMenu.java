@@ -6,12 +6,12 @@ import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.logging.Logger;
 
 import ConquerSpace.start.gui.Manual;
 import ConquerSpace.start.gui.NewGame;
 import ConquerSpace.util.CQSPLogger;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Main menu.
@@ -31,6 +31,7 @@ public class MainMenu extends JFrame {
         add(new BottomMenu());
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        LOGGER.info("Loaded main menu");
     }
 
     /**

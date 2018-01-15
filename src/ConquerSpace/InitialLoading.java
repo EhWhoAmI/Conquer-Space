@@ -5,11 +5,10 @@ import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Initial loading screen. Loads everything.
@@ -41,6 +40,7 @@ public class InitialLoading extends JFrame {
      * Run function for the content of the loading.
      */
     public void run() {
+        long startTime = System.currentTimeMillis();
         try {
             //Load the file check.
             Scanner fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
@@ -49,23 +49,27 @@ public class InitialLoading extends JFrame {
                 files++;
                 fileScanner.nextLine();
             }
-            LOGGER.info("Files: " + files);
+            LOGGER.info("Asset Files: " + files);
             //Reset Scanner
             fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
             int fileIndex = 0;
-            LOGGER.info("Scanner status: " + fileScanner.hasNext());
             while (fileScanner.hasNextLine()) {
                 
                 fileIndex ++;
                 String fileName = fileScanner.nextLine();
-                LOGGER.info("Doing file " + fileName);
+                LOGGER.info("Verifying file " + fileName);
                 File f = new File(System.getProperty("user.dir") + "/" + fileName);
                 if (!f.exists())
                     throw new FileNotFoundException("File " + fileName + " not found");
+                else
+                    LOGGER.info("File " + fileName + " exists");
                 progressBar.setValue((int) fileIndex/files);
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(InitialLoading.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Error: ", ex);
         }
+        long endTime = System.currentTimeMillis();
+        
+        LOGGER.info("Took " + (endTime - startTime) + "ms to load files");
     }
 }

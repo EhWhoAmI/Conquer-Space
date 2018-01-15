@@ -1,3 +1,5 @@
 assets/manuals/man000
 assets/manuals/man001
 assets/manuals/manlist.properties
+assets/scripts/universeGen/main.py
+assets/log4j.xml

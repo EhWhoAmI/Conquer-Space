@@ -1,24 +1,26 @@
 package ConquerSpace.util;
 
-import java.util.logging.Logger;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
+import java.io.File;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
 
 /**
  *
- * @author hoong
+ * @author Zyun
  */
 public class CQSPLogger {
-
     /**
      *
      * @param name
      * @return
      */
     public static Logger getLogger(String name) {
-        Handler hand = new ConsoleHandler();
-        Logger log = Logger.getLogger(name);
-        log.addHandler(hand);
-        return log;
+        
+        return LogManager.getLogger(name);
+    }
+    
+    public static void initLoggers() {
+         Logger log = LogManager.getLogger("ErrorLog");
     }
 }

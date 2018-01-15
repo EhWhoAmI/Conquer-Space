@@ -70,4 +70,6 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <property name="log4j2.configurationFile" value="${user.dir}/assets/log4j2.xml"/>
+    <property name="log4j2.debug" value="${user.dir}/assets/log4j2.xml"/>
 </project>

@@ -3,7 +3,7 @@ package ConquerSpace;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
 import com.alee.laf.WebLookAndFeel;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Conquer Space main class. Where everything starts.
@@ -26,8 +26,12 @@ public class ConquerSpace {
      * @param args Command line arguments. Does nothing so far.
     */
     public static void main(String[] args) {
+        CQSPLogger.initLoggers();
         //Set look and feel
         WebLookAndFeel.install();
+        
+        //Init logger
+        
         InitialLoading loading = new InitialLoading();
         loading.setVisible(true);
         loading.run();
