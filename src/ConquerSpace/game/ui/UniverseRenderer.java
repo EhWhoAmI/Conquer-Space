@@ -51,13 +51,65 @@ public class UniverseRenderer extends JPanel{
         Ellipse2D.Float universeCircle = new Ellipse2D.Float(0, 0, universeDrawnSize, universeDrawnSize);
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
+        //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
+        int sizeOfLtyr = (int) ((int) universeDrawnSize/details.diameter);
+        
         //Load all the sectors.
         ArrayList<Sector> sectors = new ArrayList<>();
         for (int i = 0; i < universe.getSectorCount(); i ++) {
             sectors.add(universe.getSector(i));
         }
         
-        //Iterate over sectors and find size
+        //Iterate over sectors and find size of sector, make circles of them.
+        Ellipse2D.Float[] circleList = new Ellipse2D.Float[universe.getSectorCount()];
+        //Initalize sector circles!
+        for (int n = 0; n < circleList.length; n ++) {
+            //Get sector
+            Sector s = sectors.get(n);
+            
+            //Get furthest star system.
+            float longest = 0;
+            for (int b = 0; b < s.getStarSystemCount(); b++){
+                if (s.getStarSystem(n).getGalaticLocation().getDistance() > longest)
+                    longest = s.getStarSystem(n).getGalaticLocation().getDistance();
+            }
+            //Do math to calculate the position of the sector. 
+            //Distance is to the center of the sector to center of universe.
+            //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
+            int ang = (int) s.getGalaticLocation().getDegrees();
+            if (s.getGalaticLocation().getDegrees() < 90) {
+                //So the triangle is to up. ( the 90 degrees)
+                
+            }
+            else if (s.getGalaticLocation().getDegrees() < 180) {
+                //So the triangle is to right. ( the 90 degrees)
+                ang -= 90;
+            }
+            else if (s.getGalaticLocation().getDegrees() < 270) {
+                //So the triangle is to down. ( the 90 degrees)
+                ang -= 180;
+            }
+            else if (s.getGalaticLocation().getDegrees() < 360) {
+                //So the triangle is to right. ( the 90 degrees)
+                ang -= 270;
+            }
+            //Then do a sine to calculate the length of the opposite. 
+            int opp = (int) (Math.sin(ang)*(s.getGalaticLocation().getDistance() * sizeOfLtyr));
+            //Then do a cosine to get the adjacent
+            int adj = (int) (Math.cos(ang) * (s.getGalaticLocation().getDistance() * sizeOfLtyr));
+            LOGGER.info("Opposite = " + opp + "px; Adjacent = " + adj + "px.");
+            
+            //Find position from the center of the galaxy.
+            int xpos = (universeDrawnSize/2 + opp);
+            int ypos = (universeDrawnSize/2 + adj);
+            //Longest is the size of the sector.
+            circleList[n] = new Ellipse2D.Float(xpos, ypos, longest * sizeOfLtyr, longest * sizeOfLtyr);
+        }
+        
+        g2d.setColor(Color.red);
+        for (Ellipse2D.Float e: circleList) {
+            g2d.draw(e);
+        }
     }
     
     //Details for the universe. Size, etc, etc...

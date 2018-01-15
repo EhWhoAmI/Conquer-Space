@@ -53,23 +53,31 @@ public class InitialLoading extends JFrame {
             //Reset Scanner
             fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
             int fileIndex = 0;
+            int filesMissing = 0;
             while (fileScanner.hasNextLine()) {
                 
                 fileIndex ++;
                 String fileName = fileScanner.nextLine();
                 LOGGER.info("Verifying file " + fileName);
                 File f = new File(System.getProperty("user.dir") + "/" + fileName);
-                if (!f.exists())
-                    throw new FileNotFoundException("File " + fileName + " not found");
+                //Next we have to determine the importance of the file.
+                if (!f.exists()) {
+                    LOGGER.warn("Can't find file " + fileName + ". not fatal.");
+                    filesMissing ++;
+                }
                 else
                     LOGGER.info("File " + fileName + " exists");
                 progressBar.setValue((int) fileIndex/files);
             }
+            if (filesMissing == 0)
+                LOGGER.info("No files missing.");
+            else
+                LOGGER.warn(filesMissing + " file(s) missing.");
         } catch (FileNotFoundException ex) {
             LOGGER.error("Error: ", ex);
         }
         long endTime = System.currentTimeMillis();
         
-        LOGGER.info("Took " + (endTime - startTime) + "ms to load files");
+        LOGGER.info("Took " + (endTime - startTime) + "ms to load.");
     }
 }

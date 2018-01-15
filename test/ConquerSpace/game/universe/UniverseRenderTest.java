@@ -113,7 +113,7 @@ public final class UniverseRenderTest {
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         //Add the universe renderer
         UniverseRenderer renderer = new UniverseRenderer(Toolkit.getDefaultToolkit().getScreenSize(), universe, new Point(0, 0));
-
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(renderer);
 
         frame.setVisible(true);

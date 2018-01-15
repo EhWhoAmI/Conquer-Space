@@ -1,11 +1,10 @@
 # universeGen/main.py -- generates universe, loads it into xml file
 # Get universe config, then parse the XML into file
 
-from datetime import datetime
 import random
-import xml.etree.ElementTree as ET
 from os.path import *
 from os import *
+import time
 
 # Import universe files
 from ConquerSpace.game.universe import Universe, Sector, StarSystem, Star, Planet, PlanetTypes, StarTypes, GalaticLocation 
@@ -26,7 +25,7 @@ civCount = {'Sparse': 1, 'Common': 2}[universeConfig.getCivilizationCount()]
 planetCommonality = {'Common': 1, 'Sparse': 2}[universeConfig.getPlanetCommonality()]
 
 # Random seed
-seed = 0
+seed = time.time()
 # Seed random
 random.seed(seed)
 

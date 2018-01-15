@@ -44,6 +44,8 @@ public class Manual extends JFrame implements ListSelectionListener {
             for (Object val : prop.values()) {
                 model.addElement((String) val);
             }
+            
+            LOGGER.info("Manual entries: " + model.getSize());
             list = new JList<>(model);
             list.addListSelectionListener(this);
             add(list);
@@ -51,10 +53,11 @@ public class Manual extends JFrame implements ListSelectionListener {
                 public void windowClosing(WindowEvent arg0) {
                     current.dispose();
                     current = null;
+                    LOGGER.info("Closed manual window.");
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn("Cannot find file", e);
         }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
@@ -78,7 +81,10 @@ public class Manual extends JFrame implements ListSelectionListener {
             String str = (String) keys.nextElement();
             if (prop.getProperty(str).equals(list.getSelectedValue())) {
                 try {
-                    value = ManualContent.getInstance(new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
+                    value = ManualContent.getInstance(
+                            new String(Files.readAllBytes(Paths.get(
+                                    System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
+                    LOGGER.info("Loading manual " + str);
                     break;
                 } catch (IOException ex) {
                     LOGGER.error("Error", ex);

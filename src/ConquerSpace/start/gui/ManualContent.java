@@ -1,17 +1,19 @@
 package ConquerSpace.start.gui;
 
+import ConquerSpace.util.CQSPLogger;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author hoong
  */
 public class ManualContent extends JFrame {
-
+    private static final Logger LOGGER = CQSPLogger.getLogger(ManualContent.class.getName());
     private static ManualContent instance;
     private JTextPane text;
 
@@ -38,6 +40,8 @@ public class ManualContent extends JFrame {
             public void windowClosing(WindowEvent arg0) {
                 instance.dispose();
                 instance = null;
+                LOGGER.info("Closed manual content window");
+
             }
         });
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
