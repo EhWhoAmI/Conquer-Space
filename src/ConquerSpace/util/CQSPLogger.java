@@ -16,7 +16,6 @@ public class CQSPLogger {
      * @return
      */
     public static Logger getLogger(String name) {
-        
         return LogManager.getLogger(name);
     }
     

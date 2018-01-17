@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import org.apache.logging.log4j.Logger;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -46,14 +47,14 @@ public class UniverseRenderer extends JPanel{
         g2d.fill(bg);
         //We have the universe diameter, then find the size in pixels the universe has to be.
         int universeDrawnSize = (bounds.height < bounds.width)? bounds.height : bounds.width;
-        
+        LOGGER.info("Universe drawn size: " + universeDrawnSize);
         //Draw a circle to show the universe
         Ellipse2D.Float universeCircle = new Ellipse2D.Float(0, 0, universeDrawnSize, universeDrawnSize);
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
         //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
         int sizeOfLtyr = (int) ((int) universeDrawnSize/details.diameter);
-        
+        LOGGER.info("Size of light year " + sizeOfLtyr + "px");
         //Load all the sectors.
         ArrayList<Sector> sectors = new ArrayList<>();
         for (int i = 0; i < universe.getSectorCount(); i ++) {
@@ -66,44 +67,64 @@ public class UniverseRenderer extends JPanel{
         for (int n = 0; n < circleList.length; n ++) {
             //Get sector
             Sector s = sectors.get(n);
-            
+            LOGGER.info("---- [Sector " + s.getID() + "] ----");
             //Get furthest star system.
             float longest = 0;
             for (int b = 0; b < s.getStarSystemCount(); b++){
-                if (s.getStarSystem(n).getGalaticLocation().getDistance() > longest)
-                    longest = s.getStarSystem(n).getGalaticLocation().getDistance();
+                if (s.getStarSystem(b).getGalaticLocation().getDistance() > longest)
+                    longest = s.getStarSystem(b).getGalaticLocation().getDistance();
             }
+            LOGGER.info("Sector " + s.getID() + " size:" + longest);
+            LOGGER.info("Angle " + s.getGalaticLocation().getDegrees());
             //Do math to calculate the position of the sector. 
             //Distance is to the center of the sector to center of universe.
             //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
-            int ang = (int) s.getGalaticLocation().getDegrees();
-            if (s.getGalaticLocation().getDegrees() < 90) {
-                //So the triangle is to up. ( the 90 degrees)
-                
-            }
-            else if (s.getGalaticLocation().getDegrees() < 180) {
-                //So the triangle is to right. ( the 90 degrees)
-                ang -= 90;
-            }
-            else if (s.getGalaticLocation().getDegrees() < 270) {
-                //So the triangle is to down. ( the 90 degrees)
-                ang -= 180;
-            }
-            else if (s.getGalaticLocation().getDegrees() < 360) {
-                //So the triangle is to right. ( the 90 degrees)
-                ang -= 270;
-            }
-            //Then do a sine to calculate the length of the opposite. 
-            int opp = (int) (Math.sin(ang)*(s.getGalaticLocation().getDistance() * sizeOfLtyr));
-            //Then do a cosine to get the adjacent
-            int adj = (int) (Math.cos(ang) * (s.getGalaticLocation().getDistance() * sizeOfLtyr));
-            LOGGER.info("Opposite = " + opp + "px; Adjacent = " + adj + "px.");
+            long ang = (long) s.getGalaticLocation().getDegrees();
+            int rot = 0;
             
+            //Then do a sine to calculate the length of the opposite. 
+            int xpos;
+            int ypos;
+            //Math.sin and Math.cos is in radians.
+             long opp = (long) (Math.sin(Math.toDegrees(ang)) * s.getGalaticLocation().getDistance());
+             long adj = (long) (Math.cos(Math.toDegrees(ang)) * s.getGalaticLocation().getDistance());
+             opp *= sizeOfLtyr;
+             adj *=sizeOfLtyr;
+             LOGGER.info("ROT: " + rot);
+            switch (rot) {
+                case 0:
+                    //Xpos is adjectant.
+                    xpos = (int) (universeDrawnSize/2 + opp);
+                    ypos = (int) (universeDrawnSize/2 + adj);
+                    break;
+                case 1:
+                    //YPos is adjecant
+                    xpos = (int) (universeDrawnSize/2 + adj);
+                    ypos = (int) (universeDrawnSize/2 - opp);
+                    break;
+                case 2:
+                    xpos = (int) (universeDrawnSize/2 - opp);
+                    ypos = (int) (universeDrawnSize/2 - adj);
+                    break;
+                case 3:
+                    xpos = (int) (universeDrawnSize/2 - adj);
+                    ypos = (int) (universeDrawnSize/2 + opp);
+                    break;
+                default:
+                    xpos = 0;
+                    ypos = 0;
+            }
+            
+            LOGGER.info("Opposite = " + opp + "px; Adjacent = " + adj + "px.");
+            LOGGER.info("Position: " + xpos + ", " + ypos);
             //Find position from the center of the galaxy.
-            int xpos = (universeDrawnSize/2 + opp);
-            int ypos = (universeDrawnSize/2 + adj);
             //Longest is the size of the sector.
             circleList[n] = new Ellipse2D.Float(xpos, ypos, longest * sizeOfLtyr, longest * sizeOfLtyr);
+            //Debugging: draw line from xpos and y pos to the center of universe, just as test.
+            Line2D.Float ln = new Line2D.Float(universeDrawnSize/2, universeDrawnSize/2, xpos, ypos);
+            g2d.setColor(Color.ORANGE);
+            g2d.draw(ln);
+            LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
         }
         
         g2d.setColor(Color.red);
@@ -127,15 +148,15 @@ public class UniverseRenderer extends JPanel{
             }
             
             //Use the same process for the star systems.
-            StarSystem largeStarSystem = null;
+            int largeStarSystem = 0;
             for (int i = 0; i < largest.getStarSystemCount(); i ++) {
-                StarSystem s = largest.getStarSystem(i);
-                if (largeStarSystem == null || s.getGalaticLocation().getDistance() > largeStarSystem.getGalaticLocation().getDistance())
-                    largeStarSystem = s;
+                if (largest.getStarSystem(i).getGalaticLocation().getDistance() > largeStarSystem)
+                    largeStarSystem = (int) largest.getStarSystem(i).getGalaticLocation().getDistance();
             }
             
             // Then add the two distances together.
-            diameter = (largeStarSystem.getGalaticLocation().getDistance() + largest.getGalaticLocation().getDistance() + 1);
+            diameter = (largeStarSystem + largest.getGalaticLocation().getDistance() + 1);
+            LOGGER.info("Universe diameter : " + diameter);
         }
         
     }

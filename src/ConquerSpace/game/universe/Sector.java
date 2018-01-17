@@ -79,6 +79,9 @@ public class Sector {
         return loc;
     }
     
+    public int getID() {
+        return id;
+    }
     /**
      *
      * @return

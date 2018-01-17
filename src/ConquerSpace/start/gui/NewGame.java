@@ -1,6 +1,8 @@
 package ConquerSpace.start.gui;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.Globals;
+import ConquerSpace.game.ui.MainWindow;
 import ConquerSpace.game.universe.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.GridLayout;
@@ -152,10 +154,14 @@ public class NewGame extends JFrame implements ActionListener{
             
             // Log info
             LOGGER.info("Universe:" + universe.toReadableString());
-            
+            //Insert universe into globals
+            Globals.universe = universe;
+            new MainWindow();
+            setVisible(false);
         } catch (FileNotFoundException ex) {
             LogManager.getLogger("ErrorLog").error("Error!", ex);
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         } catch (ScriptException ex) {
             LogManager.getLogger("ErrorLog").error("Error!", ex);
             JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
