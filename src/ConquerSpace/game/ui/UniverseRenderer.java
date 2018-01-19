@@ -1,7 +1,6 @@
 package ConquerSpace.game.ui;
 
 import ConquerSpace.game.universe.Sector;
-import ConquerSpace.game.universe.StarSystem;
 import ConquerSpace.game.universe.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
@@ -34,7 +33,7 @@ public class UniverseRenderer extends JPanel{
         
         details = new UniverseDetails(universe);
         
-        LOGGER.info("Displaying universe " + universe.toReadableString());
+        //LOGGER.info("Displaying universe " + universe.toReadableString());
     }
     
     @Override
@@ -53,7 +52,7 @@ public class UniverseRenderer extends JPanel{
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
         //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
-        int sizeOfLtyr = (int) ((int) universeDrawnSize/details.diameter);
+        int sizeOfLtyr = (int) Math.floor(universeDrawnSize/details.diameter);
         LOGGER.info("Size of light year " + sizeOfLtyr + "px");
         //Load all the sectors.
         ArrayList<Sector> sectors = new ArrayList<>();
@@ -81,34 +80,38 @@ public class UniverseRenderer extends JPanel{
             //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
             long ang = (long) s.getGalaticLocation().getDegrees();
             int rot = 0;
-            
+            while (ang > 89) {
+                ang -= 90;
+                rot ++;
+                        
+            }
             //Then do a sine to calculate the length of the opposite. 
             int xpos;
             int ypos;
             //Math.sin and Math.cos is in radians.
-             long opp = (long) (Math.sin(Math.toDegrees(ang)) * s.getGalaticLocation().getDistance());
-             long adj = (long) (Math.cos(Math.toDegrees(ang)) * s.getGalaticLocation().getDistance());
+            int opp = (int) Math.round(Math.sin(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
+            int adj = (int) Math.round(Math.cos(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
              opp *= sizeOfLtyr;
              adj *=sizeOfLtyr;
              LOGGER.info("ROT: " + rot);
             switch (rot) {
                 case 0:
                     //Xpos is adjectant.
-                    xpos = (int) (universeDrawnSize/2 + opp);
-                    ypos = (int) (universeDrawnSize/2 + adj);
+                    xpos = Math.round(universeDrawnSize/2 + opp);
+                    ypos = Math.round(universeDrawnSize/2 - adj);
                     break;
                 case 1:
                     //YPos is adjecant
-                    xpos = (int) (universeDrawnSize/2 + adj);
-                    ypos = (int) (universeDrawnSize/2 - opp);
+                    xpos = Math.round(universeDrawnSize/2 + adj);
+                    ypos = Math.round(universeDrawnSize/2 + opp);
                     break;
                 case 2:
-                    xpos = (int) (universeDrawnSize/2 - opp);
-                    ypos = (int) (universeDrawnSize/2 - adj);
+                    xpos = Math.round(universeDrawnSize/2 - opp);
+                    ypos = Math.round(universeDrawnSize/2 + adj);
                     break;
                 case 3:
-                    xpos = (int) (universeDrawnSize/2 - adj);
-                    ypos = (int) (universeDrawnSize/2 + opp);
+                    xpos = Math.round(universeDrawnSize/2 - adj);
+                    ypos = Math.round(universeDrawnSize/2 - opp);
                     break;
                 default:
                     xpos = 0;
@@ -119,17 +122,16 @@ public class UniverseRenderer extends JPanel{
             LOGGER.info("Position: " + xpos + ", " + ypos);
             //Find position from the center of the galaxy.
             //Longest is the size of the sector.
-            circleList[n] = new Ellipse2D.Float(xpos, ypos, longest * sizeOfLtyr, longest * sizeOfLtyr);
+            Ellipse2D.Float c = new Ellipse2D.Float(xpos - (longest * sizeOfLtyr/2), ypos - (longest * sizeOfLtyr/2), longest * sizeOfLtyr, longest * sizeOfLtyr);
+            LOGGER.info("Rect " + c.getBounds2D().toString());
+            g2d.setColor(Color.red);
+            g2d.draw(c);
+            
             //Debugging: draw line from xpos and y pos to the center of universe, just as test.
             Line2D.Float ln = new Line2D.Float(universeDrawnSize/2, universeDrawnSize/2, xpos, ypos);
             g2d.setColor(Color.ORANGE);
             g2d.draw(ln);
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
-        }
-        
-        g2d.setColor(Color.red);
-        for (Ellipse2D.Float e: circleList) {
-            g2d.draw(e);
         }
     }
     
@@ -156,7 +158,7 @@ public class UniverseRenderer extends JPanel{
             
             // Then add the two distances together.
             diameter = (largeStarSystem + largest.getGalaticLocation().getDistance() + 1);
-            LOGGER.info("Universe diameter : " + diameter);
+            LOGGER.info("Universe diameter : " + diameter + " ltyr");
         }
         
     }

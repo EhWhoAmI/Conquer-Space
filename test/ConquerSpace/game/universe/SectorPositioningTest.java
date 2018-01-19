@@ -130,7 +130,7 @@ public class SectorPositioningTest {
                 Graphics2D g2d = (Graphics2D) g;
                 //Values go here!!
                 double dist = 100;
-                double degs = 145;
+                double degs = 223;
                 
                 
                 int smallSide = (this.getWidth() < this.getHeight())?this.getWidth():this.getHeight();
