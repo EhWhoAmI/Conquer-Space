@@ -1,6 +1,6 @@
 package ConquerSpace;
 
-import ConquerSpace.game.universe.Universe;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 
 /**
  *

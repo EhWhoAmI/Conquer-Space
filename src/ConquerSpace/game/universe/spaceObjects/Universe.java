@@ -1,5 +1,6 @@
-package ConquerSpace.game.universe;
+package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.universe.civilizations.Civilization;
 import java.util.ArrayList;
 
 /**
@@ -9,12 +10,13 @@ import java.util.ArrayList;
 public class Universe {
 
     private ArrayList<Sector> sectors;
-
+    private ArrayList<Civilization> civs;
     /**
      *
      */
     public Universe() {
         sectors = new ArrayList<>();
+        civs = new ArrayList<>();
     }
     
     /**
@@ -54,5 +56,17 @@ public class Universe {
      */
     public int getSectorCount() {
         return(sectors.size());
+    }
+    
+    public void addCivilization(Civilization c) {
+        civs.add(c);
+    }
+    
+    public int getCivilizationCount() {
+        return (civs.size());
+    }
+    
+    public Civilization getCivilization(int i) {
+        return (civs.get(i));
     }
 }

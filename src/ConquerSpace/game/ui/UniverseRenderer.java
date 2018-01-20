@@ -1,7 +1,7 @@
 package ConquerSpace.game.ui;
 
-import ConquerSpace.game.universe.Sector;
-import ConquerSpace.game.universe.Universe;
+import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
 import java.awt.Graphics;

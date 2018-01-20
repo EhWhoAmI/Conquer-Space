@@ -1,5 +1,6 @@
-package ConquerSpace.game.universe;
+package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.universe.GalaticLocation;
 import java.util.ArrayList;
 
 /**

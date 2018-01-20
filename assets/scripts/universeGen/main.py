@@ -7,7 +7,10 @@ from os import *
 import time
 
 # Import universe files
-from ConquerSpace.game.universe import Universe, Sector, StarSystem, Star, Planet, PlanetTypes, StarTypes, GalaticLocation 
+from ConquerSpace.game.universe import GalaticLocation
+from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet, PlanetTypes, StarTypes
+from ConquerSpace.game.universe.civilizations import Civilization, CivilizationPreferredClimateTypes
+from ConquerSpace.game.universe.civControllers import AIController, PlayerController
 
 # universe size -- change this when universe sizes change
 universeSize = {'Small': 2, 'Medium': 3, 'Large': 4}[universeConfig.getUniverseSize()]
@@ -32,6 +35,8 @@ random.seed(seed)
 # Create universe generation object
 universeObject = Universe()
 
+
+LOGGER.info("Loading sectors")
 # Create sectors
 # Get sector count
 for i in range(universeSize):
@@ -71,3 +76,36 @@ for i in range(universeSize):
         sector.addStarSystem(starSystem)
         
     universeObject.addSector(sector)
+    
+LOGGER.info("Done Creating Sectors")
+# Generate Civs
+
+LOGGER.info("Creating Civilizations")
+# Get approximate number of starSystems
+systemCount = universeSize * 7
+
+# Civ count
+if civCount == 1:
+    civCount = (systemCount/40)
+elif civCount == 2:
+    civCount = (systemCount/20)
+    
+LOGGER.info("Civilization Count: " + str(civCount))
+
+# Init player civ
+
+# Player Civ options
+civConf = universeConfig.getCivilizationConfig()
+
+civColor = civConf.getCivColor()
+civSymbol = civConf.getCivSymbol()
+civHomePlanetName = civConf.getHomePlanetName()
+civName = civConf.getCivilizationName()
+speciesName = civConf.getSpeciesName()
+civPreferredClimate = {'Varied': 0, 'Cold':1, 'Hot':2}[civConf.getCivilizationPreferredClimate()]
+
+# Id is 0 because it is the first one.
+playerCiv = Civilization(0)
+while i in range(civCount):
+    civ = Civilization()
+    

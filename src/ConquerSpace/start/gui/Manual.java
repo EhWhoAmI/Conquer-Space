@@ -16,12 +16,11 @@ import ConquerSpace.util.CQSPLogger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author hoong
+ * @author Zyun
  */
 public class Manual extends JFrame implements ListSelectionListener {
     private static final long serialVersionUID = -2589166556749207075L;
@@ -63,8 +62,8 @@ public class Manual extends JFrame implements ListSelectionListener {
     }
 
     /**
-     *
-     * @return
+     * Creates a singleton of a manual list.
+     * @return an instance of manual.
      */
     public static Manual getInstance() {
         if (current == null) {

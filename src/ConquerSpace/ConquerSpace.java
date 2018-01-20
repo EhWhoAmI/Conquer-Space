@@ -2,7 +2,8 @@ package ConquerSpace;
 
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
-import com.alee.laf.WebLookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -27,10 +28,19 @@ public class ConquerSpace {
     */
     public static void main(String[] args) {
         CQSPLogger.initLoggers();
-        //Set look and feel
-        WebLookAndFeel.install();
-        
-        //Init logger
+        try {
+            //Set look and feel
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //Init logger
+        } catch (ClassNotFoundException ex) {
+            LOGGER.error("", ex);
+        } catch (InstantiationException ex) {
+            LOGGER.error("", ex);
+        } catch (IllegalAccessException ex) {
+            LOGGER.error("", ex);        
+        } catch (UnsupportedLookAndFeelException ex) {
+            LOGGER.error("", ex);
+        }
         
         InitialLoading loading = new InitialLoading();
         loading.setVisible(true);

@@ -1,37 +1,20 @@
-package ConquerSpace.start.gui;
+package ConquerSpace.game.universe;
+
+import ConquerSpace.game.universe.civilizations.CivilizationConfig;
 
 /**
  *
  * @author Zyun
  */
 public class UniverseConfig {
-
-    /**
-     *
-     */
     public String universeSize;
-
-    /**
-     *
-     */
     public String universeShape;
-
-    /**
-     *
-     */
     public String universeAge;
-
-    /**
-     *
-     */
     public String planetCommonality;
-
-    /**
-     *
-     */
     public String civilizationCount;
+    public long seed;
     
-    public int seed;
+    public CivilizationConfig civConfig;
 
     /**
      *
@@ -73,8 +56,12 @@ public class UniverseConfig {
         this.universeSize = universeSize;
     }
     
-    public void setSeed(int seed) {
+    public void setSeed(long seed) {
         this.seed = seed;
+    }
+    
+    public void setCivilizationConfig(CivilizationConfig conf) {
+        this.civConfig = conf;
     }
 
     /**
@@ -117,7 +104,11 @@ public class UniverseConfig {
         return universeSize;
     }
     
-    public int getSeed() {
+    public long getSeed() {
         return seed;
+    }
+    
+    public CivilizationConfig getCivilizationConfig() {
+        return (civConfig);
     }
 }

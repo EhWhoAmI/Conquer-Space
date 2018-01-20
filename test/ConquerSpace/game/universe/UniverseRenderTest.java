@@ -1,8 +1,8 @@
 package ConquerSpace.game.universe;
 
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.ui.UniverseRenderer;
-import ConquerSpace.start.gui.UniverseConfig;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author hoong
+ * @author Zyun
  */
 public class ManualContent extends JFrame {
     private static final Logger LOGGER = CQSPLogger.getLogger(ManualContent.class.getName());
@@ -19,7 +19,7 @@ public class ManualContent extends JFrame {
 
     /**
      *
-     * @param file
+     * @param file the manual file to load.
      * @return
      */
     public static ManualContent getInstance(String file) {
@@ -41,7 +41,6 @@ public class ManualContent extends JFrame {
                 instance.dispose();
                 instance = null;
                 LOGGER.info("Closed manual content window");
-
             }
         });
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

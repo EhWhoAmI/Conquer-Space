@@ -1,4 +1,4 @@
-package ConquerSpace.game.universe;
+package ConquerSpace.game.universe.spaceObjects;
 
 /**
  * Planet class

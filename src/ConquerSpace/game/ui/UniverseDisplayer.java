@@ -10,9 +10,9 @@ import javax.swing.JScrollPane;
  *
  * @author Zyun
  */
-public class MainWindow extends JFrame{
+public class UniverseDisplayer extends JFrame{
 
-    public MainWindow(){
+    public UniverseDisplayer() {
         setTitle("Conquer Space");
         //Create universe renderer
         UniverseRenderer renderer = new UniverseRenderer(new Dimension(500, 500), Globals.universe, new Point(0, 0));
