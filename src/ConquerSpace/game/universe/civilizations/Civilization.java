@@ -13,7 +13,7 @@ public class Civilization {
     
     private Color color;
     private String name;
-    private int civilizationPrefferedClimate;
+    private int civilizationPreferedClimate;
     private String civilizationSymbol;
     private String speciesName;
     
@@ -29,7 +29,7 @@ public class Civilization {
     }
     
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
-        this.civilizationPrefferedClimate = civilizationPrefferedClimate;
+        this.civilizationPreferedClimate = civilizationPrefferedClimate;
     }
 
     public void setCivilizationSymbol(String civilizationSymbol) {
@@ -68,8 +68,12 @@ public class Civilization {
         this.speciesName = speciesName;
     }
 
-    public int getCivilizationPrefferedClimate() {
-        return civilizationPrefferedClimate;
+    public void setCivilizationPreferredClimate(int civilizationPreferedClimate) {
+        this.civilizationPreferedClimate = civilizationPreferedClimate;
+    }
+    
+    public int getCivilizationPreferredClimate() {
+        return civilizationPreferedClimate;
     }
 
     public String getCivilizationSymbol() {
@@ -116,11 +120,11 @@ public class Civilization {
         //Return values...
         StringBuilder builder = new StringBuilder();
         builder.append("<Civ " + ID + ", Name=" + name + ", Home Planet Name=" + homePlanetName);
-        builder.append(", Species Name=" + speciesName + ", Civ Prefferred Climate");
+        builder.append(", Species Name=" + speciesName + ", Civ Symbol=" + civilizationSymbol + ", Civ Prefferred Climate=");
         
         //Get the species preferred climate in name
         
-        switch(civilizationPrefferedClimate) {
+        switch(civilizationPreferedClimate) {
             case CivilizationPreferredClimateTypes.VARIED:
                 builder.append("Varied");
                 break;
@@ -138,7 +142,8 @@ public class Civilization {
         else {
             builder.append("Player");
         }
-        builder.append(">");
+        builder.append(", Color=" + color.toString());
+        builder.append(">\n");
         return (builder.toString());
     }
 }

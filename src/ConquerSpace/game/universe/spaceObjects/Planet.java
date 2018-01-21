@@ -42,4 +42,20 @@ public class Planet {
         builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + ")\n");
         return (builder.toString());
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getOrbitalDistance() {
+        return orbitalDistance;
+    }
+
+    public int getPlanetSize() {
+        return planetSize;
+    }
+
+    public int getPlanetType() {
+        return planetType;
+    }
 }

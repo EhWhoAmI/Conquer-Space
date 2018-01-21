@@ -83,7 +83,6 @@ public class UniverseRenderer extends JPanel{
             while (ang > 89) {
                 ang -= 90;
                 rot ++;
-                        
             }
             //Then do a sine to calculate the length of the opposite. 
             int xpos;
@@ -130,7 +129,8 @@ public class UniverseRenderer extends JPanel{
             //Debugging: draw line from xpos and y pos to the center of universe, just as test.
             Line2D.Float ln = new Line2D.Float(universeDrawnSize/2, universeDrawnSize/2, xpos, ypos);
             g2d.setColor(Color.ORANGE);
-            g2d.draw(ln);
+            //Uncomment for debugging
+            //g2d.draw(ln);
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
         }
     }

@@ -11,9 +11,10 @@ from ConquerSpace.game.universe import GalaticLocation
 from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet, PlanetTypes, StarTypes
 from ConquerSpace.game.universe.civilizations import Civilization, CivilizationPreferredClimateTypes
 from ConquerSpace.game.universe.civControllers import AIController, PlayerController
+from java.awt import Color
 
 # universe size -- change this when universe sizes change
-universeSize = {'Small': 2, 'Medium': 3, 'Large': 4}[universeConfig.getUniverseSize()]
+universeSize = {'Small': 10, 'Medium': 20, 'Large': 30}[universeConfig.getUniverseSize()]
 
 # Universe Shape
 universeShape = {'Spiral': 1, 'Irregular': 2, 'Elliptical': 3}[universeConfig.getUniverseShape()]
@@ -83,7 +84,7 @@ LOGGER.info("Done Creating Sectors")
 LOGGER.info("Creating Civilizations")
 # Get approximate number of starSystems
 systemCount = universeSize * 7
-
+LOGGER.info("Universe system approx count: " + str(systemCount))
 # Civ count
 if civCount == 1:
     civCount = (systemCount/40)
@@ -106,6 +107,48 @@ civPreferredClimate = {'Varied': 0, 'Cold':1, 'Hot':2}[civConf.getCivilizationPr
 
 # Id is 0 because it is the first one.
 playerCiv = Civilization(0)
-while i in range(civCount):
-    civ = Civilization()
+
+playerCiv.setColor(civColor)
+playerCiv.setHomePlanetName(civHomePlanetName)
+playerCiv.setName(civName)
+playerCiv.setSpeciesName(speciesName)
+playerCiv.setCivilizationPreferredClimate(civPreferredClimate)
+playerCiv.setCivilizationSymbol(civSymbol)
+playerCiv.setController(PlayerController())
+
+LOGGER.info('Civ symbol: "' + civSymbol + '"')
+universeObject.addCivilization(playerCiv)
+symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
+
+symbolList.remove(civSymbol)
+
+for p in range(civCount):
+    civ = Civilization(p + 1)
+    # Civ name list
+    civNameList = [
+        ["He", "Be", "Das", "Kas", "Mak", "Aef", "Len"],
+        ["le", "as", "ma", "\'ea", "mal", "\'as", "had"],
+        ["ese", "", "et", "\'tese", "mad", "las", "bas"]
+    ]
+    civName = random.choice(civNameList[0]) + random.choice(civNameList[1]) + random.choice(civNameList[2])
     
+    civ.setName(civName)
+    
+    civ.setColor(Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+
+    # Home Planet name list
+    planetNameList = [
+        ["Ke", "Ba", "Dam", "Ka", "Mak", "Bef", "Zen"],
+        ["la", "es", "da", "eaf", "mal", "\'az", "lad"],
+        ["les", "", "et", "\'tese", "mar", "zas", "bas"]
+    ]
+    civ.setHomePlanetName(random.choice(planetNameList[0]) + random.choice(planetNameList[1]) + random.choice(planetNameList[2]))
+    civ.setSpeciesName(speciesName)
+    civ.setCivilizationPreferredClimate(random.randint(0,2))
+    
+    symbol = random.choice(symbolList)
+    symbolList.remove(symbol)
+    civ.setCivilizationSymbol(symbol)
+    civ.setController(AIController())
+
+    universeObject.addCivilization(civ)

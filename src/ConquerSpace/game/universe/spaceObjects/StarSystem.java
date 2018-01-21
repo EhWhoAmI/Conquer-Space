@@ -75,6 +75,14 @@ public class StarSystem {
         return (stars.size());
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public GalaticLocation getLocation() {
+        return location;
+    }
+    
     /**
      *
      * @return

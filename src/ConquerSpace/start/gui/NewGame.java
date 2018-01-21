@@ -57,7 +57,7 @@ public class NewGame extends JFrame implements ActionListener {
     private JTextField civNameTextField;
     private JLabel civColorLabel;
     private JButton civColorChooserButton;
-    private JLabel civSymbol;
+    private JLabel civSymbolLabel;
     private JSpinner civSymbolSpinner;
     private JLabel civHomePlanetNameLabel;
     private JTextField civHomePlanetName;
@@ -130,7 +130,7 @@ public class NewGame extends JFrame implements ActionListener {
         civNameLabel = new JLabel("Civilization Name");
         civNameTextField = new JTextField("Humans");
 
-        civSymbol = new JLabel("Civilization Symbol");
+        civSymbolLabel = new JLabel("Civilization Symbol");
         //Greek symbol list
         String[] list = new String[26];
         for (int i = 0; i < list.length; i++) {
@@ -171,7 +171,7 @@ public class NewGame extends JFrame implements ActionListener {
 
         rsidePan.add(civNameLabel);
         rsidePan.add(civNameTextField);
-        rsidePan.add(civSymbol);
+        rsidePan.add(civSymbolLabel);
         rsidePan.add(civSymbolSpinner);
         rsidePan.add(civColorLabel);
         rsidePan.add(civColorChooserButton);
@@ -223,8 +223,8 @@ public class NewGame extends JFrame implements ActionListener {
                 //Set the player Civ options
                 CivilizationConfig civilizationConfig = new CivilizationConfig();
                 civilizationConfig.setCivColor(civColor);
-                civilizationConfig.setCivSymbol(civSymbol.getText());
-                civilizationConfig.setCivilizationName(civilizationsLabel.getText());
+                civilizationConfig.setCivSymbol((String) civSymbolSpinner.getValue());
+                civilizationConfig.setCivilizationName(civNameTextField.getText());
                 civilizationConfig.setCivilizationPreferredClimate((String) civTempResistanceComboBox.getSelectedItem());
                 civilizationConfig.setHomePlanetName(civHomePlanetName.getText());
                 civilizationConfig.setSpeciesName(speciesNameField.getText());
@@ -257,6 +257,7 @@ public class NewGame extends JFrame implements ActionListener {
             } catch (ScriptException ex) {
                 LogManager.getLogger("ErrorLog").error("Error!", ex);
                 JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             } finally {
                 try {
                     if (reader != null) {

@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.universe.civilizations.Civilization;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -29,6 +30,9 @@ public class Universe {
         //Just call the same method in the various containing objects
         for (Sector s : sectors) {
             builder.append(s.toReadableString());
+        }
+        for (Civilization c : civs) {
+            builder.append(c.toReadableString());
         }
         return (builder.toString());
     }
