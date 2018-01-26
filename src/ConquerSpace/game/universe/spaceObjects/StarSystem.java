@@ -1,13 +1,14 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.GameObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Zyun
  */
-public class StarSystem {
+public class StarSystem extends GameObject{
     private ArrayList<Planet> planets;
     private ArrayList<Star> stars;
     private int id;

@@ -1,10 +1,11 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.GameObject;
 /**
  * Planet class
  * @author Zyun
  */
-public class Planet {
+public class Planet extends GameObject{
     private int planetType;
     private int orbitalDistance;
     private int planetSize;

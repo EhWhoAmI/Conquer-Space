@@ -2,13 +2,14 @@ package ConquerSpace.game.universe.civilizations;
 
 import ConquerSpace.game.universe.civControllers.AIController;
 import ConquerSpace.game.universe.civControllers.CivilizationController;
+import ConquerSpace.game.GameObject;
 import java.awt.Color;
 
 /**
  *
  * @author Zyun
  */
-public class Civilization {
+public class Civilization extends GameObject{
     private int ID;
     
     private Color color;
