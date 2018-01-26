@@ -1,10 +1,11 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.GameObject;
 /**
  *
  * @author Zyun
  */
-public class Star {
+public class Star extends GameObject{
     private int type;
     private int starSize;
     private int id;

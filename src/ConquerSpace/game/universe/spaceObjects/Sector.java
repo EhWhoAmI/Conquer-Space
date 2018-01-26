@@ -1,13 +1,14 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.GameObject;
 import java.util.ArrayList;
 
 /**
  * A collection of 20 - 30 star systems.
  * @author Zyun
  */
-public class Sector {
+public class Sector extends GameObject{
 
     private ArrayList<StarSystem> starSystems;
     private GalaticLocation loc;

@@ -1,12 +1,11 @@
 package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.civilizations.CivilizationConfig;
-
 /**
  *
  * @author Zyun
  */
-public class UniverseConfig {
+public class UniverseConfig{
     public String universeSize;
     public String universeShape;
     public String universeAge;
