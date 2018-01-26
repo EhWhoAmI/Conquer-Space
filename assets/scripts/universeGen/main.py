@@ -43,8 +43,8 @@ LOGGER.info("Loading sectors")
 for i in range(universeSize):
     # Set galatic location
     # random degrees, 360 degrees. Take 360 * 4, then select a random one.
-    secdegs = (random.randint(0, 360 * 4)/4)
-    secdist = random.randint(0, 100)
+    secdegs = (random.randint(0, 360))
+    secdist = random.randint(0, 500)
     sectorLoc = GalaticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)
@@ -143,7 +143,7 @@ for p in range(civCount):
         ["les", "", "et", "\'tese", "mar", "zas", "bas"]
     ]
     civ.setHomePlanetName(random.choice(planetNameList[0]) + random.choice(planetNameList[1]) + random.choice(planetNameList[2]))
-    civ.setSpeciesName(speciesName)
+    civ.setSpeciesName(civName)
     civ.setCivilizationPreferredClimate(random.randint(0,2))
     
     symbol = random.choice(symbolList)

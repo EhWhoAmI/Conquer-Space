@@ -75,10 +75,11 @@ public class UniverseRenderer extends JPanel{
             }
             LOGGER.info("Sector " + s.getID() + " size:" + longest);
             LOGGER.info("Angle " + s.getGalaticLocation().getDegrees());
+            LOGGER.info("Distance " + s.getGalaticLocation().getDistance());
             //Do math to calculate the position of the sector. 
             //Distance is to the center of the sector to center of universe.
             //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
-            long ang = (long) s.getGalaticLocation().getDegrees();
+            double ang = (double) s.getGalaticLocation().getDegrees();
             int rot = 0;
             while (ang > 89) {
                 ang -= 90;
@@ -92,7 +93,7 @@ public class UniverseRenderer extends JPanel{
             int adj = (int) Math.round(Math.cos(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
              opp *= sizeOfLtyr;
              adj *=sizeOfLtyr;
-             LOGGER.info("ROT: " + rot);
+             LOGGER.info("ROT: " + rot + " Angle: " + ang);
             switch (rot) {
                 case 0:
                     //Xpos is adjectant.

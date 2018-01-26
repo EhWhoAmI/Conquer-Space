@@ -1,8 +1,11 @@
 package ConquerSpace.game.ui;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.universe.civControllers.AIController;
+import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,16 +53,29 @@ public class UniverseBreakdown extends JFrame {
                 starSystem.add(planetsNode);
                 sectorNode.add(starSystem);
             }
-
             sectorNodes.add(sectorNode);
             
         }
         root.add(sectorNodes);
+        
+        //Civs
+        DefaultMutableTreeNode civNodes = new DefaultMutableTreeNode("Civilizations");
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+            Civilization civ = Globals.universe.getCivilization(i);
+            DefaultMutableTreeNode civNode = new DefaultMutableTreeNode(civ.getName());
+            civNodes.add(civNode);
+        }
+        root.add(civNodes);
         JTree tree = new JTree(root);
+        tree.addTreeSelectionListener((e) -> {
+            
+        });
         JScrollPane pane = new JScrollPane(tree);
+        pane.setSize(500, 500);
         pan.add(pane);
+        pan.setPreferredSize(new Dimension(500, 500));
         add(pan);
-        pack();
+        setSize(500, 500);
         setVisible(true);
     }
 
