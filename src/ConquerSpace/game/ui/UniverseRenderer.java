@@ -64,6 +64,7 @@ public class UniverseRenderer extends JPanel{
         Ellipse2D.Float[] circleList = new Ellipse2D.Float[universe.getSectorCount()];
         //Initalize sector circles!
         for (int n = 0; n < circleList.length; n ++) {
+            long start = System.currentTimeMillis();
             //Get sector
             Sector s = sectors.get(n);
             LOGGER.info("---- [Sector " + s.getID() + "] ----");
@@ -132,6 +133,8 @@ public class UniverseRenderer extends JPanel{
             g2d.setColor(Color.ORANGE);
             //Uncomment for debugging
             //g2d.draw(ln);
+            long end = System.currentTimeMillis();
+            LOGGER.info("Took " + (end - start) + " milliseconds to draw sector");
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
         }
     }

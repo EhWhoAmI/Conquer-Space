@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 
 import ConquerSpace.start.gui.Manual;
 import ConquerSpace.start.gui.NewGame;
+import ConquerSpace.start.gui.OptionsWindow;
 import ConquerSpace.util.CQSPLogger;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Logger;
@@ -90,7 +91,7 @@ public class MainMenu extends JFrame {
             });
 
             options.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, "Forgot to implement LOL :P", "Oops", JOptionPane.INFORMATION_MESSAGE);
+                OptionsWindow.getInstance();
             });
             
             add(startGame);

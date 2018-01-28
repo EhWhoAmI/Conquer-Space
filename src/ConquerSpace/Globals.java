@@ -1,6 +1,7 @@
 package ConquerSpace;
 
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import java.util.Properties;
 
 /**
  *
@@ -8,4 +9,5 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
  */
 public class Globals {
     public static Universe universe;
+    public static Properties settings;
 }
