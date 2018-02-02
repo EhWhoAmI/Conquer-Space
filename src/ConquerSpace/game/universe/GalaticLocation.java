@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe;
 
 /**
- * Galatic location.
+ * Galatic location. In a nutshell, this is a polar coordinate.
  * @author Zyun
  */
 public class GalaticLocation {
@@ -10,8 +10,8 @@ public class GalaticLocation {
 
     /**
      * Constructor.
-     * @param degrees
-     * @param distance
+     * @param degrees degrees from north in a clockwise direction.
+     * @param distance distance from the center.
      */
     public GalaticLocation(float degrees, int distance) {
         this.degrees = degrees;
@@ -24,10 +24,18 @@ public class GalaticLocation {
         return("(Degrees: " + degrees + " Distance: " + distance + ")");
     }
     
+    /**
+     * Get the degrees.
+     * @return Degrees.
+     */
     public float getDegrees() {
         return (degrees);
     }
     
+    /**
+     * Get the distance.
+     * @return Distance.
+     */
     public float getDistance() {
         return (distance);
     }

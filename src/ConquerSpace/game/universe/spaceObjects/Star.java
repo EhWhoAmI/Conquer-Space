@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.GameObject;
 /**
- *
+ * A star.
  * @author Zyun
  */
 public class Star extends GameObject{
@@ -11,10 +11,10 @@ public class Star extends GameObject{
     private int id;
 
     /**
-     *
-     * @param type
-     * @param starSize
-     * @param id
+     * @see StarTypes
+     * @param type type of star
+     * @param starSize size of star
+     * @param id id
      */
     public Star(int type, int starSize, int id) {
         this.type = type;

@@ -19,7 +19,8 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class MainMenu extends JFrame {
-
+    
+    //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
 
     /**
@@ -28,6 +29,8 @@ public class MainMenu extends JFrame {
     public MainMenu() {
         setTitle("Conquer Space");
         setLayout(new GridLayout(2, 1, 10, 10));
+        
+        //Add the classes on the bottom
         add(new TopBanner());
         add(new BottomMenu());
         pack();
@@ -36,10 +39,13 @@ public class MainMenu extends JFrame {
     }
 
     /**
-     * 
+     * Top banner of the main menu. Drawings.
      */
     private class TopBanner extends JPanel {
-
+        /**
+         * The paint component part, for the title screen.
+         * @param g Graphics.
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
@@ -47,8 +53,12 @@ public class MainMenu extends JFrame {
         }
     }
 
+    /**
+     * The bottom menu of the main menu. Buttons.
+     */
     private class BottomMenu extends JPanel {
 
+        //Components
         private JButton startGame;
         private JButton resumeGame;
         private JButton about;
@@ -56,6 +66,9 @@ public class MainMenu extends JFrame {
         private JButton credits;
         private JButton options;
 
+        /**
+         * The whole menu.
+         */
         public BottomMenu() {
             setLayout(new GridLayout(2, 3, 10, 10));
 
@@ -94,6 +107,7 @@ public class MainMenu extends JFrame {
                 OptionsWindow.getInstance();
             });
             
+            //Add components
             add(startGame);
             add(resumeGame);
             add(manual);

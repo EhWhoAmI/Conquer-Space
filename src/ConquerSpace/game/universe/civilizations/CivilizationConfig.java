@@ -3,7 +3,7 @@ package ConquerSpace.game.universe.civilizations;
 import java.awt.Color;
 
 /**
- *
+ * Configuration of the civilization.
  * @author Zyun
  */
 public class CivilizationConfig {

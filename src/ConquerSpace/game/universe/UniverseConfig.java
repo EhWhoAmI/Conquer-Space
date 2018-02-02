@@ -2,7 +2,7 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.civilizations.CivilizationConfig;
 /**
- *
+ * Config of the Universe to be passed on to the scripts.
  * @author Zyun
  */
 public class UniverseConfig{

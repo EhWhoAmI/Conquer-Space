@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 import org.apache.logging.log4j.Logger;
 
 /**
- *
+ * Shows the selection of manuals.
  * @author Zyun
  */
 public class Manual extends JFrame implements ListSelectionListener {

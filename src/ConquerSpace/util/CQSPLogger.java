@@ -4,20 +4,23 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 /**
- *
+ * Logger for CQSP.
  * @author Zyun
  */
 public class CQSPLogger {
     /**
-     *
-     * @param name
-     * @return
+     * Inits a logger.
+     * @param name name of logger. Usually the name of the class
+     * @return Logger.
      */
     public static Logger getLogger(String name) {
         return LogManager.getLogger(name);
     }
     
+    /**
+     * Init the Error log.
+     */
     public static void initLoggers() {
-         Logger log = LogManager.getLogger("ErrorLog");
+         LogManager.getLogger("ErrorLog");
     }
 }

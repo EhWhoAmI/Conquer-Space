@@ -16,7 +16,10 @@ import org.apache.logging.log4j.Logger;
  */
 public class InitialLoading extends JFrame {
 
+    //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(InitialLoading.class.getName());
+    
+    //Components
     private JProgressBar progressBar;
     private JLabel text;
 

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
- *
+ * Jpanel of the universe. Displays the whole of it.
  * @author Zyun
  */
 public class UniverseRenderer extends JPanel{
@@ -36,6 +36,10 @@ public class UniverseRenderer extends JPanel{
         //LOGGER.info("Displaying universe " + universe.toReadableString());
     }
     
+    /**
+     * Paints the universe.
+     * @param g Graphics.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -132,14 +136,16 @@ public class UniverseRenderer extends JPanel{
             Line2D.Float ln = new Line2D.Float(universeDrawnSize/2, universeDrawnSize/2, xpos, ypos);
             g2d.setColor(Color.ORANGE);
             //Uncomment for debugging
-            //g2d.draw(ln);
+            g2d.draw(ln);
             long end = System.currentTimeMillis();
             LOGGER.info("Took " + (end - start) + " milliseconds to draw sector");
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
         }
     }
     
-    //Details for the universe. Size, etc, etc...
+    /**
+     * Details for the universe. Size, etc, etc...
+     */
     private class UniverseDetails {
         float diameter;
         

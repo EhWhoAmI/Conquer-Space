@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *
+ * Universe Object.
  * @author Zyun
  */
 public class Universe extends GameObject{
 
     private ArrayList<Sector> sectors;
     private ArrayList<Civilization> civs;
-    /**
-     *
-     */
+
     public Universe() {
         sectors = new ArrayList<>();
         civs = new ArrayList<>();

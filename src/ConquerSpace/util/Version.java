@@ -1,7 +1,7 @@
 package ConquerSpace.util;
 
 /**
- *
+ * Version for easy parts.
  * @author Zyun
  */
 public class Version {
@@ -13,10 +13,10 @@ public class Version {
 
     /**
      *
-     * @param major
-     * @param minor
-     * @param patch
-     * @param extras
+     * @param major major number.
+     * @param minor Minor number.
+     * @param patch Patch number.
+     * @param extras Extras, e.g.:"-dev", "-alpha"
      */
     public Version(int major, int minor, int patch, String extras) {
         this.major = major;

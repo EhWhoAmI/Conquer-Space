@@ -230,17 +230,19 @@ public class NewGame extends JFrame implements ActionListener {
                 civilizationConfig.setSpeciesName(speciesNameField.getText());
                 config.setCivilizationConfig(civilizationConfig);
                 
+                // Start time of logging
                 long loadingStart = System.currentTimeMillis();
-                //Init script
+                //Init script engine
                 ScriptEngineManager manager = new ScriptEngineManager();
                 ScriptEngine engine = manager.getEngineByName("python");
 
                 engine.put("universeConfig", config);
-                engine.put("version", ConquerSpace.VERSION);
                 engine.put("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
                 reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
                 engine.eval(reader);
                 Universe universe = (Universe) engine.get("universeObject");
+                
+                //Logger end time
                 long loadingEnd = System.currentTimeMillis();
                 LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe.");
 
@@ -268,6 +270,7 @@ public class NewGame extends JFrame implements ActionListener {
                 }
             }
         } else if (e.getSource() == civColorChooserButton) {
+            //Show the civ color chooser
             civColor = JColorChooser.showDialog(null, "Choose Civilization Color", civColor);
             civColorChooserButton.setBackground(civColor);
         }

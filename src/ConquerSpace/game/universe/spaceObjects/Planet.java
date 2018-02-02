@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.GameObject;
 /**
- * Planet class
+ * Planet class.
  * @author Zyun
  */
 public class Planet extends GameObject{

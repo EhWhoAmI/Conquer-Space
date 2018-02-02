@@ -9,7 +9,7 @@ import javax.swing.JTextPane;
 import org.apache.logging.log4j.Logger;
 
 /**
- *
+ * The content of the manuals.
  * @author Zyun
  */
 public class ManualContent extends JFrame {
@@ -20,7 +20,7 @@ public class ManualContent extends JFrame {
     /**
      *
      * @param file the manual file to load.
-     * @return
+     * @return ManualContent instance
      */
     public static ManualContent getInstance(String file) {
         if (instance == null) {

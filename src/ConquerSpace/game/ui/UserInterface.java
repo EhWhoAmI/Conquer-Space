@@ -9,10 +9,12 @@ import javax.swing.JPanel;
  * @author Zyun
  */
 public class UserInterface extends JFrame{
+    //Components
     private JButton industryButton;
     private JButton militaryButton;
     private JButton economyButton;
     private JButton universeBreakdownButton;
+    
     public UserInterface() {
         JPanel pan = new JPanel();
         industryButton = new JButton("Industry");

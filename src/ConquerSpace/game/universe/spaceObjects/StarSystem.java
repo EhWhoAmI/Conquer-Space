@@ -5,7 +5,7 @@ import ConquerSpace.game.GameObject;
 import java.util.ArrayList;
 
 /**
- *
+ * A star system.
  * @author Zyun
  */
 public class StarSystem extends GameObject{

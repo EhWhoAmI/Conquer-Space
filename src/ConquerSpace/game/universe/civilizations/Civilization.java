@@ -6,7 +6,7 @@ import ConquerSpace.game.GameObject;
 import java.awt.Color;
 
 /**
- *
+ * Civilization
  * @author Zyun
  */
 public class Civilization extends GameObject{
@@ -23,6 +23,9 @@ public class Civilization extends GameObject{
     private int homeSystemID;
     private int homePlanetID;
     
+    /**
+     * The controller of this civ.
+     */
     public CivilizationController controller;
 
     public Civilization(int ID) {

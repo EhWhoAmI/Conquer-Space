@@ -13,7 +13,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- *
+ * Breakdown of the universe.
  * @author Zyun
  */
 public class UniverseBreakdown extends JFrame {
@@ -79,6 +79,10 @@ public class UniverseBreakdown extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Get one instance of the UniverseBreakdown class.
+     * @return Instance of universe breakdown class.
+     */
     public static UniverseBreakdown getInstance() {
         if (instance == null) {
             instance = new UniverseBreakdown();

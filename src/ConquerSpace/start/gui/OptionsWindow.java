@@ -15,13 +15,17 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 /**
- *
+ * Window of options.
  * @author Zyun
  */
 public class OptionsWindow extends JFrame{
     
+    //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(OptionsWindow.class.getName());
+    
     private static OptionsWindow instance;
+    
+    //Components
     private JPanel logsPanel;
     private JLabel deleteLogsLabel;
     private JButton deleteLogsButton;

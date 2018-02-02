@@ -1,15 +1,18 @@
 # universeGen/main.py -- generates universe, loads it into xml file
 # Get universe config, then parse the XML into file
 
+# Variables in this script:
+# LOGGER -- Logger for this script. Check out org.apache.logging.log4j.Logger.
+# universeConfig -- Universe Config object. Check out ConquerSpace.game.universe.UniverseConfig
+
 import random
 from os.path import *
 from os import *
-import time
 
 # Import universe files
 from ConquerSpace.game.universe import GalaticLocation
-from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet, PlanetTypes, StarTypes
-from ConquerSpace.game.universe.civilizations import Civilization, CivilizationPreferredClimateTypes
+from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet
+from ConquerSpace.game.universe.civilizations import Civilization
 from ConquerSpace.game.universe.civControllers import AIController, PlayerController
 from java.awt import Color
 
@@ -66,10 +69,12 @@ for i in range(universeSize):
         
         planets = random.randint(0, 9)
         
+        lastDist = 1
         for n in range(planets):
             # Planets
             ptype = random.randint(0, 1)
-            orbitalDistance = random.randint(1, 100)
+            orbitalDistance = random.randint(lastDist, 100)
+            lastDist = orbitalDistance
             planetSize = random.randint(1, 50)
             planet = Planet(ptype, orbitalDistance, planetSize, n)
             starSystem.addPlanet(planet)
