@@ -2,7 +2,7 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.ConquerSpace;
-import ConquerSpace.game.ui.UniverseRenderer;
+import ConquerSpace.game.ui.renderer.universe.UniverseRenderer;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;

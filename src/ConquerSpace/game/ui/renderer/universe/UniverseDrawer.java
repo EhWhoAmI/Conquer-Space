@@ -1,65 +1,59 @@
-package ConquerSpace.game.ui;
+package ConquerSpace.game.ui.renderer.universe;
 
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import org.apache.logging.log4j.Logger;
-import java.awt.Color;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import javax.swing.JPanel;
+import org.apache.logging.log4j.Logger;
 
 /**
- * Jpanel of the universe. Displays the whole of it.
+ * Tries to remove all the math from the paintComponent in UniverseRenderer, by doing the math before hand.
  * @author Zyun
  */
-public class UniverseRenderer extends JPanel{
-    private static final Logger LOGGER = CQSPLogger.getLogger(UniverseRenderer.class.getName());
-    private Dimension bounds;
-    private Universe universe;
-    private Point translation; 
-    private UniverseDetails details;
+public class UniverseDrawer {
+    //Logger
+    private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDrawer.class.getName());
     
-    public UniverseRenderer(Dimension bounds, Universe universe, Point translation) {
-        this.bounds = bounds;
-        this.universe = universe;
-        this.translation = translation;
-        
-        details = new UniverseDetails(universe);
-        
-        setPreferredSize(bounds);
-        //LOGGER.info("Displaying universe " + universe.toReadableString());
-    }
+    public int universeDimensionsLTYR;
+    public int universeDrawnSize;
     
-    /**
-     * Paints the universe.
-     * @param g Graphics.
-     */
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        //Paint bounds dark blue.
-        Graphics2D g2d = (Graphics2D) g;
+    public ArrayList<SectorDrawStats> sectorDrawings;
+    public UniverseDrawer(Universe universe, Dimension bounds) {
+        sectorDrawings = new ArrayList<>();
+        {
+            //Find radius of the universe in light years. Outermost system of the outermost sector + 1 ltyr.
+            Sector largest = null;
+            for (int i = 0; i < universe.getSectorCount(); i ++) {
+                Sector s = universe.getSector(i);
+                if (largest == null || s.getGalaticLocation().getDistance() > largest.getGalaticLocation().getDistance()) {
+                    largest = s;
+                }
+            }
+            
+            //Use the same process for the star systems.
+            int largeStarSystem = 0;
+            for (int i = 0; i < largest.getStarSystemCount(); i ++) {
+                if (largest.getStarSystem(i).getGalaticLocation().getDistance() > largeStarSystem)
+                    largeStarSystem = (int) largest.getStarSystem(i).getGalaticLocation().getDistance();
+            }
+            
+            // Then add the two distances together.
+            universeDimensionsLTYR = (int) (largeStarSystem + largest.getGalaticLocation().getDistance() + 1);
+            LOGGER.info("Universe diameter : " + universeDimensionsLTYR + " ltyr");
+            
+            
+        }
         
-        Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
-        g2d.setColor(new Color(0, 0, 255));
-        g2d.fill(bg);
-        //We have the universe diameter, then find the size in pixels the universe has to be.
-        int universeDrawnSize = (bounds.height < bounds.width)? bounds.height : bounds.width;
+        //Calculate drawn size
+        universeDrawnSize = (bounds.height < bounds.width)? bounds.height : bounds.width;
         int placedOutside = 0;
         LOGGER.info("Universe drawn size: " + universeDrawnSize);
         //Draw a circle to show the universe
-        Ellipse2D.Float universeCircle = new Ellipse2D.Float(0, 0, universeDrawnSize, universeDrawnSize);
-        g2d.setColor(Color.BLACK);
-        g2d.fill(universeCircle);
+
         //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
-        int sizeOfLtyr = (int) Math.floor(universeDrawnSize/details.diameter);
+        int sizeOfLtyr = (int) Math.floor(universeDrawnSize/universeDimensionsLTYR);
         LOGGER.info("Size of light year " + sizeOfLtyr + "px");
         //Load all the sectors.
         ArrayList<Sector> sectors = new ArrayList<>();
@@ -67,11 +61,8 @@ public class UniverseRenderer extends JPanel{
             sectors.add(universe.getSector(i));
         }
         
-        //Iterate over sectors and find size of sector, make circles of them.
-        Ellipse2D.Float[] circleList = new Ellipse2D.Float[universe.getSectorCount()];
         //Initalize sector circles!
-        for (int n = 0; n < circleList.length; n ++) {
-            long start = System.currentTimeMillis();
+        for (int n = 0; n < universe.getSectorCount(); n ++) {
             //Get sector
             Sector s = sectors.get(n);
             LOGGER.info("---- [Sector " + s.getID() + "] ----");
@@ -128,18 +119,6 @@ public class UniverseRenderer extends JPanel{
             
             LOGGER.info("Opposite = " + opp + "px; Adjacent = " + adj + "px.");
             LOGGER.info("Position: " + xpos + ", " + ypos);
-            //Find position from the center of the galaxy.
-            //Longest is the size of the sector.
-            Ellipse2D.Float c = new Ellipse2D.Float(xpos - (longest * sizeOfLtyr/2), ypos - (longest * sizeOfLtyr/2), longest * sizeOfLtyr, longest * sizeOfLtyr);
-            LOGGER.info("Rect " + c.getBounds2D().toString());
-            g2d.setColor(Color.red);
-            g2d.draw(c);
-            
-            //Debugging: draw line from xpos and y pos to the center of universe, just as test.
-            Line2D.Float ln = new Line2D.Float(universeDrawnSize/2, universeDrawnSize/2, xpos, ypos);
-            g2d.setColor(Color.ORANGE);
-            //Uncomment for debugging
-            g2d.draw(ln);
             
             //Also for debugging, ensure the center of the circle is in the screen
             double i = Math.hypot(xpos - universeDrawnSize/2, ypos - universeDrawnSize/2);
@@ -148,42 +127,29 @@ public class UniverseRenderer extends JPanel{
                 LOGGER.warn("Sector " + s.getID() + " Outside the box!");
                 placedOutside++;
             }
-            long end = System.currentTimeMillis();
-            LOGGER.info("Took " + (end - start) + " milliseconds to draw sector");
+            SectorDrawStats stats = new SectorDrawStats(new Point(xpos, ypos), (int) longest);
+            sectorDrawings.add(stats);
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
             
         }
         LOGGER.info(placedOutside + " sector(s) outside!");
     }
     
-    /**
-     * Details for the universe. Size, etc, etc...
-     */
-    private class UniverseDetails {
-        float diameter;
-        
-        public UniverseDetails(Universe univ) {
-            //Find radus of the universe. Outermost system of the outermost sector + 1 ltyr.
-            Sector largest = null;
-            for (int i = 0; i < univ.getSectorCount(); i ++) {
-                Sector s = univ.getSector(i);
-                if (largest == null || s.getGalaticLocation().getDistance() > largest.getGalaticLocation().getDistance()) {
-                    largest = s;
-                }
-            }
-            
-            //Use the same process for the star systems.
-            int largeStarSystem = 0;
-            for (int i = 0; i < largest.getStarSystemCount(); i ++) {
-                if (largest.getStarSystem(i).getGalaticLocation().getDistance() > largeStarSystem)
-                    largeStarSystem = (int) largest.getStarSystem(i).getGalaticLocation().getDistance();
-            }
-            
-            // Then add the two distances together.
-            diameter = (largeStarSystem + largest.getGalaticLocation().getDistance() + 1);
-            LOGGER.info("Universe diameter : " + diameter + " ltyr");
+    public class SectorDrawStats {
+        private Point pos;
+        private int circumference;
+
+        public SectorDrawStats(Point pos, int circumference) {
+            this.pos = pos;
+            this.circumference = circumference;
         }
-        
+
+        public int getCircumference() {
+            return circumference;
+        }
+
+        public Point getPosition() {
+            return pos;
+        }
     }
-    
 }

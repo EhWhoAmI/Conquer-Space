@@ -1,5 +1,6 @@
 package ConquerSpace.game.ui;
 
+import ConquerSpace.game.ui.renderer.universe.UniverseRenderer;
 import ConquerSpace.Globals;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,7 +19,7 @@ public class UniverseDisplayer extends JFrame{
         setTitle("Conquer Space");
         setLayout(new BorderLayout());
         //Create universe renderer
-        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1000, 1000), Globals.universe, new Point(0, 0));
+        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1000, 1000), Globals.universe);
         JPanel pan = new JPanel();
         pan.add(renderer);
         
