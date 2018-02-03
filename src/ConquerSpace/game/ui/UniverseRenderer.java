@@ -33,6 +33,7 @@ public class UniverseRenderer extends JPanel{
         
         details = new UniverseDetails(universe);
         
+        setPreferredSize(bounds);
         //LOGGER.info("Displaying universe " + universe.toReadableString());
     }
     
@@ -45,11 +46,13 @@ public class UniverseRenderer extends JPanel{
         super.paintComponent(g);
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
+        
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(new Color(0, 0, 255));
         g2d.fill(bg);
         //We have the universe diameter, then find the size in pixels the universe has to be.
         int universeDrawnSize = (bounds.height < bounds.width)? bounds.height : bounds.width;
+        int placedOutside = 0;
         LOGGER.info("Universe drawn size: " + universeDrawnSize);
         //Draw a circle to show the universe
         Ellipse2D.Float universeCircle = new Ellipse2D.Float(0, 0, universeDrawnSize, universeDrawnSize);
@@ -94,29 +97,29 @@ public class UniverseRenderer extends JPanel{
             int xpos;
             int ypos;
             //Math.sin and Math.cos is in radians.
-            int opp = (int) Math.round(Math.sin(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
-            int adj = (int) Math.round(Math.cos(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
-             opp *= sizeOfLtyr;
-             adj *=sizeOfLtyr;
-             LOGGER.info("ROT: " + rot + " Angle: " + ang);
+            int opp = (int) Math.floor(Math.sin(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
+            int adj = (int) Math.floor(Math.cos(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
+            opp *= sizeOfLtyr;
+            adj *= sizeOfLtyr;
+            LOGGER.info("ROT: " + rot + " Angle: " + ang);
             switch (rot) {
                 case 0:
-                    //Xpos is adjectant.
-                    xpos = Math.round(universeDrawnSize/2 + opp);
-                    ypos = Math.round(universeDrawnSize/2 - adj);
+                    //Xpos is opposite.
+                    xpos = (int) Math.floor(universeDrawnSize/2 + opp);
+                    ypos = (int) Math.floor(universeDrawnSize/2 - adj);
                     break;
                 case 1:
                     //YPos is adjecant
-                    xpos = Math.round(universeDrawnSize/2 + adj);
-                    ypos = Math.round(universeDrawnSize/2 + opp);
+                    xpos = (int) Math.floor(universeDrawnSize/2 + adj);
+                    ypos = (int) Math.floor(universeDrawnSize/2 + opp);
                     break;
                 case 2:
-                    xpos = Math.round(universeDrawnSize/2 - opp);
-                    ypos = Math.round(universeDrawnSize/2 + adj);
+                    xpos = (int) Math.floor(universeDrawnSize/2 - opp);
+                    ypos = (int) Math.floor(universeDrawnSize/2 + adj);
                     break;
                 case 3:
-                    xpos = Math.round(universeDrawnSize/2 - adj);
-                    ypos = Math.round(universeDrawnSize/2 - opp);
+                    xpos = (int) Math.floor(universeDrawnSize/2 - adj);
+                    ypos = (int) Math.round(universeDrawnSize/2 - opp);
                     break;
                 default:
                     xpos = 0;
@@ -137,10 +140,20 @@ public class UniverseRenderer extends JPanel{
             g2d.setColor(Color.ORANGE);
             //Uncomment for debugging
             g2d.draw(ln);
+            
+            //Also for debugging, ensure the center of the circle is in the screen
+            double i = Math.hypot(xpos - universeDrawnSize/2, ypos - universeDrawnSize/2);
+            LOGGER.info("Distance is " + i);
+            if (i > (universeDrawnSize/2)){
+                LOGGER.warn("Sector " + s.getID() + " Outside the box!");
+                placedOutside++;
+            }
             long end = System.currentTimeMillis();
             LOGGER.info("Took " + (end - start) + " milliseconds to draw sector");
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
+            
         }
+        LOGGER.info(placedOutside + " sector(s) outside!");
     }
     
     /**

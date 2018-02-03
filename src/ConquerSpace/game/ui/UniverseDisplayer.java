@@ -1,9 +1,11 @@
 package ConquerSpace.game.ui;
 
 import ConquerSpace.Globals;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
@@ -14,16 +16,19 @@ public class UniverseDisplayer extends JFrame{
 
     public UniverseDisplayer() {
         setTitle("Conquer Space");
+        setLayout(new BorderLayout());
         //Create universe renderer
-        UniverseRenderer renderer = new UniverseRenderer(new Dimension(750, 750), Globals.universe, new Point(0, 0));
-        renderer.setPreferredSize(new Dimension(750, 750));
-        //Place renderer into a scroll pane. taken out for now
-        JScrollPane scrollPane = new JScrollPane(renderer);
-        //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1000, 1000), Globals.universe, new Point(0, 0));
+        JPanel pan = new JPanel();
+        pan.add(renderer);
         
-        add(renderer);
-        pack();
+        //Place renderer into a scroll pane.
+
+        JScrollPane scrollPane = new JScrollPane(pan);
+        
+        add(scrollPane);
+
+        setSize(500, 500);
         setVisible(true);
     }
     

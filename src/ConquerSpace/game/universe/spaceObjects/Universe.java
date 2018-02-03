@@ -3,7 +3,6 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.GameObject;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Universe Object.

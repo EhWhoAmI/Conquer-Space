@@ -47,12 +47,13 @@ for i in range(universeSize):
     # Set galatic location
     # random degrees, 360 degrees. Take 360 * 4, then select a random one.
     secdegs = (random.randint(0, 360))
-    secdist = random.randint(0, 500)
+    secdist = random.randint(0, (50 * universeSize))
     sectorLoc = GalaticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)
     
     starSystemCount = random.randint(10, 20)
+    
     # Add star systems
     for r in range(starSystemCount):
         # Galatic location
@@ -73,7 +74,7 @@ for i in range(universeSize):
         for n in range(planets):
             # Planets
             ptype = random.randint(0, 1)
-            orbitalDistance = random.randint(lastDist, 100)
+            orbitalDistance = random.randint(lastDist, lastDist + 5*n)
             lastDist = orbitalDistance
             planetSize = random.randint(1, 50)
             planet = Planet(ptype, orbitalDistance, planetSize, n)
@@ -88,7 +89,7 @@ LOGGER.info("Done Creating Sectors")
 
 LOGGER.info("Creating Civilizations")
 # Get approximate number of starSystems
-systemCount = universeSize * 7
+systemCount = universeSize * 15
 LOGGER.info("Universe system approx count: " + str(systemCount))
 # Civ count
 if civCount == 1:
