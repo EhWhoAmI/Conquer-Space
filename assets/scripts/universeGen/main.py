@@ -8,13 +8,22 @@
 import random
 from os.path import *
 from os import *
+import math
 
 # Import universe files
 from ConquerSpace.game.universe import GalaticLocation
+from ConquerSpace.game.ui.renderer import RendererMath
 from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet
 from ConquerSpace.game.universe.civilizations import Civilization
 from ConquerSpace.game.universe.civControllers import AIController, PlayerController
-from java.awt import Color
+from java.awt import Color, Point
+
+def circleIntersects(pt1, rad1, pt2, rad2):
+	dist = math.hypot(pt1.x - pt2.x, pt1.y - pt2.y)
+	if dist < (rad1 + rad2):
+		return True
+	return False
+
 
 # universe size -- change this when universe sizes change
 universeSize = {'Small': 10, 'Medium': 20, 'Large': 30}[universeConfig.getUniverseSize()]
@@ -43,11 +52,18 @@ universeObject = Universe()
 LOGGER.info("Loading sectors")
 # Create sectors
 # Get sector count
+sectorLevel = 0
 for i in range(universeSize):
     # Set galatic location
     # random degrees, 360 degrees. Take 360 * 4, then select a random one.
-    secdegs = (random.randint(0, 360))
+    secdegs = random.randint(0, 360)
+	
+	
     secdist = random.randint(0, (25 * universeSize))
+	if i != 0:
+		sectTest = universeConfig.getSector(i-1)
+		pt1 = RendererMath.polarCoordToCartesianCoord(sectTest.getGalaticLocation(), Point(0, 0), 1)
+		pt2 = 
     sectorLoc = GalaticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)
