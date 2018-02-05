@@ -47,7 +47,7 @@ for i in range(universeSize):
     # Set galatic location
     # random degrees, 360 degrees. Take 360 * 4, then select a random one.
     secdegs = (random.randint(0, 360))
-    secdist = random.randint(0, (50 * universeSize))
+    secdist = random.randint(0, (25 * universeSize))
     sectorLoc = GalaticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)

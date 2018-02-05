@@ -1,4 +1,4 @@
-package ConquerSpace.game.ui.renderer.universe;
+package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -75,59 +75,18 @@ public class UniverseDrawer {
             LOGGER.info("Sector " + s.getID() + " size:" + longest);
             LOGGER.info("Angle " + s.getGalaticLocation().getDegrees());
             LOGGER.info("Distance " + s.getGalaticLocation().getDistance());
-            //Do math to calculate the position of the sector. 
-            //Distance is to the center of the sector to center of universe.
-            //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
-            double ang = (double) s.getGalaticLocation().getDegrees();
-            int rot = 0;
-            while (ang > 89) {
-                ang -= 90;
-                rot ++;
-            }
-            //Then do a sine to calculate the length of the opposite. 
-            int xpos;
-            int ypos;
-            //Math.sin and Math.cos is in radians.
-            int opp = (int) Math.floor(Math.sin(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
-            int adj = (int) Math.floor(Math.cos(Math.toRadians(ang)) * s.getGalaticLocation().getDistance());
-            opp *= sizeOfLtyr;
-            adj *= sizeOfLtyr;
-            LOGGER.info("ROT: " + rot + " Angle: " + ang);
-            switch (rot) {
-                case 0:
-                    //Xpos is opposite.
-                    xpos = (int) Math.floor(universeDrawnSize/2 + opp);
-                    ypos = (int) Math.floor(universeDrawnSize/2 - adj);
-                    break;
-                case 1:
-                    //YPos is adjecant
-                    xpos = (int) Math.floor(universeDrawnSize/2 + adj);
-                    ypos = (int) Math.floor(universeDrawnSize/2 + opp);
-                    break;
-                case 2:
-                    xpos = (int) Math.floor(universeDrawnSize/2 - opp);
-                    ypos = (int) Math.floor(universeDrawnSize/2 + adj);
-                    break;
-                case 3:
-                    xpos = (int) Math.floor(universeDrawnSize/2 - adj);
-                    ypos = (int) Math.round(universeDrawnSize/2 - opp);
-                    break;
-                default:
-                    xpos = 0;
-                    ypos = 0;
-            }
             
-            LOGGER.info("Opposite = " + opp + "px; Adjacent = " + adj + "px.");
-            LOGGER.info("Position: " + xpos + ", " + ypos);
+            
+            Point sectorPos = RendererMath.polarCoordToCartesianCoord(s.getGalaticLocation(), new Point(universeDrawnSize/2, universeDrawnSize/2), sizeOfLtyr);
             
             //Also for debugging, ensure the center of the circle is in the screen
-            double i = Math.hypot(xpos - universeDrawnSize/2, ypos - universeDrawnSize/2);
+            double i = Math.hypot(sectorPos.getX() - universeDrawnSize/2, sectorPos.getY() - universeDrawnSize/2);
             LOGGER.info("Distance is " + i);
             if (i > (universeDrawnSize/2)){
                 LOGGER.warn("Sector " + s.getID() + " Outside the box!");
                 placedOutside++;
             }
-            SectorDrawStats stats = new SectorDrawStats(new Point(xpos, ypos), (int) longest);
+            SectorDrawStats stats = new SectorDrawStats(new Point((int) sectorPos.getX(), (int) sectorPos.getY()), (int) longest);
             sectorDrawings.add(stats);
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
             

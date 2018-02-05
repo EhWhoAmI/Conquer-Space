@@ -1,6 +1,6 @@
 package ConquerSpace.game.ui;
 
-import ConquerSpace.game.ui.renderer.universe.UniverseRenderer;
+import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.Globals;
 import java.awt.BorderLayout;
 import java.awt.Dimension;

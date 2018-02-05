@@ -2,7 +2,7 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.ConquerSpace;
-import ConquerSpace.game.ui.renderer.universe.UniverseRenderer;
+import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -126,7 +126,7 @@ public final class UniverseRenderTest {
 
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         //Add the universe renderer
-        UniverseRenderer renderer = new UniverseRenderer(Toolkit.getDefaultToolkit().getScreenSize(), universe, new Point(0, 0));
+        UniverseRenderer renderer = new UniverseRenderer(Toolkit.getDefaultToolkit().getScreenSize(), universe);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(renderer);
 

@@ -49,11 +49,14 @@ public class ConquerSpace {
         }
         else {
             try {
+                if (!settingsFile.getParentFile().exists()) {
+                    settingsFile.getParentFile().mkdir();
+                }
                 settingsFile.createNewFile();
                 //Add default settings
                 
             } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(ConquerSpace.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.warn("Unable to create settings file!", ex);
             }
         }
         

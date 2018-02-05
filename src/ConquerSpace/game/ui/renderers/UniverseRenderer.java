@@ -1,4 +1,4 @@
-package ConquerSpace.game.ui.renderer.universe;
+package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
