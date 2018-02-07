@@ -12,17 +12,17 @@ import math
 
 # Import universe files
 from ConquerSpace.game.universe import GalaticLocation
-from ConquerSpace.game.ui.renderer import RendererMath
+from ConquerSpace.game.ui.renderers import RendererMath
 from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet
 from ConquerSpace.game.universe.civilizations import Civilization
 from ConquerSpace.game.universe.civControllers import AIController, PlayerController
 from java.awt import Color, Point
 
 def circleIntersects(pt1, rad1, pt2, rad2):
-	dist = math.hypot(pt1.x - pt2.x, pt1.y - pt2.y)
-	if dist < (rad1 + rad2):
-		return True
-	return False
+    dist = math.hypot(pt1.x - pt2.x, pt1.y - pt2.y)
+    if dist < (rad1 + rad2):
+        return True
+    return False
 
 
 # universe size -- change this when universe sizes change
@@ -59,11 +59,8 @@ for i in range(universeSize):
     secdegs = random.randint(0, 360)
 	
 	
-    secdist = random.randint(0, (25 * universeSize))
-	if i != 0:
-		sectTest = universeConfig.getSector(i-1)
-		pt1 = RendererMath.polarCoordToCartesianCoord(sectTest.getGalaticLocation(), Point(0, 0), 1)
-		pt2 = 
+    secdist = random.randint(50, (25 * universeSize))
+    
     sectorLoc = GalaticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)
@@ -97,7 +94,23 @@ for i in range(universeSize):
             starSystem.addPlanet(planet)
             
         sector.addStarSystem(starSystem)
+    if i != 0:
+        sectTest = universeObject.getSector(i-1)
         
+        pt1 = RendererMath.polarCoordToCartesianCoord(sectTest.getGalaticLocation(), Point(0, 0), 1)
+        pt2 = RendererMath.polarCoordToCartesianCoord(sector.getGalaticLocation(), Point(0, 0), 1)
+
+        times = 0
+        while not(circleIntersects(pt1, sectTest.getSize(), pt2, sector.getSize())):
+            sector.modifyDegrees(10)
+            pt1 = RendererMath.polarCoordToCartesianCoord(sectTest.getGalaticLocation(), Point(0, 0), 1)
+            pt2 = RendererMath.polarCoordToCartesianCoord(sector.getGalaticLocation(), Point(0, 0), 1)
+            times = times + 1
+            if times > 10:
+                # Increase distance, and check again
+                sector.modifyDistance(20)
+                times = 0
+
     universeObject.addSector(sector)
     
 LOGGER.info("Done Creating Sectors")

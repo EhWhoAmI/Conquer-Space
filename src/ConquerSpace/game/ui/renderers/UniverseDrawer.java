@@ -78,7 +78,7 @@ public class UniverseDrawer {
             
             
             Point sectorPos = RendererMath.polarCoordToCartesianCoord(s.getGalaticLocation(), new Point(universeDrawnSize/2, universeDrawnSize/2), sizeOfLtyr);
-            
+            LOGGER.info("X = " + sectorPos.x + " Y = " + sectorPos.y);
             //Also for debugging, ensure the center of the circle is in the screen
             double i = Math.hypot(sectorPos.getX() - universeDrawnSize/2, sectorPos.getY() - universeDrawnSize/2);
             LOGGER.info("Distance is " + i);

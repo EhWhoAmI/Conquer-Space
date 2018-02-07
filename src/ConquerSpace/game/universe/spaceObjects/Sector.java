@@ -75,4 +75,24 @@ public class Sector extends GameObject{
         builder.append("}\n");
         return(builder.toString());
     }
+    
+    public void modifyDegrees(float degs) {
+        getGalaticLocation().setDegrees(getGalaticLocation().getDegrees() + degs);
+    }
+    
+    public void modifyDistance(int dist) {
+        getGalaticLocation().setDistance((int) (getGalaticLocation().getDistance() + dist));
+    }
+    public int getSize() {
+            
+            //Use the same process for the star systems.
+            int largeStarSystem = 0;
+            for (int i = 0; i < this.getStarSystemCount(); i ++) {
+                if (this.getStarSystem(i).getGalaticLocation().getDistance() > largeStarSystem)
+                    largeStarSystem = (int) this.getStarSystem(i).getGalaticLocation().getDistance();
+            }
+            
+            // Then add the two distances together.
+            return (largeStarSystem);
+    }
 }

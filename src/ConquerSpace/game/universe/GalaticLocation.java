@@ -39,4 +39,13 @@ public class GalaticLocation {
     public float getDistance() {
         return (distance);
     }
+    
+    public void setDegrees(float degrees) {
+        this.degrees = degrees;
+        this.degrees = this.degrees%360;
+    }
+    
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
 }
