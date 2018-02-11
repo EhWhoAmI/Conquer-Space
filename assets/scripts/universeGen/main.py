@@ -5,19 +5,25 @@
 # LOGGER -- Logger for this script. Check out org.apache.logging.log4j.Logger.
 # universeConfig -- Universe Config object. Check out ConquerSpace.game.universe.UniverseConfig
 
-import random
-from os.path import *
-from os import *
-import math
-
-# Import universe files
 from ConquerSpace.game.universe import GalaticLocation
-from ConquerSpace.game.ui.renderers import RendererMath
-from ConquerSpace.game.universe.spaceObjects import Universe, Sector, StarSystem, Star, Planet
+from ConquerSpace.game.universe.civControllers import AIController
+from ConquerSpace.game.universe.civControllers import PlayerController
 from ConquerSpace.game.universe.civilizations import Civilization
-from ConquerSpace.game.universe.civControllers import AIController, PlayerController
-from java.awt import Color, Point
+from ConquerSpace.game.universe.spaceObjects import Planet
+from ConquerSpace.game.universe.spaceObjects import Sector
+from ConquerSpace.game.universe.spaceObjects import Star
+from ConquerSpace.game.universe.spaceObjects import StarSystem
+from ConquerSpace.game.universe.spaceObjects import Universe
+from java.awt import Color
+import math
+from os import *
+from os.path import *
+import random
 
+# Constants:
+SECTOR_MIN_SYSTEM = 20
+SECTOR_MAX_SYSTEM = 30
+SECTOR_MAX_RADIUS = 150
 def circleIntersects(pt1, rad1, pt2, rad2):
     dist = math.hypot(pt1.x - pt2.x, pt1.y - pt2.y)
     if dist < (rad1 + rad2):
@@ -53,25 +59,34 @@ LOGGER.info("Loading sectors")
 # Create sectors
 # Get sector count
 sectorLevel = 0
+centerSize = 0
+layer = 0
+innerLayerList = []
+degCounter = 0
+sizeOfPolygon = 0
+sidesLeft = 0
 for i in range(universeSize):
     # Set galatic location
-    # random degrees, 360 degrees. Take 360 * 4, then select a random one.
-    secdegs = random.randint(0, 360)
-	
-	
-    secdist = random.randint(50, (25 * universeSize))
+    LOGGER.info("Deg counter = " + str(degCounter))
+    secdegs = degCounter
+    secdist = (((layer-1)*(SECTOR_MAX_RADIUS*2 + 2)) + SECTOR_MAX_RADIUS)
+    
+    
+    if layer == 0:
+        secdegs = 0
+        secdist = 0
     
     sectorLoc = GalaticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)
     
-    starSystemCount = random.randint(10, 20)
+    starSystemCount = random.randint(SECTOR_MIN_SYSTEM, SECTOR_MIN_SYSTEM)
     
     # Add star systems
     for r in range(starSystemCount):
         # Galatic location
-        sysdegs = (random.randint(0, 360 * 4)/4)
-        sysdist = random.randint(0, 100)
+        sysdegs = (random.randint(0, 360 * 4) / 4)
+        sysdist = random.randint(0, SECTOR_MAX_RADIUS)
         systemLoc = GalaticLocation(sysdegs, sysdist)
         starSystem = StarSystem(r, systemLoc)
         # Create star
@@ -87,30 +102,44 @@ for i in range(universeSize):
         for n in range(planets):
             # Planets
             ptype = random.randint(0, 1)
-            orbitalDistance = random.randint(lastDist, lastDist + 5*n)
+            orbitalDistance = random.randint(lastDist, lastDist + 5 * n)
             lastDist = orbitalDistance
             planetSize = random.randint(1, 50)
             planet = Planet(ptype, orbitalDistance, planetSize, n)
             starSystem.addPlanet(planet)
             
         sector.addStarSystem(starSystem)
-    if i != 0:
-        sectTest = universeObject.getSector(i-1)
         
-        pt1 = RendererMath.polarCoordToCartesianCoord(sectTest.getGalaticLocation(), Point(0, 0), 1)
-        pt2 = RendererMath.polarCoordToCartesianCoord(sector.getGalaticLocation(), Point(0, 0), 1)
-
-        times = 0
-        while not(circleIntersects(pt1, sectTest.getSize(), pt2, sector.getSize())):
-            sector.modifyDegrees(10)
-            pt1 = RendererMath.polarCoordToCartesianCoord(sectTest.getGalaticLocation(), Point(0, 0), 1)
-            pt2 = RendererMath.polarCoordToCartesianCoord(sector.getGalaticLocation(), Point(0, 0), 1)
-            times = times + 1
-            if times > 10:
-                # Increase distance, and check again
-                sector.modifyDistance(20)
-                times = 0
-
+    if i == 0:
+        centerSize = sector.getSize()
+        degCounter = 360
+    else:
+        innerLayerList.append(sector)
+        # Add degrees
+        degCounter = degCounter + math.floor((360 / sizeOfPolygon))
+        sidesLeft = sidesLeft - 1
+        print(sizeOfPolygon)
+        print("Deg counter = " + str(degCounter))
+    
+    if sidesLeft == 0:
+        # Reset degrees counter
+        degCounter = 0
+        # Clear the list.
+        innerLayerList = []
+        # Increment layer 
+        layer = layer + 1
+        
+        # Calculate size of polygon
+        radius = ((layer - 1)* (SECTOR_MAX_RADIUS*2 + 2) + SECTOR_MAX_RADIUS)
+        LOGGER.info("Radius: " + str(radius))
+        circurmference = math.pi * radius * 2
+        LOGGER.info("Circurmference: " + str(circurmference))
+        # Divide and round up.
+        sizeOfPolygon = math.floor(circurmference / ((SECTOR_MAX_RADIUS*2) + 2))
+        print(layer)
+        sidesLeft = sizeOfPolygon
+        
+        
     universeObject.addSector(sector)
     
 LOGGER.info("Done Creating Sectors")
@@ -122,9 +151,9 @@ systemCount = universeSize * 15
 LOGGER.info("Universe system approx count: " + str(systemCount))
 # Civ count
 if civCount == 1:
-    civCount = (systemCount/40)
+    civCount = (systemCount / 40)
 elif civCount == 2:
-    civCount = (systemCount/20)
+    civCount = (systemCount / 20)
     
 LOGGER.info("Civilization Count: " + str(civCount))
 
@@ -185,5 +214,5 @@ for p in range(civCount):
     symbolList.remove(symbol)
     civ.setCivilizationSymbol(symbol)
     civ.setController(AIController())
-
+    
     universeObject.addCivilization(civ)

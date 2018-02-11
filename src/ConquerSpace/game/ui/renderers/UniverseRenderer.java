@@ -10,6 +10,8 @@ import java.awt.geom.Rectangle2D;
 import org.apache.logging.log4j.Logger;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import javax.swing.JPanel;
 
 /**
@@ -50,13 +52,18 @@ public class UniverseRenderer extends JPanel{
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
         
-        g2d.setColor(Color.RED);
         for (UniverseDrawer.SectorDrawStats s : drawer.sectorDrawings) {
             //Draw the sectors
             Point p = s.getPosition();
             
             Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getCircumference()/2, p.y - s.getCircumference()/2, s.getCircumference(), s.getCircumference());
+            Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize/2, drawer.universeDrawnSize/2));
+            
+            g2d.setColor(Color.RED);
             g2d.draw(sector);
+            
+            g2d.setColor(Color.orange);
+            g2d.draw(ln);
         }
     }
 }

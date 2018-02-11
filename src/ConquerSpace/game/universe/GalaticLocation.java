@@ -14,7 +14,7 @@ public class GalaticLocation {
      * @param distance distance from the center.
      */
     public GalaticLocation(float degrees, int distance) {
-        this.degrees = degrees;
+        this.degrees = (degrees%360);
         this.distance = distance;
     }
 
