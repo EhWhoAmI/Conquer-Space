@@ -1,6 +1,7 @@
 package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
@@ -55,6 +56,7 @@ public class UniverseDrawer {
         //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
         int sizeOfLtyr = (int) Math.floor(universeDrawnSize/universeDimensionsLTYR);
         LOGGER.info("Size of light year " + sizeOfLtyr + "px");
+        sizeOfLtyr = 1;
         //Load all the sectors.
         ArrayList<Sector> sectors = new ArrayList<>();
         for (int i = 0; i < universe.getSectorCount(); i ++) {
@@ -86,7 +88,16 @@ public class UniverseDrawer {
                 LOGGER.warn("Sector " + s.getID() + " Outside the box!");
                 placedOutside++;
             }
-            SectorDrawStats stats = new SectorDrawStats(new Point((int) sectorPos.getX(), (int) sectorPos.getY()), (int) longest);
+            Point center = new Point((int) sectorPos.getX(), (int) sectorPos.getY());
+            SectorDrawStats stats = new SectorDrawStats(center, (int)longest);
+            
+            //Do star systems
+            for (int b = 0; b < s.getStarSystemCount(); b ++) {
+                StarSystem sys = s.getStarSystem(b);
+                Point pt = RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation(), center, sizeOfLtyr);
+                SystemDrawStats sysStats = new SystemDrawStats(pt);
+                stats.addSystemStats(sysStats);
+            }
             sectorDrawings.add(stats);
             LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
             
@@ -97,10 +108,11 @@ public class UniverseDrawer {
     public class SectorDrawStats {
         private Point pos;
         private int circumference;
-
+        public ArrayList<SystemDrawStats> systems;
         public SectorDrawStats(Point pos, int circumference) {
             this.pos = pos;
             this.circumference = circumference;
+            this.systems = new ArrayList<>();
         }
 
         public int getCircumference() {
@@ -108,6 +120,22 @@ public class UniverseDrawer {
         }
 
         public Point getPosition() {
+            return pos;
+        }
+        
+        public void addSystemStats(SystemDrawStats s) {
+            systems.add(s);
+        }
+    }
+    
+    public class SystemDrawStats {
+        private Point pos;
+
+        public SystemDrawStats(Point pos) {
+            this.pos = pos;
+        }
+
+        public Point getPos() {
             return pos;
         }
     }

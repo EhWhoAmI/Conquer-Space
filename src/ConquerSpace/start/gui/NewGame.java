@@ -78,7 +78,7 @@ public class NewGame extends JFrame implements ActionListener {
     public NewGame() {
         setSize(500, 400);
         setTitle("New Game");
-        setLayout(new GridLayout(3, 1, 10, 10));
+        setLayout(new GridLayout(2, 1, 10, 10));
         //Add components
         JPanel lsidePan = new JPanel();
         lsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));

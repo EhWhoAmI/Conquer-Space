@@ -69,7 +69,7 @@ for i in range(universeSize):
     # Set galatic location
     LOGGER.info("Deg counter = " + str(degCounter))
     secdegs = degCounter
-    secdist = (((layer-1)*(SECTOR_MAX_RADIUS*2 + 2)) + SECTOR_MAX_RADIUS)
+    secdist = (((layer-1)*((SECTOR_MAX_RADIUS)) + 2) + SECTOR_MAX_RADIUS)
     
     
     if layer == 0:
@@ -118,8 +118,8 @@ for i in range(universeSize):
         # Add degrees
         degCounter = degCounter + math.floor((360 / sizeOfPolygon))
         sidesLeft = sidesLeft - 1
-        print(sizeOfPolygon)
-        print("Deg counter = " + str(degCounter))
+        LOGGER.info("Size of polygon: " + str(sizeOfPolygon))
+        LOGGER.info("Deg counter = " + str(degCounter))
     
     if sidesLeft == 0:
         # Reset degrees counter
@@ -130,13 +130,12 @@ for i in range(universeSize):
         layer = layer + 1
         
         # Calculate size of polygon
-        radius = ((layer - 1)* (SECTOR_MAX_RADIUS*2 + 2) + SECTOR_MAX_RADIUS)
+        radius = ((layer - 1) * (SECTOR_MAX_RADIUS) + 2 + SECTOR_MAX_RADIUS)
         LOGGER.info("Radius: " + str(radius))
         circurmference = math.pi * radius * 2
         LOGGER.info("Circurmference: " + str(circurmference))
         # Divide and round up.
-        sizeOfPolygon = math.floor(circurmference / ((SECTOR_MAX_RADIUS*2) + 2))
-        print(layer)
+        sizeOfPolygon = math.floor(circurmference/(SECTOR_MAX_RADIUS * 2))
         sidesLeft = sizeOfPolygon
         
         

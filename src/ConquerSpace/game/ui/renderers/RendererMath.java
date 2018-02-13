@@ -11,7 +11,6 @@ import java.awt.Point;
 public class RendererMath {
 
     public static Point polarCoordToCartesianCoord(GalaticLocation g, Point center, int unitSize) {
-        System.out.println(g.toString());
         //Do math to calculate the position of the sector. 
         //Distance is to the center of the sector to center of universe.
         //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
@@ -22,8 +21,8 @@ public class RendererMath {
         int xpos;
         int ypos;
         //Math.sin and Math.cos is in radians.
-        int opp = (int) Math.floor(Math.sin(Math.toRadians(ang)) * g.getDistance());
-        int adj = (int) Math.floor(Math.cos(Math.toRadians(ang)) * g.getDistance());
+        double opp = Math.sin(Math.toRadians(ang)) * g.getDistance();
+        double adj = Math.cos(Math.toRadians(ang)) * g.getDistance();
         opp *= unitSize;
         adj *= unitSize;
         

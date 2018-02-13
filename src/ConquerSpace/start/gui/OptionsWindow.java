@@ -3,8 +3,6 @@ package ConquerSpace.start.gui;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
