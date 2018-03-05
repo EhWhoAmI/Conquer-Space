@@ -60,7 +60,7 @@ LOGGER.info("Loading sectors")
 # Get sector count
 sectorLevel = 0
 centerSize = 0
-layer = 0
+layer = 1
 innerLayerList = []
 degCounter = 0
 sizeOfPolygon = 0
@@ -69,7 +69,7 @@ for i in range(universeSize):
     # Set galatic location
     LOGGER.info("Deg counter = " + str(degCounter))
     secdegs = degCounter
-    secdist = (((layer-1)*((SECTOR_MAX_RADIUS)) + 2) + SECTOR_MAX_RADIUS)
+    secdist = (((layer-1)*((SECTOR_MAX_RADIUS)) * 2))
     
     
     if layer == 0:
@@ -130,7 +130,7 @@ for i in range(universeSize):
         layer = layer + 1
         
         # Calculate size of polygon
-        radius = ((layer - 1) * (SECTOR_MAX_RADIUS) + 2 + SECTOR_MAX_RADIUS)
+        radius = ((layer-1) * SECTOR_MAX_RADIUS * 2)
         LOGGER.info("Radius: " + str(radius))
         circurmference = math.pi * radius * 2
         LOGGER.info("Circurmference: " + str(circurmference))

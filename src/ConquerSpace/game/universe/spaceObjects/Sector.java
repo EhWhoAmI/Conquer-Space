@@ -93,6 +93,6 @@ public class Sector extends GameObject{
             }
             
             // Then add the two distances together.
-            return (largeStarSystem);
+            return (largeStarSystem * 2);
     }
 }
