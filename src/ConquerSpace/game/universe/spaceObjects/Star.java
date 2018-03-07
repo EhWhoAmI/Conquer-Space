@@ -6,9 +6,9 @@ import ConquerSpace.game.GameObject;
  * @author Zyun
  */
 public class Star extends GameObject{
-    private int type;
-    private int starSize;
-    private int id;
+    public int type;
+    public int starSize;
+    public int id;
 
     /**
      * @see StarTypes

@@ -21,8 +21,8 @@ from os.path import *
 import random
 
 # Constants:
-SECTOR_MIN_SYSTEM = 20
-SECTOR_MAX_SYSTEM = 30
+SECTOR_MIN_SYSTEM = 40
+SECTOR_MAX_SYSTEM = 50
 SECTOR_MAX_RADIUS = 150
 def circleIntersects(pt1, rad1, pt2, rad2):
     dist = math.hypot(pt1.x - pt2.x, pt1.y - pt2.y)
