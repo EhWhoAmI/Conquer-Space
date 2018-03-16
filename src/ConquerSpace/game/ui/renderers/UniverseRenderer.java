@@ -56,7 +56,7 @@ public class UniverseRenderer extends JPanel{
             //Draw the sectors
             Point p = s.getPosition();
             
-            Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getCircumference(), p.y - s.getCircumference(), s.getCircumference()*2, s.getCircumference()*2);
+            Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getRadius(), p.y - s.getRadius(), s.getRadius()*2, s.getRadius()*2);
             Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize/2, drawer.universeDrawnSize/2));
             
             // Draw star systems

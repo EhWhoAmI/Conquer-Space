@@ -14,6 +14,7 @@ from ConquerSpace.game.universe.spaceObjects import Sector
 from ConquerSpace.game.universe.spaceObjects import Star
 from ConquerSpace.game.universe.spaceObjects import StarSystem
 from ConquerSpace.game.universe.spaceObjects import Universe
+from ConquerSpace.game.universe.spaceObjects import StarTypes
 from java.awt import Color
 import math
 from os import *
@@ -90,7 +91,15 @@ for i in range(universeSize):
         systemLoc = GalaticLocation(sysdegs, sysdist)
         starSystem = StarSystem(r, systemLoc)
         # Create star
-        starType = random.randint(0, 3)
+        starType = random.randint(1, 100)
+        if starType < 55:
+            starType = StarTypes.YELLOW
+        elif starType < 75:
+            starType = StarTypes.BLUE
+        elif starType < 96:
+            starType = StarTypes.RED
+        else:
+            starType = StarTypes.BROWN
         starSize = random.randint(1, 10)
         # 0 because there is only one star so far.
         star = Star(starType, starSize, 0)

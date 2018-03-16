@@ -1,7 +1,6 @@
 package ConquerSpace.game.ui;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.universe.civControllers.AIController;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -70,12 +69,13 @@ public class UniverseBreakdown extends JFrame {
         tree.addTreeSelectionListener((e) -> {
             
         });
+        tree.setPreferredSize(new Dimension(480, 500));
         JScrollPane pane = new JScrollPane(tree);
         pane.setSize(500, 500);
         pan.add(pane);
-        pan.setPreferredSize(new Dimension(500, 500));
+        //pan.setPreferredSize(new Dimension(500, 500));
         add(pan);
-        setSize(500, 500);
+        pack();
         setVisible(true);
     }
 
