@@ -2,6 +2,7 @@ package ConquerSpace.game.ui;
 
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.Globals;
+import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.BorderLayout;
@@ -31,7 +32,7 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
         //Place renderer into a scroll pane.
         JScrollPane scrollPane = new JScrollPane(pan);
         pan.addMouseListener(this);
-        System.out.println(scrollPane.getViewport().getViewPosition().toString());
+
         add(scrollPane);
         
         setSize(500, 500);
@@ -45,9 +46,11 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
             //Get which sector clicked.
             LOGGER.info("Double clicked. Opening sector");
             int i = 0;
-            for (UniverseDrawer.SectorDrawStats stats : drawer.sectorDrawings) {
+            for (SectorDrawStats stats : drawer.sectorDrawings) {
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < stats.getRadius()) {
                     LOGGER.info("Mouse clicked in sector " + i + "!");
+                    SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(i));
+                    break;
                 }
                 i ++;
             }

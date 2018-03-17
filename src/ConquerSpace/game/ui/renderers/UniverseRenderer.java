@@ -21,12 +21,10 @@ import javax.swing.JPanel;
 public class UniverseRenderer extends JPanel{
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseRenderer.class.getName());
     private Dimension bounds;
-    private Universe universe;
     private UniverseDrawer drawer;
     
     public UniverseRenderer(Dimension bounds, Universe universe) {
         this.bounds = bounds;
-        this.universe = universe;
         
         drawer = new UniverseDrawer(universe, bounds);
         
@@ -52,7 +50,7 @@ public class UniverseRenderer extends JPanel{
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
         
-        for (UniverseDrawer.SectorDrawStats s : drawer.sectorDrawings) {
+        for (SectorDrawStats s : drawer.sectorDrawings) {
             //Draw the sectors
             Point p = s.getPosition();
             
@@ -60,7 +58,7 @@ public class UniverseRenderer extends JPanel{
             Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize/2, drawer.universeDrawnSize/2));
             
             // Draw star systems
-            for (UniverseDrawer.SystemDrawStats sys : s.systems) {
+            for (SystemDrawStats sys : s.systems) {
                 g2d.setColor(sys.getColor());
                 Ellipse2D.Float system = new Ellipse2D.Float(sys.getPos().x, sys.getPos().y, 2, 2);
                 g2d.fill(system);

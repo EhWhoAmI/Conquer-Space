@@ -101,6 +101,8 @@ public class UniverseDrawer {
             for (int b = 0; b < s.getStarSystemCount(); b++) {
                 StarSystem sys = s.getStarSystem(b);
                 Point pt = RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation(), center, sizeOfLtyr);
+                
+                //Color of star system
                 Color c;
                 switch (sys.getStar(0).type) {
                     case 0:
@@ -126,49 +128,5 @@ public class UniverseDrawer {
 
         }
         LOGGER.info(placedOutside + " sector(s) outside!");
-    }
-
-    public class SectorDrawStats {
-
-        private Point pos;
-        private int radius;
-        public ArrayList<SystemDrawStats> systems;
-
-        public SectorDrawStats(Point pos, int circumference) {
-            this.pos = pos;
-            this.radius = circumference;
-            this.systems = new ArrayList<>();
-        }
-
-        public int getRadius() {
-            return radius;
-        }
-
-        public Point getPosition() {
-            return pos;
-        }
-
-        public void addSystemStats(SystemDrawStats s) {
-            systems.add(s);
-        }
-    }
-
-    public class SystemDrawStats {
-
-        private Point pos;
-        private Color color;
-
-        public SystemDrawStats(Point pos, Color color) {
-            this.pos = pos;
-            this.color = color;
-        }
-
-        public Point getPos() {
-            return pos;
-        }
-
-        public Color getColor() {
-            return color;
-        }
     }
 }
