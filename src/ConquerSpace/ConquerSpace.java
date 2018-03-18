@@ -2,6 +2,7 @@ package ConquerSpace;
 
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
+import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class ConquerSpace {
                 FileInputStream fis = new FileInputStream(settingsFile);
                 Globals.settings.load(fis);
             } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(ConquerSpace.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.warn("Cannot load settings. Using default", ex);
             }
         }
         else {
@@ -59,19 +60,19 @@ public class ConquerSpace {
                 LOGGER.warn("Unable to create settings file!", ex);
             }
         }
-        
+
         try {
             //Set look and feel
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             //Init logger
         } catch (ClassNotFoundException ex) {
-            LOGGER.error("", ex);
+            LOGGER.warn("", ex);
         } catch (InstantiationException ex) {
-            LOGGER.error("", ex);
+            LOGGER.warn("", ex);
         } catch (IllegalAccessException ex) {
-            LOGGER.error("", ex);        
+            LOGGER.warn("", ex);        
         } catch (UnsupportedLookAndFeelException ex) {
-            LOGGER.error("", ex);
+            LOGGER.warn("", ex);
         }
         
         InitialLoading loading = new InitialLoading();

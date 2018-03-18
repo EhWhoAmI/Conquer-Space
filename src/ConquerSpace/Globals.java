@@ -17,4 +17,6 @@ public class Globals {
      * This is the settings of the game.
      */
     public static Properties settings;
+    
+    public static int turn;
 }

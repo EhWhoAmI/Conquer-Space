@@ -1,4 +1,26 @@
 <html>
-<h1>How to Play</h1>
-<img src="./ConquerSpace/0.png"/>
+<h1>How to Play Part 1: Starting a new game.</h1>
+<p>When open the game, you will be greeted with a window. That looks like this:</p>
+<img src="res/0.png"/>
+<p>Or like this on Mac.</p>
+<img src="res/1.png"/>
+<p>You probably have already gone there if you can open this.</p>
+<p>Then, click on 'Start game'.</p>
+<p>You will be greeted with a window that looks like this:</p>
+<img src="res/2.png"/>
+<p>These are the options you can have for your universe generation.</p>
+<p>You can play around with them later, but for now, click 'Done'</p>
+<p>Wait for a few moments for the universe to generate, and there you go, your universe has been generated.</p>
+<br/>
+<p>Here are what the different options do.</p>
+<table>
+    <tr>
+        <th>Option</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <th>Universe Size</th>
+        <th>Determines the size of the galaxy you are creating</th>
+    </tr>
+</table>
 </html>

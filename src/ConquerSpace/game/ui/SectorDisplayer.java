@@ -17,7 +17,7 @@ public class SectorDisplayer extends JFrame{
     private SectorDrawer drawer;
     public SectorDisplayer(Sector s) {
 
-        setTitle("Conquer Space");
+        setTitle("Sector " + s.getID());
         setLayout(new BorderLayout());
         //Create universe renderer
         SectorRenderer renderer = new SectorRenderer(new Dimension(1500, 1500), s);

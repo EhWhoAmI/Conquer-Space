@@ -1,5 +1,8 @@
 assets/manuals/man000
 assets/manuals/man001
+assets/manuals/res/0.png
+assets/manuals/res/1.png
+assets/manuals/res/2.png
 assets/manuals/manlist.properties
 assets/scripts/universeGen/main.py
 assets/log4j2.xml

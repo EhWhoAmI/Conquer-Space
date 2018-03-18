@@ -62,7 +62,6 @@ LOGGER.info("Loading sectors")
 sectorLevel = 0
 centerSize = 0
 layer = 1
-innerLayerList = []
 degCounter = 0
 sizeOfPolygon = 0
 sidesLeft = 0
@@ -123,7 +122,6 @@ for i in range(universeSize):
         centerSize = sector.getSize()
         degCounter = 360
     else:
-        innerLayerList.append(sector)
         # Add degrees
         degCounter = degCounter + math.floor((360 / sizeOfPolygon))
         sidesLeft = sidesLeft - 1
@@ -133,8 +131,6 @@ for i in range(universeSize):
     if sidesLeft == 0:
         # Reset degrees counter
         degCounter = 0
-        # Clear the list.
-        innerLayerList = []
         # Increment layer 
         layer = layer + 1
         
@@ -146,6 +142,9 @@ for i in range(universeSize):
         # Divide and round up.
         sizeOfPolygon = math.floor(circurmference/(SECTOR_MAX_RADIUS * 2))
         sidesLeft = sizeOfPolygon
+        print(universeSize - i)
+        if (universeSize - i) < sidesLeft:
+            sidesLeft = (universeSize - i)
         
         
     universeObject.addSector(sector)
