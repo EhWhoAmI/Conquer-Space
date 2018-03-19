@@ -146,7 +146,7 @@ public class Civilization extends GameObject{
         else {
             builder.append("Player");
         }
-        builder.append(", Color=" + color.toString());
+        builder.append(", Home system=Sector " + homesectorID + " System " + homeSystemID + " Planet " + homePlanetID);
         builder.append(">\n");
         return (builder.toString());
     }

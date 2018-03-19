@@ -231,19 +231,19 @@ for p in range(civCount):
     LOGGER.info("Choosing home star system")
     # BTW, this system is not good because there are chances that the home star system may collide with others.
     i = 0
-    while i < universeObject.getSector(i).getStarSystemCount():
+    while i < universeObject.getSector(HomesectorID).getStarSystemCount():
         # iterate through the planets for suitable planet
         n = 0
-        while n < universeObject.getSector(i).getStarSystemCount():
+        while n < universeObject.getSector(HomesectorID).getStarSystemCount():
             # Check distance and make sure it is not gas.
-            if universeObject.getSector(i).getStarSystem(n) == 0 and universeObject.getSector(i).getStarSystem(n).getOrbitalDistance() < 20:
+            if universeObject.getSector(HomesectorID).getStarSystem(n) == 0 and universeObject.getSector(i).getStarSystem(n).getOrbitalDistance() < 20:
                civ.setHomeSystemID(i)
                civ.setHomePlanetID(n)
                # Add 100k because a sector cannot have that much star systems and abort the loops
                i = i + 100000
                break;
             n = n + 1
-    i = i + 1
+        i = i + 1
             
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)
