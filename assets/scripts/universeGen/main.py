@@ -142,7 +142,6 @@ for i in range(universeSize):
         # Divide and round up.
         sizeOfPolygon = math.floor(circurmference/(SECTOR_MAX_RADIUS * 2))
         sidesLeft = sizeOfPolygon
-        print(universeSize - i)
         if (universeSize - i) < sidesLeft:
             sidesLeft = (universeSize - i)
         
@@ -193,6 +192,7 @@ symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
 
 symbolList.remove(civSymbol)
 
+# Still need to set the player's
 for p in range(civCount):
     civ = Civilization(p + 1)
     # Civ name list
@@ -217,6 +217,34 @@ for p in range(civCount):
     civ.setSpeciesName(civName)
     civ.setCivilizationPreferredClimate(random.randint(0,2))
     
+    # Figure out home system and planet
+    # Choose random sector
+    HomesectorID = random.randint(0, universeSize)
+    civ.setHomesectorID(HomesectorID)
+    
+    # figure out home system by finding a suitable starsystem.
+    # rules: the home planet is determined by the position of the planet from the star.
+    # So, those in `hot` places will be 1-5
+    # `cold` places will be 5-20
+    # `varied` will be 1-20.
+    
+    LOGGER.info("Choosing home star system")
+    # BTW, this system is not good because there are chances that the home star system may collide with others.
+    i = 0
+    while i < universeObject.getSector(i).getStarSystemCount():
+        # iterate through the planets for suitable planet
+        n = 0
+        while n < universeObject.getSector(i).getStarSystemCount():
+            # Check distance and make sure it is not gas.
+            if universeObject.getSector(i).getStarSystem(n) == 0 and universeObject.getSector(i).getStarSystem(n).getOrbitalDistance() < 20:
+               civ.setHomeSystemID(i)
+               civ.setHomePlanetID(n)
+               # Add 100k because a sector cannot have that much star systems and abort the loops
+               i = i + 100000
+               break;
+            n = n + 1
+    i = i + 1
+            
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)
     civ.setCivilizationSymbol(symbol)

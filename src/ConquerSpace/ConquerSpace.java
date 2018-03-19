@@ -2,7 +2,6 @@ package ConquerSpace;
 
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
-import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

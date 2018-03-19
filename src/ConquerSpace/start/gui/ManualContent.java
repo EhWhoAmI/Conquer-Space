@@ -38,7 +38,7 @@ public class ManualContent extends JFrame {
         if (instance == null) {
             instance = new ManualContent();
         }
-        try {
+        try {		
             //Parse text so that images show
             Builder b = new Builder();
             Document d = b.build(file, null);
@@ -50,7 +50,8 @@ public class ManualContent extends JFrame {
                 Attribute attri = imgE.getAttribute("src");
                 attri.setValue("file://" + System.getProperty("user.dir") + File.separator + "assets" + File.separator + "manuals" + File.separator + attri.getValue());
             }
-            file = d.toXML();
+            file = e.toXML();
+            LOGGER.info(file);
         } catch (ParsingException ex) {
             LOGGER.warn("Parsing exception:" + ex.toString(), ex);
         } catch (IOException ex) {
