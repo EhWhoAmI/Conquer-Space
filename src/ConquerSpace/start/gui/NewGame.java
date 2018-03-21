@@ -7,6 +7,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.ui.GameController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.scripts.RunScript;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.border.LineBorder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.python.core.PyObjectDerived;
 
 /**
  *
@@ -196,7 +198,6 @@ public class NewGame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitButton) {
             setVisible(false);
-            FileReader reader = null;
             try {
                 //This button will only be pressed by the `done` button.
                 //Read all the info, pass to scripts.
@@ -233,14 +234,12 @@ public class NewGame extends JFrame implements ActionListener {
                 // Start time of logging
                 long loadingStart = System.currentTimeMillis();
                 //Init script engine
-                ScriptEngineManager manager = new ScriptEngineManager();
-                ScriptEngine engine = manager.getEngineByName("python");
+                RunScript s = new RunScript(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
 
-                engine.put("universeConfig", config);
-                engine.put("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
-                reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
-                engine.eval(reader);
-                Universe universe = (Universe) engine.get("universeObject");
+                s.addVar("universeConfig", config);
+                s.addVar("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
+                s.exec();
+                Universe universe = (Universe) ((PyObjectDerived) s.getObject("universeObject")).__tojava__(Universe.class);
                 
                 //Logger end time
                 long loadingEnd = System.currentTimeMillis();
@@ -251,23 +250,11 @@ public class NewGame extends JFrame implements ActionListener {
                 //Insert universe into globals
                 Globals.universe = universe;
                 new GameController();
-
-            } catch (FileNotFoundException ex) {
+                
+            } catch (Exception ex) {
                 LogManager.getLogger("ErrorLog").error("Error!", ex);
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
-            } catch (ScriptException ex) {
-                LogManager.getLogger("ErrorLog").error("Error!", ex);
-                JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace().toString(), "Script Error", JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
-            } finally {
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException ex) {
-                    LOGGER.error("Error!", ex);
-                }
             }
         } else if (e.getSource() == civColorChooserButton) {
             //Show the civ color chooser

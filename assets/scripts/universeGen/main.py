@@ -152,14 +152,9 @@ LOGGER.info("Done Creating Sectors")
 # Generate Civs
 
 LOGGER.info("Creating Civilizations")
-# Get approximate number of starSystems
-systemCount = universeSize * 15
-LOGGER.info("Universe system approx count: " + str(systemCount))
-# Civ count
-if civCount == 1:
-    civCount = (systemCount / 40)
-elif civCount == 2:
-    civCount = (systemCount / 20)
+# Number of civs is half of sectors
+# So that we will always have `empty` sectors.
+civCount = int(math.floor(universeSize/2));
     
 LOGGER.info("Civilization Count: " + str(civCount))
 
@@ -175,6 +170,7 @@ civName = civConf.getCivilizationName()
 speciesName = civConf.getSpeciesName()
 civPreferredClimate = {'Varied': 0, 'Cold':1, 'Hot':2}[civConf.getCivilizationPreferredClimate()]
 
+# Sector 
 # Id is 0 because it is the first one.
 playerCiv = Civilization(0)
 
@@ -193,13 +189,13 @@ symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
 symbolList.remove(civSymbol)
 
 # Still need to set the player's
-for p in range(civCount):
+for p in range(civCount-1):
     civ = Civilization(p + 1)
     # Civ name list
     civNameList = [
-        ["He", "Be", "Das", "Kas", "Mak", "Aef", "Len"],
-        ["le", "as", "ma", "\'ea", "mal", "\'as", "had"],
-        ["ese", "", "et", "\'tese", "mad", "las", "bas"]
+        ["He", "Be", "Das", "Kas", "Mak", "Aef", "Len", "Las", "Ke"],
+        ["le", "as", "ma", "\'ea", "mal", "\'as", "had", "'kah", "fad"],
+        ["ese", "", "et", "\'tese", "mad", "las", "bas", "ish", ""]
     ]
     civName = random.choice(civNameList[0]) + random.choice(civNameList[1]) + random.choice(civNameList[2])
     

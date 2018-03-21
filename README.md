@@ -33,5 +33,3 @@ If you are excited to help, you need to know at least Java or Python. If you kno
 Check out the [projects page](https://github.com/EhWhoAmI/Conquer-Space/projects) to figure what we are doing next.
 
 If you want to report an issue, just go to the [issues page](https://github.com/EhWhoAmI/Conquer-Space/issues) to report that. Just paste the stacktrace and what you did before everything went wrong.
-
-And yeah, our Jython engine is broken.
