@@ -3,7 +3,9 @@ package ConquerSpace.game.universe.civilizations;
 import ConquerSpace.game.universe.civControllers.AIController;
 import ConquerSpace.game.universe.civControllers.CivilizationController;
 import ConquerSpace.game.GameObject;
+import ConquerSpace.game.UniversePath;
 import java.awt.Color;
+import java.util.ArrayList;
 
 /**
  * Civilization
@@ -23,6 +25,7 @@ public class Civilization extends GameObject{
     private int homeSystemID;
     private int homePlanetID;
     
+    public ArrayList<UniversePath> control;
     /**
      * The controller of this civ.
      */
@@ -30,6 +33,9 @@ public class Civilization extends GameObject{
 
     public Civilization(int ID) {
         this.ID = ID;
+        
+        //Set a temp starting point as in 0:0:0
+        this.control.add(new UniversePath("0:0:0"));
     }
     
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -49,6 +55,12 @@ public class Civilization extends GameObject{
     }
 
     public void setHomePlanetID(int homePlanetID) {
+        //Split string then append
+        String s = control.get(0).path;
+        String[] path = s.split(":");
+        //Alter it
+        path[2] = Integer.toString(homePlanetID);
+        control.get(0).path = path[0] + ":" + path[1] + ":" + path[3];
         this.homePlanetID = homePlanetID;
     }
 
@@ -57,10 +69,20 @@ public class Civilization extends GameObject{
     }
 
     public void setHomeSystemID(int homeSystemID) {
+        String s = control.get(0).path;
+        String[] path = s.split(":");
+        //Alter it
+        path[1] = Integer.toString(homeSystemID);
+        control.get(0).path = path[0] + ":" + path[1] + ":" + path[3];
         this.homeSystemID = homeSystemID;
     }
 
     public void setHomesectorID(int homesectorID) {
+        String s = control.get(0).path;
+        String[] path = s.split(":");
+        //Alter it
+        path[1] = Integer.toString(homesectorID);
+        control.get(0).path = path[0] + ":" + path[1] + ":" + path[3];
         this.homesectorID = homesectorID;
     }
 
