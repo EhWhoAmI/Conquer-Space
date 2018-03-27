@@ -32,6 +32,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.border.LineBorder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.python.core.PyException;
 import org.python.core.PyObjectDerived;
 
 /**
@@ -251,9 +252,9 @@ public class NewGame extends JFrame implements ActionListener {
                 Globals.universe = universe;
                 new GameController();
                 
-            } catch (Exception ex) {
-                LogManager.getLogger("ErrorLog").error("Error!", ex);
-                JOptionPane.showMessageDialog(this, "Script Error: " + ex.getMessage() + "\n" + ex.getStackTrace(), "File not found", JOptionPane.ERROR_MESSAGE);
+            } catch (final PyException ex) {
+                LogManager.getLogger("ErrorLog").error("Python error " + ex.toString(), ex);
+                JOptionPane.showMessageDialog(this, "Script Error: " + ex.type.toString()+"\n" + ex.traceback.dumpStack(), "File not found", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }
         } else if (e.getSource() == civColorChooserButton) {
