@@ -15,6 +15,7 @@ from ConquerSpace.game.universe.spaceObjects import Star
 from ConquerSpace.game.universe.spaceObjects import StarSystem
 from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects import StarTypes
+import generation
 from java.awt import Color
 import math
 from os import *
@@ -189,23 +190,9 @@ HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
 playerCiv.setHomesectorID(HomesectorID)
-# Select star system
-num = random.randint(0, universeObject.getSector(HomesectorID).getStarSystemCount())
-i = num
-while i < universeObject.getSector(HomesectorID).getStarSystemCount():
-    # iterate through the planets for suitable planet
-    n = 0
-    while n < universeObject.getSector(HomesectorID).getStarSystemCount():
-        # Check distance and make sure it is not gas.
-        if universeObject.getSector(HomesectorID).getStarSystem(i) == 0 and universeObject.getSector(i).getStarSystem(n).getOrbitalDistance() < 20:
-            LOGGER.info('System id, planet id' + str(i) + ',' + str(n))
-            playerCiv.setHomeSystemID(i)
-            playerCiv.setHomePlanetID(n)
-            # Add 100k because a sector cannot have that much star systems and abort the loops
-            i = i + 100000
-            break;
-        n = n + 1
-    i = i + 1
+start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate()）
+playerCiv.setHomeSystemID(start[0])
+playerCiv.setHomePlanetID(start[1])
 universeObject.addCivilization(playerCiv)
 
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
@@ -250,23 +237,10 @@ for p in range(civCount):
     # `varied` will be 1-20.
     
     LOGGER.info("Choosing home star system")
-    # BTW, this system is not good because there are chances that the home star system may collide with others.
-    num = random.randint(0, universeObject.getSector(HomesectorID).getStarSystemCount())
 
-    i = num
-
-    while (i+1) < universeObject.getSector(HomesectorID).getStarSystemCount():
-        # iterate through the planets for suitable planet
-        n = 0
-        while n < universeObject.getSector(HomesectorID).getStarSystem(i).getPlanetCount():
-            # Check distance and make sure it is not gas.
-            if universeObject.getSector(HomesectorID).getStarSystem(i).getPlanet(n).getPlanetType() == 0 and universeObject.getSector(HomesectorID).getStarSystem(i).getPlanet(n).getOrbitalDistance() < 20:
-                civ.setHomePlanetID(n)
-                # Add 100k because a sector cannot have that much star systems and abort the loops
-                i = i + 100000
-                break;
-            n = n + 1
-        i = i + 1
+    start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
+    civ.setHomeSystemID(start[0])
+    civ.setHomePlanetID(start[1])
             
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)

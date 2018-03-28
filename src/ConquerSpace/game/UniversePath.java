@@ -1,5 +1,7 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.universe.GalaticLocation;
+
 /**
  * Path of an object in a universe. To write path:
  * "sectorid:star systemid:planet id" for a planet
@@ -10,9 +12,18 @@ package ConquerSpace.game;
  */
 public class UniversePath {
     public String path;
-
+    int sectorID;
+    int systemID;
+    int planetID;
+    GalaticLocation loc;
     public UniversePath(String path) {
         this.path = path;
     }
     
+    public void parse() {
+        String[] text = path.split(":");
+        if(text.length == 0) {
+            //Incorrect format.
+        }
+    }
 }
