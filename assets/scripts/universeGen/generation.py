@@ -6,10 +6,10 @@ def selectRandomSuitablePlanet(sector, civClimate):
         # Select star system
         system = sector.getStarSystem(start)
         n = 0
-        for n < system.getPlanetCount():
+        while n < system.getPlanetCount():
             if random.randint(1, 2) == 1:
                 p = system.getPlanet(n)
-                if n.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 20:
+                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 20:
                     value = [start, n]
                     return value
             n += 1

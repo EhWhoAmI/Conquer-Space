@@ -25,7 +25,7 @@ public class Civilization extends GameObject{
     private int homeSystemID;
     private int homePlanetID;
     
-    public ArrayList<UniversePath> control;
+    public ArrayList<UniversePath> control = new ArrayList<>();
     /**
      * The controller of this civ.
      */
@@ -56,11 +56,8 @@ public class Civilization extends GameObject{
 
     public void setHomePlanetID(int homePlanetID) {
         //Split string then append
-        String s = control.get(0).path;
-        String[] path = s.split(":");
-        //Alter it
-        path[2] = Integer.toString(homePlanetID);
-        control.get(0).path = path[0] + ":" + path[1] + ":" + path[3];
+        
+        control.get(0).parse(control.get(0).getSectorID() + ":" + homePlanetID + ":" + control.get(0).getPlanetID());
         this.homePlanetID = homePlanetID;
     }
 
@@ -69,20 +66,12 @@ public class Civilization extends GameObject{
     }
 
     public void setHomeSystemID(int homeSystemID) {
-        String s = control.get(0).path;
-        String[] path = s.split(":");
-        //Alter it
-        path[1] = Integer.toString(homeSystemID);
-        control.get(0).path = path[0] + ":" + path[1] + ":" + path[3];
+        control.get(0).parse(control.get(0).getSectorID() + ":" + control.get(0).getSystemID() + ":" + homeSystemID);
         this.homeSystemID = homeSystemID;
     }
 
     public void setHomesectorID(int homesectorID) {
-        String s = control.get(0).path;
-        String[] path = s.split(":");
-        //Alter it
-        path[1] = Integer.toString(homesectorID);
-        control.get(0).path = path[0] + ":" + path[1] + ":" + path[3];
+        control.get(0).parse(homesectorID + ":" +control.get(0).getSystemID() + ":" + control.get(0).getPlanetID());
         this.homesectorID = homesectorID;
     }
 

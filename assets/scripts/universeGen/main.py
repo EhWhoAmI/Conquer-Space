@@ -145,8 +145,7 @@ for i in range(universeSize):
         sidesLeft = sizeOfPolygon
         if (universeSize - i) < sidesLeft:
             sidesLeft = (universeSize - i)
-        
-        
+                
     universeObject.addSector(sector)
     
 LOGGER.info("Done Creating Sectors")
@@ -190,7 +189,7 @@ HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
 playerCiv.setHomesectorID(HomesectorID)
-start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate()）
+start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
 playerCiv.setHomeSystemID(start[0])
 playerCiv.setHomePlanetID(start[1])
 universeObject.addCivilization(playerCiv)
