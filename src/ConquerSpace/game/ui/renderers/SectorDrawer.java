@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class SectorDrawer {
 
     public ArrayList<SystemDrawStats> stats;
+    public ArrayList<ControlDrawStats> controlDrawStats;
     public int sectorDrawnSize;
     public int sizeOfLtyr;
     public Point center;

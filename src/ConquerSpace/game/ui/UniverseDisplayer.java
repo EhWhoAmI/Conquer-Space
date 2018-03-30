@@ -34,7 +34,7 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
         pan.addMouseListener(this);
 
         add(scrollPane);
-        
+        setMaximumSize(new Dimension(1500, 1500));
         setSize(500, 500);
         setVisible(true);
     }

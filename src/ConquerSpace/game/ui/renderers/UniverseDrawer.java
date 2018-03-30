@@ -1,5 +1,7 @@
 package ConquerSpace.game.ui.renderers;
 
+import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -24,7 +26,8 @@ public class UniverseDrawer {
 
     public int universeDimensionsLTYR;
     public int universeDrawnSize;
-
+    
+    public ArrayList<ControlDrawStats> controlDrawStats;
     public ArrayList<SectorDrawStats> sectorDrawings;
 
     public UniverseDrawer(Universe universe, Dimension bounds) {
@@ -128,5 +131,20 @@ public class UniverseDrawer {
 
         }
         LOGGER.info(placedOutside + " sector(s) outside!");
+        //Now for the control
+        controlDrawStats = new ArrayList<>();
+        for (int n = 0; n < universe.getCivilizationCount(); n++) {
+            Civilization civ = universe.getCivilization(n);
+            for (UniversePath p : civ.control) {
+                LOGGER.info(p.toString());
+                if (p.getSystemID() > -1) {
+                    //Calculate the thingy
+                    //Get sector
+                    int sectorid = p.getSectorID();
+                    ControlDrawStats stats = new ControlDrawStats(sectorDrawings.get(sectorid).systems.get(p.getSystemID()).getPos(), civ.getColor());
+                    controlDrawStats.add(stats);
+                }
+            }
+        }
     }
 }

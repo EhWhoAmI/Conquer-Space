@@ -74,7 +74,9 @@ public class Civilization extends GameObject{
         control.get(0).parse(homesectorID + ":" +control.get(0).getSystemID() + ":" + control.get(0).getPlanetID());
         this.homesectorID = homesectorID;
     }
-
+    public void setHomeplanetPath(int homeSectorID, int homeSystemID, int homePlanetID) {
+        control.set(0, new UniversePath(homesectorID, homeSystemID, homePlanetID));
+    }
     public void setName(String name) {
         this.name = name;
     }
