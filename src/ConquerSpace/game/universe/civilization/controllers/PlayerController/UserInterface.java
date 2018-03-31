@@ -1,4 +1,4 @@
-package ConquerSpace.game.ui;
+package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;

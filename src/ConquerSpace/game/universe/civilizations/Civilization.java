@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.civilizations;
 
-import ConquerSpace.game.universe.civControllers.AIController;
-import ConquerSpace.game.universe.civControllers.CivilizationController;
+import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
+import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.GameObject;
 import ConquerSpace.game.UniversePath;
 import java.awt.Color;

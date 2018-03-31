@@ -1,6 +1,7 @@
 package ConquerSpace.game.ui;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.universe.civilizations.Civilization;
 
 /**
  * The controller of the game UI.
@@ -12,9 +13,12 @@ public class GameController {
      */
     public GameController() {
         Globals.turn = 0;
+        while(true) {
+            for(int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+                Civilization c = Globals.universe.getCivilization(i);
+                c.controller.doTurn();
+            }
+        }
         
-        UniverseDisplayer displayer = new UniverseDisplayer();
-        UserInterface userInterface = new UserInterface();
-        TurnSaveWindow tsWindow = new TurnSaveWindow();
     }
 }

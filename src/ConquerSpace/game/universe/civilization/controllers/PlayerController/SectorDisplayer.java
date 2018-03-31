@@ -1,4 +1,4 @@
-package ConquerSpace.game.ui;
+package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.ui.renderers.SectorDrawer;
 import ConquerSpace.game.ui.renderers.SectorRenderer;

@@ -1,4 +1,4 @@
-package ConquerSpace.game.ui;
+package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.Globals;
 import ConquerSpace.start.gui.Manual;
@@ -8,12 +8,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Zyun
  */
-public class TurnSaveWindow extends JFrame {
+public class TurnSaveWindow{
 
     private JLabel turnLabel;
     private JButton nextTurnButton;
@@ -22,7 +24,7 @@ public class TurnSaveWindow extends JFrame {
     private JButton manualButton;
 
     public TurnSaveWindow() {
-        setTitle("Conquer Space");
+        JPanel pan = new JPanel();
 
         //Init components
         turnLabel = new JLabel();
@@ -49,16 +51,14 @@ public class TurnSaveWindow extends JFrame {
             }
         });
 
-        add(turnLabel);
-        add(nextTurnButton);
-        add(manualButton);
-        add(saveGameButton);
-        add(exitGameButton);
-        setLayout(new GridLayout(5, 1, 5, 5));
-        setAlwaysOnTop(true);
-        pack();
+        pan.add(turnLabel);
+        pan.add(nextTurnButton);
+        pan.add(manualButton);
+        pan.add(saveGameButton);
+        pan.add(exitGameButton);
+        pan.setLayout(new GridLayout(5, 1, 5, 5));
+        JOptionPane.showMessageDialog(null, pan);
 
-        setVisible(true);
     }
 
 }

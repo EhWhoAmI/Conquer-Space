@@ -6,8 +6,8 @@
 # universeConfig -- Universe Config object. Check out ConquerSpace.game.universe.UniverseConfig
 
 from ConquerSpace.game.universe import GalaticLocation
-from ConquerSpace.game.universe.civControllers import AIController
-from ConquerSpace.game.universe.civControllers import PlayerController
+from ConquerSpace.game.universe.civilization.controllers.AIController import AIController
+from ConquerSpace.game.universe.civilization.controllers.PlayerController import PlayerController
 from ConquerSpace.game.universe.civilizations import Civilization
 from ConquerSpace.game.universe.spaceObjects import Planet
 from ConquerSpace.game.universe.spaceObjects import Sector
@@ -188,8 +188,10 @@ LOGGER.info('Civ symbol: "' + civSymbol + '"')
 HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
+playerCiv.setHomesectorID(HomesectorID)
 start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
-playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
+playerCiv.setHomeSystemID(start[0])
+playerCiv.setHomePlanetID(start[1])
 universeObject.addCivilization(playerCiv)
 
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
