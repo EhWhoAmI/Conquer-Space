@@ -59,12 +59,10 @@ public class UniverseRenderer extends JPanel {
             Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getRadius(), p.y - s.getRadius(), s.getRadius() * 2, s.getRadius() * 2);
             Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize / 2, drawer.universeDrawnSize / 2));
             //Draw control
-            LOGGER.info("Control: " + drawer.controlDrawStats.toString());
             for (ControlDrawStats c : drawer.controlDrawStats) {
                 Point pos = c.getPos();
-                LOGGER.info("Drawing control");
-                Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 5, pos.y - 5, 50, 50);
-                g2d.setColor(new Color(c.getColor().getRed(), c.getColor().getBlue(), c.getColor().getGreen(), 127));
+                Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 5, pos.y - 5, 10, 10);
+                g2d.setColor(new Color(c.getColor().getRed(), c.getColor().getBlue(), c.getColor().getGreen(), 10));
                 g2d.fill(control);
             }
             // Draw star systems

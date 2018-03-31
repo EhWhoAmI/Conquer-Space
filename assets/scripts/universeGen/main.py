@@ -188,10 +188,8 @@ LOGGER.info('Civ symbol: "' + civSymbol + '"')
 HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
-playerCiv.setHomesectorID(HomesectorID)
 start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
-playerCiv.setHomeSystemID(start[0])
-playerCiv.setHomePlanetID(start[1])
+playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
 universeObject.addCivilization(playerCiv)
 
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
@@ -227,7 +225,6 @@ for p in range(civCount):
     # Choose random sector
     HomesectorID = random.choice(sectorList)
     sectorList.remove(HomesectorID)
-    civ.setHomesectorID(HomesectorID)
 
     # figure out home system by finding a suitable starsystem.
     # rules: the home planet is determined by the position of the planet from the star.
@@ -238,8 +235,7 @@ for p in range(civCount):
     LOGGER.info("Choosing home star system")
 
     start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
-    civ.setHomeSystemID(start[0])
-    civ.setHomePlanetID(start[1])
+    civ.setHomeplanetPath(HomesectorID, start[0], start[1])
             
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)

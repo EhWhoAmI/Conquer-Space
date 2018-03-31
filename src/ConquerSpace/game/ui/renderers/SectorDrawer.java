@@ -1,5 +1,8 @@
 package ConquerSpace.game.ui.renderers;
 
+import ConquerSpace.Globals;
+import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,6 +26,7 @@ public class SectorDrawer {
 
     public SectorDrawer(Sector sector, Dimension bounds) {
         stats = new ArrayList<>();
+        controlDrawStats = new ArrayList<>();
         //Calculate center.
         sectorDrawnSize = (bounds.height < bounds.width) ? bounds.height : bounds.width;
 
@@ -51,6 +55,19 @@ public class SectorDrawer {
             }
             SystemDrawStats sds = new SystemDrawStats(p, c);
             stats.add(sds);
+        }
+        for(int n = 0; n < Globals.universe.getCivilizationCount(); n++) {
+            Civilization c = Globals.universe.getCivilization(n);
+            for(UniversePath p : c.control) {
+                
+                if (p.getSystemID() > -1 && p.getSectorID() == sector.getID()) {
+                    //Calculate the thingy
+                    //Get sector
+                    ControlDrawStats cds = new ControlDrawStats(stats.get(p.getSystemID()).getPos(), c.getColor());
+                    System.err.println(cds.getPos().toString());
+                    controlDrawStats.add(cds);
+                }
+            }
         }
         //Done!
     }
