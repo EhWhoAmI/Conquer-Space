@@ -13,10 +13,13 @@ public class GameController {
      */
     public GameController() {
         Globals.turn = 0;
+        main:
         while(true) {
             for(int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                 Civilization c = Globals.universe.getCivilization(i);
                 c.controller.doTurn();
+                //Wait until done...
+                break main;
             }
         }
         

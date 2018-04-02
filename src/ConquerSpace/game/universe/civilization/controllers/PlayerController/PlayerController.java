@@ -3,6 +3,8 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.Action;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller for player.
@@ -15,8 +17,6 @@ public class PlayerController implements CivilizationController{
         UniverseDisplayer displayer = new UniverseDisplayer();
         UserInterface userInterface = new UserInterface();
         TurnSaveWindow tsWindow = new TurnSaveWindow();
-        
         return null;
     }
-    
 }

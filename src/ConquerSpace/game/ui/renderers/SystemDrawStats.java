@@ -11,17 +11,22 @@ public class SystemDrawStats {
 
         private Point pos;
         private Color color;
-
-        public SystemDrawStats(Point pos, Color color) {
+        private int id;
+        public SystemDrawStats(Point pos, Color color, int id) {
             this.pos = pos;
             this.color = color;
+            this.id = id;
         }
 
-        public Point getPos() {
+        public Point getPosition() {
             return pos;
         }
 
         public Color getColor() {
             return color;
         }
+
+    public int getId() {
+        return id;
     }
+}

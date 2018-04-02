@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class SectorRenderer extends JPanel {
 
     private Dimension bounds;
-    private SectorDrawer drawer;
+    public SectorDrawer drawer;
 
     public SectorRenderer(Dimension bounds, Sector sector) {
         //Draw background
@@ -48,7 +48,7 @@ public class SectorRenderer extends JPanel {
             g2d.fill(control);
         }
         for (SystemDrawStats s : drawer.stats) {
-            Ellipse2D.Float star = new Ellipse2D.Float(s.getPos().x, s.getPos().y, 20, 20);
+            Ellipse2D.Float star = new Ellipse2D.Float(s.getPosition().x, s.getPosition().y, 20, 20);
             g2d.setColor(s.getColor());
             g2d.fill(star);
         }

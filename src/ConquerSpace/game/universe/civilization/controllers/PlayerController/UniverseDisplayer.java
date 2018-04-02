@@ -45,14 +45,12 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
         if (e.getClickCount() == 2) {
             //Get which sector clicked.
             LOGGER.info("Double clicked. Opening sector");
-            int i = 0;
             for (SectorDrawStats stats : drawer.sectorDrawings) {
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < stats.getRadius()) {
-                    LOGGER.info("Mouse clicked in sector " + i + "!");
-                    SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(i));
+                    LOGGER.info("Mouse clicked in sector " + stats.getId() + "!");
+                    SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(stats.getId()));
                     break;
                 }
-                i ++;
             }
         }
     }
@@ -71,6 +69,6 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {
-      }
+    }
     
 }

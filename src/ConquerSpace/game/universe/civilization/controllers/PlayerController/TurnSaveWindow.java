@@ -8,14 +8,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Zyun
  */
-public class TurnSaveWindow{
+public class TurnSaveWindow extends JFrame implements ActionListener{
 
     private JLabel turnLabel;
     private JButton nextTurnButton;
@@ -34,7 +33,7 @@ public class TurnSaveWindow{
         exitGameButton = new JButton("Exit Game");
 
         turnLabel.setText("Turn " + Globals.turn);
-
+        nextTurnButton.addActionListener(this);
         exitGameButton.addActionListener(new ActionListener() {
 
             @Override
@@ -57,8 +56,15 @@ public class TurnSaveWindow{
         pan.add(saveGameButton);
         pan.add(exitGameButton);
         pan.setLayout(new GridLayout(5, 1, 5, 5));
-        JOptionPane.showMessageDialog(null, pan);
-
+        add(pan);
+        pack();
+        setVisible(true);
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == nextTurnButton) {
+            this.setVisible(false);
+        }
+    }
 }

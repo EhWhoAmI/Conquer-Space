@@ -98,7 +98,7 @@ public class UniverseDrawer {
                 placedOutside++;
             }
             Point center = new Point((int) sectorPos.getX(), (int) sectorPos.getY());
-            SectorDrawStats stats = new SectorDrawStats(center, (int) longest);
+            SectorDrawStats stats = new SectorDrawStats(center, (int) longest, s.getID());
 
             //Do star systems
             for (int b = 0; b < s.getStarSystemCount(); b++) {
@@ -123,7 +123,7 @@ public class UniverseDrawer {
                     default:
                         c = Color.BLACK;
                 }
-                SystemDrawStats sysStats = new SystemDrawStats(pt, c);
+                SystemDrawStats sysStats = new SystemDrawStats(pt, c, sys.getId());
                 stats.addSystemStats(sysStats);
             }
             sectorDrawings.add(stats);
@@ -141,7 +141,7 @@ public class UniverseDrawer {
                     //Calculate the thingy
                     //Get sector
                     int sectorid = p.getSectorID();
-                    ControlDrawStats stats = new ControlDrawStats(sectorDrawings.get(sectorid).systems.get(p.getSystemID()).getPos(), civ.getColor());
+                    ControlDrawStats stats = new ControlDrawStats(sectorDrawings.get(sectorid).systems.get(p.getSystemID()).getPosition(), civ.getColor());
                     controlDrawStats.add(stats);
                 }
             }

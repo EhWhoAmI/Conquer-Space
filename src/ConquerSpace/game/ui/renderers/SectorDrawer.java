@@ -53,7 +53,7 @@ public class SectorDrawer {
                 default:
                     c = Color.BLACK;
             }
-            SystemDrawStats sds = new SystemDrawStats(p, c);
+            SystemDrawStats sds = new SystemDrawStats(p, c, sector.getStarSystem(i).getId());
             stats.add(sds);
         }
         for(int n = 0; n < Globals.universe.getCivilizationCount(); n++) {
@@ -63,7 +63,7 @@ public class SectorDrawer {
                 if (p.getSystemID() > -1 && p.getSectorID() == sector.getID()) {
                     //Calculate the thingy
                     //Get sector
-                    ControlDrawStats cds = new ControlDrawStats(stats.get(p.getSystemID()).getPos(), c.getColor());
+                    ControlDrawStats cds = new ControlDrawStats(stats.get(p.getSystemID()).getPosition(), c.getColor());
                     System.err.println(cds.getPos().toString());
                     controlDrawStats.add(cds);
                 }
