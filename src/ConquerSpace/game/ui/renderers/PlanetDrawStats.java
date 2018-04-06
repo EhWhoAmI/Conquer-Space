@@ -7,20 +7,15 @@ import java.awt.Point;
  *
  * @author Zyun
  */
-public class SystemDrawStats {
-
+public class PlanetDrawStats {
+    private int id;
     private Point pos;
     private Color color;
-    private int id;
 
-    public SystemDrawStats(Point pos, Color color, int id) {
+    public PlanetDrawStats(int id, Point pos, Color color) {
+        this.id = id;
         this.pos = pos;
         this.color = color;
-        this.id = id;
-    }
-
-    public Point getPosition() {
-        return pos;
     }
 
     public Color getColor() {
@@ -30,4 +25,10 @@ public class SystemDrawStats {
     public int getId() {
         return id;
     }
+
+    public Point getPos() {
+        return pos;
+    }
+    
+    
 }

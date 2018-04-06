@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.ui.renderers.SectorDrawer;
 import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 public class SectorDisplayer extends JFrame implements MouseListener{
     private static final Logger LOGGER = CQSPLogger.getLogger(SectorDisplayer.class.getName());
     SectorDrawer drawStats;
+    int id;
     public SectorDisplayer(Sector s) {
 
         setTitle("Sector " + s.getID());
@@ -40,6 +42,7 @@ public class SectorDisplayer extends JFrame implements MouseListener{
         setSize(500, 500);
         setMaximumSize(new Dimension(1500, 1500));
         setVisible(true);
+        id = s.getID();
     }
 
     @Override
@@ -51,6 +54,7 @@ public class SectorDisplayer extends JFrame implements MouseListener{
             for (SystemDrawStats stats : drawStats.stats) {
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < 25) {
                     LOGGER.info("Mouse clicked in system " + stats.getId() + "!");
+                    SystemDisplayer d = new SystemDisplayer(Globals.universe.getSector(id).getStarSystem(stats.getId()));
                     break;
                 }
             }

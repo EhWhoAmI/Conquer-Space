@@ -1,13 +1,14 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.GameObject;
+import ConquerSpace.game.universe.GalaticLocation;
 /**
  * Planet class.
  * @author Zyun
  */
 public class Planet extends GameObject{
     private int planetType;
-    private int orbitalDistance;
+    private GalaticLocation orbitalDistance;
     private int planetSize;
     private int id;
     
@@ -20,7 +21,7 @@ public class Planet extends GameObject{
      */
     public Planet(int planetType, int orbitalDistance, int planetSize, int id) {
         this.planetType = planetType;
-        this.orbitalDistance = orbitalDistance;
+        this.orbitalDistance = new GalaticLocation(0, orbitalDistance);
         this.planetSize = planetSize;
         this.id = id;
     }
@@ -49,7 +50,7 @@ public class Planet extends GameObject{
     }
 
     public int getOrbitalDistance() {
-        return orbitalDistance;
+        return (int) orbitalDistance.getDistance();
     }
 
     public int getPlanetSize() {
@@ -58,5 +59,9 @@ public class Planet extends GameObject{
 
     public int getPlanetType() {
         return planetType;
+    }
+    
+    public void modDegrees(float degs) {
+        orbitalDistance.setDegrees(orbitalDistance.getDegrees() + degs);
     }
 }
