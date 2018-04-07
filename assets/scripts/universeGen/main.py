@@ -111,7 +111,12 @@ for i in range(universeSize):
         for n in range(planets):
             # Planets
             ptype = random.randint(0, 1)
-            orbitalDistance = random.randint(lastDist, lastDist+(lastDist*n/2))
+            toadd = 0
+            if n == 0:
+                toadd = 1
+            else:
+                toadd = n
+            orbitalDistance = random.randint(lastDist + 1, lastDist+ 1 + (lastDist/2))
             lastDist = orbitalDistance
             planetSize = random.randint(1, 50)
             planet = Planet(ptype, orbitalDistance, planetSize, n)

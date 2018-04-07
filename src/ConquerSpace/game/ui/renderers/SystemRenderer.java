@@ -42,7 +42,7 @@ public class SystemRenderer extends JPanel {
             Ellipse2D.Float planet = new Ellipse2D.Float(p.getPos().x - 10, p.getPos().y - 10, 20, 20);
             g2d.setColor(p.getColor());
             g2d.fill(planet);
-        }
+         }
     }
 
 }
