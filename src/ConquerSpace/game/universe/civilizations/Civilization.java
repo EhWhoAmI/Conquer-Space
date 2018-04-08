@@ -9,35 +9,41 @@ import java.util.ArrayList;
 
 /**
  * Civilization
+ *
  * @author Zyun
  */
-public class Civilization extends GameObject{
+public class Civilization extends GameObject {
+
     private int ID;
-    
+
     private Color color;
     private String name;
     private int civilizationPreferedClimate;
     private String civilizationSymbol;
     private String speciesName;
-    
+
     private String homePlanetName;
     private int homesectorID;
     private int homeSystemID;
     private int homePlanetID;
-    
+
     public ArrayList<UniversePath> control = new ArrayList<>();
     /**
      * The controller of this civ.
      */
     public CivilizationController controller;
 
+    private int population;
+
+    public ArrayList<UniversePath> vision = new ArrayList<>();
+
     public Civilization(int ID) {
         this.ID = ID;
-        
+
         //Set a temp starting point as in 0:0:0
         this.control.add(new UniversePath("0:0:0"));
     }
-    
+
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
         this.civilizationPreferedClimate = civilizationPrefferedClimate;
     }
@@ -54,32 +60,17 @@ public class Civilization extends GameObject{
         this.controller = controller;
     }
 
-    public void setHomePlanetID(int homePlanetID) {
-        //Split string then append
-        
-        control.get(0).parse(control.get(0).getSectorID() + ":" + homePlanetID + ":" + control.get(0).getPlanetID());
-        this.homePlanetID = homePlanetID;
-    }
-
     public void setHomePlanetName(String homePlanetName) {
         this.homePlanetName = homePlanetName;
     }
 
-    public void setHomeSystemID(int homeSystemID) {
-        control.get(0).parse(control.get(0).getSectorID() + ":" + control.get(0).getSystemID() + ":" + homeSystemID);
-        this.homeSystemID = homeSystemID;
-    }
-
-    public void setHomesectorID(int homesectorID) {
-        control.get(0).parse(homesectorID + ":" +control.get(0).getSystemID() + ":" + control.get(0).getPlanetID());
-        this.homesectorID = homesectorID;
-    }
     public void setHomeplanetPath(int homeSectorID, int homeSystemID, int homePlanetID) {
         this.homesectorID = homeSectorID;
         this.homeSystemID = homeSystemID;
         this.homePlanetID = homePlanetID;
-        control.set(0, new UniversePath(homesectorID, homeSystemID, homePlanetID));
+        addControl(new UniversePath(homesectorID, homeSystemID, homePlanetID));
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -91,7 +82,7 @@ public class Civilization extends GameObject{
     public void setCivilizationPreferredClimate(int civilizationPreferedClimate) {
         this.civilizationPreferedClimate = civilizationPreferedClimate;
     }
-    
+
     public int getCivilizationPreferredClimate() {
         return civilizationPreferedClimate;
     }
@@ -135,16 +126,15 @@ public class Civilization extends GameObject{
     public int getID() {
         return ID;
     }
-    
-    public String toReadableString(){
+
+    public String toReadableString() {
         //Return values...
         StringBuilder builder = new StringBuilder();
         builder.append("<Civ " + ID + ", Name=" + name + ", Home Planet Name=" + homePlanetName);
         builder.append(", Species Name=" + speciesName + ", Civ Symbol=" + civilizationSymbol + ", Civ Prefferred Climate=");
-        
+
         //Get the species preferred climate in name
-        
-        switch(civilizationPreferedClimate) {
+        switch (civilizationPreferedClimate) {
             case CivilizationPreferredClimateTypes.VARIED:
                 builder.append("Varied");
                 break;
@@ -158,12 +148,20 @@ public class Civilization extends GameObject{
         builder.append(", Civ Controller=");
         if (controller instanceof AIController) {
             builder.append("AI");
-        }
-        else {
+        } else {
             builder.append("Player");
         }
         builder.append(", Home system=Sector " + homesectorID + " System " + homeSystemID + " Planet " + homePlanetID);
         builder.append(">\n");
         return (builder.toString());
+    }
+
+    public void addControl(UniversePath p) {
+        if (!control.contains(p)) {
+            // we only add the planet
+            // Also do vision.
+            control.add(p);
+            vision.add(p);
+        }
     }
 }

@@ -1,5 +1,6 @@
-package ConquerSpace;
+package ConquerSpace.start.gui;
 
+import ConquerSpace.ConquerSpace;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;

@@ -193,10 +193,8 @@ LOGGER.info('Civ symbol: "' + civSymbol + '"')
 HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
-playerCiv.setHomesectorID(HomesectorID)
 start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
-playerCiv.setHomeSystemID(start[0])
-playerCiv.setHomePlanetID(start[1])
+playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
 universeObject.addCivilization(playerCiv)
 
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
