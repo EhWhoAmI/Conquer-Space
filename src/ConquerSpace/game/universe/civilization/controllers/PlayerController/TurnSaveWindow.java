@@ -59,6 +59,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener{
         add(pan);
         pack();
         setVisible(true);
+        setAlwaysOnTop(true);
     }
 
     @Override

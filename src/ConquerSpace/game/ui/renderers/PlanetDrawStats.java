@@ -11,11 +11,18 @@ public class PlanetDrawStats {
     private int id;
     private Point pos;
     private Color color;
-
-    public PlanetDrawStats(int id, Point pos, Color color) {
+    //Orbit is the distance from the center (radius)
+    private int orbitPath;
+    
+    //NOTE: planet size has to be exzagurated in order to see the planet.
+    //Space is too dang big!
+    private int size;
+    public PlanetDrawStats(int id, Point pos, Color color, int orbitPath, int size) {
         this.id = id;
         this.pos = pos;
         this.color = color;
+        this.orbitPath = orbitPath;
+        this.size = size;
     }
 
     public Color getColor() {
@@ -29,6 +36,12 @@ public class PlanetDrawStats {
     public Point getPos() {
         return pos;
     }
-    
-    
+
+    public int getOrbitPath() {
+        return orbitPath;
+    }
+
+    public int getSize() {
+        return size;
+    }
 }

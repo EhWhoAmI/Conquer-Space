@@ -39,7 +39,12 @@ public class SystemRenderer extends JPanel {
             g2d.fill(thingy);
         }
         for (PlanetDrawStats p : drawer.stats.planetDrawStats) {
-            Ellipse2D.Float planet = new Ellipse2D.Float(p.getPos().x - 10, p.getPos().y - 10, 20, 20);
+            //Draw orbit circle
+            Ellipse2D.Float circle = new Ellipse2D.Float(bounds.width/2 - p.getOrbitPath(), bounds.height/2 - p.getOrbitPath(), p.getOrbitPath()*2, p.getOrbitPath()*2);
+            g2d.setColor(Color.WHITE);
+            g2d.draw(circle);
+            
+            Ellipse2D.Float planet = new Ellipse2D.Float(p.getPos().x - (p.getSize()/2), p.getPos().y - (p.getSize()/2), p.getSize(), p.getSize());
             g2d.setColor(p.getColor());
             g2d.fill(planet);
          }

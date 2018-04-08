@@ -5,6 +5,7 @@ import ConquerSpace.util.Version;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.UIManager;
@@ -33,7 +34,8 @@ public class ConquerSpace {
     */
     public static void main(String[] args) {
         CQSPLogger.initLoggers();
-        
+        LOGGER.info("Run started: " + new Date().toString());
+        LOGGER.info("Version " + VERSION.toString());
         //Init settings, and read from file if possible
         Globals.settings = new Properties();
         //Check for the existance of the settings file

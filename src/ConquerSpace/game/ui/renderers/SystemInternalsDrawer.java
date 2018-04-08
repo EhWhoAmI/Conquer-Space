@@ -19,6 +19,7 @@ public class SystemInternalsDrawer {
 
     public SystemInternalDrawStats stats;
     private static final Logger LOGGER = CQSPLogger.getLogger(SystemInternalsDrawer.class.getName());
+
     public SystemInternalsDrawer(StarSystem sys, Dimension bounds) {
         stats = new SystemInternalDrawStats();
         //Get size of the star system
@@ -31,7 +32,7 @@ public class SystemInternalsDrawer {
         //then find larger bounds
         int systemDrawnSize = (((bounds.height < bounds.width) ? bounds.height : bounds.width) / 2);
         LOGGER.info("System size: " + size);
-        int sizeofAU = (int) (Math.floor(systemDrawnSize / (size + (size/2))));
+        int sizeofAU = (int) (Math.floor(systemDrawnSize / (size + (size / 2))));
         LOGGER.info("Size of 1 AU: " + sizeofAU + " px");
         //Draw it
         // As of version indev, there is only one star.
@@ -58,7 +59,7 @@ public class SystemInternalsDrawer {
         }
 
         Point starPos = RendererMath.polarCoordToCartesianCoord(new GalaticLocation(0, 0), new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
-        StarDrawStats sds = new StarDrawStats(star.id, starPos, starSize * 10, c);
+        StarDrawStats sds = new StarDrawStats(star.id, starPos, starSize * 5, c);
         stats.addStarDrawStats(sds);
         LOGGER.info("System " + sys.getId() + " has " + sys.getPlanetCount() + " planets");
         for (int n = 0; n < sys.getPlanetCount(); n++) {
@@ -79,9 +80,14 @@ public class SystemInternalsDrawer {
             Random rand = new Random();
             int degs = rand.nextInt(361);
             LOGGER.info("Degrees: " + degs + " distance " + p.getOrbitalDistance());
-            Point point = RendererMath.polarCoordToCartesianCoord(new GalaticLocation(degs, p.getOrbitalDistance()), new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
-            PlanetDrawStats pds = new PlanetDrawStats(p.getId(), point, cl);
-            LOGGER.info(Math.hypot(point.x - bounds.width/2, point.y - bounds.height/2));
+            Point point = RendererMath.polarCoordToCartesianCoord(
+                    new GalaticLocation(degs, p.getOrbitalDistance()), 
+                    new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
+
+            PlanetDrawStats pds = new PlanetDrawStats(p.getId(), point, cl,
+                    p.getOrbitalDistance() * sizeofAU, p.getPlanetSize());
+            
+            LOGGER.info(Math.hypot(point.x - bounds.width / 2, point.y - bounds.height / 2));
             this.stats.addPlanetDrawStats(pds);
         }
     }
