@@ -23,9 +23,6 @@ public class Civilization extends GameObject {
     private String speciesName;
 
     private String homePlanetName;
-    private int homesectorID;
-    private int homeSystemID;
-    private int homePlanetID;
 
     public ArrayList<UniversePath> control = new ArrayList<>();
     /**
@@ -65,10 +62,7 @@ public class Civilization extends GameObject {
     }
 
     public void setHomeplanetPath(int homeSectorID, int homeSystemID, int homePlanetID) {
-        this.homesectorID = homeSectorID;
-        this.homeSystemID = homeSystemID;
-        this.homePlanetID = homePlanetID;
-        addControl(new UniversePath(homesectorID, homeSystemID, homePlanetID));
+        addControl(new UniversePath(homeSectorID, homeSystemID, homePlanetID));
     }
 
     public void setName(String name) {
@@ -100,7 +94,7 @@ public class Civilization extends GameObject {
     }
 
     public int getHomePlanetID() {
-        return homePlanetID;
+        return control.get(0).getPlanetID();
     }
 
     public String getHomePlanetName() {
@@ -108,11 +102,11 @@ public class Civilization extends GameObject {
     }
 
     public int getHomeSystemID() {
-        return homeSystemID;
+        return control.get(0).getSystemID();
     }
 
     public int getHomesectorID() {
-        return homesectorID;
+        return control.get(0).getSectorID();
     }
 
     public String getName() {
@@ -151,7 +145,7 @@ public class Civilization extends GameObject {
         } else {
             builder.append("Player");
         }
-        builder.append(", Home system=Sector " + homesectorID + " System " + homeSystemID + " Planet " + homePlanetID);
+        builder.append(", Home system=Sector " + getHomesectorID() + " System " + getHomeSystemID() + " Planet " + getHomePlanetID());
         builder.append(">\n");
         return (builder.toString());
     }

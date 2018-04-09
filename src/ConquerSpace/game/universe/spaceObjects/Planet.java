@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.GameObject;
 import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.spaceObjects.planet.PlanetSector;
 /**
  * Planet class.
  * @author Zyun
@@ -11,6 +12,11 @@ public class Planet extends GameObject{
     private GalaticLocation orbitalDistance;
     private int planetSize;
     private int id;
+    
+    private int ownerID;
+    private int population;
+    private int surfaceArea;
+    public PlanetSector[] planetSectors;
     
     /**
      * Creates planet
@@ -24,6 +30,12 @@ public class Planet extends GameObject{
         this.orbitalDistance = new GalaticLocation(0, orbitalDistance);
         this.planetSize = planetSize;
         this.id = id;
+        //Surface area equals 4 * diameter
+        //Surface area is in sectors
+        //1 sector = 100 'units'
+        surfaceArea = (int) Math.floor((planetSize * planetSize * Math.PI * 4) / 100);
+        planetSectors = new PlanetSector[surfaceArea];
+        
     }
 
     /**
@@ -63,5 +75,25 @@ public class Planet extends GameObject{
     
     public void modDegrees(float degs) {
         orbitalDistance.setDegrees(orbitalDistance.getDegrees() + degs);
+    }
+
+    public int getOwnerID() {
+        return ownerID;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public int getSurfaceArea() {
+        return surfaceArea;
+    }
+
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 }
