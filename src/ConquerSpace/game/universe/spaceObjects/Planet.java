@@ -96,4 +96,12 @@ public class Planet extends GameObject{
     public void setPopulation(int population) {
         this.population = population;
     }
+    
+    public void setPlanetSector(int index, PlanetSector sector) {
+        planetSectors[index] = sector;
+    }
+    
+    public int getPlanetSectorCount() {
+        return planetSectors.length;
+    }
 }

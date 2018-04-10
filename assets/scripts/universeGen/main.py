@@ -15,6 +15,8 @@ from ConquerSpace.game.universe.spaceObjects import Star
 from ConquerSpace.game.universe.spaceObjects import StarSystem
 from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects import StarTypes
+from ConquerSpace.game.universe.spaceObjects.planet import RawResource
+
 import generation
 from java.awt import Color
 import math
@@ -120,6 +122,14 @@ for i in range(universeSize):
             lastDist = orbitalDistance
             planetSize = random.randint(1, 50)
             planet = Planet(ptype, orbitalDistance, planetSize, n)
+            # Set planet sectors
+            for b in range(planet.getPlanetSectorCount()):
+                if planet.getPlanetType() == PlanetTypes.GAS:
+                    # Set to all gas raw resource
+                    planet.setPlanetSector(b, RawResource(random.randint(1000, 100000), RawResourceTypes.GAS))
+                else:
+                    # Select random raw resource
+                    planet.setPlanetSector(b, RawResource(random.randint(1000, 100000), random.randint(0, 3)))
             starSystem.addPlanet(planet)
             
         sector.addStarSystem(starSystem)
