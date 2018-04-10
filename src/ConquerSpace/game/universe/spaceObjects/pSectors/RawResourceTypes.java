@@ -1,4 +1,4 @@
-package ConquerSpace.game.universe.spaceObjects.planet;
+package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 /**
  *

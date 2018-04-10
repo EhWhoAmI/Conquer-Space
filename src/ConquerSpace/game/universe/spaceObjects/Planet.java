@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.GameObject;
 import ConquerSpace.game.universe.GalaticLocation;
-import ConquerSpace.game.universe.spaceObjects.planet.PlanetSector;
+import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 /**
  * Planet class.
  * @author Zyun
@@ -53,7 +53,13 @@ public class Planet extends GameObject{
             case PlanetTypes.GAS:
                 builder.append("gas");
         }
-        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + ")\n");
+        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + " Planet Sectors " + planetSectors.length + ":\n");
+                
+        for(PlanetSector s : planetSectors) {
+            builder.append(s.toReadableString());
+            builder.append(", \n");
+        }
+        builder.append(")\n");
         return (builder.toString());
     }
 

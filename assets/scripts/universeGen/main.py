@@ -15,7 +15,9 @@ from ConquerSpace.game.universe.spaceObjects import Star
 from ConquerSpace.game.universe.spaceObjects import StarSystem
 from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects import StarTypes
-from ConquerSpace.game.universe.spaceObjects.planet import RawResource
+from ConquerSpace.game.universe.spaceObjects import PlanetTypes
+from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
+from ConquerSpace.game.universe.spaceObjects.pSectors import RawResourceTypes
 
 import generation
 from java.awt import Color

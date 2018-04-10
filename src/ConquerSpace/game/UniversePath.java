@@ -43,7 +43,6 @@ public class UniversePath {
         int planetID = -1;
         loc = null;
         String[] text = s.split(":");
-        System.out.println("text" + text.length);
         // Split last one for galatic location
         if (text[text.length - 1].contains("[")) {
             //Then it has a galatic location
@@ -54,7 +53,6 @@ public class UniversePath {
             String[] vals = cont[1].split(".");
             
             loc = new GalaticLocation(Float.parseFloat(vals[0]), Integer.parseInt(vals[1]));
-            System.out.println("loc = " + loc.toString());
         }
         if (text.length == 0) {
             //Incorrect format.
@@ -63,7 +61,6 @@ public class UniversePath {
             sectorID = Integer.parseInt(text[0]);
             if (text.length > 1) {
                 systemID = Integer.parseInt(text[1]);
-                System.out.println("SystemID " + systemID);
             }
             if (text.length > 2) {
                 planetID = Integer.parseInt(text[2]);
