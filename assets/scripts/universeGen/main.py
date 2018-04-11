@@ -18,6 +18,7 @@ from ConquerSpace.game.universe.spaceObjects import StarTypes
 from ConquerSpace.game.universe.spaceObjects import PlanetTypes
 from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
 from ConquerSpace.game.universe.spaceObjects.pSectors import RawResourceTypes
+from ConquerSpace.game.universe.spaceObjects.pSectors import PopulationStorage
 
 import generation
 from java.awt import Color
@@ -128,10 +129,10 @@ for i in range(universeSize):
             for b in range(planet.getPlanetSectorCount()):
                 if planet.getPlanetType() == PlanetTypes.GAS:
                     # Set to all gas raw resource
-                    planet.setPlanetSector(b, RawResource(random.randint(1000, 100000), RawResourceTypes.GAS))
+                    planet.setPlanetSector(b, RawResource(b, random.randint(1000, 100000), RawResourceTypes.GAS))
                 else:
                     # Select random raw resource
-                    planet.setPlanetSector(b, RawResource(random.randint(1000, 100000), random.randint(0, 3)))
+                    planet.setPlanetSector(b, RawResource(b, random.randint(1000, 100000), random.randint(0, 3)))
             starSystem.addPlanet(planet)
             
         sector.addStarSystem(starSystem)
@@ -207,6 +208,12 @@ sectorList.remove(HomesectorID)
 
 start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
 playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
+
+# Get planet then add 1 population center
+# Now, choose one random thingy, and enter it.
+homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
+planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
+homeP.setPlanetSector(planetSectorID, PopulationStorage(100000, 100000, 100, planetSectorID))
 universeObject.addCivilization(playerCiv)
 
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
@@ -253,7 +260,12 @@ for p in range(civCount):
 
     start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
     civ.setHomeplanetPath(HomesectorID, start[0], start[1])
-            
+    # Get planet then add 1 population center
+    # Now, choose one random thingy, and enter it.
+    homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
+    planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
+    homeP.setPlanetSector(planetSectorID, PopulationStorage(100000, 100000, 100, planetSectorID));
+
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)
     civ.setCivilizationSymbol(symbol)
