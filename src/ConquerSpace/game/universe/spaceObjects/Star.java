@@ -9,7 +9,8 @@ public class Star extends GameObject{
     public int type;
     public int starSize;
     public int id;
-
+    private int parentStarSystem;
+    private int parentSector;
     /**
      * @see StarTypes
      * @param type type of star

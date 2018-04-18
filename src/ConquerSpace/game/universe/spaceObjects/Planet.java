@@ -16,8 +16,11 @@ public class Planet extends GameObject{
     private int ownerID;
     private int population;
     private int surfaceArea;
+    //Empty as default -- undiscovered
+    private String name = "";
     public PlanetSector[] planetSectors;
-    
+    private int parent;
+
     /**
      * Creates planet
      * @param planetType

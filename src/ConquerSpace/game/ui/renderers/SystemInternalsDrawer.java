@@ -32,7 +32,10 @@ public class SystemInternalsDrawer {
         //then find larger bounds
         int systemDrawnSize = (((bounds.height < bounds.width) ? bounds.height : bounds.width) / 2);
         LOGGER.info("System size: " + size);
-        int sizeofAU = (int) (Math.floor(systemDrawnSize / (size + (size / 2))));
+        int sizeofAU = 1;
+        if (size != 0)
+            sizeofAU = (int) (Math.floor(systemDrawnSize / (size + (size / 2))));
+        
         LOGGER.info("Size of 1 AU: " + sizeofAU + " px");
         //Draw it
         // As of version indev, there is only one star.

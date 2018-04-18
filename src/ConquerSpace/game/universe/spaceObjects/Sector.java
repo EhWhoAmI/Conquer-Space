@@ -30,6 +30,7 @@ public class Sector extends GameObject{
      * @param e
      */
     public void addStarSystem(StarSystem e) {
+        e.setParent(id);
         starSystems.add(e);
     }
 

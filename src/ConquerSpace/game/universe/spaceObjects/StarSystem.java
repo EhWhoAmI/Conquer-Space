@@ -13,6 +13,7 @@ public class StarSystem extends GameObject{
     private ArrayList<Star> stars;
     private int id;
     private GalaticLocation location;
+    private int parent;
     
     /**
      *
@@ -113,5 +114,13 @@ public class StarSystem extends GameObject{
         }
         builder.append(">\n");
         return (builder.toString());
+    }
+
+    public int getParent() {
+        return parent;
+    }
+
+    public void setParent(int parent) {
+        this.parent = parent;
     }
 }
