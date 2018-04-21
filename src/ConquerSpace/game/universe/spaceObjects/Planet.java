@@ -1,26 +1,29 @@
 package ConquerSpace.game.universe.spaceObjects;
 
-import ConquerSpace.game.GameObject;
+import ConquerSpace.Globals;
 import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.civilizations.stats.Economy;
+import ConquerSpace.game.universe.civilizations.stats.Population;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
+import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 /**
  * Planet class.
  * @author Zyun
  */
-public class Planet extends GameObject{
+public class Planet extends SpaceObject{
     private int planetType;
     private GalaticLocation orbitalDistance;
     private int planetSize;
     private int id;
     
     private int ownerID;
-    private int population;
     private int surfaceArea;
     //Empty as default -- undiscovered
     private String name = "";
     public PlanetSector[] planetSectors;
     private int parent;
-
+    public Population population;
+    public Economy economy;
     /**
      * Creates planet
      * @param planetType
@@ -38,7 +41,8 @@ public class Planet extends GameObject{
         //1 sector = 100 'units'
         surfaceArea = (int) Math.floor((planetSize * planetSize * Math.PI * 4) / 100);
         planetSectors = new PlanetSector[surfaceArea];
-        
+        population = new Population();
+        economy = new Economy();
     }
 
     /**
@@ -90,8 +94,8 @@ public class Planet extends GameObject{
         return ownerID;
     }
 
-    public int getPopulation() {
-        return population;
+    public long getPopulation() {
+        return population.population.get(population.population.size() - 1);
     }
 
     public int getSurfaceArea() {
@@ -102,15 +106,33 @@ public class Planet extends GameObject{
         this.ownerID = ownerID;
     }
 
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-    
     public void setPlanetSector(int index, PlanetSector sector) {
         planetSectors[index] = sector;
     }
     
     public int getPlanetSectorCount() {
         return planetSectors.length;
+    }
+    
+    public void computePopulation(){
+        long currentPopulation = 0;
+        
+        for(PlanetSector sector : planetSectors) {
+            if(sector instanceof PopulationStorage) {
+                //Parse
+                currentPopulation +=((PopulationStorage)sector).pop.population.get(population.population.size() - 1);
+            }
+        }
+        population.population.add(currentPopulation);
+    }
+    
+    public void computeEconomy() {
+        
+    }
+    
+    @Override
+    public void processTurn(int turn) {
+        computePopulation();
+        computeEconomy();
     }
 }

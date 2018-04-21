@@ -1,14 +1,13 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.universe.GalaticLocation;
-import ConquerSpace.game.GameObject;
 import java.util.ArrayList;
 
 /**
  * A star system.
  * @author Zyun
  */
-public class StarSystem extends GameObject{
+public class StarSystem extends SpaceObject{
     private ArrayList<Planet> planets;
     private ArrayList<Star> stars;
     private int id;
@@ -123,4 +122,17 @@ public class StarSystem extends GameObject{
     public void setParent(int parent) {
         this.parent = parent;
     }
+
+    @Override
+    public void processTurn(int turn) {
+        //Process turn of the planets then the stars.
+        //Maybe later the objects in space.
+        for (Planet planet : planets) {
+            planet.processTurn(turn);
+        }
+        
+        for (Star star : stars) {
+            star.processTurn(turn);
+        }
+    }    
 }

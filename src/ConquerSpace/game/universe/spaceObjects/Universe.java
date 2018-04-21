@@ -1,14 +1,13 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.universe.civilizations.Civilization;
-import ConquerSpace.game.GameObject;
 import java.util.ArrayList;
 
 /**
  * Universe Object.
  * @author Zyun
  */
-public class Universe extends GameObject{
+public class Universe extends SpaceObject{
 
     private ArrayList<Sector> sectors;
     private ArrayList<Civilization> civs;
@@ -70,5 +69,13 @@ public class Universe extends GameObject{
     
     public Civilization getCivilization(int i) {
         return (civs.get(i));
+    }
+
+    @Override
+    public void processTurn(int turn) {
+        //Process turns of all the internals
+        for (Sector sector : sectors) {
+            sector.processTurn(turn);
+        }
     }
 }

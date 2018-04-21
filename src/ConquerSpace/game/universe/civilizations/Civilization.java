@@ -4,6 +4,8 @@ import ConquerSpace.game.universe.civilization.controllers.AIController.AIContro
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.GameObject;
 import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.civilizations.stats.Economy;
+import ConquerSpace.game.universe.civilizations.stats.Population;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -30,7 +32,8 @@ public class Civilization extends GameObject {
      */
     public CivilizationController controller;
 
-    private int population;
+    public Population pop;
+    public Economy economy;
 
     public ArrayList<UniversePath> vision = new ArrayList<>();
 
@@ -39,6 +42,9 @@ public class Civilization extends GameObject {
 
         //Set a temp starting point as in 0:0:0
         this.control.add(new UniversePath("0:0:0"));
+        
+        pop = new Population();
+        economy = new Economy();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
