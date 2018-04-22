@@ -2,18 +2,21 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.civilizations.stats.Population;
+import java.util.Random;
 
 /**
  * AKA apartments
+ *
  * @author Zyun
  */
-public class PopulationStorage extends PlanetSector{
-    private int maxStorage;
-    private int currentStorage;
+public class PopulationStorage extends PlanetSector {
+
+    private long maxStorage;
+    private long currentStorage;
     private byte happiness;
     public Population pop;
 
-    public PopulationStorage(int maxStorage, int currentStorage, byte happiness, int id) {
+    public PopulationStorage(long maxStorage, long currentStorage, byte happiness, int id) {
         super(id);
         this.maxStorage = maxStorage;
         this.currentStorage = currentStorage;
@@ -25,20 +28,74 @@ public class PopulationStorage extends PlanetSector{
     public byte getHappiness() {
         return happiness;
     }
-    
-    public int getMaxPopulation() {
+
+    public long getMaxPopulation() {
         return maxStorage;
     }
-    
-    public int getCurrentPopulation() {
+
+    public long getCurrentPopulation() {
         return currentStorage;
     }
-    
+
     public void setCurrentPopulation(int pop) {
         currentStorage = pop;
     }
-    
+
     public void setHappiness(byte happiness) {
         this.happiness = happiness;
+    }
+
+    @Override
+    public void processTurn(int turn) {
+        if (turn == 0) {
+            //Just push back default values for all that.
+            pop.population.add((Long) currentStorage);
+            pop.mortalityRate.add((float) (9 / 100));
+            pop.birthsPer1k.add((float) (19 / 100));
+            pop.populationGrowth.add((float) (0));
+
+            //100% happy for now
+            pop.happiness.add((float) 100);
+            return;
+        }
+        //Increase and subtract population
+        //According to: https://en.wikipedia.org/wiki/Birth_rate, we will use the world average of 19 in the years 2010 - 2015
+        //And according to https://en.wikipedia.org/wiki/Mortality_rate we will use 9.
+
+        //Using those values, we will do a little math and make it change about 10%.
+        float birthRate = 19;
+        float deathRate = 9;
+        Random rand = new Random();
+        int alterB = rand.nextInt((10 - (-10)) + 1);
+        int alterD = rand.nextInt((10 - (-10)) + 1);
+        birthRate = birthRate + (birthRate * (alterB / 100));
+        deathRate = deathRate + (deathRate * (alterD / 100));
+        System.out.println("birthrate: " + birthRate);
+        int toAdd = Math.round((birthRate / 1000) * currentStorage);
+        int toSubtract = Math.round((deathRate / 1000) * currentStorage);
+        long pastPop = currentStorage;
+
+        //Add and subtract population
+        currentStorage += toAdd;
+        currentStorage -= toSubtract;
+
+        //Add all the thingies
+        pop.population.add((Long) currentStorage);
+        pop.mortalityRate.add(deathRate);
+        pop.birthsPer1k.add(birthRate);
+
+        //Calculate population change
+        //Equation:
+        //(Vpr - Vpa)
+        // ---------  * 100
+        //  Vpa
+        //Where Vpr is present value
+        //Vpa is past value
+        float popChange = (((currentStorage - pastPop) / pastPop) * 100);
+        pop.populationGrowth.add(popChange);
+        System.err.println(pop.population.get(0));
+
+        //100% happy for now
+        pop.happiness.add((float) 100);
     }
 }

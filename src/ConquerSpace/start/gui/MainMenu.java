@@ -8,9 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import ConquerSpace.start.gui.Manual;
-import ConquerSpace.start.gui.NewGame;
-import ConquerSpace.start.gui.OptionsWindow;
 import ConquerSpace.util.CQSPLogger;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Logger;

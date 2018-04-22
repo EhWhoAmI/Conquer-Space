@@ -16,6 +16,7 @@ public class UserInterface extends JFrame {
     private JButton militaryButton;
     private JButton economyButton;
     private JButton diplomacyButton;
+    private JButton researchButton;
 
     private JButton universeBreakdownButton;
 
@@ -24,6 +25,9 @@ public class UserInterface extends JFrame {
         industryButton = new JButton("Industry");
         militaryButton = new JButton("Military");
         economyButton = new JButton("Economy");
+        diplomacyButton = new JButton("Diplomacy");
+        researchButton = new JButton("Research");
+        
         universeBreakdownButton = new JButton("Universe Breakdown");
 
         universeBreakdownButton.addActionListener((e) -> {
@@ -33,6 +37,8 @@ public class UserInterface extends JFrame {
         pan.add(militaryButton);
         pan.add(economyButton);
         pan.add(universeBreakdownButton);
+        pan.add(diplomacyButton);
+        pan.add(researchButton);
 
         add(pan);
         pack();

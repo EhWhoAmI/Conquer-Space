@@ -23,7 +23,7 @@ public class UniverseToReadableStringTest {
         Sector s = new Sector(new GalaticLocation(0, 0), 0);
         StarSystem system = new StarSystem(0, new GalaticLocation(0, 0));
         system.addStar(new Star(0, 0, 0));
-        system.addPlanet(new Planet(0, 0, 0, 0));
+        system.addPlanet(new Planet(0, 0, 0, 0, 0, 0));
         s.addStarSystem(system);
         universe.addSector(s);
         System.out.println(universe.toReadableString());

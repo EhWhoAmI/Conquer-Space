@@ -10,6 +10,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,7 +40,8 @@ public class SectorDisplayer extends JFrame implements MouseListener{
         JScrollPane scrollPane = new JScrollPane(pan);
         add(scrollPane);
         
-        
+        //Prevent close
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(500, 500);
         setMaximumSize(new Dimension(1500, 1500));
         setVisible(true);

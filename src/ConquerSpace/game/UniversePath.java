@@ -11,7 +11,7 @@ import ConquerSpace.game.universe.GalaticLocation;
  * @author Zyun
  */
 public class UniversePath {
-
+    //-1 is none
     private int sectorID = -1;
     private int systemID = -1;
     private int planetID = -1;
@@ -33,10 +33,16 @@ public class UniversePath {
    public UniversePath(int sectorID) {
         this.sectorID = sectorID;
     }
+   
    public UniversePath(int sectorID, int systemID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
     }
+   
+   /**
+    * Parses the universe path from a string
+    * @param s the string
+    */
     public void parse(String s) {
         int sectorID = -1;
         int systemID = -1;
@@ -68,10 +74,18 @@ public class UniversePath {
         }
     }
 
+    /**
+     * Location of object
+     * @return 
+     */
     public GalaticLocation getLoc() {
         return loc;
     }
-
+    
+    /**
+     * Get the id of the planet selected
+     * @return 
+     */
     public int getPlanetID() {
         return planetID;
     }
@@ -83,7 +97,11 @@ public class UniversePath {
     public int getSystemID() {
         return systemID;
     }
-
+    
+    /**
+     * To string
+     * @return this object in a string form, so that it can be parsed.
+     */
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();

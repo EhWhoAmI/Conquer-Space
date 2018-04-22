@@ -164,4 +164,8 @@ public class Civilization extends GameObject {
             vision.add(p);
         }
     }
+    
+    public void processTurn(int turn) {
+            //Stat everything
+    }
 }

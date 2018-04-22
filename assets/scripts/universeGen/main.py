@@ -21,22 +21,12 @@ from ConquerSpace.game.universe.spaceObjects.pSectors import RawResourceTypes
 from ConquerSpace.game.universe.spaceObjects.pSectors import PopulationStorage
 
 import generation
+from constants import *
 from java.awt import Color
 import math
 from os import *
 from os.path import *
 import random
-
-# Constants:
-SECTOR_MIN_SYSTEM = 40
-SECTOR_MAX_SYSTEM = 50
-SECTOR_MAX_RADIUS = 150
-def circleIntersects(pt1, rad1, pt2, rad2):
-    dist = math.hypot(pt1.x - pt2.x, pt1.y - pt2.y)
-    if dist < (rad1 + rad2):
-        return True
-    return False
-
 
 # universe size -- change this when universe sizes change
 universeSize = {'Small': 10, 'Medium': 20, 'Large': 30}[universeConfig.getUniverseSize()]
@@ -124,7 +114,7 @@ for i in range(universeSize):
             orbitalDistance = random.randint(lastDist + 1, lastDist+ 1 + (lastDist/2))
             lastDist = orbitalDistance
             planetSize = random.randint(1, 50)
-            planet = Planet(ptype, orbitalDistance, planetSize, n)
+            planet = Planet(ptype, orbitalDistance, planetSize, n, r, i)
             # Set planet sectors
             for b in range(planet.getPlanetSectorCount()):
                 if planet.getPlanetType() == PlanetTypes.GAS:
@@ -212,10 +202,10 @@ playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
 # Get planet then add 1 population center
 # Now, choose one random thingy, and enter it.
 homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
+homeP.setName(civHomePlanetName)
 planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
-homeP.setPlanetSector(planetSectorID, PopulationStorage(100000, 100000, 100, planetSectorID))
+homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID))
 universeObject.addCivilization(playerCiv)
-
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
 
 symbolList.remove(civSymbol)
@@ -264,8 +254,9 @@ for p in range(civCount):
     # Now, choose one random thingy, and enter it.
     homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
     planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
-    homeP.setPlanetSector(planetSectorID, PopulationStorage(100000, 100000, 100, planetSectorID));
-
+    homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID));
+    homeP.setName(civ.getHomePlanetName())
+    
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)
     civ.setCivilizationSymbol(symbol)

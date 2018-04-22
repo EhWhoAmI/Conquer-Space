@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +64,8 @@ public class InitialLoading extends JFrame {
                 String fileName = fileScanner.nextLine();
                 LOGGER.info("Verifying file " + fileName);
                 File f = new File(System.getProperty("user.dir") + "/" + fileName);
-                //Next we have to determine the importance of the file.
+                //Next we have to determine the importance of the file. -- TODO
+                //File exists or not, and warn noone. XD
                 if (!f.exists()) {
                     LOGGER.warn("Can't find file " + fileName + ". not fatal.");
                     filesMissing ++;
@@ -77,10 +79,13 @@ public class InitialLoading extends JFrame {
             else
                 LOGGER.warn(filesMissing + " file(s) missing.");
         } catch (FileNotFoundException ex) {
+            //Cannot fine FILELIST
             LOGGER.error("Error: ", ex);
+            JOptionPane.showMessageDialog(null, "Could not find file: \n" + ex.getMessage() , ex.getClass().getName(), JOptionPane.ERROR_MESSAGE);
         }
         long endTime = System.currentTimeMillis();
         
+        //Log how long that took
         LOGGER.info("Took " + (endTime - startTime) + "ms to load.");
     }
 }

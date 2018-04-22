@@ -7,12 +7,10 @@ import ConquerSpace.game.ui.GameController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.scripts.RunScript;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -21,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
@@ -246,6 +243,7 @@ public class NewGame extends JFrame implements ActionListener {
                 //LOGGER.info("Universe:" + universe.toReadableString());
                 //Insert universe into globals
                 Globals.universe = universe;
+                System.gc();
                 new GameController();
                 
             } catch (final PyException ex) {
