@@ -50,10 +50,13 @@ public class PopulationStorage extends PlanetSector {
         if (turn == 0) {
             //Just push back default values for all that.
             pop.population.add((Long) currentStorage);
-            pop.mortalityRate.add((float) (9 / 100));
-            pop.birthsPer1k.add((float) (19 / 100));
+            System.out.println("Size" + pop.birthsPer1k.size());
+            pop.mortalityRate.add((9f / 100f));
+            pop.birthsPer1k.add((19f / 100f));
+            //This is 0 because there is no previous population
+            
             pop.populationGrowth.add((float) (0));
-
+            System.out.println("popb " + pop.birthsPer1k.get(0) + " " + pop.birthsPer1k.size());
             //100% happy for now
             pop.happiness.add((float) 100);
             return;
