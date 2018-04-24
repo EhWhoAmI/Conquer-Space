@@ -19,7 +19,7 @@ public class SystemInternalsDrawer {
 
     public SystemInternalDrawStats stats;
     private static final Logger LOGGER = CQSPLogger.getLogger(SystemInternalsDrawer.class.getName());
-
+    public int sizeofAU;
     public SystemInternalsDrawer(StarSystem sys, Dimension bounds) {
         stats = new SystemInternalDrawStats();
         //Get size of the star system
@@ -32,7 +32,7 @@ public class SystemInternalsDrawer {
         //then find larger bounds
         int systemDrawnSize = (((bounds.height < bounds.width) ? bounds.height : bounds.width) / 2);
         LOGGER.info("System size: " + size);
-        int sizeofAU = 1;
+        sizeofAU = 1;
         if (size != 0)
             sizeofAU = (int) (Math.floor(systemDrawnSize / (size + (size / 2))));
         

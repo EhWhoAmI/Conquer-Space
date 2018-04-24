@@ -43,7 +43,7 @@ public class UniverseRenderer extends JPanel {
         super.paintComponent(g);
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
-
+        
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(new Color(0, 0, 255));
         g2d.fill(bg);
@@ -77,9 +77,14 @@ public class UniverseRenderer extends JPanel {
             }
             g2d.setColor(Color.RED);
             g2d.draw(sector);
-
+            
             g2d.setColor(Color.orange);
             //g2d.draw(ln);
+            
+            //Draw scale line
+            Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr*30 + 10, 20);
+            g2d.draw(line);
+            g2d.drawString("30 light years", 10, 10);
         }
     }
 }

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
@@ -48,6 +49,11 @@ public class SystemRenderer extends JPanel {
             g2d.setColor(p.getColor());
             g2d.fill(planet);
          }
+        
+        //Draw scale line
+            Line2D.Float line = new Line2D.Float(10, 20, 50, 20);
+            g2d.draw(line);
+            g2d.drawString((20d/(double) drawer.sizeofAU) + " AU", 10, 10);
     }
 
 }

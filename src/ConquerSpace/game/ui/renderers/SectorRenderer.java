@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
@@ -52,5 +53,11 @@ public class SectorRenderer extends JPanel {
             g2d.setColor(s.getColor());
             g2d.fill(star);
         }
+        
+        //Draw scale line
+            Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr*30 + 10, 20);
+            g2d.setColor(Color.ORANGE);
+            g2d.draw(line);
+            g2d.drawString("30 light years", 10, 10);
     }
 }

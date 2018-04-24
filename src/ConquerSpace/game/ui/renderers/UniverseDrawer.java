@@ -26,6 +26,7 @@ public class UniverseDrawer {
 
     public int universeDimensionsLTYR;
     public int universeDrawnSize;
+    public int sizeOfLtyr;
     
     public ArrayList<ControlDrawStats> controlDrawStats;
     public ArrayList<SectorDrawStats> sectorDrawings;
@@ -63,7 +64,7 @@ public class UniverseDrawer {
         //Draw a circle to show the universe
 
         //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
-        int sizeOfLtyr = (int) Math.floor(universeDrawnSize / universeDimensionsLTYR);
+        sizeOfLtyr = (int) Math.floor(universeDrawnSize / universeDimensionsLTYR);
         LOGGER.info("Size of light year " + sizeOfLtyr + "px");
         sizeOfLtyr = 1;
         //Load all the sectors.
