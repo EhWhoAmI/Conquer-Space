@@ -66,6 +66,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nextTurnButton) {
             this.setVisible(false);
+            PlayerController.isOpen = false;
         }
     }
 }

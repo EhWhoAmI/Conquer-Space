@@ -3,7 +3,9 @@ package ConquerSpace.game.ui;
 import ConquerSpace.Globals;
 import ConquerSpace.game.Action;
 import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.util.CQSPLogger;
 import java.util.ArrayList;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The controller of the game UI.
@@ -11,8 +13,7 @@ import java.util.ArrayList;
  * @author Zyun
  */
 public class GameController {
-
-    /**
+    private static final Logger LOGGER = CQSPLogger.getLogger(GameController.class.getName());   /**
      * Constructor. Inits all components.
      */
     public GameController() {
@@ -21,6 +22,7 @@ public class GameController {
         Globals.universe.processTurn(Globals.turn);
         System.gc();
         Globals.turn++;
+        LOGGER.info("Entering game loop...");
         Thread t = new Thread(new Thread() {
 
             @Override
@@ -28,12 +30,12 @@ public class GameController {
                 main:
                 //Game loop
                 while (true) {
+                    LOGGER.info("Turn " + Globals.turn);
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Civilization c = Globals.universe.getCivilization(i);
                         ArrayList<Action> actions = c.controller.doTurn();
-                        System.out.println("actions: " + actions.size());
+                        LOGGER.info("Doing civ " + c.getSpeciesName());
                         System.gc();
-                        break main;
                     }
                     Globals.universe.processTurn(Globals.turn);
                     Globals.turn++;

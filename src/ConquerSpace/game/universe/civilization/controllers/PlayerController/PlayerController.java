@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class PlayerController implements CivilizationController, Runnable {
-
+    public static boolean isOpen = true;
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
     UniverseDisplayer displayer;
     UserInterface userInterface;
@@ -21,18 +21,21 @@ public class PlayerController implements CivilizationController, Runnable {
 
     @Override
     public ArrayList<Action> doTurn() {
+        isOpen = true;
         ArrayList<Action> actions = new ArrayList<>();
         Thread t = new Thread(this, "Game-Thread");
         t.setName("Game-Thread");
         t.start();
-        System.out.println(t.isAlive());
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
         }
-        while (tsWindow.isVisible()) {
-            //Wait until dpne
-            
+        while (isOpen) {
+            //Need this for some reason, so that the turn can work.
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+            }
         }
         displayer.setVisible(false);
             userInterface.setVisible(false);

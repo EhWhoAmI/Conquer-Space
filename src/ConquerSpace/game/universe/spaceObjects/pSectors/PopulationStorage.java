@@ -93,7 +93,6 @@ public class PopulationStorage extends PlanetSector {
         //Vpa is past value
         float popChange = (((currentStorage - pastPop) / pastPop) * 100);
         pop.populationGrowth.add(popChange);
-        System.err.println(pop.population.get(0));
 
         //100% happy for now
         pop.happiness.add((float) 100);

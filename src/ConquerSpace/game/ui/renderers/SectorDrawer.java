@@ -64,7 +64,6 @@ public class SectorDrawer {
                     //Calculate the thingy
                     //Get sector
                     ControlDrawStats cds = new ControlDrawStats(stats.get(p.getSystemID()).getPosition(), c.getColor());
-                    System.err.println(cds.getPos().toString());
                     controlDrawStats.add(cds);
                 }
             }

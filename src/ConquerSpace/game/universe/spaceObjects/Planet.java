@@ -151,7 +151,7 @@ public class Planet extends SpaceObject {
             if (sector instanceof PopulationStorage) {
                 //Parse
                 Population pop = ((PopulationStorage) sector).pop;
-                currentPopulation += pop.getLastYearsPopulation(turn);
+                currentPopulation += pop.population.get(turn);
                 birthRate += pop.getLastYearsbirthsPer1K(turn);
                 deathRate += pop.getLastYearsMortalityRate(turn);
                 index ++;
