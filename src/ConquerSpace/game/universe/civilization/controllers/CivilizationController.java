@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilization.controllers;
 
 import ConquerSpace.game.Action;
+import ConquerSpace.game.universe.civilizations.Civilization;
 import java.util.ArrayList;
 
 /**
@@ -8,5 +9,5 @@ import java.util.ArrayList;
  * @author Zyun
  */
 public interface CivilizationController {
-    public ArrayList<Action> doTurn();
+    public ArrayList<Action> doTurn(Civilization c);
 }

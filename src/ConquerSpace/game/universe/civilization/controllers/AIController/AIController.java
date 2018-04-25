@@ -2,6 +2,8 @@ package ConquerSpace.game.universe.civilization.controllers.AIController;
 
 import ConquerSpace.game.Action;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
+import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.util.scripts.RunScript;
 import java.util.ArrayList;
 
 /**
@@ -11,8 +13,13 @@ import java.util.ArrayList;
 public class AIController implements CivilizationController{
 
     @Override
-    public ArrayList<Action> doTurn() {
-        return null;
-    }
-    
+    public ArrayList<Action> doTurn(Civilization c) {
+        RunScript script = new RunScript(System.getProperty("user.dir") + "/assets/scripts/ai/normal/main.py");
+        ArrayList<Action> actions = new ArrayList<>();
+        script.addVar("civ", c);
+        script.addVar("actions", actions);
+        script.exec();
+        actions = (ArrayList <Action>) script.getObject("actions");
+        return actions;
+    }   
 }

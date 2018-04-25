@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.Globals;
+import ConquerSpace.game.Action;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
 import ConquerSpace.util.CQSPLogger;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -21,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 public class UniverseDisplayer extends JFrame implements MouseListener{
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());
     private UniverseDrawer drawer = new UniverseDrawer(Globals.universe, new Dimension(1500, 1500));
-    public UniverseDisplayer() {
+    public UniverseDisplayer(ArrayList<Action> actions) {
         setTitle("Conquer Space");
         setLayout(new BorderLayout());
         //Create universe renderer

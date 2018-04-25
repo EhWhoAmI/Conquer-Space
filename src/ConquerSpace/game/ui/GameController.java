@@ -33,7 +33,7 @@ public class GameController {
                     LOGGER.info("Turn " + Globals.turn);
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Civilization c = Globals.universe.getCivilization(i);
-                        ArrayList<Action> actions = c.controller.doTurn();
+                        ArrayList<Action> actions = c.controller.doTurn(c);
                         LOGGER.info("Doing civ " + c.getSpeciesName());
                         System.gc();
                     }
@@ -42,9 +42,7 @@ public class GameController {
                     System.gc();
                 }
             }
-
         });
         t.start();
-
     }
 }
