@@ -150,9 +150,7 @@ public class Planet extends SpaceObject {
         for (PlanetSector sector : planetSectors) {
             if (sector instanceof PopulationStorage) {
                 //Parse
-                System.out.println("pop");
                 Population pop = ((PopulationStorage) sector).pop;
-                System.out.println("popinc = " + pop.populationGrowth.get(0));
                 currentPopulation += pop.getLastYearsPopulation(turn);
                 birthRate += pop.getLastYearsbirthsPer1K(turn);
                 deathRate += pop.getLastYearsMortalityRate(turn);

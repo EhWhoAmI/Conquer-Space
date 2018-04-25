@@ -32,6 +32,7 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
         //Place renderer into a scroll pane.
         JScrollPane scrollPane = new JScrollPane(pan);
         pan.addMouseListener(this);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         add(scrollPane);
         setMaximumSize(new Dimension(1500, 1500));
