@@ -15,8 +15,10 @@ public class UniversePath {
     private int sectorID = -1;
     private int systemID = -1;
     private int planetID = -1;
-    private GalaticLocation loc = null;
-
+    private int orbitID = -1;
+    private int onGID = -1;
+    
+    @Deprecated
     public UniversePath(String path) {
         parse(path);
     }
@@ -28,6 +30,13 @@ public class UniversePath {
         this.sectorID = sectorID;
         this.systemID = systemID;
         this.planetID = planetID;
+    }
+    
+    public UniversePath(int sectorID, int systemID, int planetID, int orbitID) {
+        this.sectorID = sectorID;
+        this.systemID = systemID;
+        this.planetID = planetID;
+        this.orbitID = orbitID;
     }
     
    public UniversePath(int sectorID) {
@@ -42,24 +51,13 @@ public class UniversePath {
    /**
     * Parses the universe path from a string
     * @param s the string
+    * @deprecated 
     */
     public void parse(String s) {
         int sectorID = -1;
         int systemID = -1;
         int planetID = -1;
-        loc = null;
         String[] text = s.split(":");
-        // Split last one for galatic location
-        if (text[text.length - 1].contains("[")) {
-            //Then it has a galatic location
-            String[] cont = text[text.length - 1].split("[");
-            text[text.length - 1] = cont[0];
-            //Parse the thingy
-            cont[1] = cont[1].replace("]", "");
-            String[] vals = cont[1].split(".");
-            
-            loc = new GalaticLocation(Float.parseFloat(vals[0]), Integer.parseInt(vals[1]));
-        }
         if (text.length == 0) {
             //Incorrect format.
             return;
@@ -72,14 +70,6 @@ public class UniversePath {
                 planetID = Integer.parseInt(text[2]);
             }
         }
-    }
-
-    /**
-     * Location of object
-     * @return 
-     */
-    public GalaticLocation getLoc() {
-        return loc;
     }
     
     /**
@@ -116,9 +106,22 @@ public class UniversePath {
             b.append(":");
             b.append(planetID);
         }
-        if (loc != null) {
-            b.append("[").append(loc.getDistance()).append(",").append(loc.getDegrees()).append("]");
-        }
         return b.toString();
+    }
+
+    public int getOnGID() {
+        return onGID;
+    }
+
+    public int getOrbitID() {
+        return orbitID;
+    }
+
+    public void setOnGID(int onGID) {
+        this.onGID = onGID;
+    }
+
+    public void setOrbitID(int orbitID) {
+        this.orbitID = orbitID;
     }
 }

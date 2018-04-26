@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers;
 
-import ConquerSpace.game.Action;
+import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import java.util.ArrayList;
 

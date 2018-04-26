@@ -1,7 +1,7 @@
 package ConquerSpace.game.ui;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.Action;
+import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.util.CQSPLogger;
 import java.util.ArrayList;

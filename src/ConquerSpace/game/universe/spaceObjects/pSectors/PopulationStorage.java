@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.game.buildings.Buildable;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.civilizations.stats.Population;
 import java.util.Random;
@@ -9,7 +10,7 @@ import java.util.Random;
  *
  * @author Zyun
  */
-public class PopulationStorage extends PlanetSector {
+public class PopulationStorage extends PlanetSector  implements Buildable{
 
     private long maxStorage;
     private long currentStorage;

@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.Globals;
-import ConquerSpace.game.Action;
+import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
 import ConquerSpace.util.CQSPLogger;
