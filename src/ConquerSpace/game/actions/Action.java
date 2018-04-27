@@ -6,7 +6,7 @@ import ConquerSpace.game.UniversePath;
  * Action of a turn.
  * @author Zyun
  */
-public class Action {
+public abstract class Action {
     /**
      * The selected object
      */
@@ -19,4 +19,9 @@ public class Action {
     public UniversePath getSelected() {
         return selected;
     } 
+    
+    /**
+     * Do the action
+     */
+    abstract public void doAction();
 }

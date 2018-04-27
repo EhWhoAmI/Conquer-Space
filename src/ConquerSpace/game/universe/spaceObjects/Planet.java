@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.universe.GalaticLocation;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.civilizations.stats.Population;
+import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 
@@ -175,8 +176,19 @@ public class Planet extends SpaceObject {
 
     @Override
     public void processTurn(int turn) {
+        int index = 0;
         for (PlanetSector planetSector : planetSectors) {
             planetSector.processTurn(turn);
+            
+            //Parse building buildings
+            if(planetSector instanceof BuildingBuilding) {
+                BuildingBuilding building = (BuildingBuilding)planetSector;
+                if(building.getTurns() == 0) {
+                    //Replace
+                    planetSectors[index] = building.getSector();
+                }
+            }
+            index ++;
         }
         computePopulation(turn);
         computeEconomy(turn);

@@ -32,5 +32,10 @@ public class BuildAction extends Action{
             //
         }
     }
+
+    @Override
+    public void doAction() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
