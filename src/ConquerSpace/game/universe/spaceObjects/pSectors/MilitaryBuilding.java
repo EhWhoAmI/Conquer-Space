@@ -8,8 +8,8 @@ import ConquerSpace.game.buildings.Buildable;
  */
 public class MilitaryBuilding extends PlanetSector implements Buildable{
 
-    public MilitaryBuilding(int id) {
-        super(id);
+    public MilitaryBuilding(int id, int owner) {
+        super(id, owner);
     }
     
 }

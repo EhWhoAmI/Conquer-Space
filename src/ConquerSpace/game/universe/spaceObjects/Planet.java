@@ -52,10 +52,7 @@ public class Planet extends SpaceObject {
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
-        surfaceArea = (int) Math.floor((planetSize * planetSize * Math.PI * 4) / 10);
-        if (surfaceArea == 0) {
-            surfaceArea = 1;
-        }
+        surfaceArea = planetSize*planetSize;
         planetSectors = new PlanetSector[surfaceArea];
         population = new Population();
         economy = new Economy();

@@ -10,6 +10,13 @@ import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 public class PlanetSector extends SpaceObject{
     public Economy economy;
     private int id;
+    private int owner = -1;
+    
+    public PlanetSector(int id, int owner) {
+        this.id = id;
+        economy = new Economy();
+        this.owner = owner;
+    }
     
     public PlanetSector(int id) {
         this.id = id;
@@ -22,5 +29,9 @@ public class PlanetSector extends SpaceObject{
 
     public int getId() {
         return id;
+    }
+
+    public int getOwner() {
+        return owner;
     }
 }

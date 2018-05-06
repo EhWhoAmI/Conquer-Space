@@ -7,8 +7,8 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 public class BuildingBuilding extends PlanetSector{
     private int turns;
     private PlanetSector sector;
-    public BuildingBuilding(int id, int turns, PlanetSector sector) {
-        super(id);
+    public BuildingBuilding(int id, int turns, PlanetSector sector, int owner) {
+        super(id, owner);
         this.turns = turns;
         this.sector = sector;
     }

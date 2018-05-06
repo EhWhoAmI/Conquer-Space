@@ -204,10 +204,14 @@ playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
 homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
 homeP.setName(civHomePlanetName)
 planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
-homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID))
+# Owner id is 0 for player
+homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, 0))
 universeObject.addCivilization(playerCiv)
+
+# Civ list
 symbolList = list('ABCDEFGHIJKLNMOPQRSTUVWXYZ')
 
+# Remove this civ symbol
 symbolList.remove(civSymbol)
 
 # Still need to set the player's
@@ -250,11 +254,12 @@ for p in range(civCount):
 
     start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
     civ.setHomeplanetPath(HomesectorID, start[0], start[1])
+    
     # Get planet then add 1 population center
     # Now, choose one random thingy, and enter it.
     homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
     planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
-    homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID));
+    homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, p+1));
     homeP.setName(civ.getHomePlanetName())
     
     symbol = random.choice(symbolList)

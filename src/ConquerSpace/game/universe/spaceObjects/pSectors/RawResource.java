@@ -8,6 +8,7 @@ public class RawResource extends PlanetSector{
     private int resources;
     private int resourceType;
 
+    //Raw Resource will ALWAYS have no owner
     public RawResource(int id, int resources, int resourceType) {
         super(id);
         this.resources = resources;

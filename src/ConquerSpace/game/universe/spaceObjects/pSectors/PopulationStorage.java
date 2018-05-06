@@ -17,8 +17,8 @@ public class PopulationStorage extends PlanetSector  implements Buildable{
     private byte happiness;
     public Population pop;
 
-    public PopulationStorage(long maxStorage, long currentStorage, byte happiness, int id) {
-        super(id);
+    public PopulationStorage(long maxStorage, long currentStorage, byte happiness, int id, int owner) {
+        super(id, owner);
         this.maxStorage = maxStorage;
         this.currentStorage = currentStorage;
         this.happiness = happiness;
