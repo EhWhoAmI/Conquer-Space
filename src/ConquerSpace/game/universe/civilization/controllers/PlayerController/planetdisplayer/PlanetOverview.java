@@ -10,9 +10,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 /**
@@ -66,15 +69,17 @@ public class PlanetOverview extends JPanel {
         
     }
 
-    private class PlanetSectorDisplayer extends JPanel {
+    private class PlanetSectorDisplayer extends JPanel implements MouseListener{
 
         private PlanetSector[] sectors;
         private int times;
-
+        private JPopupMenu menu;
         public PlanetSectorDisplayer(Planet p) {
             sectors = p.planetSectors;
             times = (int) Math.sqrt(sectors.length);
-            setPreferredSize(new Dimension(times * 7, times * 7));
+            setPreferredSize(new Dimension(times * 7 + 2, times * 7 + 2));
+            menu = new JPopupMenu();
+            addMouseListener(this);
         }
 
         @Override
@@ -106,6 +111,40 @@ public class PlanetOverview extends JPanel {
                     count ++;
                 }
             }
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+                            System.out.println("Clicked");
+
+            if(e.getButton() == MouseEvent.BUTTON3) {
+                menu.removeAll();
+                
+                int width = e.getX()/7;
+                int height = e.getY()/7;
+                
+                int index = height*times + width;
+                menu.add("Planet sector id " + (index + 1));
+                //Add other options, like build, short info, etc...
+                
+                menu.show(this, e.getX(), e.getY());
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
         }
     }
 }

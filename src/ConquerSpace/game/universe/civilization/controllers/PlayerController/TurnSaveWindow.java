@@ -35,7 +35,6 @@ public class TurnSaveWindow extends JFrame implements ActionListener{
         turnLabel.setText("Turn " + Globals.turn);
         nextTurnButton.addActionListener(this);
         exitGameButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
