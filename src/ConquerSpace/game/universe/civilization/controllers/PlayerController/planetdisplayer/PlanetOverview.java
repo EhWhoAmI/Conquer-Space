@@ -1,7 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
@@ -13,7 +12,9 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -91,7 +92,7 @@ public class PlanetOverview extends JPanel {
             for (int i = 0; i < times; i++) {
                 for (int n = 0; n < times; n++) {
                     //Draw box
-                    Rectangle2D.Float rect = new Rectangle2D.Float(7*i, 7*n, 7, 7);
+                    Rectangle2D.Float rect = new Rectangle2D.Float(7*n, 7*i, 7, 7);
                     //Draw the boxes.
                     //Get type of sectors
                     if (sectors[count] instanceof RawResource) {
@@ -115,8 +116,6 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-                            System.out.println("Clicked");
-
             if(e.getButton() == MouseEvent.BUTTON3) {
                 menu.removeAll();
                 
@@ -125,8 +124,16 @@ public class PlanetOverview extends JPanel {
                 
                 int index = height*times + width;
                 menu.add("Planet sector id " + (index + 1));
-                //Add other options, like build, short info, etc...
-                
+                //Add other options, like build, get info... short info, etc...
+                JMenuItem infoItem = new JMenuItem("Info");
+                infoItem.addActionListener((l) -> {
+                    JFrame info = new JFrame("Planet sector " + (index + 1));
+                    info.add(sectors[index].getInfoPanel());
+                    info.pack();
+                    info.setLocation(200, 100);
+                    info.setVisible(true);
+                });
+                menu.add(infoItem);
                 menu.show(this, e.getX(), e.getY());
             }
         }

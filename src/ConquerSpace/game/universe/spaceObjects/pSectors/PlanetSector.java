@@ -1,7 +1,11 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  * AKA building
@@ -33,5 +37,21 @@ public class PlanetSector extends SpaceObject{
 
     public int getOwner() {
         return owner;
+    }
+    //Creates the info panel, and then do
+    public JPanel getInfoPanel() {
+        JPanel root = new JPanel();
+        JTabbedPane tabbedPane = new JTabbedPane();
+        
+        JPanel infoPanel = new JPanel();
+        JLabel idLabel = new JLabel("ID: " + this.id);
+        JLabel ownerLabel = new JLabel("Owner: " + (owner == -1  ? "No owner" : Globals.universe.getCivilization(owner).getSpeciesName()));
+        
+        infoPanel.add(idLabel);
+        infoPanel.add(ownerLabel);
+        
+        tabbedPane.add("Info", infoPanel);
+        root.add(tabbedPane);
+        return root;
     }
 }
