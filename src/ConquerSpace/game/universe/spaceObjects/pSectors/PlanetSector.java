@@ -38,13 +38,15 @@ public class PlanetSector extends SpaceObject{
     public int getOwner() {
         return owner;
     }
+    
     //Creates the info panel, and then do
+    //Copy this for the subclass panels.
     public JPanel getInfoPanel() {
         JPanel root = new JPanel();
         JTabbedPane tabbedPane = new JTabbedPane();
         
         JPanel infoPanel = new JPanel();
-        JLabel idLabel = new JLabel("ID: " + this.id);
+        JLabel idLabel = new JLabel("ID: " + this.getId());
         JLabel ownerLabel = new JLabel("Owner: " + (owner == -1  ? "No owner" : Globals.universe.getCivilization(owner).getSpeciesName()));
         
         infoPanel.add(idLabel);

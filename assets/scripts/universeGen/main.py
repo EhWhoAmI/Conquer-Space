@@ -17,7 +17,7 @@ from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects import StarTypes
 from ConquerSpace.game.universe.spaceObjects import PlanetTypes
 from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
-from ConquerSpace.game.universe.spaceObjects.pSectors import RawResourceTypes
+from ConquerSpace.game.universe.resources import RawResourceTypes
 from ConquerSpace.game.universe.spaceObjects.pSectors import PopulationStorage
 
 import generation
@@ -119,10 +119,23 @@ for i in range(universeSize):
             for b in range(planet.getPlanetSectorCount()):
                 if planet.getPlanetType() == PlanetTypes.GAS:
                     # Set to all gas raw resource
-                    planet.setPlanetSector(b, RawResource(b, random.randint(1000, 100000), RawResourceTypes.GAS))
+                    rawr = RawResource(b)
+                    # Add other resources
+                    # Types of resources
+                    resourceTypesCount = random.randint(1, 3)
+                    resourceTypes = list(range(RAW_RESOURCE_TYPES_COUNT))
+                    for k in range(resourceTypesCount):
+                        resourceSelection = random.choice(resourceTypes)
+                        resourceTypes.remove(resourceSelection)
+                        rawr.addResource(resourceSelection, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
+                        
+                    planet.setPlanetSector(b, rawr)
                 else:
                     # Select random raw resource
-                    planet.setPlanetSector(b, RawResource(b, random.randint(1000, 100000), random.randint(0, 3)))
+                    rawr = RawResource(b)
+                    rawr.addResource(RawResourceTypes.GAS, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
+                    planet.setPlanetSector(b, rawr)
+                    
             starSystem.addPlanet(planet)
             
         sector.addStarSystem(starSystem)
