@@ -23,8 +23,8 @@ public class SectorDisplayer extends JFrame implements MouseListener{
     private static final Logger LOGGER = CQSPLogger.getLogger(SectorDisplayer.class.getName());
     SectorDrawer drawStats;
     int id;
+    
     public SectorDisplayer(Sector s) {
-
         setTitle("Sector " + s.getID());
         setLayout(new BorderLayout());
         //Create universe renderer

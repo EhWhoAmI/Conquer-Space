@@ -45,7 +45,7 @@ public class PlayerController implements CivilizationController, Runnable {
             }
         }
         displayer.setVisible(false);
-            userInterface.setVisible(false);
+        userInterface.setVisible(false);
         return actions;
     }
 

@@ -51,8 +51,7 @@ random.seed(seed)
 # Create universe generation object
 universeObject = Universe()
 
-
-LOGGER.info("Loading sectors")
+LOGGER.trace("Loading sectors")
 # Create sectors
 # Get sector count
 sectorLevel = 0
@@ -63,7 +62,7 @@ sizeOfPolygon = 0
 sidesLeft = 0
 for i in range(universeSize):
     # Set galatic location
-    LOGGER.info("Deg counter = " + str(degCounter))
+    LOGGER.trace("Deg counter = " + str(degCounter))
     secdegs = degCounter
     secdist = (((layer-1)*((SECTOR_MAX_RADIUS)) * 2))
     
@@ -147,8 +146,8 @@ for i in range(universeSize):
         # Add degrees
         degCounter = degCounter + math.floor((360 / sizeOfPolygon))
         sidesLeft = sidesLeft - 1
-        LOGGER.info("Size of polygon: " + str(sizeOfPolygon))
-        LOGGER.info("Deg counter = " + str(degCounter))
+        LOGGER.trace("Size of polygon: " + str(sizeOfPolygon))
+        LOGGER.trace("Deg counter = " + str(degCounter))
     
     if sidesLeft == 0:
         # Reset degrees counter
@@ -158,9 +157,9 @@ for i in range(universeSize):
         
         # Calculate size of polygon
         radius = ((layer-1) * SECTOR_MAX_RADIUS * 2)
-        LOGGER.info("Radius: " + str(radius))
+        LOGGER.trace("Radius: " + str(radius))
         circurmference = math.pi * radius * 2
-        LOGGER.info("Circurmference: " + str(circurmference))
+        LOGGER.trace("Circurmference: " + str(circurmference))
         # Divide and round up.
         sizeOfPolygon = math.floor(circurmference/(SECTOR_MAX_RADIUS * 2))
         sidesLeft = sizeOfPolygon
@@ -172,7 +171,7 @@ for i in range(universeSize):
 LOGGER.info("Done Creating Sectors")
 # Generate Civs
 
-LOGGER.info("Creating Civilizations")
+LOGGER.trace("Creating Civilizations")
 # Number of civs is half of sectors
 # So that we will always have `empty` sectors.
 civCount = int(math.floor(universeSize/2))
@@ -205,7 +204,7 @@ playerCiv.setCivilizationPreferredClimate(civPreferredClimate)
 playerCiv.setCivilizationSymbol(civSymbol)
 playerCiv.setController(PlayerController())
 
-LOGGER.info('Civ symbol: "' + civSymbol + '"')
+LOGGER.trace('Civ symbol: "' + civSymbol + '"')
 HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
@@ -263,7 +262,7 @@ for p in range(civCount):
     # `cold` places will be 5-20
     # `varied` will be 1-20.
     
-    LOGGER.info("Choosing home star system")
+    LOGGER.trace("Choosing home star system")
 
     start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
     civ.setHomeplanetPath(HomesectorID, start[0], start[1])

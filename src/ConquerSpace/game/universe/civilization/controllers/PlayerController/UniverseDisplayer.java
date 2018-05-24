@@ -22,12 +22,13 @@ import org.apache.logging.log4j.Logger;
  */
 public class UniverseDisplayer extends JFrame implements MouseListener{
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());
-    private UniverseDrawer drawer = new UniverseDrawer(Globals.universe, new Dimension(1500, 1500));
+    private UniverseDrawer drawer;
     public UniverseDisplayer(ArrayList<Action> actions) {
         setTitle("Conquer Space");
         setLayout(new BorderLayout());
         //Create universe renderer
         UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), Globals.universe);
+        drawer = renderer.drawer;
         JPanel pan = new JPanel();
         pan.add(renderer);
         

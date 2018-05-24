@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <tech id="0">
+        <name>Life</name>
+        <desc>You need this to do anything. I mean, no life = nothing done, right?</desc>
+    </tech>
+    <tech id="1">
+        <name>Argriculture</name>
+        <dep>0</dep>
+        <desc>So that you can get food, and usually, you need food to live.</desc>
+    </tech>
+    
+</root>

@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
+import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
@@ -30,8 +31,9 @@ public class PlanetOverview extends JPanel {
     private JPanel planetSectors;
     private JLabel planetName;
     private JLabel planetPath;
-
+    private Planet p;
     public PlanetOverview(Planet p) {
+        this.p = p;
         setLayout(new GridLayout(1, 2));
         
         planetOverview = new JPanel();
@@ -133,7 +135,14 @@ public class PlanetOverview extends JPanel {
                     info.setLocation(200, 100);
                     info.setVisible(true);
                 });
+                
+                JMenuItem build = new JMenuItem("Build");
+                build.addActionListener((l) -> {
+                    new BuildPlanetSectorMenu(p, index);
+                });
+                
                 menu.add(infoItem);
+                menu.add(build);
                 menu.show(this, e.getX(), e.getY());
             }
         }

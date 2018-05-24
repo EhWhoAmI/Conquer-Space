@@ -41,7 +41,7 @@ public class Civilization extends GameObject {
         this.ID = ID;
 
         //Set a temp starting point as in 0:0:0
-        this.control.add(new UniversePath("0:0:0"));
+        this.control.add(new UniversePath(0,0,0));
         
         pop = new Population();
         economy = new Economy();

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -62,7 +63,7 @@ public class InitialLoading extends JFrame {
                 
                 fileIndex ++;
                 String fileName = fileScanner.nextLine();
-                LOGGER.info("Verifying file " + fileName);
+                LOGGER.trace("Verifying file " + fileName);
                 File f = new File(System.getProperty("user.dir") + "/" + fileName);
                 //Next we have to determine the importance of the file. -- TODO
                 //File exists or not, and warn noone. XD
@@ -71,7 +72,7 @@ public class InitialLoading extends JFrame {
                     filesMissing ++;
                 }
                 else
-                    LOGGER.info("File " + fileName + " exists");
+                    LOGGER.trace("File " + fileName + " exists");
                 progressBar.setValue((int) fileIndex/files);
             }
             if (filesMissing == 0)

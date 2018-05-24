@@ -185,7 +185,7 @@ public class NewGame extends JFrame implements ActionListener {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
-        LOGGER.info("Loaded new game UI.");
+        LOGGER.trace("Loaded new game UI.");
     }
 
     @Override
@@ -203,15 +203,15 @@ public class NewGame extends JFrame implements ActionListener {
                 config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
 
                 long seed;
-                LOGGER.info("Parsing seed.");
+                LOGGER.trace("Parsing seed.");
                 try {
                     seed = Long.parseLong(seedText.getText()); // This will pass a nfe.
-                    LOGGER.info("Seed is long value.");
+                    LOGGER.trace("Seed is long value.");
                 } catch (NumberFormatException nfe) {
                     seed = seedText.getText().hashCode();
-                    LOGGER.info("Seed is string literal.");
+                    LOGGER.trace("Seed is string literal.");
                 }
-                LOGGER.info("Seed: " + seed);
+                LOGGER.trace("Seed: " + seed);
 
                 config.setSeed(seed);
                 
@@ -237,7 +237,7 @@ public class NewGame extends JFrame implements ActionListener {
                 
                 //Logger end time
                 long loadingEnd = System.currentTimeMillis();
-                LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe.");
+                LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart)/60000) + " minutes");
 
                 // Log info
                 //LOGGER.info("Universe:" + universe.toReadableString());
@@ -247,7 +247,7 @@ public class NewGame extends JFrame implements ActionListener {
                 new GameController();
                 
             } catch (final PyException ex) {
-                LogManager.getLogger("ErrorLog").error("Python error " + ex.toString(), ex);
+                LogManager.getLogger("ErrorLog").error("Python error " + ex.toString() + " Seed = " + seedText.getText(), ex);
                 JOptionPane.showMessageDialog(this, "Script Error: " + ex.type.toString()+"\n" + ex.traceback.dumpStack(), "File not found", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }

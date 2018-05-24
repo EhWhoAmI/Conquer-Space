@@ -4,11 +4,14 @@ import ConquerSpace.ConquerSpace;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import ConquerSpace.util.CQSPLogger;
+import java.awt.Font;
+import java.awt.RenderingHints;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Logger;
 
@@ -28,18 +31,21 @@ public class MainMenu extends JFrame {
         setTitle("Conquer Space");
         setLayout(new GridLayout(2, 1, 10, 10));
         
+        TopBanner topBanner = new TopBanner();
+        topBanner.repaint();
         //Add the classes on the bottom
-        add(new TopBanner());
+        add(topBanner); 
         add(new BottomMenu());
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        LOGGER.info("Loaded main menu");
+        LOGGER.trace("Loaded main menu");
     }
 
     /**
      * Top banner of the main menu. Drawings.
      */
     private class TopBanner extends JPanel {
+        Font f = new Font(getFont().getFontName(), Font.BOLD, 28);
         /**
          * The paint component part, for the title screen.
          * @param g Graphics.
@@ -47,7 +53,15 @@ public class MainMenu extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
-            g2d.drawString("TODO: TITLE SCREEN", 0, 0);
+            g2d.setColor(Color.BLUE);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            g2d.setColor(Color.black);
+            
+            g2d.setFont(f);
+            //Turn on antialias, looks better.
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.drawString("Conquer Space", 10, 30);
+            
         }
     }
 

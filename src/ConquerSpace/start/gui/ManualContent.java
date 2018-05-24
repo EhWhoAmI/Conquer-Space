@@ -51,7 +51,6 @@ public class ManualContent extends JFrame {
                 attri.setValue("file://" + System.getProperty("user.dir") + File.separator + "assets" + File.separator + "manuals" + File.separator + attri.getValue());
             }
             file = e.toXML();
-            LOGGER.info(file);
         } catch (ParsingException ex) {
             LOGGER.warn("Parsing exception:" + ex.toString(), ex);
         } catch (IOException ex) {

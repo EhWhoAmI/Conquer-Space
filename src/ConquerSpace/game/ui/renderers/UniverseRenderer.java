@@ -20,9 +20,9 @@ import javax.swing.JPanel;
  */
 public class UniverseRenderer extends JPanel {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(UniverseRenderer.class.getName());
+    //private static final Logger LOGGER = CQSPLogger.getLogger(UniverseRenderer.class.getName());
     private Dimension bounds;
-    private UniverseDrawer drawer;
+    public UniverseDrawer drawer;
 
     public UniverseRenderer(Dimension bounds, Universe universe) {
         this.bounds = bounds;

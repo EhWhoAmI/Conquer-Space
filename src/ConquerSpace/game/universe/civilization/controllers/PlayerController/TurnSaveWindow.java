@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
@@ -21,7 +22,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener{
     private JButton saveGameButton;
     private JButton exitGameButton;
     private JButton manualButton;
-
+    private JButton runningstatsButton;
     public TurnSaveWindow() {
         JPanel pan = new JPanel();
 
@@ -31,6 +32,8 @@ public class TurnSaveWindow extends JFrame implements ActionListener{
         manualButton = new JButton("Manual");
         saveGameButton = new JButton("Save Game");
         exitGameButton = new JButton("Exit Game");
+        //Copy youtube's
+        runningstatsButton = new JButton("Stats for Nerds");
 
         turnLabel.setText("Turn " + Globals.turn);
         nextTurnButton.addActionListener(this);
@@ -49,18 +52,22 @@ public class TurnSaveWindow extends JFrame implements ActionListener{
             }
         });
 
+        runningstatsButton.addActionListener((e) -> {
+            DebugStats.getInstance();
+        });
         pan.add(turnLabel);
         pan.add(nextTurnButton);
         pan.add(manualButton);
         pan.add(saveGameButton);
         pan.add(exitGameButton);
-        pan.setLayout(new GridLayout(5, 1, 5, 5));
+        pan.add(runningstatsButton);
+        pan.setLayout(new GridLayout(6, 1, 5, 5));
         add(pan);
         pack();
         setVisible(true);
         setAlwaysOnTop(true);
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nextTurnButton) {

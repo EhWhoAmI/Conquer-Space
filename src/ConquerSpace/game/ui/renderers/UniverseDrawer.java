@@ -77,7 +77,7 @@ public class UniverseDrawer {
         for (int n = 0; n < universe.getSectorCount(); n++) {
             //Get sector
             Sector s = sectors.get(n);
-            LOGGER.info("---- [Sector " + s.getID() + "] ----");
+            LOGGER.trace("---- [Sector " + s.getID() + "] ----");
             //Get furthest star system.
             float longest = 0;
             for (int b = 0; b < s.getStarSystemCount(); b++) {
@@ -85,15 +85,15 @@ public class UniverseDrawer {
                     longest = s.getStarSystem(b).getGalaticLocation().getDistance();
                 }
             }
-            LOGGER.info("Sector " + s.getID() + " size:" + longest);
-            LOGGER.info("Angle " + s.getGalaticLocation().getDegrees());
-            LOGGER.info("Distance " + s.getGalaticLocation().getDistance());
+            LOGGER.trace("Sector " + s.getID() + " size:" + longest);
+            LOGGER.trace("Angle " + s.getGalaticLocation().getDegrees());
+            LOGGER.trace("Distance " + s.getGalaticLocation().getDistance());
 
             Point sectorPos = RendererMath.polarCoordToCartesianCoord(s.getGalaticLocation(), new Point(universeDrawnSize / 2, universeDrawnSize / 2), sizeOfLtyr);
-            LOGGER.info("X = " + sectorPos.x + " Y = " + sectorPos.y);
+            LOGGER.trace("X = " + sectorPos.x + " Y = " + sectorPos.y);
             //Also for debugging, ensure the center of the circle is in the screen
             double i = Math.hypot(sectorPos.getX() - universeDrawnSize / 2, sectorPos.getY() - universeDrawnSize / 2);
-            LOGGER.info("Distance is " + i);
+            LOGGER.trace("Distance is " + i);
             if (i > (universeDrawnSize / 2)) {
                 LOGGER.warn("Sector " + s.getID() + " Outside the box!");
                 placedOutside++;
@@ -128,7 +128,7 @@ public class UniverseDrawer {
                 stats.addSystemStats(sysStats);
             }
             sectorDrawings.add(stats);
-            LOGGER.info("----- [End of Sector " + s.getID() + "] ----");
+            LOGGER.trace("----- [End of Sector " + s.getID() + "] ----");
 
         }
         LOGGER.info(placedOutside + " sector(s) outside!");
@@ -137,7 +137,7 @@ public class UniverseDrawer {
         for (int n = 0; n < universe.getCivilizationCount(); n++) {
             Civilization civ = universe.getCivilization(n);
             for (UniversePath p : civ.control) {
-                LOGGER.info(p.toString());
+                LOGGER.trace(p.toString());
                 if (p.getSystemID() > -1) {
                     //Calculate the thingy
                     //Get sector

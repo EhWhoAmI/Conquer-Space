@@ -1,9 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.Resource;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -12,7 +10,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.ListModel;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -41,7 +38,7 @@ public class RawResource extends PlanetSector{
         JLabel title = new JLabel("Raw Resource");
         JLabel idLabel = new JLabel("ID: " + this.getId());
         JLabel ownerLabel = new JLabel("Owner: No owner");
-        JLabel resourceTitle = new JLabel("Resources");
+        //JLabel resourceTitle = new JLabel("Resources");
         
         DefaultListModel<String> resourceList = new DefaultListModel<>();
 
