@@ -49,7 +49,7 @@ public class SystemDisplayer extends JFrame implements MouseListener{
             //Get which system clicked.
             for (PlanetDrawStats pstats : stats.stats.planetDrawStats) {
                 if (Math.hypot(pstats.getPos().x - e.getX(), pstats.getPos().y - e.getY()) < pstats.getSize()) {
-                    LOGGER.info("Mouse clicked in planet " + pstats.getId() + "!");
+                    LOGGER.trace("Mouse clicked in planet " + pstats.getId() + "!");
                     PlanetInfoSheet d = new PlanetInfoSheet(Globals.universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getId()), Globals.turn);
                     break;
                 }

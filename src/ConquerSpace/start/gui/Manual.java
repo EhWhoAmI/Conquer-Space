@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
 import java.awt.Dimension;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -50,9 +51,8 @@ public class Manual extends JFrame implements ListSelectionListener {
                 prop.put(values[0], values[1]);
             }
         } catch (IOException ioe) {
-            JOptionPane.showMessageDialog(this, "Cannot open manual. " + ioe.getMessage(), "Dang it", JOptionPane.ERROR_MESSAGE);
+            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.\nReason: Cannot open manual list.", ioe);
             LOGGER.warn("Cannot open manual list. " + ioe.getMessage(), ioe);
-
         }
 
         for (Object val : prop.values()) {
@@ -98,11 +98,12 @@ public class Manual extends JFrame implements ListSelectionListener {
                 try {
                     value = ManualContent.getInstance(
                             new String(Files.readAllBytes(Paths.get(
-                                                    System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
+                                    System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
                     LOGGER.info("Loading manual " + str);
                     break;
                 } catch (IOException ex) {
-                    LOGGER.error("Error", ex);
+                    ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
+                    LOGGER.warn("Unable to open manual", ex);
                 }
             }
         }

@@ -67,20 +67,20 @@ public class BuildPlanetSectorMenu extends JFrame {
     private class BuildPopulationStorage extends JPanel {
 
         private JLabel amount;
-        private JFormattedTextField maxPopulation;
+        private JTextField maxPopulation;
 
         public BuildPopulationStorage() {
             setLayout(new GridLayout(1, 2));
             amount = new JLabel("Max Population");
-            NumberFormat format = NumberFormat.getInstance();
-            NumberFormatter formatter = new NumberFormatter(format);
-            formatter.setValueClass(Integer.class);
-            formatter.setMinimum(-1);
-            formatter.setMaximum(Integer.MAX_VALUE);
-            formatter.setAllowsInvalid(false);
-            formatter.setCommitsOnValidEdit(true);
 
-            maxPopulation = new JFormattedTextField(formatter);
+            maxPopulation = new JTextField();
+            maxPopulation.addActionListener((e) -> {
+                try {
+                    Integer.parseInt(maxPopulation.getText());
+                } catch (NumberFormatException nfe) {
+                    maxPopulation.setText("");
+                }
+            });
             add(amount);
             add(maxPopulation);
         }

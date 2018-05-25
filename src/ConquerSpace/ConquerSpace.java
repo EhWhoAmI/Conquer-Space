@@ -5,10 +5,10 @@ import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
-import java.util.logging.Level;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.logging.log4j.Logger;
@@ -24,11 +24,28 @@ public class ConquerSpace {
     */
     private static final Logger LOGGER = CQSPLogger.getLogger(ConquerSpace.class.getName());
     
+        /**
+     * Build number for debugging.
+     */
+    public static int BUILD_NUMBER = 0;
+    static {
+        Properties buildno = new Properties();
+        try {
+            buildno.load(new FileInputStream(System.getProperty("user.dir") + "/assets/BUILDNO"));
+            BUILD_NUMBER = Integer.parseInt(buildno.getProperty("build.number"));
+        } catch (FileNotFoundException ex) {
+            LOGGER.info("Asset file not found. No Problem.", ex);
+        } catch (IOException ex) {
+            LOGGER.info("Io exception. No Problem.", ex);
+        }
+        
+    }
+    
     /**
      * The version of the game.
      */
-    public static final Version VERSION = new Version(0, 0, 0, "dev");
-
+    public static final Version VERSION = new Version(0, 0, 0, "dev-b" + BUILD_NUMBER);
+    
     /**
      * Main class.
      * @param args Command line arguments. Does nothing so far.

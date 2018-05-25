@@ -1,6 +1,7 @@
 package ConquerSpace;
 
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,12 +78,20 @@ public class InitialLoading extends JFrame {
             }
             if (filesMissing == 0)
                 LOGGER.info("No files missing.");
-            else
+            else {
                 LOGGER.warn(filesMissing + " file(s) missing.");
+                int toexit = JOptionPane.showConfirmDialog(null, "You have " + filesMissing + " files missing. Make sure they are there. \nSomething will go wrong if you don't fix it. \nWe need all the files that we have. Exit?" , "Files missing", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                if(toexit == JOptionPane.YES_OPTION) {
+                    //Then exit
+                    System.exit(0);
+                }
+                //or else leave the user to his or her own troubles. HEHEHE...
+            }
         } catch (FileNotFoundException ex) {
             //Cannot fine FILELIST
-            LOGGER.error("Error: ", ex);
-            JOptionPane.showMessageDialog(null, "Could not find file: \n" + ex.getMessage() , ex.getClass().getName(), JOptionPane.ERROR_MESSAGE);
+            LOGGER.error("File not found Error: ", ex);
+            ExceptionHandling.ExceptionMessageBox("File FILELIST not found. Please find it online or somewhere!", ex);
+            System.exit(1);
         }
         long endTime = System.currentTimeMillis();
         

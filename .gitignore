@@ -4,3 +4,6 @@
 
 *.class
 /logs/
+
+# crash logs
+crashlog.txt

@@ -1,11 +1,13 @@
 package ConquerSpace.start.gui;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.civilizations.CivilizationConfig;
 import ConquerSpace.Globals;
 import ConquerSpace.game.ui.GameController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.scripts.RunScript;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -248,7 +250,11 @@ public class NewGame extends JFrame implements ActionListener {
                 
             } catch (final PyException ex) {
                 LogManager.getLogger("ErrorLog").error("Python error " + ex.toString() + " Seed = " + seedText.getText(), ex);
-                JOptionPane.showMessageDialog(this, "Script Error: " + ex.type.toString()+"\n" + ex.traceback.dumpStack(), "File not found", JOptionPane.ERROR_MESSAGE);
+                String trace = "None";
+                if(ex.traceback != null) {
+                    trace = ex.traceback.dumpStack();
+                }
+                ExceptionHandling.ExceptionMessageBox("Script error: " +  ex.type.toString()+ ".\nPython trace: \n" + trace, ex);
                 System.exit(1);
             }
         } else if (e.getSource() == civColorChooserButton) {

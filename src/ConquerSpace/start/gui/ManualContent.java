@@ -1,12 +1,14 @@
 package ConquerSpace.start.gui;
 
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import nu.xom.Attribute;
@@ -38,7 +40,7 @@ public class ManualContent extends JFrame {
         if (instance == null) {
             instance = new ManualContent();
         }
-        try {		
+        try {
             //Parse text so that images show
             Builder b = new Builder();
             Document d = b.build(file, null);
@@ -53,8 +55,10 @@ public class ManualContent extends JFrame {
             file = e.toXML();
         } catch (ParsingException ex) {
             LOGGER.warn("Parsing exception:" + ex.toString(), ex);
+            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
         } catch (IOException ex) {
             LOGGER.warn("IO Exception:" + ex.getMessage(), ex);
+            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
         }
         instance.setText(file);
         return instance;
