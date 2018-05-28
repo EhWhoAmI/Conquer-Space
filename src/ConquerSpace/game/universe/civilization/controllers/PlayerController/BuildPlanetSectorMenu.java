@@ -1,18 +1,17 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.text.NumberFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -34,10 +33,12 @@ public class BuildPlanetSectorMenu extends JFrame {
         topWrapper = new JPanel();
         topWrapper.setLayout(new GridLayout(2, 2, 5, 5));
         planetBuildTypeTitle = new JLabel("Build a ");
+
         planetBuildType = new JComboBox<>();
         planetBuildType.addItem("Residental area");
         planetBuildType.addItem("Industral area");
         planetBuildType.addItem("Military building");
+
         planetBuildType.addActionListener((e) -> {
             JComboBox<String> box = (JComboBox) e.getSource();
             box.getSelectedItem();
@@ -45,7 +46,11 @@ public class BuildPlanetSectorMenu extends JFrame {
         });
 
         costLabel = new JLabel("Cost : " + 0);
+
         build = new JButton("Build!");
+        build.addActionListener((e) -> {
+            p.planetSectors[id] = new BuildingBuilding(id, 100, p.planetSectors[id], 0);
+        });
 
         topWrapper.add(planetBuildTypeTitle);
         topWrapper.add(planetBuildType);
@@ -64,7 +69,7 @@ public class BuildPlanetSectorMenu extends JFrame {
     }
 
     //Various menus for building stats
-    private class BuildPopulationStorage extends JPanel {
+    private class BuildPopulationStorage extends JPanel implements ActionListener {
 
         private JLabel amount;
         private JTextField maxPopulation;
@@ -76,14 +81,31 @@ public class BuildPlanetSectorMenu extends JFrame {
             maxPopulation = new JTextField();
             maxPopulation.addActionListener((e) -> {
                 try {
-                    Integer.parseInt(maxPopulation.getText());
+                    Long.parseLong(maxPopulation.getText());
                 } catch (NumberFormatException nfe) {
                     maxPopulation.setText("");
                 }
             });
+
+            maxPopulation.addActionListener(this);
             add(amount);
             add(maxPopulation);
         }
 
+        //Determine price
+        //Add this 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //Calculate the cost...
+            long pop = 0;
+            try {
+                pop = Long.parseLong(maxPopulation.getText());
+                long price = (((1000) * pop));
+                costLabel.setText("Cost : " + price);
+            } catch (NumberFormatException | ArithmeticException nfe) {
+                //Because who cares!
+
+            }
+        }
     }
 }

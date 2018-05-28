@@ -50,7 +50,7 @@ public class NewGame extends JFrame implements ActionListener {
     private JComboBox<String> civilazitionComboBox;
     private JLabel seedLabel;
     private JTextField seedText;
-    
+
     private JLabel civNameLabel;
     private JTextField civNameTextField;
     private JLabel civColorLabel;
@@ -81,7 +81,7 @@ public class NewGame extends JFrame implements ActionListener {
         JPanel lsidePan = new JPanel();
         lsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));
         lsidePan.setLayout(new GridLayout(3, 4, 10, 10));
-        
+
         universeSizeLabel = new JLabel("Universe Size");
         universeSizeBox = new JComboBox<>();
         universeSizeBox.addItem("Small");
@@ -194,10 +194,10 @@ public class NewGame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitButton) {
             setVisible(false);
+            UniverseConfig config = new UniverseConfig();
             try {
                 //This button will only be pressed by the `done` button.
                 //Read all the info, pass to scripts.
-                UniverseConfig config = new UniverseConfig();
                 config.setUniverseSize((String) universeSizeBox.getSelectedItem());
                 config.setUniverseShape((String) universeTypeComboBox.getSelectedItem());
                 config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
@@ -216,7 +216,7 @@ public class NewGame extends JFrame implements ActionListener {
                 LOGGER.trace("Seed: " + seed);
 
                 config.setSeed(seed);
-                
+
                 //Set the player Civ options
                 CivilizationConfig civilizationConfig = new CivilizationConfig();
                 civilizationConfig.setCivColor(civColor);
@@ -226,7 +226,7 @@ public class NewGame extends JFrame implements ActionListener {
                 civilizationConfig.setHomePlanetName(civHomePlanetName.getText());
                 civilizationConfig.setSpeciesName(speciesNameField.getText());
                 config.setCivilizationConfig(civilizationConfig);
-                
+
                 // Start time of logging
                 long loadingStart = System.currentTimeMillis();
                 //Init script engine
@@ -236,10 +236,10 @@ public class NewGame extends JFrame implements ActionListener {
                 s.addVar("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
                 s.exec();
                 Universe universe = (Universe) ((PyObjectDerived) s.getObject("universeObject")).__tojava__(Universe.class);
-                
+
                 //Logger end time
                 long loadingEnd = System.currentTimeMillis();
-                LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart)/60000) + " minutes");
+                LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
 
                 // Log info
                 //LOGGER.info("Universe:" + universe.toReadableString());
@@ -247,14 +247,13 @@ public class NewGame extends JFrame implements ActionListener {
                 Globals.universe = universe;
                 System.gc();
                 new GameController();
-                
             } catch (final PyException ex) {
                 LogManager.getLogger("ErrorLog").error("Python error " + ex.toString() + " Seed = " + seedText.getText(), ex);
                 String trace = "None";
-                if(ex.traceback != null) {
+                if (ex.traceback != null) {
                     trace = ex.traceback.dumpStack();
                 }
-                ExceptionHandling.ExceptionMessageBox("Script error: " +  ex.type.toString()+ ".\nPython trace: \n" + trace, ex);
+                ExceptionHandling.ExceptionMessageBox("Script error: " + ex.type.toString() + ".\nPython trace: \n" + trace + "\nSeed: " + config.seed, ex);
                 System.exit(1);
             }
         } else if (e.getSource() == civColorChooserButton) {

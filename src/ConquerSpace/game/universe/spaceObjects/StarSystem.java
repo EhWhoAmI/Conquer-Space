@@ -31,7 +31,10 @@ public class StarSystem extends SpaceObject{
      * @param star
      */
     public void addStar(Star star) {
+        star.setParentSector(parent);
+        star.setParentStarSystem(id);
         stars.add(star);
+        stars.trimToSize();
     }
     
     /**
@@ -40,6 +43,7 @@ public class StarSystem extends SpaceObject{
      */
     public void addPlanet(Planet planet) {
         planets.add(planet);
+        planets.trimToSize();
     }
     
     /**

@@ -32,6 +32,7 @@ public class Sector extends SpaceObject {
     public void addStarSystem(StarSystem e) {
         e.setParent(id);
         starSystems.add(e);
+        starSystems.trimToSize();
     }
 
     /**

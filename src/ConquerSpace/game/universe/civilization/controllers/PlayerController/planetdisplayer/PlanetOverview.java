@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController.pla
 
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
@@ -32,10 +33,11 @@ public class PlanetOverview extends JPanel {
     private JLabel planetName;
     private JLabel planetPath;
     private Planet p;
+
     public PlanetOverview(Planet p) {
         this.p = p;
         setLayout(new GridLayout(1, 2));
-        
+
         planetOverview = new JPanel();
         //If name is nothing, then call it unnamed planet
         planetName = new JLabel();
@@ -62,21 +64,22 @@ public class PlanetOverview extends JPanel {
         wrapper.add(sectorDisplayer);
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
-        
+
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
-        
+
         add(planetOverview);
         add(planetSectors);
-        
+
     }
 
-    private class PlanetSectorDisplayer extends JPanel implements MouseListener{
+    private class PlanetSectorDisplayer extends JPanel implements MouseListener {
 
         private PlanetSector[] sectors;
         private int times;
         private JPopupMenu menu;
+
         public PlanetSectorDisplayer(Planet p) {
             sectors = p.planetSectors;
             times = (int) Math.sqrt(sectors.length);
@@ -94,37 +97,39 @@ public class PlanetOverview extends JPanel {
             for (int i = 0; i < times; i++) {
                 for (int n = 0; n < times; n++) {
                     //Draw box
-                    Rectangle2D.Float rect = new Rectangle2D.Float(7*n, 7*i, 7, 7);
+                    Rectangle2D.Float rect = new Rectangle2D.Float(7 * n, 7 * i, 7, 7);
                     //Draw the boxes.
                     //Get type of sectors
                     if (sectors[count] instanceof RawResource) {
                         g2d.setColor(Color.GREEN);
                     } else if (sectors[count] instanceof PopulationStorage) {
                         g2d.setColor(Color.blue);
+                    } else if (sectors[count] instanceof BuildingBuilding) {
+                        g2d.setColor(Color.yellow);
                     }
-                    
+
                     g2d.fill(rect);
                     if (sectors[count].getOwner() <= 0) {
                         g2d.setColor(Color.black);
                     } else {
                         g2d.setColor(Color.red);
                     }
-                    
+
                     g2d.draw(rect);
-                    count ++;
+                    count++;
                 }
             }
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(e.getButton() == MouseEvent.BUTTON3) {
+            if (e.getButton() == MouseEvent.BUTTON3) {
                 menu.removeAll();
-                
-                int width = e.getX()/7;
-                int height = e.getY()/7;
-                
-                int index = height*times + width;
+
+                int width = e.getX() / 7;
+                int height = e.getY() / 7;
+
+                int index = height * times + width;
                 menu.add("Planet sector id " + (index + 1));
                 //Add other options, like build, get info... short info, etc...
                 JMenuItem infoItem = new JMenuItem("Info");
@@ -135,12 +140,12 @@ public class PlanetOverview extends JPanel {
                     info.setLocation(200, 100);
                     info.setVisible(true);
                 });
-                
+
                 JMenuItem build = new JMenuItem("Build");
                 build.addActionListener((l) -> {
                     new BuildPlanetSectorMenu(p, index);
                 });
-                
+
                 menu.add(infoItem);
                 menu.add(build);
                 menu.show(this, e.getX(), e.getY());

@@ -19,7 +19,8 @@ public class AIController implements CivilizationController{
         script.addVar("civ", c);
         script.addVar("actions", actions);
         script.exec();
-        actions = (ArrayList <Action>) script.getObject("actions");
+        //For now comment it out... Until we do the ai
+        //actions = (ArrayList <Action>) script.getObject("actions");
         return actions;
     }   
 }

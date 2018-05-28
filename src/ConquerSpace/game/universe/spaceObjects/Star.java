@@ -44,4 +44,22 @@ public class Star extends SpaceObject{
         builder.append("Size=" + starSize + ")\n");
         return(builder.toString());
     }
+
+    void setParentSector(int parentSector) {
+        this.parentSector = parentSector;
+    }
+
+    void setParentStarSystem(int parentStarSystem) {
+        this.parentStarSystem = parentStarSystem;
+    }
+
+    public int getParentStarSystem() {
+        return parentStarSystem;
+    }
+
+    public int getParentSector() {
+        return parentSector;
+    }
+    
+    
 }
