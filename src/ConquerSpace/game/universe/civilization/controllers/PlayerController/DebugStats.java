@@ -35,6 +35,7 @@ public class DebugStats extends JFrame {
     public static DebugStats getInstance() {
         if (instance == null)
             instance = new DebugStats();
+        instance.setVisible(true);
         return instance;
     }
 }

@@ -1,8 +1,10 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
+import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
+import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,8 @@ public class BuildPlanetSectorMenu extends JFrame {
     private JPanel bottom;
     private CardLayout cardLayout;
 
+    private int currentSelected;
+
     public BuildPlanetSectorMenu(Planet p, int id) {
         setTitle("Build on planet " + p.getName());
         setLayout(new GridLayout(2, 1));
@@ -49,7 +53,17 @@ public class BuildPlanetSectorMenu extends JFrame {
 
         build = new JButton("Build!");
         build.addActionListener((e) -> {
-            p.planetSectors[id] = new BuildingBuilding(id, 100, p.planetSectors[id], 0);
+            //p.planetSectors[id] = new BuildingBuilding(id, 100, p.planetSectors[id], 0);
+            String item = (String) planetBuildType.getSelectedItem();
+            if (item.equals("Residental area")) {
+                for (Component c : bottom.getComponents()) {
+                    if (c instanceof BuildPopulationStorage && c.isVisible()) {
+                        PopulationStorage storage = new PopulationStorage(Long.parseLong(((BuildPopulationStorage) c).maxPopulation.getText()), 0, (byte) 100, id, 0);
+                        Actions.buildBuilding(p, id, storage, 0, 100);
+                    }
+                }
+            }
+            this.dispose();
         });
 
         topWrapper.add(planetBuildTypeTitle);
@@ -65,14 +79,13 @@ public class BuildPlanetSectorMenu extends JFrame {
 
         add(bottom);
         pack();
-        setVisible(true);
     }
 
     //Various menus for building stats
     private class BuildPopulationStorage extends JPanel implements ActionListener {
 
         private JLabel amount;
-        private JTextField maxPopulation;
+        JTextField maxPopulation;
 
         public BuildPopulationStorage() {
             setLayout(new GridLayout(1, 2));
@@ -104,7 +117,6 @@ public class BuildPlanetSectorMenu extends JFrame {
                 costLabel.setText("Cost : " + price);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
-
             }
         }
     }

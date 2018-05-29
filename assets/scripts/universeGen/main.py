@@ -270,7 +270,7 @@ for p in range(civCount):
     # Get planet then add 1 population center
     # Now, choose one random thingy, and enter it.
     homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
-    planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
+    planetSectorID = random.randint(0, homeP.getPlanetSectorCount()-1)
     homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, p+1));
     homeP.setName(civ.getHomePlanetName())
     

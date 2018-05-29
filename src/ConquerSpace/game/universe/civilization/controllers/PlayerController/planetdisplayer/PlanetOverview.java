@@ -13,6 +13,9 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -141,13 +144,18 @@ public class PlanetOverview extends JPanel {
                     info.setVisible(true);
                 });
 
-                JMenuItem build = new JMenuItem("Build");
-                build.addActionListener((l) -> {
-                    new BuildPlanetSectorMenu(p, index);
-                });
+                if (p.getOwnerID() == 0 && p.planetSectors[index] instanceof RawResource) {
+                    JMenuItem build = new JMenuItem("Build");
+                    build.addActionListener((l) -> {
+                        BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index);
+                        //sector.addWindowListener();
+                        
+                        sector.setVisible(true);
+                    });
+                    menu.add(build);
+                }
 
                 menu.add(infoItem);
-                menu.add(build);
                 menu.show(this, e.getX(), e.getY());
             }
         }

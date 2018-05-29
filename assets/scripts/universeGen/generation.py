@@ -9,7 +9,7 @@ def selectRandomSuitablePlanet(sector, civClimate):
         while n < system.getPlanetCount():
             if random.randint(1, 2) == 1:
                 p = system.getPlanet(n)
-                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 20:
+                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 20 and p.getPlanetSectorCount() > 1:
                     value = [start, n]
                     return value
             n += 1

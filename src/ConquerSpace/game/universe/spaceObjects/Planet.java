@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.civilizations.stats.Population;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
+import java.util.HashMap;
 
 /**
  * Planet class.
@@ -52,7 +53,7 @@ public class Planet extends SpaceObject {
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
-        surfaceArea = planetSize*planetSize;
+        surfaceArea = (int) Math.pow(Math.ceil(planetSize/2), 2);
         planetSectors = new PlanetSector[surfaceArea];
         population = new Population();
         economy = new Economy();
@@ -131,19 +132,20 @@ public class Planet extends SpaceObject {
     public void computePopulation(int turn) {
         //Population
         long currentPopulation = 0;
-        
+
         //Birth rate
         float birthRate = 0;
         //Death rate
         float deathRate = 0;
-        
+
         //Population:
         //Last and current
         long lastPop;
-        if(population.population.size() == 0)
+        if (population.population.size() == 0) {
             lastPop = 0;
-        else
+        } else {
             lastPop = getPopulation();
+        }
         int index = 0;
         for (PlanetSector sector : planetSectors) {
             if (sector instanceof PopulationStorage) {
@@ -152,19 +154,20 @@ public class Planet extends SpaceObject {
                 currentPopulation += pop.population.get(turn);
                 birthRate += pop.getLastYearsbirthsPer1K(turn);
                 deathRate += pop.getLastYearsMortalityRate(turn);
-                index ++;
+                index++;
             }
         }
         population.population.add(currentPopulation);
-        
+
         //Calculate averages
-        population.birthsPer1k.add(birthRate/index);
-        population.mortalityRate.add(deathRate/index);
-        if(lastPop != 0)
-            population.populationGrowth.add((float)(((currentPopulation - lastPop) / lastPop) * 100));
-        else
+        population.birthsPer1k.add(birthRate / index);
+        population.mortalityRate.add(deathRate / index);
+        if (lastPop != 0) {
+            population.populationGrowth.add((float) (((currentPopulation - lastPop) / lastPop) * 100));
+        } else {
             population.populationGrowth.add(0f);
-        
+        }
+
     }
 
     public void computeEconomy(int turn) {
@@ -174,19 +177,44 @@ public class Planet extends SpaceObject {
     @Override
     public void processTurn(int turn) {
         int index = 0;
+        HashMap<Integer, Integer> control = new HashMap<>();
         for (PlanetSector planetSector : planetSectors) {
             planetSector.processTurn(turn);
-            
+
             //Parse building buildings
-            if(planetSector instanceof BuildingBuilding) {
-                BuildingBuilding building = (BuildingBuilding)planetSector;
-                if(building.getTurns() == 0) {
+            if (planetSector instanceof BuildingBuilding) {
+                BuildingBuilding building = (BuildingBuilding) planetSector;
+                if (building.getTurns() == 0) {
                     //Replace
                     planetSectors[index] = building.getSector();
                 }
             }
-            index ++;
+            index++;
+            if (planetSector.getOwner() != -1) {
+                //None
+                if (control.containsKey(planetSector.getOwner())) {
+                    control.put(planetSector.getOwner(), (control.get(planetSector.getOwner()) + 1));
+                } else {
+                    control.put(planetSector.getOwner(), 1);
+                }
+            }
+
         }
+
+        //Get total control of planet
+        Object[] keys = control.keySet().toArray();
+        int noofmost = 0;
+        int idofmost = -1;
+        if (keys.length != 0) {
+            for (Object i : keys) {
+                int n = (Integer) i;
+                if (control.get(n) > noofmost) {
+                    noofmost = control.get(n);
+                    idofmost = n;
+                }
+            }
+        }
+        setOwnerID(idofmost);
         computePopulation(turn);
         computeEconomy(turn);
     }
