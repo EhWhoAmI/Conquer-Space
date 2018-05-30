@@ -41,19 +41,31 @@ public class SystemRenderer extends JPanel {
         }
         for (PlanetDrawStats p : drawer.stats.planetDrawStats) {
             //Draw orbit circle
-            Ellipse2D.Float circle = new Ellipse2D.Float(bounds.width/2 - p.getOrbitPath(), bounds.height/2 - p.getOrbitPath(), p.getOrbitPath()*2, p.getOrbitPath()*2);
+            Ellipse2D.Float circle = new Ellipse2D.Float(bounds.width / 2 - p.getOrbitPath(), bounds.height / 2 - p.getOrbitPath(), p.getOrbitPath() * 2, p.getOrbitPath() * 2);
             g2d.setColor(Color.WHITE);
             g2d.draw(circle);
             
-            Ellipse2D.Float planet = new Ellipse2D.Float(p.getPos().x - (p.getSize()/2), p.getPos().y - (p.getSize()/2), p.getSize(), p.getSize());
+            //Background
+            if (p.getOwnerColor() != null) {
+                int aurasize = 10;
+                Ellipse2D.Float owner = new Ellipse2D.Float(p.getPos().x - ((p.getSize()+ aurasize) / 2), p.getPos().y - ((p.getSize() + aurasize) / 2), p.getSize() + aurasize, p.getSize() + aurasize);
+                g2d.setColor(p.getOwnerColor());
+                g2d.fill(owner);
+            }
+
+            Ellipse2D.Float planet = new Ellipse2D.Float(p.getPos().x - (p.getSize() / 2), p.getPos().y - (p.getSize() / 2), p.getSize(), p.getSize());
             g2d.setColor(p.getColor());
             g2d.fill(planet);
-         }
-        
+                        //Draw owner
+
+            g2d.setColor(Color.white);
+            g2d.drawString(p.getOwner(), p.getPos().x - (p.getSize() / 2), p.getPos().y - (p.getSize() / 2));
+        }
+
         //Draw scale line
-            Line2D.Float line = new Line2D.Float(10, 20, 50, 20);
-            g2d.draw(line);
-            g2d.drawString((20d/(double) drawer.sizeofAU) + " AU", 10, 10);
+        Line2D.Float line = new Line2D.Float(10, 20, 50, 20);
+        g2d.draw(line);
+        g2d.drawString((20d / (double) drawer.sizeofAU) + " AU", 10, 10);
     }
 
 }

@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.civilizations;
 
 /**
- * Class of the civ preffered climate.
+ * Class of the civ preferred climate.
  * @author Zyun
  */
 public class CivilizationPreferredClimateTypes {

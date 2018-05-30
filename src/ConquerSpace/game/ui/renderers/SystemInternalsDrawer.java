@@ -1,6 +1,8 @@
 package ConquerSpace.game.ui.renderers;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -86,9 +88,17 @@ public class SystemInternalsDrawer {
             Point point = RendererMath.polarCoordToCartesianCoord(
                     new GalaticLocation(degs, p.getOrbitalDistance()), 
                     new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
-
+            
+            String playerSymbol = "";
+            Color co = null;
+            if(p.getOwnerID()!= -1) {
+                Civilization civ = Globals.universe.getCivilization(p.getOwnerID());
+                playerSymbol = civ.getName();
+                co = civ.getColor();
+            }
             PlanetDrawStats pds = new PlanetDrawStats(p.getId(), point, cl,
-                    p.getOrbitalDistance() * sizeofAU, p.getPlanetSize());
+                    p.getOrbitalDistance() * sizeofAU, p.getPlanetSize(), playerSymbol,
+                    co);
             
             LOGGER.info(Math.hypot(point.x - bounds.width / 2, point.y - bounds.height / 2));
             this.stats.addPlanetDrawStats(pds);

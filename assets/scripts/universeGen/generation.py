@@ -14,3 +14,5 @@ def selectRandomSuitablePlanet(sector, civClimate):
                     return value
             n += 1
         start += 1
+        if start >= sector.getStarSystemCount:
+            start = 0
