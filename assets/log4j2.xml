@@ -19,11 +19,11 @@
     </File>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="Console" />
+        <Root level="all">
+            <AppenderRef ref="Console" level="info"/>
             <AppenderRef ref="log"/>
             <AppenderRef ref="error" level="error"/>
-            <AppenderRef ref="logCum"/>
+            <AppenderRef ref="logCum" level="info"/>
             <AppenderRef ref="errorCum" level="error"/>
         </Root>
     </Loggers>

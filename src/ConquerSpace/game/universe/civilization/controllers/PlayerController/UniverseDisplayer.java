@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.Globals;
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
@@ -18,11 +19,14 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Displays the universe in a window.
+ *
  * @author Zyun
  */
-public class UniverseDisplayer extends JFrame implements MouseListener{
+public class UniverseDisplayer extends JFrame implements MouseListener {
+
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());
     private UniverseDrawer drawer;
+
     public UniverseDisplayer(ArrayList<Action> actions) {
         setTitle("Conquer Space");
         setLayout(new BorderLayout());
@@ -31,7 +35,7 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
         drawer = renderer.drawer;
         JPanel pan = new JPanel();
         pan.add(renderer);
-        
+
         //Place renderer into a scroll pane.
         JScrollPane scrollPane = new JScrollPane(pan);
         pan.addMouseListener(this);
@@ -49,11 +53,18 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
         if (e.getClickCount() == 2) {
             //Get which sector clicked.
             LOGGER.info("Double clicked. Opening sector");
+            sectorit:
             for (SectorDrawStats stats : drawer.sectorDrawings) {
+                //Check for vision
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < stats.getRadius()) {
-                    LOGGER.info("Mouse clicked in sector " + stats.getId() + "!");
-                    SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(stats.getId()));
-                    break;
+                    for (UniversePath p : Globals.universe.getCivilization(0).vision) {
+                        if (p.getSectorID() == stats.getId()) {
+                            LOGGER.info("Mouse clicked in sector " + stats.getId() + "!");
+                            SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(stats.getId()));
+                            break sectorit;
+                        }
+                    }
+
                 }
             }
         }
@@ -74,5 +85,5 @@ public class UniverseDisplayer extends JFrame implements MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
     }
-    
+
 }

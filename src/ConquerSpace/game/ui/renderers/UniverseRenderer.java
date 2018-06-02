@@ -1,13 +1,13 @@
 package ConquerSpace.game.ui.renderers;
 
+import ConquerSpace.Globals;
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
-import org.apache.logging.log4j.Logger;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -43,7 +43,7 @@ public class UniverseRenderer extends JPanel {
         super.paintComponent(g);
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
-        
+
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(new Color(0, 0, 255));
         g2d.fill(bg);
@@ -53,38 +53,44 @@ public class UniverseRenderer extends JPanel {
         g2d.fill(universeCircle);
 
         for (SectorDrawStats s : drawer.sectorDrawings) {
-            //Draw the sectors
-            Point p = s.getPosition();
+            //Check vision
+            for (UniversePath pa : Globals.universe.getCivilization(0).vision) {
+                if (pa.getSectorID() == s.getId()) {
+                    //Draw the sectors
+                    Point p = s.getPosition();
 
-            Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getRadius(), p.y - s.getRadius(), s.getRadius() * 2, s.getRadius() * 2);
-            Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize / 2, drawer.universeDrawnSize / 2));
-            //Draw control
-            for (ControlDrawStats c : drawer.controlDrawStats) {
-                Point pos = c.getPos();
-                Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 5, pos.y - 5, 10, 10);
-                g2d.setColor(new Color(c.getColor().getRed(), c.getColor().getBlue(), c.getColor().getGreen(), 10));
-                g2d.fill(control);
-            }
-            // Draw star systems
-            for (SystemDrawStats sys : s.systems) {
-                g2d.setColor(sys.getColor());
-                Ellipse2D.Float system = new Ellipse2D.Float(sys.getPosition().x, sys.getPosition().y, 2, 2);
-                g2d.fill(system);
+                    Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getRadius(), p.y - s.getRadius(), s.getRadius() * 2, s.getRadius() * 2);
+                    Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize / 2, drawer.universeDrawnSize / 2));
+                    //Draw control
+                    for (ControlDrawStats c : drawer.controlDrawStats) {
+                        Point pos = c.getPos();
+                        Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 5, pos.y - 5, 10, 10);
+                        g2d.setColor(new Color(c.getColor().getRed(), c.getColor().getBlue(), c.getColor().getGreen(), 10));
+                        g2d.fill(control);
+                    }
+                    // Draw star systems
+                    for (SystemDrawStats sys : s.systems) {
+                        g2d.setColor(sys.getColor());
+                        Ellipse2D.Float system = new Ellipse2D.Float(sys.getPosition().x, sys.getPosition().y, 2, 2);
+                        g2d.fill(system);
 
-                Line2D.Float systemln = new Line2D.Float(sys.getPosition(), p);
-                g2d.setColor(Color.orange);
-                //g2d.draw(systemln);
+                        Line2D.Float systemln = new Line2D.Float(sys.getPosition(), p);
+                        g2d.setColor(Color.orange);
+                        //Unncomment for debugging
+                        //g2d.draw(systemln);
+                    }
+                    g2d.setColor(Color.RED);
+                    g2d.draw(sector);
+
+                    g2d.setColor(Color.orange);
+                    //Uncomment this for debugging
+                    //g2d.draw(ln);
+                }
             }
-            g2d.setColor(Color.RED);
-            g2d.draw(sector);
-            
-            g2d.setColor(Color.orange);
-            //g2d.draw(ln);
-            
-            //Draw scale line
-            Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr*30 + 10, 20);
-            g2d.draw(line);
-            g2d.drawString("30 light years", 10, 10);
         }
+        //Draw scale line
+        Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 + 10, 20);
+        g2d.draw(line);
+        g2d.drawString("30 light years", 10, 10);
     }
 }
