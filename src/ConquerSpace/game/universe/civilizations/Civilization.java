@@ -1,13 +1,18 @@
 package ConquerSpace.game.universe.civilizations;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.GameObject;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.civilizations.stats.Population;
+import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Civilization
@@ -35,14 +40,30 @@ public class Civilization extends GameObject {
     public Population pop;
     public Economy economy;
 
-    public ArrayList<UniversePath> vision = new ArrayList<>();
+    public HashMap<UniversePath, Integer> vision;
 
-    public Civilization(int ID) {
+    public Civilization(int ID, Universe u) {
         this.ID = ID;
 
         //Set a temp starting point as in 0:0:0
         this.control.add(new UniversePath(0,0,0));
         
+        vision = new HashMap<>();
+        //Add all the vision.
+        for(int i = 0; i < u.getSectorCount(); i++) {
+            Sector s = u.getSector(i);
+            for (int n = 0; n < s.getStarSystemCount(); n ++) {
+                this.vision.put(new UniversePath(i, n), VisionTypes.UNDISCOVERED);
+                StarSystem sys = s.getStarSystem(n);
+                for (int h = 0; h < sys.getPlanetCount(); h ++) {
+                    //Add planets
+                    this.vision.put(new UniversePath(i, n, h), VisionTypes.UNDISCOVERED);
+                }
+                for (int h2 = 0; h2 < sys.getStarCount(); h2++) {
+                    this.vision.put(new UniversePath(i, n, h2, true), VisionTypes.UNDISCOVERED);
+                }
+            }
+        }
         pop = new Population();
         economy = new Economy();
     }
@@ -159,9 +180,8 @@ public class Civilization extends GameObject {
     public void addControl(UniversePath p) {
         if (!control.contains(p)) {
             // we only add the planet
-            // Also do vision.
             control.add(p);
-            vision.add(p);
+            vision.put(p, VisionTypes.KNOWS_ALL);
         }
     }
     

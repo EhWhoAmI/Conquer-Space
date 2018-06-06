@@ -1,5 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author Zyun

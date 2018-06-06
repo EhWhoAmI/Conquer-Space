@@ -124,7 +124,7 @@ public class UniverseDrawer {
                     default:
                         c = Color.BLACK;
                 }
-                SystemDrawStats sysStats = new SystemDrawStats(pt, c, sys.getId());
+                SystemDrawStats sysStats = new SystemDrawStats(pt, c, sys.getId(), sys.getUniversePath());
                 stats.addSystemStats(sysStats);
             }
             sectorDrawings.add(stats);
@@ -142,7 +142,7 @@ public class UniverseDrawer {
                     //Calculate the thingy
                     //Get sector
                     int sectorid = p.getSectorID();
-                    ControlDrawStats stats = new ControlDrawStats(sectorDrawings.get(sectorid).systems.get(p.getSystemID()).getPosition(), civ.getColor());
+                    ControlDrawStats stats = new ControlDrawStats(sectorDrawings.get(sectorid).systems.get(p.getSystemID()).getPosition(), civ.getColor(), p);
                     controlDrawStats.add(stats);
                 }
             }

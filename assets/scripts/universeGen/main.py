@@ -194,7 +194,7 @@ civPreferredClimate = {'Varied': 0, 'Cold':1, 'Hot':2}[civConf.getCivilizationPr
 
 # Sector 
 # Id is 0 because it is the first one.
-playerCiv = Civilization(0)
+playerCiv = Civilization(0, universeObject)
 
 playerCiv.setColor(civColor)
 playerCiv.setHomePlanetName(civHomePlanetName)
@@ -228,7 +228,7 @@ symbolList.remove(civSymbol)
 
 # Still need to set the player's
 for p in range(civCount):
-    civ = Civilization(p + 1)
+    civ = Civilization(p + 1, universeObject)
     # Civ name list
     civNameList = [
         ["He", "Be", "Das", "Kas", "Mak", "Aef", "Len", "Las", "Ke"],

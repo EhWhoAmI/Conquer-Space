@@ -1,19 +1,22 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalaticLocation;
 import java.util.ArrayList;
 
 /**
  * A star system.
+ *
  * @author Zyun
  */
-public class StarSystem extends SpaceObject{
+public class StarSystem extends SpaceObject {
+
     private ArrayList<Planet> planets;
     private ArrayList<Star> stars;
     private int id;
     private GalaticLocation location;
     private int parent;
-    
+
     /**
      *
      * @param id
@@ -25,7 +28,7 @@ public class StarSystem extends SpaceObject{
         planets = new ArrayList<>();
         stars = new ArrayList<>();
     }
-    
+
     /**
      *
      * @param star
@@ -36,7 +39,7 @@ public class StarSystem extends SpaceObject{
         stars.add(star);
         stars.trimToSize();
     }
-    
+
     /**
      *
      * @param planet
@@ -45,7 +48,7 @@ public class StarSystem extends SpaceObject{
         planets.add(planet);
         planets.trimToSize();
     }
-    
+
     /**
      *
      * @param i
@@ -54,7 +57,7 @@ public class StarSystem extends SpaceObject{
     public Planet getPlanet(int i) {
         return (planets.get(i));
     }
-    
+
     /**
      *
      * @return
@@ -62,7 +65,7 @@ public class StarSystem extends SpaceObject{
     public int getPlanetCount() {
         return (planets.size());
     }
-    
+
     /**
      *
      * @param i
@@ -71,7 +74,7 @@ public class StarSystem extends SpaceObject{
     public Star getStar(int i) {
         return (stars.get(i));
     }
-    
+
     /**
      *
      * @return
@@ -87,15 +90,15 @@ public class StarSystem extends SpaceObject{
     public GalaticLocation getLocation() {
         return location;
     }
-    
+
     /**
      *
      * @return
      */
-    public GalaticLocation getGalaticLocation(){
+    public GalaticLocation getGalaticLocation() {
         return location;
     }
-    
+
     /**
      *
      * @return
@@ -105,11 +108,11 @@ public class StarSystem extends SpaceObject{
         builder.append("Star system " + this.id + " Location-" + location.toString() + ": [\n");
         //Display stars
         builder.append("Stars: <");
-        for (Star s: stars) {
+        for (Star s : stars) {
             builder.append(s.toReadableString());
         }
         builder.append(">\n");
-        
+
         //Display planets
         builder.append("Planets: <");
         for (Planet p : planets) {
@@ -134,9 +137,13 @@ public class StarSystem extends SpaceObject{
         for (Planet planet : planets) {
             planet.processTurn(turn);
         }
-        
+
         for (Star star : stars) {
             star.processTurn(turn);
         }
-    }    
+    }
+    
+    public UniversePath getUniversePath() {
+        return (new UniversePath(parent, id));
+    }
 }

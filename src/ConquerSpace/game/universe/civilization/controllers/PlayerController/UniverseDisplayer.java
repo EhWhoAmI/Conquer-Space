@@ -6,6 +6,7 @@ import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
+import ConquerSpace.game.universe.civilizations.VisionTypes;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -57,8 +58,8 @@ public class UniverseDisplayer extends JFrame implements MouseListener {
             for (SectorDrawStats stats : drawer.sectorDrawings) {
                 //Check for vision
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < stats.getRadius()) {
-                    for (UniversePath p : Globals.universe.getCivilization(0).vision) {
-                        if (p.getSectorID() == stats.getId()) {
+                    for (UniversePath p : Globals.universe.getCivilization(0).vision.keySet()) {
+                        if (p.getSectorID() == stats.getId() && Globals.universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                             LOGGER.info("Mouse clicked in sector " + stats.getId() + "!");
                             SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(stats.getId()));
                             break sectorit;

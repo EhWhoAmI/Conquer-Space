@@ -15,8 +15,8 @@ public class UniversePath {
     private int sectorID = -1;
     private int systemID = -1;
     private int planetID = -1;
+    private int starID = -1;
     private int orbitID = -1;
-    private int onGID = -1;
     
     @Deprecated
     public UniversePath(String path) {
@@ -32,10 +32,38 @@ public class UniversePath {
         this.planetID = planetID;
     }
     
+    /**
+     * 
+     * @param sectorID
+     * @param systemID
+     * @param starID
+     * @param isstar ignore this. Put anything that is a bool. Just for reconition of this method.
+     */
+    public UniversePath(int sectorID, int systemID, int starID, boolean isstar) {
+        this.sectorID = sectorID;
+        this.systemID = systemID;
+        this.starID = planetID;
+    }
+    
     public UniversePath(int sectorID, int systemID, int planetID, int orbitID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
         this.planetID = planetID;
+        this.orbitID = orbitID;
+    }
+    
+    /**
+     * 
+     * @param sectorID
+     * @param systemID
+     * @param starID
+     * @param orbitID
+     * @param isstar ignore this. Put anything that is a bool. Just for reconition of this method.
+     */
+    public UniversePath(int sectorID, int systemID, int starID, int orbitID, boolean isstar) {
+        this.sectorID = sectorID;
+        this.systemID = systemID;
+        this.starID = starID;
         this.orbitID = orbitID;
     }
     
@@ -109,19 +137,15 @@ public class UniversePath {
         return b.toString();
     }
 
-    public int getOnGID() {
-        return onGID;
-    }
-
     public int getOrbitID() {
         return orbitID;
     }
-
-    public void setOnGID(int onGID) {
-        this.onGID = onGID;
-    }
-
+    
     public void setOrbitID(int orbitID) {
         this.orbitID = orbitID;
+    }
+
+    public int getStarID() {
+        return starID;
     }
 }
