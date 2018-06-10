@@ -4,7 +4,7 @@ import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.civilizations.CivilizationConfig;
 import ConquerSpace.Globals;
-import ConquerSpace.game.ui.GameController;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;

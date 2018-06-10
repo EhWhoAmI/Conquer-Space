@@ -1,5 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.game.universe.spaceObjects.Planet;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -9,10 +11,13 @@ import javax.swing.JPanel;
 public class BuildingBuilding extends PlanetSector{
     private int turns;
     private PlanetSector sector;
-    public BuildingBuilding(int id, int turns, PlanetSector sector, int owner) {
+    private Planet parent;
+    
+    public BuildingBuilding(int id, int turns, PlanetSector sector, int owner, Planet parent) {
         super(id, owner);
         this.turns = turns;
         this.sector = sector;
+        this.parent = parent;
     }
 
     public PlanetSector getSector() {
@@ -28,6 +33,16 @@ public class BuildingBuilding extends PlanetSector{
         turns--;
         if(turns == 0) {
             //Replace self with sector
+            //parent.planetSectors[this.getId()] = sector;
         }
     }
+
+    @Override
+    public JPanel getInfoPanel() {
+        JPanel root = new JPanel();
+        JLabel tofinish = new JLabel("Finishing in " + turns + " turns");
+        root.add(tofinish);
+        return root;
+    }
+    
 }

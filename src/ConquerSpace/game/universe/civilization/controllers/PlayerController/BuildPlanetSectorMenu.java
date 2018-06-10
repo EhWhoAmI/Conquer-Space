@@ -59,7 +59,7 @@ public class BuildPlanetSectorMenu extends JFrame {
                 for (Component c : bottom.getComponents()) {
                     if (c instanceof BuildPopulationStorage && c.isVisible()) {
                         PopulationStorage storage = new PopulationStorage(Long.parseLong(((BuildPopulationStorage) c).maxPopulation.getText()), 0, (byte) 100, id, 0);
-                        Actions.buildBuilding(p, id, storage, 0, 100);
+                        Actions.buildBuilding(p, id, storage, 0, 1);
                     }
                 }
             }

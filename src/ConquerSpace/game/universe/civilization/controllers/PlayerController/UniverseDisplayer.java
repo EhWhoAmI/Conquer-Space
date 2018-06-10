@@ -28,7 +28,7 @@ public class UniverseDisplayer extends JFrame implements MouseListener {
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());
     private UniverseDrawer drawer;
 
-    public UniverseDisplayer(ArrayList<Action> actions) {
+    public UniverseDisplayer() {
         setTitle("Conquer Space");
         setLayout(new BorderLayout());
         //Create universe renderer

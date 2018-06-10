@@ -1,5 +1,6 @@
 package ConquerSpace;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.util.Properties;
 
@@ -23,6 +24,7 @@ public class Globals {
      */
     public static int turn;
     
+    public static StarDate date = new StarDate();
     /**
      * How long 1 year is in turns.
      * For now, 12, so there are 12 turns in a year.

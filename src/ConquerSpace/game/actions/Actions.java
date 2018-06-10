@@ -21,12 +21,13 @@ public class Actions {
      * @param sectorID ID of planet sector
      * @param what What do you want to build?
      * @param owner You the owner
+     * @param turns
      * @return Success or not
      */
     public static boolean buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {
         if(p.getOwnerID() == owner) {
             //Pass
-            p.planetSectors[sectorID] = new BuildingBuilding(sectorID, turns, what, owner);
+            p.planetSectors[sectorID] = new BuildingBuilding(sectorID, turns, what, owner, p);
             return true;
         } else
             return false;
