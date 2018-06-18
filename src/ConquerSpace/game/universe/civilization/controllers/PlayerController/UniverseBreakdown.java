@@ -8,6 +8,7 @@ import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,14 +24,17 @@ public class UniverseBreakdown extends JFrame {
 
     private static UniverseBreakdown instance;
 
+    private Universe universe;
     //Hide constructor
-    private UniverseBreakdown() {
+    private UniverseBreakdown(Universe u) {
+        this.universe = u;
+        
         JPanel pan = new JPanel();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Universe");
         DefaultMutableTreeNode sectorNodes = new DefaultMutableTreeNode("Sectors");
         //Parse all the sectors in the universe
-        for (int i = 0; i < Globals.universe.getSectorCount(); i++) {
-            Sector s = Globals.universe.getSector(i);
+        for (int i = 0; i < universe.getSectorCount(); i++) {
+            Sector s = universe.getSector(i);
             //Parse star systems
             DefaultMutableTreeNode sectorNode = new DefaultMutableTreeNode("Sector " + s.getID());
 
@@ -99,8 +103,8 @@ public class UniverseBreakdown extends JFrame {
 
         //Civs
         DefaultMutableTreeNode civNodes = new DefaultMutableTreeNode("Civilizations");
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Civilization civ = Globals.universe.getCivilization(i);
+        for (int i = 0; i < universe.getCivilizationCount(); i++) {
+            Civilization civ = universe.getCivilization(i);
             DefaultMutableTreeNode civNode = new DefaultMutableTreeNode(civ.getName());
             civNodes.add(civNode);
         }
@@ -122,11 +126,12 @@ public class UniverseBreakdown extends JFrame {
     /**
      * Get one instance of the UniverseBreakdown class.
      *
+     * @param u Universe
      * @return Instance of universe breakdown class.
      */
-    public static UniverseBreakdown getInstance() {
+    public static UniverseBreakdown getInstance(Universe u) {
         if (instance == null) {
-            instance = new UniverseBreakdown();
+            instance = new UniverseBreakdown(u);
         }
         instance.setVisible(true);
         return instance;

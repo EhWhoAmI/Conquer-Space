@@ -1,9 +1,18 @@
+# Netbeans stuff
 /nbproject/private/
 /build/
 /dist/
 
+# Files created in runtime
+
+# Created by jython for the scripts
 *.class
+
+# Logs
 /logs/
 
 # crash logs
 crashlog.txt
+
+# Javadoc files
+/docs/

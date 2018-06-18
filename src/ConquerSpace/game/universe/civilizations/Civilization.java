@@ -1,10 +1,8 @@
 package ConquerSpace.game.universe.civilizations;
 
-import ConquerSpace.Globals;
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
-import ConquerSpace.game.GameObject;
-import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.civilizations.stats.Population;
 import ConquerSpace.game.universe.spaceObjects.Sector;
@@ -19,7 +17,7 @@ import java.util.HashMap;
  *
  * @author Zyun
  */
-public class Civilization extends GameObject {
+public class Civilization {
 
     private int ID;
 

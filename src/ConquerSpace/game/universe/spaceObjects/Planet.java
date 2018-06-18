@@ -18,7 +18,8 @@ public class Planet extends SpaceObject {
     private int planetType;
     private GalaticLocation orbitalDistance;
     private int planetSize;
-    private int id;
+    
+    int id;
 
     private int ownerID;
     private int surfaceArea;
@@ -101,6 +102,10 @@ public class Planet extends SpaceObject {
         return planetType;
     }
 
+    /**
+     * Change the degrees by <code>degs</code> degrees.
+     * @param degs degrees
+     */
     public void modDegrees(float degs) {
         orbitalDistance.setDegrees(orbitalDistance.getDegrees() + degs);
     }
@@ -235,4 +240,11 @@ public class Planet extends SpaceObject {
         return name;
     }
 
+    public void setParentSector(int parentSector) {
+        this.parentSector = parentSector;
+    }
+
+    public void setParentStarSystem(int parentStarSystem) {
+        this.parentStarSystem = parentStarSystem;
+    }
 }

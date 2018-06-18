@@ -24,6 +24,9 @@ public class Globals {
      */
     public static int turn;
     
+    /**
+     * Date in the stars. Game timer.
+     */
     public static StarDate date = new StarDate();
     /**
      * How long 1 year is in turns.

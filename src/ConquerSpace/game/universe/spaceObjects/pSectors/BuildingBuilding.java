@@ -1,5 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.Globals;
+import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +35,8 @@ public class BuildingBuilding extends PlanetSector{
         turns--;
         if(turns == 0) {
             //Replace self with sector
-            //parent.planetSectors[this.getId()] = sector;
+            parent.planetSectors[this.getId()] = sector;
+            Globals.universe.getCivilization(getOwner()).controller.alert(new Alert(0, 0, "Sector finished building"));
         }
     }
 

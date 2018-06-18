@@ -1,9 +1,9 @@
 package ConquerSpace.script;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.start.gui.NewGame;
-import ConquerSpace.game.universe.UniverseConfig;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

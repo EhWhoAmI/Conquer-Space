@@ -3,110 +3,156 @@ package ConquerSpace.game.universe;
 import ConquerSpace.game.universe.civilizations.CivilizationConfig;
 /**
  * Config of the Universe to be passed on to the scripts.
+ * @see ConquerSpace.start.gui.NewGame
  * @author Zyun
  */
 public class UniverseConfig{
+    //Everything is in string because python is a jerk and there are no enums.
+    //So we pass it off as strings to parse it later.
+    
+    /**
+     * Size of universe
+     */
     public String universeSize;
+    
+    /**
+     * Shape of universe
+     */
     public String universeShape;
+    
+    /**
+     * Age of universe
+     */
     public String universeAge;
+    
+    /**
+     * How common planets are
+     */
     public String planetCommonality;
+    
+    /**
+     * Number of civilizations
+     */
     public String civilizationCount;
+    
+    /**
+     * Seed of universe generation
+     */
     public long seed;
     
+    /**
+     * Civilization config for player
+     */
     public CivilizationConfig civConfig;
 
     /**
-     *
-     * @param civilizationCount
+     * Set the number of civilizations
+     * @param civilizationCount Amount of civilizations as said in the new game class.
      */
     public void setCivilizationCount(String civilizationCount) {
         this.civilizationCount = civilizationCount;
     }
 
     /**
-     *
-     * @param planetCommonality
+     * Set number of planets
+     * @param planetCommonality Amount of planet as said in the new game class.
      */
     public void setPlanetCommonality(String planetCommonality) {
         this.planetCommonality = planetCommonality;
     }
 
     /**
-     *
-     * @param universeAge
+     * Set age of galaxy
+     * @param universeAge Age of galaxy
      */
     public void setUniverseAge(String universeAge) {
         this.universeAge = universeAge;
     }
 
     /**
-     *
-     * @param universeShape
+     * Shape of galaxy, Elliptical, irregular and spiral.
+     * @param universeShape Shape of galaxy.
      */
     public void setUniverseShape(String universeShape) {
         this.universeShape = universeShape;
     }
 
     /**
-     *
-     * @param universeSize
+     * Set size of universe
+     * @param universeSize Size of universe 
      */
     public void setUniverseSize(String universeSize) {
         this.universeSize = universeSize;
     }
     
+    /**
+     * Seed as long value
+     * @param seed seed.
+     */
     public void setSeed(long seed) {
         this.seed = seed;
     }
     
+    /**
+     * Set the player civilization config
+     * @param conf civilization config
+     */
     public void setCivilizationConfig(CivilizationConfig conf) {
         this.civConfig = conf;
     }
 
     /**
-     *
-     * @return
+     * Get number of civilizations.
+     * @return Number of civilizations
      */
     public String getCivilizationCount() {
         return civilizationCount;
     }
 
     /**
-     *
-     * @return
+     * Get number of planets.
+     * @return number of planets
      */
     public String getPlanetCommonality() {
         return planetCommonality;
     }
 
     /**
-     *
-     * @return
+     * Get galaxy age
+     * @return Age of galaxy
      */
     public String getUniverseAge() {
         return universeAge;
     }
 
     /**
-     *
-     * @return
+     * Get shape of universe
+     * @return Shape of universe
      */
     public String getUniverseShape() {
         return universeShape;
     }
 
     /**
-     *
-     * @return
+     * Get galaxy size
+     * @return galaxy size
      */
     public String getUniverseSize() {
         return universeSize;
     }
     
+    /**
+     * Get seed
+     * @return seed
+     */
     public long getSeed() {
         return seed;
     }
     
+    /**
+     * Get civilization config
+     * @return configuration of civilization
+     */
     public CivilizationConfig getCivilizationConfig() {
         return (civConfig);
     }

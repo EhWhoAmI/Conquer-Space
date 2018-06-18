@@ -10,16 +10,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Initial loading screen. Loads everything.
+ * Initial loading screen. Loads everything. This only checks that the files exist.
  * @author Zyun
  */
 public class InitialLoading extends JFrame {
 
-    //Logger
+    /**
+     * Logger
+     */
     private static final Logger LOGGER = CQSPLogger.getLogger(InitialLoading.class.getName());
     
     //Components
@@ -36,6 +37,7 @@ public class InitialLoading extends JFrame {
         text = new JLabel("Loading...");
         progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
+        
         add(text);
         add(progressBar);
         pack();
@@ -61,10 +63,13 @@ public class InitialLoading extends JFrame {
             int fileIndex = 0;
             int filesMissing = 0;
             while (fileScanner.hasNextLine()) {
-                
                 fileIndex ++;
+                
                 String fileName = fileScanner.nextLine();
+                
                 LOGGER.trace("Verifying file " + fileName);
+                
+                //Check for it
                 File f = new File(System.getProperty("user.dir") + "/" + fileName);
                 //Next we have to determine the importance of the file. -- TODO
                 //File exists or not, and warn noone. XD
@@ -72,15 +77,21 @@ public class InitialLoading extends JFrame {
                     LOGGER.warn("Can't find file " + fileName + ". not fatal.");
                     filesMissing ++;
                 }
-                else
+                else {
                     LOGGER.trace("File " + fileName + " exists");
+                }
                 progressBar.setValue((int) fileIndex/files);
             }
             if (filesMissing == 0)
                 LOGGER.info("No files missing.");
             else {
                 LOGGER.warn(filesMissing + " file(s) missing.");
-                int toexit = JOptionPane.showConfirmDialog(null, "You have " + filesMissing + " files missing. Make sure they are there. \nSomething will go wrong if you don't fix it. \nWe need all the files that we have. Exit?" , "Files missing", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                int toexit = JOptionPane.showConfirmDialog(null, "You have " + 
+                        filesMissing + " files missing. Make sure they are there"
+                                + ". \nSomething will go wrong if you don't fix"
+                                + "it. \nWe need all the files that we have. "
+                                + "Exit?" , "Files missing", 
+                                JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
                 if(toexit == JOptionPane.YES_OPTION) {
                     //Then exit
                     System.exit(0);
@@ -90,9 +101,12 @@ public class InitialLoading extends JFrame {
         } catch (FileNotFoundException ex) {
             //Cannot fine FILELIST
             LOGGER.error("File not found Error: ", ex);
-            ExceptionHandling.ExceptionMessageBox("File FILELIST not found. Please find it online or somewhere!", ex);
+            ExceptionHandling.ExceptionMessageBox("File FILELIST not found. Plea"
+                    + "se find it online or somewhere! We cannot check for any f"
+                    + "iles we need.", ex);
             System.exit(1);
         }
+        
         long endTime = System.currentTimeMillis();
         
         //Log how long that took

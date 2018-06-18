@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,7 +23,11 @@ public class SystemInternalsDrawer {
     public SystemInternalDrawStats stats;
     private static final Logger LOGGER = CQSPLogger.getLogger(SystemInternalsDrawer.class.getName());
     public int sizeofAU;
-    public SystemInternalsDrawer(StarSystem sys, Dimension bounds) {
+    
+    private Universe universe;
+    
+    public SystemInternalsDrawer(StarSystem sys, Universe u, Dimension bounds) {
+        universe = u;
         stats = new SystemInternalDrawStats();
         //Get size of the star system
         int size = 0;
@@ -92,7 +97,7 @@ public class SystemInternalsDrawer {
             String playerSymbol = "";
             Color co = null;
             if(p.getOwnerID()!= -1) {
-                Civilization civ = Globals.universe.getCivilization(p.getOwnerID());
+                Civilization civ = universe.getCivilization(p.getOwnerID());
                 playerSymbol = civ.getName();
                 co = civ.getColor();
             }

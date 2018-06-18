@@ -94,6 +94,7 @@ public class ConquerSpace {
             LOGGER.warn("", ex);
         }
         
+        // Load all the files.
         InitialLoading loading = new InitialLoading();
         loading.setVisible(true);
         loading.run();

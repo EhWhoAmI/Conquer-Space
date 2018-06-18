@@ -4,6 +4,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,11 +25,14 @@ public class SectorRenderer extends JPanel {
     private Dimension bounds;
     public SectorDrawer drawer;
     
-    public SectorRenderer(Dimension bounds, Sector sector) {
+    private Universe universe;
+    
+    public SectorRenderer(Dimension bounds, Sector sector, Universe u) {
+        this.universe = u;
         //Draw background
         this.bounds = bounds;
         
-        drawer = new SectorDrawer(sector, bounds);
+        drawer = new SectorDrawer(sector, universe, bounds);
         
         setPreferredSize(bounds);
     }
@@ -54,8 +58,8 @@ public class SectorRenderer extends JPanel {
         }
         
         for (SystemDrawStats s : drawer.stats) {
-            for (UniversePath p : Globals.universe.getCivilization(0).vision.keySet()) {
-                if (p.getSystemID()== s.getPath().getSystemID()&& Globals.universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+            for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
+                if (p.getSystemID()== s.getPath().getSystemID()&& universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                     Ellipse2D.Float star = new Ellipse2D.Float(s.getPosition().x, s.getPosition().y, 20, 20);
                     g2d.setColor(s.getColor());
                     g2d.fill(star);

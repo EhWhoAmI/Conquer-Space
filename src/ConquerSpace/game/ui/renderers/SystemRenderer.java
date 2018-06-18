@@ -1,6 +1,7 @@
 package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,9 +20,12 @@ public class SystemRenderer extends JPanel {
     public SystemInternalsDrawer drawer;
     private Dimension bounds;
 
-    public SystemRenderer(StarSystem sys, Dimension bounds) {
+    private Universe universe;
+    
+    public SystemRenderer(StarSystem sys, Universe u, Dimension bounds) {
         this.bounds = bounds;
-        drawer = new SystemInternalsDrawer(sys, bounds);
+        universe = u;
+        drawer = new SystemInternalsDrawer(sys, u, bounds);
         setPreferredSize(bounds);
     }
 

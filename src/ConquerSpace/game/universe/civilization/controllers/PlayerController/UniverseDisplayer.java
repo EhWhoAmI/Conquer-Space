@@ -1,21 +1,20 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
+import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.game.universe.civilizations.VisionTypes;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -27,12 +26,15 @@ public class UniverseDisplayer extends JFrame implements MouseListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());
     private UniverseDrawer drawer;
+    private Universe universe;
 
-    public UniverseDisplayer() {
+    public UniverseDisplayer(Universe u) {
+        this.universe = u;
+        
         setTitle("Conquer Space");
         setLayout(new BorderLayout());
         //Create universe renderer
-        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), Globals.universe);
+        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), u);
         drawer = renderer.drawer;
         JPanel pan = new JPanel();
         pan.add(renderer);
@@ -58,10 +60,10 @@ public class UniverseDisplayer extends JFrame implements MouseListener {
             for (SectorDrawStats stats : drawer.sectorDrawings) {
                 //Check for vision
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < stats.getRadius()) {
-                    for (UniversePath p : Globals.universe.getCivilization(0).vision.keySet()) {
-                        if (p.getSectorID() == stats.getId() && Globals.universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                    for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
+                        if (p.getSectorID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                             LOGGER.info("Mouse clicked in sector " + stats.getId() + "!");
-                            SectorDisplayer d = new SectorDisplayer(Globals.universe.getSector(stats.getId()));
+                            SectorDisplayer d = new SectorDisplayer(universe.getSector(stats.getId()), universe);
                             break sectorit;
                         }
                     }

@@ -35,25 +35,26 @@ public class Universe extends SpaceObject{
     }
     
     /**
-     *
-     * @param s
+     * Add a sector to the universe
+     * @param s Sector to add
      */
     public void addSector(Sector s) {
+        s.id = sectors.size();
         sectors.add(s);
     }
     
     /**
      *
-     * @param i
-     * @return
+     * @param i ID of sector
+     * @return The sector,
      */
     public Sector getSector(int i) {
         return (sectors.get(i));
     }
     
     /**
-     *
-     * @return
+     * Get number of sectors in planet.
+     * @return Number of sectors
      */
     public int getSectorCount() {
         return(sectors.size());

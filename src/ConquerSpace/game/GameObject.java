@@ -3,6 +3,7 @@ package ConquerSpace.game;
 /**
  * This is a game object, used to ID all the in game objects.
  *
+ * @deprecated
  * @author Zyun
  */
 public class GameObject {

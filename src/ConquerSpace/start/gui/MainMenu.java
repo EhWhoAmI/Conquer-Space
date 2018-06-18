@@ -1,18 +1,17 @@
 package ConquerSpace.start.gui;
 
 import ConquerSpace.ConquerSpace;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
+import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
-import ConquerSpace.util.CQSPLogger;
-import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.RenderingHints;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.apache.logging.log4j.Logger;
 
 /**

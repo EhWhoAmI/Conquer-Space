@@ -1,8 +1,11 @@
 package ConquerSpace.game.universe.civilization.controllers.AIController;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
+import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.scripts.RunScript;
 import java.util.ArrayList;
 
@@ -23,4 +26,15 @@ public class AIController implements CivilizationController{
         //actions = (ArrayList <Action>) script.getObject("actions");
         return actions;
     }   
+
+    @Override
+    public void alert(Alert a) {
+        //Skip for AI, at least for now.
+    }
+
+    @Override
+    public void init(Universe u, StarDate d) {
+    }
+    
+    
 }

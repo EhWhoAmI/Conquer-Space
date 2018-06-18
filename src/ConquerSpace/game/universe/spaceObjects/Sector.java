@@ -15,9 +15,9 @@ public class Sector extends SpaceObject {
     int id;
 
     /**
-     *
-     * @param location
-     * @param id
+     * Creates a new sector
+     * @param location Galatic location of the sector
+     * @param id id of sector
      */
     public Sector(GalaticLocation location, int id) {
         loc = location;
@@ -26,35 +26,37 @@ public class Sector extends SpaceObject {
     }
 
     /**
-     *
-     * @param e
+     * Add a star system to this.
+     * @param e Star system
      */
     public void addStarSystem(StarSystem e) {
         e.setParent(id);
+        e.id = starSystems.size();
+        
         starSystems.add(e);
         starSystems.trimToSize();
     }
 
     /**
-     *
-     * @param i
-     * @return
+     * Get star system
+     * @param i id of system
+     * @return get the star system i
      */
     public StarSystem getStarSystem(int i) {
         return (starSystems.get(i));
     }
 
     /**
-     *
-     * @return
+     * Get number of star systems.
+     * @return number of star systems
      */
     public int getStarSystemCount() {
         return (starSystems.size());
     }
 
     /**
-     *
-     * @return
+     * Get the galatic location of this sector
+     * @return Galatic location of this sector
      */
     public GalaticLocation getGalaticLocation() {
         return loc;
@@ -65,8 +67,8 @@ public class Sector extends SpaceObject {
     }
 
     /**
-     *
-     * @return
+     * Readable string
+     * @return This sector in a readable string
      */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();

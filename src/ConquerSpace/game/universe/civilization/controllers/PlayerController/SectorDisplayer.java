@@ -1,10 +1,10 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.ui.renderers.SectorDrawer;
 import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,11 +24,13 @@ public class SectorDisplayer extends JFrame implements MouseListener{
     SectorDrawer drawStats;
     int id;
     
-    public SectorDisplayer(Sector s) {
+    private Universe universe;
+    public SectorDisplayer(Sector s, Universe universe) {
+        this.universe = universe;
         setTitle("Sector " + s.getID());
         setLayout(new BorderLayout());
         //Create universe renderer
-        SectorRenderer renderer = new SectorRenderer(new Dimension(1500, 1500), s);
+        SectorRenderer renderer = new SectorRenderer(new Dimension(1500, 1500), s, universe);
         renderer.addMouseListener(this);
         drawStats = renderer.drawer;
         JPanel pan = new JPanel();
@@ -54,7 +56,7 @@ public class SectorDisplayer extends JFrame implements MouseListener{
             for (SystemDrawStats stats : drawStats.stats) {
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < 25) {
                     LOGGER.info("Mouse clicked in system " + stats.getId() + "!");
-                    SystemDisplayer d = new SystemDisplayer(Globals.universe.getSector(id).getStarSystem(stats.getId()));
+                    SystemDisplayer d = new SystemDisplayer(universe.getSector(id).getStarSystem(stats.getId()), universe);
                     break;
                 }
             }

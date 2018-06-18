@@ -5,6 +5,7 @@ import ConquerSpace.game.ui.renderers.PlanetDrawStats;
 import ConquerSpace.game.ui.renderers.SystemInternalsDrawer;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -20,14 +21,19 @@ import org.apache.logging.log4j.Logger;
  */
 public class SystemDisplayer extends JFrame implements MouseListener{
     SystemInternalsDrawer stats;
-    public static final Logger LOGGER = CQSPLogger.getLogger(SystemDisplayer.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(SystemDisplayer.class.getName());
     int sectorID;
     int systemID;
-    public SystemDisplayer(StarSystem sys) {
+    
+    private Universe universe;
+    
+    public SystemDisplayer(StarSystem sys, Universe universe) {
+        this.universe = universe;
+        
         setTitle("Star System " + sys.getId());
         systemID = sys.getId();
         sectorID = sys.getParent();
-        SystemRenderer renderer = new SystemRenderer(sys, new Dimension(1500, 1500));
+        SystemRenderer renderer = new SystemRenderer(sys, universe, new Dimension(1500, 1500));
         renderer.addMouseListener(this);
         stats = renderer.drawer;
         JPanel pan = new JPanel();
@@ -50,7 +56,7 @@ public class SystemDisplayer extends JFrame implements MouseListener{
             for (PlanetDrawStats pstats : stats.stats.planetDrawStats) {
                 if (Math.hypot(pstats.getPos().x - e.getX(), pstats.getPos().y - e.getY()) < pstats.getSize()) {
                     LOGGER.trace("Mouse clicked in planet " + pstats.getId() + "!");
-                    PlanetInfoSheet d = new PlanetInfoSheet(Globals.universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getId()), Globals.turn);
+                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getId()), Globals.turn);
                     break;
                 }
             }

@@ -9,8 +9,8 @@ public class GalaticLocation {
     private int distance;
 
     /**
-     * Constructor.
-     * @param degrees degrees from north in a clockwise direction.
+     * Constructor of the polar coordinate.
+     * @param degrees degrees from north in a anticlockwise direction.
      * @param distance distance from the center.
      */
     public GalaticLocation(float degrees, int distance) {
@@ -18,7 +18,10 @@ public class GalaticLocation {
         this.distance = distance;
     }
 
-    //To string
+    /**
+     * To string. Example output: (Degrees: &lt;degrees&gt; Distance &lt;distance&gt;)
+     * @return String value of this class
+     */
     @Override
     public String toString() {
         return("(Degrees: " + degrees + " Distance: " + distance + ")");
@@ -40,11 +43,19 @@ public class GalaticLocation {
         return (distance);
     }
     
+    /**
+     * Set the degrees
+     * @param degrees degrees
+     */
     public void setDegrees(float degrees) {
         this.degrees = degrees;
         this.degrees = this.degrees%360;
     }
     
+    /**
+     * Set the distance
+     * @param distance Distance
+     */
     public void setDistance(int distance) {
         this.distance = distance;
     }

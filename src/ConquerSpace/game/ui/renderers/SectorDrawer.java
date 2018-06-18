@@ -4,6 +4,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -23,8 +24,11 @@ public class SectorDrawer {
     public int sectorDrawnSize;
     public int sizeOfLtyr;
     public Point center;
+    
+    private Universe universe;
 
-    public SectorDrawer(Sector sector, Dimension bounds) {
+    public SectorDrawer(Sector sector, Universe u, Dimension bounds) {
+        universe = u;
         stats = new ArrayList<>();
         controlDrawStats = new ArrayList<>();
         //Calculate center.
@@ -56,8 +60,8 @@ public class SectorDrawer {
             SystemDrawStats sds = new SystemDrawStats(p, c, sector.getStarSystem(i).getId(), new UniversePath(sector.getStarSystem(i).getParent(), sector.getStarSystem(i).getId()));
             stats.add(sds);
         }
-        for(int n = 0; n < Globals.universe.getCivilizationCount(); n++) {
-            Civilization c = Globals.universe.getCivilization(n);
+        for(int n = 0; n < universe.getCivilizationCount(); n++) {
+            Civilization c = universe.getCivilization(n);
             for(UniversePath p : c.control) {
                 if (p.getSystemID() > -1 && p.getSectorID() == sector.getID()) {
                     //Calculate the thingy

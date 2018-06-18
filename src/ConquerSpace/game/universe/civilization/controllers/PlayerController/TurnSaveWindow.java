@@ -21,6 +21,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
 
     private JLabel turnLabel;
     private JButton pausePlayButton;
+    private JButton alertsButton;
     private JButton saveGameButton;
     private JButton exitGameButton;
     private JButton manualButton;
@@ -38,6 +39,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
         turnLabel = new JLabel();
         statusProgressBar = new JProgressBar();
         pausePlayButton = new JButton("Paused");
+        alertsButton = new JButton("Alerts");
         manualButton = new JButton("Manual");
         saveGameButton = new JButton("Save Game");
         exitGameButton = new JButton("Exit Game");
@@ -51,27 +53,27 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
         pausePlayButton.addActionListener(this);
         pausePlayButton.setForeground(Color.red);
 
-        exitGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
+        alertsButton.addActionListener((e) -> {
+            AlertDisplayer disp = AlertDisplayer.getInstance();
+            disp.toFront();
+        });
+        
+        exitGameButton.addActionListener((e) -> {
+            System.exit(0);
         });
 
-        manualButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Manual.getInstance().setVisible(true);
-            }
+        manualButton.addActionListener((e) -> {
+            Manual.getInstance().setVisible(true);
         });
 
         runningstatsButton.addActionListener((e) -> {
-            DebugStats.getInstance();
+            DebugStatsWindow.getInstance();
         });
 
         pan.add(turnLabel);
         pan.add(statusProgressBar);
         pan.add(pausePlayButton);
+        pan.add(alertsButton);
         pan.add(manualButton);
         pan.add(saveGameButton);
         pan.add(exitGameButton);
@@ -82,7 +84,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
         });
         updater.start();
 
-        pan.setLayout(new GridLayout(7, 1, 5, 5));
+        pan.setLayout(new GridLayout(8, 1, 5, 5));
         add(pan);
         pack();
         setVisible(true);
@@ -99,7 +101,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
             } else {
                 ((JButton) e.getSource()).setText("Paused");
                 ((JButton) e.getSource()).setForeground(Color.red);
-                 statusProgressBar.setIndeterminate(false);
+                statusProgressBar.setIndeterminate(false);
             }
             isPaused = !isPaused;
         }

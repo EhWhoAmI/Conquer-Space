@@ -21,7 +21,7 @@ public class Actions {
      * @param sectorID ID of planet sector
      * @param what What do you want to build?
      * @param owner You the owner
-     * @param turns
+     * @param turns number of months...
      * @return Success or not
      */
     public static boolean buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {

@@ -1,7 +1,5 @@
 package ConquerSpace.game;
 
-import ConquerSpace.game.universe.GalaticLocation;
-
 /**
  * Path of an object in a universe. To write path: "sectorid:star
  * systemid:planet id" for a planet "sectorid" for a sector "sectorid:star
@@ -11,11 +9,27 @@ import ConquerSpace.game.universe.GalaticLocation;
  * @author Zyun
  */
 public class UniversePath {
-    //-1 is none
+    //-1 is none selected
+    
+    /**
+     * Id of sector
+     */
     private int sectorID = -1;
+    /**
+     * ID of system
+     */
     private int systemID = -1;
+    /**
+     * ID of planet
+     */
     private int planetID = -1;
+    /**
+     * ID of star
+     */
     private int starID = -1;
+    /**
+     * ID of object in orbit
+     */
     private int orbitID = -1;
     
     @Deprecated
@@ -23,9 +37,18 @@ public class UniversePath {
         parse(path);
     }
 
+    /**
+     * Empty constructor.
+     */
     public UniversePath() {
     }
 
+    /**
+     * Creates a new UniversePath object
+     * @param sectorID ID of sector
+     * @param systemID ID of system
+     * @param planetID ID of planet
+     */
     public UniversePath(int sectorID, int systemID, int planetID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
@@ -33,10 +56,10 @@ public class UniversePath {
     }
     
     /**
-     * 
-     * @param sectorID
-     * @param systemID
-     * @param starID
+     * Creates a new UniversePath object
+     * @param sectorID id of sector
+     * @param systemID id of star system
+     * @param starID id of star
      * @param isstar ignore this. Put anything that is a bool. Just for reconition of this method.
      */
     public UniversePath(int sectorID, int systemID, int starID, boolean isstar) {
@@ -45,6 +68,13 @@ public class UniversePath {
         this.starID = planetID;
     }
     
+    /**
+     * Creates a new UniversePath object
+     * @param sectorID id of sector
+     * @param systemID id of star system
+     * @param planetID id of planet
+     * @param orbitID id of object in orbit
+     */
     public UniversePath(int sectorID, int systemID, int planetID, int orbitID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
@@ -53,12 +83,12 @@ public class UniversePath {
     }
     
     /**
-     * 
-     * @param sectorID
-     * @param systemID
-     * @param starID
-     * @param orbitID
-     * @param isstar ignore this. Put anything that is a bool. Just for reconition of this method.
+     * Creates a new UniversePath object
+     * @param sectorID ID of sector
+     * @param systemID ID of system
+     * @param starID ID of star
+     * @param orbitID ID of object in oject
+     * @param isstar ignore this. Put anything that is a bool. Just for reconition of this Constructor.
      */
     public UniversePath(int sectorID, int systemID, int starID, int orbitID, boolean isstar) {
         this.sectorID = sectorID;
@@ -67,10 +97,19 @@ public class UniversePath {
         this.orbitID = orbitID;
     }
     
+    /**
+     * Creates a new UniversePath object
+     * @param sectorID ID of sector
+     */
    public UniversePath(int sectorID) {
         this.sectorID = sectorID;
     }
    
+   /**
+    * Creates a new UniversePath object
+    * @param sectorID ID of sector
+    * @param systemID ID of system
+    */
    public UniversePath(int sectorID, int systemID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
@@ -102,16 +141,24 @@ public class UniversePath {
     
     /**
      * Get the id of the planet selected
-     * @return 
+     * @return Planet ID
      */
     public int getPlanetID() {
         return planetID;
     }
 
+    /**
+     * Get the id of the sector selected
+     * @return Sector ID
+     */
     public int getSectorID() {
         return sectorID;
     }
 
+    /**
+     * Get the id of the Star system
+     * @return Star system ID
+     */
     public int getSystemID() {
         return systemID;
     }
@@ -137,14 +184,18 @@ public class UniversePath {
         return b.toString();
     }
 
+    /**
+     * Get id of the object in orbit
+     * @return Orbit ID
+     */
     public int getOrbitID() {
         return orbitID;
     }
-    
-    public void setOrbitID(int orbitID) {
-        this.orbitID = orbitID;
-    }
 
+    /**
+     * Get id of star
+     * @return Star ID
+     */
     public int getStarID() {
         return starID;
     }

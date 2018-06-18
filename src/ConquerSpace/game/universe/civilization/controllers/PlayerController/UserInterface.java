@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +21,11 @@ public class UserInterface extends JFrame {
 
     private JButton universeBreakdownButton;
 
-    public UserInterface() {
+    private Universe universe;
+    
+    public UserInterface(Universe u) {
+        this.universe = u;
+        
         JPanel pan = new JPanel();
         industryButton = new JButton("Industry");
         militaryButton = new JButton("Military");
@@ -31,7 +36,7 @@ public class UserInterface extends JFrame {
         universeBreakdownButton = new JButton("Universe Breakdown");
 
         universeBreakdownButton.addActionListener((e) -> {
-            UniverseBreakdown.getInstance();
+            UniverseBreakdown.getInstance(universe);
         });
         pan.add(industryButton);
         pan.add(militaryButton);

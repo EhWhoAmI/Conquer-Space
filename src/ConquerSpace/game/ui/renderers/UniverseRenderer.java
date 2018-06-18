@@ -4,14 +4,14 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
 /**
@@ -25,9 +25,10 @@ public class UniverseRenderer extends JPanel {
     private Dimension bounds;
     public UniverseDrawer drawer;
 
+    Universe universe;
     public UniverseRenderer(Dimension bounds, Universe universe) {
         this.bounds = bounds;
-
+        this.universe = universe;
         drawer = new UniverseDrawer(universe, bounds);
 
         setPreferredSize(bounds);
@@ -55,8 +56,8 @@ public class UniverseRenderer extends JPanel {
 
         for (SectorDrawStats s : drawer.sectorDrawings) {
             //Check vision
-            for (UniversePath pa : Globals.universe.getCivilization(0).vision.keySet()) {
-                if (pa.getSectorID() == s.getId() && Globals.universe.getCivilization(0).vision.get(pa) > VisionTypes.UNDISCOVERED) {
+            for (UniversePath pa : universe.getCivilization(0).vision.keySet()) {
+                if (pa.getSectorID() == s.getId() && universe.getCivilization(0).vision.get(pa) > VisionTypes.UNDISCOVERED) {
                     //Draw the sectors
                     Point p = s.getPosition();
 
@@ -65,8 +66,8 @@ public class UniverseRenderer extends JPanel {
 
                     // Draw star systems
                     for (SystemDrawStats sys : s.systems) {
-                        for (UniversePath pat : Globals.universe.getCivilization(0).vision.keySet()) {
-                            if (pat.getSystemID() == sys.getPath().getSystemID() && Globals.universe.getCivilization(0).vision.get(pat) > VisionTypes.UNDISCOVERED) {
+                        for (UniversePath pat : universe.getCivilization(0).vision.keySet()) {
+                            if (pat.getSystemID() == sys.getPath().getSystemID() && universe.getCivilization(0).vision.get(pat) > VisionTypes.UNDISCOVERED) {
                                 g2d.setColor(sys.getColor());
                                 Ellipse2D.Float system = new Ellipse2D.Float(sys.getPosition().x, sys.getPosition().y, 2, 2);
                                 g2d.fill(system);
@@ -88,12 +89,12 @@ public class UniverseRenderer extends JPanel {
             }
 
             for (ControlDrawStats c : drawer.controlDrawStats) {
-                for (UniversePath pa : Globals.universe.getCivilization(0).vision.keySet()) {
-                    if (pa.getSystemID() == c.getUniversePath().getSystemID() && Globals.universe.getCivilization(0).vision.get(pa) > VisionTypes.UNDISCOVERED) {
+                for (UniversePath pa : universe.getCivilization(0).vision.keySet()) {
+                    if (pa.getSystemID() == c.getUniversePath().getSystemID() && universe.getCivilization(0).vision.get(pa) > VisionTypes.UNDISCOVERED) {
                         //Draw control
                         Point pos = c.getPos();
                         Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 5, pos.y - 5, 10, 10);
-                        switch (Globals.universe.getCivilization(0).vision.get(pa)) {
+                        switch (universe.getCivilization(0).vision.get(pa)) {
                             case VisionTypes.EXISTS:
                                 g2d.setColor(Color.gray);
                                 break;
