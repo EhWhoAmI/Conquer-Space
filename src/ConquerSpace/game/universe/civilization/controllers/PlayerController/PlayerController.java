@@ -16,12 +16,13 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class PlayerController implements CivilizationController {
-    public static boolean isOpen = true;
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
-    UniverseDisplayer displayer;
-    UserInterface userInterface;
-    TurnSaveWindow tsWindow;
-    AlertDisplayer alertDisplayer;
+    
+    public UniverseDisplayer displayer;
+    public UserInterface userInterface;
+    public TurnSaveWindow tsWindow;
+    public AlertDisplayer alertDisplayer;
+    
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
         displayer.setVisible(false);
@@ -38,7 +39,7 @@ public class PlayerController implements CivilizationController {
     public void init(Universe u, StarDate d) {
         displayer = new UniverseDisplayer(u);
         userInterface = new UserInterface(u);
-        tsWindow = new TurnSaveWindow(d);
+        tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();
     }
 }

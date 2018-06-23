@@ -1,5 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.UniversePath;
+
 /**
  * A star.
  *
@@ -13,6 +15,8 @@ public class Star extends SpaceObject {
     private int parentSector;
 
     int id;
+    
+    private int ownerID = -1;
 
     /**
      * @see StarTypes
@@ -82,4 +86,19 @@ public class Star extends SpaceObject {
         return parentSector;
     }
 
+    public int getId() {
+        return id;
+    }
+    
+    public UniversePath getUniversePath() {
+        return (new UniversePath(parentSector, parentStarSystem, id, true));
+    }
+    
+    public int getOwnerID(){
+        return ownerID;
+    }
+    
+    public void setOwnerID(int id) {
+        this.ownerID = id;
+    }
 }

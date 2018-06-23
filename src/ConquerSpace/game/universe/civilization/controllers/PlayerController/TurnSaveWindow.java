@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.StarDate;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.start.gui.Manual;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -30,8 +31,10 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
 
     private boolean isPaused = true;
     private StarDate date;
+    private Universe universe;
 
-    public TurnSaveWindow(StarDate date) {
+    public TurnSaveWindow(StarDate date, Universe u) {
+        universe = u;
         this.date = date;
         JPanel pan = new JPanel();
 
@@ -67,7 +70,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
         });
 
         runningstatsButton.addActionListener((e) -> {
-            DebugStatsWindow.getInstance();
+            DebugStatsWindow.getInstance(universe);
         });
 
         pan.add(turnLabel);

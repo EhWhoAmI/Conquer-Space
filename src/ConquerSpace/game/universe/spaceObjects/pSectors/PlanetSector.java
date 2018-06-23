@@ -13,17 +13,12 @@ import javax.swing.JTabbedPane;
  */
 public class PlanetSector extends SpaceObject{
     public Economy economy;
-    private int id;
+    public int id;
+    
+    @Deprecated
     private int owner = -1;
     
-    public PlanetSector(int id, int owner) {
-        this.id = id;
-        economy = new Economy();
-        this.owner = owner;
-    }
-    
-    public PlanetSector(int id) {
-        this.id = id;
+    public PlanetSector() {
         economy = new Economy();
     }
     

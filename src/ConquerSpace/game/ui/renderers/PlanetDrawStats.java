@@ -33,7 +33,7 @@ public class PlanetDrawStats {
         return color;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 

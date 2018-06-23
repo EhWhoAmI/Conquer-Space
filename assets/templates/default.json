@@ -1,0 +1,15 @@
+{
+    "_comment" : "How this works: we call the class' constructor, and edit it with this.",
+    "templates" : [
+        {
+            "_comment" : "Basic population storage",
+            "name" : "Basic residence",
+            "class" : "ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage",
+            "_comment2" : "For this, this is only for integer values. So, use i as int, l is long, b as byte, o as object, f as float, d as double, s as string, bool as boolean",
+            "params" : ["l", "l", "b"],
+            "args" : [
+                100000, 0, 0
+            ]
+        }
+    ]
+}

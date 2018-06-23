@@ -8,8 +8,7 @@ import ConquerSpace.game.buildings.Buildable;
  */
 public class IndustryBuilding extends PlanetSector implements Buildable{
 
-    public IndustryBuilding(int id, int owner) {
-        super(id, owner);
+    public IndustryBuilding() {
     }
     
 }

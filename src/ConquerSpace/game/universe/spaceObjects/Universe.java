@@ -1,7 +1,9 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Universe Object.
@@ -12,9 +14,12 @@ public class Universe extends SpaceObject{
     private ArrayList<Sector> sectors;
     private ArrayList<Civilization> civs;
 
+    public HashMap<UniversePath, Integer> control;
+    
     public Universe() {
         sectors = new ArrayList<>();
         civs = new ArrayList<>();
+        control = new HashMap<>();
     }
     
     /**
@@ -40,6 +45,33 @@ public class Universe extends SpaceObject{
      */
     public void addSector(Sector s) {
         s.id = sectors.size();
+        
+        //Set the id of the parent sector.
+        for (StarSystem e : s.starSystems) {
+            for (int i = 0; i < e.getPlanetCount(); i++) {
+                e.getPlanet(i).setParentSector(s.id);
+            }
+        }
+        
+        //Add sector and contents to control.
+        for(int i = 0; i < s.getStarSystemCount(); i++){
+            StarSystem system = s.getStarSystem(i);
+            
+            //Add planets
+            for(int n = 0; n < system.getPlanetCount(); n++) {
+                Planet p = system.getPlanet(n);
+                control.put(p.getUniversePath(), ControlTypes.NONE_CONTROLLED);
+            }
+            
+            //Add stars
+            for(int n = 0; n < system.getStarCount(); n++) {
+                Star star = system.getStar(n);
+                control.put(star.getUniversePath(), ControlTypes.NONE_CONTROLLED);
+            }
+            
+            //Add star system
+            control.put(system.getUniversePath(), ControlTypes.NONE_CONTROLLED);
+        }
         sectors.add(s);
     }
     
@@ -77,6 +109,37 @@ public class Universe extends SpaceObject{
         //Process turns of all the internals
         for (Sector sector : sectors) {
             sector.processTurn(turn);
+        }
+    }
+    
+    /**
+     * Get the space object (Planet, sector, etc,) as referenced by UniversePath
+     * <code>p</code>.
+     * @param p Path
+     * @return Space object
+     */
+    public SpaceObject getSpaceObject(UniversePath p) {
+        //Get the type
+        if(p.getSectorID() == -1) {
+            return null;
+        } 
+        else {
+            Sector s = sectors.get(p.getSectorID());
+            if(p.getSystemID() == -1) {
+                return s;
+            }
+            else {
+                StarSystem system = s.getStarSystem(p.getSystemID());
+                if(p.getPlanetID() != -1) {
+                    return system.getPlanet(p.getPlanetID());
+                }
+                else if (p.getStarID() != -1) {
+                    return system.getStar(p.getStarID());
+                }
+                else {
+                    return system;
+                }
+            }
         }
     }
 }

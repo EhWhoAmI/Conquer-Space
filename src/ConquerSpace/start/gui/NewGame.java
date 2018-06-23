@@ -113,7 +113,11 @@ public class NewGame extends JFrame implements ActionListener {
 
         seedLabel = new JLabel("Seed");
         seedText = new JTextField();
-        seedText.setText("" + System.currentTimeMillis());
+        if (Globals.settings.getProperty("debug") != null && Globals.settings.getProperty("debug").equals("yes")) {
+            seedText.setText("test");
+        } else {
+            seedText.setText("" + System.currentTimeMillis());
+        }
 
         quoteLabel = new JLabel("Good luck -- Have Fun!");
         exitButton = new JButton("Done!");
@@ -127,7 +131,7 @@ public class NewGame extends JFrame implements ActionListener {
         civNameTextField = new JTextField("Humans");
 
         civSymbolLabel = new JLabel("Civilization Symbol");
-        //Greek symbol list
+        //symbol list (Alphabet)
         String[] list = new String[26];
         for (int i = 0; i < list.length; i++) {
             list[i] = String.valueOf((char) (i + 65));

@@ -1,5 +1,6 @@
 package ConquerSpace.util;
 
+import static ConquerSpace.ConquerSpace.localeMessages;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class ExceptionHandling {
                     + "Here's some information for the developers.\n\n"
                     + "Conquer Space v " + ConquerSpace.ConquerSpace.VERSION.toString() + "\n"
                     + "Build: " + ConquerSpace.ConquerSpace.BUILD_NUMBER + "\n\n" + what;
-            JOptionPane.showMessageDialog(null, header, ex.getClass().getName() + ": " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, String.format(localeMessages.getMessage("errorhandlingheader"), ConquerSpace.ConquerSpace.VERSION, ConquerSpace.ConquerSpace.VERSION) + "\n\n" + what, ex.getClass().getName() + ": " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             //Create dump file
             File file = new File("crashlog.txt");
             if (!file.exists())file.createNewFile();

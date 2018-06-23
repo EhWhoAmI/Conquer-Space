@@ -5,6 +5,7 @@
 # LOGGER -- Logger for this script. Check out org.apache.logging.log4j.Logger.
 # universeConfig -- Universe Config object. Check out ConquerSpace.game.universe.UniverseConfig
 
+from ConquerSpace.game import UniversePath
 from ConquerSpace.game.universe import GalaticLocation
 from ConquerSpace.game.universe.civilization.controllers.AIController import AIController
 from ConquerSpace.game.universe.civilization.controllers.PlayerController import PlayerController
@@ -118,10 +119,11 @@ for i in range(universeSize):
             for b in range(planet.getPlanetSectorCount()):
                 if planet.getPlanetType() == PlanetTypes.GAS:
                     # Set to all gas raw resource
-                    rawr = RawResource(b)
+                    rawr = RawResource()
                     # Add other resources
                     # Types of resources
-                    resourceTypesCount = random.randint(1, 3)
+                    # One planet sector can have a max of 3 kinds of resources.
+                    resourceTypesCount = random.randint(0, 3)
                     resourceTypes = list(range(RAW_RESOURCE_TYPES_COUNT))
                     for k in range(resourceTypesCount):
                         resourceSelection = random.choice(resourceTypes)
@@ -131,7 +133,7 @@ for i in range(universeSize):
                     planet.setPlanetSector(b, rawr)
                 else:
                     # Select random raw resource
-                    rawr = RawResource(b)
+                    rawr = RawResource()
                     rawr.addResource(RawResourceTypes.GAS, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
                     planet.setPlanetSector(b, rawr)
                     
@@ -209,15 +211,14 @@ HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
 start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
-playerCiv.setHomeplanetPath(HomesectorID, start[0], start[1])
-
+playerCiv.setStartingPlanet(UniversePath(HomesectorID, start[0], start[1]))
 # Get planet then add 1 population center
 # Now, choose one random thingy, and enter it.
-homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
-homeP.setName(civHomePlanetName)
-planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
+#homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
+#homeP.setName(civHomePlanetName)
+#planetSectorID = random.randint(0, homeP.getPlanetSectorCount())
 # Owner id is 0 for player
-homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, 0))
+# homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, 0))
 universeObject.addCivilization(playerCiv)
 
 # Civ list
@@ -265,14 +266,15 @@ for p in range(civCount):
     LOGGER.trace("Choosing home star system")
 
     start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
-    civ.setHomeplanetPath(HomesectorID, start[0], start[1])
+    civ.setStartingPlanet(UniversePath(HomesectorID, start[0], start[1]))
     
     # Get planet then add 1 population center
     # Now, choose one random thingy, and enter it.
-    homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
-    planetSectorID = random.randint(0, homeP.getPlanetSectorCount()-1)
-    homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, p+1));
-    homeP.setName(civ.getHomePlanetName())
+    # homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
+    # planetSectorID = random.randint(0, homeP.getPlanetSectorCount()-1)
+    
+    # homeP.setPlanetSector(planetSectorID, PopulationStorage(CIV_STARTING_POP_STORAGE_MAX, CIV_STARTING_POPULATION, 100, planetSectorID, p+1));
+    # homeP.setName(civ.getHomePlanetName())
     
     symbol = random.choice(symbolList)
     symbolList.remove(symbol)

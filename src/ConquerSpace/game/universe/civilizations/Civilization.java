@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilizations;
 
 import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.templates.Template;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
@@ -10,6 +11,8 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -40,20 +43,24 @@ public class Civilization {
 
     public HashMap<UniversePath, Integer> vision;
 
+    private UniversePath startingPlanet;
+
+    private HashMap<String, Template> templatesList;
+
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
         //Set a temp starting point as in 0:0:0
-        this.control.add(new UniversePath(0,0,0));
-        
+        this.control.add(new UniversePath(0, 0, 0));
+
         vision = new HashMap<>();
         //Add all the vision.
-        for(int i = 0; i < u.getSectorCount(); i++) {
+        for (int i = 0; i < u.getSectorCount(); i++) {
             Sector s = u.getSector(i);
-            for (int n = 0; n < s.getStarSystemCount(); n ++) {
+            for (int n = 0; n < s.getStarSystemCount(); n++) {
                 this.vision.put(new UniversePath(i, n), VisionTypes.UNDISCOVERED);
                 StarSystem sys = s.getStarSystem(n);
-                for (int h = 0; h < sys.getPlanetCount(); h ++) {
+                for (int h = 0; h < sys.getPlanetCount(); h++) {
                     //Add planets
                     this.vision.put(new UniversePath(i, n, h), VisionTypes.UNDISCOVERED);
                 }
@@ -64,6 +71,8 @@ public class Civilization {
         }
         pop = new Population();
         economy = new Economy();
+
+        templatesList = new HashMap<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -170,7 +179,7 @@ public class Civilization {
         } else {
             builder.append("Player");
         }
-        builder.append(", Home system=Sector " + getHomesectorID() + " System " + getHomeSystemID() + " Planet " + getHomePlanetID());
+        builder.append(", Home system=Sector " + startingPlanet.toString());
         builder.append(">\n");
         return (builder.toString());
     }
@@ -182,8 +191,32 @@ public class Civilization {
             vision.put(p, VisionTypes.KNOWS_ALL);
         }
     }
-    
+
     public void processTurn(int turn) {
-            //Stat everything
+        //Stat everything
+    }
+
+    public void setStartingPlanet(UniversePath startingPlanet) {
+        this.startingPlanet = startingPlanet;
+    }
+
+    public UniversePath getStartingPlanet() {
+        return startingPlanet;
+    }
+
+    public void addTemplate(Template b, String name) {
+        templatesList.put(name, b);
+    }
+
+    public Template getTemplate(String name) {
+        return (templatesList.get(name));
+    }
+
+    public void updateTemplate(String name, Template b) {
+        templatesList.put(name, b);
+    }
+    
+    public String[] getTemplateNameList() {
+        return ((String[] )templatesList.keySet().toArray());
     }
 }

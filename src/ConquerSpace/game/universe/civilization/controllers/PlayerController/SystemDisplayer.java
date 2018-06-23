@@ -4,6 +4,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.ui.renderers.PlanetDrawStats;
 import ConquerSpace.game.ui.renderers.SystemInternalsDrawer;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
+import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
@@ -12,7 +13,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -25,10 +28,15 @@ public class SystemDisplayer extends JFrame implements MouseListener{
     int sectorID;
     int systemID;
     
-    private Universe universe;
+    private JPopupMenu menu;
     
+    private Universe universe;
+    private StarSystem system;
     public SystemDisplayer(StarSystem sys, Universe universe) {
         this.universe = universe;
+        this.system = sys;
+        //Init popup menu
+        menu = new JPopupMenu();
         
         setTitle("Star System " + sys.getId());
         systemID = sys.getId();
@@ -51,15 +59,27 @@ public class SystemDisplayer extends JFrame implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent e) {
         //Double click opens system.
-        if (e.getClickCount() == 2) {
+        if (e.getClickCount() == 2 || SwingUtilities.isLeftMouseButton(e)) {
             //Get which system clicked.
             for (PlanetDrawStats pstats : stats.stats.planetDrawStats) {
                 if (Math.hypot(pstats.getPos().x - e.getX(), pstats.getPos().y - e.getY()) < pstats.getSize()) {
-                    LOGGER.trace("Mouse clicked in planet " + pstats.getId() + "!");
-                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getId()), Globals.turn);
+                    LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
+                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getID()), Globals.turn);
                     break;
                 }
             }
+        }
+        else if(SwingUtilities.isRightMouseButton(e)) {
+            //Show right click...
+            Planet clicked = null;
+            for (PlanetDrawStats pstats : stats.stats.planetDrawStats) {
+                if (Math.hypot(pstats.getPos().x - e.getX(), pstats.getPos().y - e.getY()) < pstats.getSize()) {
+                    LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
+                    clicked = system.getPlanet(pstats.getID());
+                    break;
+                }
+            }
+            menu.add("Planet " + clicked.getId());
         }
     }
 

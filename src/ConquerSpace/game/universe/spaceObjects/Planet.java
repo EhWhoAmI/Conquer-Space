@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalaticLocation;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
 import ConquerSpace.game.universe.civilizations.stats.Population;
@@ -21,7 +22,7 @@ public class Planet extends SpaceObject {
     
     int id;
 
-    private int ownerID;
+    private int ownerID = -1;
     private int surfaceArea;
     //Empty as default -- undiscovered
     private String name = "";
@@ -127,6 +128,7 @@ public class Planet extends SpaceObject {
     }
 
     public void setPlanetSector(int index, PlanetSector sector) {
+        sector.id = index;
         planetSectors[index] = sector;
     }
 
@@ -183,7 +185,7 @@ public class Planet extends SpaceObject {
     public void processTurn(int turn) {
         int index = 0;
         HashMap<Integer, Integer> control = new HashMap<>();
-        for (PlanetSector planetSector : planetSectors) {
+        for (PlanetSector planetSector : planetSectors ) {
             planetSector.processTurn(turn);
 
             //Parse building buildings
@@ -240,11 +242,19 @@ public class Planet extends SpaceObject {
         return name;
     }
 
-    public void setParentSector(int parentSector) {
+    void setParentSector(int parentSector) {
         this.parentSector = parentSector;
     }
 
-    public void setParentStarSystem(int parentStarSystem) {
+    void setParentStarSystem(int parentStarSystem) {
         this.parentStarSystem = parentStarSystem;
+    }
+    
+    public float getPlanetDegrees() {
+        return (orbitalDistance.getDegrees());
+    }
+    
+    public UniversePath getUniversePath() {
+        return (new UniversePath(ownerID, parentStarSystem, id));
     }
 }

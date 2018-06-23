@@ -20,8 +20,7 @@ public class RawResource extends PlanetSector{
     public ArrayList<Resource> resources;
 
     //Raw Resource will ALWAYS have no owner
-    public RawResource(int id) {
-        super(id);
+    public RawResource() {
         resources = new ArrayList<>();
     }
     

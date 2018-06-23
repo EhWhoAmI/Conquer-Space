@@ -14,5 +14,11 @@
 # crash logs
 crashlog.txt
 
+# Universe dump files
+universe.dump
+
+# Dump files in general for later
+*.dump
+
 # Javadoc files
 /docs/

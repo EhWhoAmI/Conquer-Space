@@ -8,8 +8,7 @@ import ConquerSpace.game.buildings.Buildable;
  */
 public class DefenseBuilding extends MilitaryBuilding implements Buildable{
 
-    public DefenseBuilding(int id, int owner) {
-        super(id, owner);
+    public DefenseBuilding() {
     }
     
 }

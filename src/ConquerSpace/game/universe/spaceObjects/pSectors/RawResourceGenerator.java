@@ -8,8 +8,7 @@ import ConquerSpace.game.buildings.Buildable;
  */
 public class RawResourceGenerator extends IndustryBuilding implements Buildable{
 
-    public RawResourceGenerator(int id, int owner) {
-        super(id, owner);
+    public RawResourceGenerator() {
     }
     
 }

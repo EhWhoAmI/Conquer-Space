@@ -10,12 +10,13 @@ import java.util.ArrayList;
  */
 public class Sector extends SpaceObject {
 
-    private ArrayList<StarSystem> starSystems;
+    ArrayList<StarSystem> starSystems;
     private GalaticLocation loc;
     int id;
 
     /**
      * Creates a new sector
+     *
      * @param location Galatic location of the sector
      * @param id id of sector
      */
@@ -27,11 +28,20 @@ public class Sector extends SpaceObject {
 
     /**
      * Add a star system to this.
+     *
      * @param e Star system
      */
     public void addStarSystem(StarSystem e) {
         e.setParent(id);
         e.id = starSystems.size();
+
+        for (int i = 0; i < e.getPlanetCount(); i++) {
+            e.getPlanet(i).setParentSector(id);
+        }
+        
+        for (int i = 0; i < e.getStarCount(); i++) {
+            e.getStar(i).setParentSector(id);
+        }
         
         starSystems.add(e);
         starSystems.trimToSize();
@@ -39,6 +49,7 @@ public class Sector extends SpaceObject {
 
     /**
      * Get star system
+     *
      * @param i id of system
      * @return get the star system i
      */
@@ -48,6 +59,7 @@ public class Sector extends SpaceObject {
 
     /**
      * Get number of star systems.
+     *
      * @return number of star systems
      */
     public int getStarSystemCount() {
@@ -56,6 +68,7 @@ public class Sector extends SpaceObject {
 
     /**
      * Get the galatic location of this sector
+     *
      * @return Galatic location of this sector
      */
     public GalaticLocation getGalaticLocation() {
@@ -68,6 +81,7 @@ public class Sector extends SpaceObject {
 
     /**
      * Readable string
+     *
      * @return This sector in a readable string
      */
     public String toReadableString() {
@@ -106,5 +120,5 @@ public class Sector extends SpaceObject {
         for (StarSystem starSystem : starSystems) {
             starSystem.processTurn(turn);
         }
-    }    
+    }
 }

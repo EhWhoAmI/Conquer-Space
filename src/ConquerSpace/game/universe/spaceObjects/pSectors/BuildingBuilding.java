@@ -15,8 +15,7 @@ public class BuildingBuilding extends PlanetSector{
     private PlanetSector sector;
     private Planet parent;
     
-    public BuildingBuilding(int id, int turns, PlanetSector sector, int owner, Planet parent) {
-        super(id, owner);
+    public BuildingBuilding(int turns, PlanetSector sector, Planet parent) {
         this.turns = turns;
         this.sector = sector;
         this.parent = parent;

@@ -69,7 +69,7 @@ public class SystemInternalsDrawer {
         }
 
         Point starPos = RendererMath.polarCoordToCartesianCoord(new GalaticLocation(0, 0), new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
-        StarDrawStats sds = new StarDrawStats(star.id, starPos, starSize * 5, c);
+        StarDrawStats sds = new StarDrawStats(star.getId(), starPos, starSize * 5, c);
         stats.addStarDrawStats(sds);
         LOGGER.trace("System " + sys.getId() + " has " + sys.getPlanetCount() + " planets");
         for (int n = 0; n < sys.getPlanetCount(); n++) {
@@ -91,7 +91,7 @@ public class SystemInternalsDrawer {
             int degs = rand.nextInt(361);
             LOGGER.trace("Degrees: " + degs + " distance " + p.getOrbitalDistance());
             Point point = RendererMath.polarCoordToCartesianCoord(
-                    new GalaticLocation(degs, p.getOrbitalDistance()), 
+                    new GalaticLocation(p.getPlanetDegrees(), p.getOrbitalDistance()), 
                     new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
             
             String playerSymbol = "";
