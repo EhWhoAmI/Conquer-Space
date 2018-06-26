@@ -22,7 +22,7 @@ public class Planet extends SpaceObject {
     
     int id;
 
-    private int ownerID = -1;
+    private int ownerID = ControlTypes.NONE_CONTROLLED;
     private int surfaceArea;
     //Empty as default -- undiscovered
     private String name = "";
@@ -255,6 +255,6 @@ public class Planet extends SpaceObject {
     }
     
     public UniversePath getUniversePath() {
-        return (new UniversePath(ownerID, parentStarSystem, id));
+        return (new UniversePath(parentSector, parentStarSystem, id));
     }
 }

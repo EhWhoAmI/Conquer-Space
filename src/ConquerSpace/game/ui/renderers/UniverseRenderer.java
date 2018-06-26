@@ -26,6 +26,7 @@ public class UniverseRenderer extends JPanel {
     public UniverseDrawer drawer;
 
     Universe universe;
+
     public UniverseRenderer(Dimension bounds, Universe universe) {
         this.bounds = bounds;
         this.universe = universe;
@@ -66,18 +67,18 @@ public class UniverseRenderer extends JPanel {
 
                     // Draw star systems
                     for (SystemDrawStats sys : s.systems) {
-                        for (UniversePath pat : universe.getCivilization(0).vision.keySet()) {
-                            if (pat.getSystemID() == sys.getPath().getSystemID() && universe.getCivilization(0).vision.get(pat) > VisionTypes.UNDISCOVERED) {
-                                g2d.setColor(sys.getColor());
-                                Ellipse2D.Float system = new Ellipse2D.Float(sys.getPosition().x, sys.getPosition().y, 2, 2);
-                                g2d.fill(system);
+                        if (universe.getCivilization(0).vision.get(sys.getPath()) > VisionTypes.UNDISCOVERED) {
+                            System.out.println("Sysem visible!" + sys.getPath());
+                            g2d.setColor(sys.getColor());
+                            Ellipse2D.Float system = new Ellipse2D.Float(sys.getPosition().x, sys.getPosition().y, 2, 2);
+                            g2d.fill(system);
 
-                                Line2D.Float systemln = new Line2D.Float(sys.getPosition(), p);
-                                g2d.setColor(Color.orange);
-                                //Unncomment for debugging
-                                //g2d.draw(systemln);
-                            }
+                            Line2D.Float systemln = new Line2D.Float(sys.getPosition(), p);
+                            g2d.setColor(Color.orange);
+                            //Unncomment for debugging
+                            //g2d.draw(systemln);
                         }
+
                     }
                     g2d.setColor(Color.RED);
                     g2d.draw(sector);

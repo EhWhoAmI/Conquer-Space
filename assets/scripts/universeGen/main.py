@@ -117,7 +117,7 @@ for i in range(universeSize):
             planet = Planet(ptype, orbitalDistance, planetSize, n, r, i)
             # Set planet sectors
             for b in range(planet.getPlanetSectorCount()):
-                if planet.getPlanetType() == PlanetTypes.GAS:
+                if planet.getPlanetType() == PlanetTypes.ROCK:
                     # Set to all gas raw resource
                     rawr = RawResource()
                     # Add other resources

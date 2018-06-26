@@ -8,4 +8,8 @@ assets/scripts/ai/normal/main.py
 assets/scripts/universeGen/main.py
 assets/scripts/universeGen/generation.py
 assets/scripts/universeGen/constants.py
+assets/credits.txt
+assets/BUILDNO
 assets/log4j2.xml
+assets/templates/default.json
+assets/i18n/ApplicationMessages_en_US.properties

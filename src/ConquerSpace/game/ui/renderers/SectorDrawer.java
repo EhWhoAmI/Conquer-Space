@@ -24,7 +24,7 @@ public class SectorDrawer {
     public int sectorDrawnSize;
     public int sizeOfLtyr;
     public Point center;
-    
+
     private Universe universe;
 
     public SectorDrawer(Sector sector, Universe u, Dimension bounds) {
@@ -60,13 +60,14 @@ public class SectorDrawer {
             SystemDrawStats sds = new SystemDrawStats(p, c, sector.getStarSystem(i).getId(), new UniversePath(sector.getStarSystem(i).getParent(), sector.getStarSystem(i).getId()));
             stats.add(sds);
         }
-        for(int n = 0; n < universe.getCivilizationCount(); n++) {
-            Civilization c = universe.getCivilization(n);
-            for(UniversePath p : c.control) {
-                if (p.getSystemID() > -1 && p.getSectorID() == sector.getID()) {
-                    //Calculate the thingy
-                    //Get sector
-                    ControlDrawStats cds = new ControlDrawStats(stats.get(p.getSystemID()).getPosition(), c.getColor(), p);
+        for (UniversePath p : universe.control.keySet()) {
+            if (p.getSystemID() > -1 && p.getSectorID() == sector.getID() && universe.control.get(p) > -1) {
+                //Calculate the thingy
+                //Get sector
+                if (universe.control.get(p) > -1) {
+                    ControlDrawStats cds = new ControlDrawStats(
+                            stats.get(p.getSystemID()).getPosition(),
+                            universe.getCivilization(universe.control.get(p)).getColor(), p);
                     controlDrawStats.add(cds);
                 }
             }

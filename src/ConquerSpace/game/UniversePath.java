@@ -10,7 +10,7 @@ package ConquerSpace.game;
  */
 public class UniversePath {
     //-1 is none selected
-    
+
     /**
      * Id of sector
      */
@@ -31,7 +31,7 @@ public class UniversePath {
      * ID of object in orbit
      */
     private int orbitID = -1;
-    
+
     @Deprecated
     public UniversePath(String path) {
         parse(path);
@@ -45,6 +45,7 @@ public class UniversePath {
 
     /**
      * Creates a new UniversePath object
+     *
      * @param sectorID ID of sector
      * @param systemID ID of system
      * @param planetID ID of planet
@@ -54,22 +55,25 @@ public class UniversePath {
         this.systemID = systemID;
         this.planetID = planetID;
     }
-    
+
     /**
      * Creates a new UniversePath object
+     *
      * @param sectorID id of sector
      * @param systemID id of star system
      * @param starID id of star
-     * @param isstar ignore this. Put anything that is a bool. Just for reconition of this method.
+     * @param isstar ignore this. Put anything that is a bool. Just for
+     * reconition of this method.
      */
     public UniversePath(int sectorID, int systemID, int starID, boolean isstar) {
         this.sectorID = sectorID;
         this.systemID = systemID;
         this.starID = planetID;
     }
-    
+
     /**
      * Creates a new UniversePath object
+     *
      * @param sectorID id of sector
      * @param systemID id of star system
      * @param planetID id of planet
@@ -81,14 +85,16 @@ public class UniversePath {
         this.planetID = planetID;
         this.orbitID = orbitID;
     }
-    
+
     /**
      * Creates a new UniversePath object
+     *
      * @param sectorID ID of sector
      * @param systemID ID of system
      * @param starID ID of star
      * @param orbitID ID of object in oject
-     * @param isstar ignore this. Put anything that is a bool. Just for reconition of this Constructor.
+     * @param isstar ignore this. Put anything that is a bool. Just for
+     * reconition of this Constructor.
      */
     public UniversePath(int sectorID, int systemID, int starID, int orbitID, boolean isstar) {
         this.sectorID = sectorID;
@@ -96,30 +102,33 @@ public class UniversePath {
         this.starID = starID;
         this.orbitID = orbitID;
     }
-    
+
     /**
      * Creates a new UniversePath object
+     *
      * @param sectorID ID of sector
      */
-   public UniversePath(int sectorID) {
+    public UniversePath(int sectorID) {
         this.sectorID = sectorID;
     }
-   
-   /**
-    * Creates a new UniversePath object
-    * @param sectorID ID of sector
-    * @param systemID ID of system
-    */
-   public UniversePath(int sectorID, int systemID) {
+
+    /**
+     * Creates a new UniversePath object
+     *
+     * @param sectorID ID of sector
+     * @param systemID ID of system
+     */
+    public UniversePath(int sectorID, int systemID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
     }
-   
-   /**
-    * Parses the universe path from a string
-    * @param s the string
-    * @deprecated 
-    */
+
+    /**
+     * Parses the universe path from a string
+     *
+     * @param s the string
+     * @deprecated
+     */
     public void parse(String s) {
         int sectorID = -1;
         int systemID = -1;
@@ -138,9 +147,10 @@ public class UniversePath {
             }
         }
     }
-    
+
     /**
      * Get the id of the planet selected
+     *
      * @return Planet ID
      */
     public int getPlanetID() {
@@ -149,6 +159,7 @@ public class UniversePath {
 
     /**
      * Get the id of the sector selected
+     *
      * @return Sector ID
      */
     public int getSectorID() {
@@ -157,14 +168,16 @@ public class UniversePath {
 
     /**
      * Get the id of the Star system
+     *
      * @return Star system ID
      */
     public int getSystemID() {
         return systemID;
     }
-    
+
     /**
      * To string
+     *
      * @return this object in a string form, so that it can be parsed.
      */
     @Override
@@ -186,6 +199,7 @@ public class UniversePath {
 
     /**
      * Get id of the object in orbit
+     *
      * @return Orbit ID
      */
     public int getOrbitID() {
@@ -194,9 +208,24 @@ public class UniversePath {
 
     /**
      * Get id of star
+     *
      * @return Star ID
      */
     public int getStarID() {
         return starID;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof UniversePath) {
+            UniversePath other = (UniversePath) obj;
+            return ((this.sectorID == other.sectorID) && (this.starID == other.starID) && (this.planetID == other.planetID) && (this.orbitID == other.orbitID) && (this.systemID == other.systemID));
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return(("" + sectorID + systemID + starID + planetID + orbitID).hashCode());
     }
 }

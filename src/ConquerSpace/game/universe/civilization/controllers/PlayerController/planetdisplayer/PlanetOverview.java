@@ -1,6 +1,8 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
+import ConquerSpace.game.universe.resources.RawResourceTypes;
+import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
@@ -14,8 +16,10 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -30,18 +34,24 @@ public class PlanetOverview extends JPanel {
 
     private JPanel planetOverview;
     private JPanel planetSectors;
+    private JPanel resourcePanels;
     private JLabel planetName;
     private JLabel planetPath;
+    private JLabel planetType;
+    private JLabel ownerLabel;
+    private JList<String> resoueceList;
     private Planet p;
 
     public PlanetOverview(Planet p) {
         this.p = p;
-        setLayout(new GridLayout(1, 2));
+        setLayout(new GridLayout(2, 2));
 
         planetOverview = new JPanel();
         //If name is nothing, then call it unnamed planet
         planetName = new JLabel();
         planetPath = new JLabel();
+        planetType = new JLabel("Planet type: " + p.getPlanetType());
+        ownerLabel = new JLabel();
 
         //Init planetname
         if (p.getName() == "") {
@@ -56,22 +66,65 @@ public class PlanetOverview extends JPanel {
         name.append("" + p.getParentSector());
         name.append(" Star System ");
         name.append("" + p.getParentStarSystem());
+        name.append(" Planet id " + p.getId());
         planetPath.setText(name.toString());
 
+        //Init owner
+        
+        if(p.getOwnerID() > -1) {
+            ownerLabel.setText("Owner: " + p.getOwnerID());
+        }
+        else {
+            ownerLabel.setText("No owner");
+        }
+        
         planetSectors = new JPanel();
         PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p);
         JPanel wrapper = new JPanel();
         wrapper.add(sectorDisplayer);
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
-
+        
+        
+        resourcePanels = new JPanel();
+        DefaultListModel<String> dataModel = new DefaultListModel<>();
+        for (PlanetSector planetSector : p.planetSectors) {
+            if (planetSector instanceof RawResource) {
+                RawResource res = (RawResource) planetSector;
+                for (Resource resource : res.resources) {
+                    String resourceName = "";
+                    switch (resource.getType()) {
+                        case RawResourceTypes.GAS:
+                            resourceName = "Gas";
+                            break;
+                        case RawResourceTypes.ROCK:
+                            resourceName = "Rock";
+                            break;
+                        case RawResourceTypes.METAL:
+                            resourceName = "Metal";
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!dataModel.contains(resourceName)) {
+                        dataModel.addElement(resourceName);;
+                    }
+                }
+            }
+        }
+        resoueceList = new JList<>(dataModel);
+        
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
+        planetOverview.add(planetType);
+        planetOverview.add(ownerLabel);
+        
+        resourcePanels.add(resoueceList);
 
         add(planetOverview);
         add(planetSectors);
-
+        add(resourcePanels);
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {
@@ -146,7 +199,7 @@ public class PlanetOverview extends JPanel {
                     build.addActionListener((l) -> {
                         BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index);
                         //sector.addWindowListener();
-                        
+
                         sector.setVisible(true);
                     });
                     menu.add(build);

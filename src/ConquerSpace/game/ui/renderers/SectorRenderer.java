@@ -59,7 +59,9 @@ public class SectorRenderer extends JPanel {
         
         for (SystemDrawStats s : drawer.stats) {
             for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                if (p.getSystemID()== s.getPath().getSystemID()&& universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                //Check vision
+                if (p.getSystemID()== s.getPath().getSystemID() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                    System.out.println("Drawing vision for " + p);
                     Ellipse2D.Float star = new Ellipse2D.Float(s.getPosition().x, s.getPosition().y, 20, 20);
                     g2d.setColor(s.getColor());
                     g2d.fill(star);

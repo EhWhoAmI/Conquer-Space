@@ -28,7 +28,6 @@ public class GameController {
         //Init universe
         GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
         updater.initGame();
-        updater.calculateControl();
         //Load the player
 
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date);
