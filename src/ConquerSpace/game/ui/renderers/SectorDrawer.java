@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class SectorDrawer {
 
     public ArrayList<SystemDrawStats> stats;
-    public ArrayList<ControlDrawStats> controlDrawStats;
     public int sectorDrawnSize;
     public int sizeOfLtyr;
     public Point center;
@@ -30,7 +29,6 @@ public class SectorDrawer {
     public SectorDrawer(Sector sector, Universe u, Dimension bounds) {
         universe = u;
         stats = new ArrayList<>();
-        controlDrawStats = new ArrayList<>();
         //Calculate center.
         sectorDrawnSize = (bounds.height < bounds.width) ? bounds.height : bounds.width;
 
@@ -59,18 +57,6 @@ public class SectorDrawer {
             }
             SystemDrawStats sds = new SystemDrawStats(p, c, sector.getStarSystem(i).getId(), new UniversePath(sector.getStarSystem(i).getParent(), sector.getStarSystem(i).getId()));
             stats.add(sds);
-        }
-        for (UniversePath p : universe.control.keySet()) {
-            if (p.getSystemID() > -1 && p.getSectorID() == sector.getID() && universe.control.get(p) > -1) {
-                //Calculate the thingy
-                //Get sector
-                if (universe.control.get(p) > -1) {
-                    ControlDrawStats cds = new ControlDrawStats(
-                            stats.get(p.getSystemID()).getPosition(),
-                            universe.getCivilization(universe.control.get(p)).getColor(), p);
-                    controlDrawStats.add(cds);
-                }
-            }
         }
         //Done!
     }

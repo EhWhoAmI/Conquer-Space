@@ -21,14 +21,12 @@ import org.apache.logging.log4j.Logger;
 public class UniverseDrawer {
 
     //Logger
-
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDrawer.class.getName());
 
     public int universeDimensionsLTYR;
     public int universeDrawnSize;
     public int sizeOfLtyr;
-    
-    public ArrayList<ControlDrawStats> controlDrawStats;
+
     public ArrayList<SectorDrawStats> sectorDrawings;
 
     public UniverseDrawer(Universe universe, Dimension bounds) {
@@ -105,7 +103,7 @@ public class UniverseDrawer {
             for (int b = 0; b < s.getStarSystemCount(); b++) {
                 StarSystem sys = s.getStarSystem(b);
                 Point pt = RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation(), center, sizeOfLtyr);
-                
+
                 //Color of star system
                 Color c;
                 switch (sys.getStar(0).type) {
@@ -132,20 +130,5 @@ public class UniverseDrawer {
 
         }
         LOGGER.info(placedOutside + " sector(s) outside!");
-        //Now for the control
-        controlDrawStats = new ArrayList<>();
-        for (int n = 0; n < universe.getCivilizationCount(); n++) {
-            Civilization civ = universe.getCivilization(n);
-            for (UniversePath p : civ.control) {
-                LOGGER.trace(p.toString());
-                if (p.getSystemID() > -1) {
-                    //Calculate the thingy
-                    //Get sector
-                    int sectorid = p.getSectorID();
-                    ControlDrawStats stats = new ControlDrawStats(sectorDrawings.get(sectorid).systems.get(p.getSystemID()).getPosition(), civ.getColor(), p);
-                    controlDrawStats.add(stats);
-                }
-            }
-        }
     }
 }

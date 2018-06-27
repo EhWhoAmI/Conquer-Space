@@ -65,10 +65,23 @@ public class UniverseRenderer extends JPanel {
                     Ellipse2D.Float sector = new Ellipse2D.Float(p.x - s.getRadius(), p.y - s.getRadius(), s.getRadius() * 2, s.getRadius() * 2);
                     Line2D.Float ln = new Line2D.Float(p, new Point(drawer.universeDrawnSize / 2, drawer.universeDrawnSize / 2));
 
-                    // Draw star systems
+                    // Draw star systems   
                     for (SystemDrawStats sys : s.systems) {
-                        if (universe.getCivilization(0).vision.get(sys.getPath()) > VisionTypes.UNDISCOVERED) {
-                            System.out.println("Sysem visible!" + sys.getPath());
+                        if (universe.getCivilization(0).vision.get(sys.getPath()) > 0) {
+                            if (universe.control.get(sys.getPath()) > -1) {
+                                switch (universe.getCivilization(0).vision.
+                                        get(sys.getPath())) {
+                                    case VisionTypes.KNOWS_INTERIOR:
+                                        g2d.setColor(Color.gray);
+                                        break;
+                                    default:
+                                        g2d.setColor(universe.getCivilization(universe.control.get(sys.getPath())).getColor());
+                                }
+                                //Control, if any...
+                                Ellipse2D.Float control = new Ellipse2D.Float(sys.getPosition().x - 5, sys.getPosition().y - 5, 10, 10);
+                                g2d.fill(control);
+                            }
+                            
                             g2d.setColor(sys.getColor());
                             Ellipse2D.Float system = new Ellipse2D.Float(sys.getPosition().x, sys.getPosition().y, 2, 2);
                             g2d.fill(system);
@@ -78,7 +91,6 @@ public class UniverseRenderer extends JPanel {
                             //Unncomment for debugging
                             //g2d.draw(systemln);
                         }
-
                     }
                     g2d.setColor(Color.RED);
                     g2d.draw(sector);
@@ -86,26 +98,7 @@ public class UniverseRenderer extends JPanel {
                     g2d.setColor(Color.orange);
                     //Uncomment this for debugging
                     //g2d.draw(ln);
-                }
-            }
-
-            for (ControlDrawStats c : drawer.controlDrawStats) {
-                for (UniversePath pa : universe.getCivilization(0).vision.keySet()) {
-                    if (pa.getSystemID() == c.getUniversePath().getSystemID() && universe.getCivilization(0).vision.get(pa) > VisionTypes.UNDISCOVERED) {
-                        //Draw control
-                        Point pos = c.getPos();
-                        Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 5, pos.y - 5, 10, 10);
-                        switch (universe.getCivilization(0).vision.get(pa)) {
-                            case VisionTypes.EXISTS:
-                                g2d.setColor(Color.gray);
-                                break;
-                            default:
-                                g2d.setColor(new Color(c.getColor().getRed(), c.getColor().getBlue(), c.getColor().getGreen(), 20));
-
-                        }
-                        g2d.fill(control);
-
-                    }
+                    break;
                 }
             }
             //Draw scale line

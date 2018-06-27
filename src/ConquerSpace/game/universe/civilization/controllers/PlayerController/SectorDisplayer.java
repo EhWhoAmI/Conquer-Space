@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.ui.renderers.SectorDrawer;
 import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
+import ConquerSpace.game.universe.civilizations.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
@@ -54,7 +55,7 @@ public class SectorDisplayer extends JFrame implements MouseListener{
             //Get which system clicked.
             LOGGER.info("Double clicked. Opening system");
             for (SystemDrawStats stats : drawStats.stats) {
-                if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < 25) {
+                if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < 25 && universe.getCivilization(0).vision.get(stats.getPath()) > VisionTypes.UNDISCOVERED) {
                     LOGGER.info("Mouse clicked in system " + stats.getId() + "!");
                     SystemDisplayer d = new SystemDisplayer(universe.getSector(id).getStarSystem(stats.getId()), universe);
                     break;

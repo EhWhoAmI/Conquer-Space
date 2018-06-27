@@ -21,51 +21,57 @@ import javax.swing.JPanel;
  * @author Zyun
  */
 public class SectorRenderer extends JPanel {
-    
+
     private Dimension bounds;
     public SectorDrawer drawer;
-    
+
     private Universe universe;
-    
+
     public SectorRenderer(Dimension bounds, Sector sector, Universe u) {
         this.universe = u;
         //Draw background
         this.bounds = bounds;
-        
+
         drawer = new SectorDrawer(sector, universe, bounds);
-        
+
         setPreferredSize(bounds);
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        
+
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
         g2d.fill(bg);
-        
+
         Ellipse2D.Float sectorCircle = new Ellipse2D.Float(0, 0, drawer.sectorDrawnSize, drawer.sectorDrawnSize);
         g2d.setColor(Color.red);
         g2d.draw(sectorCircle);
-        for (ControlDrawStats c : drawer.controlDrawStats) {
-            
-            Point pos = c.getPos();
-            Ellipse2D.Float control = new Ellipse2D.Float(pos.x - 25, pos.y - 25, 50, 50);
-            g2d.setColor(new Color(c.getColor().getRed(), c.getColor().getBlue(), c.getColor().getGreen(), 127));
-            g2d.fill(control);
-        }
-        
+
         for (SystemDrawStats s : drawer.stats) {
-            for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                //Check vision
-                if (p.getSystemID()== s.getPath().getSystemID() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
-                    System.out.println("Drawing vision for " + p);
-                    Ellipse2D.Float star = new Ellipse2D.Float(s.getPosition().x, s.getPosition().y, 20, 20);
-                    g2d.setColor(s.getColor());
-                    g2d.fill(star);
+            //Check vision
+            if (universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED) {
+                if (universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.KNOWS_INTERIOR) {
+                    //Control
+                    if (universe.control.get(s.getPath()) > -1) {
+                        switch (universe.getCivilization(0).vision.
+                                get(s.getPath())) {
+                            case VisionTypes.KNOWS_INTERIOR:
+                                g2d.setColor(Color.gray);
+                                break;
+                            default:
+                                g2d.setColor(universe.getCivilization(universe.control.get(s.getPath())).getColor().darker());
+                        }
+                        //Control, if any...
+                        Ellipse2D.Float control = new Ellipse2D.Float(s.getPosition().x - 12, s.getPosition().y - 12, 50, 50);
+                        g2d.fill(control);
+                    }
                 }
+                Ellipse2D.Float star = new Ellipse2D.Float(s.getPosition().x, s.getPosition().y, 20, 20);
+                g2d.setColor(s.getColor());
+                g2d.fill(star);
             }
         }
 
