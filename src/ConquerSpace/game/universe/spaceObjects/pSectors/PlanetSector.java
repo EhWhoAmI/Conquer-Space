@@ -2,7 +2,9 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.universe.civilizations.stats.Economy;
+import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -12,6 +14,7 @@ import javax.swing.JTabbedPane;
  * @author Zyun
  */
 public class PlanetSector extends SpaceObject{
+    public ArrayList<Resource> resources;
     public Economy economy;
     public int id;
     
@@ -20,6 +23,7 @@ public class PlanetSector extends SpaceObject{
     
     public PlanetSector() {
         economy = new Economy();
+        resources = new ArrayList<>();
     }
     
     public String toReadableString() {
@@ -50,5 +54,9 @@ public class PlanetSector extends SpaceObject{
         tabbedPane.add("Info", infoPanel);
         root.add(tabbedPane);
         return root;
+    }
+    
+    public void addResource(int type, int amount) {
+        resources.add(new Resource(type, amount));
     }
 }

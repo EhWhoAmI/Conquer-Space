@@ -9,7 +9,11 @@
             "params" : ["l", "l", "b"],
             "args" : [
                 100000, 0, 0
-            ]
+            ],
+            "_comment3" : "Resources it takes to create cost too",
+            "resources" : {
+                
+            }
         }
     ]
 }

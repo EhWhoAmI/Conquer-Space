@@ -11,5 +11,4 @@ assets/scripts/universeGen/constants.py
 assets/credits.txt
 assets/BUILDNO
 assets/log4j2.xml
-assets/templates/default.json
 assets/i18n/ApplicationMessages_en_US.properties

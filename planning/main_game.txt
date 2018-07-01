@@ -1,0 +1,21 @@
+Conquer Space, is a space themed game.
+
+The goal is open ended, though the aim will mostly be:
+
+Conquer Space!
+
+We will try our best to simulate a real empire and things like that. A space one.
+
+We need to accept that other empires are unlike us humans, and may be different, from the
+very fundementals. Culture, and every thing there is. But, we kinda need to have 
+something similar to humans, because that's all we got. I mean, have you ever met an alien?
+(Ok maybe if some archeologist finds this in the far future and we humans have met aliens.
+then yes.)
+
+Though there may be aliens, there is just as much chance there are none. (Unless you are
+in the future and have met aliens. In that case, danm it) So, we may have a galaxy where there
+are no other civilizations, and your own splits as it goes. That will do.
+
+Our focus will be on diplomacy, not killing people. There is a victory condition on 'Peace'.
+
+Try Stellaris. I was inspired by that.

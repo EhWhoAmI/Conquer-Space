@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
-import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -17,15 +16,9 @@ import javax.swing.border.TitledBorder;
  * @author Zyun
  */
 public class RawResource extends PlanetSector{
-    public ArrayList<Resource> resources;
-
     //Raw Resource will ALWAYS have no owner
     public RawResource() {
         resources = new ArrayList<>();
-    }
-    
-    public void addResource(int type, int amount) {
-        resources.add(new Resource(type, amount));
     }
 
     @Override
@@ -36,25 +29,13 @@ public class RawResource extends PlanetSector{
         JPanel infoPanel = new JPanel();
         JLabel title = new JLabel("Raw Resource");
         JLabel idLabel = new JLabel("ID: " + this.getId());
-        JLabel ownerLabel = new JLabel("Owner: No owner");
+        JLabel amountLabel = new JLabel("Amount of resources: " + resources.size());
         //JLabel resourceTitle = new JLabel("Resources");
         
         DefaultListModel<String> resourceList = new DefaultListModel<>();
 
         for(Resource res : resources) {
-            switch (res.getType()) {
-                case RawResourceTypes.GAS:
-                    resourceList.addElement("Gas");
-                    break;
-                case RawResourceTypes.ROCK:
-                    resourceList.addElement("Rock");
-                    break;
-                case RawResourceTypes.METAL:
-                    resourceList.addElement("Metal");
-                    break;
-                default:
-                    break;
-            }
+            resourceList.addElement(res.name);
         }
         
         JList<String> resources = new JList<>(resourceList);
@@ -62,7 +43,7 @@ public class RawResource extends PlanetSector{
         JScrollPane resourceScrollPane = new JScrollPane(resources);
         
         infoPanel.add(idLabel);
-        infoPanel.add(ownerLabel);
+        infoPanel.add(amountLabel);
         infoPanel.add(resourceScrollPane);
         infoPanel.setLayout(new GridLayout(3,1));
         tabbedPane.add("Info", infoPanel);

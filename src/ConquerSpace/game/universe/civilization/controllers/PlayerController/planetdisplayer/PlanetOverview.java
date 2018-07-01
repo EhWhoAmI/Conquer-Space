@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
 
 /**
  * Display sectors and stuff.
@@ -39,7 +40,7 @@ public class PlanetOverview extends JPanel {
     private JLabel planetPath;
     private JLabel planetType;
     private JLabel ownerLabel;
-    private JList<String> resoueceList;
+    private JList<String> resourceList;
     private Planet p;
 
     public PlanetOverview(Planet p) {
@@ -70,57 +71,38 @@ public class PlanetOverview extends JPanel {
         planetPath.setText(name.toString());
 
         //Init owner
-        
-        if(p.getOwnerID() > -1) {
+        if (p.getOwnerID() > -1) {
             ownerLabel.setText("Owner: " + p.getOwnerID());
-        }
-        else {
+        } else {
             ownerLabel.setText("No owner");
         }
-        
+
         planetSectors = new JPanel();
         PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p);
         JPanel wrapper = new JPanel();
         wrapper.add(sectorDisplayer);
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
-        
-        
+
         resourcePanels = new JPanel();
         DefaultListModel<String> dataModel = new DefaultListModel<>();
         for (PlanetSector planetSector : p.planetSectors) {
-            if (planetSector instanceof RawResource) {
-                RawResource res = (RawResource) planetSector;
-                for (Resource resource : res.resources) {
-                    String resourceName = "";
-                    switch (resource.getType()) {
-                        case RawResourceTypes.GAS:
-                            resourceName = "Gas";
-                            break;
-                        case RawResourceTypes.ROCK:
-                            resourceName = "Rock";
-                            break;
-                        case RawResourceTypes.METAL:
-                            resourceName = "Metal";
-                            break;
-                        default:
-                            break;
-                    }
-                    if (!dataModel.contains(resourceName)) {
-                        dataModel.addElement(resourceName);;
-                    }
+            for (Resource s : planetSector.resources) {
+                if (!dataModel.contains(s.name)) {
+                    dataModel.addElement(s.name);
                 }
             }
         }
-        resoueceList = new JList<>(dataModel);
-        
+        resourceList = new JList<>(dataModel);
+        resourceList.setBorder(new TitledBorder("Resources"));
+
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
         planetOverview.add(planetType);
         planetOverview.add(ownerLabel);
-        
-        resourcePanels.add(resoueceList);
+
+        resourcePanels.add(resourceList);
 
         add(planetOverview);
         add(planetSectors);

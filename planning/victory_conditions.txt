@@ -1,0 +1,12 @@
+Victory conditions:
+
+Conquered Space!
+What they said.
+A certain percentage of the star systems in the galaxy have been conquered.
+
+Diplomacy
+The peace option.
+Have peace and form alliance with all the people in it.
+
+Tech victory????
+High enough tech. Should i add this?

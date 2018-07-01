@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -61,15 +62,15 @@ public class MainMenu extends JFrame {
          */
         @Override
         protected void paintComponent(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(Color.BLUE);
-            g2d.fillRect(0, 0, getWidth(), getHeight());
-            g2d.setColor(Color.black);
-
-            g2d.setFont(f);
-            //Turn on antialias, looks better.
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.drawString("Conquer Space", 10, 30);
+            try {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setColor(Color.BLUE);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                
+                //Image is a bit small though.
+                g2d.drawImage(ImageIO.read(new File(System.getProperty("user.dir") + "/assets/img/title.png")), null, 0, 0);
+            } catch (IOException ex) {
+            }
 
         }
     }

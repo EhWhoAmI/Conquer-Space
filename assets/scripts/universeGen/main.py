@@ -113,7 +113,7 @@ for i in range(universeSize):
                 toadd = n
             orbitalDistance = random.randint(lastDist + 1, lastDist+ 1 + (lastDist/2))
             lastDist = orbitalDistance
-            planetSize = random.randint(1, 50)
+            planetSize = random.randint(PLANET_MIN_SIZE, PLANET_MAX_SIZE)
             planet = Planet(ptype, orbitalDistance, planetSize, n, r, i)
             # Set planet sectors
             for b in range(planet.getPlanetSectorCount()):
