@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 /**
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  *
  * @author Zyun
  */
-public class UserInterface extends JFrame {
+public class UserInterface extends JInternalFrame {
 
     //Components
     private JButton industryButton;
@@ -46,6 +46,8 @@ public class UserInterface extends JFrame {
         pan.add(researchButton);
 
         add(pan);
+        setResizable(true);
+        setClosable(true);
         pack();
         setVisible(true);
     }

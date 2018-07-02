@@ -1,7 +1,5 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.Globals;
-import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -9,7 +7,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;

@@ -8,7 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -18,7 +18,7 @@ import javax.swing.Timer;
  *
  * @author Zyun
  */
-public class TurnSaveWindow extends JFrame implements ActionListener {
+public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
     private JLabel turnLabel;
     private JButton pausePlayButton;
@@ -60,7 +60,7 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
             AlertDisplayer disp = AlertDisplayer.getInstance();
             disp.toFront();
         });
-        
+
         exitGameButton.addActionListener((e) -> {
             System.exit(0);
         });
@@ -90,8 +90,8 @@ public class TurnSaveWindow extends JFrame implements ActionListener {
         pan.setLayout(new GridLayout(8, 1, 5, 5));
         add(pan);
         pack();
+        setResizable(true);
         setVisible(true);
-        setAlwaysOnTop(true);
     }
 
     @Override

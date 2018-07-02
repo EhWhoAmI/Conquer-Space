@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,7 +19,7 @@ import javax.swing.JTextField;
  *
  * @author Zyun
  */
-public class BuildPlanetSectorMenu extends JFrame {
+public class BuildPlanetSectorMenu extends JInternalFrame {
 
     private JPanel topWrapper;
     private JLabel planetBuildTypeTitle;
@@ -76,7 +76,8 @@ public class BuildPlanetSectorMenu extends JFrame {
         cardLayout = new CardLayout();
         bottom.setLayout(cardLayout);
         bottom.add(new BuildPopulationStorage(), "Pop");
-
+        setResizable(true);
+        setClosable(true);
         add(bottom);
         pack();
     }

@@ -1,6 +1,5 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilizations.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;

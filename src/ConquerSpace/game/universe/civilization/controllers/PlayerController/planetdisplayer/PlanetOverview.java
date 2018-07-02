@@ -1,7 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
-import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
@@ -9,6 +8,7 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,7 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -169,11 +169,21 @@ public class PlanetOverview extends JPanel {
                 //Add other options, like build, get info... short info, etc...
                 JMenuItem infoItem = new JMenuItem("Info");
                 infoItem.addActionListener((l) -> {
-                    JFrame info = new JFrame("Planet sector " + (index + 1));
+                    JInternalFrame info = new JInternalFrame("Planet sector " + (index + 1));
                     info.add(sectors[index].getInfoPanel());
                     info.pack();
                     info.setLocation(200, 100);
                     info.setVisible(true);
+                    info.setClosable(true);
+                    Component c;
+                    for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
+                        if (c instanceof JInternalFrame) {
+                            break;
+                        }
+                    }
+                    if (c != null) {
+                        ((JInternalFrame) c).getDesktopPane().add(info);
+                    }
                 });
 
                 if (p.getOwnerID() == 0 && p.planetSectors[index] instanceof RawResource) {
@@ -181,7 +191,15 @@ public class PlanetOverview extends JPanel {
                     build.addActionListener((l) -> {
                         BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index);
                         //sector.addWindowListener();
-
+                        Component c;
+                        for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
+                            if (c instanceof JInternalFrame) {
+                                break;
+                            }
+                        }
+                        if (c != null) {
+                            ((JInternalFrame) c).getDesktopPane().add(sector);
+                        }
                         sector.setVisible(true);
                     });
                     menu.add(build);

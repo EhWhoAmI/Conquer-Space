@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
@@ -12,7 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class UniverseDisplayer extends JFrame implements MouseListener {
+public class UniverseDisplayer extends JInternalFrame implements MouseListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());
     private UniverseDrawer drawer;
@@ -47,6 +46,9 @@ public class UniverseDisplayer extends JFrame implements MouseListener {
         add(scrollPane);
         setMaximumSize(new Dimension(1500, 1500));
         setSize(500, 500);
+        setResizable(true);
+        setClosable(true);
+
         setVisible(true);
     }
 
@@ -64,6 +66,7 @@ public class UniverseDisplayer extends JFrame implements MouseListener {
                         if (p.getSectorID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                             LOGGER.info("Mouse clicked in sector " + stats.getId() + "!");
                             SectorDisplayer d = new SectorDisplayer(universe.getSector(stats.getId()), universe);
+                            getDesktopPane().add(d);
                             break sectorit;
                         }
                     }

@@ -3,7 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.actions.Alert;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
  *
  * @author Zyun
  */
-public class AlertDisplayer extends JFrame {
+public class AlertDisplayer extends JInternalFrame {
 
     private JList<Alert> alertList;
     private DefaultListModel<Alert> model;
@@ -25,6 +25,8 @@ public class AlertDisplayer extends JFrame {
         JScrollPane pane = new JScrollPane(alertList);
 
         add(pane);
+        setResizable(true);
+
         setSize(new Dimension(20, 300));
         setVisible(true);
     }

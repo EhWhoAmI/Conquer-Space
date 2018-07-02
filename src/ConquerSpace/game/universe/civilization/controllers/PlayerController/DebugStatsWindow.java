@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class DebugStatsWindow extends JFrame {
+public class DebugStatsWindow extends JInternalFrame {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(DebugStatsWindow.class.getName());
 
@@ -86,6 +86,7 @@ public class DebugStatsWindow extends JFrame {
         ticker.setDelay(1000);
         ticker.setRepeats(true);
         ticker.start();
+        setResizable(true);
 
         setVisible(true);
     }

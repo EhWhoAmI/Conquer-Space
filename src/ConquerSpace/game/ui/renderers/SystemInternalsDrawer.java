@@ -1,6 +1,5 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.universe.GalaticLocation;
 import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;

@@ -1,7 +1,5 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;

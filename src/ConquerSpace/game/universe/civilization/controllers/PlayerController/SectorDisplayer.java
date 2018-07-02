@@ -11,7 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class SectorDisplayer extends JFrame implements MouseListener{
+public class SectorDisplayer extends JInternalFrame implements MouseListener{
     private static final Logger LOGGER = CQSPLogger.getLogger(SectorDisplayer.class.getName());
     SectorDrawer drawStats;
     int id;
@@ -44,6 +44,9 @@ public class SectorDisplayer extends JFrame implements MouseListener{
         //Prevent close
         setSize(500, 500);
         setMaximumSize(new Dimension(1500, 1500));
+        setResizable(true);
+        setClosable(true);
+
         setVisible(true);
         id = s.getID();
     }
@@ -58,6 +61,7 @@ public class SectorDisplayer extends JFrame implements MouseListener{
                 if (Math.hypot(stats.getPosition().getX() - e.getX(), stats.getPosition().getY() - e.getY()) < 25 && universe.getCivilization(0).vision.get(stats.getPath()) > VisionTypes.UNDISCOVERED) {
                     LOGGER.info("Mouse clicked in system " + stats.getId() + "!");
                     SystemDisplayer d = new SystemDisplayer(universe.getSector(id).getStarSystem(stats.getId()), universe);
+                    getDesktopPane().add(d);
                     break;
                 }
             }
