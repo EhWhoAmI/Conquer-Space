@@ -7,7 +7,10 @@ import ConquerSpace.game.universe.civilization.controllers.CivilizationControlle
 import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
+import java.awt.event.MouseListener;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -38,17 +41,22 @@ public class PlayerController implements CivilizationController {
 
     @Override
     public void init(Universe u, StarDate d) {
-        mainwindow = new GameWindow();
+        mainwindow = new GameWindow(u);
 
-        displayer = new UniverseDisplayer(u);
-        userInterface = new UserInterface(u);
+        //displayer = new UniverseDisplayer(u);
+        //userInterface = new UserInterface(u);
         tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();
 
-        mainwindow.add(displayer);
+        tsWindow.setLocation(mainwindow.getWidth() - tsWindow.getWidth(), 0);
+        for (MouseListener listener : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().getMouseListeners()) {
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().removeMouseListener(listener);
+        }
+
+        //mainwindow.add(displayer);
         //mainwindow.add(userInterface);
         mainwindow.add(tsWindow);
-        mainwindow.add(alertDisplayer);
+        //mainwindow.add(alertDisplayer);
 
     }
 }

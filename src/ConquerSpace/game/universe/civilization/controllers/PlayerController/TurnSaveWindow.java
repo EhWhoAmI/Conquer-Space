@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -70,7 +71,8 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
 
         runningstatsButton.addActionListener((e) -> {
-            DebugStatsWindow.getInstance(universe);
+            DebugStatsWindow win = DebugStatsWindow.getInstance(universe);
+            getDesktopPane().add(win);
         });
 
         pan.add(turnLabel);

@@ -68,7 +68,7 @@ public class SystemDisplayer extends JInternalFrame implements MouseListener {
             for (PlanetDrawStats pstats : stats.stats.planetDrawStats) {
                 if (Math.hypot(pstats.getPos().x - e.getX(), pstats.getPos().y - e.getY()) < pstats.getSize()) {
                     LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
-                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getID()), Globals.turn);
+                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getID()));
                     getDesktopPane().add(d);
                     break;
                 }

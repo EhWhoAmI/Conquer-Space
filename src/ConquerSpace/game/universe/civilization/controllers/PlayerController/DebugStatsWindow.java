@@ -87,7 +87,7 @@ public class DebugStatsWindow extends JInternalFrame {
         ticker.setRepeats(true);
         ticker.start();
         setResizable(true);
-
+        setClosable(true);
         setVisible(true);
     }
 

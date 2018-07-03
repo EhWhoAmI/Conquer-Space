@@ -14,10 +14,10 @@ public class PlanetInfoSheet extends JInternalFrame {
 
     private JTabbedPane tpane;
 
-    public PlanetInfoSheet(Planet p, int turn) {
+    public PlanetInfoSheet(Planet p) {
         tpane = new JTabbedPane();
         tpane.add("Overview", new PlanetOverview(p));
-        tpane.add("Population", new PlayerPopulation(p, turn));
+        tpane.add("Population", new PlayerPopulation(p, 0));
         add(tpane);
         setSize(500, 500);
         setResizable(true);

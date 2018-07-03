@@ -19,7 +19,6 @@ from ConquerSpace.game.universe.spaceObjects import StarTypes
 from ConquerSpace.game.universe.spaceObjects import PlanetTypes
 from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
 from ConquerSpace.game.universe.resources import RawResourceTypes
-from ConquerSpace.game.universe.spaceObjects.pSectors import PopulationStorage
 
 import generation
 from constants import *
@@ -30,7 +29,7 @@ from os.path import *
 import random
 
 # universe size -- change this when universe sizes change
-universeSize = {'Small': 10, 'Medium': 20, 'Large': 30}[universeConfig.getUniverseSize()]
+universeSize = {'Small': 5, 'Medium': 10, 'Large': 20}[universeConfig.getUniverseSize()]
 
 # Universe Shape
 universeShape = {'Spiral': 1, 'Irregular': 2, 'Elliptical': 3}[universeConfig.getUniverseShape()]

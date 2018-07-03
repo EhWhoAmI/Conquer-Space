@@ -13,7 +13,7 @@ public class Universe extends SpaceObject{
 
     private ArrayList<Sector> sectors;
     private ArrayList<Civilization> civs;
-
+    
     public HashMap<UniversePath, Integer> control;
     
     public Universe() {
