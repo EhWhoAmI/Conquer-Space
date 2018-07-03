@@ -13,6 +13,7 @@ import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -24,6 +25,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
 
@@ -50,11 +52,15 @@ public class GameWindow extends JFrame {
             desktopPane.drawing = CQSPDesktop.DRAW_UNIVERSE;
             desktopPane.repaint();
         });
+        setToUniverseView.setAccelerator(KeyStroke.getKeyStroke((int) '1', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
         JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(u.getCivilization(0).getHomesectorID(), u.getCivilization(0).getHomeSystemID());
+            desktopPane.see(u.getCivilization(0).getStartingPlanet().getSectorID(), u.getCivilization(0).getStartingPlanet().getSystemID());
 
         });
+        seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
         views.add(setToUniverseView);
         views.add(seeHomePlanet);
         JMenu menu = new JMenu("Alerts");
@@ -95,7 +101,6 @@ public class GameWindow extends JFrame {
 
         @Override
         protected void paintComponent(Graphics g) {
-            System.out.println("Drawing " + drawing);
             switch (drawing) {
                 case DRAW_UNIVERSE:
                     universeRenderer.drawUniverse(g, new Point(translateX, translateY));
@@ -228,11 +233,10 @@ public class GameWindow extends JFrame {
 
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
-            if(drawing == DRAW_STAR_SYSTEM && e.getUnitsToScroll() < -1) {
+            if (drawing == DRAW_STAR_SYSTEM && e.getUnitsToScroll() < -1) {
                 drawing = DRAW_SECTOR;
                 repaint();
-            }
-            else if(drawing == DRAW_SECTOR && e.getUnitsToScroll() < -1) {
+            } else if (drawing == DRAW_SECTOR && e.getUnitsToScroll() < -1) {
                 drawing = DRAW_UNIVERSE;
                 repaint();
             }
