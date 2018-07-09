@@ -31,6 +31,7 @@ public class Manual extends JFrame implements ListSelectionListener {
     private static final long serialVersionUID = -2589166556749207075L;
     private static Manual current;
     private static final Logger LOGGER = CQSPLogger.getLogger(Manual.class.getName());
+    //Linked hashmap because it has to be in order.
     private LinkedHashMap<String, String> prop = new LinkedHashMap<>();
     private JList<String> list;
 

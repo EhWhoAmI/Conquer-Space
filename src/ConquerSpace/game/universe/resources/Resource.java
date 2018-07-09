@@ -10,6 +10,7 @@ public class Resource {
     public int amount;
     public int type;
     public int renewability = 0;
+    public int max;
 
     public Resource(int type, int amount) {
         this.amount = amount;
@@ -76,5 +77,18 @@ public class Resource {
 
     public int getRenewability() {
         return renewability;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    public void renew() {
+        //If there are no resources, it will not renew.
+        if((amount + renewability) >= max) {
+            amount = max;
+        } else if(amount != 0){
+            amount += renewability;
+        }
     }
 }

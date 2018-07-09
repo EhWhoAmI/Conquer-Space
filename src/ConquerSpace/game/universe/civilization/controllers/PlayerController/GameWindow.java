@@ -64,9 +64,20 @@ public class GameWindow extends JFrame {
         views.add(setToUniverseView);
         views.add(seeHomePlanet);
         JMenu menu = new JMenu("Alerts");
+        
+        JMenu techonology = new JMenu("Techonology");
+        JMenuItem seetechs = new JMenuItem("See Researched Techs");
+        seetechs.addActionListener((e) -> {
+            TechonologyViewer viewer = new TechonologyViewer(u, u.getCivilization(0));
+            addFrame(viewer);
+        });
+        
+        techonology.add(seetechs);
+        
         menuBar.add(windows);
         menuBar.add(views);
         menuBar.add(menu);
+        menuBar.add(techonology);
         desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
         //desktopPane.setBackground(Color.cyan);

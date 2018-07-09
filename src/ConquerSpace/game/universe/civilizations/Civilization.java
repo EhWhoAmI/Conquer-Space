@@ -1,6 +1,9 @@
 package ConquerSpace.game.universe.civilizations;
 
 import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.tech.FieldNode;
+import ConquerSpace.game.tech.Techonologies;
+import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.templates.Template;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
@@ -11,6 +14,7 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -45,6 +49,10 @@ public class Civilization {
 
     private HashMap<String, Template> templatesList;
 
+    public HashMap<Techonology, Integer> civTechs;
+
+    public FieldNode fields;
+
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -71,6 +79,7 @@ public class Civilization {
         economy = new Economy();
 
         templatesList = new HashMap<>();
+        civTechs = new HashMap<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -213,8 +222,24 @@ public class Civilization {
     public void updateTemplate(String name, Template b) {
         templatesList.put(name, b);
     }
-    
+
     public String[] getTemplateNameList() {
-        return ((String[] )templatesList.keySet().toArray());
+        return ((String[]) templatesList.keySet().toArray());
+    }
+
+    public void addTech(Techonology t) {
+        civTechs.put(t, 0);
+    }
+
+    public Techonology getTechByName(String s) {
+        return (civTechs.keySet().stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
+    }
+
+    public Techonology[] getTechsByTag(String tag) {
+        return ((Techonology[]) (civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray()));
+    }
+
+    public void researchTech(Techonology t) {
+        civTechs.put(t, Techonologies.RESEARCHED);
     }
 }

@@ -1,0 +1,10 @@
+Techs in Conquer Space work a bit different from other games. In other games, it is possible to
+research all the techs in the tech tree. 
+In Conquer Space, it is different. All sciences has a chance to be revealed, and if it does, it can
+be researched, and not all sciences may be researched in order to get to some high tech 
+thingy. There will be multiple paths to one goal.
+For example, for ftl, there will be:
+Wormholes,
+Hyperspace, etc...
+
+All sciences are attributed to `fields`, which have to be unlocked by researching.

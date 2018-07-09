@@ -49,13 +49,11 @@ seed = universeConfig.getSeed();
 random.seed(seed)
 
 # Create universe generation object
-universeObject = Universe()
+universeObject = Universe(seed)
 
 LOGGER.trace("Loading sectors")
 # Create sectors
 # Get sector count
-sectorLevel = 0
-centerSize = 0
 layer = 1
 degCounter = 0
 sizeOfPolygon = 0

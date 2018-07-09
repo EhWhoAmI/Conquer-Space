@@ -18,7 +18,7 @@ public class UniverseToReadableStringTest {
      */
     public static void main(String[] args) {
         //Create universe
-        Universe universe = new Universe();
+        Universe universe = new Universe(0l);
         //Create sector
         Sector s = new Sector(new GalaticLocation(0, 0), 0);
         StarSystem system = new StarSystem(0, new GalaticLocation(0, 0));

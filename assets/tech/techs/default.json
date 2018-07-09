@@ -1,0 +1,41 @@
+{
+    "techonologies" : [
+        {
+            "name" : "life",
+            "deps" : [
+            ],
+            "level" : 0,
+            "type" : "UNLOCK",
+            "action" : [""],
+            "fields" : [
+                "Knowledge"
+            ],
+            "tags" : ["Starting"],
+            "floor" : 0
+        },
+        {
+            "name" : "hunting and gathering",
+            "deps" : ["life"],
+            "level" : 1,
+            "type" : "UNLOCK",
+            "action" : [""],
+            "fields" : [
+                "Knowledge"
+            ],
+            "tags" : ["Starting"],
+            "floor" : 1
+        }, 
+        {
+            "name" : "farming",
+            "deps" : ["life"],
+            "level" : 1,
+            "type" : "UNLOCK",
+            "action" : [""],
+            "fields" : [
+                "Knowledge"
+            ],
+            "tags" : ["Starting"],
+            "floor" : 2
+        }
+    ]
+}

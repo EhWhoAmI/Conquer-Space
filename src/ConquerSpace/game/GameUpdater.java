@@ -1,5 +1,8 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.tech.Fields;
+import ConquerSpace.game.tech.Techonologies;
+import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.templates.DefaultTemplates;
 import ConquerSpace.game.templates.Template;
 import ConquerSpace.game.universe.civilizations.Civilization;
@@ -99,9 +102,14 @@ public class GameUpdater {
     }
 
     public void initGame() {
+        //Init tech and fields
+        Fields.readFields();
+        Techonologies.readTech();
+        
         //All the home planets of the civs are theirs.
         //Set home planet and sector
-        Random selector = new Random();
+        Random selector = new Random(universe.getSeed());
+        
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -110,7 +118,15 @@ public class GameUpdater {
             for (Template template : t) {
                 c.addTemplate(template, template.getName());
             }
-
+            
+            //Add the starting techs
+            c.researchTech(Techonologies.getTechByName("life"));
+            
+            //Add all starting techs
+            for(Techonology tech : Techonologies.getTechsByTag("Starting")) {
+                c.researchTech(tech);
+            }
+            
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 try {

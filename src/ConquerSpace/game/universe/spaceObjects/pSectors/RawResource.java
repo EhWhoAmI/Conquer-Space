@@ -18,7 +18,6 @@ import javax.swing.border.TitledBorder;
 public class RawResource extends PlanetSector{
     //Raw Resource will ALWAYS have no owner
     public RawResource() {
-        resources = new ArrayList<>();
     }
 
     @Override

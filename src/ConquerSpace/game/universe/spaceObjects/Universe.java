@@ -10,13 +10,15 @@ import java.util.HashMap;
  * @author Zyun
  */
 public class Universe extends SpaceObject{
-
+    private final long seed;
+    
     private ArrayList<Sector> sectors;
     private ArrayList<Civilization> civs;
     
     public HashMap<UniversePath, Integer> control;
     
-    public Universe() {
+    public Universe(long seed) {
+        this.seed = seed;
         sectors = new ArrayList<>();
         civs = new ArrayList<>();
         control = new HashMap<>();
@@ -141,5 +143,9 @@ public class Universe extends SpaceObject{
                 }
             }
         }
+    }
+
+    public long getSeed() {
+        return seed;
     }
 }
