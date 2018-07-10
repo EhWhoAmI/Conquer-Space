@@ -53,6 +53,7 @@ public class Civilization {
 
     public FieldNode fields;
 
+    private int techLevel = 0;
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -241,5 +242,16 @@ public class Civilization {
 
     public void researchTech(Techonology t) {
         civTechs.put(t, Techonologies.RESEARCHED);
+    }
+
+    public int getTechLevel() {
+        return techLevel;
+    }
+    
+    public void calculateTechLevel() {
+        techLevel = 0;
+        civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Techonologies.RESEARCHED)).forEachOrdered((t) -> {
+            techLevel += t.getLevel();
+        });
     }
 }

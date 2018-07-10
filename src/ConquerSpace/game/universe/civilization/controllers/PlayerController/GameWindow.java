@@ -65,6 +65,13 @@ public class GameWindow extends JFrame {
         views.add(seeHomePlanet);
         JMenu menu = new JMenu("Alerts");
         
+        JMenu ownCivInfo = new JMenu("Civilization");
+        
+        JMenuItem allCivInfo = new JMenuItem("My Civilization");
+        allCivInfo.addActionListener((e) -> {
+        });
+        ownCivInfo.add(allCivInfo);
+        
         JMenu techonology = new JMenu("Techonology");
         JMenuItem seetechs = new JMenuItem("See Researched Techs");
         seetechs.addActionListener((e) -> {
@@ -77,6 +84,7 @@ public class GameWindow extends JFrame {
         menuBar.add(windows);
         menuBar.add(views);
         menuBar.add(menu);
+        menuBar.add(ownCivInfo);
         menuBar.add(techonology);
         desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 

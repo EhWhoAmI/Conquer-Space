@@ -127,6 +127,7 @@ public class GameUpdater {
                 c.researchTech(tech);
             }
             
+            c.calculateTechLevel();
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 try {

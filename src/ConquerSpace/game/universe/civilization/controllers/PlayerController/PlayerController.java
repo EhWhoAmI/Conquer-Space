@@ -8,9 +8,7 @@ import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.event.MouseListener;
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 
 /**

@@ -67,7 +67,8 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
 
         manualButton.addActionListener((e) -> {
-            Manual.getInstance().setVisible(true);
+            InternalManual manual = new InternalManual();
+            getDesktopPane().add(manual);
         });
 
         runningstatsButton.addActionListener((e) -> {
