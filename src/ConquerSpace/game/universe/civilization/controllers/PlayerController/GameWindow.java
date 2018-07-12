@@ -69,6 +69,7 @@ public class GameWindow extends JFrame {
         
         JMenuItem allCivInfo = new JMenuItem("My Civilization");
         allCivInfo.addActionListener((e) -> {
+            addFrame(new CivInfoOverview(u.getCivilization(0), u));
         });
         ownCivInfo.add(allCivInfo);
         
@@ -106,7 +107,6 @@ public class GameWindow extends JFrame {
         SectorRenderer[] sectorRenderers;
         private boolean isDragging = false;
         private Point startPoint;
-        private Point endPoint;
         private int translateX = 0;
         private int translateY = 0;
         static final int DRAW_UNIVERSE = 0;
@@ -212,7 +212,6 @@ public class GameWindow extends JFrame {
         @Override
         public void mouseReleased(MouseEvent e) {
             isDragging = false;
-            endPoint = e.getPoint();
         }
 
         @Override
