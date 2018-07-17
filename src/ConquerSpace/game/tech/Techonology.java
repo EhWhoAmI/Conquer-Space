@@ -13,15 +13,17 @@ public class Techonology {
     private int level;
     private String[] fields;
     private String[] tags;
+    private String[] actions;
     private int floor;
 
-    public Techonology(String name, String[] deps, int type, int level, String[] fields, String[] tags, int floor) {
+    public Techonology(String name, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor) {
         this.name = name;
         this.deps = deps;
         this.type = type;
         this.level = level;
         this.fields = fields;
         this.tags = tags;
+        this.actions = actions;
         this.floor = floor;
     }
 
@@ -80,6 +82,8 @@ public class Techonology {
     public String toString() {
         return this.name;
     }
-    
-    
+
+    public String[] getActions() {
+        return actions;
+    }
 }

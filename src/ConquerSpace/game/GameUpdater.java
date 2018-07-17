@@ -127,6 +127,10 @@ public class GameUpdater {
                 c.researchTech(tech);
             }
             
+            //Select one of the space travel sciences
+            Techonology[] teks = Techonologies.getTechsByTag("space travel base");
+            //To research this
+            c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
             c.calculateTechLevel();
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
@@ -136,7 +140,9 @@ public class GameUpdater {
                     int id = selector.nextInt(sectorCount);
                     PopulationStorage storage = (PopulationStorage) c.getTemplate("Basic residence").create();
                     starting.setPlanetSector(id, storage);
-
+                    
+                    starting.setName(c.getHomePlanetName());
+                    
                     //Set ownership
                     starting.setOwnerID(c.getID());
 

@@ -7,12 +7,16 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 /**
@@ -22,7 +26,8 @@ import javax.swing.Timer;
 public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
     private JLabel turnLabel;
-    private JButton pausePlayButton;
+    //Public for the action listeners later on
+    public JButton pausePlayButton;
     private JButton alertsButton;
     private JButton saveGameButton;
     private JButton exitGameButton;
@@ -56,7 +61,13 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         pausePlayButton.addActionListener(this);
         pausePlayButton.setForeground(Color.red);
-
+        pausePlayButton.getActionMap().put("doPause", new AbstractAction("Pause") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        pausePlayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
+        
         alertsButton.addActionListener((e) -> {
             AlertDisplayer disp = AlertDisplayer.getInstance();
             disp.toFront();

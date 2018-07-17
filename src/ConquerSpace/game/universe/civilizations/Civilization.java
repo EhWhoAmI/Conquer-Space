@@ -24,6 +24,8 @@ import java.util.HashMap;
  */
 public class Civilization {
 
+    public static final int CIV_TECH_RESEARCH_CHANCE = 0;
+    public static final int CIV_TECH_RESEARCH_AMOUNT = 1;
     private int ID;
 
     private Color color;
@@ -50,10 +52,13 @@ public class Civilization {
     private HashMap<String, Template> templatesList;
 
     public HashMap<Techonology, Integer> civTechs;
+    public HashMap<Techonology, Integer> civResearch;
 
+    public HashMap<String, Integer> multipliers;
     public FieldNode fields;
 
     private int techLevel = 0;
+
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -81,6 +86,7 @@ public class Civilization {
 
         templatesList = new HashMap<>();
         civTechs = new HashMap<>();
+        civResearch = new HashMap<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -230,6 +236,7 @@ public class Civilization {
 
     public void addTech(Techonology t) {
         civTechs.put(t, 0);
+        civResearch.put(t, 0);
     }
 
     public Techonology getTechByName(String s) {
@@ -241,13 +248,19 @@ public class Civilization {
     }
 
     public void researchTech(Techonology t) {
+        //Parse actions.
+        for (String act : t.getActions()) {
+            Techonologies.parseAction(act, this);
+        }
         civTechs.put(t, Techonologies.RESEARCHED);
+        //Delete the tech because it has been researhed
+        civResearch.remove(t);
     }
 
     public int getTechLevel() {
         return techLevel;
     }
-    
+
     public void calculateTechLevel() {
         techLevel = 0;
         civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Techonologies.RESEARCHED)).forEachOrdered((t) -> {

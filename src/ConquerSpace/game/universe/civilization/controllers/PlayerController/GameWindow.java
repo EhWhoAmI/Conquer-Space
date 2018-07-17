@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -46,6 +47,10 @@ public class GameWindow extends JFrame {
 
         //Edit menu bar
         JMenu windows = new JMenu("Windows");
+        
+        JMenu game = new JMenu("Game");
+        JMenuItem pauseplayButton = new JMenuItem("");
+        
         JMenu views = new JMenu("View");
         JMenuItem setToUniverseView = new JMenuItem("Go to Universe View");
         setToUniverseView.addActionListener(a -> {
@@ -80,6 +85,14 @@ public class GameWindow extends JFrame {
             addFrame(viewer);
         });
         
+        JMenuItem techResearcher = new JMenuItem("Research Techonologies");
+        techResearcher.addActionListener(e -> {
+            ResearchViewer viewer = new ResearchViewer(u.getCivilization(0));
+            addFrame(viewer);
+        });
+        
+        techResearcher.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+        techonology.add(techResearcher);
         techonology.add(seetechs);
         
         menuBar.add(windows);
@@ -95,6 +108,9 @@ public class GameWindow extends JFrame {
 
         setSize(getToolkit().getScreenSize());
         setVisible(true);
+        
+        //See home planet
+        desktopPane.see(u.getCivilization(0).getStartingPlanet().getSectorID(), u.getCivilization(0).getStartingPlanet().getSystemID());
     }
 
     public void addFrame(JInternalFrame frame) {

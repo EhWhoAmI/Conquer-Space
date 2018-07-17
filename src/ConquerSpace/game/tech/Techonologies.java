@@ -1,5 +1,6 @@
 package ConquerSpace.game.tech;
 
+import ConquerSpace.game.universe.civilizations.Civilization;
 import ConquerSpace.util.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +24,8 @@ public class Techonologies {
     public static ArrayList<String> fields = new ArrayList<>();
 
     public static final int RESEARCHED = 101;
-
+    public static final int REVEALED = 100;
+    
     public static void readTech() {
         File techFolder = new File(System.getProperty("user.dir") + "/assets/tech/techs");
         File[] tempFiles = techFolder.listFiles();
@@ -86,11 +87,18 @@ public class Techonologies {
             for (int j = 0; j < tagsArray.length(); j++) {
                 tags[j] = tagsArray.getString(j);
             }
-
+            
+            JSONArray actionsarry = techonology.getJSONArray("action");
+            
+            String[] actions = new String[actionsarry.length()];
+            for (int j = 0; j < actionsarry.length(); j++) {
+                actions[j] = actionsarry.getString(j);
+            }
+            
             //Floor
             int floor = techonology.getInt("floor");
 
-            Techonology t = new Techonology(name, deps, type, level, fields, tags, floor);
+            Techonology t = new Techonology(name, deps, type, level, fields, tags, actions, floor);
             techonologies.add(t);
         }
     }
@@ -102,5 +110,48 @@ public class Techonologies {
     public static Techonology[] getTechsByTag(String tag) {
         Object[] techList = techonologies.stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray();
         return (Arrays.copyOf(techList, techList.length, Techonology[].class));
+    }
+    
+    public static void parseAction(String action, Civilization c) {
+        if(action.startsWith("tech")) {
+            //Is boosting chance for tech
+            action = action.replace("tech(", "");
+            action = action.replace(")", "");
+            String[] splitAction = action.split(":");
+            //Get tech to boost
+            String techtoboost = splitAction[0];
+            int amount = Integer.parseInt(splitAction[1]);
+            Techonology tech = getTechByName(techtoboost);
+            if(c.civTechs.containsKey(tech)) {
+                if(!(c.civTechs.get(tech) > 100)) {
+                    //Then add
+                    if(c.civTechs.get(tech) > (100 - amount)) {
+                        c.civTechs.put(tech, 100);
+                    } else {
+                        c.civTechs.put(tech, c.civTechs.get(tech) + amount);
+                    }
+                }
+            } else {
+                c.civTechs.put(tech, amount);
+            }
+        }
+        else if(action.startsWith("boost")) {
+            //Boosts a certain multiplier
+            //Get civ multiplier
+            action = action.replace("boost(", "");
+            action = action.replace(")", "");
+            String[] splitAction = action.split(":");
+            if(c.multipliers.containsKey(splitAction[0])) {
+                //Then add
+                c.multipliers.put(splitAction[0], c.multipliers.get(splitAction[0]) + Integer.parseInt(splitAction[1]));
+            } else {
+                c.multipliers.put(splitAction[0], Integer.parseInt(splitAction[1]));
+            }
+        } else if(action.startsWith("field")) {
+            action = action.replace("field(", "");
+            action = action.replace(")", "");
+            //Add the field that is mentioned
+            //Skip fields for now TODO.
+        }
     }
 }

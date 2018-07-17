@@ -59,4 +59,17 @@ public class TechonologiesTest {
             System.out.println(t.getName());
         }
     }
+    
+    @Test
+    public void testtechEquals() {
+        System.out.println("testtechEquals");
+        Techonologies.readTech();
+        System.out.println(Techonologies.techonologies.get(0));
+        if (Techonologies.getTechByName("rocketery") == Techonologies.getTechByName("rocketery")) {
+            System.out.println("Is equal");
+        } else {
+            System.out.println("Not equal");
+        }
+        
+    }
 }
