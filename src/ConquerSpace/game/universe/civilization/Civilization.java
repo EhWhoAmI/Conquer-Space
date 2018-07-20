@@ -1,14 +1,16 @@
-package ConquerSpace.game.universe.civilizations;
+package ConquerSpace.game.universe.civilization;
 
 import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.people.Person;
+import ConquerSpace.game.people.Researcher;
 import ConquerSpace.game.tech.FieldNode;
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.templates.Template;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
-import ConquerSpace.game.universe.civilizations.stats.Economy;
-import ConquerSpace.game.universe.civilizations.stats.Population;
+import ConquerSpace.game.universe.civilization.stats.Economy;
+import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -53,11 +55,14 @@ public class Civilization {
 
     public HashMap<Techonology, Integer> civTechs;
     public HashMap<Techonology, Integer> civResearch;
-
+    public HashMap<Techonology, Researcher> currentlyResearchingTechonologys;
+    
     public HashMap<String, Integer> multipliers;
     public FieldNode fields;
 
     private int techLevel = 0;
+    
+    public ArrayList<Person> people;
 
     public Civilization(int ID, Universe u) {
         this.ID = ID;
@@ -87,6 +92,9 @@ public class Civilization {
         templatesList = new HashMap<>();
         civTechs = new HashMap<>();
         civResearch = new HashMap<>();
+        
+        currentlyResearchingTechonologys = new HashMap<>();
+        people = new ArrayList<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -257,6 +265,13 @@ public class Civilization {
         civResearch.remove(t);
     }
 
+    public void assignResearch(Techonology t, Person p) {
+        if(people.contains(p) && p instanceof Researcher) {
+            //Then do it...
+            currentlyResearchingTechonologys.put(t, (Researcher) p);
+        }
+    }
+    
     public int getTechLevel() {
         return techLevel;
     }

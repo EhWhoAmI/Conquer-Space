@@ -4,7 +4,7 @@ import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.ui.renderers.SectorDrawStats;
 import ConquerSpace.game.ui.renderers.UniverseDrawer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
-import ConquerSpace.game.universe.civilizations.VisionTypes;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.BorderLayout;

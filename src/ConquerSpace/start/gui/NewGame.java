@@ -3,7 +3,7 @@ package ConquerSpace.start.gui;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.UniverseConfig;
-import ConquerSpace.game.universe.civilizations.CivilizationConfig;
+import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;

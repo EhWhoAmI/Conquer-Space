@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe;
 
-import ConquerSpace.game.universe.civilizations.CivilizationConfig;
+import ConquerSpace.game.universe.civilization.CivilizationConfig;
 /**
  * Config of the Universe to be passed on to the scripts.
  * @see ConquerSpace.start.gui.NewGame

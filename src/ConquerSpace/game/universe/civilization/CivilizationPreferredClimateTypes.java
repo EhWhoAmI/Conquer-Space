@@ -1,4 +1,4 @@
-package ConquerSpace.game.universe.civilizations;
+package ConquerSpace.game.universe.civilization;
 
 /**
  * Class of the civ preferred climate.

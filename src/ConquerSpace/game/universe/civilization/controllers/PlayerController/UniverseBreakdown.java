@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.Sector;

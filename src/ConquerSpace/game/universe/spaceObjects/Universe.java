@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.civilization.Civilization;
 import java.util.ArrayList;
 import java.util.HashMap;
 

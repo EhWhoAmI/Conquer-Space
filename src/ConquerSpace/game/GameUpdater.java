@@ -1,12 +1,13 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.people.Researcher;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.templates.DefaultTemplates;
 import ConquerSpace.game.templates.Template;
-import ConquerSpace.game.universe.civilizations.Civilization;
-import ConquerSpace.game.universe.civilizations.VisionTypes;
+import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
@@ -132,6 +133,13 @@ public class GameUpdater {
             //To research this
             c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
             c.calculateTechLevel();
+            
+            //Add researchers
+            //Only one.
+            Researcher r = new Researcher("Person", 20);
+            r.setSkill(1);
+            c.people.add(r);
+            
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 try {

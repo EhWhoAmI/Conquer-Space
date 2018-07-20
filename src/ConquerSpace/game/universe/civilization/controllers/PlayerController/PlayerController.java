@@ -4,7 +4,7 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
-import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.event.MouseListener;
@@ -39,7 +39,7 @@ public class PlayerController implements CivilizationController {
 
     @Override
     public void init(Universe u, StarDate d) {
-        mainwindow = new GameWindow(u);
+        mainwindow = new GameWindow(u, this);
 
         //displayer = new UniverseDisplayer(u);
         //userInterface = new UserInterface(u);

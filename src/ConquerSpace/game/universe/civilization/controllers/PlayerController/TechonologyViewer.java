@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
-import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.DefaultListModel;

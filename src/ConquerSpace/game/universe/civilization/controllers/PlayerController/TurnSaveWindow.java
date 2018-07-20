@@ -110,14 +110,14 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == pausePlayButton) {
+        if (e.getActionCommand().equals("pauseplay") || e.getSource() == pausePlayButton) {
             if (isPaused) {
-                ((JButton) e.getSource()).setText("Pause");
-                ((JButton) e.getSource()).setForeground(Color.green);
+                (pausePlayButton).setText("Pause");
+                (pausePlayButton).setForeground(Color.green);
                 statusProgressBar.setIndeterminate(true);
             } else {
-                ((JButton) e.getSource()).setText("Paused");
-                ((JButton) e.getSource()).setForeground(Color.red);
+                (pausePlayButton).setText("Paused");
+                (pausePlayButton).setForeground(Color.red);
                 statusProgressBar.setIndeterminate(false);
             }
             isPaused = !isPaused;

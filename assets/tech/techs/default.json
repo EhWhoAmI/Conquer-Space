@@ -1,210 +1,227 @@
 {
-    "techonologies" : [
+    "techonologies": [
         {
-            "name" : "life",
-            "deps" : [
+            "name": "life",
+            "deps": [
             ],
-            "level" : 0,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "level": 0,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 0
+            "tags": ["Starting"],
+            "floor": 0
         },
         {
-            "name" : "hunting and gathering",
-            "deps" : ["life"],
-            "level" : 1,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "hunting and gathering",
+            "deps": ["life"],
+            "level": 1,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 1
+            "tags": ["Starting"],
+            "floor": 1
         }, 
         {
-            "name" : "primitive farming",
-            "deps" : ["life"],
-            "level" : 2,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "primitive farming",
+            "deps": ["life"],
+            "level": 2,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 2
+            "tags": ["Starting"],
+            "floor": 2
         },
         {
-            "name" : "primitive houses",
-            "deps" : ["life"],
-            "level" : 2,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "primitive houses",
+            "deps": ["life"],
+            "level": 2,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 3
+            "tags": ["Starting"],
+            "floor": 3
         },
         {
-            "name" : "primitive mining",
-            "deps" : ["life"],
-            "level" : 2,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "primitive mining",
+            "deps": ["life"],
+            "level": 2,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 4
+            "tags": ["Starting"],
+            "floor": 4
         },
         {
-            "name" : "primitive power",
-            "deps" : ["life"],
-            "level" : 3,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "primitive power",
+            "deps": ["life"],
+            "level": 3,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 5
+            "tags": ["Starting"],
+            "floor": 5
         },
         {
-            "name" : "basic medicine",
-            "deps" : ["life"],
-            "level" : 1,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "basic medicine",
+            "deps": ["life"],
+            "level": 1,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
                 "Knowledge", "Medicine"
             ],
-            "tags" : ["Starting"],
-            "floor" : 6
+            "tags": ["Starting"],
+            "floor": 6
         },
         {
-            "name" : "basic science",
-            "deps" : ["life"],
-            "level" : 1,
-            "type" : "UNLOCK",
-            "action" : ["field(science)", "field(biology)", "field(chemistry)",
-            "tech(flight):20", "tech(rocket science):20"],
-            "fields" : [
+            "name": "basic science",
+            "deps": ["life"],
+            "level": 1,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": ["field(science)", "field(biology)", "field(chemistry)",
+                "tech(flight):20", "tech(rocket science):20"],
+            "fields": [
                 "Knowledge"
             ],
-            "tags" : ["Starting"],
-            "floor" : 7
+            "tags": ["Starting"],
+            "floor": 7
         },
         {
-            "name" : "chemical propulsion",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : [""],
-            "fields" : [
+            "name": "chemical propulsion",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 2,
+            "action": [""],
+            "fields": [
                 "Knowledge", "Chemistry"
             ],
-            "tags" : ["Propulsion"],
-            "floor" : 7
+            "tags": ["Propulsion"],
+            "floor": 7
         },
         {
-            "name" : "Electrothermal propulsion",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : [""],
-            "fields" : [
+            "name": "Electrothermal propulsion",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 3,
+            "action": [],
+            "fields": [
                 "Knowledge", "Chemistry"
             ],
-            "tags" : ["Propulsion"],
-            "floor" : 7
+            "tags": ["Propulsion"],
+            "floor": 7
         },
         {
-            "name" : "Ion propulsion",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : [""],
-            "fields" : [
+            "name": "Ion propulsion",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 3,
+            "action": [],
+            "fields": [
                 "Knowledge", "Chemistry"
             ],
-            "tags" : ["Propulsion"],
-            "floor" : 7
+            "tags": ["Propulsion"],
+            "floor": 7
         },
         {
-            "name" : "Plasma propulsion",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : [""],
-            "fields" : [
+            "name": "Plasma propulsion",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 3,
+            "action": [],
+            "fields": [
                 "Knowledge", "Chemistry"
             ],
-            "tags" : ["Propulsion"],
-            "floor" : 7
+            "tags": ["Propulsion"],
+            "floor": 7
         },
         {
-            "name" : "Nuclear propulsion",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : [""],
-            "fields" : [
+            "name": "Nuclear propulsion",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 2,
+            "action": [],
+            "fields": [
                 "Knowledge", "Chemistry"
             ],
-            "tags" : ["Propulsion"],
-            "floor" : 7
+            "tags": ["Propulsion"],
+            "floor": 7
         },
         {
-            "name" : "flight",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : ["tech(space planes):100"],
-            "fields" : [
+            "name": "flight",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 2,
+            "action": ["tech(space planes):100"],
+            "fields": [
                 "Knowledge", "Aeronautics"
             ],
-            "tags" : ["space travel base"],
-            "floor" : 8
+            "tags": ["space travel base"],
+            "floor": 8
         },
         {
-            "name" : "space planes",
-            "deps" : ["life"],
-            "level" : 7,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "space planes",
+            "deps": ["flight"],
+            "level": 7,
+            "type": "UNLOCK",
+            "difficulty": 5,
+            "action": [],
+            "fields": [
                 "Knowledge", "Aeronautics"
             ],
-            "tags" : ["space travel"],
-            "floor" : 9
+            "tags": ["space travel"],
+            "floor": 9
         },
         {
-            "name" : "rocket science",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : ["tech(rocketery):100"],
-            "fields" : [
+            "name": "rocket science",
+            "deps": ["life"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 2,
+            "action": ["tech(rocketery):100"],
+            "fields": [
                 "Knowledge", "Physics"
             ],
-            "tags" : ["space travel base"],
-            "floor" : 8
+            "tags": ["space travel base"],
+            "floor": 8
         },
         {
-            "name" : "rocketery",
-            "deps" : ["life"],
-            "level" : 5,
-            "type" : "UNLOCK",
-            "action" : [],
-            "fields" : [
+            "name": "rocketery",
+            "deps": ["rocket science"],
+            "level": 5,
+            "type": "UNLOCK",
+            "difficulty": 5,
+            "action": [],
+            "fields": [
                 "Knowledge", "Aeronautics"
             ],
-            "tags" : ["space travel"],
-            "floor" : 9
+            "tags": ["space travel"],
+            "floor": 9
         }
     ]
 }

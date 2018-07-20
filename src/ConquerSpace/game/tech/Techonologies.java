@@ -1,6 +1,6 @@
 package ConquerSpace.game.tech;
 
-import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.util.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,6 +73,9 @@ public class Techonologies {
                     break;
             }
 
+            //Difficulty
+            int difficulty = techonology.getInt("difficulty");
+            
             JSONArray fieldsArray = techonology.getJSONArray("fields");
 
             //Loop over fields
@@ -98,7 +101,7 @@ public class Techonologies {
             //Floor
             int floor = techonology.getInt("floor");
 
-            Techonology t = new Techonology(name, deps, type, level, fields, tags, actions, floor);
+            Techonology t = new Techonology(name, deps, type, level, fields, tags, actions, floor, difficulty);
             techonologies.add(t);
         }
     }
@@ -153,5 +156,9 @@ public class Techonologies {
             //Add the field that is mentioned
             //Skip fields for now TODO.
         }
+    }
+    
+    public static int estFinishTime(Techonology t) {
+        return t.getDifficulty() * 10;
     }
 }

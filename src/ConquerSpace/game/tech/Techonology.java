@@ -15,8 +15,9 @@ public class Techonology {
     private String[] tags;
     private String[] actions;
     private int floor;
+    private int difficulty;
 
-    public Techonology(String name, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor) {
+    public Techonology(String name, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
         this.name = name;
         this.deps = deps;
         this.type = type;
@@ -25,6 +26,7 @@ public class Techonology {
         this.tags = tags;
         this.actions = actions;
         this.floor = floor;
+        this.difficulty = difficulty;
     }
 
     public String[] getDeps() {
@@ -85,5 +87,9 @@ public class Techonology {
 
     public String[] getActions() {
         return actions;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
     }
 }

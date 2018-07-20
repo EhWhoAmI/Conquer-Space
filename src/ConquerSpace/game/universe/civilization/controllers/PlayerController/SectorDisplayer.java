@@ -3,7 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.ui.renderers.SectorDrawer;
 import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
-import ConquerSpace.game.universe.civilizations.VisionTypes;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;

@@ -7,13 +7,15 @@ import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
-import ConquerSpace.game.universe.civilizations.VisionTypes;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -40,8 +42,10 @@ public class GameWindow extends JFrame {
 
     private CQSPDesktop desktopPane;
     private JMenuBar menuBar;
-
-    public GameWindow(Universe u) {
+    
+    private PlayerController controller;
+    public GameWindow(Universe u, PlayerController controller) {
+        this.controller = controller;
         desktopPane = new CQSPDesktop(u);
         menuBar = new JMenuBar();
 
@@ -49,7 +53,18 @@ public class GameWindow extends JFrame {
         JMenu windows = new JMenu("Windows");
         
         JMenu game = new JMenu("Game");
-        JMenuItem pauseplayButton = new JMenuItem("");
+        JMenuItem pauseplayButton = new JMenuItem("Paused");
+        pauseplayButton.addActionListener(a -> {
+            if (controller.tsWindow.isPaused()) {
+                pauseplayButton.setText("Pause");
+            } else {
+                pauseplayButton.setText("Paused");
+            }
+            a = new ActionEvent(pauseplayButton, 0, "pauseplay");
+            controller.tsWindow.actionPerformed(a);
+        });
+        pauseplayButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+        game.add(pauseplayButton);
         
         JMenu views = new JMenu("View");
         JMenuItem setToUniverseView = new JMenuItem("Go to Universe View");
@@ -62,7 +77,6 @@ public class GameWindow extends JFrame {
         JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
         seeHomePlanet.addActionListener(a -> {
             desktopPane.see(u.getCivilization(0).getStartingPlanet().getSectorID(), u.getCivilization(0).getStartingPlanet().getSystemID());
-
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -96,6 +110,7 @@ public class GameWindow extends JFrame {
         techonology.add(seetechs);
         
         menuBar.add(windows);
+        menuBar.add(game);
         menuBar.add(views);
         menuBar.add(menu);
         menuBar.add(ownCivInfo);

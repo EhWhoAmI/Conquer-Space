@@ -1,4 +1,4 @@
-package ConquerSpace.game.universe.civilizations.stats;
+package ConquerSpace.game.universe.civilization.stats;
 
 /**
  *

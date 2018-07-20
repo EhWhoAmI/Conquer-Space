@@ -9,7 +9,7 @@ from ConquerSpace.game import UniversePath
 from ConquerSpace.game.universe import GalaticLocation
 from ConquerSpace.game.universe.civilization.controllers.AIController import AIController
 from ConquerSpace.game.universe.civilization.controllers.PlayerController import PlayerController
-from ConquerSpace.game.universe.civilizations import Civilization
+from ConquerSpace.game.universe.civilization import Civilization
 from ConquerSpace.game.universe.spaceObjects import Planet
 from ConquerSpace.game.universe.spaceObjects import Sector
 from ConquerSpace.game.universe.spaceObjects import Star

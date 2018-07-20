@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.universe.civilizations.stats.Economy;
+import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import java.util.ArrayList;

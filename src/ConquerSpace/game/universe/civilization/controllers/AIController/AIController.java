@@ -4,7 +4,7 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
-import ConquerSpace.game.universe.civilizations.Civilization;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.scripts.RunScript;
 import java.util.ArrayList;

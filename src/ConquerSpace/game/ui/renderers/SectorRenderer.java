@@ -1,6 +1,6 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.game.universe.civilizations.VisionTypes;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
