@@ -50,7 +50,12 @@ public class ManualContent extends JFrame {
             for (int i = 0; i < imgs.size(); i++) {
                 Element imgE = imgs.get(i);
                 Attribute attri = imgE.getAttribute("src");
-                attri.setValue("file://" + System.getProperty("user.dir") + File.separator + "assets" + File.separator + "manuals" + File.separator + attri.getValue());
+                String imgPathName = System.getProperty("user.dir") + File.separator + "assets" + File.separator + "manuals" + File.separator + attri.getValue();
+                if(System.getProperty("os.name").toLowerCase().contains("win")) {
+                    //Windows, remove the disk
+                    imgPathName = imgPathName.replaceAll(".*:", "");
+                }
+                attri.setValue("file://" + imgPathName);
             }
             file = e.toXML();
         } catch (ParsingException ex) {
