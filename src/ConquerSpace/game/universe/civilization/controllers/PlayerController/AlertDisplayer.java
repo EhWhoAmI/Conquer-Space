@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.util.Singleton;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
@@ -11,6 +12,7 @@ import javax.swing.JScrollPane;
  *
  * @author Zyun
  */
+@Singleton
 public class AlertDisplayer extends JInternalFrame {
 
     private JList<Alert> alertList;
@@ -19,6 +21,7 @@ public class AlertDisplayer extends JInternalFrame {
     private static AlertDisplayer instance;
 
     private AlertDisplayer() {
+        setTitle("Alerts");
         //Form array
         model = new DefaultListModel<>();
         alertList = new JList<>(model);
@@ -29,6 +32,7 @@ public class AlertDisplayer extends JInternalFrame {
 
         setSize(new Dimension(20, 300));
         setVisible(true);
+        setClosable(true);
     }
 
     public void addAlert(Alert a) {

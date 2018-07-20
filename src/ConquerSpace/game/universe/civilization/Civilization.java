@@ -268,7 +268,11 @@ public class Civilization {
     public void assignResearch(Techonology t, Person p) {
         if(people.contains(p) && p instanceof Researcher) {
             //Then do it...
+            System.out.println(p + " is person");
             currentlyResearchingTechonologys.put(t, (Researcher) p);
+            civResearch.put(t, 0);
+            //Hide because it is researching
+            civTechs.put(t, -1);
         }
     }
     

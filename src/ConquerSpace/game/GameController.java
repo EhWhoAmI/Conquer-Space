@@ -1,6 +1,10 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.tech.Techonologies;
+import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.util.CQSPLogger;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +28,7 @@ public class GameController {
         Globals.turn = 0;
         Globals.universe.processTurn(Globals.turn);
         Globals.turn++;
-        
+
         //Init universe
         GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
         updater.initGame();
@@ -35,7 +39,7 @@ public class GameController {
         //Atomic integer so that we can edit it in a lambada.
         AtomicInteger lastMonth = new AtomicInteger(1);
 
-        int tickerSpeed = 100;
+        int tickerSpeed = 10;
         Timer ticker = new Timer(tickerSpeed, (e) -> {
             if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
                 //DO ticks, somehow
@@ -46,11 +50,30 @@ public class GameController {
                     long start = System.currentTimeMillis();
                     Globals.universe.processTurn(0);
                     long end = System.currentTimeMillis();
+                    
+                    //Increment tech
+                    for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+                        Civilization c = Globals.universe.getCivilization(i);
+                        for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
+                            if((Techonologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
+                                //Then tech is finished
+                                c.researchTech(t);
+                                c.civResearch.remove(t);
+                                c.currentlyResearchingTechonologys.remove(t);
+                                //Alert civ
+                                c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
+                            } else {
+                           c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill());
+                            }
+                        }
+                    }
                     LOGGER.info("Took " + (end - start) + " ms");
                     if (lastMonth.intValue() == 13) {
                         lastMonth.set(1);
                     }
+                    
                 }
+
             }
         });
 

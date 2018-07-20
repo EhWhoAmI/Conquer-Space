@@ -1,11 +1,8 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.start.gui.ManualContent;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

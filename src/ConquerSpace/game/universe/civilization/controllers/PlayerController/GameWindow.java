@@ -82,7 +82,15 @@ public class GameWindow extends JFrame {
 
         views.add(setToUniverseView);
         views.add(seeHomePlanet);
+        
         JMenu menu = new JMenu("Alerts");
+        
+        JMenuItem viewAlert = new JMenuItem("View Alerts");
+        viewAlert.setAccelerator(KeyStroke.getKeyStroke('l'));
+        viewAlert.addActionListener((e) -> {
+            addFrame(AlertDisplayer.getInstance());
+        });
+        menu.add(viewAlert);
         
         JMenu ownCivInfo = new JMenu("Civilization");
         

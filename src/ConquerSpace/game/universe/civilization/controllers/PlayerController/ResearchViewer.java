@@ -34,6 +34,7 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
     private JPanel researchProgressPanel;
     private JLabel researchingTech;
     private JLabel researcher;
+    private JLabel estTimeLeft;
 
     private Civilization c;
 
@@ -72,18 +73,22 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
             if (!tech.isSelectionEmpty()) {
                 System.out.println("Researching");
                 c.assignResearch(tech.getSelectedValue(), c.people.get(0));
-                
+                list.removeElement(tech.getSelectedValue());
             }
         });
         techInfoPanel.add(researchButton);
 
         researchProgressPanel = new JPanel();
         researchProgressPanel.setLayout(new VerticalFlowLayout());
-        
+
         researchingTech = new JLabel("");
         researchProgressPanel.add(researchingTech);
+
         researcher = new JLabel("");
         researchProgressPanel.add(researcher);
+
+        estTimeLeft = new JLabel("");
+        researchProgressPanel.add(estTimeLeft);
 
         techResearcher.add(tech);
         techResearcher.add(techInfoPanel);
@@ -92,6 +97,7 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
             for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
                 researchingTech.setText(t.getName());
                 researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
+                estTimeLeft.setText("Estimated time left: " + (Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()));
             }
         });
         pane.addTab("Research", techResearcher);
@@ -106,9 +112,11 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        Techonology selected = tech.getSelectedValue();
-        techName.setText(selected.getName());
-        techdifficulity.setText("Difficulty: " + selected.getDifficulty());
-        techEstTime.setText("Estimated time to completion: " + Techonologies.estFinishTime(selected) + " months");
+        if (tech.getModel().getSize() > 0) {
+            Techonology selected = tech.getSelectedValue();
+            techName.setText(selected.getName());
+            techdifficulity.setText("Difficulty: " + selected.getDifficulty());
+            techEstTime.setText("Estimated time to completion: " + Techonologies.estFinishTime(selected) + " months");
+        }
     }
 }
