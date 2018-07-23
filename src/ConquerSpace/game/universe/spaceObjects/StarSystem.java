@@ -165,18 +165,17 @@ public class StarSystem extends SpaceObject {
     
     /**
      * Processes turns of the planets
-     * @param turn the turn number.
      */
     @Override
-    public void processTurn(int turn) {
+    public void processTurn() {
         //Process turn of the planets then the stars.
         //Maybe later the objects in space.
         for (Planet planet : planets) {
-            planet.processTurn(turn);
+            planet.processTurn();
         }
 
         for (Star star : stars) {
-            star.processTurn(turn);
+            star.processTurn();
         }
     }
     

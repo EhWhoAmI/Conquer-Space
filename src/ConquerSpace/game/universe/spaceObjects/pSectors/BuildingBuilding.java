@@ -14,11 +14,13 @@ public class BuildingBuilding extends PlanetSector{
     private int turns;
     private PlanetSector sector;
     private Planet parent;
+    private int owner;
     
-    public BuildingBuilding(int turns, PlanetSector sector, Planet parent) {
+    public BuildingBuilding(int turns, PlanetSector sector, Planet parent, int owner) {
         this.turns = turns;
         this.sector = sector;
         this.parent = parent;
+        this.owner = owner;
     }
 
     public PlanetSector getSector() {
@@ -30,12 +32,12 @@ public class BuildingBuilding extends PlanetSector{
     }
 
     @Override
-    public void processTurn(int turn) {
+    public void processTurn() {
         turns--;
         if(turns == 0) {
             //Replace self with sector
-            parent.planetSectors[this.getId()] = sector;
-            Globals.universe.getCivilization(getOwner()).controller.alert(new Alert(0, 0, "Sector finished building"));
+            parent.planetSectors[sector.getId()] = sector;
+            Globals.universe.getCivilization(owner).controller.alert(new Alert(0, 0, "Sector finished building"));
         }
     }
 

@@ -116,9 +116,9 @@ public class Sector extends SpaceObject {
     }
 
     @Override
-    public void processTurn(int turn) {
+    public void processTurn() {
         for (StarSystem starSystem : starSystems) {
-            starSystem.processTurn(turn);
+            starSystem.processTurn();
         }
     }
 }

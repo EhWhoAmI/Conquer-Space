@@ -5,7 +5,7 @@ package ConquerSpace.game.universe.spaceObjects;
  * @author Zyun
  */
 public class SpaceObject{
-    public void processTurn(int turn) {
+    public void processTurn() {
         
     }
 }

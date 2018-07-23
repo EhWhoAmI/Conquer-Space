@@ -107,10 +107,10 @@ public class Universe extends SpaceObject{
     }
 
     @Override
-    public void processTurn(int turn) {
+    public void processTurn() {
         //Process turns of all the internals
         for (Sector sector : sectors) {
-            sector.processTurn(turn);
+            sector.processTurn();
         }
     }
     

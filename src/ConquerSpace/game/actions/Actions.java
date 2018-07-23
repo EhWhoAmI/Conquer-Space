@@ -29,7 +29,7 @@ public class Actions {
     public static boolean buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {
         if(p.getOwnerID() == owner) {
             //Pass
-            p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p);
+            p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p, owner);
             return true;
         } else
             return false;

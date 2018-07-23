@@ -116,7 +116,7 @@ public class Planet extends SpaceObject {
     }
 
     public long getPopulation() {
-        return population.population.get(population.population.size() - 1);
+        return 0;//population.population.get(population.population.size() - 1);
     }
 
     public int getSurfaceArea() {
@@ -136,7 +136,7 @@ public class Planet extends SpaceObject {
         return planetSectors.length;
     }
 
-    public void computePopulation(int turn) {
+    public void computePopulation() {
         //Population
         long currentPopulation = 0;
 
@@ -158,9 +158,9 @@ public class Planet extends SpaceObject {
             if (sector instanceof PopulationStorage) {
                 //Parse
                 Population pop = ((PopulationStorage) sector).pop;
-                currentPopulation += pop.population.get(turn);
-                birthRate += pop.getLastYearsbirthsPer1K(turn);
-                deathRate += pop.getLastYearsMortalityRate(turn);
+                //currentPopulation += pop.population.get();
+                //birthRate += pop.getLastYearsbirthsPer1K(turn);
+                //deathRate += pop.getLastYearsMortalityRate(turn);
                 index++;
             }
         }
@@ -177,25 +177,25 @@ public class Planet extends SpaceObject {
 
     }
 
-    public void computeEconomy(int turn) {
+    public void computeEconomy() {
 
     }
 
     @Override
-    public void processTurn(int turn) {
+    public void processTurn() {
         int index = 0;
         HashMap<Integer, Integer> control = new HashMap<>();
         for (PlanetSector planetSector : planetSectors ) {
-            planetSector.processTurn(turn);
+            planetSector.processTurn();
 
             //Parse building buildings
-            if (planetSector instanceof BuildingBuilding) {
-                BuildingBuilding building = (BuildingBuilding) planetSector;
-                if (building.getTurns() == 0) {
-                    //Replace
-                    planetSectors[index] = building.getSector();
-                }
-            }
+//            if (planetSector instanceof BuildingBuilding) {
+//                BuildingBuilding building = (BuildingBuilding) planetSector;
+//                if (building.getTurns() == 0) {
+//                    //Replace
+//                    planetSectors[index] = building.getSector();
+//                }
+//            }
             index++;
             if (planetSector.getOwner() != -1) {
                 //None
@@ -222,8 +222,8 @@ public class Planet extends SpaceObject {
             }
         }
         setOwnerID(idofmost);
-        computePopulation(turn);
-        computeEconomy(turn);
+        //computePopulation();
+        computeEconomy();
     }
 
     public int getParentSector() {

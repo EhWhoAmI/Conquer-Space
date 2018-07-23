@@ -26,7 +26,7 @@ public class GameController {
     public GameController() {
         //Process the 0th turn and initalize the universe.
         Globals.turn = 0;
-        Globals.universe.processTurn(Globals.turn);
+        Globals.universe.processTurn();
         Globals.turn++;
 
         //Init universe
@@ -37,25 +37,27 @@ public class GameController {
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date);
 
         //Atomic integer so that we can edit it in a lambada.
-        AtomicInteger lastMonth = new AtomicInteger(1);
+        AtomicInteger lastMonth = new AtomicInteger(Globals.date.getMonthNumber());
 
-        int tickerSpeed = 10;
+        int tickerSpeed = 1;
         Timer ticker = new Timer(tickerSpeed, (e) -> {
             if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
-                //DO ticks, somehow
+                //DO ticks
                 Globals.date.increment(1);
                 //Check for month increase
-                if (Globals.date.getMonthNumber() > lastMonth.get()) {
-                    lastMonth.incrementAndGet();
+
+                if (Globals.date.getMonthNumber() != lastMonth.get()) {
+                    lastMonth.set(Globals.date.getMonthNumber());
                     long start = System.currentTimeMillis();
-                    Globals.universe.processTurn(0);
-                    long end = System.currentTimeMillis();
-                    
+                    Globals.universe.processTurn();
+                    for (int i = 0; i < Globals.universe.getCivilizationCount(); i++)
+                        Globals.universe.getCivilization(0).calculateTechLevel();
                     //Increment tech
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Civilization c = Globals.universe.getCivilization(i);
                         for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
-                            if((Techonologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
+                            System.out.println("processing tech " + t + " " + (Techonologies.estFinishTime(t) - c.civResearch.get(t)) + " " + lastMonth.intValue());
+                            if ((Techonologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
                                 //Then tech is finished
                                 c.researchTech(t);
                                 c.civResearch.remove(t);
@@ -63,17 +65,14 @@ public class GameController {
                                 //Alert civ
                                 c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
                             } else {
-                           c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill());
+                                c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill());
                             }
                         }
                     }
-                    LOGGER.info("Took " + (end - start) + " ms");
-                    if (lastMonth.intValue() == 13) {
-                        lastMonth.set(1);
-                    }
-                    
-                }
+                    long end = System.currentTimeMillis();
 
+                    LOGGER.info("Took " + (end - start) + " ms");
+                }
             }
         });
 

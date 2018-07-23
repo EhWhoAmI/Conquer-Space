@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.Timer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -74,6 +75,10 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
                 System.out.println("Researching");
                 c.assignResearch(tech.getSelectedValue(), c.people.get(0));
                 list.removeElement(tech.getSelectedValue());
+                //Set everything empty
+                techName.setText("");
+                techdifficulity.setText("");
+                techEstTime.setText("");
             }
         });
         techInfoPanel.add(researchButton);
@@ -93,6 +98,22 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         techResearcher.add(tech);
         techResearcher.add(techInfoPanel);
 
+        Timer researchingTechticker = new Timer(100, (e) -> {
+            for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
+                researchingTech.setText(t.getName());
+                researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
+                estTimeLeft.setText("Estimated time left: " + (Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()));
+            }
+            //Add all techs
+            for (Techonology t : c.civTechs.keySet()) {
+                if (c.civTechs.get(t) == Techonologies.REVEALED && !list.contains(t)) {
+                    list.addElement(t);
+                }
+            }
+        });
+
+        researchingTechticker.setRepeats(true);
+        researchingTechticker.start();
         pane.addChangeListener((e) -> {
             for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
                 researchingTech.setText(t.getName());
@@ -112,7 +133,7 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        if (tech.getModel().getSize() > 0) {
+        if (tech.getModel().getSize() > 0 && tech.getSelectedValue() != null) {
             Techonology selected = tech.getSelectedValue();
             techName.setText(selected.getName());
             techdifficulity.setText("Difficulty: " + selected.getDifficulty());
