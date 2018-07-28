@@ -197,6 +197,9 @@ public class Planet extends SpaceObject {
 //                }
 //            }
             index++;
+        }
+            //Calculate owner... Skip...
+            /*
             if (planetSector.getOwner() != -1) {
                 //None
                 if (control.containsKey(planetSector.getOwner())) {
@@ -205,6 +208,7 @@ public class Planet extends SpaceObject {
                     control.put(planetSector.getOwner(), 1);
                 }
             }
+
 
         }
 
@@ -222,6 +226,7 @@ public class Planet extends SpaceObject {
             }
         }
         setOwnerID(idofmost);
+*/
         //computePopulation();
         computeEconomy();
     }

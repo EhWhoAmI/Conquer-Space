@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
+@Deprecated
 public class UniverseDisplayer extends JInternalFrame implements MouseListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(UniverseDisplayer.class.getName());

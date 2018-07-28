@@ -14,5 +14,5 @@ import java.util.ArrayList;
 public interface CivilizationController{
     public ArrayList<Action> doTurn(Civilization c);
     public void alert(Alert a);
-    public void init(Universe u, StarDate d);
+    public void init(Universe u, StarDate d, Civilization c);
 }

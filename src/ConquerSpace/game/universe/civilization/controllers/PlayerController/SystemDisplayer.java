@@ -1,10 +1,8 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.ui.renderers.PlanetDrawStats;
 import ConquerSpace.game.ui.renderers.SystemInternalsDrawer;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
-import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
@@ -22,6 +20,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
+@Deprecated
 public class SystemDisplayer extends JInternalFrame implements MouseListener {
 
     SystemInternalsDrawer stats;
@@ -68,7 +67,7 @@ public class SystemDisplayer extends JInternalFrame implements MouseListener {
             for (PlanetDrawStats pstats : stats.stats.planetDrawStats) {
                 if (Math.hypot(pstats.getPos().x - e.getX(), pstats.getPos().y - e.getY()) < pstats.getSize()) {
                     LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
-                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getID()));
+                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(sectorID).getStarSystem(systemID).getPlanet(pstats.getID()), null);
                     getDesktopPane().add(d);
                     break;
                 }

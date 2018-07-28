@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
+@Deprecated
 public class SectorDisplayer extends JInternalFrame implements MouseListener{
     private static final Logger LOGGER = CQSPLogger.getLogger(SectorDisplayer.class.getName());
     SectorDrawer drawStats;

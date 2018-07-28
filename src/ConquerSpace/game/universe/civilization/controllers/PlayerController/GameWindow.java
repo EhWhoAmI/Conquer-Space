@@ -7,6 +7,7 @@ import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
@@ -43,9 +44,12 @@ public class GameWindow extends JFrame {
     private CQSPDesktop desktopPane;
     private JMenuBar menuBar;
     
+    private Civilization c;
+    
     private PlayerController controller;
-    public GameWindow(Universe u, PlayerController controller) {
+    public GameWindow(Universe u, PlayerController controller, Civilization c) {
         this.controller = controller;
+        this.c = c;
         desktopPane = new CQSPDesktop(u);
         menuBar = new JMenuBar();
 
@@ -232,7 +236,7 @@ public class GameWindow extends JFrame {
                     for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
                         if (Math.hypot(translateX + pstats.getPos().x - e.getX(), translateY + pstats.getPos().y - e.getY()) < pstats.getSize()) {
                             LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
-                            PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(drawingSector).getStarSystem(drawingStarSystem).getPlanet(pstats.getID()));
+                            PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(drawingSector).getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
                             add(d);
                             break;
                         }

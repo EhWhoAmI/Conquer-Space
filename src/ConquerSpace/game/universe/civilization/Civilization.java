@@ -252,7 +252,8 @@ public class Civilization {
     }
 
     public Techonology[] getTechsByTag(String tag) {
-        return ((Techonology[]) (civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray()));
+        Object[] techList = civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e ->civTechs.get(e) == Techonologies.RESEARCHED).toArray();
+        return (Arrays.copyOf(techList, techList.length, Techonology[].class));
     }
 
     public void researchTech(Techonology t) {

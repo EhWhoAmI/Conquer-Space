@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -43,7 +44,7 @@ public class PlanetOverview extends JPanel {
     private JList<String> resourceList;
     private Planet p;
 
-    public PlanetOverview(Planet p) {
+    public PlanetOverview(Planet p, Civilization c) {
         this.p = p;
         setLayout(new GridLayout(2, 2));
 
@@ -78,7 +79,7 @@ public class PlanetOverview extends JPanel {
         }
 
         planetSectors = new JPanel();
-        PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p);
+        PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p, c);
         JPanel wrapper = new JPanel();
         wrapper.add(sectorDisplayer);
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
@@ -114,8 +115,10 @@ public class PlanetOverview extends JPanel {
         private PlanetSector[] sectors;
         private int times;
         private JPopupMenu menu;
-
-        public PlanetSectorDisplayer(Planet p) {
+        private Civilization c;
+        
+        public PlanetSectorDisplayer(Planet p, Civilization c) {
+            this.c = c;
             sectors = p.planetSectors;
             times = (int) Math.sqrt(sectors.length);
             setPreferredSize(new Dimension(times * 7 + 2, times * 7 + 2));
@@ -189,7 +192,7 @@ public class PlanetOverview extends JPanel {
                 if (p.getOwnerID() == 0 && p.planetSectors[index] instanceof RawResource) {
                     JMenuItem build = new JMenuItem("Build");
                     build.addActionListener((l) -> {
-                        BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index);
+                        BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index, c);
                         //sector.addWindowListener();
                         Component c;
                         for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {

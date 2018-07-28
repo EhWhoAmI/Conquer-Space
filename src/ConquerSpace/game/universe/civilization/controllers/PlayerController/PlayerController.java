@@ -17,18 +17,16 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class PlayerController implements CivilizationController {
-
+    private Civilization c;
+    
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
     public GameWindow mainwindow;
-    public UniverseDisplayer displayer;
     public UserInterface userInterface;
     public TurnSaveWindow tsWindow;
     public AlertDisplayer alertDisplayer;
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
-        displayer.setVisible(false);
-        userInterface.setVisible(false);
         return null;
     }
 
@@ -38,8 +36,8 @@ public class PlayerController implements CivilizationController {
     }
 
     @Override
-    public void init(Universe u, StarDate d) {
-        mainwindow = new GameWindow(u, this);
+    public void init(Universe u, StarDate d, Civilization c) {
+        mainwindow = new GameWindow(u, this, c);
 
         //displayer = new UniverseDisplayer(u);
         //userInterface = new UserInterface(u);

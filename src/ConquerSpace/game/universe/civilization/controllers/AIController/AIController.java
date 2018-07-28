@@ -33,7 +33,7 @@ public class AIController implements CivilizationController{
     }
 
     @Override
-    public void init(Universe u, StarDate d) {
+    public void init(Universe u, StarDate d, Civilization c) {
     }
     
     

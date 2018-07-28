@@ -34,7 +34,7 @@ public class GameController {
         updater.initGame();
         //Load the player
 
-        Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date);
+        Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 
         //Atomic integer so that we can edit it in a lambada.
         AtomicInteger lastMonth = new AtomicInteger(Globals.date.getMonthNumber());
