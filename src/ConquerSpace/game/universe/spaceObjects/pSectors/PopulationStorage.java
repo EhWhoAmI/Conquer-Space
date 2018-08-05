@@ -3,7 +3,6 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 import ConquerSpace.game.buildings.Buildable;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
-import java.util.Random;
 
 /**
  * AKA apartments

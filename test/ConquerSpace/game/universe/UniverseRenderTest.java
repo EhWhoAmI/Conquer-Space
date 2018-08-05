@@ -243,7 +243,7 @@ public final class UniverseRenderTest {
         //Create universe renderer
         UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), universe);
         JPanel panel = new JPanel();
-        panel.add(renderer);
+        //panel.add(renderer);
 
         //Place renderer into a scroll pane.
         JScrollPane scrollPane = new JScrollPane(panel);

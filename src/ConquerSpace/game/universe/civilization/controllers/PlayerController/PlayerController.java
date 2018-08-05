@@ -21,7 +21,6 @@ public class PlayerController implements CivilizationController {
     
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
     public GameWindow mainwindow;
-    public UserInterface userInterface;
     public TurnSaveWindow tsWindow;
     public AlertDisplayer alertDisplayer;
 
@@ -39,20 +38,15 @@ public class PlayerController implements CivilizationController {
     public void init(Universe u, StarDate d, Civilization c) {
         mainwindow = new GameWindow(u, this, c);
 
-        //displayer = new UniverseDisplayer(u);
-        //userInterface = new UserInterface(u);
         tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();
 
         tsWindow.setLocation(mainwindow.getWidth() - tsWindow.getWidth(), 0);
+        //Remove mouse listeners for the turnsave window.
         for (MouseListener listener : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().getMouseListeners()) {
             ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().removeMouseListener(listener);
         }
 
-        //mainwindow.add(displayer);
-        //mainwindow.add(userInterface);
         mainwindow.add(tsWindow);
-        //mainwindow.add(alertDisplayer);
-
     }
 }

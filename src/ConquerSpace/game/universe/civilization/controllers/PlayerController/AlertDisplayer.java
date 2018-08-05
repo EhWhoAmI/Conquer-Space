@@ -30,7 +30,7 @@ public class AlertDisplayer extends JInternalFrame {
         add(pane);
         setResizable(true);
 
-        setSize(new Dimension(20, 300));
+        setSize(new Dimension(100, 200));
         setVisible(true);
         setClosable(true);
     }

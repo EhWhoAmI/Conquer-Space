@@ -48,8 +48,7 @@ public class GalaticLocation {
      * @param degrees degrees
      */
     public void setDegrees(float degrees) {
-        this.degrees = degrees;
-        this.degrees = this.degrees%360;
+        this.degrees = (degrees%360);
     }
     
     /**

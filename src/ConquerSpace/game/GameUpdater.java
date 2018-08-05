@@ -4,8 +4,6 @@ import ConquerSpace.game.people.Researcher;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
-import ConquerSpace.game.templates.DefaultTemplates;
-import ConquerSpace.game.templates.Template;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
@@ -16,8 +14,6 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.util.CQSPLogger;
-import ConquerSpace.util.ExceptionHandling;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -73,10 +69,9 @@ public class GameUpdater {
                 int owner = -1;
                 for (int i = 0; i < starsystem.getPlanetCount(); i++) {
                     Planet planet = starsystem.getPlanet(i);
-                    if(owner == -1 && planet.getOwnerID() > -1) {
+                    if (owner == -1 && planet.getOwnerID() > -1) {
                         owner = planet.getOwnerID();
-                    }
-                    else if(owner != planet.getOwnerID() && planet.getOwnerID() != -1){
+                    } else if (owner != planet.getOwnerID() && planet.getOwnerID() != -1) {
                         owner = ControlTypes.DISPUTED;
                     }
                 }
@@ -98,7 +93,7 @@ public class GameUpdater {
                 universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.KNOWS_ALL);
                 //Set sector to visible
                 universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID()), VisionTypes.KNOWS_ALL);
-                
+
                 //Get the stars around it.
             }
         }
@@ -108,68 +103,49 @@ public class GameUpdater {
         //Init tech and fields
         Fields.readFields();
         Techonologies.readTech();
-        
+
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
-        
+
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
-            Template[] t = DefaultTemplates.createDefaultTemplates();
 
-            for (Template template : t) {
-                c.addTemplate(template, template.getName());
-            }
-            
             //Add the starting techs
             c.researchTech(Techonologies.getTechByName("life"));
-            
+
             //Add all starting techs
-            for(Techonology tech : Techonologies.getTechsByTag("Starting")) {
+            for (Techonology tech : Techonologies.getTechsByTag("Starting")) {
                 c.researchTech(tech);
             }
-            
+
             //Select one of the space travel sciences
             Techonology[] teks = Techonologies.getTechsByTag("space travel base");
             //To research this
             c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
             c.calculateTechLevel();
-            
+
             //Add researchers
             //Only one.
             Researcher r = new Researcher("Person", 20);
             r.setSkill(1);
             c.people.add(r);
-            
+
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
-                try {
-                    Planet starting = (Planet) universe.getSpaceObject(p);
-                    int sectorCount = starting.getPlanetSectorCount();
-                    int id = selector.nextInt(sectorCount);
-                    PopulationStorage storage = (PopulationStorage) c.getTemplate("Basic residence").create();
-                    starting.setPlanetSector(id, storage);
-                    
-                    starting.setName(c.getHomePlanetName());
-                    
-                    //Set ownership
-                    starting.setOwnerID(c.getID());
+                Planet starting = (Planet) universe.getSpaceObject(p);
+                int sectorCount = starting.getPlanetSectorCount();
+                int id = selector.nextInt(sectorCount);
+                PopulationStorage storage = new PopulationStorage(100l, 100l, (byte)100);
+                starting.setPlanetSector(id, storage);
 
-                    LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
-                } catch (ClassCastException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Class cast exception! " + ex.getMessage(), ex);
-                } catch (InstantiationException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Instantiation Exception! " + ex.getMessage(), ex);
-                } catch (IllegalAccessException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Illegal Access Exception! " + ex.getMessage(), ex);
-                } catch (IllegalArgumentException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Illegal Argument Exception! " + ex.getMessage(), ex);
-                } catch (InvocationTargetException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Invocation Target Exception! " + ex.getMessage(), ex);
-                } catch (NoSuchMethodException ex) {
-                    ExceptionHandling.ExceptionMessageBox("No Such Method Exception! " + ex.getMessage(), ex);
-                }
+                starting.setName(c.getHomePlanetName());
+
+                //Set ownership
+                starting.setOwnerID(c.getID());
+
+                LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
             }
         }
         calculateControl();

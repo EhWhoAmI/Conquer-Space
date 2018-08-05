@@ -6,7 +6,6 @@ import ConquerSpace.game.people.Researcher;
 import ConquerSpace.game.tech.FieldNode;
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
-import ConquerSpace.game.templates.Template;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -51,8 +50,6 @@ public class Civilization {
 
     private UniversePath startingPlanet;
 
-    private HashMap<String, Template> templatesList;
-
     public HashMap<Techonology, Integer> civTechs;
     public HashMap<Techonology, Integer> civResearch;
     public HashMap<Techonology, Researcher> currentlyResearchingTechonologys;
@@ -89,7 +86,6 @@ public class Civilization {
         pop = new Population();
         economy = new Economy();
 
-        templatesList = new HashMap<>();
         civTechs = new HashMap<>();
         civResearch = new HashMap<>();
         
@@ -224,22 +220,6 @@ public class Civilization {
 
     public UniversePath getStartingPlanet() {
         return startingPlanet;
-    }
-
-    public void addTemplate(Template b, String name) {
-        templatesList.put(name, b);
-    }
-
-    public Template getTemplate(String name) {
-        return (templatesList.get(name));
-    }
-
-    public void updateTemplate(String name, Template b) {
-        templatesList.put(name, b);
-    }
-
-    public String[] getTemplateNameList() {
-        return ((String[]) templatesList.keySet().toArray());
     }
 
     public void addTech(Techonology t) {

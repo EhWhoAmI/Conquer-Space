@@ -35,7 +35,6 @@ public class Techonologies {
             } catch (IOException ex) {
                 LOGGER.warn("IOException", ex);
             } catch (JSONException jsone) {
-                LOGGER.warn("JSONException", jsone);
             }
         }
     }

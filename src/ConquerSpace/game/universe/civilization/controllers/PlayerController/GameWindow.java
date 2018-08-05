@@ -11,7 +11,6 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -43,10 +42,11 @@ public class GameWindow extends JFrame {
 
     private CQSPDesktop desktopPane;
     private JMenuBar menuBar;
-    
+
     private Civilization c;
-    
+
     private PlayerController controller;
+
     public GameWindow(Universe u, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.c = c;
@@ -55,7 +55,7 @@ public class GameWindow extends JFrame {
 
         //Edit menu bar
         JMenu windows = new JMenu("Windows");
-        
+
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
         pauseplayButton.addActionListener(a -> {
@@ -69,7 +69,7 @@ public class GameWindow extends JFrame {
         });
         pauseplayButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         game.add(pauseplayButton);
-        
+
         JMenu views = new JMenu("View");
         JMenuItem setToUniverseView = new JMenuItem("Go to Universe View");
         setToUniverseView.addActionListener(a -> {
@@ -86,41 +86,41 @@ public class GameWindow extends JFrame {
 
         views.add(setToUniverseView);
         views.add(seeHomePlanet);
-        
+
         JMenu menu = new JMenu("Alerts");
-        
+
         JMenuItem viewAlert = new JMenuItem("View Alerts");
         viewAlert.setAccelerator(KeyStroke.getKeyStroke('l'));
         viewAlert.addActionListener((e) -> {
             addFrame(AlertDisplayer.getInstance());
         });
         menu.add(viewAlert);
-        
+
         JMenu ownCivInfo = new JMenu("Civilization");
-        
+
         JMenuItem allCivInfo = new JMenuItem("My Civilization");
         allCivInfo.addActionListener((e) -> {
             addFrame(new CivInfoOverview(u.getCivilization(0), u));
         });
         ownCivInfo.add(allCivInfo);
-        
+
         JMenu techonology = new JMenu("Techonology");
         JMenuItem seetechs = new JMenuItem("See Researched Techs");
         seetechs.addActionListener((e) -> {
             TechonologyViewer viewer = new TechonologyViewer(u, u.getCivilization(0));
             addFrame(viewer);
         });
-        
+
         JMenuItem techResearcher = new JMenuItem("Research Techonologies");
         techResearcher.addActionListener(e -> {
             ResearchViewer viewer = new ResearchViewer(u.getCivilization(0));
             addFrame(viewer);
         });
-        
+
         techResearcher.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
         techonology.add(techResearcher);
         techonology.add(seetechs);
-        
+
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
@@ -135,7 +135,7 @@ public class GameWindow extends JFrame {
 
         setSize(getToolkit().getScreenSize());
         setVisible(true);
-        
+
         //See home planet
         desktopPane.see(u.getCivilization(0).getStartingPlanet().getSectorID(), u.getCivilization(0).getStartingPlanet().getSystemID());
     }
@@ -197,50 +197,55 @@ public class GameWindow extends JFrame {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2) {
                 //If universe, click
-                if (drawing == DRAW_UNIVERSE) {
-                    //Get sector..
-                    LOGGER.info("Checking for click");
-                    sectorit:
-                    for (SectorDrawStats stats : universeRenderer.drawer.sectorDrawings) {
-                        //Check for vision
-                        if (Math.hypot(stats.getPosition().getX() + translateX - e.getX(), stats.getPosition().getY() - e.getY() + translateY) < stats.getRadius()) {
-                            for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                if (p.getSectorID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
-                                    LOGGER.info("Found sector!" + p.getSectorID());
-                                    drawingSector = p.getSectorID();
-                                    drawing = DRAW_SECTOR;
-                                    translateX = 0;
-                                    translateY = 0;
-                                    repaint();
-                                    break sectorit;
+                switch (drawing) {
+                    case DRAW_UNIVERSE:
+                        //Get sector..
+                        LOGGER.info("Checking for click");
+                        sectorit:
+                        for (SectorDrawStats stats : universeRenderer.drawer.sectorDrawings) {
+                            //Check for vision
+                            if (Math.hypot(stats.getPosition().getX() + translateX - e.getX(), stats.getPosition().getY() - e.getY() + translateY) < stats.getRadius()) {
+                                for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
+                                    if (p.getSectorID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                        LOGGER.info("Found sector!" + p.getSectorID());
+                                        drawingSector = p.getSectorID();
+                                        drawing = DRAW_SECTOR;
+                                        translateX = 0;
+                                        translateY = 0;
+                                        repaint();
+                                        break sectorit;
+                                    }
                                 }
                             }
                         }
-                    }
-
-                } else if (drawing == DRAW_SECTOR) {
-                    //Star system
-                    //Get which system clicked.
-                    LOGGER.info("Double clicked. Opening system");
-                    for (SystemDrawStats stat : sectorRenderers[drawingSector].drawer.stats) {
-                        if (Math.hypot(translateX + stat.getPosition().getX() - e.getX(), translateY + stat.getPosition().getY() - e.getY()) < 25 && universe.getCivilization(0).vision.get(stat.getPath()) > VisionTypes.UNDISCOVERED) {
-                            LOGGER.info("Mouse clicked in system " + stat.getId() + "!");
-                            systemRenderer = new SystemRenderer(universe.getSector(drawingSector).getStarSystem(stat.getId()), universe, new Dimension(1500, 1500));
-                            drawing = DRAW_STAR_SYSTEM;
-                            drawingStarSystem = stat.getId();
-                            repaint();
-                            break;
+                        break;
+                    case DRAW_SECTOR:
+                        //Star system
+                        //Get which system clicked.
+                        LOGGER.info("Double clicked. Opening system");
+                        for (SystemDrawStats stat : sectorRenderers[drawingSector].drawer.stats) {
+                            if (Math.hypot(translateX + stat.getPosition().getX() - e.getX(), translateY + stat.getPosition().getY() - e.getY()) < 25 && universe.getCivilization(0).vision.get(stat.getPath()) > VisionTypes.UNDISCOVERED) {
+                                LOGGER.info("Mouse clicked in system " + stat.getId() + "!");
+                                systemRenderer = new SystemRenderer(universe.getSector(drawingSector).getStarSystem(stat.getId()), universe, new Dimension(1500, 1500));
+                                drawing = DRAW_STAR_SYSTEM;
+                                drawingStarSystem = stat.getId();
+                                repaint();
+                                break;
+                            }
                         }
-                    }
-                } else if (drawing == DRAW_STAR_SYSTEM) {
-                    for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
-                        if (Math.hypot(translateX + pstats.getPos().x - e.getX(), translateY + pstats.getPos().y - e.getY()) < pstats.getSize()) {
-                            LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
-                            PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(drawingSector).getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
-                            add(d);
-                            break;
+                        break;
+                    case DRAW_STAR_SYSTEM:
+                        for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
+                            if (Math.hypot(translateX + pstats.getPos().x - e.getX(), translateY + pstats.getPos().y - e.getY()) < pstats.getSize()) {
+                                LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
+                                PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(drawingSector).getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
+                                add(d);
+                                break;
+                            }
                         }
-                    }
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -259,7 +264,6 @@ public class GameWindow extends JFrame {
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            //Pause game?
         }
 
         @Override

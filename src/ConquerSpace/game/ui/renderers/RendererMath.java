@@ -122,7 +122,6 @@ public class RendererMath {
         return (new Point(xpos, ypos));
     }
 
-    
     /**
      * Hide constructor.
      */

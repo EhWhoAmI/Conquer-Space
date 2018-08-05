@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -33,6 +34,8 @@ public class DebugStatsWindow extends JInternalFrame {
 
     private JButton dumpUniverseButton;
 
+    private JButton runTrashCompactor;
+    
     /**
      * Universe
      */
@@ -47,7 +50,7 @@ public class DebugStatsWindow extends JInternalFrame {
         setTitle("Stats for Nerds");
         setLayout(new VerticalFlowLayout());
         Runtime runtime = Runtime.getRuntime();
-        memoryusedLabel = new JLabel("Memory used: " + ((runtime.maxMemory() - runtime.freeMemory()) / 1048576) + " MB/" + (runtime.maxMemory() / 1048576) + " MB. Something like " + (((((float) runtime.maxMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.maxMemory()) * 100) + "%");
+        memoryusedLabel = new JLabel("Memory used: " + FileUtils.byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
 
         dumpUniverseButton = new JButton("Dump universe");
 
@@ -69,15 +72,20 @@ public class DebugStatsWindow extends JInternalFrame {
             }
         });
 
+        runTrashCompactor = new JButton("Force Garbage Collection");
+        runTrashCompactor.addActionListener((e) -> {
+            System.gc();
+        });
         add(memoryusedLabel);
         add(dumpUniverseButton);
+        add(runTrashCompactor);
         
         pack();
 
         //Ticker to tick and update the text.
         Timer ticker = new Timer(0, (e) -> {
             Runtime r = Runtime.getRuntime();
-            memoryusedLabel.setText("Memory used: " + ((r.maxMemory() - r.freeMemory()) / 1048576) + " MB/" + (r.maxMemory() / 1048576) + " MB. Something like " + (((((float) r.maxMemory()) - ((float) r.freeMemory()))) / ((float) r.maxMemory()) * 100) + "%");
+            memoryusedLabel.setText("Memory used: " + FileUtils.byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(r.totalMemory()) + ". Something like " + (((((float) r.totalMemory()) - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
             repaint();
         });
         //Every 1 second, update. make it update ever so often, but not so that it

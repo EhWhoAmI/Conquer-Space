@@ -23,19 +23,6 @@ public class StarDate {
     }
     
     /**
-     * Just don't use this
-     * @deprecated 
-     * @return Null
-     */
-    @Override
-    public String toString() {
-        BigInteger days = bigint.divide(BigInteger.valueOf(24L));
-        days = days.mod(BigInteger.valueOf(365L));
-        
-        return null;
-    }
-    
-    /**
      * Get number of days from start of month.
      * @return Days from start of month.
      */

@@ -25,15 +25,12 @@ public class GameController {
      */
     public GameController() {
         //Process the 0th turn and initalize the universe.
-        Globals.turn = 0;
         Globals.universe.processTurn();
-        Globals.turn++;
 
         //Init universe
         GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
         updater.initGame();
         //Load the player
-
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 
         //Atomic integer so that we can edit it in a lambada.
@@ -51,7 +48,7 @@ public class GameController {
                     long start = System.currentTimeMillis();
                     Globals.universe.processTurn();
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++)
-                        Globals.universe.getCivilization(0).calculateTechLevel();
+                        Globals.universe.getCivilization(i).calculateTechLevel();
                     //Increment tech
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Civilization c = Globals.universe.getCivilization(i);

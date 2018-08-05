@@ -2,7 +2,6 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.start.gui.Manual;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

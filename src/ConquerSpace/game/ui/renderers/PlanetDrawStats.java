@@ -19,6 +19,7 @@ public class PlanetDrawStats {
     //NOTE: planet size has to be exxagurated in order to see the planet.
     //Space is too dang big!
     private int size;
+    
     public PlanetDrawStats(int id, Point pos, Color color, int orbitPath, int size, String owner, Color ownColor) {
         this.id = id;
         this.pos = pos;

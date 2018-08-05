@@ -48,32 +48,32 @@ public class Economy extends Stats{
     
     public BigInteger getLastYearsgdp(int turn) {
         //Get index
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
-        return(gdp.get(year));
+        //int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+        return(BigInteger.ZERO);
     }
     
     public float getLastYearsUnemploymentRate(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
-        return (unemploymentRate.get(year));
+        //int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+        return (0);
     }
     
     public BigInteger getLastYearsNetWorth(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
-        return (netWorth.get(year));
+        //int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+        return (BigInteger.ZERO);
     }
     
     public int getLastYearsAverageWage(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
-        return (averageWage.get(year));
+        //int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+        return (0);
     }
     
     public long getLastYearsJobs(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
-        return (jobs.get(year));
+        //int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+        return (0);
     }
     
     public BigInteger getLastYearsTradeVolume(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
-        return (tradeVolume.get(year));
+        //int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+        return (BigInteger.ZERO);
     }
 }

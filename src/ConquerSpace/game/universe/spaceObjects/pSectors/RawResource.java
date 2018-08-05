@@ -2,7 +2,6 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.game.universe.resources.Resource;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;

@@ -96,6 +96,7 @@ public class PlanetOverview extends JPanel {
         }
         resourceList = new JList<>(dataModel);
         resourceList.setBorder(new TitledBorder("Resources"));
+        resourceList.setSize(100, resourceList.getHeight());
 
         //Add components
         planetOverview.add(planetName);
@@ -116,7 +117,7 @@ public class PlanetOverview extends JPanel {
         private int times;
         private JPopupMenu menu;
         private Civilization c;
-        
+
         public PlanetSectorDisplayer(Planet p, Civilization c) {
             this.c = c;
             sectors = p.planetSectors;
@@ -147,11 +148,7 @@ public class PlanetOverview extends JPanel {
                     }
 
                     g2d.fill(rect);
-                    if (sectors[count].getOwner() <= 0) {
-                        g2d.setColor(Color.black);
-                    } else {
-                        g2d.setColor(Color.red);
-                    }
+                    g2d.setColor(Color.black);
 
                     g2d.draw(rect);
                     count++;

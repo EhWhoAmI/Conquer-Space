@@ -32,11 +32,6 @@ public class UniversePath {
      */
     private int orbitID = -1;
 
-    @Deprecated
-    public UniversePath(String path) {
-        parse(path);
-    }
-
     /**
      * Empty constructor.
      */
@@ -121,31 +116,6 @@ public class UniversePath {
     public UniversePath(int sectorID, int systemID) {
         this.sectorID = sectorID;
         this.systemID = systemID;
-    }
-
-    /**
-     * Parses the universe path from a string
-     *
-     * @param s the string
-     * @deprecated
-     */
-    public void parse(String s) {
-        int sectorID = -1;
-        int systemID = -1;
-        int planetID = -1;
-        String[] text = s.split(":");
-        if (text.length == 0) {
-            //Incorrect format.
-            return;
-        } else {
-            sectorID = Integer.parseInt(text[0]);
-            if (text.length > 1) {
-                systemID = Integer.parseInt(text[1]);
-            }
-            if (text.length > 2) {
-                planetID = Integer.parseInt(text[2]);
-            }
-        }
     }
 
     /**

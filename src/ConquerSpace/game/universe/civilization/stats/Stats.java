@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.civilization.stats;
 
 /**
  *
- * @author lamkokheng
+ * @author Zyun
  */
 public class Stats {
     

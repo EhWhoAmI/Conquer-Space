@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.civilization.stats;
 
-import ConquerSpace.Globals;
 import java.util.ArrayList;
 
 /**
@@ -38,27 +37,27 @@ public class Population extends Stats{
     }
     
     public long getLastYearsPopulation(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+//        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
         return 0; //(population.get(year));
     }
     
     public float getLastYearsbirthsPer1K(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+//        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
         return 0;//(birthsPer1k.get(year));
     }
     
     public float getLastYearsHappiness(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+//        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
         return 0;//(happiness.get(year));
     }
     
     public float getLastYearsMortalityRate(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+//        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
         return 0;//(mortalityRate.get(year));
     }
     
     public float getLastYearsPopulationGrowth(int turn) {
-        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
+//        int year = (int) Math.floor(turn/Globals.YEAR_IN_TURNS);
         return 0;//(populationGrowth.get(year));
     }
 }
