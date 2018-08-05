@@ -98,6 +98,8 @@ public class GameUpdater {
                 universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.KNOWS_ALL);
                 //Set sector to visible
                 universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID()), VisionTypes.KNOWS_ALL);
+                
+                //Get the stars around it.
             }
         }
     }

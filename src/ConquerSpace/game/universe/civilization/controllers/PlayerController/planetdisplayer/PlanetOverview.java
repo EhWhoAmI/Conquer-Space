@@ -178,6 +178,7 @@ public class PlanetOverview extends JPanel {
                     info.setLocation(200, 100);
                     info.setVisible(true);
                     info.setClosable(true);
+                    info.setResizable(true);
                     Component c;
                     for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
                         if (c instanceof JInternalFrame) {

@@ -222,6 +222,19 @@
             ],
             "tags": ["space travel"],
             "floor": 9
+        },
+        {
+            "name": "astronomy",
+            "deps": ["life"],
+            "level": 2,
+            "type": "UNLOCK",
+            "difficulty": 0,
+            "action": [],
+            "fields": [
+                "Knowledge", "Astronomy"
+            ],
+            "tags": ["starting"],
+            "floor": 10
         }
     ]
 }

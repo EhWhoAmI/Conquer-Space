@@ -34,6 +34,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
     private BuildPopulationStorage bps;
     private BuildSpaceLaunchSite bsls;
 
+    @SuppressWarnings("unchecked")
     public BuildPlanetSectorMenu(Planet p, int id, Civilization c) {
         setTitle("Build on planet " + p.getName());
         setLayout(new GridLayout(2, 1));
@@ -67,7 +68,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                 Actions.buildBuilding(p, id, storage, 0, 1);
             } else if (item.equals("Space Launch Site")) {
                 //Get civ launching type...
-                SpacePortBuilding port = new SpacePortBuilding(0, 0);
+                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), 0);
                 Actions.buildBuilding(p, id, port, 0, 1);
             }
             this.dispose();

@@ -4,9 +4,10 @@ import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalaticLocation;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
-import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
+import ConquerSpace.game.universe.ships.Satellite;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -33,7 +34,8 @@ public class Planet extends SpaceObject {
 
     public Population population;
     public Economy economy;
-
+    
+    private ArrayList<Satellite> satellites;
     /**
      * Creates planet
      *
@@ -261,5 +263,17 @@ public class Planet extends SpaceObject {
     
     public UniversePath getUniversePath() {
         return (new UniversePath(parentSector, parentStarSystem, id));
+    }
+    
+    public int getSatelliteCount() {
+        return satellites.size();
+    }
+    
+    public Satellite getSatellite(int i) {
+        return satellites.get(i);
+    }
+    
+    public void addSatellite(Satellite s) {
+        satellites.add(s);
     }
 }
