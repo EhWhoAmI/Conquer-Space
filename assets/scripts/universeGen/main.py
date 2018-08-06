@@ -108,10 +108,11 @@ for i in range(universeSize):
                 toadd = 1
             else:
                 toadd = n
-            orbitalDistance = random.randint(lastDist + 1, lastDist+ 1 + (lastDist/2))
+            orbitalDistance = generation.calculatePlanetSpacing(lastDist)
             lastDist = orbitalDistance
             planetSize = random.randint(PLANET_MIN_SIZE, PLANET_MAX_SIZE)
             planet = Planet(ptype, orbitalDistance, planetSize, n, r, i)
+            ####################
             # Set planet sectors
             for b in range(planet.getPlanetSectorCount()):
                 if planet.getPlanetType() == PlanetTypes.ROCK:
@@ -133,7 +134,7 @@ for i in range(universeSize):
                     rawr = RawResource()
                     rawr.addResource(RawResourceTypes.GAS, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
                     planet.setPlanetSector(b, rawr)
-                    
+            ##################
             starSystem.addPlanet(planet)
             
         sector.addStarSystem(starSystem)

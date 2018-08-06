@@ -1,7 +1,8 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.game.universe.resources.Resource;
-import java.awt.GridLayout;
+import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.Dimension;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,13 +22,13 @@ public class RawResource extends PlanetSector{
 
     @Override
     public JPanel getInfoPanel() {
-        JPanel root = new JPanel();
+        JPanel root = new JPanel(new VerticalFlowLayout(5, 3));
         JTabbedPane tabbedPane = new JTabbedPane();
         
         JPanel infoPanel = new JPanel();
         JLabel title = new JLabel("Raw Resource");
         JLabel idLabel = new JLabel("ID: " + this.getId());
-        JLabel amountLabel = new JLabel("Amount of resources: " + resources.size());
+        JLabel amountLabel = new JLabel("Amount of resources: " + ((resources.size() > 0) ? resources.size():"none"));
         //JLabel resourceTitle = new JLabel("Resources");
         
         DefaultListModel<String> resourceList = new DefaultListModel<>();
@@ -36,14 +37,15 @@ public class RawResource extends PlanetSector{
             resourceList.addElement(res.name);
         }
         
-        JList<String> resources = new JList<>(resourceList);
-        resources.setBorder(new TitledBorder("Resources"));
-        JScrollPane resourceScrollPane = new JScrollPane(resources);
+        JList<String> resourcesList = new JList<>(resourceList);
+        JScrollPane resourceScrollPane = new JScrollPane(resourcesList);
+        resourceScrollPane.setBorder(new TitledBorder("Resources"));
         
         infoPanel.add(idLabel);
         infoPanel.add(amountLabel);
         infoPanel.add(resourceScrollPane);
-        infoPanel.setLayout(new GridLayout(3,1));
+        
+        infoPanel.setLayout(new VerticalFlowLayout(5, 3));
         tabbedPane.add("Info", infoPanel);
         root.add(title);
         root.add(tabbedPane);

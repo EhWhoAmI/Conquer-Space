@@ -48,7 +48,7 @@ public class DebugStatsWindow extends JInternalFrame {
         universe = u;
 
         setTitle("Stats for Nerds");
-        setLayout(new VerticalFlowLayout());
+        setLayout(new VerticalFlowLayout(5, 3));
         Runtime runtime = Runtime.getRuntime();
         memoryusedLabel = new JLabel("Memory used: " + FileUtils.byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
 

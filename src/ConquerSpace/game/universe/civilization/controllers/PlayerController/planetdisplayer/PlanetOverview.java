@@ -8,6 +8,7 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -36,24 +37,26 @@ public class PlanetOverview extends JPanel {
 
     private JPanel planetOverview;
     private JPanel planetSectors;
-    private JPanel resourcePanels;
     private JLabel planetName;
     private JLabel planetPath;
     private JLabel planetType;
     private JLabel ownerLabel;
-    private JList<String> resourceList;
+    private JLabel orbitDistance;
     private Planet p;
 
     public PlanetOverview(Planet p, Civilization c) {
         this.p = p;
-        setLayout(new GridLayout(2, 2));
+        setLayout(new GridLayout(1, 2));
 
         planetOverview = new JPanel();
+        planetOverview.setLayout(new VerticalFlowLayout(5, 3));
+        planetOverview.setBorder(new TitledBorder("Planet Info"));
         //If name is nothing, then call it unnamed planet
         planetName = new JLabel();
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
         ownerLabel = new JLabel();
+        orbitDistance = new JLabel("Distance: " + p.getOrbitalDistance());
 
         //Init planetname
         if (p.getName() == "") {
@@ -73,7 +76,7 @@ public class PlanetOverview extends JPanel {
 
         //Init owner
         if (p.getOwnerID() > -1) {
-            ownerLabel.setText("Owner: " + p.getOwnerID());
+            ownerLabel.setText("Owner: " + c.getName());
         } else {
             ownerLabel.setText("No owner");
         }
@@ -85,30 +88,17 @@ public class PlanetOverview extends JPanel {
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
 
-        resourcePanels = new JPanel();
-        DefaultListModel<String> dataModel = new DefaultListModel<>();
-        for (PlanetSector planetSector : p.planetSectors) {
-            for (Resource s : planetSector.resources) {
-                if (!dataModel.contains(s.name)) {
-                    dataModel.addElement(s.name);
-                }
-            }
-        }
-        resourceList = new JList<>(dataModel);
-        resourceList.setBorder(new TitledBorder("Resources"));
-        resourceList.setSize(100, resourceList.getHeight());
-
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
         planetOverview.add(planetType);
         planetOverview.add(ownerLabel);
-
-        resourcePanels.add(resourceList);
-
+        planetOverview.add(orbitDistance);
+        
         add(planetOverview);
         add(planetSectors);
-        add(resourcePanels);
+        //Add empty panel
+        add(new JPanel());
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {

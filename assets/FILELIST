@@ -12,3 +12,6 @@ assets/credits.txt
 assets/BUILDNO
 assets/log4j2.xml
 assets/i18n/ApplicationMessages_en_US.properties
+assets/img/title.png
+assets/tech/fields.xml
+assets/tech/techs/default.json

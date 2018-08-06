@@ -16,3 +16,10 @@ def selectRandomSuitablePlanet(sector, civClimate):
         start += 1
         if start >= sector.getStarSystemCount:
             start = 0
+            
+def calculatePlanetSpacing(previous):
+    if previous == 1:
+        return 2
+    amount = (float(random.randint(11, 25))/10)
+    
+    return int(previous*amount)

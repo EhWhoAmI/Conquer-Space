@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer.PlanetOverview;
+import ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer.PlanetResources;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer.PlayerPopulation;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import javax.swing.JInternalFrame;
@@ -18,9 +19,10 @@ public class PlanetInfoSheet extends JInternalFrame {
     public PlanetInfoSheet(Planet p, Civilization c) {
         tpane = new JTabbedPane();
         tpane.add("Overview", new PlanetOverview(p, c));
+        tpane.add("Resources", new PlanetResources(p));
         tpane.add("Population", new PlayerPopulation(p, 0));
         add(tpane);
-        setSize(500, 500);
+        pack();
         setResizable(true);
         setClosable(true);
         setVisible(true);

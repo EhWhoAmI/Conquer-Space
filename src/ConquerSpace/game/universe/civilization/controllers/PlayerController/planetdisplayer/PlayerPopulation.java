@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -18,9 +19,10 @@ public class PlayerPopulation extends JPanel{
     private JLabel populationGrowth;
     private JLabel birthRate;
     private JLabel deathRate;
+    
     public PlayerPopulation(Planet p, int turn) {
-        setLayout(new GridLayout(1, 1, 5, 5));
-        currentStats = new JPanel();
+        setLayout(new VerticalFlowLayout());
+        currentStats = new JPanel(new VerticalFlowLayout());
         
         populationCount = new JLabel();
         populationGrowth = new JLabel();
