@@ -17,6 +17,11 @@ public class Actions {
     private Actions() {  
     }
     
+    //Codes for the building status
+    public static final int BUILD_BUILDING_SUCCESS = 000;
+    public static final int BUILD_BUILDING_FAIL_NO_MONEY = 001;
+    public static final int BUILD_BUILDING_FAIL_NO_RESOURCES = 002;
+    public static final int BUILD_BUILDING_FAIL_NOT_OWNER = 003;
     /**
      * Builds a building on the planet.
      * @param p planet you want to build on.
@@ -26,13 +31,14 @@ public class Actions {
      * @param turns number of months...
      * @return Success or not
      */
-    public static boolean buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {
+    public static int buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {
         if(p.getOwnerID() == owner) {
+            //Get type of the planet sector
             //Pass
             p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p, owner, sectorID);
-            return true;
+            return BUILD_BUILDING_SUCCESS;
         } else
-            return false;
+            return BUILD_BUILDING_FAIL_NOT_OWNER;
     }
     
     public static void researchTech(Civilization c, Techonology t) {

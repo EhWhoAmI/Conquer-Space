@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalaticLocation;
 import java.util.ArrayList;
@@ -167,15 +168,15 @@ public class StarSystem extends SpaceObject {
      * Processes turns of the planets
      */
     @Override
-    public void processTurn() {
+    public void processTurn(int GameRefreshRate, StarDate stardate) {
         //Process turn of the planets then the stars.
         //Maybe later the objects in space.
         for (Planet planet : planets) {
-            planet.processTurn();
+            planet.processTurn(GameRefreshRate, stardate);
         }
 
         for (Star star : stars) {
-            star.processTurn();
+            star.processTurn(GameRefreshRate, stardate);
         }
     }
     

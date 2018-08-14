@@ -32,6 +32,10 @@ public class PlayerController implements CivilizationController {
     @Override
     public void alert(Alert a) {
         alertDisplayer.addAlert(a);
+        AlertNotification notification = new AlertNotification(a.toString(), a.getDesc());
+        notification.setLocation(mainwindow.getWidth()/2 - notification.getWidth()/2, 0);
+        mainwindow.addFrame(notification);
+        notification.setVisible(true);
     }
 
     @Override

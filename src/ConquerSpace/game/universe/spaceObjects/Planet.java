@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalaticLocation;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -184,11 +185,11 @@ public class Planet extends SpaceObject {
     }
 
     @Override
-    public void processTurn() {
+    public void processTurn(int GameRefreshRate, StarDate stardate) {
         int index = 0;
         HashMap<Integer, Integer> control = new HashMap<>();
         for (PlanetSector planetSector : planetSectors ) {
-            planetSector.processTurn();
+            planetSector.processTurn(GameRefreshRate, stardate);
 
             //Parse building buildings
 //            if (planetSector instanceof BuildingBuilding) {

@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.GalaticLocation;
 import java.util.ArrayList;
 
@@ -116,9 +117,9 @@ public class Sector extends SpaceObject {
     }
 
     @Override
-    public void processTurn() {
+    public void processTurn(int GameRefreshRate, StarDate stardate) {
         for (StarSystem starSystem : starSystems) {
-            starSystem.processTurn();
+            starSystem.processTurn(GameRefreshRate, stardate);
         }
     }
 }

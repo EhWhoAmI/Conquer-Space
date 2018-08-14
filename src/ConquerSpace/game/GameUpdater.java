@@ -1,19 +1,23 @@
 package ConquerSpace.game;
 
-import ConquerSpace.game.people.Researcher;
+import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.ui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.util.CQSPLogger;
+import java.awt.Point;
+import java.util.HashMap;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +32,11 @@ public class GameUpdater {
 
     private Universe universe;
 
+    HashMap<UniversePath, Point> allsystemsstats;
+
     public GameUpdater(Universe u, StarDate s) {
         universe = u;
+        allsystemsstats = new HashMap<>();
     }
 
     public void calculateControl() {
@@ -94,7 +101,32 @@ public class GameUpdater {
                 //Set sector to visible
                 universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID()), VisionTypes.KNOWS_ALL);
 
-                //Get the stars around it.
+                if (allsystemsstats.containsKey(p)) {
+                    //Get the stars around it.
+                    for (UniversePath path : allsystemsstats.keySet()) {
+
+                        //Get path position relative to the star system
+                        Point a = allsystemsstats.get(p);
+                        Point b = allsystemsstats.get(path);
+                        if (Math.hypot(a.x - b.x, a.y - b.y) < 100) {
+                            //Set visible
+                            universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.EXISTS);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    public void calculateSystemPositions() {
+        //Loop sectors
+        for (int i = 0; i < universe.getSectorCount(); i++) {
+            Sector sector = universe.getSector(i);
+            //Loop systems
+            for (int n = 0; n < sector.getStarSystemCount(); n++) {
+                Point p = RendererMath.polarCoordToCartesianCoord(sector.getStarSystem(n).getGalaticLocation(), new Point(0, 0), 1);
+                allsystemsstats.put(sector.getStarSystem(n).getUniversePath(), p);
             }
         }
     }
@@ -128,7 +160,7 @@ public class GameUpdater {
 
             //Add researchers
             //Only one.
-            Researcher r = new Researcher("Person", 20);
+            Scientist r = new Scientist("Person", 20);
             r.setSkill(1);
             c.people.add(r);
 
@@ -137,7 +169,7 @@ public class GameUpdater {
                 Planet starting = (Planet) universe.getSpaceObject(p);
                 int sectorCount = starting.getPlanetSectorCount();
                 int id = selector.nextInt(sectorCount);
-                PopulationStorage storage = new PopulationStorage(100l, 100l, (byte)100);
+                PopulationStorage storage = new PopulationStorage(100l, 100l, (byte) 100);
                 starting.setPlanetSector(id, storage);
 
                 starting.setName(c.getHomePlanetName());
@@ -148,6 +180,9 @@ public class GameUpdater {
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
             }
         }
+        //Calculate all the star system positions.
+        calculateSystemPositions();
+
         calculateControl();
         calculateVision();
     }

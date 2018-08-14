@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.Buildable;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
@@ -60,7 +61,7 @@ public class PopulationStorage extends PlanetSector  implements Buildable{
     }
 
     @Override
-    public void processTurn() {
+    public void processTurn(int GameRefreshRate, StarDate stardate) {
 //        if (turn == 0) {
 //            //Just push back default values for all that.
 //            pop.population.add((Long) currentStorage);

@@ -72,7 +72,6 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         researchButton.addActionListener((e) -> {
             //Get first researcher to research
             if (!tech.isSelectionEmpty()) {
-                System.out.println("Researching");
                 c.assignResearch(tech.getSelectedValue(), c.people.get(0));
                 list.removeElement(tech.getSelectedValue());
                 //Set everything empty
@@ -100,9 +99,17 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
 
         Timer researchingTechticker = new Timer(100, (e) -> {
             for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
-                researchingTech.setText(t.getName());
-                researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
-                estTimeLeft.setText("Estimated time left: " + (Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()));
+                if ((Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
+                    researchingTech.setText(t.getName());
+                    researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
+                    //720 is number of ticks in a month
+                    estTimeLeft.setText("Estimated time left: " + ((Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+                } else {
+                    //Set everything to empty
+                    researchingTech.setText("");
+                    researcher.setText("");
+                    estTimeLeft.setText("");
+                }
             }
             //Add all techs
             for (Techonology t : c.civTechs.keySet()) {
@@ -118,7 +125,7 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
             for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
                 researchingTech.setText(t.getName());
                 researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
-                estTimeLeft.setText("Estimated time left: " + (Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()));
+                estTimeLeft.setText("Estimated time left: " + ((Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
             }
         });
         pane.addTab("Research", techResearcher);
@@ -132,12 +139,14 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
     }
 
     @Override
-    public void valueChanged(ListSelectionEvent e) {
+
+    public void valueChanged(ListSelectionEvent e
+    ) {
         if (tech.getModel().getSize() > 0 && tech.getSelectedValue() != null) {
             Techonology selected = tech.getSelectedValue();
             techName.setText(selected.getName());
             techdifficulity.setText("Difficulty: " + selected.getDifficulty());
-            techEstTime.setText("Estimated time to completion: " + Techonologies.estFinishTime(selected) + " months");
+            techEstTime.setText("Estimated time to completion: " + (Techonologies.estFinishTime(selected) / 720) + " months");
         }
     }
 }

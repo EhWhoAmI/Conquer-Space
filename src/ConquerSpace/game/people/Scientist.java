@@ -4,9 +4,10 @@ package ConquerSpace.game.people;
  *
  * @author Zyun
  */
-public class Researcher extends Person{
+public class Scientist extends Person{
+    //Skill increments per tick.
     private int skill;
-    public Researcher(String name, int age) {
+    public Scientist(String name, int age) {
         super(name, age);
     }
 

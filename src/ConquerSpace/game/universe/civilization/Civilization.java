@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.civilization;
 
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.people.Person;
-import ConquerSpace.game.people.Researcher;
+import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.FieldNode;
 import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
@@ -52,7 +52,7 @@ public class Civilization {
 
     public HashMap<Techonology, Integer> civTechs;
     public HashMap<Techonology, Integer> civResearch;
-    public HashMap<Techonology, Researcher> currentlyResearchingTechonologys;
+    public HashMap<Techonology, Scientist> currentlyResearchingTechonologys;
     
     public HashMap<String, Integer> multipliers;
     public FieldNode fields;
@@ -247,10 +247,9 @@ public class Civilization {
     }
 
     public void assignResearch(Techonology t, Person p) {
-        if(people.contains(p) && p instanceof Researcher) {
+        if(people.contains(p) && p instanceof Scientist) {
             //Then do it...
-            System.out.println(p + " is person");
-            currentlyResearchingTechonologys.put(t, (Researcher) p);
+            currentlyResearchingTechonologys.put(t, (Scientist) p);
             civResearch.put(t, 0);
             //Hide because it is researching
             civTechs.put(t, -1);

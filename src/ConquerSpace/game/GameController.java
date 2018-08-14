@@ -7,9 +7,18 @@ import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ResourceLoader;
+import java.io.FileNotFoundException;
+import java.math.BigInteger;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
+import org.python.util.PythonInterpreter;
 
 /**
  * The controller of the game UI.
@@ -20,12 +29,37 @@ public class GameController {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(GameController.class.getName());
 
+    //For evals...
+    public static PythonInterpreter pythonEngine;
+
+    //Rate the game refreshes buildings and stuff like that
+    //Set to 5 days
+    int GameRefreshRate = (5 * 24);
+
     /**
      * Constructor. Inits all components.
      */
     public GameController() {
+        long begin = System.currentTimeMillis();
+        //Init js engine
+        ScriptEngineManager manager = new ScriptEngineManager();
+        pythonEngine = new PythonInterpreter();
+        //Load js methods
+        try {
+            Scanner scriptReader = new Scanner(ResourceLoader.getResourceByFile("script.python.processing.files"));
+            int count = 0;
+            while (scriptReader.hasNextLine()) {
+                String script = scriptReader.nextLine();
+                pythonEngine.execfile(ResourceLoader.loadResource(script));
+                count++;
+            }
+            LOGGER.info("Loaded " + count + " js scripts");
+        } catch (FileNotFoundException ex) {
+        }
+        long finish = System.currentTimeMillis();
+        LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");
         //Process the 0th turn and initalize the universe.
-        Globals.universe.processTurn();
+        Globals.universe.processTurn(GameRefreshRate, Globals.date);
 
         //Init universe
         GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
@@ -34,7 +68,7 @@ public class GameController {
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 
         //Atomic integer so that we can edit it in a lambada.
-        AtomicInteger lastMonth = new AtomicInteger(Globals.date.getMonthNumber());
+        AtomicInteger lastTick = new AtomicInteger(Globals.date.getMonthNumber());
 
         int tickerSpeed = 1;
         Timer ticker = new Timer(tickerSpeed, (e) -> {
@@ -43,17 +77,20 @@ public class GameController {
                 Globals.date.increment(1);
                 //Check for month increase
 
-                if (Globals.date.getMonthNumber() != lastMonth.get()) {
-                    lastMonth.set(Globals.date.getMonthNumber());
+                if (Globals.date.bigint.mod(BigInteger.valueOf(GameRefreshRate)) == BigInteger.ZERO) {
+                    lastTick.set(Globals.date.getMonthNumber());
                     long start = System.currentTimeMillis();
-                    Globals.universe.processTurn();
-                    for (int i = 0; i < Globals.universe.getCivilizationCount(); i++)
+
+                    Globals.universe.processTurn(GameRefreshRate, Globals.date);
+                    for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Globals.universe.getCivilization(i).calculateTechLevel();
+                    }
+                    //Do tech...
                     //Increment tech
+
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Civilization c = Globals.universe.getCivilization(i);
                         for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
-                            System.out.println("processing tech " + t + " " + (Techonologies.estFinishTime(t) - c.civResearch.get(t)) + " " + lastMonth.intValue());
                             if ((Techonologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
                                 //Then tech is finished
                                 c.researchTech(t);
@@ -62,13 +99,14 @@ public class GameController {
                                 //Alert civ
                                 c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
                             } else {
-                                c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill());
+                                //Increment by number of ticks
+                                c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill() * GameRefreshRate);
                             }
                         }
                     }
                     long end = System.currentTimeMillis();
 
-                    LOGGER.info("Took " + (end - start) + " ms");
+                    LOGGER.trace("Took " + (end - start) + " ms");
                 }
             }
         });

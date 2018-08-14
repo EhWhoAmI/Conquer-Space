@@ -157,7 +157,12 @@ public class Techonologies {
         }
     }
     
+    /**
+     * Estimated finish time in ticks
+     * @param t tech
+     * @return time to finish in ticks
+     */
     public static int estFinishTime(Techonology t) {
-        return t.getDifficulty() * 10;
+        return t.getDifficulty() * 1000;
     }
 }

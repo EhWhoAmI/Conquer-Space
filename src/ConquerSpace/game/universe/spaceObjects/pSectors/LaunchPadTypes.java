@@ -17,4 +17,13 @@ public class LaunchPadTypes {
         }
         return "";
     }
+    
+    public static int getLaunchPadTypeInt(String name) {
+        if(name.equals("rocket")) {
+            return ROCKET;
+        } else if (name.equals("space plane")) {
+            return SPACE_PLANE;
+        }
+        return -1;
+    }
 }

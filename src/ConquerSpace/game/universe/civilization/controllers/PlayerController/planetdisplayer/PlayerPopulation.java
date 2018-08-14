@@ -3,7 +3,6 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController.pla
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

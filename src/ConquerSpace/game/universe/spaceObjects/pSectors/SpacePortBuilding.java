@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.game.StarDate;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -69,9 +70,11 @@ public class SpacePortBuilding extends PlanetSector {
     }
 
     @Override
-    public void processTurn() {
+    public void processTurn(int GameRefreshRate, StarDate stardate) {
         for (SpacePortLaunchPad launchPad : launchPads) {
-            
+            //Change ticks
+            launchPad.ticks += GameRefreshRate;
+            //Check for launch...
         }
     }
 }

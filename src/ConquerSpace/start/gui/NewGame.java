@@ -7,6 +7,7 @@ import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
+import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.scripts.RunScript;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -232,7 +233,7 @@ public class NewGame extends JFrame implements ActionListener {
                 // Start time of logging
                 long loadingStart = System.currentTimeMillis();
                 //Init script engine
-                RunScript s = new RunScript(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
+                RunScript s = new RunScript(ResourceLoader.loadResource("script.python.universegen.main"));
 
                 s.addVar("universeConfig", config);
                 s.addVar("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));

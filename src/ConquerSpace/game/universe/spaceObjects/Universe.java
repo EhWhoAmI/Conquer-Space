@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import java.util.ArrayList;
@@ -107,10 +108,10 @@ public class Universe extends SpaceObject{
     }
 
     @Override
-    public void processTurn() {
+    public void processTurn(int GameRefreshRate, StarDate stardate) {
         //Process turns of all the internals
         for (Sector sector : sectors) {
-            sector.processTurn();
+            sector.processTurn(GameRefreshRate, stardate);
         }
     }
     

@@ -8,7 +8,7 @@ import ConquerSpace.game.universe.ships.Launchable;
  * @author Zyun
  */
 public class SpacePortLaunchPad {
-    private int launchTurn;
+    int ticks;
     private Launchable launching = null;
     private int type;
 
@@ -16,9 +16,9 @@ public class SpacePortLaunchPad {
         this.type = type;
     }
     
-    public void beginLaunch(Launchable launch, int launchTurn) {
+    public void beginLaunch(Launchable launch, int ticks) {
         launching = launch;
-        this.launchTurn = launchTurn;
+        this.ticks = ticks;
     }
     
     public boolean isLaunching() {
@@ -36,6 +36,4 @@ public class SpacePortLaunchPad {
     public String toString() {
         return LaunchPadTypes.getLaunchPadTypeName(type);
     }
-
-    
 }

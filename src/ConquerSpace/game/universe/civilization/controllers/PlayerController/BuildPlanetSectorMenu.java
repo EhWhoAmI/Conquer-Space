@@ -1,21 +1,31 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.pSectors.LaunchPadTypes;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
+import ConquerSpace.util.ExceptionHandling;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.script.Invocable;
+import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.apache.logging.log4j.LogManager;
+import org.python.core.PyException;
+import org.python.core.PyInteger;
+import org.python.core.PyLong;
+import org.python.core.PyObject;
 
 /**
  *
@@ -64,7 +74,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
         build.addActionListener((e) -> {
             String item = (String) planetBuildType.getSelectedItem();
             if (item.equals("Residental area")) {
-                PopulationStorage storage = new PopulationStorage(Long.parseLong(bps.maxPopulation.getText()), 0, (byte) 100);
+                PopulationStorage storage = new PopulationStorage(Long.parseLong(bps.maxPopulationTextField.getText()), 0, (byte) 100);
                 Actions.buildBuilding(p, id, storage, 0, 1);
             } else if (item.equals("Space Launch Site")) {
                 //Get civ launching type...
@@ -97,25 +107,26 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
     //Various menus for building stats
     private class BuildPopulationStorage extends JPanel implements ActionListener {
 
+        long maxPopulation;
         private JLabel amount;
-        JTextField maxPopulation;
+        JTextField maxPopulationTextField;
 
         public BuildPopulationStorage() {
             setLayout(new GridLayout(1, 2));
             amount = new JLabel("Max Population");
 
-            maxPopulation = new JTextField();
-            maxPopulation.addActionListener((e) -> {
+            maxPopulationTextField = new JTextField("1000000");
+            maxPopulationTextField.addActionListener((e) -> {
                 try {
-                    Long.parseLong(maxPopulation.getText());
+                    maxPopulation = Long.parseLong(maxPopulationTextField.getText());
                 } catch (NumberFormatException nfe) {
-                    maxPopulation.setText("");
+                    maxPopulationTextField.setText("1000000");
                 }
             });
 
-            maxPopulation.addActionListener(this);
+            maxPopulationTextField.addActionListener(this);
             add(amount);
-            add(maxPopulation);
+            add(maxPopulationTextField);
         }
 
         //Determine price
@@ -123,13 +134,22 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Calculate the cost...
-            long pop = 0;
             try {
-                pop = Long.parseLong(maxPopulation.getText());
-                long price = (((1000) * pop));
-                costLabel.setText("Cost : " + price);
+                maxPopulation = Long.parseLong(maxPopulationTextField.getText());
+                //Load it from js
+                PyObject function = GameController.pythonEngine.eval("calculatePopulationStorageCost");
+                long o = function.__call__(new PyLong(maxPopulation)).asLong();
+                costLabel.setText("Cost : " + o);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
+            } catch (final PyException ex) {
+                LogManager.getLogger("ErrorLog").error("Python error " + ex.toString(), ex);
+                String trace = "None";
+                if (ex.traceback != null) {
+                    trace = ex.traceback.dumpStack();
+                }
+                ExceptionHandling.ExceptionMessageBox("Script error: " + ex.type.toString() + ".\nPython trace: \n" + trace, ex);
+                System.exit(1);
             }
         }
     }
@@ -156,8 +176,8 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                     maxPopulation.setText("");
                 }
             });
-            
-            launchTypesValue = new JComboBox<>();
+
+            launchTypesValue = new JComboBox<String>();
             for (Techonology t : c.getTechsByTag("space travel")) {
                 launchTypesValue.addItem(t.getName());
             }
@@ -176,7 +196,13 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
             long pop = 0;
             try {
                 pop = Long.parseLong(maxPopulation.getText());
-                long price = (((1000000) * pop));
+                PyObject function = GameController.pythonEngine.eval("calculateSpacePortCost");
+                String s = "";
+                if(launchTypesValue.getSelectedItem().equals("rocketery")) {
+                    s = "rocket";
+                }
+                long price = function.__call__(new PyInteger(LaunchPadTypes.getLaunchPadTypeInt(s)),new PyLong(pop)).asLong();
+                
                 costLabel.setText("Cost : " + price);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
