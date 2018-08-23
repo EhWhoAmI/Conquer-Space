@@ -1,0 +1,10 @@
+{
+    "name": "Rocket",
+    "tech": "rocketery:18",
+    "size":10,
+    "safety": 100,
+    "cost" : 50000,
+    "construct cost": 1000000,
+    "reusable" : false,
+    "cargo" : 200000
+}

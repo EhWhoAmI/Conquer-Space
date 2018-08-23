@@ -37,6 +37,9 @@ public class SpacePortBuilding extends PlanetSector {
         JPanel pademptyPanel = new JPanel();
         JLabel pademptyPanel_type = new JLabel();
         JButton createSatelliteButton = new JButton("Launch Satellite");
+        createSatelliteButton.addActionListener((e) -> {
+            
+        });
         pademptyPanel.add(pademptyPanel_type);
         pademptyPanel.add(createSatelliteButton);
 

@@ -1,6 +1,8 @@
 package ConquerSpace.game.tech;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
@@ -100,7 +102,9 @@ public class Techonologies {
             //Floor
             int floor = techonology.getInt("floor");
 
-            Techonology t = new Techonology(name, deps, type, level, fields, tags, actions, floor, difficulty);
+            //ID
+            int id = techonology.getInt("id");
+            Techonology t = new Techonology(name, id, deps, type, level, fields, tags, actions, floor, difficulty);
             techonologies.add(t);
         }
     }
@@ -114,6 +118,9 @@ public class Techonologies {
         return (Arrays.copyOf(techList, techList.length, Techonology[].class));
     }
     
+    public static Techonology getTechByID(int id) {
+        return (techonologies.stream().filter(e -> e.getId() == id).findFirst().get());
+    }
     public static void parseAction(String action, Civilization c) {
         if(action.startsWith("tech")) {
             //Is boosting chance for tech
@@ -154,6 +161,17 @@ public class Techonologies {
             action = action.replace(")", "");
             //Add the field that is mentioned
             //Skip fields for now TODO.
+        } else if(action.startsWith("launch")) {
+            //unlocks a launch system
+            //Get the launch system
+            char[] dst = new char[50];
+            action.getChars(7, action.length() - 1, dst, 0);
+            
+            //Remove trailing white space.
+            String launchName = (new String(dst).trim());
+
+            LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
+            c.launchSystems.add(sys);
         }
     }
     

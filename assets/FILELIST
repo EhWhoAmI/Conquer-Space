@@ -1,6 +1,6 @@
 assets/assets.properties
 assets/BUILDNO
-assets/credits.txt
+assets/credits.html
 assets/log4j2.xml
 assets/i18n/ApplicationMessages_en_US.properties
 assets/img/title.png
@@ -14,5 +14,8 @@ assets/scripts/python/ai/normal/main.py
 assets/scripts/python/universeGen/constants.py
 assets/scripts/python/universeGen/generation.py
 assets/scripts/python/universeGen/main.py
+assets/scripts/python/processing/buildingCost.py
 assets/tech/fields.xml
 assets/tech/techs/default.json
+assets/data/launch/rocket.json
+assets/data/launch.space-plane.json

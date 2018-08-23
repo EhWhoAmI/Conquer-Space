@@ -4,19 +4,25 @@ import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.localeMessages;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -64,9 +70,11 @@ public class MainMenu extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setColor(Color.BLUE);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
-                
+
                 //Image is a bit small though.
-                g2d.drawImage(ImageIO.read(new File(System.getProperty("user.dir") + "/assets/img/title.png")), null, 0, 0);
+                g2d.drawImage(ImageIO.read(new File(
+                        System.getProperty("user.dir")
+                        + "/assets/img/title.png")), null, 0, 0);
             } catch (IOException ex) {
             }
 
@@ -122,13 +130,38 @@ public class MainMenu extends JFrame {
             credits.addActionListener(e -> {
                 FileInputStream fis = null;
                 try {
-                    File file = new File(System.getProperty("user.dir") + "/assets/credits.txt");
+                    File file = new File(System.getProperty("user.dir") + "/assets/credits.html");
                     fis = new FileInputStream(file);
                     byte[] data = new byte[(int) file.length()];
                     fis.read(data);
                     fis.close();
                     String text = new String(data);
-                    JOptionPane.showMessageDialog(this, text, localeMessages.getMessage("start.gui.MainMenu.credits"), JOptionPane.INFORMATION_MESSAGE);
+
+//                    JPanel pan = new JPanel();
+//                    pan.setLayout(new VerticalFlowLayout(5, 5));
+//                    JLabel l = new JLabel("<html>" + text.replace("\n", "<br/>") + "</html>");
+//                    pan.add(l);
+                    JEditorPane pane = new JEditorPane("text/html", text);
+                    pane.setEditable(false);
+                    JScrollPane scroll = new JScrollPane(pane);
+                    pane.addHyperlinkListener((s) -> {
+                        if (s.getInputEvent() instanceof MouseEvent) {
+                            MouseEvent me = (MouseEvent) s.getInputEvent();
+                            if (SwingUtilities.isLeftMouseButton(me)) {
+                                try {
+                                    Desktop.getDesktop().browse(s.getURL().toURI());
+
+                                } catch (IOException ex) {
+                                } catch (URISyntaxException ex) {
+                                }
+                            }
+                        }
+
+                    });
+
+                    JOptionPane.showMessageDialog(this, scroll, localeMessages.
+                            getMessage("start.gui.MainMenu.credits"),
+                            JOptionPane.INFORMATION_MESSAGE);
                 } catch (FileNotFoundException ex) {
                     LOGGER.warn("", ex);
                 } catch (IOException ex) {

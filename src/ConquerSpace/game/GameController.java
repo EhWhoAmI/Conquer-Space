@@ -6,16 +6,15 @@ import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 import org.python.util.PythonInterpreter;
@@ -36,6 +35,7 @@ public class GameController {
     //Set to 5 days
     int GameRefreshRate = (5 * 24);
 
+    public static ArrayList<LaunchSystem> launchSystems;
     /**
      * Constructor. Inits all components.
      */

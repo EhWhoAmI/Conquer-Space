@@ -7,6 +7,7 @@ import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.ui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Sector;
@@ -17,9 +18,16 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 /**
  * This actually controls the game. If you take out this class, too bad...
@@ -135,6 +143,7 @@ public class GameUpdater {
         //Init tech and fields
         Fields.readFields();
         Techonologies.readTech();
+        readLaunchSystems();
 
         //All the home planets of the civs are theirs.
         //Set home planet and sector
@@ -185,5 +194,70 @@ public class GameUpdater {
 
         calculateControl();
         calculateVision();
+    }
+
+    public void readLaunchSystems() {
+        ArrayList<LaunchSystem> launchSystems = new ArrayList<>();
+        //Get the launch systems folder
+        File launchSystemsFolder = new File(System.getProperty("user.dir") + "/assets/data/launch");
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (f.getName().endsWith(".txt")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONObject root = new JSONObject(text);
+
+                String name = root.getString("name");
+
+                String techName = root.getString("tech").split(":")[0];
+                //The tech id will be the second value.
+                int id = Integer.parseInt(root.getString("tech").split(":")[1]);
+
+                int size = root.getInt("size");
+
+                int safety = root.getInt("safety");
+
+                int cost = root.getInt("cost");
+                
+                int constructCost = root.getInt("construct cost");
+
+                boolean reusable = root.getBoolean("reusable");
+
+                int reuseCost = 0;
+                if (reusable) {
+                    //Get Reusable cost
+                    reuseCost = root.getInt("reuse cost");
+                }
+
+                int maxCargo = root.getInt("cargo");
+
+                if (reusable) {
+                    launchSystems.add(new LaunchSystem(name, Techonologies.getTechByID(id), size, safety, cost, constructCost, reuseCost, maxCargo));
+                } else {
+                    launchSystems.add(new LaunchSystem(name, Techonologies.getTechByID(id), size, safety, cost, constructCost, maxCargo));
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if(fis != null)
+                        fis.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
+        GameController.launchSystems = launchSystems;
+        
     }
 }

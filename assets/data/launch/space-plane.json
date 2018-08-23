@@ -1,0 +1,11 @@
+{
+    "name": "Space Plane",
+    "tech": "space planes:16",
+    "size":50,
+    "safety": 100,
+    "cost" : 5000,
+    "construct cost":100000,
+    "reusable" : true,
+    "reuse cost":500,
+    "cargo" : 200000
+}

@@ -2,10 +2,9 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.pSectors.LaunchPadTypes;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
 import ConquerSpace.util.ExceptionHandling;
@@ -13,8 +12,6 @@ import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.script.Invocable;
-import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
@@ -44,8 +41,11 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
     private BuildPopulationStorage bps;
     private BuildSpaceLaunchSite bsls;
 
+    Civilization c;
+
     @SuppressWarnings("unchecked")
     public BuildPlanetSectorMenu(Planet p, int id, Civilization c) {
+        this.c = c;
         setTitle("Build on planet " + p.getName());
         setLayout(new GridLayout(2, 1));
         topWrapper = new JPanel();
@@ -160,7 +160,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
 
         JTextField maxPopulation;
         private JLabel launchTypes;
-        private JComboBox<String> launchTypesValue;
+        private JComboBox<LaunchSystem> launchTypesValue;
 
         public BuildSpaceLaunchSite(Civilization c) {
             setLayout(new GridLayout(2, 2));
@@ -177,9 +177,10 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                 }
             });
 
-            launchTypesValue = new JComboBox<String>();
-            for (Techonology t : c.getTechsByTag("space travel")) {
-                launchTypesValue.addItem(t.getName());
+            launchTypesValue = new JComboBox<LaunchSystem>();
+
+            for (LaunchSystem t : c.launchSystems) {
+                launchTypesValue.addItem(t);
             }
             maxPopulation.addActionListener(this);
             add(amount);
@@ -197,12 +198,8 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
             try {
                 pop = Long.parseLong(maxPopulation.getText());
                 PyObject function = GameController.pythonEngine.eval("calculateSpacePortCost");
-                String s = "";
-                if(launchTypesValue.getSelectedItem().equals("rocketery")) {
-                    s = "rocket";
-                }
-                long price = function.__call__(new PyInteger(LaunchPadTypes.getLaunchPadTypeInt(s)),new PyLong(pop)).asLong();
-                
+
+                long price = function.__call__(new PyLong(pop), new PyInteger(((LaunchSystem)launchTypesValue.getSelectedItem()).getConstructCost())).asInt();
                 costLabel.setText("Cost : " + price);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!

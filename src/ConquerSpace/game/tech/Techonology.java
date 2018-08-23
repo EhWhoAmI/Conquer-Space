@@ -16,9 +16,11 @@ public class Techonology {
     private String[] actions;
     private int floor;
     private int difficulty;
+    private int id;
 
-    public Techonology(String name, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
+    public Techonology(String name, int id, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
         this.name = name;
+        this.id = id;
         this.deps = deps;
         this.type = type;
         this.level = level;
@@ -77,7 +79,7 @@ public class Techonology {
 
     @Override
     public int hashCode() {
-        return ((name + floor + level + type).hashCode());
+        return ((name + floor + level + type + id).hashCode());
     }
 
     @Override
@@ -91,5 +93,9 @@ public class Techonology {
 
     public int getDifficulty() {
         return difficulty;
+    }
+
+    public int getId() {
+        return id;
     }
 }
