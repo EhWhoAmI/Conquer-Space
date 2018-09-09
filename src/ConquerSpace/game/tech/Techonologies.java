@@ -3,6 +3,7 @@ package ConquerSpace.game.tech;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.util.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
@@ -172,6 +173,25 @@ public class Techonologies {
 
             LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
             c.launchSystems.add(sys);
+        } else if(action.startsWith("orbit")) {
+            //Something you put into orbit
+            char[] dst = new char[50];
+            action.getChars("orbit".length() + 1, action.length() - 1, dst, 0);
+            
+            //Remove trailing white space.
+            String orbitName = (new String(dst).trim());
+            //Get the satellite from the name or id.
+            //Find the satellite
+            //Split it
+            String[] orbitSplit = orbitName.split(":");
+            int satelliteID = Integer.parseInt(orbitSplit[1]);
+            Satellite s = GameController.satellites.stream().
+                    filter(e -> e.getId() == satelliteID).findFirst().orElseGet(null);
+            if(s != null) {
+                //Add it to civ
+                c.addSatellite(s);
+            }
+            //Or else ignore it. there is no need to complain.
         }
     }
     

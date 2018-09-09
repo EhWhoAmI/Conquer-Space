@@ -36,6 +36,7 @@ public class DebugStatsWindow extends JInternalFrame {
 
     private JButton runTrashCompactor;
     
+    private JButton openConsole;
     /**
      * Universe
      */
@@ -48,7 +49,7 @@ public class DebugStatsWindow extends JInternalFrame {
         universe = u;
 
         setTitle("Stats for Nerds");
-        setLayout(new VerticalFlowLayout(5, 3));
+        setLayout(new VerticalFlowLayout(5, 4));
         Runtime runtime = Runtime.getRuntime();
         memoryusedLabel = new JLabel("Memory used: " + FileUtils.byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
 
@@ -76,9 +77,16 @@ public class DebugStatsWindow extends JInternalFrame {
         runTrashCompactor.addActionListener((e) -> {
             System.gc();
         });
+        
+        openConsole = new JButton("Open Console");
+        openConsole.addActionListener((e) -> {
+            CQSPConsole con = new CQSPConsole(u, u.getCivilization(0));
+            getDesktopPane().add(con);
+        });
         add(memoryusedLabel);
         add(dumpUniverseButton);
         add(runTrashCompactor);
+        add(openConsole);
         
         pack();
 

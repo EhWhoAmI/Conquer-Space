@@ -6,6 +6,7 @@ import ConquerSpace.game.tech.Techonologies;
 import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
@@ -36,15 +37,18 @@ public class GameController {
     int GameRefreshRate = (5 * 24);
 
     public static ArrayList<LaunchSystem> launchSystems;
+    
+    public static ArrayList<Satellite> satellites;
+    
     /**
      * Constructor. Inits all components.
      */
     public GameController() {
         long begin = System.currentTimeMillis();
-        //Init js engine
+        //Init python engine
         ScriptEngineManager manager = new ScriptEngineManager();
         pythonEngine = new PythonInterpreter();
-        //Load js methods
+        //Load python methods
         try {
             Scanner scriptReader = new Scanner(ResourceLoader.getResourceByFile("script.python.processing.files"));
             int count = 0;
@@ -53,17 +57,20 @@ public class GameController {
                 pythonEngine.execfile(ResourceLoader.loadResource(script));
                 count++;
             }
-            LOGGER.info("Loaded " + count + " js scripts");
+            LOGGER.info("Loaded " + count + " python scripts");
         } catch (FileNotFoundException ex) {
         }
+        
         long finish = System.currentTimeMillis();
         LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");
+        
         //Process the 0th turn and initalize the universe.
         Globals.universe.processTurn(GameRefreshRate, Globals.date);
 
         //Init universe
         GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
         updater.initGame();
+        
         //Load the player
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 

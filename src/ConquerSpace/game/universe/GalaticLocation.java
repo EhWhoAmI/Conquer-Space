@@ -39,7 +39,7 @@ public class GalaticLocation {
      * Get the distance.
      * @return Distance.
      */
-    public float getDistance() {
+    public int getDistance() {
         return (distance);
     }
     

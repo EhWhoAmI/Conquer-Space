@@ -1,0 +1,7 @@
+Help:
+You are here because you need help with the console.
+The console is a very powerful tool.
+It can help you hack, but it was built for development.
+
+Hacking commands
+research(resh) <name> (or) <id> -- Research the technology as specified as the name.

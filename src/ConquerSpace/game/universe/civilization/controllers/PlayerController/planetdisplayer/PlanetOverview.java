@@ -2,7 +2,6 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController.pla
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
-import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
@@ -18,10 +17,8 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
-import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -34,7 +31,7 @@ import javax.swing.border.TitledBorder;
  * @author Zyun
  */
 public class PlanetOverview extends JPanel {
-
+    private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
     private JPanel planetSectors;
     private JLabel planetName;
@@ -112,7 +109,7 @@ public class PlanetOverview extends JPanel {
             this.c = c;
             sectors = p.planetSectors;
             times = (int) Math.sqrt(sectors.length);
-            setPreferredSize(new Dimension(times * 7 + 2, times * 7 + 2));
+            setPreferredSize(new Dimension(times * TILE_SIZE+2, times * TILE_SIZE+2));
             menu = new JPopupMenu();
             addMouseListener(this);
         }
@@ -123,10 +120,10 @@ public class PlanetOverview extends JPanel {
             //The thingy has to be a square number
             //Times to draw the thingy
             int count = 0;
-            for (int i = 0; i < times; i++) {
-                for (int n = 0; n < times; n++) {
+            for (int w = 0; w < times; w++) {
+                for (int h = 0; h < times; h++) {
                     //Draw box
-                    Rectangle2D.Float rect = new Rectangle2D.Float(7 * n, 7 * i, 7, 7);
+                    Rectangle2D.Float rect = new Rectangle2D.Float(TILE_SIZE * h, TILE_SIZE * w, TILE_SIZE, TILE_SIZE);
                     //Draw the boxes.
                     //Get type of sectors
                     if (sectors[count] instanceof RawResource) {
@@ -151,8 +148,8 @@ public class PlanetOverview extends JPanel {
             if (e.getButton() == MouseEvent.BUTTON3) {
                 menu.removeAll();
 
-                int width = e.getX() / 7;
-                int height = e.getY() / 7;
+                int width = e.getX() / TILE_SIZE;
+                int height = e.getY() / TILE_SIZE;
 
                 int index = height * times + width;
                 menu.add("Planet sector id " + (index + 1));
@@ -166,6 +163,8 @@ public class PlanetOverview extends JPanel {
                     info.setVisible(true);
                     info.setClosable(true);
                     info.setResizable(true);
+                    
+                    //Hacky code to get parent internal frame.
                     Component c;
                     for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
                         if (c instanceof JInternalFrame) {

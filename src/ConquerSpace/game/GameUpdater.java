@@ -7,7 +7,10 @@ import ConquerSpace.game.tech.Techonology;
 import ConquerSpace.game.ui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
+import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Sector;
@@ -27,6 +30,8 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -143,7 +148,10 @@ public class GameUpdater {
         //Init tech and fields
         Fields.readFields();
         Techonologies.readTech();
+        
+        //All things to load go here!!!
         readLaunchSystems();
+        readSatellites();
 
         //All the home planets of the civs are theirs.
         //Set home planet and sector
@@ -226,7 +234,7 @@ public class GameUpdater {
                 int safety = root.getInt("safety");
 
                 int cost = root.getInt("cost");
-                
+
                 int constructCost = root.getInt("construct cost");
 
                 boolean reusable = root.getBoolean("reusable");
@@ -248,16 +256,84 @@ public class GameUpdater {
                 LOGGER.error("File not found!", ex);
             } catch (IOException ex) {
                 LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
             } finally {
                 try {
                     //Because continue stat
-                    if(fis != null)
+                    if (fis != null) {
                         fis.close();
+                    }
                 } catch (IOException ex) {
                 }
             }
         }
         GameController.launchSystems = launchSystems;
-        
+    }
+
+    public void readSatellites() {
+        ArrayList<Satellite> satellites = new ArrayList<>();
+        //Get the launch systems folder
+        File launchSystemsFolder = new File(System.getProperty("user.dir") + "/assets/data/satellite_types");
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (!f.getName().endsWith(".json")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONObject root = new JSONObject(text);
+
+                //Read info. This one is a bit different, because the format is different
+                //for each type.
+                String name = root.getString("name");
+
+                String type = root.getString("type");
+                int mass = root.getInt("mass");
+                int distance = root.getInt("dist");
+                
+                int typeID = -1;
+                switch (type.toLowerCase()) {
+                    case "none":
+                        //Nothing to read.
+                        typeID = SatelliteTypes.NONE;
+                        break;
+                }
+                //That is it for now
+                int id = root.getInt("id");
+                
+                //Get type, and do the thing
+                Satellite s = null;
+                switch(typeID) {
+                    case SatelliteTypes.NONE:
+                        s = new NoneSatellite(distance, mass);
+                        s.setId(id);
+                        s.setName(name);
+                }
+                
+                satellites.add(s);
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        GameController.satellites = satellites;
     }
 }

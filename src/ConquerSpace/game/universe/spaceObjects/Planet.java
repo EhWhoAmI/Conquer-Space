@@ -5,7 +5,7 @@ import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalaticLocation;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
-import ConquerSpace.game.universe.ships.Satellite;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import java.util.ArrayList;

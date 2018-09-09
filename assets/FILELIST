@@ -14,8 +14,8 @@ assets/scripts/python/ai/normal/main.py
 assets/scripts/python/universeGen/constants.py
 assets/scripts/python/universeGen/generation.py
 assets/scripts/python/universeGen/main.py
-assets/scripts/python/processing/buildingCost.py
+assets/scripts/python/processing/building/buildingCosts.py
 assets/tech/fields.xml
 assets/tech/techs/default.json
 assets/data/launch/rocket.json
-assets/data/launch.space-plane.json
+assets/data/launch/space-plane.json

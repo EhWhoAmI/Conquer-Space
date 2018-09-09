@@ -1,9 +1,14 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.StarDate;
+import ConquerSpace.game.universe.civilization.controllers.PlayerController.LaunchSatelliteMenu;
+import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -18,7 +23,7 @@ public class SpacePortBuilding extends PlanetSector {
     private int ports;
     public SpacePortLaunchPad[] launchPads;
 
-    public SpacePortBuilding(int techLevel, int ports, int type) {
+    public SpacePortBuilding(int techLevel, int ports, LaunchSystem type) {
         this.techLevel = techLevel;
         this.ports = ports;
         launchPads = new SpacePortLaunchPad[ports];
@@ -34,12 +39,25 @@ public class SpacePortBuilding extends PlanetSector {
 
         JPanel launchingPanel = new JPanel();
 
+        JList<SpacePortLaunchPad> pads = new JList<>(launchPads);
         JPanel pademptyPanel = new JPanel();
         JLabel pademptyPanel_type = new JLabel();
         JButton createSatelliteButton = new JButton("Launch Satellite");
+        //Show launch Satellite menu.
         createSatelliteButton.addActionListener((e) -> {
-            
+            LaunchSatelliteMenu launch = new LaunchSatelliteMenu(pads.getSelectedValue(), Globals.universe.getCivilization(0));
+            Component c;
+            for (c = root.getParent(); 
+                    !(c instanceof JInternalFrame) || c != null; 
+                    c = c.getParent()) {
+                if (c instanceof JInternalFrame) {
+                    ((JInternalFrame) c).getDesktopPane().add(launch);
+                    break;
+                }
+            }
+            launch.setVisible(true);
         });
+
         pademptyPanel.add(pademptyPanel_type);
         pademptyPanel.add(createSatelliteButton);
 
@@ -48,14 +66,13 @@ public class SpacePortBuilding extends PlanetSector {
         CardLayout layout = new CardLayout();
         root.setLayout(new GridLayout(1, 2));
 
-        JList<SpacePortLaunchPad> pads = new JList<>(launchPads);
         pads.addListSelectionListener((e) -> {
             SpacePortLaunchPad launchPad = pads.getSelectedValue();
             if (launchPad.isLaunching()) {
                 layout.show(launchInfo, "launching");
             } else {
-                pademptyPanel_type.setText("Type: " + LaunchPadTypes.getLaunchPadTypeName(launchPad.getType()));
-                
+                pademptyPanel_type.setText("Type: " + launchPad.getType().getName());
+
                 layout.show(launchInfo, "pad-e");
             }
         });

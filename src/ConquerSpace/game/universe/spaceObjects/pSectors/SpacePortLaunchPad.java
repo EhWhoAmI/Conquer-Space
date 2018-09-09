@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.game.universe.ships.Launchable;
+import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 
 /**
  * Used for building a rocket and launching it. It will remain full throughout
@@ -10,9 +11,9 @@ import ConquerSpace.game.universe.ships.Launchable;
 public class SpacePortLaunchPad {
     int ticks;
     private Launchable launching = null;
-    private int type;
+    private LaunchSystem type;
 
-    public SpacePortLaunchPad(int type) {
+    public SpacePortLaunchPad(LaunchSystem type) {
         this.type = type;
     }
     
@@ -28,12 +29,12 @@ public class SpacePortLaunchPad {
         return false;
     }
 
-    public int getType() {
+    public LaunchSystem getType() {
         return type;
     }
 
     @Override
     public String toString() {
-        return LaunchPadTypes.getLaunchPadTypeName(type);
+        return type.getName();
     }
 }

@@ -78,7 +78,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                 Actions.buildBuilding(p, id, storage, 0, 1);
             } else if (item.equals("Space Launch Site")) {
                 //Get civ launching type...
-                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), 0);
+                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), (LaunchSystem) bsls.launchTypesValue.getSelectedItem());
                 Actions.buildBuilding(p, id, port, 0, 1);
             }
             this.dispose();
@@ -199,7 +199,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                 pop = Long.parseLong(maxPopulation.getText());
                 PyObject function = GameController.pythonEngine.eval("calculateSpacePortCost");
 
-                long price = function.__call__(new PyLong(pop), new PyInteger(((LaunchSystem)launchTypesValue.getSelectedItem()).getConstructCost())).asInt();
+                long price = function.__call__(new PyLong(pop), new PyInteger(((LaunchSystem) launchTypesValue.getSelectedItem()).getConstructCost())).asInt();
                 costLabel.setText("Cost : " + price);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!

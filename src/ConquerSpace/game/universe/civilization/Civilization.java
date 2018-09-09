@@ -10,6 +10,7 @@ import ConquerSpace.game.universe.civilization.controllers.AIController.AIContro
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -64,6 +65,8 @@ public class Civilization {
     
     public ArrayList<LaunchSystem> launchSystems;
 
+    public ArrayList<Satellite> satellites;
+    
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -95,6 +98,7 @@ public class Civilization {
         currentlyResearchingTechonologys = new HashMap<>();
         people = new ArrayList<>();
         launchSystems = new ArrayList<>();
+        satellites = new ArrayList<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -269,5 +273,9 @@ public class Civilization {
         civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Techonologies.RESEARCHED)).forEachOrdered((t) -> {
             techLevel += t.getLevel();
         });
+    }
+    
+    public void addSatellite(Satellite s) {
+        satellites.add(s);
     }
 }

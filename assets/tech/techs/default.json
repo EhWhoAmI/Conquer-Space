@@ -8,7 +8,7 @@
             "type": "UNLOCK",
             "upgradable" : false,
             "difficulty": 0,
-            "action": [],
+            "action": ["orbit(test:0)"],
             "fields": [
                 "Knowledge"
             ],
