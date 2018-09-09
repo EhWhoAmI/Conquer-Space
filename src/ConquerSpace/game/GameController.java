@@ -2,12 +2,12 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.actions.Alert;
-import ConquerSpace.game.tech.Techonologies;
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
 import java.io.FileNotFoundException;
@@ -97,8 +97,8 @@ public class GameController {
 
                     for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                         Civilization c = Globals.universe.getCivilization(i);
-                        for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
-                            if ((Techonologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
+                        for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+                            if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
                                 //Then tech is finished
                                 c.researchTech(t);
                                 c.civResearch.remove(t);

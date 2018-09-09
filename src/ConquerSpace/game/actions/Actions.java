@@ -1,6 +1,6 @@
 package ConquerSpace.game.actions;
 
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
@@ -41,7 +41,7 @@ public class Actions {
             return BUILD_BUILDING_FAIL_NOT_OWNER;
     }
     
-    public static void researchTech(Civilization c, Techonology t) {
+    public static void researchTech(Civilization c, Technology t) {
         
     }
 }

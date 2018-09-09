@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class Planet extends SpaceObject {
 
     private int planetType;
-    private GalaticLocation orbitalDistance;
+    private GalacticLocation orbitalDistance;
     private int planetSize;
     
     int id;
@@ -49,7 +49,7 @@ public class Planet extends SpaceObject {
      */
     public Planet(int planetType, int orbitalDistance, int planetSize, int id, int parentStarSystem, int parentSector) {
         this.planetType = planetType;
-        this.orbitalDistance = new GalaticLocation(0, orbitalDistance);
+        this.orbitalDistance = new GalacticLocation(0, orbitalDistance);
         this.planetSize = planetSize;
         this.id = id;
         this.parentSector = parentSector;

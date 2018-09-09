@@ -5,7 +5,7 @@ package ConquerSpace.game.tech;
  *
  * @author Zyun
  */
-public class Techonology {
+public class Technology {
 
     private String name;
     private String[] deps;
@@ -18,7 +18,7 @@ public class Techonology {
     private int difficulty;
     private int id;
 
-    public Techonology(String name, int id, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
+    public Technology(String name, int id, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
         this.name = name;
         this.id = id;
         this.deps = deps;
@@ -70,11 +70,11 @@ public class Techonology {
      */
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Techonology && 
-                this.floor == ((Techonology) obj).floor
-                && this.level == ((Techonology) obj).level
-                && this.name.equals(((Techonology) obj).name)
-                && this.type == ((Techonology) obj).type);
+        return (obj instanceof Technology && 
+                this.floor == ((Technology) obj).floor
+                && this.level == ((Technology) obj).level
+                && this.name.equals(((Technology) obj).name)
+                && this.type == ((Technology) obj).type);
     }
 
     @Override

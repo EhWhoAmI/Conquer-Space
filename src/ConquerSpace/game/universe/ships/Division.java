@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.ships;
 
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import java.util.ArrayList;
 
 /**
@@ -12,16 +12,16 @@ public class Division {
     private ArrayList<Ship> ships;
 
     private int parentfleetID;
-    private GalaticLocation location;
+    private GalacticLocation location;
 
-    public Division(int id,int parentfleetID, GalaticLocation location) {
+    public Division(int id,int parentfleetID, GalacticLocation location) {
         this.id = id;
         ships = new ArrayList<>();
         this.parentfleetID = parentfleetID;
         this.location = location;
     }
 
-    public void setLocation(GalaticLocation location) {
+    public void setLocation(GalacticLocation location) {
         this.location = location;
     }
 
@@ -29,7 +29,7 @@ public class Division {
         return id;
     }
 
-    public GalaticLocation getLocation() {
+    public GalacticLocation getLocation() {
         return location;
     }
 

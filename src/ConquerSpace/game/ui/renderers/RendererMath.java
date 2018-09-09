@@ -1,6 +1,6 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import java.awt.Point;
 
 /**
@@ -63,14 +63,14 @@ public class RendererMath {
      * quadrants we divide the angle (θ), by 90, to get the quardant number. In 
      * the code, subtract it by 1 to see the quardant.
      *
-     * @see GalaticLocation
+     * @see GalacticLocation
      * @param g galatic location/polar coordinate.
      * @param center center of the plot of polar coordinate.
      * @param unitSize the size of the individual unit(as in the distance of
      * <code>GalaticLocation</code>.
      * @return Point of the converted polar coordinate
      */
-    public static Point polarCoordToCartesianCoord(GalaticLocation g, Point center, int unitSize) {
+    public static Point polarCoordToCartesianCoord(GalacticLocation g, Point center, int unitSize) {
         //Do math to calculate the position of the sector. 
         //Distance is to the center of the sector to center of universe.
         //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.

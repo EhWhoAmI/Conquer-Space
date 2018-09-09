@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.game.tech.Techonologies;
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
@@ -25,7 +25,7 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
     private JTabbedPane pane;
 
     private JPanel techResearcher;
-    private JList<Techonology> tech;
+    private JList<Technology> tech;
     private JPanel techInfoPanel;
     private JLabel techName;
     private JLabel techdifficulity;
@@ -46,10 +46,10 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         techResearcher.setLayout(new GridLayout(1, 2));
 
         //Get the list of researched tech
-        DefaultListModel<Techonology> list = new DefaultListModel<>();
+        DefaultListModel<Technology> list = new DefaultListModel<>();
         //list.addElement(element);
-        for (Techonology t : c.civTechs.keySet()) {
-            if (c.civTechs.get(t) == Techonologies.REVEALED) {
+        for (Technology t : c.civTechs.keySet()) {
+            if (c.civTechs.get(t) == Technologies.REVEALED) {
                 list.addElement(t);
             }
         }
@@ -98,12 +98,12 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         techResearcher.add(techInfoPanel);
 
         Timer researchingTechticker = new Timer(100, (e) -> {
-            for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
-                if ((Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
+            for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+                if ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
                     researchingTech.setText(t.getName());
                     researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
                     //720 is number of ticks in a month
-                    estTimeLeft.setText("Estimated time left: " + ((Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+                    estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
                 } else {
                     //Set everything to empty
                     researchingTech.setText("");
@@ -112,8 +112,8 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
                 }
             }
             //Add all techs
-            for (Techonology t : c.civTechs.keySet()) {
-                if (c.civTechs.get(t) == Techonologies.REVEALED && !list.contains(t)) {
+            for (Technology t : c.civTechs.keySet()) {
+                if (c.civTechs.get(t) == Technologies.REVEALED && !list.contains(t)) {
                     list.addElement(t);
                 }
             }
@@ -122,10 +122,10 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         researchingTechticker.setRepeats(true);
         researchingTechticker.start();
         pane.addChangeListener((e) -> {
-            for (Techonology t : c.currentlyResearchingTechonologys.keySet()) {
+            for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
                 researchingTech.setText(t.getName());
                 researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
-                estTimeLeft.setText("Estimated time left: " + ((Techonologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+                estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
             }
         });
         pane.addTab("Research", techResearcher);
@@ -143,10 +143,10 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
     public void valueChanged(ListSelectionEvent e
     ) {
         if (tech.getModel().getSize() > 0 && tech.getSelectedValue() != null) {
-            Techonology selected = tech.getSelectedValue();
+            Technology selected = tech.getSelectedValue();
             techName.setText(selected.getName());
             techdifficulity.setText("Difficulty: " + selected.getDifficulty());
-            techEstTime.setText("Estimated time to completion: " + (Techonologies.estFinishTime(selected) / 720) + " months");
+            techEstTime.setText("Estimated time to completion: " + (Technologies.estFinishTime(selected) / 720) + " months");
         }
     }
 }

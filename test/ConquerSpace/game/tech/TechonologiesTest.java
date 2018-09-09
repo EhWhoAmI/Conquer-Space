@@ -3,10 +3,10 @@ package ConquerSpace.game.tech;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -36,7 +36,7 @@ public class TechonologiesTest {
     @Test
     public void testReadTech() {
         System.out.println("readTech");
-        Techonologies.readTech();
+        Technologies.readTech();
         fail("The test case is a prototype.");
     }
 
@@ -44,9 +44,9 @@ public class TechonologiesTest {
     public void testReadTechFromFile() throws Exception {
         System.out.println("readTechFromFile");
         File file = new File("assets/tech/techs/default.json");
-        Techonologies.readTechFromFile(file);
-        System.out.println(Techonologies.techonologies.size());
-        Techonologies.techonologies.forEach((s) -> {
+        Technologies.readTechFromFile(file);
+        System.out.println(Technologies.techonologies.size());
+        Technologies.techonologies.forEach((s) -> {
             System.out.println(s.getName());
         });
     }
@@ -54,8 +54,8 @@ public class TechonologiesTest {
     @Test
     public void testgetTechByTag() {
         System.out.println("getTechByTag");
-        Techonology[] techsByTag = Techonologies.getTechsByTag("Starting");
-        for(Techonology t : techsByTag) {
+        Technology[] techsByTag = Technologies.getTechsByTag("Starting");
+        for(Technology t : techsByTag) {
             System.out.println(t.getName());
         }
     }
@@ -63,9 +63,9 @@ public class TechonologiesTest {
     @Test
     public void testtechEquals() {
         System.out.println("testtechEquals");
-        Techonologies.readTech();
-        System.out.println(Techonologies.techonologies.get(0));
-        if (Techonologies.getTechByName("rocketery") == Techonologies.getTechByName("rocketery")) {
+        Technologies.readTech();
+        System.out.println(Technologies.techonologies.get(0));
+        if (Technologies.getTechByName("rocketery") == Technologies.getTechByName("rocketery")) {
             System.out.println("Is equal");
         } else {
             System.out.println("Not equal");

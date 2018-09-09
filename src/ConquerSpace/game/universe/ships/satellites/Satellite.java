@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.ships.satellites;
 
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.ships.Launchable;
 
 /**
@@ -9,14 +9,14 @@ import ConquerSpace.game.universe.ships.Launchable;
  */
 public class Satellite implements Launchable{
     
-    protected GalaticLocation location;
+    protected GalacticLocation location;
     protected int mass;
     protected String name = "";
     protected int id;
         
     public Satellite(int distance, int mass) {
         this.mass = mass;
-        location = new GalaticLocation(0, distance);
+        location = new GalacticLocation(0, distance);
     }
 
     public int getMass() {

@@ -2,14 +2,14 @@ package ConquerSpace.game;
 
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Fields;
-import ConquerSpace.game.tech.Techonologies;
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.ui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -28,9 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -147,7 +145,7 @@ public class GameUpdater {
     public void initGame() {
         //Init tech and fields
         Fields.readFields();
-        Techonologies.readTech();
+        Technologies.readTech();
         
         //All things to load go here!!!
         readLaunchSystems();
@@ -162,15 +160,15 @@ public class GameUpdater {
             //Add templates
 
             //Add the starting techs
-            c.researchTech(Techonologies.getTechByName("life"));
+            c.researchTech(Technologies.getTechByName("life"));
 
             //Add all starting techs
-            for (Techonology tech : Techonologies.getTechsByTag("Starting")) {
+            for (Technology tech : Technologies.getTechsByTag("Starting")) {
                 c.researchTech(tech);
             }
 
             //Select one of the space travel sciences
-            Techonology[] teks = Techonologies.getTechsByTag("space travel base");
+            Technology[] teks = Technologies.getTechsByTag("space travel base");
             //To research this
             c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
             c.calculateTechLevel();
@@ -248,9 +246,9 @@ public class GameUpdater {
                 int maxCargo = root.getInt("cargo");
 
                 if (reusable) {
-                    launchSystems.add(new LaunchSystem(name, Techonologies.getTechByID(id), size, safety, cost, constructCost, reuseCost, maxCargo));
+                    launchSystems.add(new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, reuseCost, maxCargo));
                 } else {
-                    launchSystems.add(new LaunchSystem(name, Techonologies.getTechByID(id), size, safety, cost, constructCost, maxCargo));
+                    launchSystems.add(new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, maxCargo));
                 }
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);

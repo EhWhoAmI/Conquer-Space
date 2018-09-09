@@ -1,10 +1,10 @@
 package ConquerSpace.game.universe;
 
 /**
- * Galatic location. In a nutshell, this is a polar coordinate.
+ * Galactic location. In a nutshell, this is a polar coordinate.
  * @author Zyun
  */
-public class GalaticLocation {
+public class GalacticLocation {
     private float degrees;
     private int distance;
 
@@ -13,7 +13,7 @@ public class GalaticLocation {
      * @param degrees degrees from north in a anticlockwise direction.
      * @param distance distance from the center.
      */
-    public GalaticLocation(float degrees, int distance) {
+    public GalacticLocation(float degrees, int distance) {
         this.degrees = (degrees%360);
         this.distance = distance;
     }

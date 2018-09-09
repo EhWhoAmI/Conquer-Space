@@ -1,6 +1,6 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Star;
@@ -67,7 +67,7 @@ public class SystemInternalsDrawer {
                 c = Color.BLACK;
         }
 
-        Point starPos = RendererMath.polarCoordToCartesianCoord(new GalaticLocation(0, 0), new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
+        Point starPos = RendererMath.polarCoordToCartesianCoord(new GalacticLocation(0, 0), new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
         StarDrawStats sds = new StarDrawStats(star.getId(), starPos, starSize * 5, c);
         stats.addStarDrawStats(sds);
         LOGGER.trace("System " + sys.getId() + " has " + sys.getPlanetCount() + " planets");
@@ -89,8 +89,7 @@ public class SystemInternalsDrawer {
             Random rand = new Random();
             int degs = rand.nextInt(361);
             LOGGER.trace("Degrees: " + degs + " distance " + p.getOrbitalDistance());
-            Point point = RendererMath.polarCoordToCartesianCoord(
-                    new GalaticLocation(p.getPlanetDegrees(), p.getOrbitalDistance()), 
+            Point point = RendererMath.polarCoordToCartesianCoord(new GalacticLocation(p.getPlanetDegrees(), p.getOrbitalDistance()), 
                     new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
             
             String playerSymbol = "";

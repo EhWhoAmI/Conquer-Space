@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.civilization.stats;
 
-import ConquerSpace.Globals;
 import java.math.BigInteger;
 import java.util.ArrayList;
 

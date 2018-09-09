@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import java.util.ArrayList;
 
 /**
@@ -27,9 +27,9 @@ public class StarSystem extends SpaceObject {
     int id;
     
     /**
-     * Galatic location.
+     * Galactic location.
      */
-    private GalaticLocation location;
+    private GalacticLocation location;
     
     /**
      * Parent sector.
@@ -41,7 +41,7 @@ public class StarSystem extends SpaceObject {
      * @param id ID of this star system
      * @param location Galatic location.
      */
-    public StarSystem(int id, GalaticLocation location) {
+    public StarSystem(int id, GalacticLocation location) {
         this.id = id;
         this.location = location;
         planets = new ArrayList<>();
@@ -121,7 +121,7 @@ public class StarSystem extends SpaceObject {
      * Get galatic location of this star system
      * @return Galatic location of this star system
      */
-    public GalaticLocation getGalaticLocation() {
+    public GalacticLocation getGalaticLocation() {
         return location;
     }
 

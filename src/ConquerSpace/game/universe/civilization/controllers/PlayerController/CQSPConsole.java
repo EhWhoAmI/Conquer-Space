@@ -1,8 +1,8 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.actions.Alert;
-import ConquerSpace.game.tech.Techonologies;
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -57,7 +57,7 @@ public class CQSPConsole extends JInternalFrame {
                     model.addElement("You need the id of the tech");
                 } else if (StringUtils.isNumeric(command[1])) {
                     
-                    Techonology t = Techonologies.getTechByID(Integer.parseInt(command[1]));
+                    Technology t = Technologies.getTechByID(Integer.parseInt(command[1]));
                     c.researchTech(t);
                     model.addElement("Researched " + t.getName() + " for " + c.getName());
                     //Alert civ

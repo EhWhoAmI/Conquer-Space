@@ -1,7 +1,5 @@
 package ConquerSpace.game.people;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Zyun

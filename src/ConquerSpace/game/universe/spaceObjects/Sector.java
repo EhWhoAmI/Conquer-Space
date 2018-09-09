@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.universe.GalaticLocation;
+import ConquerSpace.game.universe.GalacticLocation;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Sector extends SpaceObject {
 
     ArrayList<StarSystem> starSystems;
-    private GalaticLocation loc;
+    private GalacticLocation loc;
     int id;
 
     /**
@@ -21,7 +21,7 @@ public class Sector extends SpaceObject {
      * @param location Galatic location of the sector
      * @param id id of sector
      */
-    public Sector(GalaticLocation location, int id) {
+    public Sector(GalacticLocation location, int id) {
         loc = location;
         this.id = id;
         starSystems = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Sector extends SpaceObject {
      *
      * @return Galatic location of this sector
      */
-    public GalaticLocation getGalaticLocation() {
+    public GalacticLocation getGalaticLocation() {
         return loc;
     }
 

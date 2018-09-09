@@ -4,14 +4,14 @@ import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.FieldNode;
-import ConquerSpace.game.tech.Techonologies;
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -52,9 +52,9 @@ public class Civilization {
 
     private UniversePath startingPlanet;
 
-    public HashMap<Techonology, Integer> civTechs;
-    public HashMap<Techonology, Integer> civResearch;
-    public HashMap<Techonology, Scientist> currentlyResearchingTechonologys;
+    public HashMap<Technology, Integer> civTechs;
+    public HashMap<Technology, Integer> civResearch;
+    public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
     
     public HashMap<String, Integer> multipliers;
     public FieldNode fields;
@@ -230,31 +230,31 @@ public class Civilization {
         return startingPlanet;
     }
 
-    public void addTech(Techonology t) {
+    public void addTech(Technology t) {
         civTechs.put(t, 0);
         civResearch.put(t, 0);
     }
 
-    public Techonology getTechByName(String s) {
+    public Technology getTechByName(String s) {
         return (civTechs.keySet().stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
     }
 
-    public Techonology[] getTechsByTag(String tag) {
-        Object[] techList = civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e ->civTechs.get(e) == Techonologies.RESEARCHED).toArray();
-        return (Arrays.copyOf(techList, techList.length, Techonology[].class));
+    public Technology[] getTechsByTag(String tag) {
+        Object[] techList = civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e ->civTechs.get(e) == Technologies.RESEARCHED).toArray();
+        return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
 
-    public void researchTech(Techonology t) {
+    public void researchTech(Technology t) {
         //Parse actions.
         for (String act : t.getActions()) {
-            Techonologies.parseAction(act, this);
+            Technologies.parseAction(act, this);
         }
-        civTechs.put(t, Techonologies.RESEARCHED);
+        civTechs.put(t, Technologies.RESEARCHED);
         //Delete the tech because it has been researhed
         civResearch.remove(t);
     }
 
-    public void assignResearch(Techonology t, Person p) {
+    public void assignResearch(Technology t, Person p) {
         if(people.contains(p) && p instanceof Scientist) {
             //Then do it...
             currentlyResearchingTechonologys.put(t, (Scientist) p);
@@ -270,7 +270,7 @@ public class Civilization {
 
     public void calculateTechLevel() {
         techLevel = 0;
-        civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Techonologies.RESEARCHED)).forEachOrdered((t) -> {
+        civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Technologies.RESEARCHED)).forEachOrdered((t) -> {
             techLevel += t.getLevel();
         });
     }

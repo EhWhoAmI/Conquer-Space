@@ -6,7 +6,7 @@
 # universeConfig -- Universe Config object. Check out ConquerSpace.game.universe.UniverseConfig
 
 from ConquerSpace.game import UniversePath
-from ConquerSpace.game.universe import GalaticLocation
+from ConquerSpace.game.universe import GalacticLocation
 from ConquerSpace.game.universe.civilization.controllers.AIController import AIController
 from ConquerSpace.game.universe.civilization.controllers.PlayerController import PlayerController
 from ConquerSpace.game.universe.civilization import Civilization
@@ -69,7 +69,7 @@ for i in range(universeSize):
         secdegs = 0
         secdist = 0
     
-    sectorLoc = GalaticLocation(secdegs, secdist)
+    sectorLoc = GalacticLocation(secdegs, secdist)
     # Sector
     sector = Sector(sectorLoc, i)
     
@@ -77,10 +77,10 @@ for i in range(universeSize):
     
     # Add star systems
     for r in range(starSystemCount):
-        # Galatic location
+        # Galactic location
         sysdegs = (random.randint(0, 360 * 4) / 4)
         sysdist = random.randint(0, SECTOR_MAX_RADIUS)
-        systemLoc = GalaticLocation(sysdegs, sysdist)
+        systemLoc = GalacticLocation(sysdegs, sysdist)
         starSystem = StarSystem(r, systemLoc)
         # Create star
         starType = random.randint(1, 100)

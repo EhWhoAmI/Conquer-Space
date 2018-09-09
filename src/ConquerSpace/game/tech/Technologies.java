@@ -20,10 +20,10 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class Techonologies {
+public class Technologies {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(Techonologies.class.getName());
-    public static ArrayList<Techonology> techonologies = new ArrayList<>();
+    private static final Logger LOGGER = CQSPLogger.getLogger(Technologies.class.getName());
+    public static ArrayList<Technology> techonologies = new ArrayList<>();
     public static ArrayList<String> fields = new ArrayList<>();
 
     public static final int RESEARCHED = 101;
@@ -105,21 +105,21 @@ public class Techonologies {
 
             //ID
             int id = techonology.getInt("id");
-            Techonology t = new Techonology(name, id, deps, type, level, fields, tags, actions, floor, difficulty);
+            Technology t = new Technology(name, id, deps, type, level, fields, tags, actions, floor, difficulty);
             techonologies.add(t);
         }
     }
 
-    public static Techonology getTechByName(String s) {
+    public static Technology getTechByName(String s) {
         return (techonologies.stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
     }
 
-    public static Techonology[] getTechsByTag(String tag) {
+    public static Technology[] getTechsByTag(String tag) {
         Object[] techList = techonologies.stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray();
-        return (Arrays.copyOf(techList, techList.length, Techonology[].class));
+        return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
     
-    public static Techonology getTechByID(int id) {
+    public static Technology getTechByID(int id) {
         return (techonologies.stream().filter(e -> e.getId() == id).findFirst().get());
     }
     public static void parseAction(String action, Civilization c) {
@@ -131,7 +131,7 @@ public class Techonologies {
             //Get tech to boost
             String techtoboost = splitAction[0];
             int amount = Integer.parseInt(splitAction[1]);
-            Techonology tech = getTechByName(techtoboost);
+            Technology tech = getTechByName(techtoboost);
             if(c.civTechs.containsKey(tech)) {
                 if(!(c.civTechs.get(tech) > 100)) {
                     //Then add
@@ -200,7 +200,7 @@ public class Techonologies {
      * @param t tech
      * @return time to finish in ticks
      */
-    public static int estFinishTime(Techonology t) {
+    public static int estFinishTime(Technology t) {
         return t.getDifficulty() * 1000;
     }
 }

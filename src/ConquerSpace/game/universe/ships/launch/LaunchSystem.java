@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.ships.launch;
 
-import ConquerSpace.game.tech.Techonology;
+import ConquerSpace.game.tech.Technology;
 
 /**
  *
@@ -9,7 +9,7 @@ import ConquerSpace.game.tech.Techonology;
 public class LaunchSystem {
 
     private String name;
-    private Techonology tech;
+    private Technology tech;
     private int size;
     private int safety;
     private int launchCost;
@@ -33,7 +33,7 @@ public class LaunchSystem {
      * @param reusabilityCost
      * @param maxCargo
      */
-    public LaunchSystem(String name, Techonology tech, int size, int safety, int cost, int constructCost, int reusabilityCost, int maxCargo) {
+    public LaunchSystem(String name, Technology tech, int size, int safety, int cost, int constructCost, int reusabilityCost, int maxCargo) {
         this.name = name;
         this.tech = tech;
         this.size = size;
@@ -46,7 +46,7 @@ public class LaunchSystem {
         id = idcounter++;
     }
 
-    public LaunchSystem(String name, Techonology tech, int size, int safety, int cost, int constructCost, int maxCargo) {
+    public LaunchSystem(String name, Technology tech, int size, int safety, int cost, int constructCost, int maxCargo) {
         this.name = name;
         this.tech = tech;
         this.size = size;
@@ -83,7 +83,7 @@ public class LaunchSystem {
         return size;
     }
 
-    public Techonology getTech() {
+    public Technology getTech() {
         return tech;
     }
 
