@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController.pla
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
@@ -17,8 +18,10 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.util.Vector;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -34,6 +37,8 @@ public class PlanetOverview extends JPanel {
     private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
     private JPanel planetSectors;
+    private JPanel satellitesPanel;
+    private JList<Satellite> satelliteList;
     private JLabel planetName;
     private JLabel planetPath;
     private JLabel planetType;
@@ -43,7 +48,7 @@ public class PlanetOverview extends JPanel {
 
     public PlanetOverview(Planet p, Civilization c) {
         this.p = p;
-        setLayout(new GridLayout(1, 2));
+        setLayout(new GridLayout(1, 3));
 
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
@@ -92,8 +97,15 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
         
+        satellitesPanel = new JPanel();
+        satellitesPanel.setBorder(new TitledBorder("Satellites"));
+        
+        satelliteList = new JList<>(new Vector(p.getSatellites()));
+        satellitesPanel.add(satelliteList);
+        
         add(planetOverview);
         add(planetSectors);
+        add(satellitesPanel);
         //Add empty panel
         add(new JPanel());
     }

@@ -4,6 +4,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.LaunchSatelliteMenu;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.spaceObjects.Planet;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -22,10 +23,12 @@ public class SpacePortBuilding extends PlanetSector {
     private int techLevel;
     private int ports;
     public SpacePortLaunchPad[] launchPads;
-
-    public SpacePortBuilding(int techLevel, int ports, LaunchSystem type) {
+    private Planet planet;
+    
+    public SpacePortBuilding(int techLevel, int ports, LaunchSystem type, Planet p) {
         this.techLevel = techLevel;
         this.ports = ports;
+        this.planet = p;
         launchPads = new SpacePortLaunchPad[ports];
         for (int i = 0; i < launchPads.length; i++) {
             launchPads[i] = new SpacePortLaunchPad(type);
@@ -45,7 +48,7 @@ public class SpacePortBuilding extends PlanetSector {
         JButton createSatelliteButton = new JButton("Launch Satellite");
         //Show launch Satellite menu.
         createSatelliteButton.addActionListener((e) -> {
-            LaunchSatelliteMenu launch = new LaunchSatelliteMenu(pads.getSelectedValue(), Globals.universe.getCivilization(0));
+            LaunchSatelliteMenu launch = new LaunchSatelliteMenu(pads.getSelectedValue(), Globals.universe.getCivilization(0), planet);
             Component c;
             for (c = root.getParent(); 
                     !(c instanceof JInternalFrame) || c != null; 

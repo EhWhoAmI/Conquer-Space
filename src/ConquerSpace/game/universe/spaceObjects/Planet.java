@@ -62,6 +62,7 @@ public class Planet extends SpaceObject {
         planetSectors = new PlanetSector[surfaceArea];
         population = new Population();
         economy = new Economy();
+        satellites = new ArrayList<>();
     }
 
     /**
@@ -276,5 +277,9 @@ public class Planet extends SpaceObject {
     
     public void addSatellite(Satellite s) {
         satellites.add(s);
+    }
+    
+    public ArrayList getSatellites() {
+        return satellites;
     }
 }

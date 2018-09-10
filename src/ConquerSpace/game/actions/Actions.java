@@ -2,6 +2,7 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
@@ -43,5 +44,9 @@ public class Actions {
     
     public static void researchTech(Civilization c, Technology t) {
         
+    }
+    
+    public static void launchSatellite(Satellite what, Planet whichPlanet, int distance, Civilization c) {
+        whichPlanet.addSatellite(what);
     }
 }

@@ -78,7 +78,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                 Actions.buildBuilding(p, id, storage, 0, 1);
             } else if (item.equals("Space Launch Site")) {
                 //Get civ launching type...
-                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), (LaunchSystem) bsls.launchTypesValue.getSelectedItem());
+                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), (LaunchSystem) bsls.launchTypesValue.getSelectedItem(), p);
                 Actions.buildBuilding(p, id, port, 0, 1);
             }
             this.dispose();
