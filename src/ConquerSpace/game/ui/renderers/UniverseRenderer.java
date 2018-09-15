@@ -95,4 +95,70 @@ public class UniverseRenderer{
             g2d.drawString("30 light years", 10, 10);
         }
     }
+    
+    public void drawUniverse(Graphics g, Point translate, float scale) {
+        //Paint bounds dark blue.
+        Graphics2D g2d = (Graphics2D) g;
+
+        Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
+        g2d.setColor(new Color(0, 0, 255));
+        g2d.fill(bg);
+
+        Ellipse2D.Float universeCircle = new Ellipse2D.Float(translate.x * scale, translate.y * scale, drawer.universeDrawnSize * scale, drawer.universeDrawnSize * scale);
+        g2d.setColor(Color.BLACK);
+        g2d.fill(universeCircle);
+
+        for (SectorDrawStats s : drawer.sectorDrawings) {
+            //Check vision
+            for (UniversePath pa : universe.getCivilization(0).vision.keySet()) {
+                if (pa.getSectorID() == s.getId() && universe.getCivilization(0).vision.get(pa) > VisionTypes.UNDISCOVERED) {
+                    //Draw the sectors
+                    Point p = s.getPosition();
+
+                    Ellipse2D.Float sector = new Ellipse2D.Float((translate.x + p.x - s.getRadius()) * scale, (translate.y + p.y - s.getRadius()) * scale, s.getRadius() * 2 * scale, s.getRadius() * 2 * scale);
+                    Line2D.Float ln = new Line2D.Float(p, new Point((int)(((float)(drawer.universeDrawnSize / 2) + translate.x) * scale), (int)((((float)(drawer.universeDrawnSize / 2) + translate.y)) * scale)));
+
+                    // Draw star systems   
+                    for (SystemDrawStats sys : s.systems) {
+                        if (universe.getCivilization(0).vision.get(sys.getPath()) > 0) {
+                            if (universe.control.get(sys.getPath()) > -1) {
+                                switch (universe.getCivilization(0).vision.
+                                        get(sys.getPath())) {
+                                    case VisionTypes.KNOWS_INTERIOR:
+                                        g2d.setColor(Color.gray);
+                                        break;
+                                    default:
+                                        g2d.setColor(universe.getCivilization(universe.control.get(sys.getPath())).getColor());
+                                }
+                                //Control, if any...
+                                Ellipse2D.Float control = new Ellipse2D.Float(scale * (sys.getPosition().x - 5 + translate.x), scale * (sys.getPosition().y - 5 + translate.y), 10 * scale, 10 * scale);
+                                g2d.fill(control);
+                            }
+
+                            g2d.setColor(sys.getColor());
+                            Ellipse2D.Float system = new Ellipse2D.Float(scale * (sys.getPosition().x + translate.x), scale * (sys.getPosition().y + translate.y), 2, 2);
+                            g2d.fill(system);
+
+                            Line2D.Float systemln = new Line2D.Float(new Point(sys.getPosition().x + translate.x, sys.getPosition().y + translate.y), p);
+                            g2d.setColor(Color.orange);
+                            //Unncomment for debugging
+                            //g2d.draw(systemln);
+                        }
+                    }
+                    g2d.setColor(Color.RED);
+                    g2d.draw(sector);
+
+                    g2d.setColor(Color.orange);
+                    //Uncomment this for debugging
+                    //g2d.draw(ln);
+                    break;
+                }
+            }
+            //Draw scale line
+            // TODO: MAKE ACCURATE
+            Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 + 10, 20);
+            g2d.draw(line);
+            g2d.drawString("30 light years", 10, 10);
+        }
+    }
 }

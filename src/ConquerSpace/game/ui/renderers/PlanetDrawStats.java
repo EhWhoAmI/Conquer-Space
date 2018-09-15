@@ -14,13 +14,14 @@ public class PlanetDrawStats {
     //Orbit is the distance from the center (radius)
     private int orbitPath;
     private String owner;
+    private String name = "";
     private Color ownerColor;
     
     //NOTE: planet size has to be exxagurated in order to see the planet.
     //Space is too dang big!
     private int size;
     
-    public PlanetDrawStats(int id, Point pos, Color color, int orbitPath, int size, String owner, Color ownColor) {
+    public PlanetDrawStats(int id, Point pos, Color color, int orbitPath, int size, String owner, Color ownColor, String name) {
         this.id = id;
         this.pos = pos;
         this.color = color;
@@ -28,6 +29,7 @@ public class PlanetDrawStats {
         this.size = size;
         this.owner = owner;
         this.ownerColor = ownColor;
+        this.name = name;
     }
 
     public Color getColor() {
@@ -56,5 +58,9 @@ public class PlanetDrawStats {
 
     public Color getOwnerColor() {
         return ownerColor;
+    }
+    
+    public String getName() {
+        return name;
     }
 }

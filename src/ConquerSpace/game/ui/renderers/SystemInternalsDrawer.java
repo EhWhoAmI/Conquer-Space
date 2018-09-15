@@ -101,7 +101,7 @@ public class SystemInternalsDrawer {
             }
             PlanetDrawStats pds = new PlanetDrawStats(p.getId(), point, cl,
                     p.getOrbitalDistance() * sizeofAU, p.getPlanetSize(), playerSymbol,
-                    co);
+                    co, p.getName());
             
             LOGGER.trace("Distance : " + Math.hypot(point.x - bounds.width / 2, point.y - bounds.height / 2));
             this.stats.addPlanetDrawStats(pds);
