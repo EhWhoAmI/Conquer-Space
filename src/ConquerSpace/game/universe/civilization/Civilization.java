@@ -10,6 +10,7 @@ import ConquerSpace.game.universe.civilization.controllers.AIController.AIContro
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
+import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Sector;
@@ -67,6 +68,8 @@ public class Civilization {
 
     public ArrayList<Satellite> satellites;
     
+    public ArrayList<VisionPoint> visionPoints;
+    
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -99,6 +102,8 @@ public class Civilization {
         people = new ArrayList<>();
         launchSystems = new ArrayList<>();
         satellites = new ArrayList<>();
+        
+        visionPoints = new ArrayList<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
