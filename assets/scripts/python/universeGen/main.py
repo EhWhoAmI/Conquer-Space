@@ -7,21 +7,20 @@
 
 from ConquerSpace.game import UniversePath
 from ConquerSpace.game.universe import GalacticLocation
+from ConquerSpace.game.universe.civilization import Civilization
 from ConquerSpace.game.universe.civilization.controllers.AIController import AIController
 from ConquerSpace.game.universe.civilization.controllers.PlayerController import PlayerController
-from ConquerSpace.game.universe.civilization import Civilization
+from ConquerSpace.game.universe.resources import RawResourceTypes
 from ConquerSpace.game.universe.spaceObjects import Planet
+from ConquerSpace.game.universe.spaceObjects import PlanetTypes
 from ConquerSpace.game.universe.spaceObjects import Sector
 from ConquerSpace.game.universe.spaceObjects import Star
 from ConquerSpace.game.universe.spaceObjects import StarSystem
-from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects import StarTypes
-from ConquerSpace.game.universe.spaceObjects import PlanetTypes
+from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
-from ConquerSpace.game.universe.resources import RawResourceTypes
-
-import generation
 from constants import *
+import generation
 from java.awt import Color
 import math
 from os import *
@@ -58,115 +57,73 @@ layer = 1
 degCounter = 0
 sizeOfPolygon = 0
 sidesLeft = 0
-for i in range(universeSize):
-    # Set galatic location
-    LOGGER.trace("Deg counter = " + str(degCounter))
-    secdegs = degCounter
-    secdist = (((layer-1)*((SECTOR_MAX_RADIUS)) * 2))
     
+starSystemCount = random.randint(SECTOR_MIN_SYSTEM, SECTOR_MIN_SYSTEM)
     
-    if layer == 0:
-        secdegs = 0
-        secdist = 0
-    
-    sectorLoc = GalacticLocation(secdegs, secdist)
-    # Sector
-    sector = Sector(sectorLoc, i)
-    
-    starSystemCount = random.randint(SECTOR_MIN_SYSTEM, SECTOR_MIN_SYSTEM)
-    
-    # Add star systems
-    for r in range(starSystemCount):
-        # Galactic location
-        sysdegs = (random.randint(0, 360 * 4) / 4)
-        sysdist = random.randint(0, SECTOR_MAX_RADIUS)
-        systemLoc = GalacticLocation(sysdegs, sysdist)
-        starSystem = StarSystem(r, systemLoc)
-        # Create star
-        starType = random.randint(1, 100)
-        if starType < 55:
-            starType = StarTypes.YELLOW
-        elif starType < 75:
-            starType = StarTypes.BLUE
-        elif starType < 96:
-            starType = StarTypes.RED
-        else:
-            starType = StarTypes.BROWN
-        starSize = random.randint(1, 10)
-        # 0 because there is only one star so far.
-        star = Star(starType, starSize, 0)
-        starSystem.addStar(star)
-        
-        planets = random.randint(0, 9)
-        
-        lastDist = 1
-        for n in range(planets):
-            # Planets
-            ptype = random.randint(0, 1)
-            toadd = 0
-            if n == 0:
-                toadd = 1
-            else:
-                toadd = n
-            orbitalDistance = generation.calculatePlanetSpacing(lastDist)
-            lastDist = orbitalDistance
-            planetSize = random.randint(PLANET_MIN_SIZE, PLANET_MAX_SIZE)
-            planet = Planet(ptype, orbitalDistance, planetSize, n, r, i)
-            ####################
-            # Set planet sectors
-            for b in range(planet.getPlanetSectorCount()):
-                if planet.getPlanetType() == PlanetTypes.ROCK:
-                    # Set to all gas raw resource
-                    rawr = RawResource()
-                    # Add other resources
-                    # Types of resources
-                    # One planet sector can have a max of 3 kinds of resources.
-                    resourceTypesCount = random.randint(0, 3)
-                    resourceTypes = list(range(RAW_RESOURCE_TYPES_COUNT))
-                    for k in range(resourceTypesCount):
-                        resourceSelection = random.choice(resourceTypes)
-                        resourceTypes.remove(resourceSelection)
-                        rawr.addResource(resourceSelection, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
-                        
-                    planet.setPlanetSector(b, rawr)
-                else:
-                    # Select random raw resource
-                    rawr = RawResource()
-                    rawr.addResource(RawResourceTypes.GAS, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
-                    planet.setPlanetSector(b, rawr)
-            ##################
-            starSystem.addPlanet(planet)
-            
-        sector.addStarSystem(starSystem)
-        
-    if i == 0:
-        centerSize = sector.getSize()
-        degCounter = 360
+# Add star systems
+for r in range(starSystemCount):
+    # Galactic location
+    sysdegs = (random.randint(0, 360 * 4) / 4)
+    sysdist = random.randint(0, SECTOR_MAX_RADIUS)
+    systemLoc = GalacticLocation(sysdegs, sysdist)
+    starSystem = StarSystem(r, systemLoc)
+    # Create star
+    starType = random.randint(1, 100)
+    if starType < 55:
+        starType = StarTypes.YELLOW
+    elif starType < 75:
+        starType = StarTypes.BLUE
+    elif starType < 96:
+        starType = StarTypes.RED
     else:
-        # Add degrees
-        degCounter = degCounter + math.floor((360 / sizeOfPolygon))
-        sidesLeft = sidesLeft - 1
-        LOGGER.trace("Size of polygon: " + str(sizeOfPolygon))
-        LOGGER.trace("Deg counter = " + str(degCounter))
-    
-    if sidesLeft == 0:
-        # Reset degrees counter
-        degCounter = 0
-        # Increment layer 
-        layer = layer + 1
-        
-        # Calculate size of polygon
-        radius = ((layer-1) * SECTOR_MAX_RADIUS * 2)
-        LOGGER.trace("Radius: " + str(radius))
-        circurmference = math.pi * radius * 2
-        LOGGER.trace("Circurmference: " + str(circurmference))
-        # Divide and round up.
-        sizeOfPolygon = math.floor(circurmference/(SECTOR_MAX_RADIUS * 2))
-        sidesLeft = sizeOfPolygon
-        if (universeSize - i) < sidesLeft:
-            sidesLeft = (universeSize - i)
+        starType = StarTypes.BROWN
+    starSize = random.randint(1, 10)
+    # 0 because there is only one star so far.
+    star = Star(starType, starSize, 0)
+    starSystem.addStar(star)
+
+    planets = random.randint(0, 9)
+
+    lastDist = 1
+    for n in range(planets):
+        # Planets
+        ptype = random.randint(0, 1)
+        toadd = 0
+        if n == 0:
+            toadd = 1
+        else:
+            toadd = n
+        orbitalDistance = generation.calculatePlanetSpacing(lastDist)
+        lastDist = orbitalDistance
+        planetSize = random.randint(PLANET_MIN_SIZE, PLANET_MAX_SIZE)
+        planet = Planet(ptype, orbitalDistance, planetSize, n, r)
+        ####################
+        # Set planet sectors
+        for b in range(planet.getPlanetSectorCount()):
+            if planet.getPlanetType() == PlanetTypes.ROCK:
+                # Set to all gas raw resource
+                rawr = RawResource()
+                # Add other resources
+                # Types of resources
+                # One planet sector can have a max of 3 kinds of resources.
+                resourceTypesCount = random.randint(0, 3)
+                resourceTypes = list(range(RAW_RESOURCE_TYPES_COUNT))
+                for k in range(resourceTypesCount):
+                    resourceSelection = random.choice(resourceTypes)
+                    resourceTypes.remove(resourceSelection)
+                    rawr.addResource(resourceSelection, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
+
+                planet.setPlanetSector(b, rawr)
+            else:
+                # Select random raw resource
+                rawr = RawResource()
+                rawr.addResource(RawResourceTypes.GAS, random.randint(RAW_RESOURCE_MIN, RAW_RESOURCE_CAP))
+                planet.setPlanetSector(b, rawr)
+        ##################
+        starSystem.addPlanet(planet)
+
+    universeObject.addStarSystem(starSystem)
                 
-    universeObject.addSector(sector)
     
 LOGGER.info("Done Creating Sectors")
 # Generate Civs
@@ -174,7 +131,7 @@ LOGGER.info("Done Creating Sectors")
 LOGGER.trace("Creating Civilizations")
 # Number of civs is half of sectors
 # So that we will always have `empty` sectors.
-civCount = int(math.floor(universeSize/2))
+civCount = int(math.floor(universeSize / 2))
     
 LOGGER.info("Civilization Count: " + str(civCount))
 
@@ -208,8 +165,8 @@ LOGGER.trace('Civ symbol: "' + civSymbol + '"')
 HomesectorID = random.choice(sectorList)
 sectorList.remove(HomesectorID)
 
-start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), civConf.getCivilizationPreferredClimate())
-playerCiv.setStartingPlanet(UniversePath(HomesectorID, start[0], start[1]))
+start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject)
+playerCiv.setStartingPlanet(UniversePath(start[0], start[1]))
 # Get planet then add 1 population center
 # Now, choose one random thingy, and enter it.
 #homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
@@ -248,7 +205,7 @@ for p in range(civCount):
     ]
     civ.setHomePlanetName(random.choice(planetNameList[0]) + random.choice(planetNameList[1]) + random.choice(planetNameList[2]))
     civ.setSpeciesName(civName)
-    civ.setCivilizationPreferredClimate(random.randint(0,2))
+    civ.setCivilizationPreferredClimate(random.randint(0, 2))
     
     # Figure out home system and planet
     # Choose random sector
@@ -263,8 +220,8 @@ for p in range(civCount):
     
     LOGGER.trace("Choosing home star system")
 
-    start = generation.selectRandomSuitablePlanet(universeObject.getSector(HomesectorID), random.randint(0, 2))
-    civ.setStartingPlanet(UniversePath(HomesectorID, start[0], start[1]))
+    start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject)
+    civ.setStartingPlanet(UniversePath(start[0], start[1]))
     
     # Get planet then add 1 population center
     # Now, choose one random thingy, and enter it.

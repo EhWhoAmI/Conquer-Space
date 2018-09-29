@@ -85,7 +85,9 @@ public class RendererMath {
         //Math.sin and Math.cos is in radians.
         double opp = Math.sin(Math.toRadians(ang)) * g.getDistance();
         double adj = Math.cos(Math.toRadians(ang)) * g.getDistance();
-
+        
+        assert(opp < 0);
+        assert(adj < 0);
         //Multipy units. May have to change this for accuracy.
         opp *= unitSize;
         adj *= unitSize;

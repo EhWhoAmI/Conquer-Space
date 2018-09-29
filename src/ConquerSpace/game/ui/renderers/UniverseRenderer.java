@@ -32,6 +32,7 @@ public class UniverseRenderer{
     }
 
     public void drawUniverse(Graphics g, Point translate) {
+        /*
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 
@@ -93,10 +94,11 @@ public class UniverseRenderer{
             Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 + 10, 20);
             g2d.draw(line);
             g2d.drawString("30 light years", 10, 10);
-        }
+        }*/
     }
     
     public void drawUniverse(Graphics g, Point translate, float scale) {
+        /*
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 
@@ -159,6 +161,6 @@ public class UniverseRenderer{
             Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 + 10, 20);
             g2d.draw(line);
             g2d.drawString("30 light years", 10, 10);
-        }
+        }*/
     }
 }

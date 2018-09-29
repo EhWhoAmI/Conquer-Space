@@ -56,20 +56,20 @@ public class Civilization {
     public HashMap<Technology, Integer> civTechs;
     public HashMap<Technology, Integer> civResearch;
     public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
-    
+
     public HashMap<String, Integer> multipliers;
     public FieldNode fields;
 
     private int techLevel = 0;
-    
+
     public ArrayList<Person> people;
-    
+
     public ArrayList<LaunchSystem> launchSystems;
 
     public ArrayList<Satellite> satellites;
-    
+
     public ArrayList<VisionPoint> visionPoints;
-    
+
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -77,19 +77,17 @@ public class Civilization {
         this.control.add(new UniversePath(0, 0, 0));
 
         vision = new HashMap<>();
+
         //Add all the vision.
-        for (int i = 0; i < u.getSectorCount(); i++) {
-            Sector s = u.getSector(i);
-            for (int n = 0; n < s.getStarSystemCount(); n++) {
-                this.vision.put(new UniversePath(i, n), VisionTypes.UNDISCOVERED);
-                StarSystem sys = s.getStarSystem(n);
-                for (int h = 0; h < sys.getPlanetCount(); h++) {
-                    //Add planets
-                    this.vision.put(new UniversePath(i, n, h), VisionTypes.UNDISCOVERED);
-                }
-                for (int h2 = 0; h2 < sys.getStarCount(); h2++) {
-                    this.vision.put(new UniversePath(i, n, h2, true), VisionTypes.UNDISCOVERED);
-                }
+        for (int i = 0; i < u.getStarSystemCount(); i++) {
+            StarSystem s = u.getStarSystem(i);
+            this.vision.put(new UniversePath(i), VisionTypes.UNDISCOVERED);
+            for (int h = 0; h < s.getPlanetCount(); h++) {
+                //Add planets
+                this.vision.put(new UniversePath(i, h), VisionTypes.UNDISCOVERED);
+            }
+            for (int h2 = 0; h2 < s.getStarCount(); h2++) {
+                this.vision.put(new UniversePath(i, h2, true), VisionTypes.UNDISCOVERED);
             }
         }
         pop = new Population();
@@ -97,12 +95,12 @@ public class Civilization {
 
         civTechs = new HashMap<>();
         civResearch = new HashMap<>();
-        
+
         currentlyResearchingTechonologys = new HashMap<>();
         people = new ArrayList<>();
         launchSystems = new ArrayList<>();
         satellites = new ArrayList<>();
-        
+
         visionPoints = new ArrayList<>();
     }
 
@@ -168,10 +166,6 @@ public class Civilization {
 
     public int getHomeSystemID() {
         return control.get(0).getSystemID();
-    }
-
-    public int getHomesectorID() {
-        return control.get(0).getSectorID();
     }
 
     public String getName() {
@@ -245,7 +239,7 @@ public class Civilization {
     }
 
     public Technology[] getTechsByTag(String tag) {
-        Object[] techList = civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e ->civTechs.get(e) == Technologies.RESEARCHED).toArray();
+        Object[] techList = civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e -> civTechs.get(e) == Technologies.RESEARCHED).toArray();
         return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
 
@@ -260,7 +254,7 @@ public class Civilization {
     }
 
     public void assignResearch(Technology t, Person p) {
-        if(people.contains(p) && p instanceof Scientist) {
+        if (people.contains(p) && p instanceof Scientist) {
             //Then do it...
             currentlyResearchingTechonologys.put(t, (Scientist) p);
             civResearch.put(t, 0);
@@ -268,7 +262,7 @@ public class Civilization {
             civTechs.put(t, -1);
         }
     }
-    
+
     public int getTechLevel() {
         return techLevel;
     }
@@ -279,7 +273,7 @@ public class Civilization {
             techLevel += t.getLevel();
         });
     }
-    
+
     public void addSatellite(Satellite s) {
         satellites.add(s);
     }

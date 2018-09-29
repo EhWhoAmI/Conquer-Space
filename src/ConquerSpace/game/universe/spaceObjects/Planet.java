@@ -64,6 +64,24 @@ public class Planet extends SpaceObject {
         economy = new Economy();
         satellites = new ArrayList<>();
     }
+    
+    public Planet(int planetType, int orbitalDistance, int planetSize, int id, int parentStarSystem) {
+        this.planetType = planetType;
+        this.orbitalDistance = new GalacticLocation(0, orbitalDistance);
+        this.planetSize = planetSize;
+        this.id = id;
+        this.parentSector = -1;
+        this.parentStarSystem = parentStarSystem;
+
+        //Surface area equals 4 * diameter
+        //Surface area is in sectors
+        //1 sector = 10 'units'
+        surfaceArea = (int) Math.pow(Math.ceil(planetSize/2), 2);
+        planetSectors = new PlanetSector[surfaceArea];
+        population = new Population();
+        economy = new Economy();
+        satellites = new ArrayList<>();
+    }
 
     /**
      * Returns a human-readable string
@@ -264,7 +282,7 @@ public class Planet extends SpaceObject {
     }
     
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentSector, parentStarSystem, id));
+        return (new UniversePath(parentStarSystem, id));
     }
     
     public int getSatelliteCount() {

@@ -185,6 +185,6 @@ public class StarSystem extends SpaceObject {
      * @return The path of this star system
      */
     public UniversePath getUniversePath() {
-        return (new UniversePath(parent, id));
+        return (new UniversePath(id));
     }
 }

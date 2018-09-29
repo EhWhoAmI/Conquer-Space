@@ -7,6 +7,7 @@ import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer;
+import ConquerSpace.game.ui.renderers.UniverseRenderer2;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -80,7 +81,7 @@ public class GameWindow extends JFrame {
 
         JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(u.getCivilization(0).getStartingPlanet().getSectorID(), u.getCivilization(0).getStartingPlanet().getSystemID());
+            desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -89,7 +90,7 @@ public class GameWindow extends JFrame {
             desktopPane.recenter();
             desktopPane.repaint();
         });
-        
+
         views.add(setToUniverseView);
         views.add(seeHomePlanet);
         views.add(recenter);
@@ -144,7 +145,7 @@ public class GameWindow extends JFrame {
         setVisible(true);
 
         //See home planet
-        desktopPane.see(u.getCivilization(0).getStartingPlanet().getSectorID(), u.getCivilization(0).getStartingPlanet().getSystemID());
+        desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -156,25 +157,23 @@ public class GameWindow extends JFrame {
      */
     public class CQSPDesktop extends JDesktopPane implements MouseMotionListener, MouseListener, MouseWheelListener {
 
-        private static final int SIZE_OF_STAR_ON_SECTOR = 25;
-        UniverseRenderer universeRenderer;
-        SectorRenderer[] sectorRenderers;
+        public static final int SIZE_OF_STAR_ON_SECTOR = 25;
+        UniverseRenderer2 universeRenderer;
         private boolean isDragging = false;
         private Point startPoint;
         private int translateX = 0;
         private int translateY = 0;
         static final int DRAW_UNIVERSE = 0;
-        static final int DRAW_SECTOR = 1;
-        static final int DRAW_STAR_SYSTEM = 2;
+        static final int DRAW_STAR_SYSTEM = 1;
         int drawing = DRAW_UNIVERSE;
-        private int drawingSector = 0;
         private int drawingStarSystem = 0;
         private Universe universe;
         SystemRenderer systemRenderer;
-        
+
         /**
-         * Scale for the zoom. A scale of 1 is the current universe view, and it can zoom to a max of 5.
-         * 
+         * Scale for the zoom. A scale of 1 is the current universe view, and it
+         * can zoom to a max of 5.
+         *
          */
         private float scale = 1.0f;
 
@@ -183,9 +182,6 @@ public class GameWindow extends JFrame {
             switch (drawing) {
                 case DRAW_UNIVERSE:
                     universeRenderer.drawUniverse(g, new Point(translateX, translateY), scale);
-                    break;
-                case DRAW_SECTOR:
-                    sectorRenderers[drawingSector].drawSector(g, new Point(translateX, translateY), scale);
                     break;
                 case DRAW_STAR_SYSTEM:
                     assert systemRenderer == null;
@@ -199,8 +195,8 @@ public class GameWindow extends JFrame {
         @Override
         public void mouseDragged(MouseEvent e) {
             if (isDragging && SwingUtilities.isRightMouseButton(e)) {
-                translateX -= ((startPoint.x - e.getX()) * (1/scale));
-                translateY -= ((startPoint.y - e.getY()) * (1/scale));
+                translateX -= ((startPoint.x - e.getX()) * (1 / scale));
+                translateY -= ((startPoint.y - e.getY()) * (1 / scale));
                 startPoint = e.getPoint();
                 repaint();
             }
@@ -219,15 +215,16 @@ public class GameWindow extends JFrame {
                         //Get sector..
                         LOGGER.info("Checking for click");
                         sectorit:
-                        for (SectorDrawStats stats : universeRenderer.drawer.sectorDrawings) {
+                        for (SystemDrawStats stats : universeRenderer.drawer.systemDrawings) {
                             //Check for vision
                             if (Math.hypot(((stats.getPosition().getX() + translateX) * scale - e.getX()),
-                                    ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (stats.getRadius() * scale)) {
+                                    ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSectorID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
-                                        LOGGER.info("Found sector!" + p.getSectorID());
-                                        drawingSector = p.getSectorID();
-                                        drawing = DRAW_SECTOR;
+                                    if (p.getSystemID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                        LOGGER.info("Found system!" + p.getSystemID());
+                                        drawingStarSystem = p.getSystemID();
+                                        systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
+                                        drawing = DRAW_STAR_SYSTEM;
                                         translateX = 0;
                                         translateY = 0;
                                         repaint();
@@ -237,29 +234,12 @@ public class GameWindow extends JFrame {
                             }
                         }
                         break;
-                    case DRAW_SECTOR:
-                        //Star system
-                        //Get which system clicked.
-                        LOGGER.info("Double clicked. Opening system");
-                        for (SystemDrawStats stat : sectorRenderers[drawingSector].drawer.stats) {
-                            if (Math.hypot((translateX + stat.getPosition().getX()) * scale - e.getX(),
-                                    (translateY + stat.getPosition().getY()) * scale - e.getY()) < (SIZE_OF_STAR_ON_SECTOR * scale)
-                                    && universe.getCivilization(0).vision.get(stat.getPath()) > VisionTypes.UNDISCOVERED) {
-                                LOGGER.info("Mouse clicked in system " + stat.getId() + "!");
-                                systemRenderer = new SystemRenderer(universe.getSector(drawingSector).getStarSystem(stat.getId()), universe, new Dimension(1500, 1500));
-                                drawing = DRAW_STAR_SYSTEM;
-                                drawingStarSystem = stat.getId();
-                                repaint();
-                                break;
-                            }
-                        }
-                        break;
                     case DRAW_STAR_SYSTEM:
                         for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
-                            if (Math.hypot((translateX + pstats.getPos().x) * scale - e.getX(), 
+                            if (Math.hypot((translateX + pstats.getPos().x) * scale - e.getX(),
                                     (translateY + pstats.getPos().y) * scale - e.getY()) < pstats.getSize()) {
                                 LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
-                                PlanetInfoSheet d = new PlanetInfoSheet(universe.getSector(drawingSector).getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
+                                PlanetInfoSheet d = new PlanetInfoSheet(universe.getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
                                 add(d);
                                 break;
                             }
@@ -293,40 +273,30 @@ public class GameWindow extends JFrame {
 
         public CQSPDesktop(Universe u) {
             universe = u;
-            universeRenderer = new UniverseRenderer(new Dimension(1500, 1500), u);
-            sectorRenderers = new SectorRenderer[u.getSectorCount()];
-            for (int i = 0; i < sectorRenderers.length; i++) {
-                sectorRenderers[i] = new SectorRenderer(new Dimension(1500, 1500), u.getSector(i), u);
-            }
+            universeRenderer = new UniverseRenderer2(new Dimension(1500, 1500), u);
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
         }
 
-        void see(int sector, int system) {
-            drawingSector = sector;
+        void see(int system) {
             drawingStarSystem = system;
-            systemRenderer = new SystemRenderer(universe.getSector(sector).getStarSystem(system), universe, new Dimension(1500, 1500));
             drawing = DRAW_STAR_SYSTEM;
-            repaint();
-        }
-
-        void see(int sector) {
-            drawingSector = sector;
-            drawing = DRAW_SECTOR;
+            systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
             repaint();
         }
 
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             //Change scroll
-            float scroll = (float)e.getUnitsToScroll();
-            if((scale + (scroll/10)) > 0)
-                scale+=(scroll/10);
+            float scroll = (float) e.getUnitsToScroll();
+            if ((scale + (scroll / 10)) > 0) {
+                scale += (scroll / 10);
+            }
             //Now repaint
             repaint();
         }
-        
+
         public void recenter() {
             translateX = 0;
             translateY = 0;

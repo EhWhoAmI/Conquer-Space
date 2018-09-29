@@ -108,23 +108,20 @@ public class GameUpdater {
                 //System.out.println("Planet size: " + ((Planet)universe.getSpaceObject(p)).planetSectors.length);
                 universe.getCivilization(civIndex).vision.put(p, VisionTypes.KNOWS_ALL);
                 //Set the parent star system visibility to true.
-                universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.KNOWS_ALL);
-                //Set sector to visible
-                universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID()), VisionTypes.KNOWS_ALL);
-
-                if (allsystemsstats.containsKey(p)) {
-                    //Get the stars around it.
-                    for (UniversePath path : allsystemsstats.keySet()) {
-
-                        //Get path position relative to the star system
-                        Point a = allsystemsstats.get(p);
-                        Point b = allsystemsstats.get(path);
-                        if (Math.hypot(a.x - b.x, a.y - b.y) < 100) {
-                            //Set visible
-                            universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.EXISTS);
-                        }
-                    }
-                }
+                //Will be back.
+//                if (allsystemsstats.containsKey(p)) {
+//                    //Get the stars around it.
+//                    for (UniversePath path : allsystemsstats.keySet()) {
+//
+//                        //Get path position relative to the star system
+//                        Point a = allsystemsstats.get(p);
+//                        Point b = allsystemsstats.get(path);
+//                        if (Math.hypot(a.x - b.x, a.y - b.y) < 100) {
+//                            //Set visible
+//                            universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.EXISTS);
+//                        }
+//                    }
+//                }
 
             }
         }

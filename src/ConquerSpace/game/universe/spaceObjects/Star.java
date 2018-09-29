@@ -91,7 +91,7 @@ public class Star extends SpaceObject {
     }
     
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentSector, parentStarSystem, id, true));
+        return (new UniversePath(parentStarSystem, id, true));
     }
     
     public int getOwnerID(){
