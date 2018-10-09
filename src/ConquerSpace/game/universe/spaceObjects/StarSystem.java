@@ -35,7 +35,7 @@ public class StarSystem extends SpaceObject {
      * Parent sector.
      */
     private int parent;
-
+    
     /**
      * Creates a new star system.
      * @param id ID of this star system
@@ -166,6 +166,8 @@ public class StarSystem extends SpaceObject {
     
     /**
      * Processes turns of the planets
+     * @param GameRefreshRate
+     * @param stardate
      */
     @Override
     public void processTurn(int GameRefreshRate, StarDate stardate) {

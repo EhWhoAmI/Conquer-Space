@@ -1,5 +1,7 @@
 package ConquerSpace.game.universe;
 
+import java.awt.Point;
+
 /**
  * Galactic location. In a nutshell, this is a polar coordinate.
  * @author Zyun

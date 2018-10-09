@@ -100,7 +100,7 @@ public class SystemInternalsDrawer {
                 co = civ.getColor();
             }
             PlanetDrawStats pds = new PlanetDrawStats(p.getId(), point, cl,
-                    p.getOrbitalDistance() * sizeofAU, p.getPlanetSize(), playerSymbol,
+                    p.getOrbitalDistance() * sizeofAU, p.getPlanetSize()*2, playerSymbol,
                     co, p.getName());
             
             LOGGER.trace("Distance : " + Math.hypot(point.x - bounds.width / 2, point.y - bounds.height / 2));

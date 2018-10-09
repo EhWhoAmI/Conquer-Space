@@ -113,14 +113,14 @@ public class SystemRenderer {
                 g2d.setColor(Color.red);
 
                 g2d.fill(new Rectangle2D.Float(
-                        (p.getPos().x - (p.getSize() / 2) + translate.x) * scale,
-                        (p.getPos().y + (p.getSize() / 2) + translate.y) * scale - g2d.getFontMetrics().getHeight(),
+                        (p.getPos().x - (p.getSize()) + translate.x) * scale,
+                        (p.getPos().y + (p.getSize()*2) + translate.y) * scale - g2d.getFontMetrics().getHeight(),
                         (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3));
                 g2d.setColor(Color.white);
 
                 g2d.drawString(p.getName(),
-                        (p.getPos().x - (p.getSize() / 2) + translate.x) * scale,
-                        (p.getPos().y + (p.getSize() / 2) + translate.y) * scale);
+                        (p.getPos().x - (p.getSize()) + translate.x) * scale,
+                        (p.getPos().y + (p.getSize()*2) + translate.y) * scale);
             }
         }
 
