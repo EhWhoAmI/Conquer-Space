@@ -12,7 +12,7 @@ import java.util.Iterator;
  *
  * @author Zyun
  */
-public class Universe extends SpaceObject {
+public final class Universe extends SpaceObject {
 
     private final long seed;
 

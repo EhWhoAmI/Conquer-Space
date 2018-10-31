@@ -9,7 +9,8 @@ import java.util.ArrayList;
  *
  * @author Zyun
  */
-public class Sector extends SpaceObject {
+@Deprecated
+public final class Sector extends SpaceObject {
 
     ArrayList<StarSystem> starSystems;
     private GalacticLocation loc;

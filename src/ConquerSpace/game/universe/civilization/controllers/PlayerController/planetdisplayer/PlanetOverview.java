@@ -46,6 +46,7 @@ public class PlanetOverview extends JPanel {
     private JLabel orbitDistance;
     private Planet p;
 
+    @SuppressWarnings("unchecked")
     public PlanetOverview(Planet p, Civilization c) {
         this.p = p;
         setLayout(new GridLayout(1, 3));

@@ -1,7 +1,9 @@
-package ConquerSpace.game;
+package ConquerSpace.game.universe.civilization.controllers;
 
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.controllers.LimitedStarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.util.ArrayList;
@@ -13,11 +15,11 @@ import java.util.HashSet;
  * what the player owns, what it does not, what it sees... All that good stuff
  * @author Zyun
  */
-public class GameUniverse {
+public class LimitedUniverse {
     private Civilization self;
     private Universe universe;
     
-    public GameUniverse(Universe u, Civilization civ) {
+    public LimitedUniverse(Universe u, Civilization civ) {
         self = civ;
         universe = u;
     }
@@ -44,14 +46,14 @@ public class GameUniverse {
         return i;
     }
     
-    public ArrayList<StarSystem> getVisibleStarSystems() {
-        ArrayList<StarSystem> list = new ArrayList<>();
+    public ArrayList<LimitedStarSystem> getVisibleStarSystems() {
+        ArrayList<LimitedStarSystem> list = new ArrayList<>();
         //Loop through all visible star systems
         for (UniversePath p : self.vision.keySet()) {
             int v = self.vision.get(p); 
             if(v > VisionTypes.UNDISCOVERED) {
                 //Get star system
-                StarSystem sys = (StarSystem)universe.getSpaceObject(p);
+                LimitedStarSystem sys = new LimitedStarSystem((StarSystem)universe.getSpaceObject(p), v);
                 list.add(sys);
             }
         }

@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.AIController;
 
-import ConquerSpace.game.GameUniverse;
+import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Zyun
  */
 public class AIController implements CivilizationController {
-    private GameUniverse gameUniverse;
+    private LimitedUniverse gameUniverse;
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
         RunScript script = new RunScript(ResourceLoader.loadResource("script.python.ai.generation.normal.main"));
@@ -37,6 +37,6 @@ public class AIController implements CivilizationController {
 
     @Override
     public void init(Universe u, StarDate d, Civilization c) {
-        gameUniverse = new GameUniverse(u, c);
+        gameUniverse = new LimitedUniverse(u, c);
     }
 }

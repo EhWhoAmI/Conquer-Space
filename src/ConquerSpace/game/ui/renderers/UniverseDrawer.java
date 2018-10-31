@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
+@Deprecated
 public class UniverseDrawer {
 
     //Logger

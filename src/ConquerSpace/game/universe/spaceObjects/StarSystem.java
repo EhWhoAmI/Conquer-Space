@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Zyun
  */
-public class StarSystem extends SpaceObject {
+public final class StarSystem extends SpaceObject {
     /**
      * All planets in this star system.
      */
@@ -152,6 +152,7 @@ public class StarSystem extends SpaceObject {
      * Get parent sector id
      * @return parent sector id.
      */
+    @Deprecated
     public int getParent() {
         return parent;
     }
@@ -160,6 +161,7 @@ public class StarSystem extends SpaceObject {
      * Set the parent sector
      * @param parent id of parent sector
      */
+    @Deprecated
     public void setParent(int parent) {
         this.parent = parent;
     }
@@ -188,5 +190,13 @@ public class StarSystem extends SpaceObject {
      */
     public UniversePath getUniversePath() {
         return (new UniversePath(id));
+    }
+
+    public ArrayList<Star> getStars() {
+        return stars;
+    }
+
+    public ArrayList<Planet> getPlanets() {
+        return planets;
     }
 }

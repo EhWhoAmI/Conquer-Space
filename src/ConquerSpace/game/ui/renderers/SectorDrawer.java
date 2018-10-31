@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * @see UniverseRenderer
  * @author Zyun
  */
+@Deprecated
 public class SectorDrawer {
 
     public ArrayList<SystemDrawStats> stats;

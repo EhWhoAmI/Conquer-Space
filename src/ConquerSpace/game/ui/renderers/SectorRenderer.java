@@ -17,6 +17,7 @@ import java.awt.geom.Rectangle2D;
  *
  * @author Zyun
  */
+@Deprecated
 public class SectorRenderer{
 
     private Dimension bounds;

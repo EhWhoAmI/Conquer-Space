@@ -28,6 +28,8 @@ public class LaunchSatelliteMenu extends JInternalFrame{
     private JLabel satelliteName;
     private JLabel satelliteMass;
     private JButton buildAndLaunchButton;
+    
+    @SuppressWarnings("unchecked")
     public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         //The launch pad type and stuff as title
         setTitle("Launch a satellite using " + pad.getType().getName());

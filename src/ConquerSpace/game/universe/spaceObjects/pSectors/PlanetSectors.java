@@ -9,7 +9,7 @@ import javax.script.ScriptException;
  * @author Zyun
  */
 public class PlanetSectors {
-    public static class PlanetSectorTypes {
+    public static final class PlanetSectorTypes {
         public static final int BUILDING_BUILDING = 0;
         public static final int POPULATION_STORAGE = 1;
         public static final int SPACE_PORT_BUILDING = 2;

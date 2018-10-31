@@ -2,11 +2,8 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.ui.renderers.PlanetDrawStats;
-import ConquerSpace.game.ui.renderers.SectorDrawStats;
-import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
-import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer2;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
