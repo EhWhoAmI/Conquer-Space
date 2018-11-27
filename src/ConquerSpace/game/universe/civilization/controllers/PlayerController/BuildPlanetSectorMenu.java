@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.controllers.LimitedPlanet;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
@@ -44,7 +45,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
     Civilization c;
 
     @SuppressWarnings("unchecked")
-    public BuildPlanetSectorMenu(Planet p, int id, Civilization c) {
+    public BuildPlanetSectorMenu(LimitedPlanet p, int id, Civilization c) {
         this.c = c;
         setTitle("Build on planet " + p.getName());
         setLayout(new GridLayout(2, 1));
@@ -78,7 +79,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
                 Actions.buildBuilding(p, id, storage, 0, 1);
             } else if (item.equals("Space Launch Site")) {
                 //Get civ launching type...
-                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), (LaunchSystem) bsls.launchTypesValue.getSelectedItem(), p);
+                SpacePortBuilding port = new SpacePortBuilding(0, Integer.parseInt(bsls.maxPopulation.getText()), (LaunchSystem) bsls.launchTypesValue.getSelectedItem(), p.toPlanet());
                 Actions.buildBuilding(p, id, port, 0, 1);
             }
             this.dispose();

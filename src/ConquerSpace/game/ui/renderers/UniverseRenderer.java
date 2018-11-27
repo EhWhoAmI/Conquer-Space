@@ -1,16 +1,9 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Jpanel of the universe. Displays the whole of it.

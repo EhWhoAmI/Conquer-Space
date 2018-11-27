@@ -1,7 +1,8 @@
 package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.GameWindow;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
@@ -22,9 +23,9 @@ public class UniverseRenderer2 {
     private Dimension bounds;
     public UniverseDrawer2 drawer;
 
-    Universe universe;
+    LimitedUniverse universe;
 
-    public UniverseRenderer2(Dimension bounds, Universe universe) {
+    public UniverseRenderer2(Dimension bounds, LimitedUniverse universe) {
         this.bounds = bounds;
         this.universe = universe;
         drawer = new UniverseDrawer2(universe, bounds);
@@ -56,14 +57,14 @@ public class UniverseRenderer2 {
             //Check vision...
             if (/*universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED*/true) {
                 //Control
-                if (universe.control.get(s.getPath()) > -1) {
+                if (universe.getControl().get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
                             get(s.getPath())) {
                         case VisionTypes.KNOWS_INTERIOR:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            g2d.setColor(universe.getCivilization(universe.control.get(s.getPath())).getColor());
+                            g2d.setColor(universe.getCivilization(universe.getControl().get(s.getPath())).getColor());
                     }
                     //Control, if any...
                     Ellipse2D.Float control = new Ellipse2D.Float(
@@ -124,14 +125,14 @@ public class UniverseRenderer2 {
             //Check vision...
             if (universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED) {
                 //Control
-                if (universe.control.get(s.getPath()) > -1) {
+                if (universe.getControl().get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
                             get(s.getPath())) {
                         case VisionTypes.KNOWS_INTERIOR:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            g2d.setColor(universe.getCivilization(universe.control.get(s.getPath())).getColor());
+                            g2d.setColor(universe.getCivilization(universe.getControl().get(s.getPath())).getColor());
                     }
                     //Control, if any...
                     Ellipse2D.Float control = new Ellipse2D.Float(

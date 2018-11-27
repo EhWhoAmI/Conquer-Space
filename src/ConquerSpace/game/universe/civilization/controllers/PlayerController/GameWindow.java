@@ -6,7 +6,8 @@ import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer2;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
@@ -45,7 +46,7 @@ public class GameWindow extends JFrame {
 
     private PlayerController controller;
 
-    public GameWindow(Universe u, PlayerController controller, Civilization c) {
+    public GameWindow(LimitedUniverse u, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.c = c;
         desktopPane = new CQSPDesktop(u);
@@ -78,7 +79,7 @@ public class GameWindow extends JFrame {
 
         JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
+            desktopPane.see(c.getStartingPlanet().getSystemID());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -105,20 +106,20 @@ public class GameWindow extends JFrame {
 
         JMenuItem allCivInfo = new JMenuItem("My Civilization");
         allCivInfo.addActionListener((e) -> {
-            addFrame(new CivInfoOverview(u.getCivilization(0), u));
+            addFrame(new CivInfoOverview(c, u));
         });
         ownCivInfo.add(allCivInfo);
 
         JMenu techonology = new JMenu("Techonology");
         JMenuItem seetechs = new JMenuItem("See Researched Techs");
         seetechs.addActionListener((e) -> {
-            TechonologyViewer viewer = new TechonologyViewer(u, u.getCivilization(0));
+            TechonologyViewer viewer = new TechonologyViewer(c, u);
             addFrame(viewer);
         });
 
         JMenuItem techResearcher = new JMenuItem("Research Techonologies");
         techResearcher.addActionListener(e -> {
-            ResearchViewer viewer = new ResearchViewer(u.getCivilization(0));
+            ResearchViewer viewer = new ResearchViewer(c);
             addFrame(viewer);
         });
 
@@ -142,7 +143,7 @@ public class GameWindow extends JFrame {
         setVisible(true);
 
         //See home planet
-        desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
+        desktopPane.see(c.getStartingPlanet().getSystemID());
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -164,7 +165,7 @@ public class GameWindow extends JFrame {
         static final int DRAW_STAR_SYSTEM = 1;
         int drawing = DRAW_UNIVERSE;
         private int drawingStarSystem = 0;
-        private Universe universe;
+        private LimitedUniverse universe;
         SystemRenderer systemRenderer;
 
         /**
@@ -216,8 +217,8 @@ public class GameWindow extends JFrame {
                             //Check for vision
                             if (Math.hypot(((stats.getPosition().getX() + translateX) * scale - e.getX()),
                                     ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
-                                for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                for (UniversePath p : c.vision.keySet()) {
+                                    if (p.getSystemID() == stats.getId() && c.vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         LOGGER.info("Found system!" + p.getSystemID());
                                         drawingStarSystem = p.getSystemID();
                                         systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
@@ -268,7 +269,7 @@ public class GameWindow extends JFrame {
         public void mouseExited(MouseEvent e) {
         }
 
-        public CQSPDesktop(Universe u) {
+        public CQSPDesktop(LimitedUniverse u) {
             universe = u;
             universeRenderer = new UniverseRenderer2(new Dimension(1500, 1500), u);
             addMouseListener(this);

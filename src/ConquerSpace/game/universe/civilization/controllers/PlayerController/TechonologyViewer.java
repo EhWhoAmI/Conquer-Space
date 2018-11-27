@@ -3,7 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
@@ -18,9 +18,10 @@ import javax.swing.JPanel;
  */
 public class TechonologyViewer extends JInternalFrame{
     private JList<Technology> researchedList;
-    private Universe universe;
+    private LimitedUniverse universe;
     private Civilization c;
-    public TechonologyViewer(Universe u, Civilization civ) {
+    
+    public TechonologyViewer(Civilization civ, LimitedUniverse u) {
         this.universe = u;
         c = civ;
         setTitle("Researched Techonologies");

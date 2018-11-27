@@ -5,7 +5,7 @@ import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
 import ConquerSpace.game.universe.ships.satellites.Satellite;

@@ -1,11 +1,14 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.controllers.LimitedPlanet;
+import ConquerSpace.game.universe.civilization.controllers.LimitedPlanetSector;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.BuildPlanetSectorMenu;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
+import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSectors;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -18,6 +21,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -44,10 +48,10 @@ public class PlanetOverview extends JPanel {
     private JLabel planetType;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
-    private Planet p;
+    private LimitedPlanet p;
 
     @SuppressWarnings("unchecked")
-    public PlanetOverview(Planet p, Civilization c) {
+    public PlanetOverview(LimitedPlanet p, Civilization c) {
         this.p = p;
         setLayout(new GridLayout(1, 3));
 
@@ -70,11 +74,9 @@ public class PlanetOverview extends JPanel {
 
         //Init planetPath
         StringBuilder name = new StringBuilder();
-        name.append("Sector ");
-        name.append("" + p.getParentSector());
         name.append(" Star System ");
         name.append("" + p.getParentStarSystem());
-        name.append(" Planet id " + p.getId());
+        name.append(" Planet id " + p.getID());
         planetPath.setText(name.toString());
 
         //Init owner
@@ -113,15 +115,15 @@ public class PlanetOverview extends JPanel {
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {
 
-        private PlanetSector[] sectors;
+        private ArrayList<LimitedPlanetSector> sectors;
         private int times;
         private JPopupMenu menu;
         private Civilization c;
 
-        public PlanetSectorDisplayer(Planet p, Civilization c) {
+        public PlanetSectorDisplayer(LimitedPlanet p, Civilization c) {
             this.c = c;
-            sectors = p.planetSectors;
-            times = (int) Math.sqrt(sectors.length);
+            sectors = p.getPlanetSectors();
+            times = (int) Math.sqrt(sectors.size());
             setPreferredSize(new Dimension(times * TILE_SIZE+2, times * TILE_SIZE+2));
             menu = new JPopupMenu();
             addMouseListener(this);
@@ -139,12 +141,18 @@ public class PlanetOverview extends JPanel {
                     Rectangle2D.Float rect = new Rectangle2D.Float(TILE_SIZE * h, TILE_SIZE * w, TILE_SIZE, TILE_SIZE);
                     //Draw the boxes.
                     //Get type of sectors
-                    if (sectors[count] instanceof RawResource) {
-                        g2d.setColor(Color.GREEN);
-                    } else if (sectors[count] instanceof PopulationStorage) {
-                        g2d.setColor(Color.blue);
-                    } else if (sectors[count] instanceof BuildingBuilding) {
-                        g2d.setColor(Color.yellow);
+                    switch (sectors.get(count).getType()) {
+                        case PlanetSectors.PlanetSectorTypes.RAW_RESOURCE:
+                            g2d.setColor(Color.GREEN);
+                            break;
+                        case PlanetSectors.PlanetSectorTypes.POPULATION_STORAGE:
+                            g2d.setColor(Color.blue);
+                            break;
+                        case PlanetSectors.PlanetSectorTypes.BUILDING_BUILDING:
+                            g2d.setColor(Color.yellow);
+                            break;
+                        default:
+                            break;
                     }
 
                     g2d.fill(rect);
@@ -170,7 +178,7 @@ public class PlanetOverview extends JPanel {
                 JMenuItem infoItem = new JMenuItem("Info");
                 infoItem.addActionListener((l) -> {
                     JInternalFrame info = new JInternalFrame("Planet sector " + (index + 1));
-                    info.add(sectors[index].getInfoPanel());
+                    info.add(sectors.get(index).getInfoPanel());
                     info.pack();
                     info.setLocation(200, 100);
                     info.setVisible(true);
@@ -189,7 +197,7 @@ public class PlanetOverview extends JPanel {
                     }
                 });
 
-                if (p.getOwnerID() == 0 && p.planetSectors[index] instanceof RawResource) {
+                if (p.getOwnerID() == 0 && p.getPlanetSectors().get(index).getType() == PlanetSectors.PlanetSectorTypes.RAW_RESOURCE) {
                     JMenuItem build = new JMenuItem("Build");
                     build.addActionListener((l) -> {
                         BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index, c);

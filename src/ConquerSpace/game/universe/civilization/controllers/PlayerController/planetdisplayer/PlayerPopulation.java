@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
+import ConquerSpace.game.universe.civilization.controllers.LimitedPlanet;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
@@ -19,7 +20,7 @@ public class PlayerPopulation extends JPanel{
     private JLabel birthRate;
     private JLabel deathRate;
     
-    public PlayerPopulation(Planet p, int turn) {
+    public PlayerPopulation(LimitedPlanet p, int turn) {
         setLayout(new VerticalFlowLayout());
         currentStats = new JPanel(new VerticalFlowLayout());
         
@@ -30,10 +31,10 @@ public class PlayerPopulation extends JPanel{
         
         currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
         
-        populationCount.setText("Population: " + p.getPopulation());
-        populationGrowth.setText("Population growth: " + p.population.getLastYearsPopulationGrowth(turn) + "% this year");
-        birthRate.setText("Birth rate: " + p.population.getLastYearsbirthsPer1K(turn) + " per 1000 people this year");
-        deathRate.setText("Death rate: " + p.population.getLastYearsMortalityRate(turn) + " per 1000 people this year");
+        populationCount.setText("Population: "/* + p.getPopulation()*/);
+        populationGrowth.setText("Population growth: "/* + p.population.getLastYearsPopulationGrowth(turn)*/ + "% this year");
+        birthRate.setText("Birth rate: "/* + p.population.getLastYearsbirthsPer1K(turn)*/ + " per 1000 people this year");
+        deathRate.setText("Death rate: "/* + p.population.getLastYearsMortalityRate(turn)*/ + " per 1000 people this year");
         
         currentStats.add(populationCount);
         currentStats.add(populationGrowth);

@@ -1,7 +1,8 @@
 package ConquerSpace.game.universe.civilization.controllers;
 
+import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.GalacticLocation;
-import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -18,6 +19,7 @@ public class LimitedStarSystem {
 
     public LimitedStarSystem(StarSystem system, int visionType) {
         this.system = system;
+        this.visionType = visionType;
     }
     
     public int getPlanetCount() {
@@ -75,6 +77,7 @@ public class LimitedStarSystem {
                 return null;
         }
     }
+    
     public int getID() {
         return system.getId();
     }
@@ -131,5 +134,9 @@ public class LimitedStarSystem {
             default:
                 return null;
         }
+    }
+    
+    public UniversePath getUniversePath() {
+        return system.getUniversePath();
     }
 }

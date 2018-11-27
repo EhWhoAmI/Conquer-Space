@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers;
 
-import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.spaceObjects.Star;
 
 /**
