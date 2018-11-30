@@ -33,7 +33,7 @@ public class UniverseBreakdown extends JInternalFrame {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Universe");
         DefaultMutableTreeNode sectorNodes = new DefaultMutableTreeNode("Sectors");
         //Parse all the sectors in the universe
-        for (int i = 0; i < universe.getSectorCount(); i++) {
+        for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem sys = universe.getStarSystem(i);
             //Parse star systems
 

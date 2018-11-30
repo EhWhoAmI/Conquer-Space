@@ -39,7 +39,8 @@ public class Actions {
         if(p.getOwnerID() == owner) {
             //Get type of the planet sector
             //Pass
-            p.getPlanetSectors().set(sectorID, new LimitedPlanetSector(new BuildingBuilding(turns, what, p.toPlanet(), owner, sectorID), VisionTypes.KNOWS_ALL));
+            System.out.println("Building...");
+            p.toPlanet().planetSectors[sectorID]= new BuildingBuilding(turns, what, p.toPlanet(), owner, sectorID);
             return BUILD_BUILDING_SUCCESS;
         } else
             return BUILD_BUILDING_FAIL_NOT_OWNER;

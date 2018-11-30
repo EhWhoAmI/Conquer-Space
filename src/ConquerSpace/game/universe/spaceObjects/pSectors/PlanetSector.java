@@ -23,7 +23,7 @@ public class PlanetSector extends SpaceObject{
     }
     
     public String toReadableString() {
-        return ("");
+        return (this.getClass().getName());
     }
 
     public int getId() {
