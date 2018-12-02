@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilization.controllers;
 
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class LimitedPlanet {
     }
     
     //Get satellites -- will check if they are visible, one day
-    public ArrayList getSatellites() {
+    public ArrayList<Satellite> getSatellites() {
         return planet.getSatellites();
     }
     

@@ -23,6 +23,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,6 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -104,9 +106,21 @@ public class PlanetOverview extends JPanel {
         satellitesPanel = new JPanel();
         satellitesPanel.setBorder(new TitledBorder("Satellites"));
 
-        satelliteList = new JList<>(new Vector(p.getSatellites()));
+        DefaultListModel<Satellite> model = new DefaultListModel<Satellite>();
+        
+        
+        satelliteList = new JList<>(model);
         satellitesPanel.add(satelliteList);
-
+        //Update the list.
+        Timer time = new Timer(100, (e) -> {
+            
+            model.clear();
+            for(Satellite s : p.getSatellites()) {
+                model.addElement(s);
+            }
+            
+        });
+        time.start();
         add(planetOverview);
         add(planetSectors);
         add(satellitesPanel);
