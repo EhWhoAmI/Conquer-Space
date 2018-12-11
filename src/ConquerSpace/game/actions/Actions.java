@@ -51,6 +51,7 @@ public class Actions {
     }
     
     public static void launchSatellite(Satellite what, Planet whichPlanet, int distance, Civilization c) {
+        System.out.println("Launched satellite");
         whichPlanet.addSatellite(what);
     }
 }

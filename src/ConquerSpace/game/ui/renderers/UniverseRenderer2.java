@@ -167,4 +167,8 @@ public class UniverseRenderer2 {
         g2d.draw(line);
         g2d.drawString("30 light years", 10, 10);
     }
+    
+    public void refresh() {
+        drawer.refresh();
+    }
 }

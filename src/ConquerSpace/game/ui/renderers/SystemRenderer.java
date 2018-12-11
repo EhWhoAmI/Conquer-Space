@@ -24,10 +24,12 @@ public class SystemRenderer {
     private Dimension bounds;
 
     private LimitedUniverse universe;
-
+    private LimitedStarSystem system;
+    
     public SystemRenderer(LimitedStarSystem sys, LimitedUniverse u, Dimension bounds) {
         this.bounds = bounds;
         universe = u;
+        system = sys;
         drawer = new SystemInternalsDrawer(sys, u, bounds);
     }
 
@@ -108,8 +110,8 @@ public class SystemRenderer {
                     p.getSize(), p.getSize());
             g2d.setColor(p.getColor());
             g2d.fill(planet);
+            
             //Draw owner
-
             //Draw background
             if (!p.getName().equals("")) {
                 g2d.setColor(Color.red);
@@ -124,6 +126,8 @@ public class SystemRenderer {
                         (p.getPos().x - (p.getSize()) + translate.x) * scale,
                         (p.getPos().y + (p.getSize()*2) + translate.y) * scale);
             }
+            //Next, satellites
+            
         }
 
         //Draw scale line
@@ -131,5 +135,9 @@ public class SystemRenderer {
         Line2D.Float line = new Line2D.Float(10, 20, 50, 20);
         g2d.draw(line);
         g2d.drawString((20d / (double) drawer.sizeofAU) + " AU", 10, 10);
+    }
+    
+    public void refresh() {
+        drawer.refresh();
     }
 }

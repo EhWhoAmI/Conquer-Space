@@ -1,5 +1,6 @@
 package ConquerSpace.game.ui.renderers;
 
+import ConquerSpace.game.universe.civilization.controllers.LimitedPlanet;
 import java.awt.Color;
 import java.awt.Point;
 
@@ -17,6 +18,7 @@ public class PlanetDrawStats {
     private String name = "";
     private Color ownerColor;
     
+    private LimitedPlanet planet;
     //NOTE: planet size has to be exxagurated in order to see the planet.
     //Space is too dang big!
     private int size;

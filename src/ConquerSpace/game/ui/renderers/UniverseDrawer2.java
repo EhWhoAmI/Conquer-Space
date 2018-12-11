@@ -25,11 +25,13 @@ public class UniverseDrawer2 {
     public int sizeOfLtyr;
 
     public ArrayList<SystemDrawStats> systemDrawings;
-
+    
+    LimitedUniverse universe;
     //We need some way of updating it
     public UniverseDrawer2(LimitedUniverse universe, Dimension bounds) {
         systemDrawings = new ArrayList<>();
-
+        this.universe = universe;
+        
         //Get furthest star system
         int universeRadius = 0;
         ArrayList<LimitedStarSystem> visibleStarSystems = universe.getVisibleStarSystems();
@@ -58,6 +60,40 @@ public class UniverseDrawer2 {
         LOGGER.info("Size of light year " + sizeOfLtyr + "px, actual is " + ((float) universeDrawnSize / (float) universeDimensionsLTYR));
         //sizeOfLtyr = 1;
 
+        for (int i = 0; i < visibleStarSystems.size(); i++) {
+            //Do star systems
+            LimitedStarSystem sys = visibleStarSystems.get(i);
+            if(sys.getVisionType() < VisionTypes.KNOWS_DETAILS)
+                continue;
+            Point pt = RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation(), new Point(universeDrawnSize / 2, universeDrawnSize / 2), sizeOfLtyr);
+
+            //Color of star system
+            Color c;
+            switch (sys.getStar(0).getType()) {
+                case 0:
+                    c = new Color(104, 64, 0);
+                    break;
+                case 1:
+                    c = Color.YELLOW;
+                    break;
+                case 2:
+                    c = Color.RED;
+                    break;
+                case 3:
+                    c = Color.CYAN;
+                    break;
+                default:
+                    c = Color.BLACK;
+            }
+            SystemDrawStats sysStats = new SystemDrawStats(pt, c, sys.getID(), sys.getUniversePath());
+            systemDrawings.add(sysStats);
+        }
+    }
+    
+    //Redo all math
+    //Definitely not copied from constructor...
+    public void refresh() {
+        ArrayList<LimitedStarSystem> visibleStarSystems = universe.getVisibleStarSystems();
         for (int i = 0; i < visibleStarSystems.size(); i++) {
             //Do star systems
             LimitedStarSystem sys = visibleStarSystems.get(i);

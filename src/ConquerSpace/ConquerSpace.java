@@ -57,6 +57,11 @@ public class ConquerSpace {
     public static Messages localeMessages;
 
     /**
+     * Debug.
+     */
+    public static final boolean DEBUG = true;
+    
+    /**
      * Main class.
      *
      * @param args Command line arguments. Does nothing so far.
@@ -70,6 +75,9 @@ public class ConquerSpace {
         Globals.settings = new Properties();
         //Check for the existance of the settings file
         File settingsFile = new File(System.getProperty("user.home") + "/.conquerspace/settings.properties");
+        if(DEBUG) {
+            if(settingsFile.exists()) settingsFile.delete();
+        }
         if (settingsFile.exists()) {
             try {
                 //Read from file.
@@ -105,6 +113,9 @@ public class ConquerSpace {
                 //Version
                 Globals.settings.setProperty("version", VERSION.toString());
                 Globals.settings.setProperty("debug", "no");
+                
+                //Screen refresh rate
+                Globals.settings.setProperty("screen.refresh", "500");
 
                 Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
             } catch (IOException ex) {
