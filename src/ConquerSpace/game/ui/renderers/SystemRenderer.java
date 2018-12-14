@@ -2,14 +2,11 @@ package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.universe.civilization.controllers.LimitedStarSystem;
 import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -33,7 +30,7 @@ public class SystemRenderer {
         drawer = new SystemInternalsDrawer(sys, u, bounds);
     }
 
-    public void drawStarSystem(Graphics g, Point translate) {
+    public synchronized void drawStarSystem(Graphics g, Point translate) {
         Graphics2D g2d = (Graphics2D) g;
 
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
@@ -74,7 +71,7 @@ public class SystemRenderer {
         g2d.drawString((20d / (double) drawer.sizeofAU) + " AU", 10, 10);
     }
 
-    public void drawStarSystem(Graphics g, Point translate, float scale) {
+    public synchronized void drawStarSystem(Graphics g, Point translate, float scale) {
         Graphics2D g2d = (Graphics2D) g;
 
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);

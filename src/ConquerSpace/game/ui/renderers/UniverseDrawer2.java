@@ -120,7 +120,9 @@ public class UniverseDrawer2 {
                     c = Color.BLACK;
             }
             SystemDrawStats sysStats = new SystemDrawStats(pt, c, sys.getID(), sys.getUniversePath());
-            systemDrawings.add(sysStats);
+            synchronized(systemDrawings) {
+                systemDrawings.add(sysStats);
+            }
         }
     }
 }

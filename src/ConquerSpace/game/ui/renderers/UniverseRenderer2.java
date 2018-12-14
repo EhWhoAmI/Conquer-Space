@@ -32,7 +32,7 @@ public class UniverseRenderer2 {
         //LOGGER.info("Displaying universe " + universe.toReadableString());
     }
 
-    public void drawUniverse(Graphics g, Point translate) {
+    public synchronized void drawUniverse(Graphics g, Point translate) {
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 
@@ -100,7 +100,7 @@ public class UniverseRenderer2 {
         g2d.drawString("30 light years", 10, 10);
     }
 
-    public void drawUniverse(Graphics g, Point translate, float scale) {
+    public synchronized void drawUniverse(Graphics g, Point translate, float scale) {
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 

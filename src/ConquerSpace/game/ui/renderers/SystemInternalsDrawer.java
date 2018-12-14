@@ -124,15 +124,6 @@ public class SystemInternalsDrawer {
     }
 
     void refresh() {
-        //then find larger bounds
-        int systemDrawnSize = (((bounds.height < bounds.width) ? bounds.height : bounds.width) / 2);
-        LOGGER.trace("System size: " + systemSize);
-        sizeofAU = 1;
-        if (systemSize != 0) {
-            sizeofAU = (int) (Math.floor(systemDrawnSize / (systemSize + (systemSize / 2))));
-        }
-
-        LOGGER.trace("Size of 1 AU: " + sizeofAU + " px");
         //Draw it
         // As of version indev, there is only one star.
         //Star will be in the center
@@ -160,7 +151,9 @@ public class SystemInternalsDrawer {
 
             Point starPos = RendererMath.polarCoordToCartesianCoord(new GalacticLocation(0, 0), new Point(bounds.width / 2, bounds.height / 2), sizeofAU);
             StarDrawStats sds = new StarDrawStats(star.getID(), starPos, starSize * 5, c);
-            stats.addStarDrawStats(sds);
+            synchronized(stats) {
+                stats.addStarDrawStats(sds);
+            }
         }
 
         for (int n = 0; n < system.getPlanetCount(); n++) {
@@ -194,8 +187,9 @@ public class SystemInternalsDrawer {
             PlanetDrawStats pds = new PlanetDrawStats(p.getID(), point, cl,
                     p.getOrbitalDistance() * sizeofAU, p.getPlanetSize() * 2, playerSymbol,
                     co, p.getName());
-
-            this.stats.addPlanetDrawStats(pds);
+            synchronized(stats) {
+                stats.addPlanetDrawStats(pds);
+            }
         }
     }
 

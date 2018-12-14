@@ -172,9 +172,10 @@ public class GameWindow extends JFrame {
         SystemRenderer systemRenderer;
 
         private int screenRefreshRate;
-        
+
         private Timer updater;
-        
+
+        private boolean isChanging = false;
         /**
          * Scale for the zoom. A scale of 1 is the current universe view, and it
          * can zoom to a max of 5.
@@ -288,7 +289,8 @@ public class GameWindow extends JFrame {
             //Update the graphics every now and then.
             //Get refresh rate (milliseconds)
             screenRefreshRate = Integer.parseInt(Globals.settings.getProperty("screen.refresh"));
-            updater = new Timer(screenRefreshRate, a -> {
+            //Place in thread
+            Runnable r = () -> {
                 //Updater content here...
                 //Detect the thing that is being shown
                 switch (drawing) {
@@ -299,8 +301,17 @@ public class GameWindow extends JFrame {
                         universeRenderer.refresh();
                         break;
                 }
+            };
+
+            updater = new Timer(screenRefreshRate, a -> {
+                //Place in thread
+                if (!isChanging) {
+                    Thread t = new Thread(r);
+                    t.start();
+                }
             });
             updater.setRepeats(true);
+            updater.setInitialDelay(5000);
             updater.start();
         }
 
@@ -342,11 +353,18 @@ public class GameWindow extends JFrame {
 
         @Override
         public void componentShown(ComponentEvent e) {
-            
+
         }
 
         @Override
         public void componentHidden(ComponentEvent e) {
+        }
+
+        @Override
+        public void repaint() {
+            isChanging = true;
+            super.repaint(); //To change body of generated methods, choose Tools | Templates.
+            isChanging = false;
         }
     }
 }
