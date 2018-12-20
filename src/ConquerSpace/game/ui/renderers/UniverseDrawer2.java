@@ -94,6 +94,7 @@ public class UniverseDrawer2 {
     //Definitely not copied from constructor...
     public void refresh() {
         ArrayList<LimitedStarSystem> visibleStarSystems = universe.getVisibleStarSystems();
+        systemDrawings.clear();
         for (int i = 0; i < visibleStarSystems.size(); i++) {
             //Do star systems
             LimitedStarSystem sys = visibleStarSystems.get(i);

@@ -151,11 +151,11 @@ public class Technologies {
             action = action.replace("boost(", "");
             action = action.replace(")", "");
             String[] splitAction = action.split(":");
-            if(c.multipliers.containsKey(splitAction[0])) {
+            if(c.stats.containsKey(splitAction[0])) {
                 //Then add
-                c.multipliers.put(splitAction[0], c.multipliers.get(splitAction[0]) + Integer.parseInt(splitAction[1]));
+                c.stats.put(splitAction[0], c.stats.get(splitAction[0]) + Integer.parseInt(splitAction[1]));
             } else {
-                c.multipliers.put(splitAction[0], Integer.parseInt(splitAction[1]));
+                c.stats.put(splitAction[0], Integer.parseInt(splitAction[1]));
             }
         } else if(action.startsWith("field")) {
             action = action.replace("field(", "");
@@ -186,7 +186,9 @@ public class Technologies {
             String[] orbitSplit = orbitName.split(":");
             int satelliteID = Integer.parseInt(orbitSplit[1]);
             Satellite s = GameController.satellites.stream().
-                    filter(e -> e.getId() == satelliteID).findFirst().orElseGet(null);
+                    filter(e -> 
+                            e.getId() == satelliteID).
+                    findFirst().orElseGet(null);
             if(s != null) {
                 //Add it to civ
                 c.addSatellite(s);

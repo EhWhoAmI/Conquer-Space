@@ -124,6 +124,8 @@ public class SystemInternalsDrawer {
     }
 
     void refresh() {
+        stats.planetDrawStats.clear();
+        stats.starDrawStats.clear();
         //Draw it
         // As of version indev, there is only one star.
         //Star will be in the center
