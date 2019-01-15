@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
@@ -18,8 +17,6 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class PlayerController implements CivilizationController {
-    //Interface from which the game will be accessed from.
-    private LimitedUniverse gameUniverse;
     private Civilization c;
     
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
@@ -43,8 +40,7 @@ public class PlayerController implements CivilizationController {
 
     @Override
     public void init(Universe u, StarDate d, Civilization c) {
-        gameUniverse = new LimitedUniverse(u, c);
-        mainwindow = new GameWindow(gameUniverse, this, c);
+        mainwindow = new GameWindow(u, this, c);
 
         tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();

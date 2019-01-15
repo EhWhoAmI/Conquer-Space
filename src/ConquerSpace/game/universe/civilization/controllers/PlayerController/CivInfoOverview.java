@@ -1,7 +1,6 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.JInternalFrame;
@@ -17,7 +16,7 @@ public class CivInfoOverview extends JInternalFrame{
     private JPanel mainPanel;
     private JPanel resourcesPanel;
     private JTabbedPane mainTabs;
-    public CivInfoOverview(Civilization c, LimitedUniverse u) {
+    public CivInfoOverview(Civilization c, Universe u) {
         //Civ name
         mainTabs = new JTabbedPane(JTabbedPane.BOTTOM);
         

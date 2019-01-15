@@ -1,6 +1,5 @@
 package ConquerSpace.start.gui;
 
-import ConquerSpace.ConquerSpace;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.UniverseConfig;
@@ -115,7 +114,7 @@ public class NewGame extends JFrame implements ActionListener {
 
         seedLabel = new JLabel("Seed");
         seedText = new JTextField();
-        if (ConquerSpace.DEBUG||(Globals.settings.getProperty("debug") != null && Globals.settings.getProperty("debug").equals("yes"))) {
+        if (Globals.settings.getProperty("debug") != null && Globals.settings.getProperty("debug").equals("yes")) {
             seedText.setText("test");
         } else {
             seedText.setText("" + System.currentTimeMillis());

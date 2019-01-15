@@ -1,22 +1,22 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.ui.renderers.PlanetDrawStats;
+import ConquerSpace.game.ui.renderers.SectorDrawStats;
+import ConquerSpace.game.ui.renderers.SectorRenderer;
 import ConquerSpace.game.ui.renderers.SystemDrawStats;
 import ConquerSpace.game.ui.renderers.SystemRenderer;
+import ConquerSpace.game.ui.renderers.UniverseRenderer;
 import ConquerSpace.game.ui.renderers.UniverseRenderer2;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
+import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -31,7 +31,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -49,7 +48,7 @@ public class GameWindow extends JFrame {
 
     private PlayerController controller;
 
-    public GameWindow(LimitedUniverse u, PlayerController controller, Civilization c) {
+    public GameWindow(Universe u, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.c = c;
         desktopPane = new CQSPDesktop(u);
@@ -82,7 +81,7 @@ public class GameWindow extends JFrame {
 
         JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(c.getStartingPlanet().getSystemID());
+            desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -109,20 +108,20 @@ public class GameWindow extends JFrame {
 
         JMenuItem allCivInfo = new JMenuItem("My Civilization");
         allCivInfo.addActionListener((e) -> {
-            addFrame(new CivInfoOverview(c, u));
+            addFrame(new CivInfoOverview(u.getCivilization(0), u));
         });
         ownCivInfo.add(allCivInfo);
 
         JMenu techonology = new JMenu("Techonology");
         JMenuItem seetechs = new JMenuItem("See Researched Techs");
         seetechs.addActionListener((e) -> {
-            TechonologyViewer viewer = new TechonologyViewer(c, u);
+            TechonologyViewer viewer = new TechonologyViewer(u, u.getCivilization(0));
             addFrame(viewer);
         });
 
         JMenuItem techResearcher = new JMenuItem("Research Techonologies");
         techResearcher.addActionListener(e -> {
-            ResearchViewer viewer = new ResearchViewer(c);
+            ResearchViewer viewer = new ResearchViewer(u.getCivilization(0));
             addFrame(viewer);
         });
 
@@ -146,7 +145,7 @@ public class GameWindow extends JFrame {
         setVisible(true);
 
         //See home planet
-        desktopPane.see(c.getStartingPlanet().getSystemID());
+        desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -156,7 +155,7 @@ public class GameWindow extends JFrame {
     /**
      * Renders window and stuff.
      */
-    public class CQSPDesktop extends JDesktopPane implements MouseMotionListener, MouseListener, MouseWheelListener, ComponentListener {
+    public class CQSPDesktop extends JDesktopPane implements MouseMotionListener, MouseListener, MouseWheelListener {
 
         public static final int SIZE_OF_STAR_ON_SECTOR = 25;
         UniverseRenderer2 universeRenderer;
@@ -168,14 +167,9 @@ public class GameWindow extends JFrame {
         static final int DRAW_STAR_SYSTEM = 1;
         int drawing = DRAW_UNIVERSE;
         private int drawingStarSystem = 0;
-        private LimitedUniverse universe;
+        private Universe universe;
         SystemRenderer systemRenderer;
 
-        private int screenRefreshRate;
-
-        private Timer updater;
-
-        private boolean isChanging = false;
         /**
          * Scale for the zoom. A scale of 1 is the current universe view, and it
          * can zoom to a max of 5.
@@ -225,8 +219,8 @@ public class GameWindow extends JFrame {
                             //Check for vision
                             if (Math.hypot(((stats.getPosition().getX() + translateX) * scale - e.getX()),
                                     ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
-                                for (UniversePath p : c.vision.keySet()) {
-                                    if (p.getSystemID() == stats.getId() && c.vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
+                                    if (p.getSystemID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         LOGGER.info("Found system!" + p.getSystemID());
                                         drawingStarSystem = p.getSystemID();
                                         systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
@@ -277,42 +271,12 @@ public class GameWindow extends JFrame {
         public void mouseExited(MouseEvent e) {
         }
 
-        public CQSPDesktop(LimitedUniverse u) {
+        public CQSPDesktop(Universe u) {
             universe = u;
             universeRenderer = new UniverseRenderer2(new Dimension(1500, 1500), u);
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
-            addComponentListener(this);
-
-            //Set update list
-            //Update the graphics every now and then.
-            //Get refresh rate (milliseconds)
-            screenRefreshRate = Integer.parseInt(Globals.settings.getProperty("screen.refresh"));
-            //Place in thread
-            Runnable r = () -> {
-                //Updater content here...
-                //Detect the thing that is being shown
-                switch (drawing) {
-                    case DRAW_STAR_SYSTEM:
-                        systemRenderer.refresh();
-                        break;
-                    case DRAW_UNIVERSE:
-                        universeRenderer.refresh();
-                        break;
-                }
-            };
-
-            updater = new Timer(screenRefreshRate, a -> {
-                //Place in thread
-                if (!isChanging) {
-                    Thread t = new Thread(r);
-                    t.start();
-                }
-            });
-            updater.setRepeats(true);
-            updater.setInitialDelay(5000);
-            updater.start();
         }
 
         void see(int system) {
@@ -328,11 +292,7 @@ public class GameWindow extends JFrame {
             float scroll = (float) e.getUnitsToScroll();
             if ((scale + (scroll / 10)) > 0) {
                 scale += (scroll / 10);
-                //Recenter scroll so that it scrolls on the center of the window.
-                //getWidth()/2;
-                //getHeight()/2;
             }
-
             //Now repaint
             repaint();
         }
@@ -341,30 +301,6 @@ public class GameWindow extends JFrame {
             translateX = 0;
             translateY = 0;
             scale = 1f;
-        }
-
-        @Override
-        public void componentResized(ComponentEvent e) {
-        }
-
-        @Override
-        public void componentMoved(ComponentEvent e) {
-        }
-
-        @Override
-        public void componentShown(ComponentEvent e) {
-
-        }
-
-        @Override
-        public void componentHidden(ComponentEvent e) {
-        }
-
-        @Override
-        public void repaint() {
-            isChanging = true;
-            super.repaint(); //To change body of generated methods, choose Tools | Templates.
-            isChanging = false;
         }
     }
 }

@@ -1,7 +1,5 @@
 package ConquerSpace.game.universe.civilization.controllers.PlayerController.planetdisplayer;
 
-import ConquerSpace.game.universe.civilization.controllers.LimitedPlanet;
-import ConquerSpace.game.universe.civilization.controllers.LimitedPlanetSector;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
@@ -20,11 +18,11 @@ public class PlanetResources extends JPanel {
 
     JList<String> resourceList;
 
-    public PlanetResources(LimitedPlanet p) {
+    public PlanetResources(Planet p) {
         setLayout(new VerticalFlowLayout(5, 3));
         DefaultListModel<String> dataModel = new DefaultListModel<>();
-        for (LimitedPlanetSector planetSector : p.getPlanetSectors()) {
-            for (Resource s : planetSector.getResources()) {
+        for (PlanetSector planetSector : p.planetSectors) {
+            for (Resource s : planetSector.resources) {
                 if (!dataModel.contains(s.name)) {
                     dataModel.addElement(s.name);
                 }

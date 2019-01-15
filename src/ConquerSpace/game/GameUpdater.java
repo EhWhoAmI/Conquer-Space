@@ -6,19 +6,20 @@ import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.ui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
-import ConquerSpace.game.universe.spaceObjects.Planet;import ConquerSpace.game.universe.spaceObjects.SpaceObject;
+import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.Sector;
+import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.util.CQSPLogger;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,13 +44,10 @@ public class GameUpdater {
     private Universe universe;
 
     HashMap<UniversePath, Point> allsystemsstats;
-    
-    private SimplifiedUniverseDrawer drawer;
-    
+
     public GameUpdater(Universe u, StarDate s) {
         universe = u;
         allsystemsstats = new HashMap<>();
-        drawer = new SimplifiedUniverseDrawer(universe, new Dimension(2500,2500));
     }
 
     public void calculateControl() {
@@ -102,26 +100,43 @@ public class GameUpdater {
     }
 
     public void calculateVision() {
-        //Loop through all things in the universe
-        for(int i = 0; i < universe.getStarSystemCount(); i++) {
-            StarSystem system = universe.getStarSystem(i);
-            for(int n = 0; n < system.getPlanetCount(); n++) {
-                Planet p = system.getPlanet(n);
-                for(int k = 0; k < p.getSatelliteCount(); k++) {
-                    Satellite sat = p.getSatellite(k);
-                    if(sat instanceof VisionPoint) {
-                        //Then get stats and so on...
-                        VisionPoint pt = (VisionPoint) sat;
-                        int range = pt.getRange();
-                        
-                    }
-                }
+        for (UniversePath p : universe.control.keySet()) {
+            //Get the vision, do it...
+            int civIndex = universe.control.get(p);
+            if (civIndex > -1) {
+                //System.out.println("Putting vision for civ " + civIndex + " at " + p);
+                //System.out.println("Planet size: " + ((Planet)universe.getSpaceObject(p)).planetSectors.length);
+                universe.getCivilization(civIndex).vision.put(p, VisionTypes.KNOWS_ALL);
+                //Set the parent star system visibility to true.
+                //Will be back.
+//                if (allsystemsstats.containsKey(p)) {
+//                    //Get the stars around it.
+//                    for (UniversePath path : allsystemsstats.keySet()) {
+//
+//                        //Get path position relative to the star system
+//                        Point a = allsystemsstats.get(p);
+//                        Point b = allsystemsstats.get(path);
+//                        if (Math.hypot(a.x - b.x, a.y - b.y) < 100) {
+//                            //Set visible
+//                            universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.EXISTS);
+//                        }
+//                    }
+//                }
+
             }
         }
     }
 
     public void calculateSystemPositions() {
-        
+        //Loop sectors
+        for (int i = 0; i < universe.getSectorCount(); i++) {
+            Sector sector = universe.getSector(i);
+            //Loop systems
+            for (int n = 0; n < sector.getStarSystemCount(); n++) {
+                Point p = RendererMath.polarCoordToCartesianCoord(sector.getStarSystem(n).getGalaticLocation(), new Point(0, 0), 1);
+                allsystemsstats.put(sector.getStarSystem(n).getUniversePath(), p);
+            }
+        }
     }
 
     public void initGame() {
@@ -315,34 +330,5 @@ public class GameUpdater {
             }
         }
         GameController.satellites = satellites;
-    }
-    
-    /**
-     * 
-     * @param system the origin star system
-     * @param range the range of the thing.
-     * @param c the civ who the viewpoint belongs to.
-     */
-    public void processViewPoint(StarSystem system, int range, Civilization c) {
-        //Size of lightyears in pixels
-        //int ltyrsize = drawer.sizeOfLtyr;
-        int rangePx = (drawer.sizeOfLtyr * range);
-        //Now loop through the list, and get the distances. Extremely inefficient,
-        //but i think this is the only way. If you have a quantum computer, then maybe it will
-        //be faster.
-        //Get position of the star system
-        Point systemPos = drawer.systemDrawings.get(system.getId()).getPos();
-        for(SimplifiedUniverseDrawer.ReducedSystemStats stat : drawer.systemDrawings) {
-            Point pos = stat.getPos();
-            //Now, is the distance from the system and the point
-            double dist = RendererMath.distanceBetweenPoints(systemPos, pos);
-            if(((double)dist) < rangePx) {
-                //Get ratio
-                double percentage = dist/(double)range;
-                //add to vision
-                stat.increment(c.getID(), (int) (percentage * 100));
-            }
-        }
-        
     }
 }

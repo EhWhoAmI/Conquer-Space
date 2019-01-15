@@ -7,6 +7,6 @@ package ConquerSpace.game.universe.ships.satellites;
 public class NoneSatellite extends Satellite{
     
     public NoneSatellite(int distance, int mass) {
-        super(mass);
+        super(distance, mass);
     }
 }

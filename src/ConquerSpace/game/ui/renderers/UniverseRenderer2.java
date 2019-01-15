@@ -1,8 +1,7 @@
 package ConquerSpace.game.ui.renderers;
 
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
-import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.GameWindow;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
@@ -23,16 +22,16 @@ public class UniverseRenderer2 {
     private Dimension bounds;
     public UniverseDrawer2 drawer;
 
-    LimitedUniverse universe;
+    Universe universe;
 
-    public UniverseRenderer2(Dimension bounds, LimitedUniverse universe) {
+    public UniverseRenderer2(Dimension bounds, Universe universe) {
         this.bounds = bounds;
         this.universe = universe;
         drawer = new UniverseDrawer2(universe, bounds);
         //LOGGER.info("Displaying universe " + universe.toReadableString());
     }
 
-    public synchronized void drawUniverse(Graphics g, Point translate) {
+    public void drawUniverse(Graphics g, Point translate) {
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 
@@ -57,14 +56,14 @@ public class UniverseRenderer2 {
             //Check vision...
             if (/*universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED*/true) {
                 //Control
-                if (universe.getControl().get(s.getPath()) > -1) {
+                if (universe.control.get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
                             get(s.getPath())) {
                         case VisionTypes.KNOWS_INTERIOR:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            g2d.setColor(universe.getCivilization(universe.getControl().get(s.getPath())).getColor());
+                            g2d.setColor(universe.getCivilization(universe.control.get(s.getPath())).getColor());
                     }
                     //Control, if any...
                     Ellipse2D.Float control = new Ellipse2D.Float(
@@ -100,7 +99,7 @@ public class UniverseRenderer2 {
         g2d.drawString("30 light years", 10, 10);
     }
 
-    public synchronized void drawUniverse(Graphics g, Point translate, float scale) {
+    public void drawUniverse(Graphics g, Point translate, float scale) {
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 
@@ -125,14 +124,14 @@ public class UniverseRenderer2 {
             //Check vision...
             if (universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED) {
                 //Control
-                if (universe.getControl().get(s.getPath()) > -1) {
+                if (universe.control.get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
                             get(s.getPath())) {
                         case VisionTypes.KNOWS_INTERIOR:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            g2d.setColor(universe.getCivilization(universe.getControl().get(s.getPath())).getColor());
+                            g2d.setColor(universe.getCivilization(universe.control.get(s.getPath())).getColor());
                     }
                     //Control, if any...
                     Ellipse2D.Float control = new Ellipse2D.Float(
@@ -166,9 +165,5 @@ public class UniverseRenderer2 {
         Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 + 10, 20);
         g2d.draw(line);
         g2d.drawString("30 light years", 10, 10);
-    }
-    
-    public void refresh() {
-        drawer.refresh();
     }
 }

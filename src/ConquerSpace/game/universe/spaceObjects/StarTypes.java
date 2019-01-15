@@ -4,7 +4,7 @@ package ConquerSpace.game.universe.spaceObjects;
  * Class of star types.
  * @author Zyun
  */
-public final class StarTypes {
+public class StarTypes {
     //Needs to be an int because of python.
 
     public static final int BROWN = 0;

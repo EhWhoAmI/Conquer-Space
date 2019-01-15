@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.civilization;
 
-import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
@@ -14,6 +13,7 @@ import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
+import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
@@ -57,9 +57,7 @@ public class Civilization {
     public HashMap<Technology, Integer> civResearch;
     public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
 
-    public HashMap<String, Double> multipliers;
-    public HashMap<String, Integer> stats;
-    
+    public HashMap<String, Integer> multipliers;
     public FieldNode fields;
 
     private int techLevel = 0;
@@ -104,9 +102,6 @@ public class Civilization {
         satellites = new ArrayList<>();
 
         visionPoints = new ArrayList<>();
-        
-        multipliers = new HashMap<>();
-        stats = new HashMap<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {

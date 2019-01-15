@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.ships.satellites;
 
+import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.ships.Launchable;
 
 /**
@@ -8,23 +9,26 @@ import ConquerSpace.game.universe.ships.Launchable;
  */
 public class Satellite implements Launchable{
     
+    protected GalacticLocation location;
     protected int mass;
     protected String name = "";
     protected int id;
-    //We'll skip the ksp orbital stuff and detail
-    //You know: Apoasis, Perapsis, orbital period... etc...
-    //Because no time
-    /**
-     * Orbital altitude from center of planet, in hundreds of kilometers.
-     */
-    protected int orbitalAltitude = 0;
         
-    public Satellite(int mass) {
+    public Satellite(int distance, int mass) {
         this.mass = mass;
+        location = new GalacticLocation(0, distance);
     }
 
     public int getMass() {
         return mass;
+    }
+    
+    /**
+     * Get orbit distance, in km. A distance of 0 means that the satellite can orbit in any orbit.
+     * @return 
+     */
+    public int getDistance() {
+        return location.getDistance();
     }
 
     public void setName(String name) {
@@ -47,12 +51,6 @@ public class Satellite implements Launchable{
     public String toString() {
         return getName();
     }
-
-    public void setOrbitalAltitude(int orbitalAltitude) {
-        this.orbitalAltitude = orbitalAltitude;
-    }
-
-    public int getOrbitalAltitude() {
-        return orbitalAltitude;
-    }
+    
+    
 }

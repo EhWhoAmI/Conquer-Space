@@ -1,12 +1,13 @@
 package ConquerSpace.game.ui.renderers;
 
-import ConquerSpace.game.universe.civilization.controllers.LimitedStarSystem;
-import ConquerSpace.game.universe.civilization.controllers.LimitedUniverse;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -20,17 +21,15 @@ public class SystemRenderer {
     public SystemInternalsDrawer drawer;
     private Dimension bounds;
 
-    private LimitedUniverse universe;
-    private LimitedStarSystem system;
-    
-    public SystemRenderer(LimitedStarSystem sys, LimitedUniverse u, Dimension bounds) {
+    private Universe universe;
+
+    public SystemRenderer(StarSystem sys, Universe u, Dimension bounds) {
         this.bounds = bounds;
         universe = u;
-        system = sys;
         drawer = new SystemInternalsDrawer(sys, u, bounds);
     }
 
-    public synchronized void drawStarSystem(Graphics g, Point translate) {
+    public void drawStarSystem(Graphics g, Point translate) {
         Graphics2D g2d = (Graphics2D) g;
 
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
@@ -71,7 +70,7 @@ public class SystemRenderer {
         g2d.drawString((20d / (double) drawer.sizeofAU) + " AU", 10, 10);
     }
 
-    public synchronized void drawStarSystem(Graphics g, Point translate, float scale) {
+    public void drawStarSystem(Graphics g, Point translate, float scale) {
         Graphics2D g2d = (Graphics2D) g;
 
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
@@ -107,24 +106,22 @@ public class SystemRenderer {
                     p.getSize(), p.getSize());
             g2d.setColor(p.getColor());
             g2d.fill(planet);
-            
             //Draw owner
+
             //Draw background
             if (!p.getName().equals("")) {
                 g2d.setColor(Color.red);
 
                 g2d.fill(new Rectangle2D.Float(
-                        (p.getPos().x - (p.getSize()) + translate.x) * scale,
-                        (p.getPos().y + (p.getSize()*2) + translate.y) * scale - g2d.getFontMetrics().getHeight(),
+                        (p.getPos().x - (p.getSize() / 2) + translate.x) * scale,
+                        (p.getPos().y + (p.getSize() / 2) + translate.y) * scale - g2d.getFontMetrics().getHeight(),
                         (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3));
                 g2d.setColor(Color.white);
 
                 g2d.drawString(p.getName(),
-                        (p.getPos().x - (p.getSize()) + translate.x) * scale,
-                        (p.getPos().y + (p.getSize()*2) + translate.y) * scale);
+                        (p.getPos().x - (p.getSize() / 2) + translate.x) * scale,
+                        (p.getPos().y + (p.getSize() / 2) + translate.y) * scale);
             }
-            //Next, satellites
-            
         }
 
         //Draw scale line
@@ -132,9 +129,5 @@ public class SystemRenderer {
         Line2D.Float line = new Line2D.Float(10, 20, 50, 20);
         g2d.draw(line);
         g2d.drawString((20d / (double) drawer.sizeofAU) + " AU", 10, 10);
-    }
-    
-    public void refresh() {
-        drawer.refresh();
     }
 }

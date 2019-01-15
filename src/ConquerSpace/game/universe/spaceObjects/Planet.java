@@ -16,7 +16,7 @@ import java.util.HashMap;
  *
  * @author Zyun
  */
-public final class Planet extends SpaceObject {
+public class Planet extends SpaceObject {
 
     private int planetType;
     private GalacticLocation orbitalDistance;

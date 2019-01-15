@@ -14,9 +14,6 @@
 # crash logs
 crashlog.txt
 
-# Put crashes you want here:
-/saved crashes/
-
 # Universe dump files
 universe.dump
 

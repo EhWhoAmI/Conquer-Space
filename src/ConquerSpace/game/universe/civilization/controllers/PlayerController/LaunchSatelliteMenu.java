@@ -1,9 +1,7 @@
- package ConquerSpace.game.universe.civilization.controllers.PlayerController;
+package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.civilization.Civilization;
-import javax.swing.JList;
-import javax.swing.JPanel;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
@@ -13,6 +11,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 
 /**
  *
@@ -28,8 +28,6 @@ public class LaunchSatelliteMenu extends JInternalFrame{
     private JLabel satelliteName;
     private JLabel satelliteMass;
     private JButton buildAndLaunchButton;
-    
-    @SuppressWarnings("unchecked")
     public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         //The launch pad type and stuff as title
         setTitle("Launch a satellite using " + pad.getType().getName());
@@ -61,7 +59,6 @@ public class LaunchSatelliteMenu extends JInternalFrame{
         
         buildAndLaunchButton = new JButton("Launch!");
         buildAndLaunchButton.addActionListener(e -> {
-            System.out.println("Launching sat");
             Actions.launchSatellite(satelliteSelectList.getSelectedValue(), p, 100, c);
         });
         statsPanel.add(buildAndLaunchButton);

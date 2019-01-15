@@ -2,9 +2,6 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.controllers.LimitedPlanet;
-import ConquerSpace.game.universe.civilization.controllers.LimitedPlanetSector;
-import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
@@ -35,12 +32,11 @@ public class Actions {
      * @param turns number of months...
      * @return Success or not
      */
-    public static int buildBuilding(LimitedPlanet p, int sectorID, PlanetSector what, int owner, int turns) {
+    public static int buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {
         if(p.getOwnerID() == owner) {
             //Get type of the planet sector
             //Pass
-            System.out.println("Building...");
-            p.toPlanet().planetSectors[sectorID]= new BuildingBuilding(turns, what, p.toPlanet(), owner, sectorID);
+            p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p, owner, sectorID);
             return BUILD_BUILDING_SUCCESS;
         } else
             return BUILD_BUILDING_FAIL_NOT_OWNER;
@@ -51,7 +47,6 @@ public class Actions {
     }
     
     public static void launchSatellite(Satellite what, Planet whichPlanet, int distance, Civilization c) {
-        System.out.println("Launched satellite");
         whichPlanet.addSatellite(what);
     }
 }

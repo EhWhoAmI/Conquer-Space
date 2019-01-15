@@ -129,17 +129,4 @@ public class RendererMath {
      */
     private RendererMath() {
     }
-    
-    /**
-     * Calculates the distance between two points
-     * @param one first point
-     * @param two second point
-     * @return distance between the two points
-     */
-    public static double distanceBetweenPoints(Point one, Point two) {
-        double ac = Math.abs(one.y - two.y);
-        double cb = Math.abs(one.x - two.x);
-        
-        return Math.hypot(ac, cb);
-    }
 }

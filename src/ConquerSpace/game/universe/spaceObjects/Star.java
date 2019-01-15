@@ -7,7 +7,7 @@ import ConquerSpace.game.UniversePath;
  *
  * @author Zyun
  */
-public final class Star extends SpaceObject {
+public class Star extends SpaceObject {
 
     public int type;
     public int starSize;
@@ -100,13 +100,5 @@ public final class Star extends SpaceObject {
     
     public void setOwnerID(int id) {
         this.ownerID = id;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public int getStarSize() {
-        return starSize;
     }
 }
