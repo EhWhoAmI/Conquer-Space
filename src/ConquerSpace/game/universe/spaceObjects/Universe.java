@@ -138,7 +138,7 @@ public class Universe extends SpaceObject {
     @Override
     public void processTurn(int GameRefreshRate, StarDate stardate) {
         //Process turns of all the internals
-        for (Sector sector : sectors) {
+        for (StarSystem sector : starSystems) {
             sector.processTurn(GameRefreshRate, stardate);
         }
     }

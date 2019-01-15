@@ -66,20 +66,24 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
         pausePlayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
         
+        alertsButton.setFocusable(false);
         alertsButton.addActionListener((e) -> {
             AlertDisplayer disp = AlertDisplayer.getInstance();
             disp.toFront();
         });
-
+        
+        exitGameButton.setFocusable(false);
         exitGameButton.addActionListener((e) -> {
             System.exit(0);
         });
 
+        manualButton.setFocusable(false);
         manualButton.addActionListener((e) -> {
             InternalManual manual = new InternalManual();
             getDesktopPane().add(manual);
         });
 
+        runningstatsButton.setFocusable(false);
         runningstatsButton.addActionListener((e) -> {
             DebugStatsWindow win = DebugStatsWindow.getInstance(universe);
             getDesktopPane().add(win);
