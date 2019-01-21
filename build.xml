@@ -74,5 +74,6 @@
     <property name="log4j2.debug" value="${user.dir}/assets/log4j2.xml"/>
     <target  name="-post-jar">
         <buildnumber file="assets/BUILDNO"/>
+        <echo message="Changing build number"/>
     </target>
 </project>

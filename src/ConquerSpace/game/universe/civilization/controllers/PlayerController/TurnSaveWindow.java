@@ -59,6 +59,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         pausePlayButton.addActionListener(this);
         pausePlayButton.setForeground(Color.red);
+        pausePlayButton.setFocusable(false);
         pausePlayButton.getActionMap().put("doPause", new AbstractAction("Pause") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,6 +84,8 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             getDesktopPane().add(manual);
         });
 
+        saveGameButton.setFocusable(false);
+        
         runningstatsButton.setFocusable(false);
         runningstatsButton.addActionListener((e) -> {
             DebugStatsWindow win = DebugStatsWindow.getInstance(universe);
@@ -98,6 +101,14 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         pan.add(exitGameButton);
         pan.add(runningstatsButton);
 
+        //Set the keybindings
+        getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("SPACE"), "pauseplay");
+        getActionMap().put("pauseplay", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pausePlayButton.doClick();
+            }
+        });
         Timer updater = new Timer(100, (e) -> {
             turnLabel.setText("Year " + date.getYears() + " Month " + date.getMonthNumber() + " Day " + date.getDays());
         });

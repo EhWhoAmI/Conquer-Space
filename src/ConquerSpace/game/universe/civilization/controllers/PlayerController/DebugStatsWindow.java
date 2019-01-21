@@ -54,7 +54,7 @@ public class DebugStatsWindow extends JInternalFrame {
         memoryusedLabel = new JLabel("Memory used: " + FileUtils.byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
 
         dumpUniverseButton = new JButton("Dump universe");
-
+        dumpUniverseButton.setFocusable(false);
         dumpUniverseButton.addActionListener((e) -> {
             FileWriter writer = null;
             try {
@@ -74,11 +74,13 @@ public class DebugStatsWindow extends JInternalFrame {
         });
 
         runTrashCompactor = new JButton("Force Garbage Collection");
+        runTrashCompactor.setFocusable(false);
         runTrashCompactor.addActionListener((e) -> {
             System.gc();
         });
         
         openConsole = new JButton("Open Console");
+        openConsole.setFocusable(false);
         openConsole.addActionListener((e) -> {
             CQSPConsole con = new CQSPConsole(u, u.getCivilization(0));
             getDesktopPane().add(con);

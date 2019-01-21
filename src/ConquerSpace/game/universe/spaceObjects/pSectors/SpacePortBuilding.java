@@ -47,6 +47,7 @@ public class SpacePortBuilding extends PlanetSector {
         JLabel pademptyPanel_type = new JLabel();
         JButton createSatelliteButton = new JButton("Launch Satellite");
         //Show launch Satellite menu.
+        createSatelliteButton.setFocusable(false);
         createSatelliteButton.addActionListener((e) -> {
             LaunchSatelliteMenu launch = new LaunchSatelliteMenu(pads.getSelectedValue(), Globals.universe.getCivilization(0), planet);
             Component c;

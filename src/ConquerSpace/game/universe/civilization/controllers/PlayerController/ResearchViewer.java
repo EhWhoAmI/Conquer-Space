@@ -69,6 +69,7 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         techInfoPanel.add(techEstTime);
 
         researchButton = new JButton("Research");
+        researchButton.setFocusable(false);
         researchButton.addActionListener((e) -> {
             //Get first researcher to research
             if (!tech.isSelectionEmpty()) {

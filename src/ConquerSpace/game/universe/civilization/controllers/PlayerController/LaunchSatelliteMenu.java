@@ -58,8 +58,10 @@ public class LaunchSatelliteMenu extends JInternalFrame{
         statsPanel.add(satelliteMass);
         
         buildAndLaunchButton = new JButton("Launch!");
+        buildAndLaunchButton.setFocusable(false);
         buildAndLaunchButton.addActionListener(e -> {
             Actions.launchSatellite(satelliteSelectList.getSelectedValue(), p, 100, c);
+            dispose();
         });
         statsPanel.add(buildAndLaunchButton);
         

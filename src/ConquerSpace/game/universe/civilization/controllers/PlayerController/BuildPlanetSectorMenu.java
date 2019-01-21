@@ -71,6 +71,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
         costLabel = new JLabel("Cost : " + 0);
 
         build = new JButton("Build!");
+        build.setFocusable(false);
         build.addActionListener((e) -> {
             String item = (String) planetBuildType.getSelectedItem();
             if (item.equals("Residental area")) {

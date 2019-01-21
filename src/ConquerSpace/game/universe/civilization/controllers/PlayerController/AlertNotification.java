@@ -37,6 +37,7 @@ public class AlertNotification extends JInternalFrame implements Runnable {
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.NORTH;
         JButton cloesButton = new JButton("X");
+        cloesButton.setFocusable(false);
         cloesButton.addActionListener((e) -> {
             dispose();
         });
