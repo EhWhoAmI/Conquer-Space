@@ -10,6 +10,11 @@ import ConquerSpace.game.UniversePath;
 public class Star extends SpaceObject {
 
     public int type;
+    /**
+     * Radius of star in kilometers.
+     * Largest star can be about 1.7k solar radii, where the sun is about 695,700km.
+     * Neutron stars can be tiny, you know.
+     */
     public int starSize;
     private int parentStarSystem;
     private int parentSector;

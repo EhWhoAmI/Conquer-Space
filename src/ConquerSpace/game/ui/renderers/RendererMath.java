@@ -124,6 +124,60 @@ public class RendererMath {
         return (new Point(xpos, ypos));
     }
 
+    public static Point polarCoordToCartesianCoord(int distance, int degrees, Point center, int unitSize) {
+        //Do math to calculate the position of the sector. 
+        //Distance is to the center of the sector to center of universe.
+        //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
+        double ang = (double) degrees;
+        int rot = (int) Math.floor(ang / 90);
+        ang = ang % 90;
+
+        //Then do a sine to calculate the length of the opposite. 
+        int xpos;
+        int ypos;
+
+        //Math.sin and Math.cos is in radians.
+        double opp = Math.sin(Math.toRadians(ang)) * distance;
+        double adj = Math.cos(Math.toRadians(ang)) * distance;
+        
+        assert(opp < 0);
+        assert(adj < 0);
+        //Multipy units. May have to change this for accuracy.
+        opp *= unitSize;
+        adj *= unitSize;
+
+        //This basically splits an imaginary circle into 4 quardants, and draws right angled triangles
+        //Then it calculates all that based on the theory above.
+        switch (rot) {
+            case 0:
+                //Quardant 1 on javadoc
+                xpos = (int) Math.floor(center.getX() + adj);
+                ypos = (int) Math.floor(center.getY() - opp);
+                break;
+            case 1:
+                //Quardant 2 on javadoc
+                xpos = (int) Math.floor(center.getX() - opp);
+                ypos = (int) Math.floor(center.getY() - adj);
+                break;
+            case 2:
+                //Quardant 3 on javadoc
+                xpos = (int) Math.floor(center.getX() - adj);
+                ypos = (int) Math.floor(center.getY() + opp);
+                break;
+            case 3:
+                //Quardant 4 on javadoc
+                xpos = (int) Math.floor(center.getX() + opp);
+                ypos = (int) Math.floor(center.getY() + adj);
+                break;
+            default:
+                //IDK something went wrong...
+                xpos = 0;
+                ypos = 0;
+        }
+
+        return (new Point(xpos, ypos));
+    }
+    
     /**
      * Hide constructor.
      */

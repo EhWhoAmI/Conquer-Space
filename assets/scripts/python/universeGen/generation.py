@@ -9,7 +9,7 @@ def selectRandomSuitablePlanet(systemCount, civClimate, universe):
         while n < system.getPlanetCount():
             if random.randint(1, 2) == 1:
                 p = system.getPlanet(n)
-                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 20 and p.getPlanetSectorCount() > 1:
+                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 300000000 and p.getPlanetSectorCount() > 1:
                     value = [start, n]
                     return value
             n += 1
@@ -21,5 +21,4 @@ def calculatePlanetSpacing(previous):
     if previous == 1:
         return 2
     amount = (float(random.randint(11, 25))/10)
-    
-    return int(previous*amount)
+    return long(previous*amount)

@@ -1,0 +1,39 @@
+Stars have 9 types based on the Hertzsprung–Russell diagram.
+
+Hottest/bluer
+O
+B
+A
+F
+G - Our sun is a G2 star. 
+K
+M
+L
+T
+Coolest/redder
+
+We can skip the subdivisions. We do need it to be so detailed/
+
+Their rarity in the main sequence:
+They consist of 90% of stars.
+O 0.00003%
+B 0.13%
+A 0.6%
+F 3%
+G 7.6%
+K 12.1%
+M 76.45%
+(https://en.wikipedia.org/wiki/Stellar_classification#Harvard_spectral_classification)
+
+But we will use this, so mathematically its easier, and also for the code.
+O 0.07%
+B 0.13%
+A 0.7%
+F 3%
+G 9%
+K 12.1%
+M 75%
+
+Sum is 100%
+
+Star maximum size is 120 solar masses. Which we may calculate to 100 solar radii.(Just a wild guess)

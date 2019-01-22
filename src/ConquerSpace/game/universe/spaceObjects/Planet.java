@@ -2,7 +2,6 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.UniversePath;
-import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -19,7 +18,8 @@ import java.util.HashMap;
 public class Planet extends SpaceObject {
 
     private int planetType;
-    private GalacticLocation orbitalDistance;
+    private long orbitalDistance;
+    private int degrees;
     private int planetSize;
     
     int id;
@@ -41,19 +41,20 @@ public class Planet extends SpaceObject {
      * Creates planet
      *
      * @param planetType Type of planet. See <code>PlanetTypes</code>
-     * @param orbitalDistance orbit of planet
+     * @param orbitalDistance orbit of planet in km
      * @param planetSize size of planet
      * @param id planet id
      * @param parentStarSystem parent star system
      * @param parentSector parent sector
      */
-    public Planet(int planetType, int orbitalDistance, int planetSize, int id, int parentStarSystem, int parentSector) {
+    public Planet(int planetType, long orbitalDistance, int planetSize, int id, int parentStarSystem, int parentSector) {
         this.planetType = planetType;
-        this.orbitalDistance = new GalacticLocation(0, orbitalDistance);
+        this.orbitalDistance = orbitalDistance;
         this.planetSize = planetSize;
         this.id = id;
         this.parentSector = parentSector;
         this.parentStarSystem = parentStarSystem;
+        this.degrees = 0;
 
         //Surface area equals 4 * diameter
         //Surface area is in sectors
@@ -65,14 +66,14 @@ public class Planet extends SpaceObject {
         satellites = new ArrayList<>();
     }
     
-    public Planet(int planetType, int orbitalDistance, int planetSize, int id, int parentStarSystem) {
+    public Planet(int planetType, long orbitalDistance, int planetSize, int id, int parentStarSystem) {
         this.planetType = planetType;
-        this.orbitalDistance = new GalacticLocation(0, orbitalDistance);
+        this.orbitalDistance = orbitalDistance;
         this.planetSize = planetSize;
         this.id = id;
         this.parentSector = -1;
         this.parentStarSystem = parentStarSystem;
-
+        this.degrees = 0;
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
@@ -113,8 +114,8 @@ public class Planet extends SpaceObject {
         return id;
     }
 
-    public int getOrbitalDistance() {
-        return (int) orbitalDistance.getDistance();
+    public long getOrbitalDistance() {
+        return orbitalDistance;
     }
 
     public int getPlanetSize() {
@@ -130,7 +131,6 @@ public class Planet extends SpaceObject {
      * @param degs degrees
      */
     public void modDegrees(float degs) {
-        orbitalDistance.setDegrees(orbitalDistance.getDegrees() + degs);
     }
 
     public int getOwnerID() {
@@ -278,7 +278,7 @@ public class Planet extends SpaceObject {
     }
     
     public float getPlanetDegrees() {
-        return (orbitalDistance.getDegrees());
+        return (degrees);
     }
     
     public UniversePath getUniversePath() {

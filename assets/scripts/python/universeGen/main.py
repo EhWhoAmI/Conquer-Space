@@ -13,7 +13,6 @@ from ConquerSpace.game.universe.civilization.controllers.PlayerController import
 from ConquerSpace.game.universe.resources import RawResourceTypes
 from ConquerSpace.game.universe.spaceObjects import Planet
 from ConquerSpace.game.universe.spaceObjects import PlanetTypes
-from ConquerSpace.game.universe.spaceObjects import Sector
 from ConquerSpace.game.universe.spaceObjects import Star
 from ConquerSpace.game.universe.spaceObjects import StarSystem
 from ConquerSpace.game.universe.spaceObjects import StarTypes
@@ -68,33 +67,47 @@ for r in range(starSystemCount):
     systemLoc = GalacticLocation(sysdegs, sysdist)
     starSystem = StarSystem(r, systemLoc)
     # Create star
-    starType = random.randint(1, 100)
-    if starType < 55:
-        starType = StarTypes.YELLOW
-    elif starType < 75:
-        starType = StarTypes.BLUE
-    elif starType < 96:
-        starType = StarTypes.RED
+    # Only main sequence stars!
+    starType = random.randint(1, 10000)
+    solarRadius = 695508
+    if starType < 7:
+        starType = StarTypes.TYPE_O
+        starSize = random.randint(int(6.6*solarRadius), int(100*solarRadius))
+    elif starType < 20:
+        starType = StarTypes.TYPE_B
+        starSize = random.randint(int(1.8*solarRadius), int(6.6*solarRadius))
+    elif starType < 90:
+        starType = StarTypes.TYPE_A
+        starSize = random.randint(int(1.4*solarRadius), int(1.8*solarRadius))
+    elif starType < 390:
+        starType = StarTypes.TYPE_F
+        starSize = random.randint(int(1.15*solarRadius), int(1.4*solarRadius))
+    elif starType < 1290:
+        starType = StarTypes.TYPE_G
+        starSize = random.randint(int(0.96*solarRadius), int(1.15*solarRadius))
+    elif starType < 2500:
+        starType = StarTypes.TYPE_K
+        starSize = random.randint(int(0.7*solarRadius), int(0.96*solarRadius))
     else:
-        starType = StarTypes.BROWN
-    starSize = random.randint(1, 10)
+        starType = StarTypes.TYPE_M
+        starSize = random.randint(int(0.1*solarRadius), int(0.7*solarRadius))
+    
     # 0 because there is only one star so far.
     star = Star(starType, starSize, 0)
     starSystem.addStar(star)
 
     planets = random.randint(0, 9)
-
-    lastDist = 1
+    # First planet is determined by the size of the star, then adding about 10 million, then adding another random number from 0 to 30 million
+    
+    lastDist = long(starSize + 10000000 + random.randint(0, 30000000))
+    
     for n in range(planets):
         # Planets
         ptype = random.randint(0, 1)
-        toadd = 0
-        if n == 0:
-            toadd = 1
-        else:
-            toadd = n
+
         orbitalDistance = generation.calculatePlanetSpacing(lastDist)
         lastDist = orbitalDistance
+        
         planetSize = random.randint(PLANET_MIN_SIZE, PLANET_MAX_SIZE)
         planet = Planet(ptype, orbitalDistance, planetSize, n, r)
         ####################
