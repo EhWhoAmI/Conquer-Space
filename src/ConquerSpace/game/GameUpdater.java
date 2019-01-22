@@ -4,7 +4,7 @@ import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
-import ConquerSpace.game.ui.renderers.RendererMath;
+import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.VisionTypes;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -13,7 +13,6 @@ import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Sector;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -127,17 +126,6 @@ public class GameUpdater {
         }
     }
 
-    public void calculateSystemPositions() {
-        //Loop sectors
-        for (int i = 0; i < universe.getSectorCount(); i++) {
-            Sector sector = universe.getSector(i);
-            //Loop systems
-            for (int n = 0; n < sector.getStarSystemCount(); n++) {
-                Point p = RendererMath.polarCoordToCartesianCoord(sector.getStarSystem(n).getGalaticLocation(), new Point(0, 0), 1);
-                allsystemsstats.put(sector.getStarSystem(n).getUniversePath(), p);
-            }
-        }
-    }
 
     public void initGame() {
         //Init tech and fields
@@ -192,8 +180,6 @@ public class GameUpdater {
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
             }
         }
-        //Calculate all the star system positions.
-        calculateSystemPositions();
 
         calculateControl();
         calculateVision();

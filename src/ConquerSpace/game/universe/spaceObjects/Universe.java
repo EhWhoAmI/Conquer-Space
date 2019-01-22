@@ -16,7 +16,6 @@ public class Universe extends SpaceObject {
 
     private final long seed;
 
-    private ArrayList<Sector> sectors;
     private ArrayList<Civilization> civs;
 
     private ArrayList<StarSystem> starSystems;
@@ -25,7 +24,6 @@ public class Universe extends SpaceObject {
 
     public Universe(long seed) {
         this.seed = seed;
-        sectors = new ArrayList<>();
         civs = new ArrayList<>();
         control = new HashMap<>();
         starSystems = new ArrayList<>();
@@ -47,61 +45,6 @@ public class Universe extends SpaceObject {
             builder.append(c.toReadableString());
         }
         return (builder.toString());
-    }
-
-    /**
-     * Add a sector to the universe
-     *
-     * @param s Sector to add
-     */
-    public void addSector(Sector s) {
-        s.id = sectors.size();
-
-        //Set the id of the parent sector.
-        for (StarSystem e : s.starSystems) {
-            for (int i = 0; i < e.getPlanetCount(); i++) {
-                e.getPlanet(i).setParentSector(s.id);
-            }
-        }
-
-        //Add sector and contents to control.
-        for (int i = 0; i < s.getStarSystemCount(); i++) {
-            StarSystem system = s.getStarSystem(i);
-
-            //Add planets
-            for (int n = 0; n < system.getPlanetCount(); n++) {
-                Planet p = system.getPlanet(n);
-                control.put(p.getUniversePath(), ControlTypes.NONE_CONTROLLED);
-            }
-
-            //Add stars
-            for (int n = 0; n < system.getStarCount(); n++) {
-                Star star = system.getStar(n);
-                control.put(star.getUniversePath(), ControlTypes.NONE_CONTROLLED);
-            }
-
-            //Add star system
-            control.put(system.getUniversePath(), ControlTypes.NONE_CONTROLLED);
-        }
-        sectors.add(s);
-    }
-
-    /**
-     *
-     * @param i ID of sector
-     * @return The sector,
-     */
-    public Sector getSector(int i) {
-        return (sectors.get(i));
-    }
-
-    /**
-     * Get number of sectors in planet.
-     *
-     * @return Number of sectors
-     */
-    public int getSectorCount() {
-        return (sectors.size());
     }
 
     public void addStarSystem(StarSystem s) {

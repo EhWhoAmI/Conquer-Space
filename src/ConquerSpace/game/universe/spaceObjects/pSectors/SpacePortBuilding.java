@@ -2,7 +2,7 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.universe.civilization.controllers.PlayerController.LaunchSatelliteMenu;
+import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import java.awt.CardLayout;

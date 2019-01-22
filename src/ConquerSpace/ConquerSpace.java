@@ -1,7 +1,7 @@
 package ConquerSpace;
 
 import ConquerSpace.i18n.Messages;
-import ConquerSpace.start.gui.MainMenu;
+import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.Version;
 import java.io.File;
