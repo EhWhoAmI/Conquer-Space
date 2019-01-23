@@ -30,11 +30,6 @@ public class StarSystem extends SpaceObject {
      * Galactic location.
      */
     private GalacticLocation location;
-    
-    /**
-     * Parent sector.
-     */
-    private int parent;
 
     /**
      * Creates a new star system.
@@ -53,7 +48,6 @@ public class StarSystem extends SpaceObject {
      * @param star Star
      */
     public void addStar(Star star) {
-        star.setParentSector(parent);
         star.setParentStarSystem(id);
         star.id = stars.size();
         
@@ -66,7 +60,6 @@ public class StarSystem extends SpaceObject {
      * @param planet Planet
      */
     public void addPlanet(Planet planet) {
-        planet.setParentSector(parent);
         planet.setParentStarSystem(id);
         planet.id = planets.size();
         
@@ -147,25 +140,11 @@ public class StarSystem extends SpaceObject {
         builder.append(">\n");
         return (builder.toString());
     }
-
-    /**
-     * Get parent sector id
-     * @return parent sector id.
-     */
-    public int getParent() {
-        return parent;
-    }
-
-    /**
-     * Set the parent sector
-     * @param parent id of parent sector
-     */
-    public void setParent(int parent) {
-        this.parent = parent;
-    }
     
     /**
      * Processes turns of the planets
+     * @param GameRefreshRate
+     * @param stardate
      */
     @Override
     public void processTurn(int GameRefreshRate, StarDate stardate) {

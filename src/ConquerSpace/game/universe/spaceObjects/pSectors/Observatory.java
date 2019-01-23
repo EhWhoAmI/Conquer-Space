@@ -14,7 +14,6 @@ public class Observatory extends PlanetSector implements VisionPoint{
         this.range = range;
     }
     
-    
     @Override
     public int getRange() {
         return range;

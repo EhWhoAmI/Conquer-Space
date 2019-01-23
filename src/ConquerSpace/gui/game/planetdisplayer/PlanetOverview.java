@@ -69,9 +69,7 @@ public class PlanetOverview extends JPanel {
 
         //Init planetPath
         StringBuilder name = new StringBuilder();
-        name.append("Sector ");
-        name.append("" + p.getParentSector());
-        name.append(" Star System ");
+        name.append("Star System ");
         name.append("" + p.getParentStarSystem());
         name.append(" Planet id " + p.getId());
         planetPath.setText(name.toString());

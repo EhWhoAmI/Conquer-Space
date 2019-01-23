@@ -31,7 +31,6 @@ public class Planet extends SpaceObject {
     public PlanetSector[] planetSectors;
 
     private int parentStarSystem;
-    private int parentSector;
 
     public Population population;
     public Economy economy;
@@ -52,7 +51,6 @@ public class Planet extends SpaceObject {
         this.orbitalDistance = orbitalDistance;
         this.planetSize = planetSize;
         this.id = id;
-        this.parentSector = parentSector;
         this.parentStarSystem = parentStarSystem;
         this.degrees = 0;
 
@@ -71,7 +69,6 @@ public class Planet extends SpaceObject {
         this.orbitalDistance = orbitalDistance;
         this.planetSize = planetSize;
         this.id = id;
-        this.parentSector = -1;
         this.parentStarSystem = parentStarSystem;
         this.degrees = 0;
         //Surface area equals 4 * diameter
@@ -252,11 +249,7 @@ public class Planet extends SpaceObject {
         //computePopulation();
         computeEconomy();
     }
-
-    public int getParentSector() {
-        return parentSector;
-    }
-
+    
     public int getParentStarSystem() {
         return parentStarSystem;
     }
@@ -267,10 +260,6 @@ public class Planet extends SpaceObject {
 
     public String getName() {
         return name;
-    }
-
-    void setParentSector(int parentSector) {
-        this.parentSector = parentSector;
     }
 
     void setParentStarSystem(int parentStarSystem) {
@@ -297,7 +286,7 @@ public class Planet extends SpaceObject {
         satellites.add(s);
     }
     
-    public ArrayList getSatellites() {
+    public ArrayList<Satellite> getSatellites() {
         return satellites;
     }
 }

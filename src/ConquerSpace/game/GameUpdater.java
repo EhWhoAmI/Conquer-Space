@@ -4,9 +4,11 @@ import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.VisionTypes;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -17,6 +19,8 @@ import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.spaceObjects.pSectors.Observatory;
+import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Point;
@@ -42,11 +46,11 @@ public class GameUpdater {
 
     private Universe universe;
 
-    HashMap<UniversePath, Point> allsystemsstats;
+    private ArrayList<StarSystemStats> visionStats;
 
     public GameUpdater(Universe u, StarDate s) {
         universe = u;
-        allsystemsstats = new HashMap<>();
+        visionStats = new ArrayList<>();
     }
 
     public void calculateControl() {
@@ -106,32 +110,47 @@ public class GameUpdater {
                 //System.out.println("Putting vision for civ " + civIndex + " at " + p);
                 //System.out.println("Planet size: " + ((Planet)universe.getSpaceObject(p)).planetSectors.length);
                 universe.getCivilization(civIndex).vision.put(p, VisionTypes.KNOWS_ALL);
-                //Set the parent star system visibility to true.
-                //Will be back.
-//                if (allsystemsstats.containsKey(p)) {
-//                    //Get the stars around it.
-//                    for (UniversePath path : allsystemsstats.keySet()) {
-//
-//                        //Get path position relative to the star system
-//                        Point a = allsystemsstats.get(p);
-//                        Point b = allsystemsstats.get(path);
-//                        if (Math.hypot(a.x - b.x, a.y - b.y) < 100) {
-//                            //Set visible
-//                            universe.getCivilization(civIndex).vision.put(new UniversePath(p.getSectorID(), p.getSystemID()), VisionTypes.EXISTS);
-//                        }
-//                    }
-//                }
+            }
+        }
+        //Loop through all the vision points in the universe
 
+        for (int k = 0; k < universe.getStarSystemCount(); k++) {
+            for (int i = 0; i < universe.getStarSystem(k).getPlanetCount(); i++) {
+                Planet p = universe.getStarSystem(k).getPlanet(i);
+                //Get satellites
+                for (Satellite s : p.getSatellites()) {
+                    if(s instanceof VisionPoint) {
+                        //Compute
+                        int range = ((VisionPoint) s).getRange();
+                        //Distance between all star systems...
+                        for(int g = 0; g <universe.getStarSystemCount(); g++) {
+                            //Difference between points...
+                            int dist = (int)Math.hypot(visionStats.get(k).position.y- visionStats.get(universe.getStarSystem(g).getId()).position.y,
+                                    visionStats.get(k).position.x- visionStats.get(universe.getStarSystem(g).getId()).position.x);
+                            if(dist < range) {
+                                //Its in!
+                                float amount = (1-((float)dist/(float)range));
+                                
+                            }
+                        }
+                    }
+                }
+                //Observetaries
+                for(PlanetSector sector : p.planetSectors) {
+                    if(sector instanceof VisionPoint) {
+                        //Compute
+                        int range = ((VisionPoint) sector).getRange();
+                    }
+                }
             }
         }
     }
-
 
     public void initGame() {
         //Init tech and fields
         Fields.readFields();
         Technologies.readTech();
-        
+
         //All things to load go here!!!
         readLaunchSystems();
         readSatellites();
@@ -171,7 +190,11 @@ public class GameUpdater {
                 int id = selector.nextInt(sectorCount);
                 PopulationStorage storage = new PopulationStorage(100l, 100l, (byte) 100);
                 starting.setPlanetSector(id, storage);
-
+                //Add observetary
+                Observatory obs = new Observatory(10);
+                id++;
+                id%=sectorCount;
+                starting.setPlanetSector(id, obs);
                 starting.setName(c.getHomePlanetName());
 
                 //Set ownership
@@ -182,7 +205,17 @@ public class GameUpdater {
         }
 
         calculateControl();
+
+        //Do calculations for system position
         calculateVision();
+    }
+
+    public void calculateSystemPositions() {
+        for (int i = 0; i < universe.getStarSystemCount(); i++) {
+            StarSystem sys = universe.getStarSystem(i);
+            //Do the position
+            visionStats.add(new StarSystemStats(RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation(), new Point(0, 0), 1), sys.getId()));
+        }
     }
 
     public void readLaunchSystems() {
@@ -278,7 +311,7 @@ public class GameUpdater {
                 String type = root.getString("type");
                 int mass = root.getInt("mass");
                 int distance = root.getInt("dist");
-                
+
                 int typeID = -1;
                 switch (type.toLowerCase()) {
                     case "none":
@@ -288,16 +321,16 @@ public class GameUpdater {
                 }
                 //That is it for now
                 int id = root.getInt("id");
-                
+
                 //Get type, and do the thing
                 Satellite s = null;
-                switch(typeID) {
+                switch (typeID) {
                     case SatelliteTypes.NONE:
                         s = new NoneSatellite(distance, mass);
                         s.setId(id);
                         s.setName(name);
                 }
-                
+
                 satellites.add(s);
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);
@@ -316,5 +349,17 @@ public class GameUpdater {
             }
         }
         GameController.satellites = satellites;
+    }
+
+    //A class to hold the stats and position of a star system for vision.
+    static class StarSystemStats {
+
+        Point position;
+        int id;
+
+        public StarSystemStats(Point position, int id) {
+            this.position = position;
+            this.id = id;
+        }
     }
 }

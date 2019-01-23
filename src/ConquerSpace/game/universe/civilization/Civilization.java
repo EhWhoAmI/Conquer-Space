@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization;
 
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;

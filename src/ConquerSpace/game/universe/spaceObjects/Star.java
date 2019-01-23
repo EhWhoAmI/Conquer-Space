@@ -17,7 +17,6 @@ public class Star extends SpaceObject {
      */
     public int starSize;
     private int parentStarSystem;
-    private int parentSector;
 
     int id;
     
@@ -60,14 +59,6 @@ public class Star extends SpaceObject {
     }
 
     /**
-     * Set parent sector
-     * @param parentSector Parent sector id
-     */
-    void setParentSector(int parentSector) {
-        this.parentSector = parentSector;
-    }
-
-    /**
      * Set parent star system
      * @param parentStarSystem parent star system id.
      */
@@ -81,14 +72,6 @@ public class Star extends SpaceObject {
      */
     public int getParentStarSystem() {
         return parentStarSystem;
-    }
-
-    /**
-     * Get parent sector id
-     * @return parent sector id
-     */
-    public int getParentSector() {
-        return parentSector;
     }
 
     public int getId() {
