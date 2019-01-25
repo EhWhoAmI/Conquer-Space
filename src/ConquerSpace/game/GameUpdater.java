@@ -119,28 +119,40 @@ public class GameUpdater {
                 Planet p = universe.getStarSystem(k).getPlanet(i);
                 //Get satellites
                 for (Satellite s : p.getSatellites()) {
-                    if(s instanceof VisionPoint) {
+                    if (s instanceof VisionPoint) {
                         //Compute
                         int range = ((VisionPoint) s).getRange();
                         //Distance between all star systems...
-                        for(int g = 0; g <universe.getStarSystemCount(); g++) {
+                        for (int g = 0; g < universe.getStarSystemCount(); g++) {
                             //Difference between points...
-                            int dist = (int)Math.hypot(visionStats.get(k).position.y- visionStats.get(universe.getStarSystem(g).getId()).position.y,
-                                    visionStats.get(k).position.x- visionStats.get(universe.getStarSystem(g).getId()).position.x);
-                            if(dist < range) {
+                            int dist = (int) Math.hypot(visionStats.get(k).position.y - visionStats.get(universe.getStarSystem(g).getId()).position.y,
+                                    visionStats.get(k).position.x - visionStats.get(universe.getStarSystem(g).getId()).position.x);
+                            if (dist < range) {
                                 //Its in!
-                                float amount = (1-((float)dist/(float)range));
-                                
+                                int amount = ((int) (1 - ((float) dist / (float) range)) * 100);
+                                universe.getCivilization(((VisionPoint) s).getCivilization()).vision.put(p.getUniversePath(), universe.getCivilization(((VisionPoint) s).getCivilization()).vision.get(p) + amount);
                             }
                         }
                     }
                 }
                 //Observetaries
-                for(PlanetSector sector : p.planetSectors) {
-                    if(sector instanceof VisionPoint) {
-                        //Compute
+                for (PlanetSector sector : p.planetSectors) {
+                    if (sector instanceof VisionPoint) {
                         int range = ((VisionPoint) sector).getRange();
+                        for (int g = 0; g < universe.getStarSystemCount(); g++) {
+                            //Difference between points...
+                            int dist = (int) Math.hypot(visionStats.get(k).position.y - visionStats.get(universe.getStarSystem(g).getId()).position.y,
+                                    visionStats.get(k).position.x - visionStats.get(universe.getStarSystem(g).getId()).position.x);
+                            if (dist < range) {
+                                //Its in!
+                                int amount = ((int) (1 - ((float) dist / (float) range)) * 100);
+                                universe.getCivilization
+        (((VisionPoint) sector).getCivilization()).vision.put(p.getUniversePath(), 
+                universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.get(p.getUniversePath()) + amount);
+                            }
+                        }
                     }
+
                 }
             }
         }
@@ -192,8 +204,9 @@ public class GameUpdater {
                 starting.setPlanetSector(id, storage);
                 //Add observetary
                 Observatory obs = new Observatory(10);
+                obs.setOwner(c.getID());
                 id++;
-                id%=sectorCount;
+                id %= sectorCount;
                 starting.setPlanetSector(id, obs);
                 starting.setName(c.getHomePlanetName());
 
@@ -207,6 +220,7 @@ public class GameUpdater {
         calculateControl();
 
         //Do calculations for system position
+        calculateSystemPositions();
         calculateVision();
     }
 

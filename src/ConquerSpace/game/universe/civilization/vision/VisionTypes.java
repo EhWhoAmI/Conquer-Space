@@ -12,7 +12,7 @@ public class VisionTypes {
     /**
      * Knows the star exists, but nothing else.
      */
-    public static final int EXISTS = 50;
+    public static final int EXISTS = 1;
     
     /**
      * Knows what is inside, planets and all.

@@ -59,7 +59,7 @@ public class UniverseRenderer {
                 if (universe.control.get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
                             get(s.getPath())) {
-                        case VisionTypes.KNOWS_INTERIOR:
+                        case VisionTypes.EXISTS:
                             g2d.setColor(Color.gray);
                             break;
                         default:
@@ -127,7 +127,7 @@ public class UniverseRenderer {
                 if (universe.control.get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
                             get(s.getPath())) {
-                        case VisionTypes.KNOWS_INTERIOR:
+                        case VisionTypes.EXISTS:
                             g2d.setColor(Color.gray);
                             break;
                         default:
