@@ -145,10 +145,10 @@ public class GameUpdater {
                                     visionStats.get(k).position.x - visionStats.get(universe.getStarSystem(g).getId()).position.x);
                             if (dist < range) {
                                 //Its in!
-                                int amount = ((int) (1 - ((float) dist / (float) range)) * 100);
-                                universe.getCivilization
-        (((VisionPoint) sector).getCivilization()).vision.put(p.getUniversePath(), 
-                universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.get(p.getUniversePath()) + amount);
+                                int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
+                                int previous = universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.get(p.getUniversePath());
+                                universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
+                                        ((previous + amount) > 100) ? 100 : (previous + amount));
                             }
                         }
                     }
@@ -156,6 +156,8 @@ public class GameUpdater {
                 }
             }
         }
+        //Dump vision
+        System.out.println(universe.getCivilization(0).vision.toString());
     }
 
     public void initGame() {
@@ -203,7 +205,7 @@ public class GameUpdater {
                 PopulationStorage storage = new PopulationStorage(100l, 100l, (byte) 100);
                 starting.setPlanetSector(id, storage);
                 //Add observetary
-                Observatory obs = new Observatory(10);
+                Observatory obs = new Observatory(15);
                 obs.setOwner(c.getID());
                 id++;
                 id %= sectorCount;

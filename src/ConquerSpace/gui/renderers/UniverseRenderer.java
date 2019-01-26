@@ -123,6 +123,7 @@ public class UniverseRenderer {
             
             //Check vision...
             if (universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED) {
+                System.out.println(universe.getCivilization(0).vision.get(s.getPath()));
                 //Control
                 if (universe.control.get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.

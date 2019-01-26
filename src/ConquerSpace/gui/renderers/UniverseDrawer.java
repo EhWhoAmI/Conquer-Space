@@ -1,6 +1,7 @@
 package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
@@ -35,7 +36,7 @@ public class UniverseDrawer {
             }
         }
         //One more light year because why not.
-        
+
         universeRadius++;
 
         universeDimensionsLTYR = universeRadius;
@@ -45,7 +46,7 @@ public class UniverseDrawer {
 
         //Do fancy math to calculate the size of 1 light year. Divide the universe drawn size with universe details' diameter
         //Multiply by 2 because it is a radius
-        sizeOfLtyr = (int) Math.floor(universeDrawnSize/(universeDimensionsLTYR *2 ));
+        sizeOfLtyr = (int) Math.floor(universeDrawnSize / (universeDimensionsLTYR * 2));
         LOGGER.info("Size of light year " + sizeOfLtyr + "px, actual is " + ((float) universeDrawnSize / (float) universeDimensionsLTYR));
         //sizeOfLtyr = 1;
 
@@ -57,17 +58,26 @@ public class UniverseDrawer {
             //Color of star system
             Color c;
             switch (sys.getStar(0).type) {
-                case 0:
-                    c = new Color(104, 64, 0);
+                case StarTypes.TYPE_A:
+                    c = Color.decode("#D5E0FF");
                     break;
-                case 1:
-                    c = Color.YELLOW;
+                case StarTypes.TYPE_B:
+                    c = Color.decode("#A2C0FF");
                     break;
-                case 2:
-                    c = Color.RED;
+                case StarTypes.TYPE_O:
+                    c = Color.decode("#92B5FF");
                     break;
-                case 3:
-                    c = Color.CYAN;
+                case StarTypes.TYPE_F:
+                    c = Color.decode("#F9F5FF");
+                    break;
+                case StarTypes.TYPE_G:
+                    c = Color.decode("#fff4ea");
+                    break;
+                case StarTypes.TYPE_K:
+                    c = Color.decode("#FFDAB5");
+                    break;
+                case StarTypes.TYPE_M:
+                    c = Color.decode("#FFB56C");
                     break;
                 default:
                     c = Color.BLACK;
