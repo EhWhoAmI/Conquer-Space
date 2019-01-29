@@ -20,5 +20,11 @@ universe.dump
 # Dump files in general for later
 *.dump
 
+# Saves
+/save/
+
+# Logs from derby
+derby.log
+
 # Javadoc files
 /docs/

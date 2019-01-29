@@ -1,0 +1,9 @@
+{
+    "name": "Space Telescope",
+    "mass": 10,
+    "dist": -1,
+    "type": "none",
+    "range": 50,
+    "cost": ["100"],
+    "id": 1
+}

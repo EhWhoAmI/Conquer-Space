@@ -2,6 +2,7 @@ package ConquerSpace;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.util.DatabaseManager;
 import java.util.Properties;
 
 /**
@@ -23,4 +24,6 @@ public class Globals {
      * Date in the stars. Game timer.
      */
     public static StarDate date = new StarDate();
+    
+    public static DatabaseManager database = new DatabaseManager();
 }

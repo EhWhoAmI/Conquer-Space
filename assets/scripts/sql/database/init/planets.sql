@@ -1,0 +1,9 @@
+create table systems(
+ID INT NOT NULL primary key,
+SYSTEM_NAME varchar(32) NOT NULL,
+PLANET_SIZE INT,
+DISTANCE INT,
+DEGREES FLOAT,
+X_ON_MAP INT,
+Y_ON_MAP INT
+)

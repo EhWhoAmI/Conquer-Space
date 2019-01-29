@@ -4,7 +4,6 @@ import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
-import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
@@ -29,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
@@ -157,7 +157,7 @@ public class GameUpdater {
             }
         }
         //Dump vision
-        System.out.println(universe.getCivilization(0).vision.toString());
+        //System.out.println(universe.getCivilization(0).vision.toString());
     }
 
     public void initGame() {
@@ -333,6 +333,16 @@ public class GameUpdater {
                     case "none":
                         //Nothing to read.
                         typeID = SatelliteTypes.NONE;
+                        break;
+                    case "telescope":
+                        typeID = SatelliteTypes.TELESCOPE;
+                        //Read range...
+                        if(root.get("range") instanceof Integer) {
+                            //... range is int
+                            int range = root.getInt("range");
+                        } else if (root.get("range") instanceof String){
+                            //Then it is taken from the list of values...
+                        }
                         break;
                 }
                 //That is it for now

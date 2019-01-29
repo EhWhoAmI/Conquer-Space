@@ -13,6 +13,14 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -24,6 +32,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.border.LineBorder;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.python.core.PyException;
@@ -199,6 +208,11 @@ public class NewGame extends JFrame implements ActionListener {
             setVisible(false);
             UniverseConfig config = new UniverseConfig();
             try {
+                long loadingStart = System.currentTimeMillis();
+                Globals.database.init();
+                long loadingEnd = System.currentTimeMillis();
+                LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to init database, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
+                //Game config
                 //This button will only be pressed by the `done` button.
                 //Read all the info, pass to scripts.
                 config.setUniverseSize((String) universeSizeBox.getSelectedItem());
@@ -231,7 +245,7 @@ public class NewGame extends JFrame implements ActionListener {
                 config.setCivilizationConfig(civilizationConfig);
 
                 // Start time of logging
-                long loadingStart = System.currentTimeMillis();
+                loadingStart = System.currentTimeMillis();
                 //Init script engine
                 RunScript s = new RunScript(ResourceLoader.loadResource("script.python.universegen.main"));
 
@@ -241,7 +255,7 @@ public class NewGame extends JFrame implements ActionListener {
                 Universe universe = (Universe) ((PyObjectDerived) s.getObject("universeObject")).__tojava__(Universe.class);
 
                 //Logger end time
-                long loadingEnd = System.currentTimeMillis();
+                loadingEnd = System.currentTimeMillis();
                 LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
 
                 // Log info
@@ -258,6 +272,21 @@ public class NewGame extends JFrame implements ActionListener {
                 }
                 ExceptionHandling.ExceptionMessageBox("Script error: " + ex.type.toString() + ".\nPython trace: \n" + trace + "\nSeed: " + config.seed, ex);
                 System.exit(1);
+            } catch (ClassNotFoundException ex) {
+                LOGGER.error("", ex);
+                Globals.database.quietShutdown();
+            } catch (InstantiationException ex) {
+                LOGGER.error("", ex);
+                Globals.database.quietShutdown();
+            } catch (IllegalAccessException ex) {
+                LOGGER.error("", ex);
+                Globals.database.quietShutdown();
+            } catch (SQLException ex) {
+                LOGGER.error("", ex);
+                Globals.database.quietShutdown();
+            } catch (IOException ex) {
+                LOGGER.error("", ex);
+                Globals.database.quietShutdown();
             }
         } else if (e.getSource() == civColorChooserButton) {
             //Show the civ color chooser
