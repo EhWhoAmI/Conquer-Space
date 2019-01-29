@@ -96,7 +96,7 @@ for r in range(starSystemCount):
     star = Star(starType, starSize, 0)
     starSystem.addStar(star)
 
-    planets = random.randint(0, 9)
+    planets = random.randint(0, SYSTEM_MAX_PLANETS)
     # First planet is determined by the size of the star, then adding about 10 million, then adding another random number from 0 to 30 million
     
     lastDist = long(starSize + 10000000 + random.randint(0, 30000000))

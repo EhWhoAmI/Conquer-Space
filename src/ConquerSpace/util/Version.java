@@ -40,4 +40,20 @@ public class Version {
     static boolean isLess(Version v1, Version v2) {
         return (!isGreater(v1, v2));
     }
+
+    public String getExtras() {
+        return extras;
+    }
+
+    public int getMajor() {
+        return major;
+    }
+
+    public int getMinor() {
+        return minor;
+    }
+
+    public int getPatch() {
+        return patch;
+    }
 }

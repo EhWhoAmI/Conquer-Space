@@ -1,13 +1,16 @@
 package ConquerSpace.util;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.GameUpdater;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 /**
  *
@@ -54,6 +58,7 @@ public class DatabaseManager {
         //Create save dir.
         File gameSaveDir = new File(System.getProperty("user.dir") + "/save/save" + (largest+1));
         gameSaveDir.mkdir();
+        
         //Now init database
         String driver = "org.apache.derby.jdbc.EmbeddedDriver";
         String protocol = "jdbc:derby:";
@@ -71,7 +76,23 @@ public class DatabaseManager {
             Statement statement = dataBaseConnection.createStatement();
             statement.execute(text);
         }
-
+        
+        //Create metadata file
+        File metadata = new File(gameSaveDir.getAbsolutePath() + "/meta");
+        PrintWriter metawriter = new PrintWriter(metadata);
+        DatabaseMetaData dbmd = dataBaseConnection.getMetaData();
+        JSONObject root = new JSONObject();
+        JSONObject versionObject = new JSONObject();
+        versionObject.put("major", ConquerSpace.VERSION.getMajor());
+        versionObject.put("minor", ConquerSpace.VERSION.getMinor());
+        versionObject.put("patch",ConquerSpace.VERSION.getPatch());
+        root.put("version", versionObject);
+        root.put("dbversion", dbmd.getDriverVersion());
+        root.write(metawriter);
+        metawriter.flush();
+        metawriter.close();
+        //Time, 
+        //Etc...
     }
     
     public void shutdown() throws SQLException{
@@ -109,7 +130,6 @@ public class DatabaseManager {
                         // an unexpected exception (shutdown failed)
                         LOGGER.error("Derby did not shut down normally", se);
                     }
-
             }
     }
 }
