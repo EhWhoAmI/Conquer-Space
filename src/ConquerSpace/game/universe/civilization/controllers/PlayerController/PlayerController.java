@@ -10,6 +10,7 @@ import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.gui.game.TimeIncrementWindow;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class PlayerController implements CivilizationController {
     public GameWindow mainwindow;
     public TurnSaveWindow tsWindow;
     public AlertDisplayer alertDisplayer;
+    public TimeIncrementWindow timeIncrementWindow;
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
@@ -48,7 +50,7 @@ public class PlayerController implements CivilizationController {
 
         tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();
-
+        timeIncrementWindow = new TimeIncrementWindow();
         tsWindow.setLocation(mainwindow.getWidth() - tsWindow.getWidth(), 0);
         //Remove mouse listeners for the turnsave window.
         for (MouseListener listener : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().getMouseListeners()) {
@@ -56,5 +58,6 @@ public class PlayerController implements CivilizationController {
         }
 
         mainwindow.add(tsWindow);
+        mainwindow.add(timeIncrementWindow);
     }
 }

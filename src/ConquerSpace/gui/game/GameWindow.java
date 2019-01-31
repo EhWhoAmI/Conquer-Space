@@ -54,7 +54,10 @@ public class GameWindow extends JFrame {
 
         //Edit menu bar
         JMenu windows = new JMenu("Windows");
-
+        JMenuItem timeIncrementwindow = new JMenuItem("Time incrementor");
+        timeIncrementwindow.addActionListener(a -> {
+            controller.timeIncrementWindow.setVisible(true);
+        });
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
         pauseplayButton.addActionListener(a -> {
@@ -155,7 +158,7 @@ public class GameWindow extends JFrame {
      */
     public class CQSPDesktop extends JDesktopPane implements MouseMotionListener, MouseListener, MouseWheelListener {
 
-        public static final int SIZE_OF_STAR_ON_SECTOR = 25;
+        public static final int SIZE_OF_STAR_ON_SECTOR = 10;
         UniverseRenderer universeRenderer;
         private boolean isDragging = false;
         private Point startPoint;

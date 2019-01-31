@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     private JLabel turnLabel;
     //Public for the action listeners later on
     public JButton pausePlayButton;
+    private JComboBox<String> speedComboBox;
     private JButton alertsButton;
     private JButton saveGameButton;
     private JButton exitGameButton;
@@ -36,6 +38,15 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     private JButton runningstatsButton;
     private JProgressBar statusProgressBar;
 
+    private String[] speeds = {
+        "Slowest",
+        "Slower",
+        "Slow",
+        "Normal",
+        "Fast",
+        "Faster",
+        "Fastest"
+    };
     private boolean isPaused = true;
     private StarDate date;
     private Universe universe;
@@ -49,6 +60,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         turnLabel = new JLabel();
         statusProgressBar = new JProgressBar();
         pausePlayButton = new JButton("Paused");
+        speedComboBox = new JComboBox<>(speeds);
         alertsButton = new JButton("Alerts");
         manualButton = new JButton("Manual");
         saveGameButton = new JButton("Save Game");
@@ -70,6 +82,9 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
         pausePlayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
         
+        speedComboBox.addActionListener((e) -> {
+            String.valueOf(speedComboBox.getSelectedItem());
+        });
         alertsButton.setFocusable(false);
         alertsButton.addActionListener((e) -> {
             AlertDisplayer disp = AlertDisplayer.getInstance();

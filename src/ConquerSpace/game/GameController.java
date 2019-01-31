@@ -37,9 +37,9 @@ public class GameController {
     int GameRefreshRate = (5 * 24);
 
     public static ArrayList<LaunchSystem> launchSystems;
-    
+
     public static ArrayList<Satellite> satellites;
-    
+
     /**
      * Constructor. Inits all components.
      */
@@ -60,32 +60,28 @@ public class GameController {
             LOGGER.info("Loaded " + count + " python scripts");
         } catch (FileNotFoundException ex) {
         }
-        
+
         long finish = System.currentTimeMillis();
         LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");
-        
+
         //Process the 0th turn and initalize the universe.
         Globals.universe.processTurn(GameRefreshRate, Globals.date);
 
         //Init universe
         GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
         updater.initGame();
-        
+
         //Load the player
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 
-        //Atomic integer so that we can edit it in a lambada.
-        AtomicInteger lastTick = new AtomicInteger(Globals.date.getMonthNumber());
-
-        int tickerSpeed = 1;
+        int tickerSpeed = 10;
         Timer ticker = new Timer(tickerSpeed, (e) -> {
             if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
                 //DO ticks
                 Globals.date.increment(1);
                 //Check for month increase
 
-                if (Globals.date.bigint.mod(BigInteger.valueOf(GameRefreshRate)) == BigInteger.ZERO) {
-                    lastTick.set(Globals.date.getMonthNumber());
+                if (Globals.date.bigint % GameRefreshRate == 0) {
                     long start = System.currentTimeMillis();
 
                     Globals.universe.processTurn(GameRefreshRate, Globals.date);
@@ -120,5 +116,47 @@ public class GameController {
 
         //Start ticker
         ticker.start();
+    }
+
+    //Process ingame tick.
+    public void tick() {
+        //DO ticks
+        Globals.date.increment(1);
+        //Check for month increase
+
+        if (Globals.date.bigint % GameRefreshRate == 0) {
+            long start = System.currentTimeMillis();
+
+            Globals.universe.processTurn(GameRefreshRate, Globals.date);
+            for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+                Globals.universe.getCivilization(i).calculateTechLevel();
+            }
+            //Do tech...
+            //Increment tech
+            processResearch();
+            
+            long end = System.currentTimeMillis();
+
+            LOGGER.trace("Took " + (end - start) + " ms");
+        }
+    }
+    
+    public void processResearch() {
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+                Civilization c = Globals.universe.getCivilization(i);
+                for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+                    if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
+                        //Then tech is finished
+                        c.researchTech(t);
+                        c.civResearch.remove(t);
+                        c.currentlyResearchingTechonologys.remove(t);
+                        //Alert civ
+                        c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
+                    } else {
+                        //Increment by number of ticks
+                        c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill() * GameRefreshRate);
+                    }
+                }
+            }
     }
 }

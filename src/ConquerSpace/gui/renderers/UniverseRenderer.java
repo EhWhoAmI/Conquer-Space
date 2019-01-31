@@ -1,6 +1,5 @@
 package ConquerSpace.gui.renderers;
 
-import ConquerSpace.game.UniversePath;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.gui.game.GameWindow;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -39,7 +38,7 @@ public class UniverseRenderer {
         g2d.setColor(new Color(0, 0, 255));
         g2d.fill(bg);
 
-        Ellipse2D.Float universeCircle = new Ellipse2D.Float(translate.x, translate.y, drawer.universeDrawnSize , drawer.universeDrawnSize);
+        Ellipse2D.Float universeCircle = new Ellipse2D.Float(translate.x, translate.y, drawer.universeDrawnSize, drawer.universeDrawnSize);
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
 
@@ -52,7 +51,6 @@ public class UniverseRenderer {
             Line2D.Float ln = new Line2D.Float(p, new Point((int) (((float) (drawer.universeDrawnSize / 2) + translate.x)), (int) ((((float) (drawer.universeDrawnSize / 2) + translate.y)))));
 
             // Draw star systems   
-            
             //Check vision...
             if (/*universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED*/true) {
                 //Control
@@ -67,18 +65,18 @@ public class UniverseRenderer {
                     }
                     //Control, if any...
                     Ellipse2D.Float control = new Ellipse2D.Float(
-                            ((s.getPosition().x + translate.x)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10)/2, 
-                            ((s.getPosition().y + translate.y)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10)/2, 
-                            (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10), 
+                            ((s.getPosition().x + translate.x)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                            ((s.getPosition().y + translate.y)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                            (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10),
                             (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10));
                     g2d.fill(control);
                 }
                 //End of control
-                
+
                 g2d.setColor(s.getColor());
                 Ellipse2D.Float system = new Ellipse2D.Float(
                         (s.getPosition().x + translate.x) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                        (s.getPosition().y + translate.y) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2), 
+                        (s.getPosition().y + translate.y) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
 
@@ -120,10 +118,8 @@ public class UniverseRenderer {
             Line2D.Float ln = new Line2D.Float(p, new Point((int) (((float) (drawer.universeDrawnSize / 2) + translate.x) * scale), (int) ((((float) (drawer.universeDrawnSize / 2) + translate.y)) * scale)));
 
             // Draw star systems   
-            
             //Check vision...
             if (universe.getCivilization(0).vision.get(s.getPath()) > VisionTypes.UNDISCOVERED) {
-                System.out.println(universe.getCivilization(0).vision.get(s.getPath()));
                 //Control
                 if (universe.control.get(s.getPath()) > -1) {
                     switch (universe.getCivilization(0).vision.
@@ -136,18 +132,18 @@ public class UniverseRenderer {
                     }
                     //Control, if any...
                     Ellipse2D.Float control = new Ellipse2D.Float(
-                            scale * ((s.getPosition().x + translate.x)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10)/2, 
-                            scale * ((s.getPosition().y + translate.y)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10)/2, 
-                            (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10), 
+                            scale * ((s.getPosition().x + translate.x)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                            scale * ((s.getPosition().y + translate.y)) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                            (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10),
                             (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10));
                     g2d.fill(control);
                 }
                 //End of control
-                
+
                 g2d.setColor(s.getColor());
                 Ellipse2D.Float system = new Ellipse2D.Float(
                         scale * (s.getPosition().x + translate.x) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                        scale * (s.getPosition().y + translate.y) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2), 
+                        scale * (s.getPosition().y + translate.y) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
 
@@ -155,11 +151,18 @@ public class UniverseRenderer {
                 g2d.setColor(Color.orange);
                 //Unncomment for debugging
                 //g2d.draw(systemln);
-            }
+            } else {
+                //Draw stars and stuff...
+                g2d.setColor(Color.GRAY);
+                Ellipse2D.Float system = new Ellipse2D.Float(
+                        scale * (s.getPosition().x + translate.x) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                        scale * (s.getPosition().y + translate.y) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                        GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
+                g2d.fill(system);
 
-            g2d.setColor(Color.orange);
-            //Uncomment this for debugging
-            //g2d.draw(ln);
+                Line2D.Float systemln = new Line2D.Float(new Point(s.getPosition().x + translate.x, s.getPosition().y + translate.y), p);
+                g2d.setColor(Color.orange);
+            }
         }
         //Draw scale line
         // TODO: MAKE ACCURATE
