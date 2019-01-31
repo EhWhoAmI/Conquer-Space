@@ -57,7 +57,6 @@ public class Civilization {
     public HashMap<Technology, Integer> civResearch;
     public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
 
-    public HashMap<String, Integer> values;
     public HashMap<String, Integer> multipliers;
     public FieldNode fields;
 
@@ -103,9 +102,6 @@ public class Civilization {
         satellites = new ArrayList<>();
 
         visionPoints = new ArrayList<>();
-        
-        multipliers = new HashMap<>();
-        values = new HashMap<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {

@@ -68,7 +68,7 @@ public class GameWindow extends JFrame {
         });
         pauseplayButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         game.add(pauseplayButton);
-        game.add(new TimeIncrementWindow());
+
         JMenu views = new JMenu("View");
         JMenuItem setToUniverseView = new JMenuItem("Go to Universe View");
         setToUniverseView.addActionListener(a -> {
@@ -155,7 +155,7 @@ public class GameWindow extends JFrame {
      */
     public class CQSPDesktop extends JDesktopPane implements MouseMotionListener, MouseListener, MouseWheelListener {
 
-        public static final int SIZE_OF_STAR_ON_SECTOR = 10;
+        public static final int SIZE_OF_STAR_ON_SECTOR = 25;
         UniverseRenderer universeRenderer;
         private boolean isDragging = false;
         private Point startPoint;

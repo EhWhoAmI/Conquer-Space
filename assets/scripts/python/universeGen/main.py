@@ -107,10 +107,8 @@ for r in range(starSystemCount):
 
         orbitalDistance = generation.calculatePlanetSpacing(lastDist)
         lastDist = orbitalDistance
-        if ptype == 0:
-            planetSize = random.randint(ROCKY_PLANET_MIN_SIZE, ROCKY_PLANET_MAX_SIZE)
-        else:
-            planetSize = random.randint(GAS_PLANET_MIN_SIZE, GAS_PLANET_MAX_SIZE)
+        
+        planetSize = random.randint(PLANET_MIN_SIZE, PLANET_MAX_SIZE)
         planet = Planet(ptype, orbitalDistance, planetSize, n, r)
         ####################
         # Set planet sectors
@@ -150,6 +148,10 @@ civCount = int(math.floor(universeSize / 2))
     
 LOGGER.info("Civilization Count: " + str(civCount))
 
+# Init player civ
+# List for all the civs
+sectorList = range(universeSize)
+
 # Player Civ options
 civConf = universeConfig.getCivilizationConfig()
 
@@ -173,11 +175,11 @@ playerCiv.setCivilizationSymbol(civSymbol)
 playerCiv.setController(PlayerController())
 
 LOGGER.trace('Civ symbol: "' + civSymbol + '"')
+HomesectorID = random.choice(sectorList)
+sectorList.remove(HomesectorID)
 
-unsuitablePlanets = []
-start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject, unsuitablePlanets)
+start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject)
 playerCiv.setStartingPlanet(UniversePath(start[0], start[1]))
-unsuitablePlanets.append(UniversePath(start[0], start[1]))
 # Get planet then add 1 population center
 # Now, choose one random thingy, and enter it.
 #homeP = universeObject.getSector(HomesectorID).getStarSystem(start[0]).getPlanet(start[1])
@@ -218,6 +220,10 @@ for p in range(civCount):
     civ.setSpeciesName(civName)
     civ.setCivilizationPreferredClimate(random.randint(0, 2))
     
+    # Figure out home system and planet
+    # Choose random sector
+    HomesectorID = random.choice(sectorList)
+    sectorList.remove(HomesectorID)
 
     # figure out home system by finding a suitable starsystem.
     # rules: the home planet is determined by the position of the planet from the star.
@@ -227,9 +233,8 @@ for p in range(civCount):
     
     LOGGER.trace("Choosing home star system")
 
-    start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject, unsuitablePlanets)
+    start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject)
     civ.setStartingPlanet(UniversePath(start[0], start[1]))
-    unsuitablePlanets.append(UniversePath(start[0], start[1]))
     
     # Get planet then add 1 population center
     # Now, choose one random thingy, and enter it.

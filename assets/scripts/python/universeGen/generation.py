@@ -1,6 +1,6 @@
 import random
 from ConquerSpace.game.universe.spaceObjects import PlanetTypes
-def selectRandomSuitablePlanet(systemCount, civClimate, universe, limits):
+def selectRandomSuitablePlanet(systemCount, civClimate, universe):
     start = random.randint(0, systemCount - 2)
     while start < systemCount:
         # Select star system
@@ -9,9 +9,7 @@ def selectRandomSuitablePlanet(systemCount, civClimate, universe, limits):
         while n < system.getPlanetCount():
             if random.randint(1, 2) == 1:
                 p = system.getPlanet(n)
-                # Check if owned by any other civ
-                
-                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 300000000 and p.getPlanetSectorCount() > 4 and not(p.getUniversePath() in limits) :
+                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 300000000 and p.getPlanetSectorCount() > 4:
                     value = [start, n]
                     return value
             n += 1

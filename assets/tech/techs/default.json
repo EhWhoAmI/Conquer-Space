@@ -294,7 +294,7 @@
             "type": "UNLOCK",
             "upgradable" : true,
             "difficulty": 1,
-            "action": ["orbit(Space Telescope:1)"],
+            "action": [],
             "fields": [
                 "Knowledge", "Astronomy"
             ],

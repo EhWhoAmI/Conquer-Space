@@ -1,2 +1,0 @@
-StarSystem.sql
-planets.sql

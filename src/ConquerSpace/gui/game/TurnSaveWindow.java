@@ -1,15 +1,15 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.gui.game.DebugStatsWindow;
+import ConquerSpace.gui.game.AlertDisplayer;
+import ConquerSpace.gui.game.InternalManual;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -19,15 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author Zyun
  */
 public class TurnSaveWindow extends JInternalFrame implements ActionListener {
-    private static final Logger LOGGER = CQSPLogger.getLogger(TurnSaveWindow.class.getName());
-    
+
     private JLabel turnLabel;
     //Public for the action listeners later on
     public JButton pausePlayButton;
@@ -80,22 +78,6 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         
         exitGameButton.setFocusable(false);
         exitGameButton.addActionListener((e) -> {
-            try {
-                DriverManager.getConnection("jdbc:derby:;shutdown=true");
-            } catch (SQLException se) {
-                if (( (se.getErrorCode() == 50000)
-                            && ("XJ015".equals(se.getSQLState()) ))) {
-                        // we got the expected exception
-                        LOGGER.info("Derby shut down normally");
-                        // Note that for single database shutdown, the expected
-                        // SQL state is "08006", and the error code is 45000.
-                    } else {
-                        // if the error code or SQLState is different, we have
-                        // an unexpected exception (shutdown failed)
-                        LOGGER.error("Derby did not shut down normally", se);
-                    }
-
-            }
             System.exit(0);
         });
 
