@@ -54,10 +54,10 @@ public class GameWindow extends JFrame {
 
         //Edit menu bar
         JMenu windows = new JMenu("Windows");
-        JMenuItem timeIncrementwindow = new JMenuItem("Time incrementor");
-        timeIncrementwindow.addActionListener(a -> {
-            controller.timeIncrementWindow.setVisible(true);
-        });
+        //JMenuItem timeIncrementwindow = new JMenuItem("Time incrementor");
+        //timeIncrementwindow.addActionListener(a -> {
+            //controller.timeIncrementWindow.setVisible(true);
+        //});
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
         pauseplayButton.addActionListener(a -> {

@@ -197,6 +197,8 @@ public class NewGame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitButton) {
             setVisible(false);
+            //Show loading screen
+            Loading load = new Loading();
             UniverseConfig config = new UniverseConfig();
             try {
                 //This button will only be pressed by the `done` button.
@@ -249,6 +251,7 @@ public class NewGame extends JFrame implements ActionListener {
                 //Insert universe into globals
                 Globals.universe = universe;
                 System.gc();
+                load.setVisible(false);
                 new GameController();
             } catch (final PyException ex) {
                 LogManager.getLogger("ErrorLog").error("Python error " + ex.toString() + " Seed = " + seedText.getText(), ex);

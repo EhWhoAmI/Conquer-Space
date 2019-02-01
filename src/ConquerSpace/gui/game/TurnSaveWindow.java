@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameSpeeds;
 import ConquerSpace.gui.game.DebugStatsWindow;
 import ConquerSpace.gui.game.AlertDisplayer;
 import ConquerSpace.gui.game.InternalManual;
@@ -81,16 +82,16 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             }
         });
         pausePlayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
+
+        speedComboBox.setSelectedItem("Normal");
+        speedComboBox.setFocusable(false);
         
-        speedComboBox.addActionListener((e) -> {
-            String.valueOf(speedComboBox.getSelectedItem());
-        });
         alertsButton.setFocusable(false);
         alertsButton.addActionListener((e) -> {
             AlertDisplayer disp = AlertDisplayer.getInstance();
             disp.toFront();
         });
-        
+
         exitGameButton.setFocusable(false);
         exitGameButton.addActionListener((e) -> {
             System.exit(0);
@@ -103,7 +104,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
 
         saveGameButton.setFocusable(false);
-        
+
         runningstatsButton.setFocusable(false);
         runningstatsButton.addActionListener((e) -> {
             DebugStatsWindow win = DebugStatsWindow.getInstance(universe);
@@ -113,6 +114,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         pan.add(turnLabel);
         pan.add(statusProgressBar);
         pan.add(pausePlayButton);
+        pan.add(speedComboBox);
         pan.add(alertsButton);
         pan.add(manualButton);
         pan.add(saveGameButton);
@@ -132,7 +134,8 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
         updater.start();
 
-        pan.setLayout(new GridLayout(8, 1, 5, 5));
+        //Pls increment the first parameter when you add more stuff.
+        pan.setLayout(new GridLayout(9, 1, 5, 5));
         add(pan);
         pack();
         setResizable(true);
@@ -157,5 +160,26 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
     public boolean isPaused() {
         return isPaused;
+    }
+
+    public int getTickCount() {
+        switch (speedComboBox.getSelectedIndex()) {
+            case 0: // Slowest
+                return GameSpeeds.SLOWEST;
+            case 1: // Slower
+                return GameSpeeds.SLOWER;
+            case 2: // Slow
+                return GameSpeeds.SLOW;
+            case 3: // Normal
+                return GameSpeeds.NORMAL;
+            case 4: // Fast
+                return GameSpeeds.FAST;
+            case 5: // Faster
+                return GameSpeeds.FASTER;
+            case 6: // Fastest
+                return GameSpeeds.FASTEST;
+        }
+        //Default to a normal speed otherwise.
+        return GameSpeeds.NORMAL;
     }
 }
