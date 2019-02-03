@@ -58,6 +58,7 @@ public class Civilization {
     public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
 
     public HashMap<String, Integer> multipliers;
+    public HashMap<String, Integer> values;
     public FieldNode fields;
 
     private int techLevel = 0;
@@ -102,6 +103,9 @@ public class Civilization {
         satellites = new ArrayList<>();
 
         visionPoints = new ArrayList<>();
+
+        multipliers = new HashMap<>();
+        values = new HashMap<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -276,5 +280,21 @@ public class Civilization {
 
     public void addSatellite(Satellite s) {
         satellites.add(s);
+    }
+
+    public void putValue(String key, Integer value) {
+        values.put(key, value);
+    }
+
+    public void putValue(String key, int value) {
+        values.put(key, value);
+    }
+
+    public void putMultiplier(String key, Integer value) {
+        multipliers.put(key, value);
+    }
+
+    public void putMultiplier(String key, int value) {
+        multipliers.put(key, value);
     }
 }

@@ -12,3 +12,6 @@ CIV_STARTING_POP_STORAGE_MAX = 1000000
 RAW_RESOURCE_MIN = 5000
 RAW_RESOURCE_CAP = 10000
 RAW_RESOURCE_TYPES_COUNT = 5
+
+civ_default_values = {"space_telescope_range":10}
+civ_multiplcation_values = {}

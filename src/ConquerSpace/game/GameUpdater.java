@@ -13,6 +13,7 @@ import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
+import ConquerSpace.game.universe.ships.satellites.SpaceTelescope;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
@@ -334,6 +335,12 @@ public class GameUpdater {
                         //Nothing to read.
                         typeID = SatelliteTypes.NONE;
                         break;
+                    case "telescope":
+                        typeID = SatelliteTypes.TELESCOPE;
+                        break;
+                    case "military":
+                        typeID = SatelliteTypes.MILITARY;
+                        break;
                 }
                 //That is it for now
                 int id = root.getInt("id");
@@ -345,6 +352,17 @@ public class GameUpdater {
                         s = new NoneSatellite(distance, mass);
                         s.setId(id);
                         s.setName(name);
+                        break;
+                    case SatelliteTypes.TELESCOPE:
+                        s = new SpaceTelescope(distance, mass);
+                        s.setId(id);
+                        s.setName(name);
+                        int range;
+                        //if(root.get("range") instanceof Integer)
+                        range = root.getInt("range");
+                        //else
+                            //range = root.getString("range"));
+                        ((SpaceTelescope) s).setRange(range);
                 }
 
                 satellites.add(s);

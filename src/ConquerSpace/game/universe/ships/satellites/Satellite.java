@@ -13,6 +13,7 @@ public class Satellite implements Launchable{
     protected int mass;
     protected String name = "";
     protected int id;
+    protected int owner = -1;
         
     public Satellite(int distance, int mass) {
         this.mass = mass;
@@ -50,6 +51,14 @@ public class Satellite implements Launchable{
     @Override
     public String toString() {
         return getName();
+    }
+
+    public int getOwner() {
+        return owner;
+    }
+
+    public void setOwner(int owner) {
+        this.owner = owner;
     }
     
     

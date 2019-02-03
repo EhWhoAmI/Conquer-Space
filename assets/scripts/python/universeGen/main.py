@@ -21,6 +21,7 @@ from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
 from constants import *
 import generation
 from java.awt import Color
+from java.util import HashMap
 import math
 from os import *
 from os.path import *
@@ -72,25 +73,25 @@ for r in range(starSystemCount):
     solarRadius = 695508
     if starType < 7:
         starType = StarTypes.TYPE_O
-        starSize = random.randint(int(6.6*solarRadius), int(100*solarRadius))
+        starSize = random.randint(int(6.6 * solarRadius), int(100 * solarRadius))
     elif starType < 20:
         starType = StarTypes.TYPE_B
-        starSize = random.randint(int(1.8*solarRadius), int(6.6*solarRadius))
+        starSize = random.randint(int(1.8 * solarRadius), int(6.6 * solarRadius))
     elif starType < 90:
         starType = StarTypes.TYPE_A
-        starSize = random.randint(int(1.4*solarRadius), int(1.8*solarRadius))
+        starSize = random.randint(int(1.4 * solarRadius), int(1.8 * solarRadius))
     elif starType < 390:
         starType = StarTypes.TYPE_F
-        starSize = random.randint(int(1.15*solarRadius), int(1.4*solarRadius))
+        starSize = random.randint(int(1.15 * solarRadius), int(1.4 * solarRadius))
     elif starType < 1290:
         starType = StarTypes.TYPE_G
-        starSize = random.randint(int(0.96*solarRadius), int(1.15*solarRadius))
+        starSize = random.randint(int(0.96 * solarRadius), int(1.15 * solarRadius))
     elif starType < 2500:
         starType = StarTypes.TYPE_K
-        starSize = random.randint(int(0.7*solarRadius), int(0.96*solarRadius))
+        starSize = random.randint(int(0.7 * solarRadius), int(0.96 * solarRadius))
     else:
         starType = StarTypes.TYPE_M
-        starSize = random.randint(int(0.1*solarRadius), int(0.7*solarRadius))
+        starSize = random.randint(int(0.1 * solarRadius), int(0.7 * solarRadius))
     
     # 0 because there is only one star so far.
     star = Star(starType, starSize, 0)
@@ -172,6 +173,13 @@ playerCiv.setCivilizationPreferredClimate(civPreferredClimate)
 playerCiv.setCivilizationSymbol(civSymbol)
 playerCiv.setController(PlayerController())
 
+# Set stuff.. 
+for key, index in civ_default_values.items():
+    playerCiv.putValue(key, index)
+    
+for key, index in civ_multiplcation_values.items():
+    playerCiv.putMultiplier(key, index)
+    
 LOGGER.trace('Civ symbol: "' + civSymbol + '"')
 
 unsuitablePlanets = []
@@ -243,5 +251,10 @@ for p in range(civCount):
     symbolList.remove(symbol)
     civ.setCivilizationSymbol(symbol)
     civ.setController(AIController())
+    
+    for key, index in civ_default_values.items():
+        civ.putValue(key, index)
+    for key, index in civ_multiplcation_values.items():
+        civ.putMultiplier(key, index)
     
     universeObject.addCivilization(civ)

@@ -6,7 +6,7 @@
             ],
             "level": 0,
             "type": "UNLOCK",
-            "upgradable" : false,
+            "upgradable": false,
             "difficulty": 0,
             "action": ["orbit(test:0)"],
             "fields": [
@@ -21,7 +21,7 @@
             "deps": ["life"],
             "level": 1,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 0,
             "action": [],
             "fields": [
@@ -36,7 +36,7 @@
             "deps": ["life"],
             "level": 2,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 0,
             "action": [],
             "fields": [
@@ -51,7 +51,7 @@
             "deps": ["life"],
             "level": 2,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 0,
             "action": [],
             "fields": [
@@ -67,7 +67,7 @@
             "level": 2,
             "type": "UNLOCK",
             "difficulty": 0,
-            "upgradable" : true,
+            "upgradable": true,
             "action": [],
             "fields": [
                 "Knowledge"
@@ -81,7 +81,7 @@
             "deps": ["life"],
             "level": 3,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 0,
             "action": [],
             "fields": [
@@ -90,14 +90,13 @@
             "tags": ["Starting"],
             "floor": 5,
             "id": 7
-            
         },
         {
             "name": "basic medicine",
             "deps": ["life"],
             "level": 1,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 0,
             "action": [],
             "fields": [
@@ -112,7 +111,8 @@
             "deps": ["life"],
             "level": 1,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
+            "onupgrade": [],
             "difficulty": 0,
             "action": ["field(science)", "field(biology)", "field(chemistry)",
                 "tech(flight):20", "tech(rocket science):20"],
@@ -128,7 +128,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 2,
             "action": [""],
             "fields": [
@@ -143,7 +143,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 3,
             "action": [],
             "fields": [
@@ -158,7 +158,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 3,
             "action": [],
             "fields": [
@@ -173,7 +173,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 3,
             "action": [],
             "fields": [
@@ -188,7 +188,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 2,
             "action": [],
             "fields": [
@@ -203,7 +203,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 2,
             "action": ["tech(space planes):100"],
             "fields": [
@@ -218,7 +218,7 @@
             "deps": ["flight"],
             "level": 7,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 5,
             "action": [],
             "fields": [
@@ -233,6 +233,7 @@
             "deps": ["life"],
             "level": 5,
             "type": "UNLOCK",
+            "upgradable": true,
             "difficulty": 2,
             "action": ["tech(rocketery):100"],
             "fields": [
@@ -247,7 +248,7 @@
             "deps": ["rocket science"],
             "level": 5,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 5,
             "action": ["launch(Rocket)"],
             "fields": [
@@ -262,7 +263,7 @@
             "deps": ["life"],
             "level": 2,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 0,
             "action": ["tech(optics):100"],
             "fields": [
@@ -277,7 +278,7 @@
             "deps": ["astronomy"],
             "level": 3,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 1,
             "action": ["tech(telescopes):100", "tech(radio telescopes):100", "tech(x-ray telescopes):100"],
             "fields": [
@@ -292,7 +293,7 @@
             "deps": ["life"],
             "level": 3,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 1,
             "action": [],
             "fields": [
@@ -307,7 +308,7 @@
             "deps": ["life"],
             "level": 3,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 1,
             "action": [],
             "fields": [
@@ -322,7 +323,7 @@
             "deps": ["life"],
             "level": 3,
             "type": "UNLOCK",
-            "upgradable" : true,
+            "upgradable": true,
             "difficulty": 1,
             "action": [],
             "fields": [

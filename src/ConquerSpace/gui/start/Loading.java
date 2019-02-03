@@ -1,27 +1,24 @@
 package ConquerSpace.gui.start;
 
+import ConquerSpace.util.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.awt.HeadlessException;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author Zyun
  */
 public class Loading extends JFrame {
-
+    private static final Logger LOGGER = CQSPLogger.getLogger(Loading.class.getName());
     private JProgressBar jpb;
     private JLabel quoteLabel;
 
@@ -37,16 +34,15 @@ public class Loading extends JFrame {
             int index = rand.nextInt(lines.size());
             String quote = lines.get(index);
             quoteLabel.setText(quote);
+            LOGGER.info("Quote: " + quote);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Loading.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Loading.class.getName()).log(Level.SEVERE, null, ex);
         }
         setLayout(new VerticalFlowLayout());
         add(jpb);
         add(quoteLabel);
         pack();
         setVisible(true);
-        
+        repaint();
     }
 }

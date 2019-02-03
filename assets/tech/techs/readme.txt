@@ -19,3 +19,8 @@ Space - For going to space
 --------
 Floor:
 One in a floor will be selected for a tech.
+
+--------
+Onupgrade:
+On the upgrade, it will do that action, adding values to a multiplier, or things
+like that.
