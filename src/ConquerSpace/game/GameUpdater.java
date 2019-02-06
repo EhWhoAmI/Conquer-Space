@@ -302,8 +302,8 @@ public class GameUpdater {
         GameController.launchSystems = launchSystems;
     }
 
-    public void readSatellites() {
-        ArrayList<Satellite> satellites = new ArrayList<>();
+    public static void readSatellites() {
+        ArrayList<JSONObject> satellites = new ArrayList<>();
         //Get the launch systems folder
         File launchSystemsFolder = new File(System.getProperty("user.dir") + "/assets/data/satellite_types");
         File[] files = launchSystemsFolder.listFiles();
@@ -321,51 +321,51 @@ public class GameUpdater {
                 String text = new String(data);
                 JSONObject root = new JSONObject(text);
 
-                //Read info. This one is a bit different, because the format is different
-                //for each type.
-                String name = root.getString("name");
+//                //Read info. This one is a bit different, because the format is different
+//                //for each type.
+//                String name = root.getString("name");
+//
+//                String type = root.getString("type");
+//                int mass = root.getInt("mass");
+//                int distance = root.getInt("dist");
+//
+//                int typeID = -1;
+//                switch (type.toLowerCase()) {
+//                    case "none":
+//                        //Nothing to read.
+//                        typeID = SatelliteTypes.NONE;
+//                        break;
+//                    case "telescope":
+//                        typeID = SatelliteTypes.TELESCOPE;
+//                        break;
+//                    case "military":
+//                        typeID = SatelliteTypes.MILITARY;
+//                        break;
+//                }
+//                //That is it for now
+//                int id = root.getInt("id");
+//
+//                //Get type, and do the thing
+//                Satellite s = null;
+//                switch (typeID) {
+//                    case SatelliteTypes.NONE:
+//                        s = new NoneSatellite(distance, mass);
+//                        s.setId(id);
+//                        s.setName(name);
+//                        break;
+//                    case SatelliteTypes.TELESCOPE:
+//                        s = new SpaceTelescope(distance, mass);
+//                        s.setId(id);
+//                        s.setName(name);
+//                        int range;
+//                        //if(root.get("range") instanceof Integer)
+//                        range = root.getInt("range");
+//                        //else
+//                            //range = root.getString("range"));
+//                        ((SpaceTelescope) s).setRange(range);
+//                }
 
-                String type = root.getString("type");
-                int mass = root.getInt("mass");
-                int distance = root.getInt("dist");
-
-                int typeID = -1;
-                switch (type.toLowerCase()) {
-                    case "none":
-                        //Nothing to read.
-                        typeID = SatelliteTypes.NONE;
-                        break;
-                    case "telescope":
-                        typeID = SatelliteTypes.TELESCOPE;
-                        break;
-                    case "military":
-                        typeID = SatelliteTypes.MILITARY;
-                        break;
-                }
-                //That is it for now
-                int id = root.getInt("id");
-
-                //Get type, and do the thing
-                Satellite s = null;
-                switch (typeID) {
-                    case SatelliteTypes.NONE:
-                        s = new NoneSatellite(distance, mass);
-                        s.setId(id);
-                        s.setName(name);
-                        break;
-                    case SatelliteTypes.TELESCOPE:
-                        s = new SpaceTelescope(distance, mass);
-                        s.setId(id);
-                        s.setName(name);
-                        int range;
-                        //if(root.get("range") instanceof Integer)
-                        range = root.getInt("range");
-                        //else
-                            //range = root.getString("range"));
-                        ((SpaceTelescope) s).setRange(range);
-                }
-
-                satellites.add(s);
+                satellites.add(root);
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);
             } catch (IOException ex) {
@@ -382,7 +382,7 @@ public class GameUpdater {
                 }
             }
         }
-        GameController.satellites = satellites;
+        GameController.satelliteTemplates = satellites;
     }
 
     //A class to hold the stats and position of a star system for vision.

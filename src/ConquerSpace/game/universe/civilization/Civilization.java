@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import org.json.JSONObject;
 
 /**
  * Civilization
@@ -67,7 +68,7 @@ public class Civilization {
 
     public ArrayList<LaunchSystem> launchSystems;
 
-    public ArrayList<Satellite> satellites;
+    public ArrayList<JSONObject> satelliteTemplates;
 
     public ArrayList<VisionPoint> visionPoints;
 
@@ -100,7 +101,7 @@ public class Civilization {
         currentlyResearchingTechonologys = new HashMap<>();
         people = new ArrayList<>();
         launchSystems = new ArrayList<>();
-        satellites = new ArrayList<>();
+        satelliteTemplates = new ArrayList<>();
 
         visionPoints = new ArrayList<>();
 
@@ -278,8 +279,8 @@ public class Civilization {
         });
     }
 
-    public void addSatellite(Satellite s) {
-        satellites.add(s);
+    public void addSatelliteTemplate(JSONObject s) {
+        satelliteTemplates.add(s);
     }
 
     public void putValue(String key, Integer value) {

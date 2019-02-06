@@ -185,11 +185,11 @@ public class Technologies {
             //Split it
             String[] orbitSplit = orbitName.split(":");
             int satelliteID = Integer.parseInt(orbitSplit[1]);
-            Satellite s = GameController.satellites.stream().
-                    filter(e -> e.getId() == satelliteID).findFirst().orElseGet(null);
+            JSONObject s = GameController.satelliteTemplates.stream().
+                    filter(e -> e.getInt("id")== satelliteID).findFirst().orElseGet(null);
             if(s != null) {
                 //Add it to civ
-                c.addSatellite(s);
+                c.addSatelliteTemplate(s);
             }
             //Or else ignore it. there is no need to complain.
         }

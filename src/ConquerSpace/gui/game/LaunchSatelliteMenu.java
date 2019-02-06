@@ -12,7 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.json.JSONObject;
 
 /**
  *
@@ -20,8 +22,8 @@ import javax.swing.JPanel;
  */
 public class LaunchSatelliteMenu extends JInternalFrame{
     private JPanel satelliteSelectPanel;
-    private JList<Satellite> satelliteSelectList;
-    private DefaultListModel<Satellite> listModel;
+    private JList<String> satelliteSelectList;
+    private DefaultListModel<String> listModel;
     private JLabel title;
     
     private JPanel statsPanel;
@@ -39,8 +41,9 @@ public class LaunchSatelliteMenu extends JInternalFrame{
         
         listModel = new DefaultListModel<>();
         
-        for(Satellite s : c.satellites) {
-            listModel.addElement(s);
+        for(JSONObject s : c.satelliteTemplates) {
+            //Process satellite
+            listModel.addElement(s.getString("name"));
         }
         satelliteSelectList = new JList(listModel);
         //So that one is selected every time
@@ -54,24 +57,25 @@ public class LaunchSatelliteMenu extends JInternalFrame{
         satelliteName = new JLabel(satelliteSelectList.getSelectedValue().toString());
         statsPanel.add(satelliteName);
         
-        satelliteMass = new JLabel("Mass: " + satelliteSelectList.getSelectedValue().getMass());
-        statsPanel.add(satelliteMass);
+        //satelliteMass = new JLabel("Mass: " + satelliteSelectList.getSelectedValue().getMass());
+        //statsPanel.add(satelliteMass);
         
         buildAndLaunchButton = new JButton("Launch!");
         buildAndLaunchButton.setFocusable(false);
         buildAndLaunchButton.addActionListener(e -> {
             //Launch satellite
-            Satellite s = satelliteSelectList.getSelectedValue();
-            s.setOwner(c.getID());
-            Actions.launchSatellite(s, p, 100, c);
+            //Satellite s = satelliteSelectList.getSelectedValue();
+            //s.setOwner(c.getID());
+            //Actions.launchSatellite(s, p, 100, c);
+            JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
             dispose();
         });
         statsPanel.add(buildAndLaunchButton);
         
         //Add update code for the satellite selection
         satelliteSelectList.addListSelectionListener(e -> {
-            satelliteName.setText(satelliteSelectList.getSelectedValue().getName());
-            satelliteMass.setText("Mass: " + satelliteSelectList.getSelectedValue().getMass());
+            //satelliteName.setText(satelliteSelectList.getSelectedValue().getName());
+            //satelliteMass.setText("Mass: " + satelliteSelectList.getSelectedValue().getMass());
         });
         
         add(satelliteSelectList);

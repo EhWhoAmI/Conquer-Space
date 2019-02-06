@@ -1,0 +1,9 @@
+{
+    "id": 1,
+    "name": "Orbital Telescope",
+    "mass": 10,
+    "dist": 10,
+    "range":10,
+    "type": "telescope",
+    "cost": ["100"]
+}

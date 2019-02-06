@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.script.ScriptEngineManager;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 import org.python.util.PythonInterpreter;
 
 /**
@@ -39,13 +40,14 @@ public class GameController {
     public static ArrayList<LaunchSystem> launchSystems;
     private Timer ticker;
     public static ArrayList<Satellite> satellites;
-
+    public static ArrayList<JSONObject> satelliteTemplates;
     /**
      * Constructor. Inits all components.
      */
     public GameController() {
         long begin = System.currentTimeMillis();
         //Init python engine
+        satelliteTemplates = new ArrayList<>();
         ScriptEngineManager manager = new ScriptEngineManager();
         pythonEngine = new PythonInterpreter();
         //Load python methods
