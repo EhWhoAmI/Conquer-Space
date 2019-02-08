@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -138,7 +139,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
             try {
                 maxPopulation = Long.parseLong(maxPopulationTextField.getText());
                 //Load it from js
-                PyObject function = GameController.pythonEngine.eval("calculatePopulationStorageCost");
+                PyObject function = Globals.pythonEngine.eval("calculatePopulationStorageCost");
                 long o = function.__call__(new PyLong(maxPopulation)).asLong();
                 costLabel.setText("Cost : " + o);
             } catch (NumberFormatException | ArithmeticException nfe) {
@@ -198,7 +199,7 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
             long pop = 0;
             try {
                 pop = Long.parseLong(maxPopulation.getText());
-                PyObject function = GameController.pythonEngine.eval("calculateSpacePortCost");
+                PyObject function = Globals.pythonEngine.eval("calculateSpacePortCost");
 
                 long price = function.__call__(new PyLong(pop), new PyInteger(((LaunchSystem) launchTypesValue.getSelectedItem()).getConstructCost())).asInt();
                 costLabel.setText("Cost : " + price);

@@ -31,7 +31,6 @@ public class GameController {
     private static final Logger LOGGER = CQSPLogger.getLogger(GameController.class.getName());
 
     //For evals...
-    public static PythonInterpreter pythonEngine;
 
     //Rate the game refreshes buildings and stuff like that
     //Set to 5 days
@@ -48,20 +47,7 @@ public class GameController {
         long begin = System.currentTimeMillis();
         //Init python engine
         satelliteTemplates = new ArrayList<>();
-        ScriptEngineManager manager = new ScriptEngineManager();
-        pythonEngine = new PythonInterpreter();
-        //Load python methods
-        try {
-            Scanner scriptReader = new Scanner(ResourceLoader.getResourceByFile("script.python.processing.files"));
-            int count = 0;
-            while (scriptReader.hasNextLine()) {
-                String script = scriptReader.nextLine();
-                pythonEngine.execfile(ResourceLoader.loadResource(script));
-                count++;
-            }
-            LOGGER.info("Loaded " + count + " python scripts");
-        } catch (FileNotFoundException ex) {
-        }
+        
 
         long finish = System.currentTimeMillis();
         LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");

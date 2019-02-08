@@ -20,46 +20,66 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class LaunchSatelliteMenu extends JInternalFrame{
+public class LaunchSatelliteMenu extends JInternalFrame {
+
     private JPanel satelliteSelectPanel;
-    private JList<String> satelliteSelectList;
-    private DefaultListModel<String> listModel;
+    private JList<SatelliteWrapper> satelliteSelectList;
+    private DefaultListModel<SatelliteWrapper> listModel;
     private JLabel title;
-    
+
     private JPanel statsPanel;
     private JLabel satelliteName;
     private JLabel satelliteMass;
     private JButton buildAndLaunchButton;
+
     public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         //The launch pad type and stuff as title
         setTitle("Launch a satellite using " + pad.getType().getName());
         //title = new JLabel("Launch Satellite");
         setLayout(new GridLayout(1, 2));
-        
+
         //Satellite select content
         satelliteSelectPanel = new JPanel();
-        
+
         listModel = new DefaultListModel<>();
-        
-        for(JSONObject s : c.satelliteTemplates) {
+
+        for (JSONObject s : c.satelliteTemplates) {
             //Process satellite
-            listModel.addElement(s.getString("name"));
+            SatelliteWrapper wrap = new SatelliteWrapper(s.getInt("id"), s.getString("name"));
+            listModel.addElement(wrap);
         }
         satelliteSelectList = new JList(listModel);
         //So that one is selected every time
         satelliteSelectList.setSelectedIndex(0);
-        
+        satelliteSelectList.addListSelectionListener((e) -> {
+            //Reload all the things
+            //Get selected object
+            SatelliteWrapper selected = satelliteSelectList.getSelectedValue();
+            int id = selected.getId();
+            //Get compatable
+            JSONObject selectedObject = null;
+            for (JSONObject s : c.satelliteTemplates) {
+                //Process satellite
+                if (id == s.getInt("id")) {
+                    selectedObject = s;
+                    break;
+                }
+            }
+            if(selectedObject != null){
+                satelliteMass.setText("Mass: " + selectedObject.getInt("mass"));
+                satelliteName.setText(selectedObject.getString("name"));
+            }
+        });
         satelliteSelectPanel.add(satelliteSelectList);
-        
+
         //Satellite stats content
         statsPanel = new JPanel();
         statsPanel.setLayout(new VerticalFlowLayout());
         satelliteName = new JLabel(satelliteSelectList.getSelectedValue().toString());
         statsPanel.add(satelliteName);
-        
-        //satelliteMass = new JLabel("Mass: " + satelliteSelectList.getSelectedValue().getMass());
-        //statsPanel.add(satelliteMass);
-        
+
+        satelliteMass = new JLabel("Mass: ");
+        statsPanel.add(satelliteMass);
         buildAndLaunchButton = new JButton("Launch!");
         buildAndLaunchButton.setFocusable(false);
         buildAndLaunchButton.addActionListener(e -> {
@@ -71,22 +91,42 @@ public class LaunchSatelliteMenu extends JInternalFrame{
             dispose();
         });
         statsPanel.add(buildAndLaunchButton);
-        
+
         //Add update code for the satellite selection
         satelliteSelectList.addListSelectionListener(e -> {
             //satelliteName.setText(satelliteSelectList.getSelectedValue().getName());
             //satelliteMass.setText("Mass: " + satelliteSelectList.getSelectedValue().getMass());
         });
-        
+
         add(satelliteSelectList);
         add(statsPanel);
         setResizable(true);
         setVisible(true);
         setClosable(true);
         pack();
-        
+
         //Bring to front
         toFront();
     }
-    
+
+    private static class SatelliteWrapper {
+
+        int id;
+        String name;
+
+        public SatelliteWrapper(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+    }
 }

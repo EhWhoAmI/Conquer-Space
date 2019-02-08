@@ -1,8 +1,5 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
-import ConquerSpace.game.GameController;
-import javax.script.Invocable;
-import javax.script.ScriptException;
 
 /**
  *
@@ -34,12 +31,6 @@ public class PlanetSectors {
     }
     
     public static final int calculatePopulationStorageCost(int population) {
-        try {
-           Integer value = ((Double)((Invocable)GameController.pythonEngine).invokeFunction("", population)).intValue();
-           return value;
-        } catch (ScriptException ex) {
-        } catch (NoSuchMethodException ex) {
-        }
         return 0;
     }
 }
