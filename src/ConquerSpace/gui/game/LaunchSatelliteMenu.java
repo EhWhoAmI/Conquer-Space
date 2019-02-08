@@ -3,6 +3,7 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
+import ConquerSpace.game.universe.ships.satellites.Satellites;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -65,7 +66,7 @@ public class LaunchSatelliteMenu extends JInternalFrame {
                     break;
                 }
             }
-            if(selectedObject != null){
+            if (selectedObject != null) {
                 satelliteMass.setText("Mass: " + selectedObject.getInt("mass"));
                 satelliteName.setText(selectedObject.getString("name"));
             }
@@ -84,10 +85,22 @@ public class LaunchSatelliteMenu extends JInternalFrame {
         buildAndLaunchButton.setFocusable(false);
         buildAndLaunchButton.addActionListener(e -> {
             //Launch satellite
-            //Satellite s = satelliteSelectList.getSelectedValue();
-            //s.setOwner(c.getID());
-            //Actions.launchSatellite(s, p, 100, c);
-            JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
+            SatelliteWrapper selected = satelliteSelectList.getSelectedValue();
+            int id = selected.getId();
+            //Get compatable
+            JSONObject selectedObject = null;
+            for (JSONObject s : c.satelliteTemplates) {
+                //Process satellite
+                if (id == s.getInt("id")) {
+                    selectedObject = s;
+                    Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
+                    sat.setOwner(c.getID());
+                    Actions.launchSatellite(sat, p, 100, c);
+                    JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
+                    break;
+                }
+            }
+
             dispose();
         });
         statsPanel.add(buildAndLaunchButton);

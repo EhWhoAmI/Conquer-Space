@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.ships.satellites;
 
+import ConquerSpace.util.MultiplierProcessor;
 import java.util.HashMap;
 import org.json.JSONObject;
 
@@ -28,10 +29,12 @@ public class Satellites {
                 satellite.setName(name);
                 //Range...
                 //Get type
+                int range = 0;
                 if(object.get("range") instanceof Integer) {
-                    
+                    range = object.getInt("range");
                 } else {
                     //Get string
+                    range = MultiplierProcessor.process(object.getString("range"), values, multipliers);
                 }
                 break;
             default:

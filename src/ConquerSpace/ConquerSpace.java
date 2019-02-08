@@ -115,7 +115,6 @@ public class ConquerSpace {
         try {
             //Set look and feel
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            //Init logger
         } catch (ClassNotFoundException ex) {
             LOGGER.warn("", ex);
         } catch (InstantiationException ex) {
