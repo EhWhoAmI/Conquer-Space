@@ -18,14 +18,55 @@ from ConquerSpace.game.universe.spaceObjects import StarSystem
 from ConquerSpace.game.universe.spaceObjects import StarTypes
 from ConquerSpace.game.universe.spaceObjects import Universe
 from ConquerSpace.game.universe.spaceObjects.pSectors import RawResource
-from constants import *
-import generation
+
 from java.awt import Color
 from java.util import HashMap
 import math
 from os import *
 from os.path import *
 import random
+
+SECTOR_MIN_SYSTEM = 200
+SECTOR_MAX_SYSTEM = 250
+SECTOR_MAX_RADIUS = 100
+ROCKY_PLANET_MAX_SIZE = 30
+ROCKY_PLANET_MIN_SIZE = 2
+GAS_PLANET_MIN_SIZE = 25
+GAS_PLANET_MAX_SIZE = 70
+CIV_STARTING_POPULATION = 100000
+CIV_STARTING_POP_STORAGE_MAX = 1000000
+RAW_RESOURCE_MIN = 5000
+RAW_RESOURCE_CAP = 10000
+RAW_RESOURCE_TYPES_COUNT = 5
+
+civ_default_values = {"space_telescope_range":10}
+civ_multiplcation_values = {}
+
+def selectRandomSuitablePlanet(systemCount, civClimate, universe, limits):
+    start = random.randint(0, systemCount - 2)
+    while start < systemCount:
+        # Select star system
+        system = universe.getStarSystem(start)
+        n = 0
+        while n < system.getPlanetCount():
+            if random.randint(1, 2) == 1:
+                p = system.getPlanet(n)
+                # Check if owned by any other civ
+                
+                if p.getPlanetType() == PlanetTypes.ROCK and p.getOrbitalDistance() < 300000000 and p.getPlanetSectorCount() > 4 and not(p.getUniversePath() in limits) :
+                    value = [start, n]
+                    return value
+            n += 1
+        start += 1
+        if start >= systemCount:
+            start = 0
+            
+def calculatePlanetSpacing(previous):
+    if previous == 1:
+        return 2
+    amount = (float(random.randint(11, 25))/10)
+    return long(previous*amount)
+
 
 # universe size -- change this when universe sizes change
 universeSize = {'Small': 5, 'Medium': 10, 'Large': 20}[universeConfig.getUniverseSize()]
@@ -106,7 +147,7 @@ for r in range(starSystemCount):
         # Planets
         ptype = random.randint(0, 1)
 
-        orbitalDistance = generation.calculatePlanetSpacing(lastDist)
+        orbitalDistance = calculatePlanetSpacing(lastDist)
         lastDist = orbitalDistance
         if ptype == 0:
             planetSize = random.randint(ROCKY_PLANET_MIN_SIZE, ROCKY_PLANET_MAX_SIZE)
@@ -183,7 +224,7 @@ for key, index in civ_multiplcation_values.items():
 LOGGER.trace('Civ symbol: "' + civSymbol + '"')
 
 unsuitablePlanets = []
-start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject, unsuitablePlanets)
+start = selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject, unsuitablePlanets)
 playerCiv.setStartingPlanet(UniversePath(start[0], start[1]))
 unsuitablePlanets.append(UniversePath(start[0], start[1]))
 # Get planet then add 1 population center
@@ -235,7 +276,7 @@ for p in range(civCount):
     
     LOGGER.trace("Choosing home star system")
 
-    start = generation.selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject, unsuitablePlanets)
+    start = selectRandomSuitablePlanet(starSystemCount, civConf.getCivilizationPreferredClimate(), universeObject, unsuitablePlanets)
     civ.setStartingPlanet(UniversePath(start[0], start[1]))
     unsuitablePlanets.append(UniversePath(start[0], start[1]))
     

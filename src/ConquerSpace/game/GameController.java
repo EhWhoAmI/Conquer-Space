@@ -67,6 +67,7 @@ public class GameController {
             ticker.setDelay(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
             if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
                 tick();
+                updater.calculateVision();
             }
         }
         );
@@ -82,7 +83,6 @@ public class GameController {
 
         if (Globals.date.bigint % GameRefreshRate == 0) {
             long start = System.currentTimeMillis();
-
             Globals.universe.processTurn(GameRefreshRate, Globals.date);
             for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                 Globals.universe.getCivilization(i).calculateTechLevel();

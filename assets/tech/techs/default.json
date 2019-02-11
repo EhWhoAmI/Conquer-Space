@@ -332,6 +332,21 @@
             "tags": ["astronomy"],
             "floor": 14,
             "id": 24
+        },
+        {
+            "name": "space telescopes",
+            "deps": ["telescopes"],
+            "level": 3,
+            "type": "UNLOCK",
+            "upgradable": true,
+            "difficulty": 1,
+            "action": ["orbit(orbital telescope:1)"],
+            "fields": [
+                "Knowledge", "Astronomy"
+            ],
+            "tags": ["astronomy"],
+            "floor": 15,
+            "id": 25
         }
     ]
 }

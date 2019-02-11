@@ -166,7 +166,7 @@ public class UniverseRenderer {
         }
         //Draw scale line
         // TODO: MAKE ACCURATE
-        Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 + 10, 20);
+        Line2D.Float line = new Line2D.Float(10, 20, drawer.sizeOfLtyr * 30 * scale + 10, 20);
         g2d.draw(line);
         g2d.drawString("30 light years", 10, 10);
     }

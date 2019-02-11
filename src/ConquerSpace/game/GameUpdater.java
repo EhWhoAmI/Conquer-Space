@@ -104,6 +104,8 @@ public class GameUpdater {
     }
 
     public void calculateVision() {
+        System.out.println("Calculated vision");
+
         for (UniversePath p : universe.control.keySet()) {
             //Get the vision, do it...
             int civIndex = universe.control.get(p);
@@ -130,8 +132,10 @@ public class GameUpdater {
                                     visionStats.get(k).position.x - visionStats.get(universe.getStarSystem(g).getId()).position.x);
                             if (dist < range) {
                                 //Its in!
-                                int amount = ((int) (1 - ((float) dist / (float) range)) * 100);
-                                universe.getCivilization(((VisionPoint) s).getCivilization()).vision.put(p.getUniversePath(), universe.getCivilization(((VisionPoint) s).getCivilization()).vision.get(p) + amount);
+                                int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
+                                int previous = universe.getCivilization(((VisionPoint) s).getCivilization()).vision.get(p.getUniversePath());
+                                universe.getCivilization(((VisionPoint) s).getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
+                                        ((previous + amount) > 100) ? 100 : (previous + amount));
                             }
                         }
                     }
@@ -148,6 +152,7 @@ public class GameUpdater {
                                 //Its in!
                                 int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
                                 int previous = universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.get(p.getUniversePath());
+
                                 universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
                                         ((previous + amount) > 100) ? 100 : (previous + amount));
                             }
@@ -157,8 +162,6 @@ public class GameUpdater {
                 }
             }
         }
-        //Dump vision
-        System.out.println(universe.getCivilization(0).vision.toString());
     }
 
     public void initGame() {
@@ -364,7 +367,6 @@ public class GameUpdater {
 //                            //range = root.getString("range"));
 //                        ((SpaceTelescope) s).setRange(range);
 //                }
-
                 satellites.add(root);
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);

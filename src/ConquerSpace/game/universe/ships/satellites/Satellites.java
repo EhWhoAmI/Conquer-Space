@@ -36,6 +36,7 @@ public class Satellites {
                     //Get string
                     range = MultiplierProcessor.process(object.getString("range"), values, multipliers);
                 }
+                ((SpaceTelescope)satellite).setRange(range);
                 break;
             default:
                 //Just a none satellite then

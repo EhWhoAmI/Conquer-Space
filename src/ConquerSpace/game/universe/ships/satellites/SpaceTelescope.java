@@ -15,12 +15,12 @@ public class SpaceTelescope extends Satellite implements VisionPoint{
     }
 
     public void setCivilization(int civ) {
-        civilization = civ;
+        owner = civ;
     }
     
     @Override
     public int getCivilization() {
-        return civilization;
+        return getOwner();
     }
 
     public void setRange(int range) {
