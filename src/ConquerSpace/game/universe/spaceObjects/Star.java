@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
-import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.UniversePath;
 
 /**
  * A star.

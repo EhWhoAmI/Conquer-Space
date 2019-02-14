@@ -1,6 +1,6 @@
 package ConquerSpace.game.actions;
 
-import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.UniversePath;
 
 /**
  * Action of a turn.

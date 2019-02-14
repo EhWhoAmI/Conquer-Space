@@ -1,4 +1,4 @@
-package ConquerSpace.game;
+package ConquerSpace.game.universe;
 
 /**
  * Path of an object in a universe. To write path: "sectorid:star

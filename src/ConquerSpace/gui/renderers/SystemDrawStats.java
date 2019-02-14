@@ -1,6 +1,6 @@
 package ConquerSpace.gui.renderers;
 
-import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.UniversePath;
 import java.awt.Color;
 import java.awt.Point;
 

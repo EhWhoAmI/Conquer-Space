@@ -5,7 +5,7 @@
 # LOGGER -- Logger for this script. Check out org.apache.logging.log4j.Logger.
 # universeConfig -- Universe Config object. Check out ConquerSpace.game.universe.UniverseConfig
 
-from ConquerSpace.game import UniversePath
+from ConquerSpace.game.universe import UniversePath
 from ConquerSpace.game.universe import GalacticLocation
 from ConquerSpace.game.universe.civilization import Civilization
 from ConquerSpace.game.universe.civilization.controllers.AIController import AIController

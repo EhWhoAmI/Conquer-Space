@@ -2,6 +2,7 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
@@ -47,6 +48,9 @@ public class Actions {
     }
     
     public static void launchSatellite(Satellite what, Planet whichPlanet, int distance, Civilization c) {
+        if(what instanceof VisionPoint) {
+            c.visionPoints.add((VisionPoint)what);
+        }
         whichPlanet.addSatellite(what);
     }
 }

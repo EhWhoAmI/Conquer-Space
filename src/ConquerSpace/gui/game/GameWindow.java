@@ -1,6 +1,6 @@
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.gui.renderers.PlanetDrawStats;
 import ConquerSpace.gui.renderers.SystemDrawStats;
 import ConquerSpace.gui.renderers.SystemRenderer;
@@ -56,7 +56,7 @@ public class GameWindow extends JFrame {
         JMenu windows = new JMenu("Windows");
         //JMenuItem timeIncrementwindow = new JMenuItem("Time incrementor");
         //timeIncrementwindow.addActionListener(a -> {
-            //controller.timeIncrementWindow.setVisible(true);
+        //controller.timeIncrementWindow.setVisible(true);
         //});
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
@@ -130,12 +130,28 @@ public class GameWindow extends JFrame {
         techonology.add(techResearcher);
         techonology.add(seetechs);
 
+        JMenu ships = new JMenu("Ships");
+
+        JMenuItem allShips = new JMenuItem("All Ships");
+        allShips.addActionListener(a -> {
+            addFrame(new ShipListManager(u, c));
+        });
+        
+        JMenuItem fleets = new JMenuItem("Fleets");
+
+        JMenuItem shipDesigner = new JMenuItem("Ship designer");
+
+        ships.add(allShips);
+        ships.add(fleets);
+        ships.add(shipDesigner);
+        
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
         menuBar.add(menu);
         menuBar.add(ownCivInfo);
         menuBar.add(techonology);
+        menuBar.add(ships);
         desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
         //desktopPane.setBackground(Color.cyan);

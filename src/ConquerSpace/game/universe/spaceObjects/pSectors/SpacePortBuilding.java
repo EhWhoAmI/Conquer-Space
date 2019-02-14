@@ -5,6 +5,7 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -46,6 +47,7 @@ public class SpacePortBuilding extends PlanetSector {
         JPanel pademptyPanel = new JPanel();
         JLabel pademptyPanel_type = new JLabel();
         JButton createSatelliteButton = new JButton("Launch Satellite");
+        JButton createSpaceshipButton = new JButton("Launch Spaceship");
         //Show launch Satellite menu.
         createSatelliteButton.setFocusable(false);
         createSatelliteButton.addActionListener((e) -> {
@@ -62,8 +64,12 @@ public class SpacePortBuilding extends PlanetSector {
             launch.setVisible(true);
         });
 
+        createSpaceshipButton.addActionListener(a -> {
+        });
+        pademptyPanel.setLayout(new VerticalFlowLayout());
         pademptyPanel.add(pademptyPanel_type);
         pademptyPanel.add(createSatelliteButton);
+        pademptyPanel.add(createSpaceshipButton);
 
         JPanel nothingSelectedPanel = new JPanel();
 

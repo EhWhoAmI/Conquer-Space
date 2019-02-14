@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.civilization;
 
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.FieldNode;
@@ -12,6 +12,7 @@ import ConquerSpace.game.universe.civilization.controllers.CivilizationControlle
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -72,6 +73,7 @@ public class Civilization {
 
     public ArrayList<VisionPoint> visionPoints;
 
+    public ArrayList<SpaceShip> spaceships;
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -105,6 +107,8 @@ public class Civilization {
 
         visionPoints = new ArrayList<>();
 
+        spaceships = new ArrayList();
+        
         multipliers = new HashMap<>();
         values = new HashMap<>();
     }

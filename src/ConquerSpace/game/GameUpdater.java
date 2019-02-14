@@ -1,5 +1,6 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Fields;
 import ConquerSpace.game.tech.Technologies;

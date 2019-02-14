@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.UniversePath;
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.ships.satellites.Satellite;

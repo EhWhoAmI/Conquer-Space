@@ -11,6 +11,7 @@ public class Resource {
     public int type;
     public int renewability = 0;
     public int max;
+    public float difficulty;
 
     public Resource(int type, int amount) {
         this.amount = amount;
@@ -90,5 +91,13 @@ public class Resource {
         } else if(amount != 0){
             amount += renewability;
         }
+    }
+
+    public void setDifficulty(float difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public float getDifficulty() {
+        return difficulty;
     }
 }
