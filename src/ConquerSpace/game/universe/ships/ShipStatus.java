@@ -5,7 +5,7 @@ package ConquerSpace.game.universe.ships;
  * @author Zyun
  */
 public class ShipStatus {
-    public static final int IN_ORBIT = 1;
-    public static final int IN_COMBAT = 2;
-    public static final int TRAVELLING = 3;
+    public static final int IN_ORBIT = 100;
+    public static final int IN_COMBAT = 200;
+    public static final int TRAVELLING = 300;
 }

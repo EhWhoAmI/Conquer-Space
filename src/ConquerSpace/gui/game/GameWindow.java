@@ -140,6 +140,9 @@ public class GameWindow extends JFrame {
         JMenuItem fleets = new JMenuItem("Fleets");
 
         JMenuItem shipDesigner = new JMenuItem("Ship designer");
+        shipDesigner.addActionListener(a -> {
+            addFrame(new ShipDesigner(c));
+        });
 
         ships.add(allShips);
         ships.add(fleets);

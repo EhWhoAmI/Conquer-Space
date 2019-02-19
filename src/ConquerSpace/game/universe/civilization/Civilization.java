@@ -12,6 +12,7 @@ import ConquerSpace.game.universe.civilization.controllers.CivilizationControlle
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -74,6 +75,7 @@ public class Civilization {
     public ArrayList<VisionPoint> visionPoints;
 
     public ArrayList<SpaceShip> spaceships;
+    public ArrayList<ShipClass> shipClasses;
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -107,7 +109,8 @@ public class Civilization {
 
         visionPoints = new ArrayList<>();
 
-        spaceships = new ArrayList();
+        spaceships = new ArrayList<>();
+        shipClasses = new ArrayList<>();
         
         multipliers = new HashMap<>();
         values = new HashMap<>();
