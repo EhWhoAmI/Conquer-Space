@@ -43,17 +43,13 @@ public class ShipDesigner extends JInternalFrame {
     private JPanel shipComponentsContainer;
     private JPanel rootContainer;
 
-    private GridBagLayout layout;
-    private GridBagConstraints constraints;
-
     private JTextField className;
     private JLabel classText;
     
     private JTable componentTable;
 
     public ShipDesigner(Civilization c) {
-        layout = new GridBagLayout();
-        constraints = new GridBagConstraints();
+        setTitle("Ship Designer");
 
         //Set menubar
         menubar = new JMenuBar();
@@ -74,13 +70,8 @@ public class ShipDesigner extends JInternalFrame {
         shipClassesListContainer = new JPanel();
         shipClassesListContainer.setLayout(new VerticalFlowLayout());
         shipClassListModel = new DefaultListModel<>();
-        
-        ArrayList<ShipClass> classes = new ArrayList<>();
-        classes.add(new ShipClass("HELLO"));
-        classes.add(new ShipClass("XDXD"));
 
-        System.out.println(classes.toString());
-        for (ShipClass sc : classes) {
+        for (ShipClass sc : c.shipClasses) {
             shipClassListModel.addElement(sc);
         }
         shipClassesList = new JList<>(shipClassListModel);

@@ -14,6 +14,8 @@ import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.SpaceShip;
+import ConquerSpace.game.universe.ships.hull.Hull;
+import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -76,6 +78,9 @@ public class Civilization {
 
     public ArrayList<SpaceShip> spaceships;
     public ArrayList<ShipClass> shipClasses;
+    public ArrayList<HullMaterial> hullMaterials;
+    public ArrayList<Hull> hulls;
+    
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -111,6 +116,9 @@ public class Civilization {
 
         spaceships = new ArrayList<>();
         shipClasses = new ArrayList<>();
+        
+        hullMaterials = new ArrayList<>();
+        hulls = new ArrayList<>();
         
         multipliers = new HashMap<>();
         values = new HashMap<>();
