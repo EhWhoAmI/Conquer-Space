@@ -146,11 +146,13 @@ public class GameWindow extends JFrame {
         
         JMenuItem hullDesigner = new JMenuItem("Create new hull type");
         hullDesigner.addActionListener(a -> {
+            addFrame(new HullCreator(c));
         });
 
         ships.add(allShips);
         ships.add(fleets);
         ships.add(shipDesigner);
+        ships.add(hullDesigner);
         
         menuBar.add(windows);
         menuBar.add(game);

@@ -13,6 +13,7 @@ import ConquerSpace.util.ResourceLoader;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.script.ScriptEngineManager;
@@ -40,6 +41,7 @@ public class GameController {
     private Timer ticker;
     public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
+    public static HashMap<String, Integer> shipTypes;
     /**
      * Constructor. Inits all components.
      */
@@ -47,6 +49,7 @@ public class GameController {
         long begin = System.currentTimeMillis();
         //Init python engine
         satelliteTemplates = new ArrayList<>();
+        shipTypes = new HashMap<>();
         
 
         long finish = System.currentTimeMillis();

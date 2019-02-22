@@ -7,21 +7,29 @@ package ConquerSpace.game.universe.ships.hull;
 public class Hull {
     //KGS
     //Also determines hull hp and strength
-    private int mass;
+    private long mass;
     //Meters cube
-    private int space;
+    private long space;
     
     private HullMaterial material;
+    
+    private long shipType;
+    
+    //Thrust in kilonewtons
+    private long thrust;
+    
+    private String name;
 
-    public Hull(int mass, int space, HullMaterial material) {
+    public Hull(long mass, long space, HullMaterial material, long shipType, long thrust, String name) {
         this.mass = mass;
         this.space = space;
         this.material = material;
+        this.shipType = shipType;
+        this.thrust = thrust;
+        this.name = name;
     }
     
-    
-    
-    public int getMass() {
+    public long getMass() {
         return mass;
     }
 
@@ -29,7 +37,7 @@ public class Hull {
         this.mass = mass;
     }
 
-    public int getSpace() {
+    public long getSpace() {
         return space;
     }
 
@@ -52,4 +60,51 @@ public class Hull {
     public boolean isValid() {
         return (getStrength()>=1);
     }
+
+    public long getThrust() {
+        return thrust;
+    }
+
+    public long getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(int shipType) {
+        this.shipType = shipType;
+    }
+
+    public void setThrust(long thrust) {
+        this.thrust = thrust;
+    }
+
+    public void setMaterial(HullMaterial material) {
+        this.material = material;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setMass(long mass) {
+        this.mass = mass;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setShipType(long shipType) {
+        this.shipType = shipType;
+    }
+
+    public void setSpace(long space) {
+        this.space = space;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+    
+    
 }

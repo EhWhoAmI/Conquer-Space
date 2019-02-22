@@ -59,6 +59,7 @@ public class ShipDesigner extends JInternalFrame {
         JMenuItem saveShipClass = new JMenuItem("Save Ship Class");
         newStuff.add(newShipClass);
         newStuff.add(saveShipClass);
+        menubar.add(newStuff);
         setJMenuBar(menubar);
 
         rootContainer = new JPanel();

@@ -10,6 +10,7 @@ import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -33,6 +34,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,8 +108,6 @@ public class GameUpdater {
     }
 
     public void calculateVision() {
-        System.out.println("Calculated vision");
-
         for (UniversePath p : universe.control.keySet()) {
             //Get the vision, do it...
             int civIndex = universe.control.get(p);
@@ -173,6 +174,7 @@ public class GameUpdater {
         //All things to load go here!!!
         readLaunchSystems();
         readSatellites();
+        readShipTypes();
 
         //All the home planets of the civs are theirs.
         //Set home planet and sector
@@ -202,6 +204,9 @@ public class GameUpdater {
             r.setSkill(1);
             c.people.add(r);
 
+            HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
+            c.hullMaterials.add(material);
+            
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
@@ -386,6 +391,31 @@ public class GameUpdater {
             }
         }
         GameController.satelliteTemplates = satellites;
+    }
+
+    public void readShipTypes() {
+        try {
+            //Open file
+            Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/assets/data/ship_types/shipTypes.txt"));
+            while (s.hasNextLine()) {
+                String st = s.nextLine();
+                if (st.startsWith("#")) {
+                    continue;
+                } else if (st.startsWith("\"")) {
+                    //Parse string
+                    StringBuilder sb = new StringBuilder();
+                    int i;
+                    for (i = 1; i < st.length() && st.charAt(i) != '\"'; i++) {
+                        sb.append(st.charAt(i));
+                    }
+                    //Get number
+                    int number = Integer.parseInt(st.substring(i+2));
+                    GameController.shipTypes.put(sb.toString(), number);
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            LOGGER.warn("CAnnot open ship types", ex);
+        }
     }
 
     //A class to hold the stats and position of a star system for vision.
