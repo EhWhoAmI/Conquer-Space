@@ -1,4 +1,4 @@
-package ConquerSpace.game.tech;
+package ConquerSpace.game.science;
 
 import java.util.ArrayList;
 

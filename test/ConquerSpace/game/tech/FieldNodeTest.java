@@ -1,5 +1,6 @@
 package ConquerSpace.game.tech;
 
+import ConquerSpace.game.science.FieldNode;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;

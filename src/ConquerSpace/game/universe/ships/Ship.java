@@ -2,6 +2,8 @@ package ConquerSpace.game.universe.ships;
 
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.Vector;
+import ConquerSpace.game.universe.ships.components.ShipComponent;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,6 +16,8 @@ public class Ship implements SpaceShip{
     private long Y;
     private Vector v;
     private UniversePath location;
+    
+    private ArrayList<ShipComponent> components;
 
     public Ship(ShipClass sclass, long X, long Y, Vector v, UniversePath location) {
         this.sclass = sclass;

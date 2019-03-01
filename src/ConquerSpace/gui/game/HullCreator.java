@@ -70,6 +70,7 @@ public class HullCreator extends JInternalFrame {
     
     private Civilization c;
 
+    @SuppressWarnings("unchecked")
     public HullCreator(Civilization c) {
         this.c = c;
         setTitle("Create Hull");

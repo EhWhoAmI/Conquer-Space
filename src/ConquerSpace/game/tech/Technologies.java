@@ -1,6 +1,9 @@
 package ConquerSpace.game.tech;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.science.Field;
+import ConquerSpace.game.science.FieldNode;
+import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -11,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,11 +29,10 @@ public class Technologies {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Technologies.class.getName());
     public static ArrayList<Technology> techonologies = new ArrayList<>();
-    public static ArrayList<String> fields = new ArrayList<>();
 
     public static final int RESEARCHED = 101;
     public static final int REVEALED = 100;
-    
+
     public static void readTech() {
         File techFolder = new File(System.getProperty("user.dir") + "/assets/tech/techs");
         File[] tempFiles = techFolder.listFiles();
@@ -77,7 +81,7 @@ public class Technologies {
 
             //Difficulty
             int difficulty = techonology.getInt("difficulty");
-            
+
             JSONArray fieldsArray = techonology.getJSONArray("fields");
 
             //Loop over fields
@@ -92,14 +96,14 @@ public class Technologies {
             for (int j = 0; j < tagsArray.length(); j++) {
                 tags[j] = tagsArray.getString(j);
             }
-            
+
             JSONArray actionsarry = techonology.getJSONArray("action");
-            
+
             String[] actions = new String[actionsarry.length()];
             for (int j = 0; j < actionsarry.length(); j++) {
                 actions[j] = actionsarry.getString(j);
             }
-            
+
             //Floor
             int floor = techonology.getInt("floor");
 
@@ -118,12 +122,13 @@ public class Technologies {
         Object[] techList = techonologies.stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray();
         return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
-    
+
     public static Technology getTechByID(int id) {
         return (techonologies.stream().filter(e -> e.getId() == id).findFirst().get());
     }
+
     public static void parseAction(String action, Civilization c) {
-        if(action.startsWith("tech")) {
+        if (action.startsWith("tech")) {
             //Is boosting chance for tech
             action = action.replace("tech(", "");
             action = action.replace(")", "");
@@ -132,10 +137,10 @@ public class Technologies {
             String techtoboost = splitAction[0];
             int amount = Integer.parseInt(splitAction[1]);
             Technology tech = getTechByName(techtoboost);
-            if(c.civTechs.containsKey(tech)) {
-                if(!(c.civTechs.get(tech) > 100)) {
+            if (c.civTechs.containsKey(tech)) {
+                if (!(c.civTechs.get(tech) > 100)) {
                     //Then add
-                    if(c.civTechs.get(tech) > (100 - amount)) {
+                    if (c.civTechs.get(tech) > (100 - amount)) {
                         c.civTechs.put(tech, 100);
                     } else {
                         c.civTechs.put(tech, c.civTechs.get(tech) + amount);
@@ -144,40 +149,48 @@ public class Technologies {
             } else {
                 c.civTechs.put(tech, amount);
             }
-        }
-        else if(action.startsWith("boost")) {
+        } else if (action.startsWith("boost")) {
             //Boosts a certain multiplier
             //Get civ multiplier
             action = action.replace("boost(", "");
             action = action.replace(")", "");
             String[] splitAction = action.split(":");
-            if(c.multipliers.containsKey(splitAction[0])) {
+            if (c.multipliers.containsKey(splitAction[0])) {
                 //Then add
                 c.multipliers.put(splitAction[0], c.multipliers.get(splitAction[0]) + Integer.parseInt(splitAction[1]));
             } else {
                 c.multipliers.put(splitAction[0], Integer.parseInt(splitAction[1]));
             }
-        } else if(action.startsWith("field")) {
+        } else if (action.startsWith("field")) {
             action = action.replace("field(", "");
             action = action.replace(")", "");
             //Add the field that is mentioned
+            action = action.toLowerCase();
+            String[] text = action.split(":");
+            //Loop through the things
+            //Use recursion
+            FieldNode n = findNode(Fields.fieldNodeRoot, text[0]);
+            if (n != null) {
+                c.upgradeField(n);
+            }
+
             //Skip fields for now TODO.
-        } else if(action.startsWith("launch")) {
+        } else if (action.startsWith("launch")) {
             //unlocks a launch system
             //Get the launch system
             char[] dst = new char[50];
             action.getChars(7, action.length() - 1, dst, 0);
-            
+
             //Remove trailing white space.
             String launchName = (new String(dst).trim());
 
             LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
             c.launchSystems.add(sys);
-        } else if(action.startsWith("orbit")) {
+        } else if (action.startsWith("orbit")) {
             //Something you put into orbit
             char[] dst = new char[50];
             action.getChars("orbit".length() + 1, action.length() - 1, dst, 0);
-            
+
             //Remove trailing white space.
             String orbitName = (new String(dst).trim());
             //Get the satellite from the name or id.
@@ -186,21 +199,41 @@ public class Technologies {
             String[] orbitSplit = orbitName.split(":");
             int satelliteID = Integer.parseInt(orbitSplit[1]);
             JSONObject s = GameController.satelliteTemplates.stream().
-                    filter(e -> e.getInt("id")== satelliteID).findFirst().orElseGet(null);
-            if(s != null) {
+                    filter(e -> e.getInt("id") == satelliteID).findFirst().orElseGet(null);
+            if (s != null) {
                 //Add it to civ
                 c.addSatelliteTemplate(s);
             }
             //Or else ignore it. there is no need to complain.
         }
     }
-    
+
     /**
      * Estimated finish time in ticks
+     *
      * @param t tech
      * @return time to finish in ticks
      */
     public static int estFinishTime(Technology t) {
         return t.getDifficulty() * 1000;
+    }
+
+    public static FieldNode findNode(FieldNode n, String s) {
+        if (n == null) {
+            return null;
+        }
+        if (n.getName().equals(s)) {
+            return n;
+        }
+        for (int i = 0; i < n.getChildCount(); i++) {
+            FieldNode node = findNode(n.getNode(i), s);
+            if (node == null) {
+                continue;
+            }
+            if (node.getName().equals(s)) {
+                return findNode(n.getNode(i), s);
+            }
+        }
+        return null;
     }
 }

@@ -2,7 +2,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.tech.Fields;
+import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GalacticLocation;
@@ -170,7 +170,7 @@ public class GameUpdater {
         //Init tech and fields
         Fields.readFields();
         Technologies.readTech();
-
+        
         //All things to load go here!!!
         readLaunchSystems();
         readSatellites();

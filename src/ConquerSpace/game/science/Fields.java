@@ -1,4 +1,4 @@
-package ConquerSpace.game.tech;
+package ConquerSpace.game.science;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +44,7 @@ public class Fields {
                 for(int n = 0; n < fieldNamesElements.size(); n ++) {
                     Element fieldNameE = fieldNamesElements.get(n);
                     FieldNode bottomNode = new FieldNode(fieldNameE.getAttribute("name").getValue());
+                    System.out.println("Adding " + fieldNameE.getAttribute("name").getValue());
                     node.addChild(bottomNode);
                 }
             }

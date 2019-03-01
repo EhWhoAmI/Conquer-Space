@@ -13,14 +13,14 @@ public class Hull {
     
     private HullMaterial material;
     
-    private long shipType;
+    private int shipType;
     
     //Thrust in kilonewtons
     private long thrust;
     
     private String name;
 
-    public Hull(long mass, long space, HullMaterial material, long shipType, long thrust, String name) {
+    public Hull(long mass, long space, HullMaterial material, int shipType, long thrust, String name) {
         this.mass = mass;
         this.space = space;
         this.material = material;
@@ -91,10 +91,6 @@ public class Hull {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setShipType(long shipType) {
-        this.shipType = shipType;
     }
 
     public void setSpace(long space) {

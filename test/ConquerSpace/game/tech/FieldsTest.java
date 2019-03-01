@@ -1,5 +1,7 @@
 package ConquerSpace.game.tech;
 
+import ConquerSpace.game.science.FieldNode;
+import ConquerSpace.game.science.Fields;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

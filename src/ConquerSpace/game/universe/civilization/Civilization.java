@@ -4,7 +4,8 @@ import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.tech.FieldNode;
+import ConquerSpace.game.science.Field;
+import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
@@ -64,7 +65,6 @@ public class Civilization {
 
     public HashMap<String, Integer> multipliers;
     public HashMap<String, Integer> values;
-    public FieldNode fields;
 
     private int techLevel = 0;
 
@@ -80,6 +80,7 @@ public class Civilization {
     public ArrayList<ShipClass> shipClasses;
     public ArrayList<HullMaterial> hullMaterials;
     public ArrayList<Hull> hulls;
+    public ArrayList<Field> fields;
     
     public Civilization(int ID, Universe u) {
         this.ID = ID;
@@ -120,6 +121,7 @@ public class Civilization {
         hullMaterials = new ArrayList<>();
         hulls = new ArrayList<>();
         
+        fields = new ArrayList<>();
         multipliers = new HashMap<>();
         values = new HashMap<>();
     }
@@ -312,5 +314,31 @@ public class Civilization {
 
     public void putMultiplier(String key, int value) {
         multipliers.put(key, value);
+    }
+    
+    public void upgradeField(FieldNode f) {
+        //Loop through
+        for(Field field : fields) {
+            if(field.getNode().equals(f)) {
+                //Increment field value
+                field.incrementLevel(1);
+                return;
+            }
+        }
+         //Or else add it
+        fields.add(new Field(f, 1));
+    }
+    
+    public void upgradeField(FieldNode f, int amount) {
+        //Loop through
+        for(Field field : fields) {
+            if(field.getNode().equals(f)) {
+                //Increment field value
+                field.incrementLevel(amount);
+                return;
+            }
+        }
+        //Or else add it
+        fields.add(new Field(f, amount));
     }
 }
