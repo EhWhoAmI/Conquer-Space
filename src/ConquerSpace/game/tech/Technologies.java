@@ -52,9 +52,7 @@ public class Technologies {
         fis.read(data);
         fis.close();
         String text = new String(data);
-        JSONObject root = new JSONObject(text);
-        JSONArray techList = root.getJSONArray("techonologies");
-
+        JSONArray techList = new JSONArray(text);
         //Iterate over the techonologies
         for (int i = 0; i < techList.length(); i++) {
             JSONObject techonology = techList.getJSONObject(i);
@@ -205,6 +203,19 @@ public class Technologies {
                 c.addSatelliteTemplate(s);
             }
             //Or else ignore it. there is no need to complain.
+        } else if (action.startsWith("component")) {
+            //Do component
+            char[] dst = new char[50];
+
+            action.getChars("component".length() + 1, action.length() - 1, dst, 0);
+
+            String compName = (new String(dst).trim());
+
+            JSONObject s = GameController.shipComponentTemplates.stream().
+                    filter(e -> e.getString("id").equals(compName)).findFirst().orElseGet(null);
+            if(s != null) {
+                c.addShipComponent(s);
+            }
         }
     }
 

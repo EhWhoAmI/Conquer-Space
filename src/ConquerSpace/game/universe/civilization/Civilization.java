@@ -81,7 +81,8 @@ public class Civilization {
     public ArrayList<HullMaterial> hullMaterials;
     public ArrayList<Hull> hulls;
     public ArrayList<Field> fields;
-    
+    public ArrayList<JSONObject> shipComponentList;
+
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -117,10 +118,11 @@ public class Civilization {
 
         spaceships = new ArrayList<>();
         shipClasses = new ArrayList<>();
-        
+
         hullMaterials = new ArrayList<>();
         hulls = new ArrayList<>();
-        
+        shipComponentList = new ArrayList<>();
+
         fields = new ArrayList<>();
         multipliers = new HashMap<>();
         values = new HashMap<>();
@@ -300,6 +302,10 @@ public class Civilization {
         satelliteTemplates.add(s);
     }
 
+    public void addShipComponent(JSONObject s) {
+        shipComponentList.add(s);
+    }
+
     public void putValue(String key, Integer value) {
         values.put(key, value);
     }
@@ -315,24 +321,24 @@ public class Civilization {
     public void putMultiplier(String key, int value) {
         multipliers.put(key, value);
     }
-    
+
     public void upgradeField(FieldNode f) {
         //Loop through
-        for(Field field : fields) {
-            if(field.getNode().equals(f)) {
+        for (Field field : fields) {
+            if (field.getNode().equals(f)) {
                 //Increment field value
                 field.incrementLevel(1);
                 return;
             }
         }
-         //Or else add it
+        //Or else add it
         fields.add(new Field(f, 1));
     }
-    
+
     public void upgradeField(FieldNode f, int amount) {
         //Loop through
-        for(Field field : fields) {
-            if(field.getNode().equals(f)) {
+        for (Field field : fields) {
+            if (field.getNode().equals(f)) {
                 //Increment field value
                 field.incrementLevel(amount);
                 return;

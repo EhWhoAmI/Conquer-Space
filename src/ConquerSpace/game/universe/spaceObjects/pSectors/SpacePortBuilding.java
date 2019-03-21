@@ -5,6 +5,7 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.gui.game.LaunchSpaceShipMenu;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -65,6 +66,17 @@ public class SpacePortBuilding extends PlanetSector {
         });
 
         createSpaceshipButton.addActionListener(a -> {
+            LaunchSpaceShipMenu launch = new LaunchSpaceShipMenu(pads.getSelectedValue(), Globals.universe.getCivilization(0), planet);
+            Component c;
+            for (c = root.getParent(); 
+                    !(c instanceof JInternalFrame) || c != null; 
+                    c = c.getParent()) {
+                if (c instanceof JInternalFrame) {
+                    ((JInternalFrame) c).getDesktopPane().add(launch);
+                    break;
+                }
+            }
+            launch.setVisible(true);
         });
         pademptyPanel.setLayout(new VerticalFlowLayout());
         pademptyPanel.add(pademptyPanel_type);

@@ -1,0 +1,9 @@
+[
+    {
+        "name": "Test",
+        "id" : "d_test",
+        "type": "test",
+        "mass": 1,
+        "cost": 1
+    }
+]

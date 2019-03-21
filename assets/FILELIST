@@ -15,5 +15,3 @@ assets/scripts/python/universeGen/main.py
 assets/scripts/python/processing/building/buildingCosts.py
 assets/tech/fields.xml
 assets/tech/techs/default.json
-assets/data/launch/rocket.json
-assets/data/launch/space-plane.json

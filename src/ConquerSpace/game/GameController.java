@@ -41,6 +41,7 @@ public class GameController {
     private Timer ticker;
     public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
+    public static ArrayList<JSONObject> shipComponentTemplates;
     public static HashMap<String, Integer> shipTypes;
     /**
      * Constructor. Inits all components.
@@ -50,7 +51,7 @@ public class GameController {
         //Init python engine
         satelliteTemplates = new ArrayList<>();
         shipTypes = new HashMap<>();
-        
+        shipComponentTemplates = new ArrayList<>();
 
         long finish = System.currentTimeMillis();
         LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");

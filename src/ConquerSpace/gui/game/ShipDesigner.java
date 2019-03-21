@@ -30,6 +30,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONObject;
 
 /**
  *
@@ -135,6 +136,12 @@ public class ShipDesigner extends JInternalFrame {
         componentTableTabs = new JTabbedPane();
 
         componentTableModel = new DefaultTableModel(componentTableColunms, 0);
+        
+        for(JSONObject obj : c.shipComponentList) {
+            String[] data = new String[1];
+            data[0] = obj.getString("name");
+            componentTableModel.addRow(data);
+        }
         componentTable = new JTable(componentTableModel) {
             //Disable cell editing
             @Override

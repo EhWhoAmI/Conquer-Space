@@ -5,17 +5,15 @@ import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
-import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.ships.components.ShipComponent;
+import ConquerSpace.game.universe.ships.components.TestComponent;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
-import ConquerSpace.game.universe.ships.satellites.SpaceTelescope;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
@@ -26,17 +24,17 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.Observatory;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ResourceLoader;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -170,12 +168,13 @@ public class GameUpdater {
         //Init tech and fields
         Fields.readFields();
         Technologies.readTech();
-        
+
         //All things to load go here!!!
         readLaunchSystems();
         readSatellites();
         readShipTypes();
-
+        readShipComponents();
+        
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
@@ -183,10 +182,6 @@ public class GameUpdater {
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
-
-            //Add the starting techs
-            c.researchTech(Technologies.getTechByName("life"));
-
             //Add all starting techs
             for (Technology tech : Technologies.getTechsByTag("Starting")) {
                 c.researchTech(tech);
@@ -206,7 +201,7 @@ public class GameUpdater {
 
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             c.hullMaterials.add(material);
-            
+
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
@@ -247,7 +242,7 @@ public class GameUpdater {
     public void readLaunchSystems() {
         ArrayList<LaunchSystem> launchSystems = new ArrayList<>();
         //Get the launch systems folder
-        File launchSystemsFolder = new File(System.getProperty("user.dir") + "/assets/data/launch");
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.launch");
         File[] files = launchSystemsFolder.listFiles();
         for (File f : files) {
             FileInputStream fis = null;
@@ -261,36 +256,38 @@ public class GameUpdater {
                 fis.read(data);
                 fis.close();
                 String text = new String(data);
-                JSONObject root = new JSONObject(text);
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    JSONObject obj = root.getJSONObject(i);
+                    String name = obj.getString("name");
 
-                String name = root.getString("name");
+                    String techName = obj.getString("tech").split(":")[0];
+                    //The tech id will be the second value.
+                    int id = Integer.parseInt(obj.getString("tech").split(":")[1]);
 
-                String techName = root.getString("tech").split(":")[0];
-                //The tech id will be the second value.
-                int id = Integer.parseInt(root.getString("tech").split(":")[1]);
+                    int size = obj.getInt("size");
 
-                int size = root.getInt("size");
+                    int safety = obj.getInt("safety");
 
-                int safety = root.getInt("safety");
+                    int cost = obj.getInt("cost");
 
-                int cost = root.getInt("cost");
+                    int constructCost = obj.getInt("construct cost");
 
-                int constructCost = root.getInt("construct cost");
+                    boolean reusable = obj.getBoolean("reusable");
 
-                boolean reusable = root.getBoolean("reusable");
+                    int reuseCost = 0;
+                    if (reusable) {
+                        //Get Reusable cost
+                        reuseCost = obj.getInt("reuse cost");
+                    }
 
-                int reuseCost = 0;
-                if (reusable) {
-                    //Get Reusable cost
-                    reuseCost = root.getInt("reuse cost");
-                }
+                    int maxCargo = obj.getInt("cargo");
 
-                int maxCargo = root.getInt("cargo");
-
-                if (reusable) {
-                    launchSystems.add(new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, reuseCost, maxCargo));
-                } else {
-                    launchSystems.add(new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, maxCargo));
+                    if (reusable) {
+                        launchSystems.add(new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, reuseCost, maxCargo));
+                    } else {
+                        launchSystems.add(new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, maxCargo));
+                    }
                 }
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);
@@ -314,7 +311,7 @@ public class GameUpdater {
     public static void readSatellites() {
         ArrayList<JSONObject> satellites = new ArrayList<>();
         //Get the launch systems folder
-        File launchSystemsFolder = new File(System.getProperty("user.dir") + "/assets/data/satellite_types");
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.satellite.types");
         File[] files = launchSystemsFolder.listFiles();
         for (File f : files) {
             FileInputStream fis = null;
@@ -328,8 +325,11 @@ public class GameUpdater {
                 fis.read(data);
                 fis.close();
                 String text = new String(data);
-                JSONObject root = new JSONObject(text);
-
+                //JSONObject root = new JSONObject(text);
+                JSONArray content = new JSONArray(text);
+                for (int i = 0; i < content.length(); i++) {
+                    satellites.add(content.getJSONObject(i));
+                }
 //                //Read info. This one is a bit different, because the format is different
 //                //for each type.
 //                String name = root.getString("name");
@@ -373,7 +373,7 @@ public class GameUpdater {
 //                            //range = root.getString("range"));
 //                        ((SpaceTelescope) s).setRange(range);
 //                }
-                satellites.add(root);
+                //satellites.add(root);
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);
             } catch (IOException ex) {
@@ -394,6 +394,8 @@ public class GameUpdater {
     }
 
     public void readShipTypes() {
+        ArrayList<JSONObject> components = new ArrayList<>();
+
         try {
             //Open file
             Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/assets/data/ship_types/shipTypes.txt"));
@@ -409,12 +411,50 @@ public class GameUpdater {
                         sb.append(st.charAt(i));
                     }
                     //Get number
-                    int number = Integer.parseInt(st.substring(i+2));
+                    int number = Integer.parseInt(st.substring(i + 2));
                     GameController.shipTypes.put(sb.toString(), number);
                 }
             }
         } catch (FileNotFoundException ex) {
             LOGGER.warn("CAnnot open ship types", ex);
+        }
+    }
+
+    public void readShipComponents() {
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.ship.components");
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (!f.getName().endsWith(".json")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONArray root = new JSONArray(text);
+                for(int i = 0; i < root.length(); i++){
+                    GameController.shipComponentTemplates.add(root.getJSONObject(i));
+                }
+
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
         }
     }
 
