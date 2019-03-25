@@ -4,6 +4,8 @@
         "id" : "d_test",
         "type": "test",
         "mass": 1,
-        "cost": 1
+        "cost": 1,
+        "volume": 1,
+        "rating": 0
     }
 ]

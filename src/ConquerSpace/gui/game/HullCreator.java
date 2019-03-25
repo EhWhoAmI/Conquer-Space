@@ -161,7 +161,7 @@ public class HullCreator extends JInternalFrame {
         spaceBox.setColumns(16);
         meterscubedlabel = new JLabel("<html>m<sup>3</sup></html");
         
-        estThrust = new JLabel("Estimated thrust: ");
+        estThrust = new JLabel("Rated thrust: ");
         estThrustField = new JFormattedTextField(formatter);
         estThrustField.setText("1");
         estThrustField.setColumns(16);

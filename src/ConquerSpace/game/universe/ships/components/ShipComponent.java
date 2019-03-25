@@ -11,6 +11,8 @@ public class ShipComponent {
     protected int cost;
     protected String name;
     protected String id;
+    protected String ratingType;
+    protected int rating;
 
     public ShipComponent(int mass, int cost, String name) {
         this.mass = mass;
@@ -48,5 +50,17 @@ public class ShipComponent {
 
     public String getId() {
         return id;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getRatingType() {
+        return "";
     }
 }
