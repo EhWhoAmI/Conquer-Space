@@ -15,4 +15,7 @@ What we have to do.
 - Tutorial
   - For those who don't even know how to read. (I am one of them)
 
+- Ships
+  - Components
+
 - A gazillion things I can't think of.

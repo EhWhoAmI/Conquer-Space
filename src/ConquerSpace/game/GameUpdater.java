@@ -9,8 +9,6 @@ import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
-import ConquerSpace.game.universe.ships.components.ShipComponent;
-import ConquerSpace.game.universe.ships.components.TestComponent;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -174,7 +172,7 @@ public class GameUpdater {
         readSatellites();
         readShipTypes();
         readShipComponents();
-        
+
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
@@ -193,8 +191,11 @@ public class GameUpdater {
             c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
             c.calculateTechLevel();
 
+            //Add civ values
+            c.putValue("optics.quality", 100);
+
             //Add researchers
-            //Only one.
+            //Only one. Testing guy
             Scientist r = new Scientist("Person", 20);
             r.setSkill(1);
             c.people.add(r);
@@ -436,7 +437,7 @@ public class GameUpdater {
                 fis.close();
                 String text = new String(data);
                 JSONArray root = new JSONArray(text);
-                for(int i = 0; i < root.length(); i++){
+                for (int i = 0; i < root.length(); i++) {
                     GameController.shipComponentTemplates.add(root.getJSONObject(i));
                 }
 
@@ -454,6 +455,21 @@ public class GameUpdater {
                     }
                 } catch (IOException ex) {
                 }
+            }
+        }
+    }
+
+    //Here is where a lot of the math is gonna be held.
+    public static class Calculators {
+
+        public static class Optics {
+
+            public static int getRange(int quality, int size) {
+                return (int) (Math.log(Math.PI * (size) * (size) + 1) * 2);
+            }
+
+            public static int getLensMass(int quality, int size) {
+                return (int)(((double)quality/100d) * size * size * Math.PI);
             }
         }
     }

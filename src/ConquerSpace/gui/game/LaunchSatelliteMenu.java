@@ -76,7 +76,11 @@ public class LaunchSatelliteMenu extends JInternalFrame {
         //Satellite stats content
         statsPanel = new JPanel();
         statsPanel.setLayout(new VerticalFlowLayout());
-        satelliteName = new JLabel(satelliteSelectList.getSelectedValue().toString());
+        satelliteName = new JLabel();
+        if (c.satelliteTemplates.isEmpty()) {
+            satelliteName.setText(satelliteSelectList.getSelectedValue().toString());
+        }
+
         statsPanel.add(satelliteName);
 
         satelliteMass = new JLabel("Mass: ");

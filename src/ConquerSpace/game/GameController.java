@@ -9,18 +9,11 @@ import ConquerSpace.game.universe.civilization.controllers.PlayerController.Play
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.util.CQSPLogger;
-import ConquerSpace.util.ResourceLoader;
-import java.io.FileNotFoundException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.script.ScriptEngineManager;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import org.python.util.PythonInterpreter;
 
 /**
  * The controller of the game UI.

@@ -144,6 +144,11 @@ public class GameWindow extends JFrame {
             addFrame(new ShipDesigner(c));
         });
         
+        JMenuItem satelliteDesigner = new JMenuItem("Satellite designer");
+        satelliteDesigner.addActionListener(a -> {
+            addFrame(new SatelliteDesigner(c));
+        });
+        
         JMenuItem hullDesigner = new JMenuItem("Create new hull type");
         hullDesigner.addActionListener(a -> {
             addFrame(new HullCreator(c));
@@ -152,6 +157,7 @@ public class GameWindow extends JFrame {
         ships.add(allShips);
         ships.add(fleets);
         ships.add(shipDesigner);
+        ships.add(satelliteDesigner);
         ships.add(hullDesigner);
         
         menuBar.add(windows);
