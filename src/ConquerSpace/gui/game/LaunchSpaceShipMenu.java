@@ -14,7 +14,6 @@ public class LaunchSpaceShipMenu extends JInternalFrame {
     public LaunchSpaceShipMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         setTitle("Launch a space ship using " + pad.getType().getName());
         
-        
         setResizable(true);
         setVisible(true);
         setClosable(true);

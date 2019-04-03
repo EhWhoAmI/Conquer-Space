@@ -10,7 +10,7 @@ public class ShipComponent {
     //Cost in credits
     protected int cost;
     protected String name;
-    protected String id;
+    protected int id;
     protected String ratingType;
     protected int rating;
 
@@ -44,11 +44,11 @@ public class ShipComponent {
         return name;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

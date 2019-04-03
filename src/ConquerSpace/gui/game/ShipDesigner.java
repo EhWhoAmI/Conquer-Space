@@ -178,7 +178,8 @@ public class ShipDesigner extends JInternalFrame {
         shipInstalledComponentsScrollPane = new JScrollPane(installedShipComponents);
         removeInstalledComponent = new JButton("Remove Component");
         removeInstalledComponent.addActionListener(a -> {
-            installedShipComponentsTableModel.removeRow(installedShipComponents.getSelectedRow());
+            if(installedShipComponents.getSelectedRow() != -1)
+                installedShipComponentsTableModel.removeRow(installedShipComponents.getSelectedRow());
         });
         installedShipComponentsPanel.add(removeInstalledComponent);
         

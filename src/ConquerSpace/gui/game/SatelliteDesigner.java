@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.DefaultListModel;
@@ -203,17 +204,7 @@ public class SatelliteDesigner extends JInternalFrame {
             satelliteTypeListModel.addElement(s);
         }
 
-        satelliteTypeList.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //Empty
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //Empty
-            }
-
+        satelliteTypeList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 //This is the important one
@@ -239,16 +230,6 @@ public class SatelliteDesigner extends JInternalFrame {
                         layout.show(satelliteStatsPanel, TEST_SATELLITE_STRING);
                         break;
                 }
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                //Empty
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                //Empty
             }
         });
         add(satelliteList);

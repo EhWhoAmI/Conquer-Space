@@ -7,7 +7,7 @@
         "type": "UNLOCK",
         "upgradable": false,
         "difficulty": 0,
-        "action": ["field(knowledge:10)", "component(d_test)"],
+        "action": ["field(knowledge:10)"],
         "fields": [
             "Knowledge"
         ],
