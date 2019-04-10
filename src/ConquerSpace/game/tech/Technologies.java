@@ -1,12 +1,10 @@
 package ConquerSpace.game.tech;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.util.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,8 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -183,7 +179,9 @@ public class Technologies {
             String launchName = (new String(dst).trim());
 
             LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
-            c.launchSystems.add(sys);
+            if (sys != null) {
+                c.launchSystems.add(sys);
+            }
         } else if (action.startsWith("orbit")) {
             //Something you put into orbit
             char[] dst = new char[50];
@@ -213,7 +211,7 @@ public class Technologies {
 
             JSONObject s = GameController.shipComponentTemplates.stream().
                     filter(e -> e.getString("id").equals(compName)).findFirst().orElseGet(null);
-            if(s != null) {
+            if (s != null) {
                 c.addShipComponent(s);
             }
         }

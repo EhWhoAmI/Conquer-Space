@@ -1,6 +1,5 @@
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import javax.swing.JInternalFrame;

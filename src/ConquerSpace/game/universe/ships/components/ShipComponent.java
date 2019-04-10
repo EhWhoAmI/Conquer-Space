@@ -11,8 +11,8 @@ public class ShipComponent {
     protected int cost;
     protected String name;
     protected int id;
-    protected String ratingType;
     protected int rating;
+    protected int secondaryRating;
 
     public ShipComponent(int mass, int cost, String name) {
         this.mass = mass;
@@ -61,6 +61,18 @@ public class ShipComponent {
     }
 
     public String getRatingType() {
+        return "";
+    }
+
+    public int getSecondaryRating() {
+        return secondaryRating;
+    }
+
+    public void setSecondaryRating(int secondaryRating) {
+        this.secondaryRating = secondaryRating;
+    }
+    
+    public String getSecondaryRatingType() {
         return "";
     }
 }

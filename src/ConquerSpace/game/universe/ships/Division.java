@@ -1,6 +1,5 @@
 package ConquerSpace.game.universe.ships;
 
-import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.Vector;
 import java.util.ArrayList;

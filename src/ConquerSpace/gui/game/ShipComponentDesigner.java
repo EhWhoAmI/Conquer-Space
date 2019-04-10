@@ -2,7 +2,6 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.ShipComponentTypes;
-import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -51,6 +50,12 @@ public class ShipComponentDesigner extends JInternalFrame {
     private JPanel scienceComponent;
     private JLabel scienceComponentLabel;
     private final String SCIENCE_COMPONENT = "science";
+    
+    private JPanel bridgeComponent;
+    private final String BRIDGE_COMPONENT = "bridge";
+    
+    private JPanel probeComponent;
+    private final String PROBE_COMPONENT = "probe";
 
     public ShipComponentDesigner(Civilization c) {
         setTitle("Design Ship Component");

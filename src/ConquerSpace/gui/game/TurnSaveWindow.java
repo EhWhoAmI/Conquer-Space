@@ -1,9 +1,6 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.GameSpeeds;
-import ConquerSpace.gui.game.DebugStatsWindow;
-import ConquerSpace.gui.game.AlertDisplayer;
-import ConquerSpace.gui.game.InternalManual;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;

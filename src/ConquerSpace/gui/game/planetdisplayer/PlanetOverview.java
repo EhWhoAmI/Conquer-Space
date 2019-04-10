@@ -1,13 +1,13 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.gui.game.BuildPlanetSectorMenu;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import ConquerSpace.gui.game.BuildPlanetSectorMenu;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Component;

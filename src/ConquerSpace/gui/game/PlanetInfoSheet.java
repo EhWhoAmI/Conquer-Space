@@ -1,10 +1,10 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
 import ConquerSpace.gui.game.planetdisplayer.PlanetResources;
 import ConquerSpace.gui.game.planetdisplayer.PlayerPopulation;
-import ConquerSpace.game.universe.spaceObjects.Planet;
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 

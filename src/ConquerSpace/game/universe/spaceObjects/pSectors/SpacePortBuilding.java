@@ -2,9 +2,9 @@ package ConquerSpace.game.universe.spaceObjects.pSectors;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.StarDate;
-import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.gui.game.LaunchSpaceShipMenu;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;

@@ -17,6 +17,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -95,6 +96,36 @@ public class ShipDesigner extends JInternalFrame {
         JMenu newStuff = new JMenu("Classes");
         JMenuItem newShipClass = new JMenuItem("New Ship Class");
         JMenuItem saveShipClass = new JMenuItem("Save Ship Class");
+        saveShipClass.addActionListener(a -> {
+            //Save the ship class
+            ///Get the hull
+            int row = hullTable.getSelectedRow();
+            if (c.hulls.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "You need to have a hull in order for the ship to work!");
+
+            } else {
+                Hull hull = c.hulls.stream().findFirst().filter(h -> (h.getName().toLowerCase().
+                        equals(hullTable.getValueAt(row, 0).toString().toLowerCase()))).orElseGet(null);
+                if (hull != null) {
+                    ShipClass shipClass = new ShipClass(className.getText(), hull);
+                    //Add components
+
+                    if (installedShipComponents.getRowCount()> 0) {
+                        for (int i = 0; i < installedShipComponents.getRowCount(); i++) {
+                            installedShipComponents.getValueAt(row, 0);
+                            //get component, etc...
+                        }
+                    }
+                    //Check for reqired components.... Later
+                    System.out.println("Added ship class");
+                    c.shipClasses.add(shipClass);
+                    shipClassListModel.addElement(shipClass);
+                } else {
+                    //Show alert
+                    JOptionPane.showMessageDialog(this, "You need to have a hull in order for the ship to work!");
+                }
+            }
+        });
         newStuff.add(newShipClass);
         newStuff.add(saveShipClass);
         menubar.add(newStuff);
@@ -178,11 +209,12 @@ public class ShipDesigner extends JInternalFrame {
         shipInstalledComponentsScrollPane = new JScrollPane(installedShipComponents);
         removeInstalledComponent = new JButton("Remove Component");
         removeInstalledComponent.addActionListener(a -> {
-            if(installedShipComponents.getSelectedRow() != -1)
+            if (installedShipComponents.getSelectedRow() != -1) {
                 installedShipComponentsTableModel.removeRow(installedShipComponents.getSelectedRow());
+            }
         });
         installedShipComponentsPanel.add(removeInstalledComponent);
-        
+
         installedShipComponentsPanel.add(shipInstalledComponentsScrollPane);
         shipDataTabs.add("Ship Components", installedShipComponentsPanel);
 
@@ -252,7 +284,7 @@ public class ShipDesigner extends JInternalFrame {
         selectComponentButton = new JButton("Add selected component");
         selectComponentButton.addActionListener(a -> {
             int row = componentTable.getSelectedRow();
-            Vector v = ((Vector)componentTableModel.getDataVector().elementAt(componentTable.getSelectedRow()));
+            Vector v = ((Vector) componentTableModel.getDataVector().elementAt(componentTable.getSelectedRow()));
             installedShipComponentsTableModel.addRow(v.toArray());
         });
         componentTableContainer = new JPanel(new VerticalFlowLayout());

@@ -219,7 +219,7 @@
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 5,
-        "action": [],
+        "action": ["launch(Space Plane)"],
         "fields": [
             "Knowledge", "Aeronautics"
         ],
@@ -339,7 +339,7 @@
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 1,
-        "action": ["orbit(orbital telescope:1)"],
+        "action": [],
         "fields": [
             "Knowledge", "Astronomy"
         ],

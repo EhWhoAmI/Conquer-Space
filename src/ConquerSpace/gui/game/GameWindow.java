@@ -1,13 +1,13 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.PlanetDrawStats;
 import ConquerSpace.gui.renderers.SystemDrawStats;
 import ConquerSpace.gui.renderers.SystemRenderer;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.UniverseRenderer;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Dimension;
