@@ -18,4 +18,15 @@ public class TestComponent extends ShipComponent{
     public int getRating() {
         return 0;
     }
+
+    @Override
+    public Object clone() {
+        TestComponent ts =  new TestComponent();
+        ts.mass = mass;
+        ts.rating = rating;
+        ts.cost = cost;
+        ts.name = name;
+        ts.id = id;
+        return ts;
+    }
 }

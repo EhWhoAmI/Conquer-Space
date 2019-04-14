@@ -8,6 +8,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -119,7 +120,7 @@ public class GameUpdater {
             for (int i = 0; i < universe.getStarSystem(k).getPlanetCount(); i++) {
                 Planet p = universe.getStarSystem(k).getPlanet(i);
                 //Get satellites
-                for (Satellite s : p.getSatellites()) {
+                for (Orbitable s : p.getSatellites()) {
                     if (s instanceof VisionPoint) {
                         //Compute
                         int range = ((VisionPoint) s).getRange();

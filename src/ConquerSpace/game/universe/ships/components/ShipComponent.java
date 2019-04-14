@@ -5,6 +5,7 @@ package ConquerSpace.game.universe.ships.components;
  * @author Zyun
  */
 public class ShipComponent {
+
     //Mass in KG
     protected int mass;
     //Cost in credits
@@ -71,8 +72,12 @@ public class ShipComponent {
     public void setSecondaryRating(int secondaryRating) {
         this.secondaryRating = secondaryRating;
     }
-    
+
     public String getSecondaryRatingType() {
         return "";
+    }
+
+    public Object clone() {
+        return new ShipComponent(mass, cost, name);
     }
 }

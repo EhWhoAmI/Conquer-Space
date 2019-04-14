@@ -1,6 +1,9 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.ships.Orbitable;
+import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
@@ -15,6 +18,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
@@ -34,11 +38,12 @@ import javax.swing.border.TitledBorder;
  * @author Zyun
  */
 public class PlanetOverview extends JPanel {
+
     private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
     private JPanel planetSectors;
     private JPanel satellitesPanel;
-    private JList<Satellite> satelliteList;
+    private JList<Orbitable> satelliteList;
     private JLabel planetName;
     private JLabel planetPath;
     private JLabel planetType;
@@ -94,13 +99,26 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(planetType);
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
-        
+
         satellitesPanel = new JPanel();
         satellitesPanel.setBorder(new TitledBorder("Satellites"));
-        
+
         satelliteList = new JList<>(new Vector(p.getSatellites()));
         satellitesPanel.add(satelliteList);
-        
+        satelliteList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Orbitable orb = satelliteList.getSelectedValue();
+                if(orb != null && orb instanceof SpaceShip) {
+                    //Cast to space ship and show ship stats.
+                    Ship ship = (Ship) orb;
+                    //Show stats and stuff
+                    //...
+                }
+            }
+            
+        });
+
         add(planetOverview);
         add(planetSectors);
         add(satellitesPanel);
@@ -119,7 +137,7 @@ public class PlanetOverview extends JPanel {
             this.c = c;
             sectors = p.planetSectors;
             times = (int) Math.sqrt(sectors.length);
-            setPreferredSize(new Dimension(times * TILE_SIZE+2, times * TILE_SIZE+2));
+            setPreferredSize(new Dimension(times * TILE_SIZE + 2, times * TILE_SIZE + 2));
             menu = new JPopupMenu();
             addMouseListener(this);
         }
@@ -173,7 +191,7 @@ public class PlanetOverview extends JPanel {
                     info.setVisible(true);
                     info.setClosable(true);
                     info.setResizable(true);
-                    
+
                     //Hacky code to get parent internal frame.
                     Component c;
                     for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {

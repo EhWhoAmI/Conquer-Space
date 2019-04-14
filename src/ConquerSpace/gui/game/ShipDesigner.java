@@ -117,7 +117,6 @@ public class ShipDesigner extends JInternalFrame {
                         }
                     }
                     //Check for reqired components.... Later
-                    System.out.println("Added ship class");
                     c.shipClasses.add(shipClass);
                     shipClassListModel.addElement(shipClass);
                 } else {
@@ -330,5 +329,19 @@ public class ShipDesigner extends JInternalFrame {
         setResizable(true);
         //setSize(100, 100);
         pack();
+    }
+    
+    private static class ShipComponentContainer {
+
+        private JSONObject object;
+
+        public ShipComponentContainer(JSONObject object) {
+            this.object = object;
+        }
+
+        @Override
+        public String toString() {
+            return object.getString("name");
+        }
     }
 }

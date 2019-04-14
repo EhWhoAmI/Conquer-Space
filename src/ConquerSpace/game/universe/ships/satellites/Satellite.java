@@ -1,19 +1,22 @@
 package ConquerSpace.game.universe.ships.satellites;
 
 import ConquerSpace.game.universe.GalacticLocation;
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.ships.Launchable;
+import ConquerSpace.game.universe.ships.Orbitable;
 
 /**
  *
  * @author Zyun
  */
-public class Satellite implements Launchable{
+public class Satellite implements Launchable, Orbitable{
     
     protected GalacticLocation location;
     protected int mass;
     protected String name = "";
     protected int id;
     protected int owner = -1;
+    protected UniversePath orbiting = null;
         
     public Satellite(int distance, int mass) {
         this.mass = mass;
@@ -59,6 +62,15 @@ public class Satellite implements Launchable{
 
     public void setOwner(int owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public UniversePath getOrbiting() {
+        return orbiting;
+    }
+
+    public void setOrbiting(UniversePath orbiting) {
+        this.orbiting = orbiting;
     }
     
     

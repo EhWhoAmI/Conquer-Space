@@ -101,6 +101,11 @@ public class Hull {
     public String toString() {
         return getName();
     }
+
+    @Override
+    public Object clone() {
+        return new Hull(mass, space, material, shipType, thrust, name);
+    }
     
     
 }
