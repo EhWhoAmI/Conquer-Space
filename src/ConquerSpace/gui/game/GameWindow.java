@@ -4,6 +4,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.PlanetDrawStats;
 import ConquerSpace.gui.renderers.SystemDrawStats;
@@ -27,6 +28,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
@@ -136,24 +138,24 @@ public class GameWindow extends JFrame {
         allShips.addActionListener(a -> {
             addFrame(new ShipListManager(u, c));
         });
-        
+
         JMenuItem fleets = new JMenuItem("Fleets");
 
         JMenuItem shipDesigner = new JMenuItem("Ship designer");
         shipDesigner.addActionListener(a -> {
             addFrame(new ShipDesigner(c));
         });
-        
+
         JMenuItem shipComponentDesigner = new JMenuItem("Ship Component Designer");
         shipComponentDesigner.addActionListener(a -> {
             addFrame(new ShipComponentDesigner(c));
         });
-        
+
         JMenuItem satelliteDesigner = new JMenuItem("Satellite designer");
         satelliteDesigner.addActionListener(a -> {
             addFrame(new SatelliteDesigner(c));
         });
-        
+
         JMenuItem hullDesigner = new JMenuItem("Create new hull type");
         hullDesigner.addActionListener(a -> {
             addFrame(new HullCreator(c));
@@ -165,7 +167,7 @@ public class GameWindow extends JFrame {
         ships.add(shipComponentDesigner);
         ships.add(satelliteDesigner);
         ships.add(hullDesigner);
-        
+
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
@@ -232,7 +234,7 @@ public class GameWindow extends JFrame {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            if (isDragging && SwingUtilities.isRightMouseButton(e)) {
+            if (isDragging && SwingUtilities.isLeftMouseButton(e)) {
                 translateX -= ((startPoint.x - e.getX()) * (1 / scale));
                 translateY -= ((startPoint.y - e.getY()) * (1 / scale));
                 startPoint = e.getPoint();
@@ -292,6 +294,7 @@ public class GameWindow extends JFrame {
         @Override
         public void mousePressed(MouseEvent e) {
             //Started
+            //System.out.println(MouseEvent.BUTTON1);
             isDragging = true;
             startPoint = e.getPoint();
         }
@@ -299,6 +302,74 @@ public class GameWindow extends JFrame {
         @Override
         public void mouseReleased(MouseEvent e) {
             isDragging = false;
+            if (e.isPopupTrigger()) {
+                //Show popup menu
+                JPopupMenu popupMenu = new JPopupMenu();
+
+                //Show info and specific information of the sectors and stuff
+                switch (drawing) {
+                    case DRAW_UNIVERSE:
+                        //Get sector..
+                        LOGGER.info("Checking for click");
+                        sectorit:
+                        for (SystemDrawStats stats : universeRenderer.drawer.systemDrawings) {
+                            //Check for vision
+                            if (Math.hypot(((stats.getPosition().getX() + translateX) * scale - e.getX()),
+                                    ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
+                                for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
+                                    if (p.getSystemID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                        JMenuItem systemInfo = new JMenuItem("Star system: " + stats.getId());
+                                        systemInfo.addActionListener(a -> {
+                                            drawingStarSystem = p.getSystemID();
+                                            systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
+                                            drawing = DRAW_STAR_SYSTEM;
+                                            translateX = 0;
+                                            translateY = 0;
+                                            repaint();
+                                        });
+                                        popupMenu.add(systemInfo);
+                                        break sectorit;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case DRAW_STAR_SYSTEM:
+                        for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
+                            if (Math.hypot((translateX + pstats.getPos().x) * scale - e.getX(),
+                                    (translateY + pstats.getPos().y) * scale - e.getY()) < pstats.getSize()) {
+                                JMenuItem planetName = new JMenuItem("Planet " + pstats.getID());
+                                planetName.addActionListener(a -> {
+                                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
+                                    addFrame(d);
+                                });
+                                popupMenu.add(planetName);
+                                break;
+                            }
+                        }
+                        break;
+                    //Also get ship
+                    default:
+                        break;
+                }
+                JMenu selectedShips = new JMenu("Selected Ships");
+                //Get currently selected ships
+                for(Ship s : ((PlayerController)c.controller).selectedShips) {
+                    JMenu men = new JMenu(s.toString());
+                    JMenuItem gohereMenu = new JMenuItem("Go here");
+                    
+                    gohereMenu.addActionListener(a -> {
+                        s.setGoingToX(e.getX());
+                        s.setGoingToY(e.getY());
+                    });
+                    
+                    men.add(gohereMenu);
+                    selectedShips.add(men);
+                }
+
+                popupMenu.add(selectedShips);
+                popupMenu.show(this, e.getX(), e.getY());
+            }
         }
 
         @Override

@@ -1,5 +1,6 @@
 package ConquerSpace.gui.renderers;
 
+import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
@@ -123,6 +124,15 @@ public class SystemRenderer {
             }
         }
 
+        //draw spaceships
+        for(Ship ship : drawer.ships) {
+            int x = (int) (ship.getX()/10000000);
+            int y = (int) (ship.getY()/10000000);
+            //Draw dot
+            g2d.setColor(Color.yellow);
+            g2d.fill(new Ellipse2D.Float(x + 5 + translate.x, y + 5 + translate.y, 10, 10));
+            ship.getName();
+        }
         //Draw scale line
         // TODO: MAKE ACCURATE!
         Line2D.Float line = new Line2D.Float(10, 20, 50, 20);

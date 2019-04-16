@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
@@ -32,10 +33,12 @@ public class DebugStatsWindow extends JInternalFrame {
      */
     private JLabel memoryusedLabel;
 
+    private JLabel threadCountLabel;
+
     private JButton dumpUniverseButton;
 
     private JButton runTrashCompactor;
-    
+
     private JButton openConsole;
     /**
      * Universe
@@ -52,7 +55,7 @@ public class DebugStatsWindow extends JInternalFrame {
         setLayout(new VerticalFlowLayout(5, 4));
         Runtime runtime = Runtime.getRuntime();
         memoryusedLabel = new JLabel("Memory used: " + FileUtils.byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
-
+        threadCountLabel = new JLabel("Threads currently running: " + Thread.getAllStackTraces().size());
         dumpUniverseButton = new JButton("Dump universe");
         dumpUniverseButton.setFocusable(false);
         dumpUniverseButton.addActionListener((e) -> {
@@ -78,7 +81,7 @@ public class DebugStatsWindow extends JInternalFrame {
         runTrashCompactor.addActionListener((e) -> {
             System.gc();
         });
-        
+
         openConsole = new JButton("Open Console");
         openConsole.setFocusable(false);
         openConsole.addActionListener((e) -> {
@@ -86,16 +89,18 @@ public class DebugStatsWindow extends JInternalFrame {
             getDesktopPane().add(con);
         });
         add(memoryusedLabel);
+        add(threadCountLabel);
         add(dumpUniverseButton);
         add(runTrashCompactor);
         add(openConsole);
-        
+
         pack();
 
         //Ticker to tick and update the text.
         Timer ticker = new Timer(0, (e) -> {
             Runtime r = Runtime.getRuntime();
             memoryusedLabel.setText("Memory used: " + FileUtils.byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) + "/" + FileUtils.byteCountToDisplaySize(r.totalMemory()) + ". Something like " + (((((float) r.totalMemory()) - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
+            threadCountLabel.setText("Threads currently running: " + Thread.getAllStackTraces().size());
             repaint();
         });
         //Every 1 second, update. make it update ever so often, but not so that it

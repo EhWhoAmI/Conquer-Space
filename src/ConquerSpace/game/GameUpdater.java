@@ -18,9 +18,13 @@ import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.Observatory;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
+import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
+import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
@@ -64,29 +68,10 @@ public class GameUpdater {
                 Planet planet = (Planet) spaceObject;
                 //Get the control.
                 universe.control.put(p, planet.getOwnerID());
-//                if (universe.control.containsKey(new UniversePath(p.getSectorID(), p.getSystemID()))) {
-//                    if (planet.getOwnerID() > -1) {
-//                        if (planet.getOwnerID() != universe.control.get(new UniversePath(p.getSectorID(), p.getSystemID()))) {
-//                            universe.control.put(new UniversePath(p.getSectorID(), p.getSystemID()), -1);
-//                        }
-//                    }
-//                } else {
-//                    universe.control.put(new UniversePath(p.getSectorID(), p.getSystemID()), planet.getOwnerID());
-//                }
             } else if (spaceObject instanceof Star) {
                 Star star = (Star) spaceObject;
                 //Get the control.
                 universe.control.put(p, star.getOwnerID());
-//                if (universe.control.containsKey(new UniversePath(p.getSectorID(), p.getSystemID()))) {
-//                    if (star.getOwnerID() > -1) {
-//                        if (star.getOwnerID() != universe.control.get(new UniversePath(p.getSectorID(), p.getSystemID()))) {
-//                            universe.control.put(new UniversePath(p.getSectorID(), p.getSystemID()), ControlTypes.NONE_CONTROLLED);
-//                        }
-//                        //numofcivsinsystem.put(new UniversePath(p.getSectorID(), p.getSystemID()), numofcivsinsystem.get(new UniversePath(p.getSectorID(), p.getSystemID())) | star.getOwnerID());
-//                    }
-//                } else {
-//                    universe.control.put(new UniversePath(p.getSectorID(), p.getSystemID()), star.getOwnerID());
-//                }
             } else if (spaceObject instanceof StarSystem) {
                 StarSystem starsystem = (StarSystem) spaceObject;
                 int owner = -1;
@@ -470,7 +455,7 @@ public class GameUpdater {
             }
 
             public static int getLensMass(int quality, int size) {
-                return (int)(((double)quality/100d) * size * size * Math.PI);
+                return (int) (((double) quality / 100d) * size * size * Math.PI);
             }
         }
     }
@@ -485,5 +470,57 @@ public class GameUpdater {
             this.position = position;
             this.id = id;
         }
+    }
+
+    public void updateUniverse(Universe u, StarDate date) {
+        //Loop through star systems
+        for (int i = 0; i < u.getStarSystemCount(); i++) {
+            updateStarSystem(u.getStarSystem(i), date);
+        }
+    }
+
+    public void updateStarSystem(StarSystem sys, StarDate date) {
+        //Process turn of the planets then the stars.
+        //Maybe later the objects in space.
+        for (int i = 0; i < sys.getPlanetCount(); i++) {
+            processPlanet(sys.getPlanet(i), date);
+        }
+
+        for (int i = 0; i < sys.getStarCount(); i++) {
+            processStar(sys.getStar(i), date);
+        }
+    }
+
+    public void processPlanet(Planet p, StarDate date) {
+        //Process planet sectors
+        for (int i = 0; i < p.planetSectors.length; i++) {
+            //Process
+            PlanetSector planetSector = p.planetSectors[i];
+            if (planetSector instanceof RawResource) {
+
+            } else if (planetSector instanceof BuildingBuilding) {
+                BuildingBuilding build = (BuildingBuilding) planetSector;
+                if (build.getTicks() > 0)  {
+                    //build.incrementTick();
+                    build.decrementTick(GameController.GameRefreshRate);
+                } else {
+                    //Done!
+                    //Replace
+                    p.planetSectors[i] = build.getSector();
+                }
+            } else if (planetSector instanceof SpacePortBuilding) {
+                //Process
+                SpacePortBuilding build = (SpacePortBuilding) planetSector;
+                //Iterate through launchpads and process
+                for(SpacePortLaunchPad splp :build.launchPads) {
+                    splp.ticks += GameController.GameRefreshRate;
+                    //Get when to launch...
+                }
+            }
+        }
+    }
+
+    public void processStar(Star s, StarDate date) {
+
     }
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Zyun
  */
 public class Ship implements SpaceShip, Orbitable {
-
+    private static int ticker = 0;
     String sclass;
     private String name = "";
     private long X;
@@ -20,15 +20,22 @@ public class Ship implements SpaceShip, Orbitable {
     private UniversePath location;
     private boolean isOrbiting = false;
     private int mass;
+    private long goingToX;
+    private long goingToY;
 
+    private int id;
     private Hull hull;
     private ArrayList<ShipComponent> components;
 
     public Ship(ShipClass sclass, long X, long Y, Vector v, UniversePath location) {
         this.X = X;
         this.Y = Y;
+        goingToX = X;
+        goingToY = Y;
         this.v = v;
         this.location = location;
+        //Set ship's id
+        id = ticker++;
 
         components = new ArrayList<>();
         //Get components
@@ -88,6 +95,9 @@ public class Ship implements SpaceShip, Orbitable {
 
     @Override
     public String toString() {
+        if(getName().isEmpty()) {
+            return "ship";
+        }
         return (getName());
     }
 
@@ -102,5 +112,26 @@ public class Ship implements SpaceShip, Orbitable {
 
     public boolean isOrbiting() {
         return isOrbiting;
+    }
+
+    public long getGoingToX() {
+        return goingToX;
+    }
+
+    public long getGoingToY() {
+        return goingToY;
+    }
+
+    public void setGoingToX(long goingToX) {
+        this.goingToX = goingToX;
+    }
+
+    public void setGoingToY(long goingToY) {
+        this.goingToY = goingToY;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Ship && ((Ship) obj).id == this.id);
     }
 }

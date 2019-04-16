@@ -8,6 +8,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.util.CQSPLogger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,10 +26,9 @@ public class GameController {
     private static final Logger LOGGER = CQSPLogger.getLogger(GameController.class.getName());
 
     //For evals...
-
     //Rate the game refreshes buildings and stuff like that
     //Set to 5 days
-    int GameRefreshRate = (5 * 24);
+    public static int GameRefreshRate = (5 * 24);
 
     public static ArrayList<LaunchSystem> launchSystems;
     private Timer ticker;
@@ -36,6 +36,8 @@ public class GameController {
     public static ArrayList<JSONObject> satelliteTemplates;
     public static ArrayList<JSONObject> shipComponentTemplates;
     public static HashMap<String, Integer> shipTypes;
+    public static GameUpdater updater;
+
     /**
      * Constructor. Inits all components.
      */
@@ -49,18 +51,20 @@ public class GameController {
         long finish = System.currentTimeMillis();
         LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");
 
-        //Process the 0th turn and initalize the universe.
-        Globals.universe.processTurn(GameRefreshRate, Globals.date);
-
         //Init universe
-        GameUpdater updater = new GameUpdater(Globals.universe, Globals.date);
+        updater = new GameUpdater(Globals.universe, Globals.date);
         updater.initGame();
 
+        //Process the 0th turn and initalize the universe.
+        updater.updateUniverse(Globals.universe, Globals.date);
+
+        //Globals.universe.processTurn(GameRefreshRate, Globals.date);
+        
         //Load the player
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 
         int tickerSpeed = 10;
-        ticker  = new Timer(tickerSpeed, (e) -> {
+        ticker = new Timer(tickerSpeed, (e) -> {
             ticker.setDelay(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
             if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
                 tick();
@@ -80,7 +84,10 @@ public class GameController {
 
         if (Globals.date.bigint % GameRefreshRate == 0) {
             long start = System.currentTimeMillis();
-            Globals.universe.processTurn(GameRefreshRate, Globals.date);
+            //Globals.universe.processTurn(GameRefreshRate, Globals.date);
+
+            updater.updateUniverse(Globals.universe, Globals.date);
+
             for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                 Globals.universe.getCivilization(i).calculateTechLevel();
             }

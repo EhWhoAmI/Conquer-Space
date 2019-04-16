@@ -3,7 +3,9 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.ships.Ship;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 /**
  * A star system.
@@ -30,6 +32,8 @@ public class StarSystem extends SpaceObject {
      * Galactic location.
      */
     private GalacticLocation location;
+    
+    private ArrayList<Ship> spaceShips;
 
     /**
      * Creates a new star system.
@@ -41,6 +45,7 @@ public class StarSystem extends SpaceObject {
         this.location = location;
         planets = new ArrayList<>();
         stars = new ArrayList<>();
+        spaceShips = new ArrayList<>();
     }
 
     /**
@@ -157,6 +162,18 @@ public class StarSystem extends SpaceObject {
         for (Star star : stars) {
             star.processTurn(GameRefreshRate, stardate);
         }
+    }
+    
+    public void addSpaceShip(Ship ship) {
+        spaceShips.add(ship);
+    }
+    
+    public Ship getSpaceShip(int id) {
+        return spaceShips.get(id);
+    }
+    
+    public Stream<Ship> getSpaceShipStream() {
+        return spaceShips.stream();
     }
     
     /**

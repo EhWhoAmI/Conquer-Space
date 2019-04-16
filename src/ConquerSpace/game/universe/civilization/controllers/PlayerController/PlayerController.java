@@ -5,6 +5,7 @@ import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
+import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.game.AlertDisplayer;
 import ConquerSpace.gui.game.AlertNotification;
@@ -27,6 +28,7 @@ public class PlayerController implements CivilizationController {
     public GameWindow mainwindow;
     public TurnSaveWindow tsWindow;
     public AlertDisplayer alertDisplayer;
+    public ArrayList<Ship> selectedShips = new ArrayList<>();
     //public TimeIncrementWindow timeIncrementWindow;
 
     @Override

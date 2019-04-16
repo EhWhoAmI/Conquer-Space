@@ -51,4 +51,16 @@ public class BuildingBuilding extends PlanetSector{
         root.add(tofinish);
         return root;
     }
+
+    public void setTicks(int ticks) {
+        this.ticks = ticks;
+    }
+    
+    public void incrementTick(int ticks) {
+        this.ticks += ticks;
+    }
+    
+    public void decrementTick(int ticks) {
+        this.ticks -= ticks;
+    }
 }

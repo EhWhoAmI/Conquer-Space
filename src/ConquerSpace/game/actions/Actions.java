@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 
@@ -65,5 +66,18 @@ public class Actions {
         what.setLocation(planet.getUniversePath());
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
+    }
+    
+    public static void moveShip(Ship what, Civilization civ, long x, long y, Universe u) {
+        if(what.isOrbiting()) {
+            //Exit orbit
+            if( u.getSpaceObject(what.getOrbiting()) instanceof Planet) {
+                Planet p = (Planet)u.getSpaceObject(what.getOrbiting());
+                //Remove from orbit
+                p.getSatellites().remove(what);
+            }
+        }
+        what.setGoingToX(x);
+        what.setGoingToY(y);
     }
 }

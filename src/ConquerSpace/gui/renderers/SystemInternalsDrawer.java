@@ -2,6 +2,7 @@ package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -11,6 +12,7 @@ import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -23,12 +25,14 @@ public class SystemInternalsDrawer {
     public SystemInternalDrawStats stats;
     private static final Logger LOGGER = CQSPLogger.getLogger(SystemInternalsDrawer.class.getName());
     public int sizeofAU;
-
+    public ArrayList<Ship> ships;
     private Universe universe;
 
     public SystemInternalsDrawer(StarSystem sys, Universe u, Dimension bounds) {
         universe = u;
         stats = new SystemInternalDrawStats();
+        
+        ships = new ArrayList<>();
         //Get size of the star system
         long size = 0;
         for (int i = 0; i < sys.getPlanetCount(); i++) {

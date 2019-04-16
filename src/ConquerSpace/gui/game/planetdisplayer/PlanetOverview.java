@@ -11,6 +11,7 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
 import ConquerSpace.gui.game.BuildPlanetSectorMenu;
+import ConquerSpace.gui.game.ShipInformationMenu;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -109,14 +110,24 @@ public class PlanetOverview extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Orbitable orb = satelliteList.getSelectedValue();
-                if(orb != null && orb instanceof SpaceShip) {
+                if (orb != null && orb instanceof SpaceShip) {
                     //Cast to space ship and show ship stats.
                     Ship ship = (Ship) orb;
                     //Show stats and stuff
-                    //...
+                    ShipInformationMenu menu = new ShipInformationMenu(ship, c);
+                    //Hacky code to get parent internal frame.
+                    Component c;
+                    for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
+                        if (c instanceof JInternalFrame) {
+                            break;
+                        }
+                    }
+                    if (c != null) {
+                        ((JInternalFrame) c).getDesktopPane().add(menu);
+                    }
                 }
             }
-            
+
         });
 
         add(planetOverview);

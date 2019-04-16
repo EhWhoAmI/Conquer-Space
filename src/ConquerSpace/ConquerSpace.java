@@ -3,7 +3,11 @@ package ConquerSpace;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
+import java.awt.AWTEvent;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 |  `----.|  `--'  | |  |\   | |  `--'  '--.|  `--'  | |  |____ |  |\  \----.   .----)   |   |  |     /  _____  \ |  `----.|  |____ 
  \______| \______/  |__| \__|  \_____\_____\\______/  |_______|| _| `._____|   |_______/    | _|    /__/     \__\ \______||_______|
                                                                                                                                    
-*/
+ */
 /**
  * Conquer Space main class. Where everything starts.
  *
@@ -95,7 +99,7 @@ public class ConquerSpace {
                 if (!(((version.split("-"))[0]).equals(VERSION.toString().split("-")[0]))) {
                     //Then different version, update. How, idk.
                 }
-                
+
             } catch (IOException ex) {
                 LOGGER.warn("Cannot load settings. Using default", ex);
             }
@@ -120,6 +124,8 @@ public class ConquerSpace {
                 LOGGER.warn("Unable to create settings file!", ex);
             }
         }
+        //Set catch all exceptions
+        Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
 
         try {
             //Set look and feel
@@ -143,5 +149,20 @@ public class ConquerSpace {
         //New Game Menu
         MainMenu menu = new MainMenu();
         menu.setVisible(true);
+    }
+
+    static class EventQueueProxy extends EventQueue {
+
+        protected void dispatchEvent(AWTEvent newEvent) {
+            try {
+                super.dispatchEvent(newEvent);
+            } catch (Throwable t) {
+                ExceptionHandling.ExceptionMessageBox("Exception!", t);
+                //Also print stack trace if debug
+                if (true) {
+                    t.printStackTrace();
+                }
+            }
+        }
     }
 }

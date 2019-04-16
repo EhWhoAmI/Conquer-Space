@@ -9,7 +9,7 @@ import ConquerSpace.game.universe.ships.launch.LaunchSystem;
  * @author Zyun
  */
 public class SpacePortLaunchPad {
-    int ticks;
+    public int ticks;
     private Launchable launching = null;
     private LaunchSystem type;
 
