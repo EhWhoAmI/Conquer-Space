@@ -6,14 +6,14 @@ package ConquerSpace.game.universe;
  */
 public class GalacticLocation {
     private float degrees;
-    private int distance;
+    private long distance;
 
     /**
      * Constructor of the polar coordinate.
      * @param degrees degrees from north in a anticlockwise direction.
      * @param distance distance from the center.
      */
-    public GalacticLocation(float degrees, int distance) {
+    public GalacticLocation(float degrees, long distance) {
         this.degrees = (degrees%360);
         this.distance = distance;
     }
@@ -39,7 +39,7 @@ public class GalacticLocation {
      * Get the distance.
      * @return Distance.
      */
-    public int getDistance() {
+    public long getDistance() {
         return (distance);
     }
     
@@ -55,7 +55,7 @@ public class GalacticLocation {
      * Set the distance
      * @param distance Distance
      */
-    public void setDistance(int distance) {
+    public void setDistance(long distance) {
         this.distance = distance;
     }
 }

@@ -5,8 +5,9 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.gui.renderers.PlanetDrawStats;
 import ConquerSpace.gui.renderers.SystemDrawStats;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
@@ -209,7 +210,9 @@ public class GameWindow extends JFrame {
         private int drawingStarSystem = 0;
         private Universe universe;
         SystemRenderer systemRenderer;
+        public static final int BOUNDS_SIZE = 1500;
 
+        private int currentStarSystemSizeOfAU = 0;
         /**
          * Scale for the zoom. A scale of 1 is the current universe view, and it
          * can zoom to a max of 5.
@@ -255,18 +258,14 @@ public class GameWindow extends JFrame {
                         //Get sector..
                         LOGGER.info("Checking for click");
                         sectorit:
-                        for (SystemDrawStats stats : universeRenderer.drawer.systemDrawings) {
+                        for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
-                            if (Math.hypot(((stats.getPosition().getX() + translateX) * scale - e.getX()),
-                                    ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
+                            StarSystem sys = universe.getStarSystem(i);
+                            if (Math.hypot((scale * (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) - e.getX()),
+                                    (scale * (sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
-                                        LOGGER.info("Found system!" + p.getSystemID());
-                                        drawingStarSystem = p.getSystemID();
-                                        systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
-                                        drawing = DRAW_STAR_SYSTEM;
-                                        translateX = 0;
-                                        translateY = 0;
+                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                        see(sys.getId());
                                         repaint();
                                         break sectorit;
                                     }
@@ -275,11 +274,11 @@ public class GameWindow extends JFrame {
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
-                            if (Math.hypot((translateX + pstats.getPos().x) * scale - e.getX(),
-                                    (translateY + pstats.getPos().y) * scale - e.getY()) < pstats.getSize()) {
-                                LOGGER.trace("Mouse clicked in planet " + pstats.getID() + "!");
-                                PlanetInfoSheet d = new PlanetInfoSheet(universe.getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
+                        for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
+                            Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
+                            if (Math.hypot((translateX + (planet.getX() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getX(),
+                                    (translateY + (planet.getY() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize()) {
+                                PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                 add(d);
                                 break;
                             }
@@ -312,19 +311,16 @@ public class GameWindow extends JFrame {
                         //Get sector..
                         LOGGER.info("Checking for click");
                         sectorit:
-                        for (SystemDrawStats stats : universeRenderer.drawer.systemDrawings) {
+                        for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
-                            if (Math.hypot(((stats.getPosition().getX() + translateX) * scale - e.getX()),
-                                    ((stats.getPosition().getY() + translateY) * scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
+                            StarSystem sys = universe.getStarSystem(i);
+                            if (Math.hypot((scale * (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) - e.getX()),
+                                    (scale * (sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == stats.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
-                                        JMenuItem systemInfo = new JMenuItem("Star system: " + stats.getId());
+                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                        JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
                                         systemInfo.addActionListener(a -> {
-                                            drawingStarSystem = p.getSystemID();
-                                            systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
-                                            drawing = DRAW_STAR_SYSTEM;
-                                            translateX = 0;
-                                            translateY = 0;
+                                            see(sys.getId());
                                             repaint();
                                         });
                                         popupMenu.add(systemInfo);
@@ -335,12 +331,13 @@ public class GameWindow extends JFrame {
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        for (PlanetDrawStats pstats : systemRenderer.drawer.stats.planetDrawStats) {
-                            if (Math.hypot((translateX + pstats.getPos().x) * scale - e.getX(),
-                                    (translateY + pstats.getPos().y) * scale - e.getY()) < pstats.getSize()) {
-                                JMenuItem planetName = new JMenuItem("Planet " + pstats.getID());
+                        for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
+                            Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
+                            if (Math.hypot((translateX + (planet.getX() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getX(),
+                                    (translateY + (planet.getY() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize()) {
+                                JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
                                 planetName.addActionListener(a -> {
-                                    PlanetInfoSheet d = new PlanetInfoSheet(universe.getStarSystem(drawingStarSystem).getPlanet(pstats.getID()), c);
+                                    PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                     addFrame(d);
                                 });
                                 popupMenu.add(planetName);
@@ -354,15 +351,15 @@ public class GameWindow extends JFrame {
                 }
                 JMenu selectedShips = new JMenu("Selected Ships");
                 //Get currently selected ships
-                for(Ship s : ((PlayerController)c.controller).selectedShips) {
+                for (Ship s : ((PlayerController) c.controller).selectedShips) {
                     JMenu men = new JMenu(s.toString());
                     JMenuItem gohereMenu = new JMenuItem("Go here");
-                    
+
                     gohereMenu.addActionListener(a -> {
                         s.setGoingToX(e.getX());
                         s.setGoingToY(e.getY());
                     });
-                    
+
                     men.add(gohereMenu);
                     selectedShips.add(men);
                 }
@@ -392,6 +389,9 @@ public class GameWindow extends JFrame {
             drawingStarSystem = system;
             drawing = DRAW_STAR_SYSTEM;
             systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
+            currentStarSystemSizeOfAU = systemRenderer.sizeofAU;
+            translateX = 0;
+            translateY = 0;
             repaint();
         }
 

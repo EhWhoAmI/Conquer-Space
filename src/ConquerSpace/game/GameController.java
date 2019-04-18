@@ -8,7 +8,6 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.util.CQSPLogger;
 import java.util.ArrayList;
 import java.util.HashMap;

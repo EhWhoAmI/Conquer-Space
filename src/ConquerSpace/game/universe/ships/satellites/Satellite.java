@@ -31,7 +31,7 @@ public class Satellite implements Launchable, Orbitable{
      * Get orbit distance, in km. A distance of 0 means that the satellite can orbit in any orbit.
      * @return 
      */
-    public int getDistance() {
+    public long getDistance() {
         return location.getDistance();
     }
 

@@ -480,6 +480,13 @@ public class GameUpdater {
     }
 
     public void updateStarSystem(StarSystem sys, StarDate date) {
+        //Update the position
+        RendererMath.Point pt = 
+                RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation().getDistance(), 
+                        sys.getGalaticLocation().getDegrees(), new Point(0, 0), 1);
+        
+        sys.setX(pt.x);
+        sys.setY(pt.y);
         //Process turn of the planets then the stars.
         //Maybe later the objects in space.
         for (int i = 0; i < sys.getPlanetCount(); i++) {
@@ -492,6 +499,14 @@ public class GameUpdater {
     }
 
     public void processPlanet(Planet p, StarDate date) {
+        //Calculate position
+        RendererMath.Point pt = 
+                RendererMath.polarCoordToCartesianCoord(p.getOrbitalDistance(), 
+                        p.getPlanetDegrees(), new Point(0, 0), 1);
+        
+        p.setX(pt.x);
+        p.setY(pt.y);
+        
         //Process planet sectors
         for (int i = 0; i < p.planetSectors.length; i++) {
             //Process

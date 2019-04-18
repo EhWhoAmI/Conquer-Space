@@ -23,6 +23,9 @@ public class Planet extends SpaceObject {
     private int degrees;
     private int planetSize;
     
+    private long xpos;
+    private long ypos;
+    
     int id;
 
     private int ownerID = ControlTypes.NONE_CONTROLLED;
@@ -98,7 +101,8 @@ public class Planet extends SpaceObject {
             case PlanetTypes.GAS:
                 builder.append("gas");
         }
-        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + " Planet Sectors " + planetSectors.length + ":\n");
+        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + " Planet Sectors " + planetSectors.length + 
+                "Rectangular Position: " + xpos + ", " + ypos+ ":\n");
 
         for (PlanetSector s : planetSectors) {
             builder.append(s.toReadableString());
@@ -293,5 +297,21 @@ public class Planet extends SpaceObject {
     
     public void putShipInOrbit(Orbitable orb) {
         satellites.add(orb);
+    }
+    
+    public long getX() {
+        return xpos;
+    }
+    
+    public long getY() {
+        return ypos;
+    }
+    
+    public void setX(long x) {
+        xpos = x;
+    }
+    
+    public void setY(long y) {
+        ypos = y;
     }
 }

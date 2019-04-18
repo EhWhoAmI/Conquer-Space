@@ -13,30 +13,35 @@ import java.util.stream.Stream;
  * @author Zyun
  */
 public class StarSystem extends SpaceObject {
+
     /**
      * All planets in this star system.
      */
     private ArrayList<Planet> planets;
-    
+
     /**
      * All stars in this star system.
      */
     private ArrayList<Star> stars;
-    
+
     /**
      * ID of this star system.
      */
     int id;
-    
+
     /**
      * Galactic location.
      */
     private GalacticLocation location;
-    
+
     private ArrayList<Ship> spaceShips;
+
+    private long xpos;
+    private long ypos;
 
     /**
      * Creates a new star system.
+     *
      * @param id ID of this star system
      * @param location Galatic location.
      */
@@ -50,30 +55,33 @@ public class StarSystem extends SpaceObject {
 
     /**
      * Add star.
+     *
      * @param star Star
      */
     public void addStar(Star star) {
         star.setParentStarSystem(id);
         star.id = stars.size();
-        
+
         stars.add(star);
         stars.trimToSize();
     }
 
     /**
      * Add planet to this star system
+     *
      * @param planet Planet
      */
     public void addPlanet(Planet planet) {
         planet.setParentStarSystem(id);
         planet.id = planets.size();
-        
+
         planets.add(planet);
         planets.trimToSize();
     }
 
     /**
      * Get planet
+     *
      * @param i Get the planet <code>i</code>
      * @return The planet on i
      */
@@ -83,6 +91,7 @@ public class StarSystem extends SpaceObject {
 
     /**
      * Get number of planets.
+     *
      * @return number of planets
      */
     public int getPlanetCount() {
@@ -91,6 +100,7 @@ public class StarSystem extends SpaceObject {
 
     /**
      * Get the star.
+     *
      * @param i star id
      * @return star id as <code>i</code> puts it.
      */
@@ -100,6 +110,7 @@ public class StarSystem extends SpaceObject {
 
     /**
      * Get number of stars
+     *
      * @return Number of stars
      */
     public int getStarCount() {
@@ -108,15 +119,16 @@ public class StarSystem extends SpaceObject {
 
     /**
      * Get this star system's id
+     *
      * @return ID
      */
     public int getId() {
         return id;
     }
 
-
     /**
      * Get galatic location of this star system
+     *
      * @return Galatic location of this star system
      */
     public GalacticLocation getGalaticLocation() {
@@ -125,11 +137,13 @@ public class StarSystem extends SpaceObject {
 
     /**
      * Get readable string of the star system, stars and planets.
+     *
      * @return a readable string
      */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Star system " + this.id + " Location-" + location.toString() + ": [\n");
+        builder.append("Star system " + this.id + " Location-" + location.toString() + " Rectangular pos"
+                + xpos + ", " + ypos + ": [\n");
         //Display stars
         builder.append("Stars: <");
         for (Star s : stars) {
@@ -145,9 +159,10 @@ public class StarSystem extends SpaceObject {
         builder.append(">\n");
         return (builder.toString());
     }
-    
+
     /**
      * Processes turns of the planets
+     *
      * @param GameRefreshRate
      * @param stardate
      */
@@ -163,24 +178,40 @@ public class StarSystem extends SpaceObject {
             star.processTurn(GameRefreshRate, stardate);
         }
     }
-    
+
     public void addSpaceShip(Ship ship) {
         spaceShips.add(ship);
     }
-    
+
     public Ship getSpaceShip(int id) {
         return spaceShips.get(id);
     }
-    
+
     public Stream<Ship> getSpaceShipStream() {
         return spaceShips.stream();
     }
-    
+
     /**
      * Get the path of this star system
+     *
      * @return The path of this star system
      */
     public UniversePath getUniversePath() {
         return (new UniversePath(id));
+    }
+
+    public long getX() {
+        return xpos;
+    }
+    public long getY() {
+        return ypos;
+    }
+
+    public void setX(long x) {
+        xpos = x;
+    }
+
+    public void setY(long y) {
+        ypos = y;
     }
 }

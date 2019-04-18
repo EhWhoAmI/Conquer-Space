@@ -70,7 +70,7 @@ public class RendererMath {
      * <code>GalaticLocation</code>.
      * @return Point of the converted polar coordinate
      */
-    public static Point polarCoordToCartesianCoord(GalacticLocation g, Point center, int unitSize) {
+    public static java.awt.Point polarCoordToCartesianCoord(GalacticLocation g, java.awt.Point center, int unitSize) {
         //Do math to calculate the position of the sector. 
         //Distance is to the center of the sector to center of universe.
         //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
@@ -121,10 +121,10 @@ public class RendererMath {
                 ypos = 0;
         }
 
-        return (new Point(xpos, ypos));
+        return (new java.awt.Point(xpos, ypos));
     }
 
-    public static Point polarCoordToCartesianCoord(int distance, int degrees, Point center, int unitSize) {
+    public static java.awt.Point polarCoordToCartesianCoord(int distance, int degrees, java.awt.Point center, int unitSize) {
         //Do math to calculate the position of the sector. 
         //Distance is to the center of the sector to center of universe.
         //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
@@ -175,9 +175,79 @@ public class RendererMath {
                 ypos = 0;
         }
 
-        return (new Point(xpos, ypos));
+        return (new java.awt.Point(xpos, ypos));
     }
     
+    public static Point polarCoordToCartesianCoord(long distance, double degrees, java.awt.Point center, int unitSize) {
+        //Do math to calculate the position of the sector. 
+        //Distance is to the center of the sector to center of universe.
+        //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.
+        int rot = (int) Math.floor(degrees / 90);
+        degrees = degrees % 90;
+
+        //Then do a sine to calculate the length of the opposite. 
+        long xpos;
+        long ypos;
+
+        //Math.sin and Math.cos is in radians.
+        long opp = (long) (Math.sin(Math.toRadians(degrees)) * distance);
+        long adj = (long) (Math.cos(Math.toRadians(degrees)) * distance);
+        
+        assert(opp < 0);
+        assert(adj < 0);
+        //Multipy units. May have to change this for accuracy.
+        opp *= unitSize;
+        adj *= unitSize;
+
+        //This basically splits an imaginary circle into 4 quardants, and draws right angled triangles
+        //Then it calculates all that based on the theory above.
+        switch (rot) {
+            case 0:
+                //Quardant 1 on javadoc
+                xpos = (long) Math.floor(center.getX() + adj);
+                ypos = (long) Math.floor(center.getY() - opp);
+                break;
+            case 1:
+                //Quardant 2 on javadoc
+                xpos = (long) Math.floor(center.getX() - opp);
+                ypos = (long) Math.floor(center.getY() - adj);
+                break;
+            case 2:
+                //Quardant 3 on javadoc
+                xpos = (long) Math.floor(center.getX() - adj);
+                ypos = (long) Math.floor(center.getY() + opp);
+                break;
+            case 3:
+                //Quardant 4 on javadoc
+                xpos = (long) Math.floor(center.getX() + opp);
+                ypos = (long) Math.floor(center.getY() + adj);
+                break;
+            default:
+                //IDK something went wrong...
+                xpos = 0;
+                ypos = 0;
+        }
+
+        return (new RendererMath.Point(xpos, ypos));
+    }
+    
+    public static class Point {
+        public long x;
+        public long y;
+
+        public Point(long x, long y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public long getX() {
+            return x;
+        }
+
+        public long getY() {
+            return y;
+        }
+    }
     /**
      * Hide constructor.
      */
