@@ -178,7 +178,7 @@ public class RendererMath {
         return (new java.awt.Point(xpos, ypos));
     }
     
-    public static Point polarCoordToCartesianCoord(long distance, double degrees, java.awt.Point center, int unitSize) {
+    public static Point polarCoordToCartesianCoord(long distance, double degrees, Point center, int unitSize) {
         //Do math to calculate the position of the sector. 
         //Distance is to the center of the sector to center of universe.
         //So, distance is hypotenuse, we have the angle, and we need the opposite and adjectent.

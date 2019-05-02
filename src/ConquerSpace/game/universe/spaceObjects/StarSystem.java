@@ -34,7 +34,7 @@ public class StarSystem extends SpaceObject {
      */
     private GalacticLocation location;
 
-    private ArrayList<Ship> spaceShips;
+    public ArrayList<Ship> spaceShips;
 
     private long xpos;
     private long ypos;

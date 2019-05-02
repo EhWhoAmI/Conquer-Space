@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
@@ -356,8 +357,11 @@ public class GameWindow extends JFrame {
                     JMenuItem gohereMenu = new JMenuItem("Go here");
 
                     gohereMenu.addActionListener(a -> {
-                        s.setGoingToX(e.getX());
-                        s.setGoingToY(e.getY());
+                        //Move position
+                        //Convert
+                        long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE/2 - translateX) / currentStarSystemSizeOfAU) * 10_000_000;
+                        long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) / currentStarSystemSizeOfAU) * 10_000_000);
+                        Actions.moveShip(s, c, gotoX, gotoY, universe);
                     });
 
                     men.add(gohereMenu);

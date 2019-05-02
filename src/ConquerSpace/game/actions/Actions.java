@@ -75,6 +75,13 @@ public class Actions {
                 Planet p = (Planet)u.getSpaceObject(what.getOrbiting());
                 //Remove from orbit
                 p.getSatellites().remove(what);
+                
+                what.setX(p.getX());
+                what.setY(p.getY());
+                                what.setIsOrbiting(false);
+
+                //Add
+                u.getStarSystem(p.getParentStarSystem()).addSpaceShip(what);
             }
         }
         what.setGoingToX(x);

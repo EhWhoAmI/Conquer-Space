@@ -1,14 +1,19 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.ships.Orbitable;
+import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.universe.ships.ShipClass;
+import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -203,7 +208,9 @@ public class GameUpdater {
                 id %= sectorCount;
                 starting.setPlanetSector(id, obs);
                 starting.setName(c.getHomePlanetName());
-
+                //Add ship
+                Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
+                Actions.launchShip(s, starting, c);
                 //Set ownership
                 starting.setOwnerID(c.getID());
 
@@ -481,12 +488,29 @@ public class GameUpdater {
 
     public void updateStarSystem(StarSystem sys, StarDate date) {
         //Update the position
-        RendererMath.Point pt = 
-                RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation().getDistance(), 
-                        sys.getGalaticLocation().getDegrees(), new Point(0, 0), 1);
-        
+        RendererMath.Point pt
+                = RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation().getDistance(),
+                        sys.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
+
         sys.setX(pt.x);
         sys.setY(pt.y);
+
+        //Move ships
+        for (Ship ship : sys.spaceShips) {
+            double x = ship.getGoingToX() - ship.getX();
+            double y = ship.getGoingToY() - ship.getY();
+
+            //Normalize
+            double len = Math.sqrt(x * x + y * y);
+            if (len > 0) {
+                x /= len;
+                y /= len;
+            }
+            System.out.println(ship.getX() + " " + ship.getY());
+            ship.translate((long) (x * ship.getMaxSpeed() * 5), (long) (y * ship.getMaxSpeed() * 5));
+            System.out.println(ship.getX() + " " + ship.getY());
+
+        }
         //Process turn of the planets then the stars.
         //Maybe later the objects in space.
         for (int i = 0; i < sys.getPlanetCount(); i++) {
@@ -500,13 +524,13 @@ public class GameUpdater {
 
     public void processPlanet(Planet p, StarDate date) {
         //Calculate position
-        RendererMath.Point pt = 
-                RendererMath.polarCoordToCartesianCoord(p.getOrbitalDistance(), 
-                        p.getPlanetDegrees(), new Point(0, 0), 1);
-        
+        RendererMath.Point pt
+                = RendererMath.polarCoordToCartesianCoord(p.getOrbitalDistance(),
+                        p.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
+
         p.setX(pt.x);
         p.setY(pt.y);
-        
+
         //Process planet sectors
         for (int i = 0; i < p.planetSectors.length; i++) {
             //Process
@@ -515,7 +539,7 @@ public class GameUpdater {
 
             } else if (planetSector instanceof BuildingBuilding) {
                 BuildingBuilding build = (BuildingBuilding) planetSector;
-                if (build.getTicks() > 0)  {
+                if (build.getTicks() > 0) {
                     //build.incrementTick();
                     build.decrementTick(GameController.GameRefreshRate);
                 } else {
@@ -527,7 +551,7 @@ public class GameUpdater {
                 //Process
                 SpacePortBuilding build = (SpacePortBuilding) planetSector;
                 //Iterate through launchpads and process
-                for(SpacePortLaunchPad splp :build.launchPads) {
+                for (SpacePortLaunchPad splp : build.launchPads) {
                     splp.ticks += GameController.GameRefreshRate;
                     //Get when to launch...
                 }

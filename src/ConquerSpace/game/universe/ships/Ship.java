@@ -26,6 +26,7 @@ public class Ship implements SpaceShip, Orbitable {
     private int id;
     private Hull hull;
     private ArrayList<ShipComponent> components;
+    private long maxSpeed = 1_0000_000;
 
     public Ship(ShipClass sclass, long X, long Y, Vector v, UniversePath location) {
         this.X = X;
@@ -133,5 +134,22 @@ public class Ship implements SpaceShip, Orbitable {
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof Ship && ((Ship) obj).id == this.id);
+    }
+
+    public void setMaxSpeed(long maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public long getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public int getMass() {
+        return mass;
+    }
+    
+    public void translate(long x, long y) {
+        this.X+=x;
+        this.Y+=y;
     }
 }
