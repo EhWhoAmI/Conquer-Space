@@ -7,7 +7,7 @@
 
 from ConquerSpace.game.universe import UniversePath
 from ConquerSpace.game.universe import GalacticLocation
-from ConquerSpace.game.universe.civilization import Civilization
+from ConquerSpace.game.universe.civilization import *
 from ConquerSpace.game.universe.civilization.controllers.AIController import AIController
 from ConquerSpace.game.universe.civilization.controllers.PlayerController import PlayerController
 from ConquerSpace.game.universe.resources import RawResourceTypes

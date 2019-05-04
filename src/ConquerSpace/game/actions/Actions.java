@@ -78,7 +78,7 @@ public class Actions {
                 
                 what.setX(p.getX());
                 what.setY(p.getY());
-                                what.setIsOrbiting(false);
+                what.setIsOrbiting(false);
 
                 //Add
                 u.getStarSystem(p.getParentStarSystem()).addSpaceShip(what);
