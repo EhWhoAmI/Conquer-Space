@@ -4,6 +4,8 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
+import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
+import ConquerSpace.game.universe.generators.UniverseGenerator;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
@@ -235,13 +237,14 @@ public class NewGame extends JFrame implements ActionListener {
                 // Start time of logging
                 long loadingStart = System.currentTimeMillis();
                 //Init script engine
-                RunScript s = new RunScript(ResourceLoader.loadResource("script.python.universegen.main"));
+                //RunScript s = new RunScript(ResourceLoader.loadResource("script.python.universegen.main"));
 
-                s.addVar("universeConfig", config);
-                s.addVar("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
-                s.exec();
-                Universe universe = (Universe) ((PyObjectDerived) s.getObject("universeObject")).__tojava__(Universe.class);
-
+                //s.addVar("universeConfig", config);
+                //s.addVar("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
+                //s.exec();
+                //Universe universe = (Universe) ((PyObjectDerived) s.getObject("universeObject")).__tojava__(Universe.class);
+                DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
+                Universe universe = gen.generate(config, civilizationConfig, seed);
                 //Logger end time
                 long loadingEnd = System.currentTimeMillis();
                 LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");

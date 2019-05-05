@@ -23,7 +23,6 @@ public class Resource {
             case RawResourceTypes.ROCK:
                 name = "Rock";
                 break;
-
             case RawResourceTypes.METAL:
                 name = "Metal";
                 break;
@@ -47,7 +46,6 @@ public class Resource {
             case RawResourceTypes.ROCK:
                 name = "Rock";
                 break;
-
             case RawResourceTypes.METAL:
                 name = "Metal";
                 break;
