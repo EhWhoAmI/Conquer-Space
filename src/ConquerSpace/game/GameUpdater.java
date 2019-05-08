@@ -10,6 +10,7 @@ import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
@@ -28,6 +29,7 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.Observatory;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import ConquerSpace.game.universe.spaceObjects.pSectors.ResourceStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
 import ConquerSpace.gui.renderers.RendererMath;
@@ -208,6 +210,20 @@ public class GameUpdater {
                 id %= sectorCount;
                 starting.setPlanetSector(id, obs);
                 starting.setName(c.getHomePlanetName());
+                //Add resource storage
+                ResourceStorage resourceStorage = new ResourceStorage();
+                //Add the various resources
+                resourceStorage.addResourceTypeStore(RawResourceTypes.ROCK);
+                resourceStorage.addResourceTypeStore(RawResourceTypes.GAS);
+                resourceStorage.addResourceTypeStore(RawResourceTypes.METAL);
+                resourceStorage.addResourceTypeStore(RawResourceTypes.FOOD);
+                resourceStorage.addResourceTypeStore(RawResourceTypes.ENERGY);
+                id++;
+                id %= sectorCount;
+                resourceStorage.setId(id);
+                starting.setPlanetSector(id, resourceStorage);
+
+                //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 Actions.launchShip(s, starting, c);

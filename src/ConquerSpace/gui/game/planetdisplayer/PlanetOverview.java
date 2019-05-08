@@ -10,6 +10,7 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import ConquerSpace.game.universe.spaceObjects.pSectors.ResourceStorage;
 import ConquerSpace.gui.game.BuildPlanetSectorMenu;
 import ConquerSpace.gui.game.ShipInformationMenu;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -171,6 +172,8 @@ public class PlanetOverview extends JPanel {
                         g2d.setColor(Color.blue);
                     } else if (sectors[count] instanceof BuildingBuilding) {
                         g2d.setColor(Color.yellow);
+                    } else if(sectors[count] instanceof ResourceStorage) {
+                        g2d.setColor(Color.magenta);
                     }
 
                     g2d.fill(rect);

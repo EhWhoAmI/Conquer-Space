@@ -7,7 +7,6 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.ResourceLoader;
-import ConquerSpace.util.scripts.RunScript;
 import java.util.ArrayList;
 
 /**
@@ -18,13 +17,9 @@ public class AIController implements CivilizationController{
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
-        RunScript script = new RunScript(ResourceLoader.loadResource("script.python.ai.generation.normal.main"));
-        ArrayList<Action> actions = new ArrayList<>();
-        script.addVar("civ", c);
-        script.addVar("actions", actions);
-        script.exec();
         //For now comment it out... Until we do the ai
         //actions = (ArrayList <Action>) script.getObject("actions");
+        ArrayList<Action> actions = new ArrayList<>();
         return actions;
     }   
 

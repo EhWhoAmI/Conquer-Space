@@ -19,10 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.apache.logging.log4j.LogManager;
-import org.python.core.PyException;
-import org.python.core.PyInteger;
-import org.python.core.PyLong;
-import org.python.core.PyObject;
 
 /**
  *
@@ -138,19 +134,11 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
             try {
                 maxPopulation = Long.parseLong(maxPopulationTextField.getText());
                 //Load it from js
-                PyObject function = Globals.pythonEngine.eval("calculatePopulationStorageCost");
-                long o = function.__call__(new PyLong(maxPopulation)).asLong();
-                costLabel.setText("Cost : " + o);
+
+                costLabel.setText("Cost : " + 100);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
-            } catch (final PyException ex) {
-                LogManager.getLogger("ErrorLog").error("Python error " + ex.toString(), ex);
-                String trace = "None";
-                if (ex.traceback != null) {
-                    trace = ex.traceback.dumpStack();
-                }
-                ExceptionHandling.ExceptionMessageBox("Script error: " + ex.type.toString() + ".\nPython trace: \n" + trace, ex);
-                System.exit(1);
+
             }
         }
     }
@@ -198,10 +186,8 @@ public class BuildPlanetSectorMenu extends JInternalFrame {
             long pop = 0;
             try {
                 pop = Long.parseLong(maxPopulation.getText());
-                PyObject function = Globals.pythonEngine.eval("calculateSpacePortCost");
 
-                long price = function.__call__(new PyLong(pop), new PyInteger(((LaunchSystem) launchTypesValue.getSelectedItem()).getConstructCost())).asInt();
-                costLabel.setText("Cost : " + price);
+                costLabel.setText("Cost : " + 100);
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
             }

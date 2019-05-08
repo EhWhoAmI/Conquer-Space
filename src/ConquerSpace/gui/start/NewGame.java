@@ -5,12 +5,9 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
-import ConquerSpace.game.universe.generators.UniverseGenerator;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
-import ConquerSpace.util.ResourceLoader;
-import ConquerSpace.util.scripts.RunScript;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -28,8 +25,6 @@ import javax.swing.SpinnerListModel;
 import javax.swing.border.LineBorder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.python.core.PyException;
-import org.python.core.PyObjectDerived;
 
 /**
  *
@@ -202,7 +197,6 @@ public class NewGame extends JFrame implements ActionListener {
             //Show loading screen
             Loading load = new Loading();
             UniverseConfig config = new UniverseConfig();
-            try {
                 //This button will only be pressed by the `done` button.
                 //Read all the info, pass to scripts.
                 config.setUniverseSize((String) universeSizeBox.getSelectedItem());
@@ -236,13 +230,6 @@ public class NewGame extends JFrame implements ActionListener {
 
                 // Start time of logging
                 long loadingStart = System.currentTimeMillis();
-                //Init script engine
-                //RunScript s = new RunScript(ResourceLoader.loadResource("script.python.universegen.main"));
-
-                //s.addVar("universeConfig", config);
-                //s.addVar("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
-                //s.exec();
-                //Universe universe = (Universe) ((PyObjectDerived) s.getObject("universeObject")).__tojava__(Universe.class);
                 DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
                 Universe universe = gen.generate(config, civilizationConfig, seed);
                 //Logger end time
@@ -256,15 +243,6 @@ public class NewGame extends JFrame implements ActionListener {
                 System.gc();
                 load.setVisible(false);
                 new GameController();
-            } catch (final PyException ex) {
-                LogManager.getLogger("ErrorLog").error("Python error " + ex.toString() + " Seed = " + seedText.getText(), ex);
-                String trace = "None";
-                if (ex.traceback != null) {
-                    trace = ex.traceback.dumpStack();
-                }
-                ExceptionHandling.ExceptionMessageBox("Script error: " + ex.type.toString() + ".\nPython trace: \n" + trace + "\nSeed: " + config.seed, ex);
-                System.exit(1);
-            }
         } else if (e.getSource() == civColorChooserButton) {
             //Show the civ color chooser
             civColor = JColorChooser.showDialog(null, "Choose Civilization Color", civColor);
