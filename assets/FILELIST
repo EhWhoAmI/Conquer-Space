@@ -10,8 +10,5 @@ assets/manuals/res/0.png
 assets/manuals/res/1.png
 assets/manuals/res/2.png
 assets/manuals/manlist.properties
-assets/scripts/python/ai/normal/main.py
-assets/scripts/python/universeGen/main.py
-assets/scripts/python/processing/building/buildingCosts.py
 assets/tech/fields.xml
 assets/tech/techs/default.json

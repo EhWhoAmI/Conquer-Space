@@ -13,6 +13,7 @@ import ConquerSpace.game.universe.civilization.controllers.CivilizationControlle
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.ships.hull.Hull;
@@ -74,6 +75,7 @@ public class Civilization {
     public ArrayList<JSONObject> satelliteTemplates;
 
     public ArrayList<VisionPoint> visionPoints;
+    public ArrayList<ResourceStockpile> resourceStorages;
 
     public ArrayList<SpaceShip> spaceships;
     public ArrayList<ShipClass> shipClasses;
@@ -114,6 +116,7 @@ public class Civilization {
         satelliteTemplates = new ArrayList<>();
 
         visionPoints = new ArrayList<>();
+        resourceStorages = new ArrayList<>();
 
         spaceships = new ArrayList<>();
         shipClasses = new ArrayList<>();

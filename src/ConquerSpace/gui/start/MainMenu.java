@@ -5,6 +5,7 @@ import static ConquerSpace.ConquerSpace.localeMessages;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,6 +44,8 @@ public class MainMenu extends JFrame {
         setLayout(new GridLayout(2, 1, 10, 10));
 
         TopBanner topBanner = new TopBanner();
+        topBanner.setPreferredSize(new Dimension(600, 150));
+        
         topBanner.repaint();
         //Add the classes on the bottom
         add(topBanner);
@@ -74,8 +77,9 @@ public class MainMenu extends JFrame {
                 //Image is a bit small though.
                 g2d.drawImage(ImageIO.read(new File(
                         System.getProperty("user.dir")
-                        + "/assets/img/title.png")), null, 0, 0);
+                        + "/assets/img/cqspbanner.png")), null, 0, 0);
             } catch (IOException ex) {
+                System.out.println("sdf"); 
             }
 
         }

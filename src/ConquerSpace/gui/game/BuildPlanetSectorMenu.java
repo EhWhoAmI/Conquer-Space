@@ -1,13 +1,11 @@
 package ConquerSpace.gui.game;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
-import ConquerSpace.util.ExceptionHandling;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,7 +16,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import org.apache.logging.log4j.LogManager;
 
 /**
  *

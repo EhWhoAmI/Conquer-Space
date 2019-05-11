@@ -11,6 +11,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
+import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
@@ -29,6 +30,7 @@ import ConquerSpace.game.universe.spaceObjects.pSectors.Observatory;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import ConquerSpace.game.universe.spaceObjects.pSectors.RawResourceGenerator;
 import ConquerSpace.game.universe.spaceObjects.pSectors.ResourceStorage;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
 import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
@@ -41,6 +43,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
@@ -211,7 +215,7 @@ public class GameUpdater {
                 starting.setPlanetSector(id, obs);
                 starting.setName(c.getHomePlanetName());
                 //Add resource storage
-                ResourceStorage resourceStorage = new ResourceStorage();
+                ResourceStorage resourceStorage = new ResourceStorage(starting);
                 //Add the various resources
                 resourceStorage.addResourceTypeStore(RawResourceTypes.ROCK);
                 resourceStorage.addResourceTypeStore(RawResourceTypes.GAS);
@@ -222,7 +226,14 @@ public class GameUpdater {
                 id %= sectorCount;
                 resourceStorage.setId(id);
                 starting.setPlanetSector(id, resourceStorage);
+                c.resourceStorages.add(resourceStorage);
 
+                RawResourceGenerator generator = new RawResourceGenerator(RawResourceTypes.ENERGY, id, 10);
+                id++;
+                id%=sectorCount;
+                generator.setId(id);
+                starting.setPlanetSector(id, generator);
+                
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
@@ -547,6 +558,13 @@ public class GameUpdater {
         p.setX(pt.x);
         p.setY(pt.y);
 
+        //Get the amount of resources to add
+        HashMap<Integer, Integer> resources = new HashMap<>();
+        resources.put(RawResourceTypes.ROCK, 0);
+        resources.put(RawResourceTypes.GAS, 0);
+        resources.put(RawResourceTypes.METAL, 0);
+        resources.put(RawResourceTypes.FOOD, 0);
+        resources.put(RawResourceTypes.ENERGY, 0);
         //Process planet sectors
         for (int i = 0; i < p.planetSectors.length; i++) {
             //Process
@@ -571,11 +589,38 @@ public class GameUpdater {
                     splp.ticks += GameController.GameRefreshRate;
                     //Get when to launch...
                 }
+            } else if (planetSector instanceof RawResourceGenerator) {
+                //Add the resources
+                RawResourceGenerator rrg = (RawResourceGenerator) planetSector;
+                //Process
+                resources.put(rrg.getResourceMined(), resources.get(rrg.getResourceMined()) + rrg.getAmountMinedPerTurn());
             }
         }
+        //Process storing of resourcese
+        if (p.getOwnerID() >= 0) {
+            for (Map.Entry<Integer, Integer> re : resources.entrySet()) {
+                Integer key = re.getKey();
+                Integer value = re.getValue();
+                storeResource(key, value, p.getOwnerID(), p.getUniversePath());
+            }
+        }
+
     }
 
     public void processStar(Star s, StarDate date) {
 
+    }
+
+    public void storeResource(int resourceType, int amount, int owner, UniversePath from) {
+        //Process
+        Civilization c = universe.getCivilization(owner);
+        for (ResourceStockpile rs : c.resourceStorages) {
+            //Get by positon...
+            //For now, we process only if it is on the planet or not.
+            if (rs.canStore(resourceType)) {
+                rs.addResource(resourceType, amount);
+                break;
+            }
+        }
     }
 }

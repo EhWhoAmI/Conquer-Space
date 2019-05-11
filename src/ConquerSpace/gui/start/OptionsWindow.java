@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -38,8 +37,12 @@ public class OptionsWindow extends JFrame{
         deleteLogsButton.addActionListener((e) -> {
             //Get Log files
             File logDir = new File(System.getProperty("user.dir") + "/logs");
-            if (!FileUtils.deleteQuietly(logDir)){
-                LOGGER.info("Delete dir unsucessful");
+            for(File f : logDir.listFiles()) {
+                try{
+                f.delete();
+                }catch (Exception ex) {
+                    
+                }
             }
         });
         logsPanel.add(deleteLogsLabel);

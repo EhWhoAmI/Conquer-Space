@@ -72,8 +72,13 @@
     -->
     <property name="log4j2.configurationFile" value="${user.dir}/assets/log4j2.xml"/>
     <property name="log4j2.debug" value="${user.dir}/assets/log4j2.xml"/>
-    <target  name="-post-jar">
+    
+    <target name="-post-compile">
+        <copy todir="${dist.dir}/assets" >  
+            <fileset dir="assets" includes="**"/>  
+            
+        </copy> 
         <buildnumber file="assets/BUILDNO"/>
-        <echo message="Changing build number"/>
+            <echo message="Changing build number"/>
     </target>
 </project>

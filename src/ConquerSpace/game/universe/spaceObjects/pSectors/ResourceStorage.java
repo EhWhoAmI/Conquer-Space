@@ -1,7 +1,9 @@
 package ConquerSpace.game.universe.spaceObjects.pSectors;
 
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.universe.spaceObjects.Planet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -20,9 +22,13 @@ public class ResourceStorage extends PlanetSector implements ResourceStockpile {
 
     private HashMap<Integer, Integer> resources;
 
-    public ResourceStorage() {
+    private int system;
+    private int planet;
+    public ResourceStorage(Planet parent) {
         resources = new HashMap<>();
         upkeep = 0;
+        planet = parent.getId();
+        system = parent.getParentStarSystem();
     }
 
     @Override
@@ -94,5 +100,15 @@ public class ResourceStorage extends PlanetSector implements ResourceStockpile {
 
         root.add(scrollPane);
         return root;
+    }
+
+    @Override
+    public UniversePath getUniversePath() {
+        return new UniversePath(system, planet);
+    }
+
+    @Override
+    public boolean canStore(int type) {
+        return (resources.containsKey(type));
     }
 }
