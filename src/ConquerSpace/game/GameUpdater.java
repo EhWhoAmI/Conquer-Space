@@ -1,6 +1,9 @@
 package ConquerSpace.game;
 
+import ConquerSpace.Globals;
+import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
@@ -620,6 +623,42 @@ public class GameUpdater {
             if (rs.canStore(resourceType)) {
                 rs.addResource(resourceType, amount);
                 break;
+            }
+        }
+    }
+    
+    public void processResearch() {
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+            Civilization c = Globals.universe.getCivilization(i);
+            for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+                if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
+                    //Then tech is finished
+                    c.researchTech(t);
+                    c.civResearch.remove(t);
+                    c.currentlyResearchingTechonologys.remove(t);
+                    //Alert civ
+                    c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
+                } else {
+                    //Increment by number of ticks
+                    c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill() * GameRefreshRate);
+                }
+            }
+        }
+    }
+    
+    public void processResources() {
+        System.out.println("asdf");
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+            Civilization c = Globals.universe.getCivilization(i);
+            //Process resources
+            for(ResourceStockpile s : c.resourceStorages) {
+                //Get resource types allowed, and do stuff
+                //c.resourceList.
+                for(int type : s.storedTypes()) {
+                    //add to index
+                    int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
+                    c.resourceList.put(type, amountToAdd);
+                }
             }
         }
     }

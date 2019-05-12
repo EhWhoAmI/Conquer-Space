@@ -58,16 +58,16 @@ public class GameController {
         updater.updateUniverse(Globals.universe, Globals.date);
 
         //Globals.universe.processTurn(GameRefreshRate, Globals.date);
-        
         //Load the player
         Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
 
         int tickerSpeed = 10;
         ticker = new Timer(tickerSpeed, (e) -> {
             ticker.setDelay(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
+            updater.calculateVision();
+
             if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
                 tick();
-                updater.calculateVision();
             }
         }
         );
@@ -92,30 +92,14 @@ public class GameController {
             }
             //Do tech...
             //Increment tech
-            processResearch();
+            updater.processResearch();
+
+            //Increment resources
+            updater.processResources();
 
             long end = System.currentTimeMillis();
 
             LOGGER.trace("Took " + (end - start) + " ms");
-        }
-    }
-
-    public void processResearch() {
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Civilization c = Globals.universe.getCivilization(i);
-            for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
-                if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
-                    //Then tech is finished
-                    c.researchTech(t);
-                    c.civResearch.remove(t);
-                    c.currentlyResearchingTechonologys.remove(t);
-                    //Alert civ
-                    c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
-                } else {
-                    //Increment by number of ticks
-                    c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill() * GameRefreshRate);
-                }
-            }
         }
     }
 }

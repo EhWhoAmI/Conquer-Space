@@ -78,7 +78,9 @@
             <fileset dir="assets" includes="**"/>  
             
         </copy> 
+    </target>
+    <target name="-post-jar">
         <buildnumber file="assets/BUILDNO"/>
-            <echo message="Changing build number"/>
+        <echo message="Changing build number"/>
     </target>
 </project>

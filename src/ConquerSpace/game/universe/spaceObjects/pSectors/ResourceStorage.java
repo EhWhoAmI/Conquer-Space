@@ -4,9 +4,9 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,6 +24,7 @@ public class ResourceStorage extends PlanetSector implements ResourceStockpile {
 
     private int system;
     private int planet;
+
     public ResourceStorage(Planet parent) {
         resources = new HashMap<>();
         upkeep = 0;
@@ -110,5 +111,16 @@ public class ResourceStorage extends PlanetSector implements ResourceStockpile {
     @Override
     public boolean canStore(int type) {
         return (resources.containsKey(type));
+    }
+
+    @Override
+    public int[] storedTypes() {        
+        Integer[] array = Arrays.copyOf(resources.keySet().toArray(), resources.keySet().size(), Integer[].class);
+        int[] arr = new int[array.length];
+        int k = 0;
+        for(int i : array) {
+            arr[k++] = i;
+        }
+        return arr;
     }
 }

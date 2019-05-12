@@ -13,4 +13,5 @@ public class RawResourceTypes {
     public static final int METAL = 2;
     public static final int FOOD = 3;
     public static final int ENERGY = 4;
+    public static final String[] RESOURCE_NAMES = {"Gas", "Rock", "Metal", "Food", "Energy"};
 }

@@ -13,4 +13,6 @@ public interface ResourceStockpile {
     //Describe position
     public UniversePath getUniversePath();
     public boolean canStore(int type);
+    
+    public int[] storedTypes();
 }

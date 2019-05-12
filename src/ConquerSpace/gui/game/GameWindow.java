@@ -170,6 +170,14 @@ public class GameWindow extends JFrame {
         ships.add(satelliteDesigner);
         ships.add(hullDesigner);
 
+        JMenu resources = new JMenu("Resources");
+        JMenuItem resourceIndex = new JMenuItem("Resources");
+        resourceIndex.addActionListener(a -> {
+            addFrame(new ResourceManager(c));
+        });
+        
+        resources.add(resourceIndex);
+        
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
@@ -177,6 +185,7 @@ public class GameWindow extends JFrame {
         menuBar.add(ownCivInfo);
         menuBar.add(techonology);
         menuBar.add(ships);
+        menuBar.add(resources);
         desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
         //desktopPane.setBackground(Color.cyan);
