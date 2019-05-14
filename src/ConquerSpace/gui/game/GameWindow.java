@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -50,18 +51,24 @@ public class GameWindow extends JFrame {
 
     private PlayerController controller;
 
+    private MainInterfaceWindow mainInterfaceWindow;
+
     public GameWindow(Universe u, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.c = c;
         desktopPane = new CQSPDesktop(u);
         menuBar = new JMenuBar();
 
+        mainInterfaceWindow = new MainInterfaceWindow(c, u);
+        addFrame(mainInterfaceWindow);
         //Edit menu bar
         JMenu windows = new JMenu("Windows");
-        //JMenuItem timeIncrementwindow = new JMenuItem("Time incrementor");
-        //timeIncrementwindow.addActionListener(a -> {
-        //controller.timeIncrementWindow.setVisible(true);
-        //});
+        JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
+        timeIncrementwindow.addActionListener(a -> {
+            mainInterfaceWindow.setVisible(true);
+        });
+        windows.add(timeIncrementwindow);
+
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
         pauseplayButton.addActionListener(a -> {
@@ -127,7 +134,7 @@ public class GameWindow extends JFrame {
         JMenuItem techResearcher = new JMenuItem("Research Techonologies");
         techResearcher.addActionListener(e -> {
             ResearchViewer viewer = new ResearchViewer(u.getCivilization(0));
-            addFrame(viewer);
+            //addFrame(viewer);
         });
 
         techResearcher.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
@@ -175,9 +182,9 @@ public class GameWindow extends JFrame {
         resourceIndex.addActionListener(a -> {
             addFrame(new ResourceManager(c));
         });
-        
+
         resources.add(resourceIndex);
-        
+
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
@@ -186,6 +193,16 @@ public class GameWindow extends JFrame {
         menuBar.add(techonology);
         menuBar.add(ships);
         menuBar.add(resources);
+
+        //Set timer
+        Timer time = new Timer(100, a -> {
+            mainInterfaceWindow.update();
+            desktopPane.repaint();
+        });
+
+        time.setRepeats(true);
+        time.start();
+
         desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
         //desktopPane.setBackground(Color.cyan);
@@ -288,8 +305,11 @@ public class GameWindow extends JFrame {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
                             if (Math.hypot((translateX + (planet.getX() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getX(),
                                     (translateY + (planet.getY() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize()) {
-                                PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
-                                add(d);
+                                //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
+                                //add(d);
+                                mainInterfaceWindow.setSelectedPlanet(planet);
+                                mainInterfaceWindow.setSelectedTab(1);
+
                                 break;
                             }
                         }
@@ -347,8 +367,10 @@ public class GameWindow extends JFrame {
                                     (translateY + (planet.getY() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize()) {
                                 JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
                                 planetName.addActionListener(a -> {
-                                    PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
-                                    addFrame(d);
+                                    //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
+                                    //addFrame(d);
+                                    mainInterfaceWindow.setSelectedPlanet(planet);
+                                    mainInterfaceWindow.setSelectedTab(1);
                                 });
                                 popupMenu.add(planetName);
                                 break;
@@ -368,7 +390,7 @@ public class GameWindow extends JFrame {
                     gohereMenu.addActionListener(a -> {
                         //Move position
                         //Convert
-                        long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE/2 - translateX) / currentStarSystemSizeOfAU) * 10_000_000;
+                        long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) / currentStarSystemSizeOfAU) * 10_000_000;
                         long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) / currentStarSystemSizeOfAU) * 10_000_000);
                         Actions.moveShip(s, c, gotoX, gotoY, universe);
                     });

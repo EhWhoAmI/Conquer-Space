@@ -7,12 +7,10 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.Timer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -20,12 +18,13 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Zyun
  */
-public class ResearchViewer extends JInternalFrame implements ListSelectionListener {
+public class ResearchViewer extends JPanel implements ListSelectionListener {
 
     private JTabbedPane pane;
 
     private JPanel techResearcher;
     private JList<Technology> tech;
+    private DefaultListModel<Technology> list;
     private JPanel techInfoPanel;
     private JLabel techName;
     private JLabel techdifficulity;
@@ -41,12 +40,25 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
 
     public ResearchViewer(Civilization c) {
         this.c = c;
+        init();
+
+        //Timer researchingTechticker = new Timer(100, (e) -> {
+            update();
+        //});
+
+        //researchingTechticker.setRepeats(true);
+        //researchingTechticker.start();
+
+        add(pane);
+    }
+
+    public void init() {
         pane = new JTabbedPane();
         techResearcher = new JPanel();
         techResearcher.setLayout(new GridLayout(1, 2));
 
         //Get the list of researched tech
-        DefaultListModel<Technology> list = new DefaultListModel<>();
+        list = new DefaultListModel<>();
         //list.addElement(element);
         for (Technology t : c.civTechs.keySet()) {
             if (c.civTechs.get(t) == Technologies.REVEALED) {
@@ -98,30 +110,6 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         techResearcher.add(tech);
         techResearcher.add(techInfoPanel);
 
-        Timer researchingTechticker = new Timer(100, (e) -> {
-            for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
-                if ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
-                    researchingTech.setText(t.getName());
-                    researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
-                    //720 is number of ticks in a month
-                    estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
-                } else {
-                    //Set everything to empty
-                    researchingTech.setText("");
-                    researcher.setText("");
-                    estTimeLeft.setText("");
-                }
-            }
-            //Add all techs
-            for (Technology t : c.civTechs.keySet()) {
-                if (c.civTechs.get(t) == Technologies.REVEALED && !list.contains(t)) {
-                    list.addElement(t);
-                }
-            }
-        });
-
-        researchingTechticker.setRepeats(true);
-        researchingTechticker.start();
         pane.addChangeListener((e) -> {
             for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
                 researchingTech.setText(t.getName());
@@ -131,18 +119,32 @@ public class ResearchViewer extends JInternalFrame implements ListSelectionListe
         });
         pane.addTab("Research", techResearcher);
         pane.addTab("Researching", researchProgressPanel);
+    }
 
-        add(pane);
-        setSize(600, 200);
-        setVisible(true);
-        setClosable(true);
-        setResizable(true);
+    public void update() {
+        for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+            if ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
+                researchingTech.setText(t.getName());
+                researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
+                //720 is number of ticks in a month
+                estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+            } else {
+                //Set everything to empty
+                researchingTech.setText("");
+                researcher.setText("");
+                estTimeLeft.setText("");
+            }
+        }
+        //Add all techs
+        for (Technology t : c.civTechs.keySet()) {
+            if (c.civTechs.get(t) == Technologies.REVEALED && !list.contains(t)) {
+                list.addElement(t);
+            }
+        }
     }
 
     @Override
-
-    public void valueChanged(ListSelectionEvent e
-    ) {
+    public void valueChanged(ListSelectionEvent e) {
         if (tech.getModel().getSize() > 0 && tech.getSelectedValue() != null) {
             Technology selected = tech.getSelectedValue();
             techName.setText(selected.getName());

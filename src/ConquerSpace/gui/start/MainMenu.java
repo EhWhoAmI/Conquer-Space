@@ -3,6 +3,7 @@ package ConquerSpace.gui.start;
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.localeMessages;
 import ConquerSpace.util.CQSPLogger;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -41,15 +42,16 @@ public class MainMenu extends JFrame {
      */
     public MainMenu() {
         setTitle(localeMessages.getMessage("GameName"));
-        setLayout(new GridLayout(2, 1, 10, 10));
+        //setLayout(new GridLayout(2, 1, 10, 10));
+        setLayout(new BorderLayout());
 
         TopBanner topBanner = new TopBanner();
         topBanner.setPreferredSize(new Dimension(600, 150));
         
         topBanner.repaint();
         //Add the classes on the bottom
-        add(topBanner);
-        add(new BottomMenu());
+        add(topBanner, BorderLayout.NORTH);
+        add(new BottomMenu(), BorderLayout.SOUTH);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         LOGGER.trace("Loaded main menu");
@@ -102,7 +104,7 @@ public class MainMenu extends JFrame {
          * The whole menu.
          */
         public BottomMenu() {
-            setLayout(new GridLayout(2, 3, 10, 10));
+            setLayout(new GridLayout(2, 3, 5, 5));
 
             startGame = new JButton(localeMessages.getMessage("start.gui.MainMenu.startgame"));
             resumeGame = new JButton(localeMessages.getMessage("start.gui.MainMenu.resumegame"));

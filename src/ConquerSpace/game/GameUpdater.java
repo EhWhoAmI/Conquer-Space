@@ -21,7 +21,6 @@ import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
@@ -243,7 +242,9 @@ public class GameUpdater {
                 Actions.launchShip(s, starting, c);
                 //Set ownership
                 starting.setOwnerID(c.getID());
-
+                
+                c.habitatedPlanets.add(starting);
+                
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
             }
         }

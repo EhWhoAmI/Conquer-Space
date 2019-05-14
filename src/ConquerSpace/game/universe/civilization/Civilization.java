@@ -20,6 +20,7 @@ import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
@@ -87,6 +88,8 @@ public class Civilization {
 
     public HashMap<Integer, Integer> resourceList;
 
+    public ArrayList<Planet> habitatedPlanets;
+    
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -132,6 +135,8 @@ public class Civilization {
         multipliers = new HashMap<>();
         values = new HashMap<>();
 
+        habitatedPlanets = new ArrayList<>();
+        
         resourceList = new HashMap<>();
         //Initialize resources
         resourceList.put(RawResourceTypes.ROCK, 0);

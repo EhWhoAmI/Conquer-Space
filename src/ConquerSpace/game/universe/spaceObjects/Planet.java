@@ -314,4 +314,14 @@ public class Planet extends SpaceObject {
     public void setY(long y) {
         ypos = y;
     }
+
+    @Override
+    public String toString() {
+        if(name.isEmpty()) {
+            return (id + "");
+        }
+        return name;
+    }
+    
+    
 }

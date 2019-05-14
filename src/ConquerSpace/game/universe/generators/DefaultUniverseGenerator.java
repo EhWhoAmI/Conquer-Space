@@ -177,31 +177,30 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         int randomSS = rand.nextInt(u.getStarSystemCount());
         StarSystem sys = u.getStarSystem(randomSS);
         //Get planets
-
-        
         int randomP = 0;
-        if(sys.getPlanetCount() > 0)
+        if (sys.getPlanetCount() > 0) {
             randomP = rand.nextInt(sys.getPlanetCount());
+        }
+        
         while (sys.getPlanetCount() <= 0) {
             randomSS++;
             if (randomSS > u.getStarSystemCount()) {
                 randomSS = 0;
             }
             sys = u.getStarSystem(randomSS);
+            if (sys.getPlanetCount() > 0) {
+                randomP = rand.nextInt(sys.getPlanetCount());
+            }
         }
+
         //Check suitability
         //Etc.....
         //Now, just check if it is rock or not
         int i = randomP;
-        System.out.println(i + "chosen");
 
         while (sys.getPlanet(i).getPlanetType() != PlanetTypes.ROCK) {
-            System.out.println(i + "chosen");
-
-            if (i < sys.getPlanetCount()-1) {
+            if (i < sys.getPlanetCount() - 1) {
                 i++;
-                System.out.println(i + "chosen");
-
             } else {
                 //Search for another star system
                 if (randomSS < u.getStarSystemCount()) {
@@ -210,8 +209,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     randomSS = 0;
                 }
                 sys = u.getStarSystem(randomSS);
-                if(sys.getPlanetCount() > 0)
+                if (sys.getPlanetCount() > 0) {
                     i = rand.nextInt(sys.getPlanetCount());
+                }
             }
         }
         return new UniversePath(randomSS, i);
