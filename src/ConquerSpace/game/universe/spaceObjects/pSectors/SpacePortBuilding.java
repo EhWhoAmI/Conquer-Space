@@ -110,13 +110,4 @@ public class SpacePortBuilding extends PlanetSector {
         root.add(launchInfo);
         return root;
     }
-
-    @Override
-    public void processTurn(int GameRefreshRate, StarDate stardate) {
-        for (SpacePortLaunchPad launchPad : launchPads) {
-            //Change ticks
-            launchPad.ticks += GameRefreshRate;
-            //Check for launch...
-        }
-    }
 }

@@ -78,14 +78,6 @@ public class Universe extends SpaceObject {
         return (civs.get(i));
     }
 
-    @Override
-    public void processTurn(int GameRefreshRate, StarDate stardate) {
-        //Process turns of all the internals
-        for (StarSystem sector : starSystems) {
-            sector.processTurn(GameRefreshRate, stardate);
-        }
-    }
-
     /**
      * Get the space object (Planet, sector, etc,) as referenced by UniversePath
      * <code>p</code>.

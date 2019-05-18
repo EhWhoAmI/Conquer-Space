@@ -4,10 +4,12 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
+import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
+import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,20 +28,23 @@ public class Planet extends SpaceObject {
     private long xpos;
     private long ypos;
     
+    private ArrayList<ResourceVein> resourceVeins;
+    
     int id;
 
     private int ownerID = ControlTypes.NONE_CONTROLLED;
     private int surfaceArea;
     //Empty as default -- undiscovered
     private String name = "";
-    public PlanetSector[] planetSectors;
+    //public PlanetSector[] planetSectors;
 
     private int parentStarSystem;
 
-    public Population population;
     public Economy economy;
     
     private ArrayList<Orbitable> satellites;
+    
+    public Terrain terrain;
     /**
      * Creates planet
      *
@@ -48,26 +53,7 @@ public class Planet extends SpaceObject {
      * @param planetSize size of planet
      * @param id planet id
      * @param parentStarSystem parent star system
-     * @param parentSector parent sector
-     */
-    public Planet(int planetType, long orbitalDistance, int planetSize, int id, int parentStarSystem, int parentSector) {
-        this.planetType = planetType;
-        this.orbitalDistance = orbitalDistance;
-        this.planetSize = planetSize;
-        this.id = id;
-        this.parentStarSystem = parentStarSystem;
-        this.degrees = 0;
-
-        //Surface area equals 4 * diameter
-        //Surface area is in sectors
-        //1 sector = 10 'units'
-        surfaceArea = (int) Math.pow(Math.ceil(planetSize/2), 2);
-        planetSectors = new PlanetSector[surfaceArea];
-        population = new Population();
-        economy = new Economy();
-        satellites = new ArrayList<>();
-    }
-    
+     */    
     public Planet(int planetType, long orbitalDistance, int planetSize, int id, int parentStarSystem) {
         this.planetType = planetType;
         this.orbitalDistance = orbitalDistance;
@@ -79,10 +65,10 @@ public class Planet extends SpaceObject {
         //Surface area is in sectors
         //1 sector = 10 'units'
         surfaceArea = (int) Math.pow(Math.ceil(planetSize/2), 2);
-        planetSectors = new PlanetSector[surfaceArea];
-        population = new Population();
+        //planetSectors = new PlanetSector[surfaceArea];
         economy = new Economy();
         satellites = new ArrayList<>();
+        terrain = new Terrain(planetSize * 2, planetSize, 7);
     }
 
     /**
@@ -101,13 +87,10 @@ public class Planet extends SpaceObject {
             case PlanetTypes.GAS:
                 builder.append("gas");
         }
-        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + " Planet Sectors " + planetSectors.length + 
+        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + 
                 "Rectangular Position: " + xpos + ", " + ypos+ ":\n");
 
-        for (PlanetSector s : planetSectors) {
-            builder.append(s.toReadableString());
-            builder.append(", \n");
-        }
+
         builder.append(")\n");
         return (builder.toString());
     }
@@ -151,108 +134,8 @@ public class Planet extends SpaceObject {
         this.ownerID = ownerID;
     }
 
-    public void setPlanetSector(int index, PlanetSector sector) {
-        sector.id = index;
-        planetSectors[index] = sector;
-    }
-
-    public int getPlanetSectorCount() {
-        return planetSectors.length;
-    }
-
-    public void computePopulation() {
-        //Population
-        long currentPopulation = 0;
-
-        //Birth rate
-        float birthRate = 0;
-        //Death rate
-        float deathRate = 0;
-
-        //Population:
-        //Last and current
-        long lastPop;
-        if (population.population.size() == 0) {
-            lastPop = 0;
-        } else {
-            lastPop = getPopulation();
-        }
-        int index = 0;
-        for (PlanetSector sector : planetSectors) {
-            if (sector instanceof PopulationStorage) {
-                //Parse
-                Population pop = ((PopulationStorage) sector).pop;
-                //currentPopulation += pop.population.get();
-                //birthRate += pop.getLastYearsbirthsPer1K(turn);
-                //deathRate += pop.getLastYearsMortalityRate(turn);
-                index++;
-            }
-        }
-        population.population.add(currentPopulation);
-
-        //Calculate averages
-        population.birthsPer1k.add(birthRate / index);
-        population.mortalityRate.add(deathRate / index);
-        if (lastPop != 0) {
-            population.populationGrowth.add((float) (((currentPopulation - lastPop) / lastPop) * 100));
-        } else {
-            population.populationGrowth.add(0f);
-        }
-
-    }
-
     public void computeEconomy() {
 
-    }
-
-    @Override
-    public void processTurn(int GameRefreshRate, StarDate stardate) {
-        int index = 0;
-        HashMap<Integer, Integer> control = new HashMap<>();
-        for (PlanetSector planetSector : planetSectors ) {
-            planetSector.processTurn(GameRefreshRate, stardate);
-
-            //Parse building buildings
-//            if (planetSector instanceof BuildingBuilding) {
-//                BuildingBuilding building = (BuildingBuilding) planetSector;
-//                if (building.getTurns() == 0) {
-//                    //Replace
-//                    planetSectors[index] = building.getSector();
-//                }
-//            }
-            index++;
-        }
-            //Calculate owner... Skip...
-            /*
-            if (planetSector.getOwner() != -1) {
-                //None
-                if (control.containsKey(planetSector.getOwner())) {
-                    control.put(planetSector.getOwner(), (control.get(planetSector.getOwner()) + 1));
-                } else {
-                    control.put(planetSector.getOwner(), 1);
-                }
-            }
-
-
-        }
-
-        //Get total control of planet
-        Object[] keys = control.keySet().toArray();
-        int noofmost = 0;
-        int idofmost = -1;
-        if (keys.length != 0) {
-            for (Object i : keys) {
-                int n = (Integer) i;
-                if (control.get(n) > noofmost) {
-                    noofmost = control.get(n);
-                    idofmost = n;
-                }
-            }
-        }
-        setOwnerID(idofmost);
-*/
-        //computePopulation();
-        computeEconomy();
     }
     
     public int getParentStarSystem() {

@@ -15,8 +15,10 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
+import ConquerSpace.game.universe.spaceObjects.terrain.TerrainTile;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -31,6 +33,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Create random 
         Random rand = new Random(seed);
 
+        TerrainGenerator terrainGenerator = new TerrainGenerator();
         //Create star systems
         int starSystemCount = 100;
         switch (u.universeSize) {
@@ -91,13 +94,66 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 lastDistance = orbitalDistance;
                 int planetSize;
                 if (planetType == PlanetTypes.GAS) {
-                    planetSize = randint(rand, 25, 50);
+                    planetSize = randint(rand, 50, 500);
                 } else {
                     //Rock
-                    planetSize = randint(rand, 3, 30);
+                    planetSize = randint(rand, 30, 100);
+
                 }
-                Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i, 0);
-                for (int b = 0; b < p.getPlanetSectorCount(); b++) {
+                
+                Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
+
+                if (planetType == PlanetTypes.ROCK) {
+                    HashMap<Float, Color> colors = new HashMap<>();
+                    //Set planet tileset...
+                    //And composotion
+                    colors.put(-1f, new Color(69, 24, 4));
+                    colors.put(-0.25f, new Color(193, 68, 14));
+                    colors.put(0.25f, new Color(231, 125, 17));
+                    colors.put(0.75f, new Color(253, 166, 0));
+                    colors.put(0.9f, new Color(240, 231, 231));
+                    //colors.put(0.9f, new Color(255, 255, 255));
+                    //generate(int seed, int octaves, float frequency, float lacunarity, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2, HashMap<Float, Color> colors) {
+                    Color[][] terrainColorses = terrainGenerator.generate(rand.nextInt(), 6, 0.5f, 2.8f, 0.5f, planetSize * 2, planetSize, 0, planetSize / 3, 0, planetSize / 6, colors);
+                    //Modify based on latitude
+                    //Will take into account distance from star and crap like that
+                    /*for (int x = 0; x < terrainColorses.length; x++) {
+                    for (int y = 0; y < terrainColorses[0].length; y++) {
+                        //Check latitude
+                        //Set color
+                        //about 10%
+                        if (y < (planetSize) / 6) {
+                            //then calculate
+                            float toPaint = planetSize / 6;
+                            float val = (toPaint - y) / (toPaint);
+                            int height = (terrainColorses[x][y].getRed() + terrainColorses[x][y].getBlue() + terrainColorses[x][y].getGreen()) / 3;
+                            //get altitude
+                            if (height > (220 * val)) //Make white
+                            {
+                                terrainColorses[x][y] = new Color(240, 231, 231);
+                            }
+
+                            terrainColorses[x][y] = new Color(val, 0, 0);
+
+                        }
+                    }
+                }*/ 
+                    for(int x = 0; x < terrainColorses.length; x++) {
+                        for(int y = 0; y < terrainColorses[0].length; y++) {
+                            p.terrain.terrainColor[x][y] = new TerrainTile();
+                            p.terrain.terrainColor[x][y].color = terrainColorses[x][y];
+                            //Set terrain resources
+                            //Etc...
+                        }
+                    }
+                     //= terrainColorses;
+                }
+                //Set planet terrain
+                //int[][] generate(int seed, int octaves, float frequency, 
+                //float lacunarity, float persistence, int sizeX, int sizeY, 
+                //        float boundsX1, float boundsX2, float boundsY1, float boundsY2)
+                //int[][] arr = terrainGenerator.generate(rand.nextInt(), 6, 0.5f, 0.5f, planetSize*2, planetSize, -planetSize*2, planetSize*2, -planetSize*4, planetSize*4);
+                /*for (int b = 0; b < p.getPlanetSectorCount(); b++) {
                     //Fill
                     RawResource rawr = new RawResource();
                     if (p.getPlanetType() == PlanetTypes.GAS) {
@@ -119,7 +175,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                         }
                     }
                     p.planetSectors[b] = rawr;
-                }
+                }*/
                 sys.addPlanet(p);
             }
             //Add planets
@@ -181,7 +237,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         if (sys.getPlanetCount() > 0) {
             randomP = rand.nextInt(sys.getPlanetCount());
         }
-        
+
         while (sys.getPlanetCount() <= 0) {
             randomSS++;
             if (randomSS > u.getStarSystemCount()) {

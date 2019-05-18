@@ -138,7 +138,7 @@ public class GameUpdater {
                     }
                 }
                 //Observetaries
-                for (PlanetSector sector : p.planetSectors) {
+                /*for (PlanetSector sector : p.planetSectors) {
                     if (sector instanceof VisionPoint) {
                         int range = ((VisionPoint) sector).getRange();
                         for (int g = 0; g < universe.getStarSystemCount(); g++) {
@@ -156,7 +156,7 @@ public class GameUpdater {
                         }
                     }
 
-                }
+                }*/
             }
         }
     }
@@ -205,7 +205,7 @@ public class GameUpdater {
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
-                int sectorCount = starting.getPlanetSectorCount();
+                /*int sectorCount = starting.getPlanetSectorCount();
                 int id = selector.nextInt(sectorCount);
                 PopulationStorage storage = new PopulationStorage(100l, 100l, (byte) 100);
                 starting.setPlanetSector(id, storage);
@@ -241,10 +241,11 @@ public class GameUpdater {
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 Actions.launchShip(s, starting, c);
                 //Set ownership
+                 */
                 starting.setOwnerID(c.getID());
-                
+
                 c.habitatedPlanets.add(starting);
-                
+
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
             }
         }
@@ -570,7 +571,7 @@ public class GameUpdater {
         resources.put(RawResourceTypes.FOOD, 0);
         resources.put(RawResourceTypes.ENERGY, 0);
         //Process planet sectors
-        for (int i = 0; i < p.planetSectors.length; i++) {
+        /*for (int i = 0; i < p.planetSectors.length; i++) {
             //Process
             PlanetSector planetSector = p.planetSectors[i];
             if (planetSector instanceof RawResource) {
@@ -599,7 +600,7 @@ public class GameUpdater {
                 //Process
                 resources.put(rrg.getResourceMined(), resources.get(rrg.getResourceMined()) + rrg.getAmountMinedPerTurn());
             }
-        }
+        }*/
         //Process storing of resourcese
         if (p.getOwnerID() >= 0) {
             for (Map.Entry<Integer, Integer> re : resources.entrySet()) {
@@ -627,7 +628,7 @@ public class GameUpdater {
             }
         }
     }
-    
+
     public void processResearch() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
@@ -646,16 +647,16 @@ public class GameUpdater {
             }
         }
     }
-    
+
     public void processResources() {
         System.out.println("asdf");
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
             //Process resources
-            for(ResourceStockpile s : c.resourceStorages) {
+            for (ResourceStockpile s : c.resourceStorages) {
                 //Get resource types allowed, and do stuff
                 //c.resourceList.
-                for(int type : s.storedTypes()) {
+                for (int type : s.storedTypes()) {
                     //add to index
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
                     c.resourceList.put(type, amountToAdd);

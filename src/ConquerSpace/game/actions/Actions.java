@@ -43,7 +43,7 @@ public class Actions {
         if (p.getOwnerID() == owner) {
             //Get type of the planet sector
             //Pass
-            p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p, owner, sectorID);
+            //p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p, owner, sectorID);
             return BUILD_BUILDING_SUCCESS;
         } else {
             return BUILD_BUILDING_FAIL_NOT_OWNER;

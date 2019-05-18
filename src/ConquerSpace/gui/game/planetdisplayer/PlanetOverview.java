@@ -1,34 +1,18 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.Orbitable;
-import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.ships.SpaceShip;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
-import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
-import ConquerSpace.game.universe.spaceObjects.pSectors.ResourceStorage;
-import ConquerSpace.gui.game.BuildPlanetSectorMenu;
-import ConquerSpace.gui.game.ShipInformationMenu;
+import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
-import java.util.Vector;
-import javax.swing.JInternalFrame;
+import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -44,8 +28,7 @@ public class PlanetOverview extends JPanel {
     private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
     private JPanel planetSectors;
-    private JPanel satellitesPanel;
-    private JList<Orbitable> satelliteList;
+    //private JList<Orbitable> satelliteList;
     private JLabel planetName;
     private JLabel planetPath;
     private JLabel planetType;
@@ -55,7 +38,7 @@ public class PlanetOverview extends JPanel {
 
     public PlanetOverview(Planet p, Civilization c) {
         this.p = p;
-        setLayout(new GridLayout(1, 3));
+        setLayout(new GridLayout(1, 2));
 
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
@@ -102,56 +85,37 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
 
-        satellitesPanel = new JPanel();
-        satellitesPanel.setBorder(new TitledBorder("Satellites"));
-
-        satelliteList = new JList<>(new Vector(p.getSatellites()));
-        satellitesPanel.add(satelliteList);
-        satelliteList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Orbitable orb = satelliteList.getSelectedValue();
-                if (orb != null && orb instanceof SpaceShip) {
-                    //Cast to space ship and show ship stats.
-                    Ship ship = (Ship) orb;
-                    //Show stats and stuff
-                    ShipInformationMenu menu = new ShipInformationMenu(ship, c);
-                    //Hacky code to get parent internal frame.
-                    Component c;
-                    for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
-                        if (c instanceof JInternalFrame) {
-                            break;
-                        }
-                    }
-                    if (c != null) {
-                        ((JInternalFrame) c).getDesktopPane().add(menu);
-                    }
-                }
-            }
-
-        });
-
         add(planetOverview);
         add(planetSectors);
-        add(satellitesPanel);
         //Add empty panel
-        add(new JPanel());
+        //add(new JPanel());
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {
 
-        private PlanetSector[] sectors;
-        private int times;
         private JPopupMenu menu;
         private Civilization c;
+        
+        private BufferedImage planetDisplaying;
+        private Image img;
+        private Terrain terrain;
 
         public PlanetSectorDisplayer(Planet p, Civilization c) {
             this.c = c;
-            sectors = p.planetSectors;
-            times = (int) Math.sqrt(sectors.length);
-            setPreferredSize(new Dimension(times * TILE_SIZE + 2, times * TILE_SIZE + 2));
+            terrain = p.terrain;
+            setPreferredSize(
+                    new Dimension(p.terrain.terrainColor.length*2, p.terrain.terrainColor[0].length*2));
             menu = new JPopupMenu();
             addMouseListener(this);
+            planetDisplaying = new BufferedImage(p.terrain.terrainColor.length, p.terrain.terrainColor[0].length, BufferedImage.TYPE_3BYTE_BGR);
+            
+            for(int x = 0; x < p.terrain.terrainColor.length; x++) {
+                for(int y = 0; y < p.terrain.terrainColor[x].length; y++) {
+                    //if(p.terrain.terrainColor[x][y])
+                    planetDisplaying.setRGB(x, y, p.terrain.terrainColor[x][y].color.getRGB());
+                }
+            }
+            img = planetDisplaying.getScaledInstance(p.terrain.terrainColor.length*2, p.terrain.terrainColor[0].length*2, Image.SCALE_DEFAULT);
         }
 
         @Override
@@ -159,86 +123,13 @@ public class PlanetOverview extends JPanel {
             Graphics2D g2d = (Graphics2D) g;
             //The thingy has to be a square number
             //Times to draw the thingy
-            int count = 0;
-            for (int w = 0; w < times; w++) {
-                for (int h = 0; h < times; h++) {
-                    //Draw box
-                    Rectangle2D.Float rect = new Rectangle2D.Float(TILE_SIZE * h, TILE_SIZE * w, TILE_SIZE, TILE_SIZE);
-                    //Draw the boxes.
-                    //Get type of sectors
-                    if (sectors[count] instanceof RawResource) {
-                        g2d.setColor(Color.GREEN);
-                    } else if (sectors[count] instanceof PopulationStorage) {
-                        g2d.setColor(Color.blue);
-                    } else if (sectors[count] instanceof BuildingBuilding) {
-                        g2d.setColor(Color.yellow);
-                    } else if(sectors[count] instanceof ResourceStorage) {
-                        g2d.setColor(Color.magenta);
-                    }
-
-                    g2d.fill(rect);
-                    g2d.setColor(Color.black);
-
-                    g2d.draw(rect);
-                    count++;
-                }
-            }
+            
+            g2d.drawImage(img, 0, 0, null);
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON3) {
-                menu.removeAll();
-
-                int width = e.getX() / TILE_SIZE;
-                int height = e.getY() / TILE_SIZE;
-
-                int index = height * times + width;
-                menu.add("Planet sector id " + (index + 1));
-                //Add other options, like build, get info... short info, etc...
-                JMenuItem infoItem = new JMenuItem("Info");
-                infoItem.addActionListener((l) -> {
-                    JInternalFrame info = new JInternalFrame("Planet sector " + (index + 1));
-                    info.add(sectors[index].getInfoPanel());
-                    info.pack();
-                    info.setLocation(200, 100);
-                    info.setVisible(true);
-                    info.setClosable(true);
-                    info.setResizable(true);
-
-                    //Hacky code to get parent internal frame.
-                    Component c;
-                    for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
-                        if (c instanceof JInternalFrame) {
-                            break;
-                        }
-                    }
-                    if (c != null) {
-                        ((JInternalFrame) c).getDesktopPane().add(info);
-                    }
-                });
-
-                if (p.getOwnerID() == 0 && p.planetSectors[index] instanceof RawResource) {
-                    JMenuItem build = new JMenuItem("Build");
-                    build.addActionListener((l) -> {
-                        BuildPlanetSectorMenu sector = new BuildPlanetSectorMenu(p, index, c);
-                        //sector.addWindowListener();
-                        Component c;
-                        for (c = getParent(); !(c instanceof JInternalFrame) || c != null; c = c.getParent()) {
-                            if (c instanceof JInternalFrame) {
-                                break;
-                            }
-                        }
-                        if (c != null) {
-                            ((JInternalFrame) c).getDesktopPane().add(sector);
-                        }
-                        sector.setVisible(true);
-                    });
-                    menu.add(build);
-                }
-
-                menu.add(infoItem);
-                menu.show(this, e.getX(), e.getY());
             }
         }
 

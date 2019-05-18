@@ -160,25 +160,6 @@ public class StarSystem extends SpaceObject {
         return (builder.toString());
     }
 
-    /**
-     * Processes turns of the planets
-     *
-     * @param GameRefreshRate
-     * @param stardate
-     */
-    @Override
-    public void processTurn(int GameRefreshRate, StarDate stardate) {
-        //Process turn of the planets then the stars.
-        //Maybe later the objects in space.
-        for (Planet planet : planets) {
-            planet.processTurn(GameRefreshRate, stardate);
-        }
-
-        for (Star star : stars) {
-            star.processTurn(GameRefreshRate, stardate);
-        }
-    }
-
     public void addSpaceShip(Ship ship) {
         spaceShips.add(ship);
     }

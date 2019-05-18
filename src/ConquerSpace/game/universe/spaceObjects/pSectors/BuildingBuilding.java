@@ -35,16 +35,6 @@ public class BuildingBuilding extends PlanetSector{
     }
 
     @Override
-    public void processTurn(int GameRefreshRate, StarDate stardate) {
-        ticks -= GameRefreshRate;
-        if(ticks <= 0) {
-            //Replace self with sector
-            parent.planetSectors[this.getId()] = sector;
-            Globals.universe.getCivilization(owner).controller.alert(new Alert(0, 0, "Sector finished building"));
-        }
-    }
-
-    @Override
     public JPanel getInfoPanel() {
         JPanel root = new JPanel();
         JLabel tofinish = new JLabel("Finishing in " + (ticks/720) + " months");
