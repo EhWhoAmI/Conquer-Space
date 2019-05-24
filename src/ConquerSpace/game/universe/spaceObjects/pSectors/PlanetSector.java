@@ -47,7 +47,7 @@ public class PlanetSector extends SpaceObject{
     }
     
     public void addResource(int type, int amount) {
-        resources.add(new Resource(type, amount));
+        //resources.add(new Resource(type, amount));
     }
 
     public void setId(int id) {

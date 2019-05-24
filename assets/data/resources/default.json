@@ -1,0 +1,35 @@
+[
+    {
+        "name": "iron",
+        "id": 0,
+        "rarity": 0.4,
+        "value": 3,
+        "density": 7,
+        "difficulty": 42,
+        "distribution": 0,
+        "color": [192,192,192],
+        "mineable": true
+    }, 
+    {
+        "name": "gas",
+        "id": 1,
+        "rarity": 0.7,
+        "value": 3,
+        "density": 7,
+        "difficulty": 42,
+        "distribution": 0,
+        "color": [217, 66, 247],
+        "mineable": true
+    },
+    {
+        "name": "rock",
+        "id": 2,
+        "rarity": 0.8,
+        "value": 3,
+        "density": 7,
+        "difficulty": 42,
+        "distribution": 0,
+        "color": [128, 128, 128],
+        "mineable": true
+    }
+]

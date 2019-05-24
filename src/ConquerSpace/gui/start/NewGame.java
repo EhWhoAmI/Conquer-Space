@@ -214,7 +214,7 @@ public class NewGame extends JFrame implements ActionListener {
                     seed = seedText.getText().hashCode();
                     LOGGER.trace("Seed is string literal.");
                 }
-                LOGGER.trace("Seed: " + seed);
+                LOGGER.info("Seed: " + seed);
 
                 config.setSeed(seed);
 

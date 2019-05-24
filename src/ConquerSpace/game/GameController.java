@@ -6,6 +6,7 @@ import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.util.CQSPLogger;
@@ -34,6 +35,7 @@ public class GameController {
     public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
     public static ArrayList<JSONObject> shipComponentTemplates;
+    public static ArrayList<Resource> resources;
     public static HashMap<String, Integer> shipTypes;
     public static GameUpdater updater;
 
@@ -41,14 +43,10 @@ public class GameController {
      * Constructor. Inits all components.
      */
     public GameController() {
-        long begin = System.currentTimeMillis();
         //Init python engine
         satelliteTemplates = new ArrayList<>();
         shipTypes = new HashMap<>();
         shipComponentTemplates = new ArrayList<>();
-
-        long finish = System.currentTimeMillis();
-        LOGGER.info("Took " + (finish - begin) + "ms to start python interpreter");
 
         //Init universe
         updater = new GameUpdater(Globals.universe, Globals.date);

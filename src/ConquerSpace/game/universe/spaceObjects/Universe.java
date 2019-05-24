@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.resources.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +22,8 @@ public class Universe extends SpaceObject {
     private ArrayList<StarSystem> starSystems;
 
     public HashMap<UniversePath, Integer> control;
+    
+    private ArrayList<Resource> resources;
 
     public Universe(long seed) {
         this.seed = seed;

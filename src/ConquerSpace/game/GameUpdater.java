@@ -2,23 +2,20 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
-import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
+import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.ships.ShipClass;
-import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
@@ -27,15 +24,6 @@ import ConquerSpace.game.universe.spaceObjects.SpaceObject;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
-import ConquerSpace.game.universe.spaceObjects.pSectors.Observatory;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
-import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
-import ConquerSpace.game.universe.spaceObjects.pSectors.RawResourceGenerator;
-import ConquerSpace.game.universe.spaceObjects.pSectors.ResourceStorage;
-import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
-import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
@@ -265,7 +253,70 @@ public class GameUpdater {
         }
     }
 
-    public void readLaunchSystems() {
+    public static void readResources() {
+        ArrayList<Resource> resources = new ArrayList<>();
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.resources");
+        
+        File[] files = launchSystemsFolder.listFiles();
+        for(File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (f.getName().endsWith(".txt")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    JSONObject obj = root.getJSONObject(i);
+                    String name = obj.getString("name");
+
+                    //The tech id will be the second value.
+                    int id = obj.getInt("id");
+
+                    float rarity = obj.getFloat("rarity");
+
+                    int value = obj.getInt("value");
+
+                    float density = obj.getFloat("density");
+
+                    int difficulty = obj.getInt("difficulty");
+
+                    JSONArray color = obj.getJSONArray("color");
+                    
+                    boolean mineable = obj.getBoolean("mineable");
+
+                    Resource res = new Resource(name, value, rarity, id);
+                    res.setDensity(density);
+                    res.setDifficulty(difficulty);
+                    res.setMineable(mineable);
+                    res.setColor(color.getInt(0), color.getInt(1), color.getInt(2));
+                    resources.add(res);
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        GameController.resources = resources;
+    }
+
+    public static void readLaunchSystems() {
         ArrayList<LaunchSystem> launchSystems = new ArrayList<>();
         //Get the launch systems folder
         File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.launch");
@@ -419,7 +470,7 @@ public class GameUpdater {
         GameController.satelliteTemplates = satellites;
     }
 
-    public void readShipTypes() {
+    public static void readShipTypes() {
         ArrayList<JSONObject> components = new ArrayList<>();
 
         try {
@@ -446,7 +497,7 @@ public class GameUpdater {
         }
     }
 
-    public void readShipComponents() {
+    public static void readShipComponents() {
         File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.ship.components");
         File[] files = launchSystemsFolder.listFiles();
         for (File f : files) {
@@ -649,7 +700,6 @@ public class GameUpdater {
     }
 
     public void processResources() {
-        System.out.println("asdf");
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
             //Process resources

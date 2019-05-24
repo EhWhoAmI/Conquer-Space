@@ -28,7 +28,7 @@ public class Planet extends SpaceObject {
     private long xpos;
     private long ypos;
     
-    private ArrayList<ResourceVein> resourceVeins;
+    public ArrayList<ResourceVein> resourceVeins;
     
     int id;
 
@@ -69,6 +69,7 @@ public class Planet extends SpaceObject {
         economy = new Economy();
         satellites = new ArrayList<>();
         terrain = new Terrain(planetSize * 2, planetSize, 7);
+        resourceVeins = new ArrayList<>();
     }
 
     /**

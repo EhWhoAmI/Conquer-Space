@@ -1,23 +1,23 @@
 package ConquerSpace.game.universe.generators;
 
+import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.game.universe.spaceObjects.pSectors.RawResource;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainTile;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -32,6 +32,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         Universe universe = new Universe(seed);
         //Create random 
         Random rand = new Random(seed);
+
+        //Load resources
+        GameUpdater.readResources();
 
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         //Create star systems
@@ -100,8 +103,32 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     planetSize = randint(rand, 30, 100);
 
                 }
-                
+
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
+
+                //Add resource veins
+                int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
+
+                for (Resource res : GameController.resources) {
+                    //Process...
+                    float rarity = res.getRarity();
+                    float probality = rand.nextFloat();
+                    //Then count
+                    if (probality < rarity) {
+                        //Then add a certain amount
+                        int amount = (int) (rarity * resourceCount * probality);
+                        //Add that amount
+                        for (int resCount = 0; resCount < amount; resCount++) {
+                            //Add the resource
+                            ResourceVein vein = new ResourceVein(res, 10);
+                            
+                            vein.setRadius(randint(rand, 5, 50));
+                            vein.setX(rand.nextInt(planetSize*2));
+                            vein.setY(rand.nextInt(planetSize));
+                            p.resourceVeins.add(vein);
+                        }
+                    }
+                }
 
                 if (planetType == PlanetTypes.ROCK) {
                     HashMap<Float, Color> colors = new HashMap<>();
@@ -137,16 +164,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
                         }
                     }
-                }*/ 
-                    for(int x = 0; x < terrainColorses.length; x++) {
-                        for(int y = 0; y < terrainColorses[0].length; y++) {
+                }*/
+                    for (int x = 0; x < terrainColorses.length; x++) {
+                        for (int y = 0; y < terrainColorses[0].length; y++) {
                             p.terrain.terrainColor[x][y] = new TerrainTile();
                             p.terrain.terrainColor[x][y].color = terrainColorses[x][y];
                             //Set terrain resources
                             //Etc...
                         }
                     }
-                     //= terrainColorses;
+                    //= terrainColorses;
                 }
                 //Set planet terrain
                 //int[][] generate(int seed, int octaves, float frequency, 
@@ -239,7 +266,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         }
 
         while (sys.getPlanetCount() <= 0) {
-            randomSS++;
             if (randomSS > u.getStarSystemCount()) {
                 randomSS = 0;
             }
@@ -247,6 +273,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             if (sys.getPlanetCount() > 0) {
                 randomP = rand.nextInt(sys.getPlanetCount());
             }
+            randomSS++;
         }
 
         //Check suitability

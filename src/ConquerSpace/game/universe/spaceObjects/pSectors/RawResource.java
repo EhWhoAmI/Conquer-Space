@@ -33,7 +33,7 @@ public class RawResource extends PlanetSector{
         DefaultListModel<String> resourceList = new DefaultListModel<>();
 
         for(Resource res : resources) {
-            resourceList.addElement(res.name);
+            resourceList.addElement(res.getName());
         }
         
         JList<String> resourcesList = new JList<>(resourceList);

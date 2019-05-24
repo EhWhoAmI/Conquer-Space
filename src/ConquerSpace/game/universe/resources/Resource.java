@@ -1,101 +1,81 @@
 package ConquerSpace.game.universe.resources;
 
-/**
- *
- * @author Zyun
- */
+import java.awt.Color;
+
 public class Resource {
+    private String name;
+    private int value;
+    private int id;
+    private float rarity;
+    private int difficulty;
+    private boolean mineable;
+    private float density;
+    private int r;
+    private int g;
+    private int b;
 
-    public String name;
-    public int amount;
-    public int type;
-    public int renewability = 0;
-    public int max;
-    public float difficulty;
-
-    public Resource(int type, int amount) {
-        this.amount = amount;
-        this.type = type;
-        switch (type) {
-            case RawResourceTypes.GAS:
-                name = "Gas";
-                break;
-            case RawResourceTypes.ROCK:
-                name = "Rock";
-                break;
-            case RawResourceTypes.METAL:
-                name = "Metal";
-                break;
-            case RawResourceTypes.FOOD:
-                name = "Food";
-                break;
-            case RawResourceTypes.ENERGY:
-                name = "Energy";
-                break;
-        }
-    }
-
-    public Resource(String name, int amount, int type) {
+    public Resource(String name, int value, float rarity, int id) {
         this.name = name;
-        this.amount = amount;
-        this.type = type;
-        switch (type) {
-            case RawResourceTypes.GAS:
-                name = "Gas";
-                break;
-            case RawResourceTypes.ROCK:
-                name = "Rock";
-                break;
-            case RawResourceTypes.METAL:
-                name = "Metal";
-                break;
-            case RawResourceTypes.FOOD:
-                name = "Food";
-                break;
-            case RawResourceTypes.ENERGY:
-                name = "Energy";
-                break;
-        }
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public void setRenewability(int renewability) {
-        this.renewability = renewability;
-    }
-
-    public int getRenewability() {
-        return renewability;
+        this.value = value;
+        this.rarity = rarity;
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
-    
-    public void renew() {
-        //If there are no resources, it will not renew.
-        if((amount + renewability) >= max) {
-            amount = max;
-        } else if(amount != 0){
-            amount += renewability;
-        }
+
+    public float getRarity() {
+        return rarity;
     }
 
-    public void setDifficulty(float difficulty) {
+    public int getValue() {
+        return value;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRarity(float rarity) {
+        this.rarity = rarity;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public float getDensity() {
+        return density;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDensity(float density) {
+        this.density = density;
+    }
+
+    public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
 
-    public float getDifficulty() {
-        return difficulty;
+    public void setMineable(boolean mineable) {
+        this.mineable = mineable;
+    }
+    
+    public void setColor(int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+    }
+    
+    public Color getColor() {
+        return new Color(r, g, b);
     }
 }
