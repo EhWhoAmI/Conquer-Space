@@ -1,14 +1,15 @@
 package ConquerSpace.game.actions;
 
+import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.game.universe.spaceObjects.pSectors.BuildingBuilding;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
 
 /**
  * This is like a driver to do all the actions. All methods must be static.
@@ -39,11 +40,12 @@ public class Actions {
      * @param turns number of months...
      * @return Success or not
      */
-    public static int buildBuilding(Planet p, int sectorID, PlanetSector what, int owner, int turns) {
+    public static int buildBuilding(Planet p, Point pt, Building what, int owner, int turns) {
         if (p.getOwnerID() == owner) {
             //Get type of the planet sector
             //Pass
-            //p.planetSectors[sectorID] = new BuildingBuilding(turns, what, p, owner, sectorID);
+            BuildingBuilding buildings = new BuildingBuilding(what, pt);
+            p.buildings.put(pt, buildings);
             return BUILD_BUILDING_SUCCESS;
         } else {
             return BUILD_BUILDING_FAIL_NOT_OWNER;

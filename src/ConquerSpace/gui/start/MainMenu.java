@@ -12,11 +12,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -26,16 +29,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
+import org.newdawn.easyogg.OggClip;
 
 /**
  * Main menu.
  *
  * @author Zyun
  */
-public class MainMenu extends JFrame {
+public class MainMenu extends JFrame implements WindowListener {
 
     //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
+
+    OggClip clip;
 
     /**
      * Constructor, show main menu.
@@ -45,16 +51,66 @@ public class MainMenu extends JFrame {
         //setLayout(new GridLayout(2, 1, 10, 10));
         setLayout(new BorderLayout());
 
+        try {
+            //Load music
+            clip = new OggClip(new FileInputStream("assets/music/stars.ogg"));
+        } catch (FileNotFoundException ex) {
+            LOGGER.info("No Sound!");
+        } catch (IOException ex) {
+            LOGGER.info("No Sound!");
+        }
         TopBanner topBanner = new TopBanner();
         topBanner.setPreferredSize(new Dimension(600, 150));
-        
+
         topBanner.repaint();
         //Add the classes on the bottom
         add(topBanner, BorderLayout.NORTH);
         add(new BottomMenu(), BorderLayout.SOUTH);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addWindowListener(this);
         LOGGER.trace("Loaded main menu");
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        //play sound
+        if (b) {
+            //Then plau
+            clip.loop();
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+        clip.stop();
+        clip.close();
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
     }
 
     /**
@@ -81,7 +137,7 @@ public class MainMenu extends JFrame {
                         System.getProperty("user.dir")
                         + "/assets/img/cqspbanner.png")), null, 0, 0);
             } catch (IOException ex) {
-                System.out.println("sdf"); 
+                System.out.println("sdf");
             }
 
         }

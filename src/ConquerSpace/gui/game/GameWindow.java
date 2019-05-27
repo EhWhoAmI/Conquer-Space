@@ -9,6 +9,7 @@ import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.gui.GUI;
 import ConquerSpace.gui.renderers.SystemDrawStats;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
@@ -30,6 +31,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -40,7 +42,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class GameWindow extends JFrame {
+public class GameWindow extends JFrame implements GUI {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(GameWindow.class.getName());
 
@@ -53,21 +55,41 @@ public class GameWindow extends JFrame {
 
     private MainInterfaceWindow mainInterfaceWindow;
 
+    private Universe u;
+
+    private Timer gameTickTimer;
     public GameWindow(Universe u, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.c = c;
+        this.u = u;
+        //Edit menu bar
+        init();
+    }
+
+    public void addFrame(JInternalFrame frame) {
+        desktopPane.add(frame);
+    }
+
+    @Override
+    public void init() {
         desktopPane = new CQSPDesktop(u);
         menuBar = new JMenuBar();
 
         mainInterfaceWindow = new MainInterfaceWindow(c, u);
         addFrame(mainInterfaceWindow);
-        //Edit menu bar
         JMenu windows = new JMenu("Windows");
         JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
         timeIncrementwindow.addActionListener(a -> {
             mainInterfaceWindow.setVisible(true);
         });
+        
+        JMenuItem reloadWindows = new JMenuItem("Reload Windows");
+        reloadWindows.addActionListener(a -> {
+            //reload();
+        });
+        
         windows.add(timeIncrementwindow);
+        windows.add(reloadWindows);
 
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
@@ -195,13 +217,13 @@ public class GameWindow extends JFrame {
         menuBar.add(resources);
 
         //Set timer
-        Timer time = new Timer(100, a -> {
+        gameTickTimer = new Timer(100, a -> {
             mainInterfaceWindow.update();
             desktopPane.repaint();
         });
 
-        time.setRepeats(true);
-        time.start();
+        gameTickTimer.setRepeats(true);
+        gameTickTimer.start();
 
         desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
@@ -216,8 +238,19 @@ public class GameWindow extends JFrame {
         desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
     }
 
-    public void addFrame(JInternalFrame frame) {
-        desktopPane.add(frame);
+    @Override
+    public void refresh() {
+    }
+
+    @Override
+    public void clean() {
+        ///c.controller.
+    }
+
+    @Override
+    public void reload() {
+        init();
+        clean();
     }
 
     /**

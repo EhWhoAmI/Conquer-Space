@@ -6,7 +6,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortLaunchPad;
+import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;

@@ -23,7 +23,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class PlayerController implements CivilizationController {
     private Civilization c;
-    
+    private Universe u;
+    private StarDate d;
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
     public GameWindow mainwindow;
     public TurnSaveWindow tsWindow;
@@ -61,4 +62,13 @@ public class PlayerController implements CivilizationController {
         mainwindow.add(tsWindow);
         //mainwindow.add(timeIncrementWindow);
     }
+
+    @Override
+    public void refreshUI() {
+        //Reload all windows
+        mainwindow.dispose();
+        //Then reload
+        
+        init(u, d, c);
+    }    
 }

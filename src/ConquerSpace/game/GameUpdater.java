@@ -1,8 +1,10 @@
-package ConquerSpace.game;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
@@ -27,6 +29,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
+import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
@@ -193,37 +196,41 @@ public class GameUpdater {
             UniversePath p = c.getStartingPlanet();
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
-                /*int sectorCount = starting.getPlanetSectorCount();
-                int id = selector.nextInt(sectorCount);
-                PopulationStorage storage = new PopulationStorage(100l, 100l, (byte) 100);
-                starting.setPlanetSector(id, storage);
-                //Add observetary
-                Observatory obs = new Observatory(15);
-                obs.setOwner(c.getID());
-                id++;
-                id %= sectorCount;
-                starting.setPlanetSector(id, obs);
-                starting.setName(c.getHomePlanetName());
-                //Add resource storage
-                ResourceStorage resourceStorage = new ResourceStorage(starting);
-                //Add the various resources
-                resourceStorage.addResourceTypeStore(RawResourceTypes.ROCK);
-                resourceStorage.addResourceTypeStore(RawResourceTypes.GAS);
-                resourceStorage.addResourceTypeStore(RawResourceTypes.METAL);
-                resourceStorage.addResourceTypeStore(RawResourceTypes.FOOD);
-                resourceStorage.addResourceTypeStore(RawResourceTypes.ENERGY);
-                id++;
-                id %= sectorCount;
-                resourceStorage.setId(id);
-                starting.setPlanetSector(id, resourceStorage);
-                c.resourceStorages.add(resourceStorage);
 
-                RawResourceGenerator generator = new RawResourceGenerator(RawResourceTypes.ENERGY, id, 10);
-                id++;
-                id%=sectorCount;
-                generator.setId(id);
-                starting.setPlanetSector(id, generator);
-                
+                int popStorMas = (selector.nextInt(5) + 3);
+                for (int count = 0; count < popStorMas; count++) {
+                    PopulationStorage test = new PopulationStorage();
+                    //Distribute
+                    //Add random positions
+                    int pos = selector.nextInt(starting.getPlanetSize() * 2 * starting.getPlanetSize());
+                    ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(pos % (starting.getPlanetSize() * 2), pos / (starting.getPlanetSize() * 2));
+                    starting.buildings.put(pt, test);
+
+                    //Expand sector
+                    //Choose a direction, and expand...
+                    PopulationStorage test2 = new PopulationStorage();
+                    int dir = selector.nextInt(4);
+                    ConquerSpace.game.universe.Point pt2;
+                    switch(dir) {
+                        case 0:
+                        pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                        break;
+                        case 1:
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() - 1);
+                            break;
+                        case 2:
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX()+1, pt.getY());
+                            break;
+                        case 3:
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX()-1, pt.getY());
+                            break;
+                        default:
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                    }
+                     //= new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                    starting.buildings.put(pt2, test2);
+                }
+                /*
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
@@ -234,6 +241,8 @@ public class GameUpdater {
 
                 c.habitatedPlanets.add(starting);
 
+                //Add Civ initalize values
+                c.values.put("haslaunch", 0);
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
             }
         }
@@ -256,9 +265,9 @@ public class GameUpdater {
     public static void readResources() {
         ArrayList<Resource> resources = new ArrayList<>();
         File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.resources");
-        
+
         File[] files = launchSystemsFolder.listFiles();
-        for(File f : files) {
+        for (File f : files) {
             FileInputStream fis = null;
             try {
                 //If it is readme, continue
@@ -287,7 +296,7 @@ public class GameUpdater {
                     int difficulty = obj.getInt("difficulty");
 
                     JSONArray color = obj.getJSONArray("color");
-                    
+
                     boolean mineable = obj.getBoolean("mineable");
 
                     Resource res = new Resource(name, value, rarity, id);

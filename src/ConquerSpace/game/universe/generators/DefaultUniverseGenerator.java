@@ -247,6 +247,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = getRandomSuitablePlanet(rand, universe);
             civ.setStartingPlanet(up1);
+            universe.addCivilization(civ);
         }
         return universe;
     }

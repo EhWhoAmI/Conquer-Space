@@ -1,6 +1,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.gui.GUI;
 import ConquerSpace.util.Singleton;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
@@ -13,7 +14,7 @@ import javax.swing.JScrollPane;
  * @author Zyun
  */
 @Singleton
-public class AlertDisplayer extends JInternalFrame {
+public class AlertDisplayer extends JInternalFrame implements GUI {
 
     private JList<Alert> alertList;
     private DefaultListModel<Alert> model;
@@ -22,17 +23,9 @@ public class AlertDisplayer extends JInternalFrame {
 
     private AlertDisplayer() {
         setTitle("Alerts");
-        //Form array
-        model = new DefaultListModel<>();
-        alertList = new JList<>(model);
-        JScrollPane pane = new JScrollPane(alertList);
 
-        add(pane);
-        setResizable(true);
+        init();
 
-        setSize(new Dimension(100, 200));
-        setVisible(true);
-        setClosable(true);
     }
 
     public void addAlert(Alert a) {
@@ -49,5 +42,39 @@ public class AlertDisplayer extends JInternalFrame {
             instance.setVisible(true);
         }
         return instance;
+    }
+
+    private void initWindow() {
+        setResizable(true);
+
+        setSize(new Dimension(100, 200));
+        setVisible(true);
+        setClosable(true);
+    }
+
+    @Override
+    public void init() {
+        //Form array
+        model = new DefaultListModel<>();
+        alertList = new JList<>(model);
+        JScrollPane pane = new JScrollPane(alertList);
+
+        add(pane);
+        initWindow();
+    }
+
+    @Override
+    public void refresh() {
+    }
+
+    @Override
+    public void clean() {
+        model.clear();
+    }
+
+    @Override
+    public void reload() {
+        clean();
+        init();
     }
 }

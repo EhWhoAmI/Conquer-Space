@@ -170,6 +170,8 @@ public class Technologies {
 
             //Skip fields for now TODO.
         } else if (action.startsWith("launch")) {
+            //Set civ has launchpads
+            c.values.put("haslaunch", 1);
             //unlocks a launch system
             //Get the launch system
             char[] dst = new char[50];

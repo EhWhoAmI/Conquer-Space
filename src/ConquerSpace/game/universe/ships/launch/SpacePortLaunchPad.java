@@ -1,7 +1,6 @@
-package ConquerSpace.game.universe.spaceObjects.pSectors;
+package ConquerSpace.game.universe.ships.launch;
 
 import ConquerSpace.game.universe.ships.Launchable;
-import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 
 /**
  * Used for building a rocket and launching it. It will remain full throughout

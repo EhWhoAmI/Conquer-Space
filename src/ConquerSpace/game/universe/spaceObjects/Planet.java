@@ -1,14 +1,12 @@
 package ConquerSpace.game.universe.spaceObjects;
 
-import ConquerSpace.game.StarDate;
+import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
-import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PlanetSector;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
 import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +42,8 @@ public class Planet extends SpaceObject {
     
     private ArrayList<Orbitable> satellites;
     
+    public HashMap<Point, Building> buildings;
+    
     public Terrain terrain;
     /**
      * Creates planet
@@ -70,6 +70,7 @@ public class Planet extends SpaceObject {
         satellites = new ArrayList<>();
         terrain = new Terrain(planetSize * 2, planetSize, 7);
         resourceVeins = new ArrayList<>();
+        buildings = new HashMap<>();
     }
 
     /**
