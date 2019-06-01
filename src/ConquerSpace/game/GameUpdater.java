@@ -1,10 +1,12 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 package ConquerSpace.game;
+package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
@@ -20,6 +22,7 @@ import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.spaceObjects.ControlTypes;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.SpaceObject;
@@ -105,6 +108,26 @@ public class GameUpdater {
         }
         //Loop through all the vision points in the universe
 
+        for (int civ = 0; civ < universe.getCivilizationCount(); civ++) {
+            Civilization civil = universe.getCivilization(civ);
+            for (VisionPoint pt : civil.visionPoints) {
+                int range = pt.getRange();
+                //Distance between all star systems...
+                ConquerSpace.game.universe.Point pos = pt.getPosition();
+                for (int g = 0; g < universe.getStarSystemCount(); g++) {
+                    //Difference between points...
+                    int dist = (int) Math.hypot(pos.getY() - visionStats.get(universe.getStarSystem(g).getId()).position.y,
+                            pos.getX() - visionStats.get(universe.getStarSystem(g).getId()).position.x);
+                    if (dist < range) {
+                        //Its in!
+                        int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
+                        //int previous = universe.getCivilization(pt.getCivilization().vision.get(universe.getStarSystem(g).getUniversePath()));
+                        universe.getCivilization(pt.getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
+                                (amount > 100) ? 100 : (amount));
+                    }
+                }
+            }
+        }
         for (int k = 0; k < universe.getStarSystemCount(); k++) {
             for (int i = 0; i < universe.getStarSystem(k).getPlanetCount(); i++) {
                 Planet p = universe.getStarSystem(k).getPlanet(i);
@@ -211,23 +234,23 @@ public class GameUpdater {
                     PopulationStorage test2 = new PopulationStorage();
                     int dir = selector.nextInt(4);
                     ConquerSpace.game.universe.Point pt2;
-                    switch(dir) {
+                    switch (dir) {
                         case 0:
-                        pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
-                        break;
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                            break;
                         case 1:
                             pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() - 1);
                             break;
                         case 2:
-                            pt2 = new ConquerSpace.game.universe.Point(pt.getX()+1, pt.getY());
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX() + 1, pt.getY());
                             break;
                         case 3:
-                            pt2 = new ConquerSpace.game.universe.Point(pt.getX()-1, pt.getY());
+                            pt2 = new ConquerSpace.game.universe.Point(pt.getX() - 1, pt.getY());
                             break;
                         default:
                             pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
                     }
-                     //= new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                    //= new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
                     starting.buildings.put(pt2, test2);
                 }
                 /*
@@ -630,37 +653,31 @@ public class GameUpdater {
         resources.put(RawResourceTypes.METAL, 0);
         resources.put(RawResourceTypes.FOOD, 0);
         resources.put(RawResourceTypes.ENERGY, 0);
-        //Process planet sectors
-        /*for (int i = 0; i < p.planetSectors.length; i++) {
+        //Process buildings
+        for (Map.Entry<ConquerSpace.game.universe.Point, Building> entry : p.buildings.entrySet()) {
+            ConquerSpace.game.universe.Point key = entry.getKey();
+            Building building = entry.getValue();
             //Process
-            PlanetSector planetSector = p.planetSectors[i];
-            if (planetSector instanceof RawResource) {
-
-            } else if (planetSector instanceof BuildingBuilding) {
-                BuildingBuilding build = (BuildingBuilding) planetSector;
-                if (build.getTicks() > 0) {
+            if (building instanceof BuildingBuilding) {
+                BuildingBuilding build = (BuildingBuilding) building;
+                if (build.getLength() > 0) {
                     //build.incrementTick();
-                    build.decrementTick(GameController.GameRefreshRate);
+                    build.decrementLength(GameController.GameRefreshRate);
                 } else {
                     //Done!
                     //Replace
-                    p.planetSectors[i] = build.getSector();
+                    p.buildings.put(key, build.getToBuild());
                 }
-            } else if (planetSector instanceof SpacePortBuilding) {
+            } else if (building instanceof SpacePort) {
                 //Process
-                SpacePortBuilding build = (SpacePortBuilding) planetSector;
+                SpacePort build = (SpacePort) building;
                 //Iterate through launchpads and process
                 for (SpacePortLaunchPad splp : build.launchPads) {
                     splp.ticks += GameController.GameRefreshRate;
                     //Get when to launch...
                 }
-            } else if (planetSector instanceof RawResourceGenerator) {
-                //Add the resources
-                RawResourceGenerator rrg = (RawResourceGenerator) planetSector;
-                //Process
-                resources.put(rrg.getResourceMined(), resources.get(rrg.getResourceMined()) + rrg.getAmountMinedPerTurn());
             }
-        }*/
+        }
         //Process storing of resourcese
         if (p.getOwnerID() >= 0) {
             for (Map.Entry<Integer, Integer> re : resources.entrySet()) {

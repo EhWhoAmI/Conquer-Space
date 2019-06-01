@@ -1,11 +1,14 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.satellites.Satellites;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
+import ConquerSpace.game.universe.ships.satellites.SpaceTelescope;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
@@ -33,7 +36,7 @@ public class LaunchSatelliteMenu extends JInternalFrame {
     private JLabel satelliteMass;
     private JButton buildAndLaunchButton;
 
-    public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
+    public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p, StarSystem sys) {
         //The launch pad type and stuff as title
         setTitle("Launch a satellite using " + pad.getType().getName());
         //title = new JLabel("Launch Satellite");
@@ -98,6 +101,10 @@ public class LaunchSatelliteMenu extends JInternalFrame {
                 if (id == s.getInt("id")) {
                     selectedObject = s;
                     Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
+                    //Check if it orbits a planet
+                    if(sat instanceof SpaceTelescope) {
+                        ((SpaceTelescope) sat).setPosition(new Point(sys.getX(), sys.getY()));
+                    }
                     sat.setOwner(c.getID());
                     Actions.launchSatellite(sat, p, 100, c);
                     JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");

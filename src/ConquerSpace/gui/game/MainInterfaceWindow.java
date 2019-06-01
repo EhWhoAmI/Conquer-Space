@@ -117,7 +117,7 @@ public class MainInterfaceWindow extends JInternalFrame {
     public void setSelectedPlanet(Planet p) {
         selectedPlanet = p;
         planetInfoSheetContainer.removeAll();
-        planetInfoSheet = new PlanetInfoSheet(selectedPlanet, c);
+        planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
         planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
         setSelectedTab(1);
         setVisible(true);

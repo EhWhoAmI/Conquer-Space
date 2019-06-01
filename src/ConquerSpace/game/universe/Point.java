@@ -5,25 +5,25 @@ package ConquerSpace.game.universe;
  * @author zyunl
  */
 public class Point {
-    private int x;
-    private int y;
+    private long x;
+    private long y;
 
-    public int getX() {
+    public long getX() {
         return x;
     }
 
-    public int getY() {
+    public long getY() {
         return y;
     }
 
-    public Point(int x, int y) {
+    public Point(long x, long y) {
         this.x = x;
         this.y = y;
     }
 
     @Override
     public int hashCode() {
-        return Integer.parseInt("" + x + y);
+        return (int) (Long.parseLong("" + x + y) % Integer.MAX_VALUE);
     }
 
     @Override

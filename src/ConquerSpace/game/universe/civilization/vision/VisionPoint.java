@@ -1,5 +1,7 @@
 package ConquerSpace.game.universe.civilization.vision;
 
+import ConquerSpace.game.universe.Point;
+
 /**
  * A point where vision comes from, where you can start vision.
  *
@@ -14,6 +16,7 @@ public interface VisionPoint {
      */
     public int getRange();
     public int getCivilization();
+    public Point getPosition();
     
     public static final int GAMMA = 0;
     public static final int XRAY = 1;

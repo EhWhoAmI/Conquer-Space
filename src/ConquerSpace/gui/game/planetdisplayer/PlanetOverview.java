@@ -1,15 +1,17 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.pSectors.PopulationStorage;
-import ConquerSpace.game.universe.spaceObjects.pSectors.SpacePortBuilding;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
@@ -83,9 +85,11 @@ public class PlanetOverview extends JPanel {
 
     private BuildSpaceLaunchSite buildSpaceLaunchSite;
 
+    private BuildObservatoryMenu buildObservatoryMenu;
+
     private JButton buildButton;
 
-    public PlanetOverview(Planet p, Civilization c) {
+    public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
         setLayout(new GridLayout(2, 1));
 
@@ -177,6 +181,7 @@ public class PlanetOverview extends JPanel {
             //Do things
             buildingModel.addElement("Launch Systems");
         }
+        buildingModel.addElement("Observatory");
 
         JPanel mainItemContainer = new JPanel();
         buildCardLayout = new CardLayout();
@@ -186,8 +191,11 @@ public class PlanetOverview extends JPanel {
 
         buildSpaceLaunchSite = new BuildSpaceLaunchSite(c);
 
+        buildObservatoryMenu = new BuildObservatoryMenu();
+
         mainItemContainer.add(popStoragePanel, "Residential area");
         mainItemContainer.add(buildSpaceLaunchSite, "Launch Systems");
+        mainItemContainer.add(buildObservatoryMenu, "Observatory");
 
         buildCardLayout.show(mainItemContainer, "Residential area");
 
@@ -199,9 +207,11 @@ public class PlanetOverview extends JPanel {
                     buildCardLayout.show(mainItemContainer, "Residential area");
                     break;
                 case "Launch Systems":
-                    System.out.println("showing");
+                    //System.out.println("showing");
                     buildCardLayout.show(mainItemContainer, "Launch Systems");
                     break;
+                case "Observatory":
+                    buildCardLayout.show(mainItemContainer, "Observatory");
             }
         });
 
@@ -221,9 +231,23 @@ public class PlanetOverview extends JPanel {
                 SpacePort port = new SpacePort((LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), (Integer) buildSpaceLaunchSite.maxPopulation.getValue());
                 Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), port, 0, 1);
                 toReset = true;
+            } else if (item.equals("Observatory")) {
+                StarSystem sys = u.getStarSystem(p.getParentStarSystem());
+                Observatory observatory = new Observatory(
+                        GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
+                                (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
+                                c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
+                //Add visionpoint to civ
+                c.visionPoints.add(observatory);
+                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), observatory, 0, 1);
+                toReset = true;
             }
             if (toReset) {
-                xposSpinner.setValue(xposSpinner.getNextValue());
+                if ((int) xposSpinner.getValue() > 0) {
+                    xposSpinner.setValue(xposSpinner.getNextValue());
+                } else {
+                    xposSpinner.setValue(1);
+                }
                 //yPosSpinner.setValue(0);
                 //Then show alert
                 //But like it will be annoying....
@@ -486,6 +510,37 @@ public class PlanetOverview extends JPanel {
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
             }
+        }
+    }
+
+    private class BuildObservatoryMenu extends JPanel {
+
+        private JLabel lensSizeLabel;
+        private JSpinner lensSizeSpinner;
+        private JLabel telescopeRangeLabel;
+        private JLabel telescopeRangeValueLabel;
+
+        public BuildObservatoryMenu() {
+            setLayout(new GridLayout(2, 2));
+            lensSizeLabel = new JLabel("Lens Size(cm)");
+
+            SpinnerNumberModel model = new SpinnerNumberModel(50, 0, 5000, 1);
+
+            lensSizeSpinner = new JSpinner(model);
+            ((JSpinner.DefaultEditor) lensSizeSpinner.getEditor()).getTextField().setEditable(false);
+
+            lensSizeSpinner.addChangeListener(a -> {
+                //Calculate
+                telescopeRangeValueLabel.setText(GameUpdater.Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()) + " light years");
+
+            });
+
+            telescopeRangeLabel = new JLabel("Range: ");
+            telescopeRangeValueLabel = new JLabel("0 light years");
+            add(lensSizeLabel);
+            add(lensSizeSpinner);
+            add(telescopeRangeLabel);
+            add(telescopeRangeValueLabel);
         }
     }
 }
