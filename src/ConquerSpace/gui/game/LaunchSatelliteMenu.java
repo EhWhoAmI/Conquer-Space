@@ -24,7 +24,7 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class LaunchSatelliteMenu extends JInternalFrame {
+public class LaunchSatelliteMenu extends JPanel {
 
     private JPanel satelliteSelectPanel;
     private JList<SatelliteWrapper> satelliteSelectList;
@@ -36,9 +36,8 @@ public class LaunchSatelliteMenu extends JInternalFrame {
     private JLabel satelliteMass;
     private JButton buildAndLaunchButton;
 
-    public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p, StarSystem sys) {
+    public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         //The launch pad type and stuff as title
-        setTitle("Launch a satellite using " + pad.getType().getName());
         //title = new JLabel("Launch Satellite");
         setLayout(new GridLayout(1, 2));
 
@@ -80,8 +79,9 @@ public class LaunchSatelliteMenu extends JInternalFrame {
         statsPanel = new JPanel();
         statsPanel.setLayout(new VerticalFlowLayout());
         satelliteName = new JLabel();
-        if (c.satelliteTemplates.isEmpty()) {
-            satelliteName.setText(satelliteSelectList.getSelectedValue().toString());
+        if (!c.satelliteTemplates.isEmpty()) {
+            satelliteName.setText(satelliteSelectList.
+                    getSelectedValue().toString());
         }
 
         statsPanel.add(satelliteName);
@@ -91,28 +91,28 @@ public class LaunchSatelliteMenu extends JInternalFrame {
         buildAndLaunchButton = new JButton("Launch!");
         buildAndLaunchButton.setFocusable(false);
         buildAndLaunchButton.addActionListener(e -> {
-            //Launch satellite
-            SatelliteWrapper selected = satelliteSelectList.getSelectedValue();
-            int id = selected.getId();
-            //Get compatable
-            JSONObject selectedObject = null;
-            for (JSONObject s : c.satelliteTemplates) {
-                //Process satellite
-                if (id == s.getInt("id")) {
-                    selectedObject = s;
-                    Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
-                    //Check if it orbits a planet
-                    if(sat instanceof SpaceTelescope) {
-                        ((SpaceTelescope) sat).setPosition(new Point(sys.getX(), sys.getY()));
+            if (satelliteSelectList.getSelectedValue() != null) {
+                //Launch satellite
+                SatelliteWrapper selected = satelliteSelectList.getSelectedValue();
+                int id = selected.getId();
+                //Get compatable
+                JSONObject selectedObject = null;
+                for (JSONObject s : c.satelliteTemplates) {
+                    //Process satellite
+                    if (id == s.getInt("id")) {
+                        selectedObject = s;
+                        Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
+                        //Check if it orbits a planet
+                        //if(sat instanceof SpaceTelescope) {
+                        //((SpaceTelescope) sat).setPosition(new Point(sys.getX(), sys.getY()));
+                        //}
+                        sat.setOwner(c.getID());
+                        Actions.launchSatellite(sat, p, 100, c);
+                        JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
+                        break;
                     }
-                    sat.setOwner(c.getID());
-                    Actions.launchSatellite(sat, p, 100, c);
-                    JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
-                    break;
                 }
             }
-
-            dispose();
         });
         statsPanel.add(buildAndLaunchButton);
 
@@ -124,13 +124,9 @@ public class LaunchSatelliteMenu extends JInternalFrame {
 
         add(satelliteSelectList);
         add(statsPanel);
-        setResizable(true);
         setVisible(true);
-        setClosable(true);
-        pack();
 
         //Bring to front
-        toFront();
     }
 
     private static class SatelliteWrapper {

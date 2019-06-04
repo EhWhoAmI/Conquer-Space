@@ -121,9 +121,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                         for (int resCount = 0; resCount < amount; resCount++) {
                             //Add the resource
                             ResourceVein vein = new ResourceVein(res, 10);
-                            
+
                             vein.setRadius(randint(rand, 5, 50));
-                            vein.setX(rand.nextInt(planetSize*2));
+                            vein.setX(rand.nextInt(planetSize * 2));
                             vein.setY(rand.nextInt(planetSize));
                             p.resourceVeins.add(vein);
                         }
@@ -139,38 +139,27 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     colors.put(0.25f, new Color(231, 125, 17));
                     colors.put(0.75f, new Color(253, 166, 0));
                     colors.put(0.9f, new Color(240, 231, 231));
-                    //colors.put(0.9f, new Color(255, 255, 255));
-                    //generate(int seed, int octaves, float frequency, float lacunarity, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2, HashMap<Float, Color> colors) {
                     Color[][] terrainColorses = terrainGenerator.generate(rand.nextInt(), 6, 0.5f, 2.8f, 0.5f, planetSize * 2, planetSize, 0, planetSize / 3, 0, planetSize / 6, colors);
-                    //Modify based on latitude
-                    //Will take into account distance from star and crap like that
-                    /*for (int x = 0; x < terrainColorses.length; x++) {
-                    for (int y = 0; y < terrainColorses[0].length; y++) {
-                        //Check latitude
-                        //Set color
-                        //about 10%
-                        if (y < (planetSize) / 6) {
-                            //then calculate
-                            float toPaint = planetSize / 6;
-                            float val = (toPaint - y) / (toPaint);
-                            int height = (terrainColorses[x][y].getRed() + terrainColorses[x][y].getBlue() + terrainColorses[x][y].getGreen()) / 3;
-                            //get altitude
-                            if (height > (220 * val)) //Make white
-                            {
-                                terrainColorses[x][y] = new Color(240, 231, 231);
-                            }
-
-                            terrainColorses[x][y] = new Color(val, 0, 0);
-
-                        }
+                    if (terrainColorses == null) {
+                        System.out.println("oof");
+                        System.exit(1);
                     }
-                }*/
                     for (int x = 0; x < terrainColorses.length; x++) {
                         for (int y = 0; y < terrainColorses[0].length; y++) {
+                            if (terrainColorses[x][y] == null) {
+                                System.out.println("oof");
+                                System.exit(1);
+                            }
                             p.terrain.terrainColor[x][y] = new TerrainTile();
                             p.terrain.terrainColor[x][y].color = terrainColorses[x][y];
                             //Set terrain resources
                             //Etc...
+                            //System.out.println(p.terrain.terrainColor[x][y]);
+                            if (p.terrain.terrainColor[x][y] == null) {
+                                System.out.println("oof2");
+                                System.exit(1);
+                            }
+                            //p.terrain.terrainColor[x][y]
                         }
                     }
                     //= terrainColorses;

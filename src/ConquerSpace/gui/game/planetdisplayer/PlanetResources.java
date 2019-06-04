@@ -36,8 +36,7 @@ public class PlanetResources extends JPanel {
 
             for (int x = 0; x < p.terrain.terrainColor.length; x++) {
                 for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
-                    //if(p.terrain.terrainColor[x][y])
-                    bimg.setRGB(x, y, p.terrain.terrainColor[x][y].color.getRGB());
+                        bimg.setRGB(x, y, p.terrain.terrainColor[x][y].color.getRGB());
                 }
             }
             planetImage = bimg.getScaledInstance(p.terrain.terrainColor.length * 2, p.terrain.terrainColor[0].length * 2, Image.SCALE_DEFAULT);
@@ -49,8 +48,8 @@ public class PlanetResources extends JPanel {
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             //Render the various resource veins
-            for(ResourceVein v : p.resourceVeins) {
-                Ellipse2D.Float circe = new Ellipse2D.Float(v.getX(), v.getY(), v.getRadius()*2, v.getRadius()*2);
+            for (ResourceVein v : p.resourceVeins) {
+                Ellipse2D.Float circe = new Ellipse2D.Float(v.getX(), v.getY(), v.getRadius() * 2, v.getRadius() * 2);
                 g2d.fill(circe);
             }
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));

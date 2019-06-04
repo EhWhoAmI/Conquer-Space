@@ -7,22 +7,23 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Zyun
  */
-public class ShipInformationMenu extends JInternalFrame {
+public class ShipInformationMenu extends JPanel {
 
     private JLabel shipNameLabel;
     private JLabel shipNameText;
     
-    private JButton gotoPositionButton;
+    //private JButton gotoPositionButton;
     private JButton selectButton;
 
     //Actions buttons. 
     public ShipInformationMenu(Ship ship, Civilization c) {
-        setLayout(new GridLayout(2, 2));
+        setLayout(new GridLayout(3, 2));
         shipNameLabel = new JLabel("Name: ");
         add(shipNameLabel);
         shipNameText = new JLabel(ship.getName());
@@ -45,11 +46,8 @@ public class ShipInformationMenu extends JInternalFrame {
             ((PlayerController)c.controller).selectedShips.add(ship);
         });
         add(selectButton);
-        setClosable(true);
         setVisible(true);
-        setResizable(true);
         //setSize(100, 100);
-        pack();
     }
 
 }

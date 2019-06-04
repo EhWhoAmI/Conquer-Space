@@ -2,6 +2,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
+import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
@@ -12,6 +13,7 @@ import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
@@ -20,6 +22,8 @@ import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.universe.ships.ShipClass;
+import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
@@ -128,7 +132,8 @@ public class GameUpdater {
                 }
             }
         }
-        for (int k = 0; k < universe.getStarSystemCount(); k++) {
+
+        /*for (int k = 0; k < universe.getStarSystemCount(); k++) {
             for (int i = 0; i < universe.getStarSystem(k).getPlanetCount(); i++) {
                 Planet p = universe.getStarSystem(k).getPlanet(i);
                 //Get satellites
@@ -170,9 +175,8 @@ public class GameUpdater {
                         }
                     }
 
-                }*/
-            }
-        }
+                }
+            }*/
     }
 
     public void initGame() {
@@ -225,8 +229,9 @@ public class GameUpdater {
                     PopulationStorage test = new PopulationStorage();
                     //Distribute
                     //Add random positions
-                    int pos = selector.nextInt(starting.getPlanetSize() * 2 * starting.getPlanetSize());
-                    ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(pos % (starting.getPlanetSize() * 2), pos / (starting.getPlanetSize() * 2));
+                    int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                    int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                    ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(x, y);
                     starting.buildings.put(pt, test);
 
                     //Expand sector
@@ -253,13 +258,13 @@ public class GameUpdater {
                     //= new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
                     starting.buildings.put(pt2, test2);
                 }
-                /*
+
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 Actions.launchShip(s, starting, c);
                 //Set ownership
-                 */
+
                 starting.setOwnerID(c.getID());
 
                 c.habitatedPlanets.add(starting);

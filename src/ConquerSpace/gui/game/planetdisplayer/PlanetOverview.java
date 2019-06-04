@@ -235,8 +235,8 @@ public class PlanetOverview extends JPanel {
                 StarSystem sys = u.getStarSystem(p.getParentStarSystem());
                 Observatory observatory = new Observatory(
                         GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
-                                (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
-                                c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
+                        (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
+                        c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
                 //Add visionpoint to civ
                 c.visionPoints.add(observatory);
                 Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), observatory, 0, 1);
@@ -334,13 +334,15 @@ public class PlanetOverview extends JPanel {
             addMouseListener(this);
             BufferedImage planetDisplaying = new BufferedImage(p.terrain.terrainColor.length, p.terrain.terrainColor[0].length, BufferedImage.TYPE_3BYTE_BGR);
 
-            for (int x = 0; x < p.terrain.terrainColor.length; x++) {
-                for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
-                    //if(p.terrain.terrainColor[x][y])
-                    planetDisplaying.setRGB(x, y, p.terrain.terrainColor[x][y].color.getRGB());
+            if (p.terrain != null) {
+                for (int x = 0; x < p.terrain.terrainColor.length; x++) {
+                    for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
+                        //System.out.println(x + " " + y + ";" + p.terrain.terrainColor[x][y]);
+                        planetDisplaying.setRGB(x, y, p.terrain.terrainColor[x][y].color.getRGB());
+                    }
                 }
+                img = planetDisplaying.getScaledInstance(p.terrain.terrainColor.length * 2, p.terrain.terrainColor[0].length * 2, Image.SCALE_DEFAULT);
             }
-            img = planetDisplaying.getScaledInstance(p.terrain.terrainColor.length * 2, p.terrain.terrainColor[0].length * 2, Image.SCALE_DEFAULT);
         }
 
         @Override

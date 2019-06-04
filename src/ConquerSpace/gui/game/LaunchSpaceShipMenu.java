@@ -23,7 +23,7 @@ import javax.swing.JPanel;
  *
  * @author Zyun
  */
-public class LaunchSpaceShipMenu extends JInternalFrame {
+public class LaunchSpaceShipMenu extends JPanel {
 
     private DefaultListModel<ShipClass> spaceShipListModel;
     private JList<ShipClass> spaceShipList;
@@ -34,7 +34,6 @@ public class LaunchSpaceShipMenu extends JInternalFrame {
     private JButton launchButton;
 
     public LaunchSpaceShipMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
-        setTitle("Launch a space ship using " + pad.getType().getName());
         setLayout(new GridLayout(1, 3));
 
         spaceShipListModel = new DefaultListModel<>();
@@ -80,12 +79,6 @@ public class LaunchSpaceShipMenu extends JInternalFrame {
         launchSpaceShipMenu.add(launchButton);
         add(spaceShipList);
         add(launchSpaceShipMenu);
-        setResizable(true);
         setVisible(true);
-        setClosable(true);
-        pack();
-
-        //Bring to front
-        toFront();
     }
 }
