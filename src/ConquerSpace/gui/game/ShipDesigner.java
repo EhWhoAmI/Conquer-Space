@@ -5,6 +5,7 @@ import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -33,7 +34,7 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class ShipDesigner extends JInternalFrame {
+public class ShipDesigner extends JPanel {
 
     private JMenuBar menubar;
 
@@ -87,9 +88,10 @@ public class ShipDesigner extends JInternalFrame {
     private JPanel componentTableContainer;
     private JButton selectComponentButton;
 
-    public ShipDesigner(Civilization c) {
-        setTitle("Ship Designer");
+    private JTabbedPane shipStuffPanel;
 
+    public ShipDesigner(Civilization c) {
+        setLayout(new BorderLayout());
         //Set menubar
         menubar = new JMenuBar();
         //Add all the things
@@ -110,7 +112,7 @@ public class ShipDesigner extends JInternalFrame {
                     ShipClass shipClass = new ShipClass(className.getText(), hull);
                     //Add components
 
-                    if (installedShipComponents.getRowCount()> 0) {
+                    if (installedShipComponents.getRowCount() > 0) {
                         for (int i = 0; i < installedShipComponents.getRowCount(); i++) {
                             installedShipComponents.getValueAt(row, 0);
                             //get component, etc...
@@ -125,10 +127,12 @@ public class ShipDesigner extends JInternalFrame {
                 }
             }
         });
+
         newStuff.add(newShipClass);
         newStuff.add(saveShipClass);
         menubar.add(newStuff);
-        setJMenuBar(menubar);
+        //setJMenuBar(menubar);
+        shipStuffPanel = new JTabbedPane();
 
         rootContainer = new JPanel();
         rootContainer.setLayout(new HorizontalFlowLayout(10));
@@ -136,20 +140,20 @@ public class ShipDesigner extends JInternalFrame {
         //Set components
         //Ship class list
         shipClassesListContainer = new JPanel();
-        shipClassesListContainer.setLayout(new VerticalFlowLayout());
+        shipClassesListContainer.setLayout(new BorderLayout());
         shipClassListModel = new DefaultListModel<>();
 
         for (ShipClass sc : c.shipClasses) {
             shipClassListModel.addElement(sc);
         }
         shipClassesList = new JList<>(shipClassListModel);
-        shipClassesList.setVisibleRowCount(16);
+        //shipClassesList.setVisibleRowCount(16);
 
         shipClassesScrollPane = new JScrollPane(shipClassesList);
         shipClassesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        shipClassesScrollPane.setSize(30, 310);
+        //shipClassesScrollPane.setSize(30, 310);
         shipClassesListContainer.setLayout(new VerticalFlowLayout());
-        shipClassesListContainer.add(shipClassesScrollPane);
+        shipClassesListContainer.add(shipClassesScrollPane, BorderLayout.CENTER);
 
         shipClassesListContainer.setPreferredSize(new Dimension(100, shipClassesScrollPane.getHeight() + 10));
         shipClassesListContainer.setBorder(new TitledBorder(new LineBorder(Color.gray), "Classes"));
@@ -199,7 +203,7 @@ public class ShipDesigner extends JInternalFrame {
         shipDataPanel.add(thrust);
         shipDataPanel.add(thrustUnit);
 
-        shipDataTabs.add("Ship Information", shipDataPanel);
+        shipClassViewer.add(shipDataPanel);
 
         installedShipComponentsPanel = new JPanel();
         installedShipComponentsPanel.setLayout(new VerticalFlowLayout());
@@ -215,14 +219,17 @@ public class ShipDesigner extends JInternalFrame {
         installedShipComponentsPanel.add(removeInstalledComponent);
 
         installedShipComponentsPanel.add(shipInstalledComponentsScrollPane);
-        shipDataTabs.add("Ship Components", installedShipComponentsPanel);
+        installedShipComponentsPanel.setBorder(new TitledBorder(new LineBorder(Color.gray), "Installed Components"));
+        //shipDataTabs.add("Ship Components", installedShipComponentsPanel);
 
-        shipClassViewer.add(shipDataTabs);
+        //shipClassViewer.add(shipDataTabs);
         shipClassViewer.setBorder(new TitledBorder(new LineBorder(Color.gray), "Class Designer"));
 
         rootContainer.add(shipClassViewer);
+        shipStuffPanel.add("Ship information", rootContainer);
 
         //Tables and stuff
+        JPanel shipContainerThings = new JPanel();
         shipComponentsContainer = new JPanel();
         componentTableTabs = new JTabbedPane();
 
@@ -319,18 +326,23 @@ public class ShipDesigner extends JInternalFrame {
 
         shipComponentsContainer.add(componentTableTabs);
 
-        rootContainer.add(shipComponentsContainer);
-
+        shipContainerThings.add(installedShipComponentsPanel);
+        shipContainerThings.add(shipComponentsContainer);
+        
+        shipStuffPanel.add("Components", shipContainerThings);
         rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
-        add(rootContainer);
+
+        add(menubar, BorderLayout.NORTH);
+        add(shipStuffPanel, BorderLayout.CENTER);
+
         //const
-        setClosable(true);
+        //setClosable(true);
         setVisible(true);
-        setResizable(true);
+        //setResizable(true);
         //setSize(100, 100);
-        pack();
+        //pack();
     }
-    
+
     private static class ShipComponentContainer {
 
         private JSONObject object;

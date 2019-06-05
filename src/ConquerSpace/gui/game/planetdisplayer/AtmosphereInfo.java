@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.gui.game.ShipInformationMenu;
 import com.alee.extended.layout.HorizontalFlowLayout;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
@@ -31,6 +32,7 @@ public class AtmosphereInfo extends JPanel {
     private Planet planet;
 
     public AtmosphereInfo(Planet p, Civilization c) {
+        setLayout(new BorderLayout());
         planet = p;
         //Draw panels and stuff
         //The objects in orbit
@@ -55,7 +57,7 @@ public class AtmosphereInfo extends JPanel {
                 shipInfoContainer.add(shipInformationMenu);
             }
         });
-        add(stuffInOrbitPanel);
+        add(stuffInOrbitPanel, BorderLayout.NORTH);
     }
 
     public void updateList() {

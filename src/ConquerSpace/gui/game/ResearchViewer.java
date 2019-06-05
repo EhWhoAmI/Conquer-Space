@@ -4,6 +4,8 @@ import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -35,6 +37,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
     private JLabel researchingTech;
     private JLabel researcher;
     private JLabel estTimeLeft;
+    private TechonologyViewer techonologyViewer;
 
     private Civilization c;
 
@@ -49,10 +52,11 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         //researchingTechticker.setRepeats(true);
         //researchingTechticker.start();
 
-        add(pane);
+        add(pane, BorderLayout.CENTER);
     }
 
     public void init() {
+        setLayout(new BorderLayout());
         pane = new JTabbedPane();
         techResearcher = new JPanel();
         techResearcher.setLayout(new GridLayout(1, 2));
@@ -117,8 +121,15 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
                 estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
             }
         });
+        techonologyViewer = new TechonologyViewer(c);
+        
         pane.addTab("Research", techResearcher);
         pane.addTab("Researching", researchProgressPanel);
+        pane.addTab("Researched Techs", techonologyViewer);
+        
+        pane.addChangeListener(a -> {
+            techonologyViewer.update();
+        });
     }
 
     public void update() {

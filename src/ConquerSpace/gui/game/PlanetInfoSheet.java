@@ -12,6 +12,7 @@ import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
 import ConquerSpace.gui.game.planetdisplayer.PlanetResources;
 import ConquerSpace.gui.game.planetdisplayer.PlayerPopulation;
+import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -25,6 +26,7 @@ public class PlanetInfoSheet extends JPanel {
     private JTabbedPane tpane;
 
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
+        setLayout(new BorderLayout());
         tpane = new JTabbedPane();
         tpane.add("Overview", new PlanetOverview(u, p, c));
         //tpane.add("Resources", new PlanetResources(p));
@@ -48,7 +50,7 @@ public class PlanetInfoSheet extends JPanel {
             tpane.setEnabledAt(2, false);
         }
 
-        add(tpane);
+        add(tpane, BorderLayout.CENTER);
     }
 
     public void init() {

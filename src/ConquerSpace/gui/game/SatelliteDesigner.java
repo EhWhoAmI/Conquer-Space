@@ -3,8 +3,11 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,7 +30,7 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class SatelliteDesigner extends JInternalFrame {
+public class SatelliteDesigner extends JPanel {
 
     private JMenuBar menuBar;
 
@@ -73,8 +76,7 @@ public class SatelliteDesigner extends JInternalFrame {
 
     @SuppressWarnings("unchecked")
     public SatelliteDesigner(Civilization c) {
-        setLayout(new GridLayout(1, 2));
-        setTitle("Satellite Designer");
+        setLayout(new BorderLayout());
 
         menuBar = new JMenuBar();
         JMenu satelliteMenu = new JMenu("Satellites");
@@ -117,8 +119,8 @@ public class SatelliteDesigner extends JInternalFrame {
         satelliteMenu.add(newMenu);
         menuBar.add(satelliteMenu);
 
-        setJMenuBar(menuBar);
-
+        add(menuBar, BorderLayout.NORTH);
+        JPanel container = new JPanel();
         satelliteListModel = new DefaultListModel<>();
         satelliteTypeListModel = new DefaultListModel<>();
 
@@ -127,7 +129,7 @@ public class SatelliteDesigner extends JInternalFrame {
         satelliteTypeList = new JList(satelliteTypeListModel);
 
         satelliteTypeList.setSelectedIndex(0);
-        
+
         satelliteDesignerPanel.setLayout(new VerticalFlowLayout());
 
         upperSatelliteStats = new JPanel();
@@ -230,14 +232,22 @@ public class SatelliteDesigner extends JInternalFrame {
                 }
             }
         });
-        add(satelliteList);
-        add(satelliteDesignerPanel);
-        add(satelliteTypeList);
+        Dimension d = satelliteList.getPreferredSize();
+        d.width = 100;
+        satelliteList.setPreferredSize(d);
+        
+        d = satelliteTypeList.getPreferredSize();
+        d.width = 100;
+        satelliteTypeList.setPreferredSize(d);
+        container.setLayout(new BorderLayout());
 
-        setClosable(true);
+        container.add(satelliteList, BorderLayout.WEST);
+        container.add(satelliteDesignerPanel, BorderLayout.CENTER);
+        container.add(satelliteTypeList, BorderLayout.EAST);
+
+        add(container, BorderLayout.CENTER);
+
         setVisible(true);
-        setResizable(true);
         //setSize(100, 100);
-        pack();
     }
 }

@@ -3,6 +3,7 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -11,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Zyun
  */
-public class ShipListManager extends JInternalFrame{
+public class ShipListManager extends JPanel{
 
     private String[] colunms = {"Name", "Class", "Location", "Speed", "Status"};
     private DefaultTableModel model;
@@ -19,7 +20,7 @@ public class ShipListManager extends JInternalFrame{
     private JTable table;
     
     public ShipListManager(Universe u, Civilization c) {        
-        setTitle("All Ships");
+        //setTitle("All Ships");
         model = new DefaultTableModel(colunms, 1);
         
         table = new JTable(model) {
@@ -32,9 +33,9 @@ public class ShipListManager extends JInternalFrame{
         };
         scrollPane = new JScrollPane(table);
         add(scrollPane);
-        pack();
+        //pack();
         setVisible(true);
-        setResizable(true);
+        //setResizable(true);
     }
     
     public void addRow(String[] col) {

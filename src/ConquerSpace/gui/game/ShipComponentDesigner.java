@@ -3,7 +3,9 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.ShipComponentTypes;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,7 +25,7 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class ShipComponentDesigner extends JInternalFrame {
+public class ShipComponentDesigner extends JPanel {
 
     private JMenuBar menuBar;
 
@@ -50,16 +52,15 @@ public class ShipComponentDesigner extends JInternalFrame {
     private JPanel scienceComponent;
     private JLabel scienceComponentLabel;
     private final String SCIENCE_COMPONENT = "science";
-    
+
     private JPanel bridgeComponent;
     private final String BRIDGE_COMPONENT = "bridge";
-    
+
     private JPanel probeComponent;
     private final String PROBE_COMPONENT = "probe";
 
     public ShipComponentDesigner(Civilization c) {
-        setTitle("Design Ship Component");
-        setLayout(new GridLayout(1, 3));
+        setLayout(new BorderLayout());
 
         menuBar = new JMenuBar();
         JMenu menu = new JMenu("Ship Components");
@@ -92,11 +93,15 @@ public class ShipComponentDesigner extends JInternalFrame {
 
         menu.add(saveShipComponents);
         menuBar.add(menu);
-        setJMenuBar(menuBar);
+        add(menuBar, BorderLayout.NORTH);
 
         componentsListModel = new DefaultListModel<>();
         componentsList = new JList(componentsListModel);
         componentsList.isSelectedIndex(0);
+
+        Dimension dim = componentsList.getPreferredSize();
+        dim.width = 100;
+        componentsList.setPreferredSize(dim);
 
         for (JSONObject obj : c.shipComponentList) {
             componentsListModel.addElement(new ShipComponentContainer(obj));
@@ -139,6 +144,11 @@ public class ShipComponentDesigner extends JInternalFrame {
         componentPanel.add(lowerPanel);
         componentTypeListModel = new DefaultListModel<>();
         componentTypeList = new JList<>(componentTypeListModel);
+
+        Dimension d = componentTypeList.getPreferredSize();
+        d.width = 100;
+        componentTypeList.setPreferredSize(d);
+
         for (String s : ShipComponentTypes.SHIP_COMPONENT_TYPE_NAMES) {
             componentTypeListModel.addElement(s);
         }
@@ -163,14 +173,11 @@ public class ShipComponentDesigner extends JInternalFrame {
                 }
             }
         });
-        add(componentsList);
-        add(componentPanel);
-        add(componentTypeList);
-        setClosable(true);
+        add(componentsList, BorderLayout.WEST);
+        add(componentPanel, BorderLayout.CENTER);
+        add(componentTypeList, BorderLayout.EAST);
         setVisible(true);
-        setResizable(true);
         //setSize(100, 100);
-        pack();
     }
 
     private static class ShipComponentContainer {

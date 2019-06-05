@@ -137,7 +137,6 @@ public class PlanetOverview extends JPanel {
                 sectorDisplayer.setWhatToShow(1);
             } else {
                 sectorDisplayer.setWhatToShow(0);
-
             }
         });
         JPanel buttonGroupWrapper = new JPanel();

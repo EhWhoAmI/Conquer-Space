@@ -58,6 +58,7 @@ public class GameWindow extends JFrame implements GUI {
     private Universe u;
 
     private Timer gameTickTimer;
+
     public GameWindow(Universe u, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.c = c;
@@ -82,12 +83,12 @@ public class GameWindow extends JFrame implements GUI {
         timeIncrementwindow.addActionListener(a -> {
             mainInterfaceWindow.setVisible(true);
         });
-        
+
         JMenuItem reloadWindows = new JMenuItem("Reload Windows");
         reloadWindows.addActionListener(a -> {
             //reload();
         });
-        
+
         windows.add(timeIncrementwindow);
         windows.add(reloadWindows);
 
@@ -149,8 +150,8 @@ public class GameWindow extends JFrame implements GUI {
         JMenu techonology = new JMenu("Techonology");
         JMenuItem seetechs = new JMenuItem("See Researched Techs");
         seetechs.addActionListener((e) -> {
-            TechonologyViewer viewer = new TechonologyViewer(u, u.getCivilization(0));
-            addFrame(viewer);
+            //TechonologyViewer viewer = new TechonologyViewer(u, u.getCivilization(0));
+            //addFrame(viewer);
         });
 
         JMenuItem techResearcher = new JMenuItem("Research Techonologies");
@@ -159,45 +160,43 @@ public class GameWindow extends JFrame implements GUI {
             //addFrame(viewer);
         });
 
-        techResearcher.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
-        techonology.add(techResearcher);
-        techonology.add(seetechs);
-
+        //techResearcher.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+        //techonology.add(techResearcher);
+        //techonology.add(seetechs);
         JMenu ships = new JMenu("Ships");
 
         JMenuItem allShips = new JMenuItem("All Ships");
         allShips.addActionListener(a -> {
-            addFrame(new ShipListManager(u, c));
+            //addFrame(new ShipListManager(u, c));
         });
 
         JMenuItem fleets = new JMenuItem("Fleets");
 
         JMenuItem shipDesigner = new JMenuItem("Ship designer");
         shipDesigner.addActionListener(a -> {
-            addFrame(new ShipDesigner(c));
+            // addFrame(new ShipDesigner(c));
         });
 
         JMenuItem shipComponentDesigner = new JMenuItem("Ship Component Designer");
         shipComponentDesigner.addActionListener(a -> {
-            addFrame(new ShipComponentDesigner(c));
         });
 
         JMenuItem satelliteDesigner = new JMenuItem("Satellite designer");
         satelliteDesigner.addActionListener(a -> {
-            addFrame(new SatelliteDesigner(c));
+            //addFrame(new SatelliteDesigner(c));
         });
 
         JMenuItem hullDesigner = new JMenuItem("Create new hull type");
         hullDesigner.addActionListener(a -> {
-            addFrame(new HullCreator(c));
+            //addFrame(new HullCreator(c));
         });
 
-        ships.add(allShips);
+        //ships.add(allShips);
         ships.add(fleets);
-        ships.add(shipDesigner);
-        ships.add(shipComponentDesigner);
-        ships.add(satelliteDesigner);
-        ships.add(hullDesigner);
+        //ships.add(shipDesigner);
+        //ships.add(shipComponentDesigner);
+        //ships.add(satelliteDesigner);
+        //ships.add(hullDesigner);
 
         JMenu resources = new JMenu("Resources");
         JMenuItem resourceIndex = new JMenuItem("Resources");
@@ -212,7 +211,7 @@ public class GameWindow extends JFrame implements GUI {
         menuBar.add(views);
         menuBar.add(menu);
         menuBar.add(ownCivInfo);
-        menuBar.add(techonology);
+        //menuBar.add(techonology);
         menuBar.add(ships);
         menuBar.add(resources);
 

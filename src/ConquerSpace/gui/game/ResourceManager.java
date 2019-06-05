@@ -36,7 +36,6 @@ public class ResourceManager extends JInternalFrame {
 
         //Initalize with default values
         for (String s : RawResourceTypes.RESOURCE_NAMES) {
-            System.out.println(s);
             resourceTableModel.addRow(new String[]{s, "0"});
         }
         JScrollPane pane = new JScrollPane(resourceTable);
@@ -46,7 +45,6 @@ public class ResourceManager extends JInternalFrame {
     public void update() {
         //fill table
         for (int i = 0; i < RawResourceTypes.RESOURCE_NAMES.length; i++) {
-            System.out.println("" + i + " " + c.resourceList.get(i));
             resourceTableModel.setValueAt(c.resourceList.get(i), i, 1);
         }
     }

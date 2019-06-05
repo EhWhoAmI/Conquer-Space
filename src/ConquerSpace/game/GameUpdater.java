@@ -626,9 +626,7 @@ public class GameUpdater {
                 x /= len;
                 y /= len;
             }
-            System.out.println(ship.getX() + " " + ship.getY());
             ship.translate((long) (x * ship.getMaxSpeed() * 5), (long) (y * ship.getMaxSpeed() * 5));
-            System.out.println(ship.getX() + " " + ship.getY());
 
         }
         //Process turn of the planets then the stars.

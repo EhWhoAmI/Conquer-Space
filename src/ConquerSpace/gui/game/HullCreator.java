@@ -36,7 +36,7 @@ import javax.swing.text.NumberFormatter;
  * Design and create a file
  * @author Zyun
  */
-public class HullCreator extends JInternalFrame {
+public class HullCreator extends JPanel {
 
     private JMenuBar menubar;
 
@@ -73,7 +73,7 @@ public class HullCreator extends JInternalFrame {
     @SuppressWarnings("unchecked")
     public HullCreator(Civilization c) {
         this.c = c;
-        setTitle("Create Hull");
+        //setTitle("Create Hull");
 
         //Set menubar
         menubar = new JMenuBar();
@@ -85,7 +85,7 @@ public class HullCreator extends JInternalFrame {
         newStuff.add(newHull);
         newStuff.add(saveHull);
         menubar.add(newStuff);
-        setJMenuBar(menubar);
+        //setJMenuBar(menubar);
 
         rootContainer = new JPanel();
         rootContainer.setLayout(new HorizontalFlowLayout(10));
@@ -194,11 +194,11 @@ public class HullCreator extends JInternalFrame {
         rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(rootContainer);
         //const
-        setClosable(true);
+        //setClosable(true);
         setVisible(true);
-        setResizable(true);
+        //setResizable(true);
         //setSize(100, 100);
-        pack();
+        //pack();
     }
 
     private void saveHull(){
