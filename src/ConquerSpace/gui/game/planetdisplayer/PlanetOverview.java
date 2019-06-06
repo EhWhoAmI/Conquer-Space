@@ -10,6 +10,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
@@ -332,12 +333,17 @@ public class PlanetOverview extends JPanel {
             menu = new JPopupMenu();
             addMouseListener(this);
             BufferedImage planetDisplaying = new BufferedImage(p.terrain.terrainColor.length, p.terrain.terrainColor[0].length, BufferedImage.TYPE_3BYTE_BGR);
-
-            if (p.terrain != null) {
+            //System.out.println(planetDisplaying);
+            
+            if (p.terrain != null && p.getPlanetType() == PlanetTypes.ROCK) {
                 for (int x = 0; x < p.terrain.terrainColor.length; x++) {
                     for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
                         //System.out.println(x + " " + y + ";" + p.terrain.terrainColor[x][y]);
-                        planetDisplaying.setRGB(x, y, p.terrain.terrainColor[x][y].color.getRGB());
+                        //System.err.println(planetDisplaying);
+                        planetDisplaying.setRGB(x, y,
+                                p.terrain.terrainColor[x][y].color.
+                                        getRGB());
+
                     }
                 }
                 img = planetDisplaying.getScaledInstance(p.terrain.terrainColor.length * 2, p.terrain.terrainColor[0].length * 2, Image.SCALE_DEFAULT);

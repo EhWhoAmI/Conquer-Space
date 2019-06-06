@@ -93,6 +93,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 //Add planets
                 //Set stuff
                 int planetType = Math.round(rand.nextFloat());
+                //System.out.println(planetType);
                 long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
                 lastDistance = orbitalDistance;
                 int planetSize;
@@ -140,58 +141,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     colors.put(0.75f, new Color(253, 166, 0));
                     colors.put(0.9f, new Color(240, 231, 231));
                     Color[][] terrainColorses = terrainGenerator.generate(rand.nextInt(), 6, 0.5f, 2.8f, 0.5f, planetSize * 2, planetSize, 0, planetSize / 3, 0, planetSize / 6, colors);
-                    if (terrainColorses == null) {
-                        System.out.println("oof");
-                        System.exit(1);
-                    }
+
                     for (int x = 0; x < terrainColorses.length; x++) {
                         for (int y = 0; y < terrainColorses[0].length; y++) {
-                            if (terrainColorses[x][y] == null) {
-                                System.out.println("oof");
-                                System.exit(1);
-                            }
                             p.terrain.terrainColor[x][y] = new TerrainTile();
                             p.terrain.terrainColor[x][y].color = terrainColorses[x][y];
-                            //Set terrain resources
-                            //Etc...
-                            //System.out.println(p.terrain.terrainColor[x][y]);
-                            if (p.terrain.terrainColor[x][y] == null) {
-                                System.out.println("oof2");
-                                System.exit(1);
-                            }
-                            //p.terrain.terrainColor[x][y]
                         }
                     }
                     //= terrainColorses;
                 }
-                //Set planet terrain
-                //int[][] generate(int seed, int octaves, float frequency, 
-                //float lacunarity, float persistence, int sizeX, int sizeY, 
-                //        float boundsX1, float boundsX2, float boundsY1, float boundsY2)
-                //int[][] arr = terrainGenerator.generate(rand.nextInt(), 6, 0.5f, 0.5f, planetSize*2, planetSize, -planetSize*2, planetSize*2, -planetSize*4, planetSize*4);
-                /*for (int b = 0; b < p.getPlanetSectorCount(); b++) {
-                    //Fill
-                    RawResource rawr = new RawResource();
-                    if (p.getPlanetType() == PlanetTypes.GAS) {
-                        rawr.resources.add(new Resource(RawResourceTypes.GAS, randint(rand, 10_000, 50_000)));
-                    } else {
-                        //Rock add resources
-                        int resourceTypesCount = randint(rand, 0, 5);
-                        ArrayList<Integer> alist = new ArrayList<>();
-                        alist.add(0);
-                        alist.add(1);
-                        alist.add(2);
-                        alist.add(3);
-                        alist.add(4);
-                        for (int x = 0; x < resourceTypesCount; x++) {
-                            //Get random from list
-                            //int resid = alist.get(randint(rand, 0, alist.size()));
-                            int resid = alist.remove(randint(rand, 0, alist.size() - 1));
-                            rawr.resources.add(new Resource(resid, randint(rand, 10_000, 50_000)));
-                        }
-                    }
-                    p.planetSectors[b] = rawr;
-                }*/
+                //System.err.println(p.terrain.terrainColor[0][0]);
                 sys.addPlanet(p);
             }
             //Add planets
@@ -219,6 +178,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
         UniversePath up = getRandomSuitablePlanet(rand, universe);
         playerCiv.setStartingPlanet(up);
+        Planet p = (Planet)universe.getSpaceObject(up);
+        if(p.terrain.terrainColor[0][0] == null) {
+            throw new ArithmeticException();
+        }
+        System.out.println(p.terrain.terrainColor[0][0]);
 
         universe.addCivilization(playerCiv);
         //Calculate number of civs
@@ -251,42 +215,29 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         StarSystem sys = u.getStarSystem(randomSS);
         //Get planets
         int randomP = 0;
-        if (sys.getPlanetCount() > 0) {
-            randomP = rand.nextInt(sys.getPlanetCount());
-        }
 
-        while (sys.getPlanetCount() <= 0) {
-            if (randomSS > u.getStarSystemCount()) {
-                randomSS = 0;
-            }
-            sys = u.getStarSystem(randomSS);
-            if (sys.getPlanetCount() > 0) {
-                randomP = rand.nextInt(sys.getPlanetCount());
-            }
-            randomSS++;
-        }
-
-        //Check suitability
-        //Etc.....
-        //Now, just check if it is rock or not
-        int i = randomP;
-
-        while (sys.getPlanet(i).getPlanetType() != PlanetTypes.ROCK) {
-            if (i < sys.getPlanetCount() - 1) {
-                i++;
-            } else {
-                //Search for another star system
-                if (randomSS < u.getStarSystemCount()) {
-                    randomSS++;
-                } else {
+        do {
+            //Loop through the numbers
+            if (sys.getPlanetCount() <= 0 || randomP >= sys.getPlanetCount()) {
+                if (randomSS >= u.getStarSystemCount()-1) {
                     randomSS = 0;
+                } else {
+                    randomSS++;
                 }
                 sys = u.getStarSystem(randomSS);
-                if (sys.getPlanetCount() > 0) {
-                    i = rand.nextInt(sys.getPlanetCount());
+                if (u.getStarSystemCount() > 0) {
+                    randomP = rand.nextInt(u.getStarSystemCount());
                 }
+                continue;
             }
-        }
-        return new UniversePath(randomSS, i);
+            //Do the stuff
+
+            if (sys.getPlanet(randomP)
+                    .getPlanetType() == PlanetTypes.ROCK) {
+                break; //o7
+            }
+            randomP++;
+        } while (true);
+        return new UniversePath(randomSS, randomP);
     }
 }

@@ -44,6 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -712,12 +713,18 @@ public class GameUpdater {
     public void processResearch() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-            for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+            
+            Iterator<Technology> tech = c.currentlyResearchingTechonologys.keySet().iterator();
+            
+            while (tech.hasNext()) {
+                Technology t = tech.next();
+                
                 if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
                     //Then tech is finished
                     c.researchTech(t);
                     c.civResearch.remove(t);
-                    c.currentlyResearchingTechonologys.remove(t);
+                    //c.currentlyResearchingTechonologys.remove(t);
+                    tech.remove();
                     //Alert civ
                     c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
                 } else {
