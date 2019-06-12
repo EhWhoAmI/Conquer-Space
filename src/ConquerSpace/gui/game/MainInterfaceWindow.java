@@ -27,6 +27,7 @@ public class MainInterfaceWindow extends JInternalFrame {
     private JPanel planetInfoSheetContainer;
     private PlanetInfoSheet planetInfoSheet;
     private SpaceShipOverview spaceShipOverview;
+    private HullCreator hullCreator;
 
     private Civilization c;
     private Universe u;
@@ -82,14 +83,18 @@ public class MainInterfaceWindow extends JInternalFrame {
         planetInfoSheetContainer.setLayout(new BorderLayout());
 
         spaceShipOverview = new SpaceShipOverview(c, u);
-        
+
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
-        
+
         JTabbedPane shipsComponentsOverviewPanel = new JTabbedPane();
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(c);
         shipsComponentsOverviewPanel.add("Ship Components", shipComponentDesigner);
+
+        hullCreator = new HullCreator(c);
+        shipsComponentsOverviewPanel.add("Hulls", hullCreator);
+
         shipComponentsOverview.add(shipsComponentsOverviewPanel, BorderLayout.CENTER);
-        
+
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
         tabs.add("Ships", spaceShipOverview);

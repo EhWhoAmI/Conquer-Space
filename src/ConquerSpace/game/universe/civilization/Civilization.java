@@ -14,6 +14,7 @@ import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
+import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.SpaceShip;
@@ -86,7 +87,7 @@ public class Civilization {
     public ArrayList<Field> fields;
     public ArrayList<JSONObject> shipComponentList;
 
-    public HashMap<Integer, Integer> resourceList;
+    public HashMap<Resource, Integer> resourceList;
 
     public ArrayList<Planet> habitatedPlanets;
     
@@ -139,11 +140,6 @@ public class Civilization {
         
         resourceList = new HashMap<>();
         //Initialize resources
-        resourceList.put(RawResourceTypes.ROCK, 0);
-        resourceList.put(RawResourceTypes.GAS, 0);
-        resourceList.put(RawResourceTypes.METAL, 0);
-        resourceList.put(RawResourceTypes.FOOD, 0);
-        resourceList.put(RawResourceTypes.ENERGY, 0);
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {

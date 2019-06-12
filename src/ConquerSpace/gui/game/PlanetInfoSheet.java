@@ -9,6 +9,7 @@ import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
+import ConquerSpace.gui.game.planetdisplayer.BuildingMenu;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
 import ConquerSpace.gui.game.planetdisplayer.PlanetResources;
 import ConquerSpace.gui.game.planetdisplayer.PlayerPopulation;
@@ -33,7 +34,8 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add("Population", new PlayerPopulation(p, 0));
         tpane.add("Space Port", new SpacePortMenu(p, c));
         tpane.add("Atmosphere", new AtmosphereInfo(p, c));
-
+        tpane.add("Building", new BuildingMenu(u, p, c));
+        
         tpane.setEnabledAt(2, false);
         //Check if planet contains space port
         for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {

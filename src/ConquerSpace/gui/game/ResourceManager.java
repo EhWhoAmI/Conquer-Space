@@ -1,7 +1,9 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.RawResourceTypes;
+import ConquerSpace.game.universe.resources.Resource;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,8 +37,8 @@ public class ResourceManager extends JInternalFrame {
         resourceTable = new JTable(resourceTableModel);
 
         //Initalize with default values
-        for (String s : RawResourceTypes.RESOURCE_NAMES) {
-            resourceTableModel.addRow(new String[]{s, "0"});
+        for (Resource s : GameController.resources) {
+            resourceTableModel.addRow(new String[]{s.toString(), "0"});
         }
         JScrollPane pane = new JScrollPane(resourceTable);
         add(pane);
@@ -44,8 +46,11 @@ public class ResourceManager extends JInternalFrame {
 
     public void update() {
         //fill table
-        for (int i = 0; i < RawResourceTypes.RESOURCE_NAMES.length; i++) {
-            resourceTableModel.setValueAt(c.resourceList.get(i), i, 1);
+        
+        int x = 0;
+        for (Resource s : GameController.resources) {
+            resourceTableModel.setValueAt(c.resourceList.get(s), x, 1);
+            x++;
         }
     }
 }

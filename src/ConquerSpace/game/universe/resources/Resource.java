@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.resources;
 import java.awt.Color;
 
 public class Resource {
+
     private String name;
     private int value;
     private int id;
@@ -68,14 +69,33 @@ public class Resource {
     public void setMineable(boolean mineable) {
         this.mineable = mineable;
     }
-    
+
     public void setColor(int r, int g, int b) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
-    
+
     public Color getColor() {
         return new Color(r, g, b);
     }
+
+    public boolean isMineable() {
+        return mineable;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Resource) {
+            Resource res = (Resource) obj;
+            return (res.name == name && res.id == id);
+        }
+        return false;
+    }
+
 }

@@ -46,8 +46,6 @@ public class Actions {
      */
     public static int buildBuilding(Planet p, Point pt, Building what, int owner, int turns) {
         if (p.getOwnerID() == owner) {
-            //Get type of the planet sector
-            //Pass
             BuildingBuilding buildings = new BuildingBuilding(what, pt, 10);
             p.buildings.put(pt, buildings);
             return BUILD_BUILDING_SUCCESS;

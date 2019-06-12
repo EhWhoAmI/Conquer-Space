@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -74,7 +75,7 @@ public class HullCreator extends JPanel {
     public HullCreator(Civilization c) {
         this.c = c;
         //setTitle("Create Hull");
-
+        setLayout(new BorderLayout());
         //Set menubar
         menubar = new JMenuBar();
         //Add all the things
@@ -85,6 +86,7 @@ public class HullCreator extends JPanel {
         newStuff.add(newHull);
         newStuff.add(saveHull);
         menubar.add(newStuff);
+        add(menubar, BorderLayout.NORTH);
         //setJMenuBar(menubar);
 
         rootContainer = new JPanel();
@@ -192,7 +194,7 @@ public class HullCreator extends JPanel {
         rootContainer.add(hullViewer);
 
         rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
-        add(rootContainer);
+        add(rootContainer, BorderLayout.CENTER);
         //const
         //setClosable(true);
         setVisible(true);

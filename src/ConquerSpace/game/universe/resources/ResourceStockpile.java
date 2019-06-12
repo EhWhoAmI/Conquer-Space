@@ -7,12 +7,12 @@ import ConquerSpace.game.universe.UniversePath;
  * @author Zyun
  */
 public interface ResourceStockpile {
-    public void addResourceTypeStore(int type);
-    public int getResourceAmount(int type);
-    public void addResource(int type, int amount);
+    public void addResourceTypeStore(Resource type);
+    public int getResourceAmount(Resource type);
+    public void addResource(Resource type, int amount);
     //Describe position
     public UniversePath getUniversePath();
-    public boolean canStore(int type);
+    public boolean canStore(Resource type);
     
-    public int[] storedTypes();
+    public Resource[] storedTypes();
 }

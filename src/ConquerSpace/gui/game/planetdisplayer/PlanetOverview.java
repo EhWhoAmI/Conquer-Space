@@ -7,6 +7,7 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -16,6 +17,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,9 +37,11 @@ import java.util.Map;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
@@ -70,25 +74,9 @@ public class PlanetOverview extends JPanel {
     private ButtonGroup resourceButtonGroup;
     private JRadioButton[] showResources;
 
-    private JPanel buildingThingPanel;
+    
 
-    private JPanel buildingInfoPanel;
-    private JComboBox<String> buildingType;
-    private JPanel buildPanelXYPosContainer;
-    private JLabel xPosLabel;
-    private JLabel yPosLabel;
-    private JSpinner xposSpinner;
-    private JSpinner yPosSpinner;
-
-    private CardLayout buildCardLayout;
-
-    private BuildPopulationStorage popStoragePanel;
-
-    private BuildSpaceLaunchSite buildSpaceLaunchSite;
-
-    private BuildObservatoryMenu buildObservatoryMenu;
-
-    private JButton buildButton;
+    
 
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
@@ -171,129 +159,9 @@ public class PlanetOverview extends JPanel {
                 sectorDisplayer.whatToShow = PlanetSectorDisplayer.PLANET_BUILDINGS;
             }
         });
-        buildingThingPanel = new JPanel();
-        buildingThingPanel.setLayout(new GridLayout(2, 1));
-        //Format build tab
-        buildingInfoPanel = new JPanel();
-        DefaultComboBoxModel<String> buildingModel = new DefaultComboBoxModel<>();
-        buildingModel.addElement("Residential area");
-        if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
-            //Do things
-            buildingModel.addElement("Launch Systems");
-        }
-        buildingModel.addElement("Observatory");
-
-        JPanel mainItemContainer = new JPanel();
-        buildCardLayout = new CardLayout();
-        mainItemContainer.setLayout(buildCardLayout);
-
-        popStoragePanel = new BuildPopulationStorage();
-
-        buildSpaceLaunchSite = new BuildSpaceLaunchSite(c);
-
-        buildObservatoryMenu = new BuildObservatoryMenu();
-
-        mainItemContainer.add(popStoragePanel, "Residential area");
-        mainItemContainer.add(buildSpaceLaunchSite, "Launch Systems");
-        mainItemContainer.add(buildObservatoryMenu, "Observatory");
-
-        buildCardLayout.show(mainItemContainer, "Residential area");
-
-        //Do whatever, add action listeners
-        buildingType = new JComboBox<String>(buildingModel);
-        buildingType.addActionListener(a -> {
-            switch ((String) buildingType.getSelectedItem()) {
-                case "Residential area":
-                    buildCardLayout.show(mainItemContainer, "Residential area");
-                    break;
-                case "Launch Systems":
-                    //System.out.println("showing");
-                    buildCardLayout.show(mainItemContainer, "Launch Systems");
-                    break;
-                case "Observatory":
-                    buildCardLayout.show(mainItemContainer, "Observatory");
-            }
-        });
-
-        buildButton = new JButton("Build!");
-        buildButton.addActionListener(a -> {
-            String item = (String) buildingType.getSelectedItem();
-            boolean toReset = false;
-            if (item.equals("Residential area")) {
-                ConquerSpace.game.buildings.PopulationStorage storage = new ConquerSpace.game.buildings.PopulationStorage();
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), storage, 0, 1);
-                //Reset...
-                toReset = true;
-            } else if (item.equals("Launch Systems")) {
-                //Get civ launching type...
-                //SpacePortBuilding port = new SpacePortBuilding(0, (Integer)buildSpaceLaunchSite.maxPopulation.getValue(), (LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), p);
-                //Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int)xposSpinner.getValue(), (int)yPosSpinner.getValue()), port, 0, 1);
-                SpacePort port = new SpacePort((LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), (Integer) buildSpaceLaunchSite.maxPopulation.getValue());
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), port, 0, 1);
-                toReset = true;
-            } else if (item.equals("Observatory")) {
-                StarSystem sys = u.getStarSystem(p.getParentStarSystem());
-                Observatory observatory = new Observatory(
-                        GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
-                        (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
-                        c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
-                //Add visionpoint to civ
-                c.visionPoints.add(observatory);
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), observatory, 0, 1);
-                toReset = true;
-            }
-            if (toReset) {
-                if ((int) xposSpinner.getValue() > 0) {
-                    xposSpinner.setValue(xposSpinner.getNextValue());
-                } else {
-                    xposSpinner.setValue(1);
-                }
-                //yPosSpinner.setValue(0);
-                //Then show alert
-                //But like it will be annoying....
-            }
-        });
-
-        buildingInfoPanel.setLayout(new VerticalFlowLayout());
-        buildingInfoPanel.add(buildingType);
-        buildingInfoPanel.add(mainItemContainer);
-        buildingInfoPanel.add(buildButton);
-
-        buildingThingPanel.add(buildingInfoPanel);
-        buildingPanel.add("Build", buildingThingPanel);
-
-        buildPanelXYPosContainer = new JPanel();
-        buildPanelXYPosContainer.setLayout(new GridLayout(2, 2));
-
-        xPosLabel = new JLabel("X");
-        SpinnerNumberModel xSpinnerMod = new SpinnerNumberModel(0, 0, p.getPlanetSize() * 2, -1);
-        xposSpinner = new JSpinner(xSpinnerMod);
-
-        buildPanelXYPosContainer.add(xPosLabel);
-        buildPanelXYPosContainer.add(xposSpinner);
-
-        yPosLabel = new JLabel("Y");
-        SpinnerNumberModel ySpinnerMod = new SpinnerNumberModel(0, 0, p.getPlanetSize(), -1);
-        yPosSpinner = new JSpinner(ySpinnerMod);
-
-        ChangeListener listener = a -> {
-            //Set location
-            sectorDisplayer.showLocation(new Point((int) xSpinnerMod.getValue(), (int) ySpinnerMod.getValue()), Color.RED);
-            sectorDisplayer.repaint();
-        };
-
-        xposSpinner.addChangeListener(listener);
-        yPosSpinner.addChangeListener(listener);
-
-        buildPanelXYPosContainer.add(yPosLabel);
-        buildPanelXYPosContainer.add(yPosSpinner);
-
-        buildingThingPanel.add(buildPanelXYPosContainer);
-
-        wrapper.add(buildingPanel);
-
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
+        
 
         //Add components
         planetOverview.add(planetName);
@@ -334,7 +202,7 @@ public class PlanetOverview extends JPanel {
             addMouseListener(this);
             BufferedImage planetDisplaying = new BufferedImage(p.terrain.terrainColor.length, p.terrain.terrainColor[0].length, BufferedImage.TYPE_3BYTE_BGR);
             //System.out.println(planetDisplaying);
-            
+
             if (p.terrain != null && p.getPlanetType() == PlanetTypes.ROCK) {
                 for (int x = 0; x < p.terrain.terrainColor.length; x++) {
                     for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
@@ -438,116 +306,6 @@ public class PlanetOverview extends JPanel {
         public void showLocation(Point pt, Color c) {
             point = pt;
             color = c;
-        }
-    }
-
-    //Various menus for building stats
-    private class BuildPopulationStorage extends JPanel implements ActionListener {
-
-        long maxPopulation;
-        private JLabel amount;
-        JSpinner maxPopulationTextField;
-
-        public BuildPopulationStorage() {
-            setLayout(new GridLayout(1, 2));
-            amount = new JLabel("Max Population");
-
-            SpinnerNumberModel model = new SpinnerNumberModel(10000l, 0l, Long.MAX_VALUE, 1000);
-            maxPopulationTextField = new JSpinner(model);
-            ((JSpinner.DefaultEditor) maxPopulationTextField.getEditor()).getTextField().setEditable(false);
-
-            add(amount);
-            add(maxPopulationTextField);
-        }
-
-        //Determine price
-        //Add this 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //Calculate the cost...
-            try {
-                maxPopulation = (Long) maxPopulationTextField.getValue();
-
-            } catch (NumberFormatException | ArithmeticException nfe) {
-                //Because who cares!
-
-            }
-        }
-    }
-
-    private class BuildSpaceLaunchSite extends JPanel implements ActionListener {
-
-        private JLabel amount;
-
-        private JSpinner maxPopulation;
-        private JLabel launchTypes;
-        private JComboBox<LaunchSystem> launchTypesValue;
-
-        public BuildSpaceLaunchSite(Civilization c) {
-            setLayout(new GridLayout(2, 2));
-            amount = new JLabel("Amount of launch ports");
-
-            launchTypes = new JLabel("Launch types");
-
-            SpinnerNumberModel model = new SpinnerNumberModel(3, 0, 5000, 1);
-
-            maxPopulation = new JSpinner(model);
-            ((JSpinner.DefaultEditor) maxPopulation.getEditor()).getTextField().setEditable(false);
-
-            launchTypesValue = new JComboBox<LaunchSystem>();
-
-            for (LaunchSystem t : c.launchSystems) {
-                launchTypesValue.addItem(t);
-            }
-            add(amount);
-            add(maxPopulation);
-            add(launchTypes);
-            add(launchTypesValue);
-        }
-
-        //Determine price
-        //Add this 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //Calculate the cost...
-            long pop = 0;
-            try {
-                pop = (Long) maxPopulation.getValue();
-
-            } catch (NumberFormatException | ArithmeticException nfe) {
-                //Because who cares!
-            }
-        }
-    }
-
-    private class BuildObservatoryMenu extends JPanel {
-
-        private JLabel lensSizeLabel;
-        private JSpinner lensSizeSpinner;
-        private JLabel telescopeRangeLabel;
-        private JLabel telescopeRangeValueLabel;
-
-        public BuildObservatoryMenu() {
-            setLayout(new GridLayout(2, 2));
-            lensSizeLabel = new JLabel("Lens Size(cm)");
-
-            SpinnerNumberModel model = new SpinnerNumberModel(50, 0, 5000, 1);
-
-            lensSizeSpinner = new JSpinner(model);
-            ((JSpinner.DefaultEditor) lensSizeSpinner.getEditor()).getTextField().setEditable(false);
-
-            lensSizeSpinner.addChangeListener(a -> {
-                //Calculate
-                telescopeRangeValueLabel.setText(GameUpdater.Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()) + " light years");
-
-            });
-
-            telescopeRangeLabel = new JLabel("Range: ");
-            telescopeRangeValueLabel = new JLabel("0 light years");
-            add(lensSizeLabel);
-            add(lensSizeSpinner);
-            add(telescopeRangeLabel);
-            add(telescopeRangeValueLabel);
         }
     }
 }

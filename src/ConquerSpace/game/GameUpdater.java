@@ -2,11 +2,11 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
-import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.buildings.ResourceGatherer;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.science.Fields;
@@ -17,10 +17,8 @@ import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.hull.Hull;
@@ -36,7 +34,6 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
-import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
@@ -263,12 +260,17 @@ public class GameUpdater {
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
-                Actions.launchShip(s, starting, c);
+                //Actions.launchShip(s, starting, c);
                 //Set ownership
 
                 starting.setOwnerID(c.getID());
 
                 c.habitatedPlanets.add(starting);
+
+                //Add resources
+                for (Resource res : GameController.resources) {
+                    c.resourceList.put(res, 0);
+                }
 
                 //Add Civ initalize values
                 c.values.put("haslaunch", 0);
@@ -651,12 +653,12 @@ public class GameUpdater {
         p.setY(pt.y);
 
         //Get the amount of resources to add
-        HashMap<Integer, Integer> resources = new HashMap<>();
-        resources.put(RawResourceTypes.ROCK, 0);
-        resources.put(RawResourceTypes.GAS, 0);
-        resources.put(RawResourceTypes.METAL, 0);
-        resources.put(RawResourceTypes.FOOD, 0);
-        resources.put(RawResourceTypes.ENERGY, 0);
+        HashMap<Resource, Integer> resources = new HashMap<>();
+
+        for (Resource r : GameController.resources) {
+            resources.put(r, 0);
+        }
+
         //Process buildings
         for (Map.Entry<ConquerSpace.game.universe.Point, Building> entry : p.buildings.entrySet()) {
             ConquerSpace.game.universe.Point key = entry.getKey();
@@ -680,12 +682,20 @@ public class GameUpdater {
                     splp.ticks += GameController.GameRefreshRate;
                     //Get when to launch...
                 }
+            } else if (building instanceof ResourceStockpile) {
+                //Process...
+                ResourceStockpile stockpile = (ResourceStockpile) building;
+            } else if (building instanceof ResourceGatherer) {
+                ResourceGatherer gatherer = (ResourceGatherer) building;
+                //Get the resource stockpiles
+                resources.put(gatherer.getResourceMining(), (int) (resources.get(gatherer.getResourceMining()) + gatherer.getAmountMined()));
+
             }
         }
         //Process storing of resourcese
         if (p.getOwnerID() >= 0) {
-            for (Map.Entry<Integer, Integer> re : resources.entrySet()) {
-                Integer key = re.getKey();
+            for (Map.Entry<Resource, Integer> re : resources.entrySet()) {
+                Resource key = re.getKey();
                 Integer value = re.getValue();
                 storeResource(key, value, p.getOwnerID(), p.getUniversePath());
             }
@@ -697,7 +707,7 @@ public class GameUpdater {
 
     }
 
-    public void storeResource(int resourceType, int amount, int owner, UniversePath from) {
+    public void storeResource(Resource resourceType, int amount, int owner, UniversePath from) {
         //Process
         Civilization c = universe.getCivilization(owner);
         for (ResourceStockpile rs : c.resourceStorages) {
@@ -713,12 +723,12 @@ public class GameUpdater {
     public void processResearch() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-            
+
             Iterator<Technology> tech = c.currentlyResearchingTechonologys.keySet().iterator();
-            
+
             while (tech.hasNext()) {
                 Technology t = tech.next();
-                
+
                 if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
                     //Then tech is finished
                     c.researchTech(t);
@@ -742,7 +752,7 @@ public class GameUpdater {
             for (ResourceStockpile s : c.resourceStorages) {
                 //Get resource types allowed, and do stuff
                 //c.resourceList.
-                for (int type : s.storedTypes()) {
+                for (Resource type : s.storedTypes()) {
                     //add to index
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
                     c.resourceList.put(type, amountToAdd);

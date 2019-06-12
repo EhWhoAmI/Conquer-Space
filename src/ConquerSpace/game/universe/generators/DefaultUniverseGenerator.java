@@ -182,7 +182,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         if(p.terrain.terrainColor[0][0] == null) {
             throw new ArithmeticException();
         }
-        System.out.println(p.terrain.terrainColor[0][0]);
 
         universe.addCivilization(playerCiv);
         //Calculate number of civs
