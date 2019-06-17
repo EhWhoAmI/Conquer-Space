@@ -9,6 +9,7 @@ import ConquerSpace.game.buildings.ResourceGatherer;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.generators.TerrainGenerator;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -17,6 +18,7 @@ import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
+import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -37,6 +39,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.ButtonGroup;
@@ -298,32 +301,18 @@ public class BuildingMenu extends JPanel {
         private Image img;
         private Terrain terrain;
         private Point lastClicked;
+                private TerrainRenderer renderer;
 
         int size = 2;
 
         public PlanetSectorDisplayer(Planet p, Civilization c) {
             this.c = c;
-            terrain = p.terrain;
             setPreferredSize(
-                    new Dimension(p.terrain.terrainColor.length * size, p.terrain.terrainColor[0].length * size));
+                    new Dimension(p.getPlanetSize() * 4, p.getPlanetSize() * 2));
             menu = new JPopupMenu();
             addMouseListener(this);
-            BufferedImage planetDisplaying = new BufferedImage(p.terrain.terrainColor.length, p.terrain.terrainColor[0].length, BufferedImage.TYPE_3BYTE_BGR);
-            //System.out.println(planetDisplaying);
-
-            if (p.terrain != null && p.getPlanetType() == PlanetTypes.ROCK) {
-                for (int x = 0; x < p.terrain.terrainColor.length; x++) {
-                    for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
-                        //System.out.println(x + " " + y + ";" + p.terrain.terrainColor[x][y]);
-                        //System.err.println(planetDisplaying);
-                        planetDisplaying.setRGB(x, y,
-                                p.terrain.terrainColor[x][y].color.
-                                        getRGB());
-
-                    }
-                }
-                img = planetDisplaying.getScaledInstance(p.terrain.terrainColor.length * size, p.terrain.terrainColor[0].length * size, Image.SCALE_DEFAULT);
-            }
+            renderer = new TerrainRenderer(p);
+            img = renderer.getImage(2);
         }
 
         @Override

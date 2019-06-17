@@ -132,22 +132,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 }
 
                 if (planetType == PlanetTypes.ROCK) {
-                    HashMap<Float, Color> colors = new HashMap<>();
-                    //Set planet tileset...
-                    //And composotion
-                    colors.put(-1f, new Color(69, 24, 4));
-                    colors.put(-0.25f, new Color(193, 68, 14));
-                    colors.put(0.25f, new Color(231, 125, 17));
-                    colors.put(0.75f, new Color(253, 166, 0));
-                    colors.put(0.9f, new Color(240, 231, 231));
-                    Color[][] terrainColorses = terrainGenerator.generate(rand.nextInt(), 6, 0.5f, 2.8f, 0.5f, planetSize * 2, planetSize, 0, planetSize / 3, 0, planetSize / 6, colors);
-
-                    for (int x = 0; x < terrainColorses.length; x++) {
-                        for (int y = 0; y < terrainColorses[0].length; y++) {
-                            p.terrain.terrainColor[x][y] = new TerrainTile();
-                            p.terrain.terrainColor[x][y].color = terrainColorses[x][y];
-                        }
-                    }
+                    
+                    p.setTerrainSeed(rand.nextInt());
                     //= terrainColorses;
                 }
                 //System.err.println(p.terrain.terrainColor[0][0]);
@@ -178,10 +164,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
         UniversePath up = getRandomSuitablePlanet(rand, universe);
         playerCiv.setStartingPlanet(up);
-        Planet p = (Planet) universe.getSpaceObject(up);
-        if (p.terrain.terrainColor[0][0] == null) {
-            throw new ArithmeticException();
-        }
 
         universe.addCivilization(playerCiv);
         //Calculate number of civs

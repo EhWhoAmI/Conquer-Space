@@ -11,7 +11,6 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.game.planetdisplayer.BuildingMenu;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
-import ConquerSpace.gui.game.planetdisplayer.PlanetResources;
 import ConquerSpace.gui.game.planetdisplayer.PlayerPopulation;
 import java.awt.BorderLayout;
 import java.util.Map;

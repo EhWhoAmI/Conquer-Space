@@ -1,24 +1,18 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.GameUpdater;
-import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.Observatory;
-import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.generators.TerrainGenerator;
 import ConquerSpace.game.universe.resources.ResourceVein;
-import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
+import ConquerSpace.game.universe.spaceObjects.terrain.TerrainTile;
+import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -26,32 +20,22 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ButtonGroup;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeListener;
 
 /**
  * Display sectors and stuff.
@@ -73,10 +57,6 @@ public class PlanetOverview extends JPanel {
     private JButton switchButton;
     private ButtonGroup resourceButtonGroup;
     private JRadioButton[] showResources;
-
-    
-
-    
 
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
@@ -161,7 +141,6 @@ public class PlanetOverview extends JPanel {
         });
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
-        
 
         //Add components
         planetOverview.add(planetName);
@@ -190,32 +169,18 @@ public class PlanetOverview extends JPanel {
         private Color color;
         private Point point;
         private Image img;
-        private Terrain terrain;
         private Point lastClicked;
+        private TerrainRenderer renderer;
 
         public PlanetSectorDisplayer(Planet p, Civilization c) {
             this.c = c;
-            terrain = p.terrain;
             setPreferredSize(
-                    new Dimension(p.terrain.terrainColor.length * 2, p.terrain.terrainColor[0].length * 2));
+                    new Dimension(p.getPlanetSize() * 4, p.getPlanetSize() * 2));
             menu = new JPopupMenu();
             addMouseListener(this);
-            BufferedImage planetDisplaying = new BufferedImage(p.terrain.terrainColor.length, p.terrain.terrainColor[0].length, BufferedImage.TYPE_3BYTE_BGR);
-            //System.out.println(planetDisplaying);
+            renderer = new TerrainRenderer(p);
+            img = renderer.getImage(2);
 
-            if (p.terrain != null && p.getPlanetType() == PlanetTypes.ROCK) {
-                for (int x = 0; x < p.terrain.terrainColor.length; x++) {
-                    for (int y = 0; y < p.terrain.terrainColor[x].length; y++) {
-                        //System.out.println(x + " " + y + ";" + p.terrain.terrainColor[x][y]);
-                        //System.err.println(planetDisplaying);
-                        planetDisplaying.setRGB(x, y,
-                                p.terrain.terrainColor[x][y].color.
-                                        getRGB());
-
-                    }
-                }
-                img = planetDisplaying.getScaledInstance(p.terrain.terrainColor.length * 2, p.terrain.terrainColor[0].length * 2, Image.SCALE_DEFAULT);
-            }
         }
 
         @Override

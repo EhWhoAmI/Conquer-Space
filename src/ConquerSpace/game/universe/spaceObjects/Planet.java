@@ -44,7 +44,6 @@ public class Planet extends SpaceObject {
     
     public HashMap<Point, Building> buildings;
     
-    public Terrain terrain;
     
     private int terrainSeed;
     
@@ -72,7 +71,6 @@ public class Planet extends SpaceObject {
         //planetSectors = new PlanetSector[surfaceArea];
         economy = new Economy();
         satellites = new ArrayList<>();
-        terrain = new Terrain(planetSize * 2, planetSize, 7);
         resourceVeins = new ArrayList<>();
         buildings = new HashMap<>();
     }
