@@ -2,6 +2,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -9,9 +10,13 @@ import ConquerSpace.game.universe.civilization.controllers.PlayerController.Play
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
+import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.names.NameGenerator;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -38,6 +43,7 @@ public class GameController {
     public static ArrayList<Resource> resources;
     public static HashMap<String, Integer> shipTypes;
     public static GameUpdater updater;
+    public static MusicPlayer musicPlayer;
 
     /**
      * Constructor. Inits all components.
@@ -81,7 +87,6 @@ public class GameController {
 
         if (Globals.date.bigint % GameRefreshRate == 0) {
             long start = System.currentTimeMillis();
-            //Globals.universe.processTurn(GameRefreshRate, Globals.date);
 
             updater.updateUniverse(Globals.universe, Globals.date);
 
@@ -98,6 +103,28 @@ public class GameController {
             long end = System.currentTimeMillis();
 
             LOGGER.trace("Took " + (end - start) + " ms");
+        }
+        //Process people and generate every 1000 ticks, which is about every 41 days
+        if (Globals.date.bigint % 1000 == 0) {
+            for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+                Civilization c = Globals.universe.getCivilization(i);
+                NameGenerator gen = null;
+                try {
+                    gen = NameGenerator.getNameGenerator("us.names");
+                } catch (IOException ex) {
+                    //Ignore
+                }
+                //Create 5-10 random scientists
+                c.unrecruitedPeople.clear();
+                int peopleCount = (int) (Math.random() * 5) + 5;
+                for (int peep = 0; peep < peopleCount; peep++) {
+                    int age = (int) (Math.random() * 40) + 20;
+                    String person = "name";
+                    person = gen.getName((int) Math.round(Math.random()));
+                    Scientist nerd = new Scientist(person, age);
+                    c.unrecruitedPeople.add(nerd);
+                }
+            }
         }
     }
 }

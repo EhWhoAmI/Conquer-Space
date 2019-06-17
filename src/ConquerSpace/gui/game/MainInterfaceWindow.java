@@ -28,6 +28,9 @@ public class MainInterfaceWindow extends JInternalFrame {
     private PlanetInfoSheet planetInfoSheet;
     private SpaceShipOverview spaceShipOverview;
     private HullCreator hullCreator;
+    
+    private PersonWindow personWindow;
+    private RecruitingPerson recruitingPerson;
 
     private Civilization c;
     private Universe u;
@@ -95,10 +98,18 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         shipComponentsOverview.add(shipsComponentsOverviewPanel, BorderLayout.CENTER);
 
+        JTabbedPane peopleTabs = new JTabbedPane();
+        personWindow = new PersonWindow(c);
+        peopleTabs.add("Person List", personWindow);
+        
+        recruitingPerson = new RecruitingPerson(c);
+        peopleTabs.add("Recruitment", recruitingPerson);
+        
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
         tabs.add("Ships", spaceShipOverview);
         tabs.add("Engineering", shipComponentsOverview);
+        tabs.add("People", peopleTabs);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);

@@ -61,4 +61,8 @@ public class ResourceVein {
     public void setResourceType(Resource resourceType) {
         this.resourceType = resourceType;
     }
+    
+    public void removeResources(int amount) {
+        resourceAmount-=amount;
+    }
 }

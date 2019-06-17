@@ -45,6 +45,10 @@ public class Planet extends SpaceObject {
     public HashMap<Point, Building> buildings;
     
     public Terrain terrain;
+    
+    private int terrainSeed;
+    
+    private int terrainColoringIndex;
     /**
      * Creates planet
      *
@@ -207,6 +211,12 @@ public class Planet extends SpaceObject {
         }
         return name;
     }
-    
-    
+
+    public int getTerrainSeed() {
+        return terrainSeed;
+    }
+
+    public void setTerrainSeed(int terrainSeed) {
+        this.terrainSeed = terrainSeed;
+    }
 }

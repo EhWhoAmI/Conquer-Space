@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameSpeeds;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
@@ -92,6 +93,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         exitGameButton.setFocusable(false);
         exitGameButton.addActionListener((e) -> {
             System.exit(0);
+            GameController.musicPlayer.clean();
         });
 
         manualButton.setFocusable(false);

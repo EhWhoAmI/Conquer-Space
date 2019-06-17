@@ -1,6 +1,0 @@
-{
-    "name" : "tester",
-    "rules" : ["s1\\s2"],
-    "s1" : ["ah", "bh", "ch"],
-    "s2" : ["ab", "bb", "cc"]
-}

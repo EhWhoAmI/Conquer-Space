@@ -1,5 +1,7 @@
 package ConquerSpace;
 
+import ConquerSpace.game.GameController;
+import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
 import ConquerSpace.util.CQSPLogger;
@@ -70,7 +72,7 @@ public class ConquerSpace {
      * Localization.
      */
     public static Messages localeMessages;
-
+    
     /**
      * Main class.
      *
@@ -141,7 +143,7 @@ public class ConquerSpace {
         } catch (UnsupportedLookAndFeelException ex) {
             LOGGER.warn("", ex);
         }
-
+        GameController.musicPlayer = new MusicPlayer();
         // Load all the files.
         InitialLoading loading = new InitialLoading();
         loading.setVisible(true);

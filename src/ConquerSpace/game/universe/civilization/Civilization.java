@@ -72,6 +72,7 @@ public class Civilization {
     private int techLevel = 0;
 
     public ArrayList<Person> people;
+    public ArrayList<Person> unrecruitedPeople;
 
     public ArrayList<LaunchSystem> launchSystems;
 
@@ -118,7 +119,10 @@ public class Civilization {
         civResearch = new HashMap<>();
 
         currentlyResearchingTechonologys = new HashMap<>();
+        
         people = new ArrayList<>();
+        unrecruitedPeople = new ArrayList<>();
+        
         launchSystems = new ArrayList<>();
         satelliteTemplates = new ArrayList<>();
 

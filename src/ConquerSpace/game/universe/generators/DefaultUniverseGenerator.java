@@ -178,8 +178,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
         UniversePath up = getRandomSuitablePlanet(rand, universe);
         playerCiv.setStartingPlanet(up);
-        Planet p = (Planet)universe.getSpaceObject(up);
-        if(p.terrain.terrainColor[0][0] == null) {
+        Planet p = (Planet) universe.getSpaceObject(up);
+        if (p.terrain.terrainColor[0][0] == null) {
             throw new ArithmeticException();
         }
 
@@ -218,7 +218,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         do {
             //Loop through the numbers
             if (sys.getPlanetCount() <= 0 || randomP >= sys.getPlanetCount()) {
-                if (randomSS >= u.getStarSystemCount()-1) {
+                if (randomSS >= u.getStarSystemCount() - 1) {
                     randomSS = 0;
                 } else {
                     randomSS++;

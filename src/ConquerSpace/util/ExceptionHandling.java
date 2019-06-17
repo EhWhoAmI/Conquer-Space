@@ -9,17 +9,21 @@ import javax.swing.JOptionPane;
 
 /**
  * The one class I hope no one sees.
+ *
  * @author Zyun
  */
 public class ExceptionHandling {
+
     /**
      * Takes in a string and exception. Has a message box for the user and makes
      * a crash dump.
-     * @param what Your own message. 
+     *
+     * @param what Your own message.
      * @param ex Exception that caused it.
      */
-    public static void ExceptionMessageBox(String what, Exception ex){
+    public static void ExceptionMessageBox(String what, Exception ex) {
         PrintWriter writer = null;
+        int exit = 1;
         try {
             String header = "Something has gone wrong with Conquer Space\n"
                     + "We are sorry for the inconvinence.\n"
@@ -27,10 +31,20 @@ public class ExceptionHandling {
                     + "Here's some information for the developers.\n\n"
                     + "Conquer Space v " + ConquerSpace.ConquerSpace.VERSION.toString() + "\n"
                     + "Build: " + ConquerSpace.ConquerSpace.BUILD_NUMBER + "\n\n" + what;
-            JOptionPane.showMessageDialog(null, String.format(localeMessages.getMessage("errorhandlingheader"), ConquerSpace.ConquerSpace.VERSION, ConquerSpace.ConquerSpace.VERSION) + "\n\n" + what, ex.getClass().getName() + ": " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            exit = JOptionPane.showConfirmDialog(
+                    null, String.format(localeMessages.getMessage("errorhandlingheader"), 
+                            ConquerSpace.ConquerSpace.VERSION, 
+                            ConquerSpace.ConquerSpace.VERSION)
+                            + "\n\n" + what + 
+                            "\n\nDo you want to quit the game?"
+                    , ex.getClass().getName()
+                                    + ": " + ex.getMessage(),
+                            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             //Create dump file
             File file = new File("crashlog.txt");
-            if (!file.exists())file.createNewFile();
+            if (!file.exists()) {
+                file.createNewFile();
+            }
             writer = new PrintWriter(file);
             writer.println(ex.getClass().getName() + ": " + ex.getMessage());
             writer.println();
@@ -46,17 +60,21 @@ public class ExceptionHandling {
         } finally {
             writer.close();
         }
-        
+        if (exit == 0) {
+            System.exit(1);
+        }
     }
-    
+
     /**
      * Takes in a string and exception. Has a message box for the user and makes
      * a crash dump.
-     * @param what Your own message. 
+     *
+     * @param what Your own message.
      * @param ex Exception that caused it.
      */
-    public static void ExceptionMessageBox(String what, Throwable ex){
+    public static void ExceptionMessageBox(String what, Throwable ex) {
         PrintWriter writer = null;
+        int exit = 1;
         try {
             String header = "Something has gone wrong with Conquer Space\n"
                     + "We are sorry for the inconvinence.\n"
@@ -64,10 +82,16 @@ public class ExceptionHandling {
                     + "Here's some information for the developers.\n\n"
                     + "Conquer Space v " + ConquerSpace.ConquerSpace.VERSION.toString() + "\n"
                     + "Build: " + ConquerSpace.ConquerSpace.BUILD_NUMBER + "\n\n" + what;
-            JOptionPane.showMessageDialog(null, String.format(localeMessages.getMessage("errorhandlingheader"), ConquerSpace.ConquerSpace.VERSION, ConquerSpace.ConquerSpace.VERSION) + "\n\n" + what, ex.getClass().getName() + ": " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
-            //Create dump file
+            exit = JOptionPane.showConfirmDialog(null, 
+                    String.format(localeMessages.getMessage("errorhandlingheader"), 
+                            ConquerSpace.ConquerSpace.VERSION, ConquerSpace.ConquerSpace.VERSION) 
+                            + "\n\n" + what + "\n\nDo you want to quit the game?"
+                    , ex.getClass().getName() + ": " + ex.getMessage()
+                    , JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);            //Create dump file
             File file = new File("crashlog.txt");
-            if (!file.exists())file.createNewFile();
+            if (!file.exists()) {
+                file.createNewFile();
+            }
             writer = new PrintWriter(file);
             writer.println(ex.getClass().getName() + ": " + ex.getMessage());
             writer.println();
@@ -83,6 +107,8 @@ public class ExceptionHandling {
         } finally {
             writer.close();
         }
-        
+        if (exit == 0) {
+            System.exit(1);
+        }
     }
 }

@@ -18,4 +18,11 @@ public class Scientist extends Person{
     public void setSkill(int skill) {
         this.skill = skill;
     }
+
+    @Override
+    public String getJobName() {
+        return "Scientist";
+    }
+    
+    
 }

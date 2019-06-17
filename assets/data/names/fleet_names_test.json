@@ -1,0 +1,6 @@
+{
+    "name" : "fleet_tester",
+    "rules" : ["f\\[c/a/r]"],
+    "counters": ["a"],
+    "f":["Air Wing "]
+}

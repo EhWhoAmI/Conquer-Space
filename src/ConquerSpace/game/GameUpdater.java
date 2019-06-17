@@ -19,6 +19,7 @@ import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.hull.Hull;
@@ -34,6 +35,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
+import ConquerSpace.util.names.NameGenerator;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,6 +47,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -130,51 +133,6 @@ public class GameUpdater {
                 }
             }
         }
-
-        /*for (int k = 0; k < universe.getStarSystemCount(); k++) {
-            for (int i = 0; i < universe.getStarSystem(k).getPlanetCount(); i++) {
-                Planet p = universe.getStarSystem(k).getPlanet(i);
-                //Get satellites
-                for (Orbitable s : p.getSatellites()) {
-                    if (s instanceof VisionPoint) {
-                        //Compute
-                        int range = ((VisionPoint) s).getRange();
-                        //Distance between all star systems...
-                        for (int g = 0; g < universe.getStarSystemCount(); g++) {
-                            //Difference between points...
-                            int dist = (int) Math.hypot(visionStats.get(k).position.y - visionStats.get(universe.getStarSystem(g).getId()).position.y,
-                                    visionStats.get(k).position.x - visionStats.get(universe.getStarSystem(g).getId()).position.x);
-                            if (dist < range) {
-                                //Its in!
-                                int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
-                                int previous = universe.getCivilization(((VisionPoint) s).getCivilization()).vision.get(p.getUniversePath());
-                                universe.getCivilization(((VisionPoint) s).getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
-                                        ((previous + amount) > 100) ? 100 : (previous + amount));
-                            }
-                        }
-                    }
-                }
-                //Observetaries
-                /*for (PlanetSector sector : p.planetSectors) {
-                    if (sector instanceof VisionPoint) {
-                        int range = ((VisionPoint) sector).getRange();
-                        for (int g = 0; g < universe.getStarSystemCount(); g++) {
-                            //Difference between points...
-                            int dist = (int) Math.hypot(visionStats.get(k).position.y - visionStats.get(universe.getStarSystem(g).getId()).position.y,
-                                    visionStats.get(k).position.x - visionStats.get(universe.getStarSystem(g).getId()).position.x);
-                            if (dist < range) {
-                                //Its in!
-                                int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
-                                int previous = universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.get(p.getUniversePath());
-
-                                universe.getCivilization(((VisionPoint) sector).getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
-                                        ((previous + amount) > 100) ? 100 : (previous + amount));
-                            }
-                        }
-                    }
-
-                }
-            }*/
     }
 
     public void initGame() {
@@ -191,7 +149,12 @@ public class GameUpdater {
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
-
+        NameGenerator gen = null;
+        try {
+            gen = NameGenerator.getNameGenerator("us.names");
+        } catch (IOException ex) {
+            //Ignore
+        }
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -211,7 +174,23 @@ public class GameUpdater {
 
             //Add researchers
             //Only one. Testing guy
-            Scientist r = new Scientist("Person", 20);
+            String name = "Person";
+            if (gen != null) {
+                name = gen.getName(Math.round(selector.nextFloat()));
+            }
+
+            //Add unrecruited people
+            c.unrecruitedPeople.clear();
+            int peopleCount = (int) (Math.random() * 5) + 5;
+            
+            for (int peep = 0; peep < peopleCount; peep++) {
+                int age = (int) (Math.random() * 40) + 20;
+                String person = "name";
+                person = gen.getName((int) Math.round(Math.random()));
+                Scientist nerd = new Scientist(person, age);
+                c.unrecruitedPeople.add(nerd);
+            }
+            Scientist r = new Scientist(name, 20);
             r.setSkill(1);
             c.people.add(r);
 
@@ -687,8 +666,12 @@ public class GameUpdater {
                 ResourceStockpile stockpile = (ResourceStockpile) building;
             } else if (building instanceof ResourceGatherer) {
                 ResourceGatherer gatherer = (ResourceGatherer) building;
-                //Get the resource stockpiles
-                resources.put(gatherer.getResourceMining(), (int) (resources.get(gatherer.getResourceMining()) + gatherer.getAmountMined()));
+                ResourceVein vein = gatherer.getVeinMining();
+                if (vein.getResourceAmount() > 0) {
+                    vein.removeResources((int) gatherer.getAmountMined());
+                    //Get the resource stockpiles
+                    resources.put(gatherer.getResourceMining(), (int) (resources.get(gatherer.getResourceMining()) + gatherer.getAmountMined()));
+                }
 
             }
         }

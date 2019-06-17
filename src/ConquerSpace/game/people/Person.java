@@ -9,6 +9,7 @@ public class Person {
     private int age;
     //Not sure what to add to this for now
     //private ArrayList<?> multipliers;
+    //Job??
 
     public Person(String name, int age) {
         this.name = name;
@@ -32,5 +33,14 @@ public class Person {
      */
     public void age() {
         age++;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+    
+    public String getJobName() {
+        return "None";
     }
 }

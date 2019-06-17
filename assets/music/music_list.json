@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Cosmic Clouds",
+        "composer": "Nirekin Inc.",
+        "file": "CosmicClouds.ogg",
+        "length": 178
+    }, 
+    {
+        "name": "Distant Systen",
+        "composer": "Nirekin Inc.",
+        "file": "DistantSystem.ogg",
+        "length": 146
+    }, 
+    { 
+        "name": "Risky Warp",
+        "composer": "Nirekin Inc.",
+        "file": "RiskyWarp.ogg",
+        "length": 136
+    },
+    {
+        "name": "Satellite Launch",
+        "composer": "Nirekin Inc.",
+        "file": "StatelliteLaunch.ogg",
+        "length": 139
+    },
+    {
+        "name": "Stars",
+        "composer": "EhWhoAmI",
+        "file": "stars.ogg",
+        "length": 57
+    }
+]

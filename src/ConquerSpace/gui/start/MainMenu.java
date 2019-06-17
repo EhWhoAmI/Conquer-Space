@@ -29,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.newdawn.easyogg.OggClip;
 
 /**
@@ -41,7 +43,6 @@ public class MainMenu extends JFrame implements WindowListener {
     //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
 
-    OggClip clip;
 
     /**
      * Constructor, show main menu.
@@ -51,14 +52,6 @@ public class MainMenu extends JFrame implements WindowListener {
         //setLayout(new GridLayout(2, 1, 10, 10));
         setLayout(new BorderLayout());
 
-        try {
-            //Load music
-            clip = new OggClip(new FileInputStream("assets/music/stars.ogg"));
-        } catch (FileNotFoundException ex) {
-            LOGGER.info("No Sound!");
-        } catch (IOException ex) {
-            LOGGER.info("No Sound!");
-        }
         TopBanner topBanner = new TopBanner();
         topBanner.setPreferredSize(new Dimension(600, 150));
 
@@ -76,10 +69,6 @@ public class MainMenu extends JFrame implements WindowListener {
     public void setVisible(boolean b) {
         super.setVisible(b);
         //play sound
-        if (b) {
-            //Then plau
-            clip.loop();
-        }
     }
 
     @Override
@@ -93,8 +82,6 @@ public class MainMenu extends JFrame implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        clip.stop();
-        clip.close();
     }
 
     @Override
