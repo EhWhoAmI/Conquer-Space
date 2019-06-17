@@ -1,5 +1,7 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.people.Person;
+import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -7,14 +9,20 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -33,11 +41,16 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
     private JLabel techEstTime;
     private JButton researchButton;
 
+    private DefaultComboBoxModel<Person> personComboBoxModel;
+    private JComboBox<Person> personComboBox;
+
     private JPanel researchProgressPanel;
     private JLabel researchingTech;
     private JLabel researcher;
     private JLabel estTimeLeft;
     private TechonologyViewer techonologyViewer;
+    private JTable techTable;
+    private DefaultTableModel techTableModel;
 
     private Civilization c;
 
@@ -45,12 +58,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         this.c = c;
         init();
 
-        //Timer researchingTechticker = new Timer(100, (e) -> {
-            update();
-        //});
-
-        //researchingTechticker.setRepeats(true);
-        //researchingTechticker.start();
+        update();
 
         add(pane, BorderLayout.CENTER);
     }
@@ -84,12 +92,22 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         techEstTime = new JLabel("");
         techInfoPanel.add(techEstTime);
 
+        personComboBoxModel = new DefaultComboBoxModel<>();
+        for (Person p : c.people) {
+            if (p instanceof Scientist) {
+                personComboBoxModel.addElement(p);
+            }
+        }
+        techInfoPanel.add(new JLabel("Researcher:"));
+        personComboBox = new JComboBox<>(personComboBoxModel);
+        techInfoPanel.add(personComboBox);
+
         researchButton = new JButton("Research");
         researchButton.setFocusable(false);
         researchButton.addActionListener((e) -> {
             //Get first researcher to research
             if (!tech.isSelectionEmpty()) {
-                c.assignResearch(tech.getSelectedValue(), c.people.get(0));
+                c.assignResearch(tech.getSelectedValue(), (Scientist) personComboBox.getSelectedItem());
                 list.removeElement(tech.getSelectedValue());
                 //Set everything empty
                 techName.setText("");
@@ -102,31 +120,43 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         researchProgressPanel = new JPanel();
         researchProgressPanel.setLayout(new VerticalFlowLayout());
 
+        techTableModel = new DefaultTableModel(new String[]{"Tech", "Researcher", "Time left"}, 0);
+        techTable = new JTable(techTableModel);
+        JScrollPane techTableContainer = new JScrollPane(techTable);
+        researchProgressPanel.add(techTableContainer);
+
         researchingTech = new JLabel("");
-        researchProgressPanel.add(researchingTech);
+        //researchProgressPanel.add(researchingTech);
 
         researcher = new JLabel("");
-        researchProgressPanel.add(researcher);
+        //researchProgressPanel.add(researcher);
 
         estTimeLeft = new JLabel("");
-        researchProgressPanel.add(estTimeLeft);
+        //researchProgressPanel.add(estTimeLeft);
 
         techResearcher.add(tech);
         techResearcher.add(techInfoPanel);
-
         pane.addChangeListener((e) -> {
+            techTableModel.setRowCount(0);
             for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
-                researchingTech.setText(t.getName());
-                researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
-                estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+                //researchingTech.setText(t.getName());
+                //researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
+                //estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+                techTableModel.addRow(new String[]{t.getName(), c.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
+            }
+            personComboBoxModel.removeAllElements();
+            for (Person p : c.people) {
+                if (p instanceof Scientist) {
+                    personComboBoxModel.addElement(p);
+                }
             }
         });
         techonologyViewer = new TechonologyViewer(c);
-        
+
         pane.addTab("Research", techResearcher);
         pane.addTab("Researching", researchProgressPanel);
         pane.addTab("Researched Techs", techonologyViewer);
-        
+
         pane.addChangeListener(a -> {
             techonologyViewer.update();
         });

@@ -179,25 +179,27 @@ public class GameUpdater {
                 name = gen.getName(Math.round(selector.nextFloat()));
             }
 
+            Scientist r = new Scientist(name, 20);
+            r.setSkill(1);
+            c.people.add(r);
+
             //Add unrecruited people
             c.unrecruitedPeople.clear();
             int peopleCount = (int) (Math.random() * 5) + 5;
-            
+
             for (int peep = 0; peep < peopleCount; peep++) {
                 int age = (int) (Math.random() * 40) + 20;
                 String person = "name";
                 person = gen.getName((int) Math.round(Math.random()));
                 Scientist nerd = new Scientist(person, age);
+                nerd.setSkill((int)(Math.random() * 5) + 1);
                 c.unrecruitedPeople.add(nerd);
             }
-            Scientist r = new Scientist(name, 20);
-            r.setSkill(1);
-            c.people.add(r);
-
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             c.hullMaterials.add(material);
 
             UniversePath p = c.getStartingPlanet();
+            
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
 

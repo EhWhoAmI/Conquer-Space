@@ -23,6 +23,4 @@ public class Scientist extends Person{
     public String getJobName() {
         return "Scientist";
     }
-    
-    
 }

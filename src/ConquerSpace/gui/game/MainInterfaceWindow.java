@@ -9,6 +9,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
+import javax.swing.Timer;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -113,6 +114,15 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
+        
+        // Updating code
+        Timer t = new Timer(500, a -> {
+            recruitingPerson.update();
+            personWindow.update();
+            update();
+        });
+        t.setRepeats(true);
+        t.start();
     }
 
     public void update() {
