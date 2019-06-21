@@ -2,6 +2,7 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.ShipClass;
+import ConquerSpace.game.universe.ships.components.EngineComponent;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -9,6 +10,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -27,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONObject;
 
@@ -65,11 +69,15 @@ public class ShipDesigner extends JPanel {
     private JLabel thrust;
     private JLabel thrustUnit;
 
+    private JLabel estimatedAccLabel;
+    private JLabel estimatedAcc;
+    private JLabel estimatedAccUnit;
+
     private JPanel installedShipComponentsPanel;
     private JScrollPane shipInstalledComponentsScrollPane;
-    private String[] installedShipComponentColunms = {"Name", "Mass", "Space", "Rating Type", "Rating", "Cost", "Quantity"};
+    private String[] installedShipComponentColunms = {"Name", "Mass", "Space", "Rating Type", "Rating", "Cost", "Type", "Quantity"};
     private JTable installedShipComponents;
-    private DefaultTableModel installedShipComponentsTableModel;
+    private AddedComponentTableModel installedShipComponentsTableModel;
     private JButton removeInstalledComponent;
 
     private JTabbedPane componentTableTabs;
@@ -82,15 +90,24 @@ public class ShipDesigner extends JPanel {
     private JButton hullSelectorButton;
 
     private JTable componentTable;
-    private String[] componentTableColunms = {"Name", "Mass", "Space", "Rating Type", "Rating", "Cost"};
-    private DefaultTableModel componentTableModel;
+    private String[] componentTableColunms = {"Name", "Mass", "Space", "Rating Type", "Rating", "Cost", "Type"};
+    private ComponentTableModel componentTableModel;
     private JScrollPane componentTableScrollPane;
     private JPanel componentTableContainer;
     private JButton selectComponentButton;
 
     private JTabbedPane shipStuffPanel;
+    private Civilization c;
+
+    long hullRatedThrust = 0;
+    long preparedThrust = 0;
+
+    long massValue = 0;
+    
+    Hull selectedHull = null;
 
     public ShipDesigner(Civilization c) {
+        this.c = c;
         setLayout(new BorderLayout());
         //Set menubar
         menubar = new JMenuBar();
@@ -106,24 +123,29 @@ public class ShipDesigner extends JPanel {
                 JOptionPane.showMessageDialog(this, "You need to have a hull in order for the ship to work!");
 
             } else {
-                Hull hull = c.hulls.stream().findFirst().filter(h -> (h.getName().toLowerCase().
-                        equals(hullTable.getValueAt(row, 0).toString().toLowerCase()))).orElseGet(null);
+                Hull hull = selectedHull;
                 if (hull != null) {
                     ShipClass shipClass = new ShipClass(className.getText(), hull);
                     //Add components
 
                     if (installedShipComponents.getRowCount() > 0) {
                         for (int i = 0; i < installedShipComponents.getRowCount(); i++) {
-                            installedShipComponents.getValueAt(row, 0);
+                            JSONObject v = installedShipComponentsTableModel.get(i);
                             //get component, etc...
+                            switch ((String) v.get("type")) {
+                                case "engine":
+                                    EngineComponent comp;
+                                    break;
+                            }
                         }
+                        //Check for reqired components.... Later
+                        shipClass.setEstimatedThrust(preparedThrust);
+                        c.shipClasses.add(shipClass);
+                        shipClassListModel.addElement(shipClass);
+                    } else {
+                        //Show alert
+                        JOptionPane.showMessageDialog(this, "You need to have a hull in order for the ship to work!");
                     }
-                    //Check for reqired components.... Later
-                    c.shipClasses.add(shipClass);
-                    shipClassListModel.addElement(shipClass);
-                } else {
-                    //Show alert
-                    JOptionPane.showMessageDialog(this, "You need to have a hull in order for the ship to work!");
                 }
             }
         });
@@ -164,7 +186,7 @@ public class ShipDesigner extends JPanel {
         shipClassViewer = new JPanel();
 
         shipDataPanel = new JPanel();
-        shipDataPanel.setLayout(new GridLayout(5, 3));
+        shipDataPanel.setLayout(new GridLayout(6, 3));
 
         className = new JTextField();
         className.setColumns(16);
@@ -175,7 +197,7 @@ public class ShipDesigner extends JPanel {
         hullTypeName = new JLabel("");
 
         massLabel = new JLabel("Mass:");
-        mass = new JLabel("0");
+        mass = new JLabel("" + mass);
         massUnit = new JLabel("kg");
 
         volumeLabel = new JLabel("Volume");
@@ -184,9 +206,13 @@ public class ShipDesigner extends JPanel {
 
         thrustLabel = new JLabel("Thrust");
         thrust = new JLabel("0/0");
-        thrustUnit = new JLabel("mn");
-        //Ship components
+        thrustUnit = new JLabel("kn");
 
+        estimatedAccLabel = new JLabel("Estimated Max. Acceleration");
+        estimatedAcc = new JLabel("0");
+        estimatedAccUnit = new JLabel("<html>m/s<sup>2</sup></html");
+
+        //Ship components
         shipDataPanel.add(className);
         shipDataPanel.add(classText);
         shipDataPanel.add(shipTypeNameText);
@@ -202,18 +228,21 @@ public class ShipDesigner extends JPanel {
         shipDataPanel.add(thrustLabel);
         shipDataPanel.add(thrust);
         shipDataPanel.add(thrustUnit);
+        shipDataPanel.add(estimatedAccLabel);
+        shipDataPanel.add(estimatedAcc);
+        shipDataPanel.add(estimatedAccUnit);
 
         shipClassViewer.add(shipDataPanel);
 
         installedShipComponentsPanel = new JPanel();
         installedShipComponentsPanel.setLayout(new VerticalFlowLayout());
-        installedShipComponentsTableModel = new DefaultTableModel(installedShipComponentColunms, 0);
+        installedShipComponentsTableModel = new AddedComponentTableModel();
         installedShipComponents = new JTable(installedShipComponentsTableModel);
         shipInstalledComponentsScrollPane = new JScrollPane(installedShipComponents);
         removeInstalledComponent = new JButton("Remove Component");
         removeInstalledComponent.addActionListener(a -> {
             if (installedShipComponents.getSelectedRow() != -1) {
-                installedShipComponentsTableModel.removeRow(installedShipComponents.getSelectedRow());
+                //installedShipComponentsTableModel.removeRow(installedShipComponents.getSelectedRow());
             }
         });
         installedShipComponentsPanel.add(removeInstalledComponent);
@@ -233,35 +262,9 @@ public class ShipDesigner extends JPanel {
         shipComponentsContainer = new JPanel();
         componentTableTabs = new JTabbedPane();
 
-        componentTableModel = new DefaultTableModel(componentTableColunms, 0);
+        componentTableModel = new ComponentTableModel();
 
-        for (JSONObject obj : c.shipComponentList) {
-            String[] data = new String[6];
-//          private String[] componentTableColunms = {"Name", "Mass", "Space", "Rating Type", "Rating"};
-
-            data[0] = obj.getString("name");
-            data[1] = "" + obj.getInt("mass");
-            data[2] = "" + obj.getInt("volume");
-            data[3] = "" + obj.getInt("rating");
-            //Get Rating type
-            String s = "";
-            switch (obj.getString("type")) {
-                case "test":
-                    s = "Testing value";
-                    break;
-            }
-            data[4] = s;
-
-            data[5] = "" + obj.getInt("cost");
-            componentTableModel.addRow(data);
-        }
-        componentTable = new JTable(componentTableModel) {
-            //Disable cell editing
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        componentTable = new JTable(componentTableModel);
         componentTableScrollPane = new JScrollPane(componentTable);
 
         hullTableModel = new DefaultTableModel(hullTableColunms, 0);
@@ -287,15 +290,38 @@ public class ShipDesigner extends JPanel {
             }
         };
 
+        hullTable.getTableHeader().setReorderingAllowed(false);
+
         selectComponentButton = new JButton("Add selected component");
         selectComponentButton.addActionListener(a -> {
             int row = componentTable.getSelectedRow();
-            Vector v = ((Vector) componentTableModel.getDataVector().elementAt(componentTable.getSelectedRow()));
-            installedShipComponentsTableModel.addRow(v.toArray());
+            JSONObject v = componentTableModel.get(row);
+            installedShipComponentsTableModel.add(v);
+            //Get information
+            if (v.get("type").equals("engine")) {
+                //Get type
+                //Get rating in mn and set value
+                preparedThrust =+ v.getInt("rating");
+                thrust.setText(preparedThrust + "/" + hullRatedThrust);
+                if (preparedThrust > hullRatedThrust) {
+                    thrust.setForeground(Color.red);
+                    thrust.setToolTipText("Too much thrust!");
+                } else {
+                    thrust.setForeground(Color.black);
+                    thrust.setToolTipText("");
+                }
+                //Set acceleration
+                if (massValue > 0) {
+                    long mn = (preparedThrust) / massValue; //No need to multiply because mass is also in kg
+                    estimatedAcc.setText("" + NumberFormat.getInstance().format(mn));
+                }
+            }
         });
         componentTableContainer = new JPanel(new VerticalFlowLayout());
         componentTableContainer.add(componentTableScrollPane);
         componentTableContainer.add(selectComponentButton);
+
+        hullTable.getTableHeader().setReorderingAllowed(false);
 
         hullTableScrollPane = new JScrollPane(hullTable);
         hullSelectorButton = new JButton("Set selected hull");
@@ -308,12 +334,25 @@ public class ShipDesigner extends JPanel {
             //Get the hull
             Hull hull = c.hulls.stream().findFirst().filter(h -> (h.getName().toLowerCase().
                     equals(hullTable.getValueAt(row, 0).toString().toLowerCase()))).orElseGet(null);
+            selectedHull = hull;
             if (hull != null) {
                 mass.setText("" + hull.getMass());
+                massValue = hull.getMass();
                 volume.setText("0/" + hull.getSpace());
-                thrust.setText("0/" + hull.getThrust());
+                thrust.setText(preparedThrust + "/" + hull.getThrust());
+                hullRatedThrust = hull.getThrust();
+                if (preparedThrust > hullRatedThrust) {
+                    thrust.setForeground(Color.red);
+                    thrust.setToolTipText("Too much thrust!");
+                } else {
+                    thrust.setForeground(Color.black);
+                    thrust.setToolTipText("");
+                }
+                if (massValue > 0) {
+                    long mn = (preparedThrust * 1000l) / massValue;
+                    estimatedAcc.setText("" + NumberFormat.getInstance().format(mn));
+                }
             }
-
         });
 
         hullTableContainer = new JPanel(new VerticalFlowLayout());
@@ -328,10 +367,14 @@ public class ShipDesigner extends JPanel {
 
         shipContainerThings.add(installedShipComponentsPanel);
         shipContainerThings.add(shipComponentsContainer);
-        
-        shipStuffPanel.add("Components", shipContainerThings);
-        rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+        shipStuffPanel.addChangeListener(l -> {
+            update();
+        });
+        shipStuffPanel.add("Components", shipContainerThings);
+
+        rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
+        update();
         add(menubar, BorderLayout.NORTH);
         add(shipStuffPanel, BorderLayout.CENTER);
 
@@ -341,6 +384,28 @@ public class ShipDesigner extends JPanel {
         //setResizable(true);
         //setSize(100, 100);
         //pack();
+    }
+
+    public void update() {
+        hullTableModel.setRowCount(0);
+        for (Hull h : c.hulls) {
+            String[] data = new String[6];
+            //Just for notes
+            //hullTableColunms = {"Name", "Mass", "Space", "Type", "Rated Thrust", "Material"};
+            data[0] = h.getName();
+            data[1] = "" + h.getMass();
+            data[2] = "" + h.getSpace();
+            data[3] = "" + h.getShipType();
+            data[4] = "" + h.getThrust();
+            data[5] = h.getMaterial().getName();
+            hullTableModel.addRow(data);
+        }
+
+        componentTableModel.empty();
+        for (JSONObject obj : c.shipComponentList) {
+            componentTableModel.add(obj);
+        }
+        componentTableModel.fireTableDataChanged();
     }
 
     private static class ShipComponentContainer {
@@ -354,6 +419,189 @@ public class ShipDesigner extends JPanel {
         @Override
         public String toString() {
             return object.getString("name");
+        }
+    }
+
+    private class ComponentTableModel extends AbstractTableModel {
+
+        private String[] colunms = {"Name", "Mass", "Space", "Rating Type", "Rating", "Cost"};
+        private ArrayList<JSONObject> objects;
+
+        public ComponentTableModel() {
+            objects = new ArrayList<>();
+        }
+
+        @Override
+        public int getRowCount() {
+            return objects.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunms.length;
+        }
+
+        @Override
+        public Object getValueAt(int arg0, int arg1) {
+            String key = "";
+            switch (arg1) {
+                case 0:
+                    key = "name";
+                    break;
+                case 1:
+                    key = "mass";
+                    break;
+                case 2:
+                    key = "volume";
+                    break;
+                case 3:
+                    switch (objects.get(arg0).getString("type")) {
+                        case "test":
+                            return "Testing value";
+                        case "engine":
+                            return "Thrust(kn)";
+                    }
+                    break;
+                case 4:
+                    key = "rating";
+                    break;
+                case 5:
+                    key = "cost";
+                    return 0;
+                //break;
+            }
+            return objects.get(arg0).get(key);
+        }
+
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+        public JSONObject get(int id) {
+            return objects.get(id);
+        }
+
+        public void add(JSONObject id) {
+            objects.add(id);
+        }
+
+        public void empty() {
+            objects.clear();
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunms[column];
+        }
+
+        @Override
+        public Class getColumnClass(int column) {
+            return String.class;
+        }
+
+        @Override
+        public void fireTableDataChanged() {
+            super.fireTableDataChanged(); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
+
+    private class AddedComponentTableModel extends AbstractTableModel {
+
+        private String[] colunms = {"Name", "Mass", "Space", "Rating Type", "Rating", "Cost", "Quantity"};
+        private ArrayList<JSONObject> objects;
+        private ArrayList<Integer> quantities;
+
+        public AddedComponentTableModel() {
+            objects = new ArrayList<>();
+            quantities = new ArrayList<>();
+        }
+
+        @Override
+        public int getRowCount() {
+            return objects.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunms.length;
+        }
+
+        @Override
+        public Object getValueAt(int arg0, int arg1) {
+            String key = "";
+            switch (arg1) {
+                case 0:
+                    key = "name";
+                    break;
+                case 1:
+                    key = "mass";
+                    break;
+                case 2:
+                    key = "volume";
+                    break;
+                case 3:
+                    switch (objects.get(arg0).getString("type")) {
+                        case "test":
+                            return "Testing value";
+                        case "engine":
+                            return "Thrust(kn)";
+                    }
+                    break;
+                case 4:
+                    key = "rating";
+                    break;
+                case 5:
+                    key = "cost";
+                    return 0;
+                //break;
+                case 6:
+                    return quantities.get(arg0);
+            }
+            return objects.get(arg0).get(key);
+        }
+
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+        public JSONObject get(int id) {
+            return objects.get(id);
+        }
+
+        public int getQuantity(int num) {
+            return quantities.get(num);
+        }
+
+        public void add(JSONObject id) {
+            //System.out.println("");
+            if (objects.contains(id)) {
+                int index = objects.indexOf(id);
+                System.out.println(quantities.get(index) + 1);
+                quantities.set(index, (quantities.get(index) + 1));
+            } else {
+                objects.add(id);
+                quantities.add(1);
+            }
+            fireTableDataChanged();
+        }
+
+        public void empty() {
+            objects.clear();
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunms[column];
+        }
+
+        @Override
+        public Class getColumnClass(int column) {
+            return String.class;
+        }
+
+        @Override
+        public void fireTableDataChanged() {
+            super.fireTableDataChanged(); //To change body of generated methods, choose Tools | Templates.
         }
     }
 }

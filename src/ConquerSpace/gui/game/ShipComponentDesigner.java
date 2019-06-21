@@ -2,6 +2,7 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.ShipComponentTypes;
+import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -9,8 +10,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,7 +21,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import org.json.JSONObject;
 
 /**
@@ -26,7 +31,6 @@ import org.json.JSONObject;
  * @author Zyun
  */
 public class ShipComponentDesigner extends JPanel {
-
     private JMenuBar menuBar;
 
     private DefaultListModel<ShipComponentContainer> componentsListModel;
@@ -59,6 +63,14 @@ public class ShipComponentDesigner extends JPanel {
     private JPanel probeComponent;
     private final String PROBE_COMPONENT = "probe";
 
+    private JPanel engineComponent;
+    private JLabel engineTechnologyLabel;
+    private DefaultComboBoxModel<EngineTechnology> engineTechBoxModel;
+    private JComboBox<EngineTechnology> engineTechBox;
+    private JLabel thrustRatingLabel;
+    private JSpinner thrustRatingSpinner;
+    private final String ENGINE_COMPONENT = "engine";
+
     public ShipComponentDesigner(Civilization c) {
         setLayout(new BorderLayout());
 
@@ -74,6 +86,7 @@ public class ShipComponentDesigner extends JPanel {
                 obj.put("id", c.shipComponentList.size());
                 obj.put("volume", 0);
                 String type = "";
+                int rating = 0;
                 switch (componentTypeList.getSelectedIndex()) {
                     case ShipComponentTypes.TEST_COMPONENT:
                         type = "test";
@@ -81,10 +94,16 @@ public class ShipComponentDesigner extends JPanel {
                     case ShipComponentTypes.SCIENCE_COMPONENT:
                         type = "science";
                         break;
+                    case ShipComponentTypes.ENGINE_COMPONENT:
+                        type = "engine";
+                        obj.put("eng-tech", ((EngineTechnology)engineTechBox.getSelectedItem()).getId());
+                        rating = ((int)thrustRatingSpinner.getValue());
+                        break;
                 }
                 obj.put("type", type);
+                
                 //What ever, who cares
-                obj.put("rating", 0);
+                obj.put("rating", rating);
                 obj.put("cost", 0);
                 obj.put("mass", 0);
                 c.shipComponentList.add(obj);
@@ -141,6 +160,26 @@ public class ShipComponentDesigner extends JPanel {
             lowerPanel.add(scienceComponent, SCIENCE_COMPONENT);
         }
 
+        {
+            engineComponent = new JPanel(new GridLayout(2, 2));
+            engineTechnologyLabel = new JLabel("Engine Tech:");
+            engineTechBoxModel = new DefaultComboBoxModel<>();
+            //Add the civ info
+            for (EngineTechnology t : c.engineTechs) {
+                engineTechBoxModel.addElement(t);
+            }
+            engineTechBox = new JComboBox<>(engineTechBoxModel);
+            engineComponent.add(engineTechnologyLabel);
+            engineComponent.add(engineTechBox);
+            
+            thrustRatingLabel = new JLabel("Thrust Rating (kn)");
+            thrustRatingSpinner = new JSpinner(new SpinnerNumberModel(100, 0, Integer.MAX_VALUE, 1));
+            
+            engineComponent.add(thrustRatingLabel);
+            engineComponent.add(thrustRatingSpinner);
+            lowerPanel.add(engineComponent, ENGINE_COMPONENT);
+        }
+
         componentPanel.add(lowerPanel);
         componentTypeListModel = new DefaultListModel<>();
         componentTypeList = new JList<>(componentTypeListModel);
@@ -169,6 +208,14 @@ public class ShipComponentDesigner extends JPanel {
                         break;
                     case ShipComponentTypes.SCIENCE_COMPONENT:
                         cardLayout.show(lowerPanel, SCIENCE_COMPONENT);
+                        break;
+                    case ShipComponentTypes.ENGINE_COMPONENT:
+                        //Update components
+                        engineTechBoxModel.removeAllElements();
+                        for (EngineTechnology t : c.engineTechs) {
+                            engineTechBoxModel.addElement(t);
+                        }
+                        cardLayout.show(lowerPanel, ENGINE_COMPONENT);
                         break;
                 }
             }

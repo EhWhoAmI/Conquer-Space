@@ -123,13 +123,13 @@
         "id": 9
     },
     {
-        "name": "chemical propulsion",
+        "name": "Chemical propulsion",
         "deps": ["life"],
         "level": 5,
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 2,
-        "action": [""],
+        "action": ["thrust(1)"],
         "fields": [
             "Knowledge", "Chemistry"
         ],
@@ -144,7 +144,7 @@
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 3,
-        "action": [],
+        "action": ["thrust(2)"],
         "fields": [
             "Knowledge", "Chemistry"
         ],
@@ -159,7 +159,7 @@
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 3,
-        "action": [],
+        "action": ["thrust(0)"],
         "fields": [
             "Knowledge", "Chemistry"
         ],
@@ -174,7 +174,7 @@
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 3,
-        "action": [],
+        "action": ["thrust(3)"],
         "fields": [
             "Knowledge", "Chemistry"
         ],
@@ -189,7 +189,7 @@
         "type": "UNLOCK",
         "upgradable": true,
         "difficulty": 2,
-        "action": [],
+        "action": ["thrust(4)"],
         "fields": [
             "Knowledge", "Chemistry"
         ],

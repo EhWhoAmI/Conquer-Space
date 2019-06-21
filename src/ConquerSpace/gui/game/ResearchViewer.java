@@ -158,6 +158,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         pane.addTab("Researched Techs", techonologyViewer);
 
         pane.addChangeListener(a -> {
+            update();
             techonologyViewer.update();
         });
     }

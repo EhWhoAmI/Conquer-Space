@@ -67,7 +67,7 @@ public class LaunchSpaceShipMenu extends JPanel {
                 Ship ship = new Ship(spaceShipList.getSelectedValue(),
                         0, 0, new Vector(0, 0),
                         p.getUniversePath());
-                
+                ship.setEstimatedThrust(spaceShipList.getSelectedValue().getEstimatedThrust());
                 Actions.launchShip(ship, p, c);
             }
             else {

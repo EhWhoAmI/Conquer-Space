@@ -20,7 +20,7 @@
     {
         "name": "Satellite Launch",
         "composer": "Nirekin Inc.",
-        "file": "StatelliteLaunch.ogg",
+        "file": "SatelliteLaunch.ogg",
         "length": 139
     },
     {
@@ -28,5 +28,11 @@
         "composer": "EhWhoAmI",
         "file": "stars.ogg",
         "length": 57
+    },
+    {
+        "name": "Starlight",
+        "composer": "Nirekin Inc.",
+        "file": "Starlight.ogg",
+        "length": 147
     }
 ]

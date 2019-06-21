@@ -27,6 +27,9 @@ public class Ship implements SpaceShip, Orbitable {
     private Hull hull;
     private ArrayList<ShipComponent> components;
     private long maxSpeed = 1_0000_000;
+    private int throttle = 0;
+    
+    private long estimatedThrust = 0;
 
     public Ship(ShipClass sclass, long X, long Y, Vector v, UniversePath location) {
         this.X = X;
@@ -141,7 +144,7 @@ public class Ship implements SpaceShip, Orbitable {
     }
 
     public long getMaxSpeed() {
-        return maxSpeed;
+        return estimatedThrust/mass;
     }
 
     public int getMass() {
@@ -151,5 +154,21 @@ public class Ship implements SpaceShip, Orbitable {
     public void translate(long x, long y) {
         this.X+=x;
         this.Y+=y;
+    }
+
+    public int getThrottle() {
+        return throttle;
+    }
+
+    public void setThrottle(int throttle) {
+        this.throttle = throttle;
+    }
+
+    public void setEstimatedThrust(long estimatedThrust) {
+        this.estimatedThrust = estimatedThrust;
+    }
+
+    public long getEstimatedThrust() {
+        return estimatedThrust;
     }
 }

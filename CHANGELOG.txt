@@ -1,0 +1,7 @@
+Changelog:
+
+0.0.1:
+Massive changes:
+We removed the planet sector system, and replaced it with terrain.
+Buildings have been shaken up also
+Planets now have terrain, and more feasible sizes. (like wide and, and shorter)

@@ -18,6 +18,7 @@ import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.SpaceShip;
+import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -87,6 +88,7 @@ public class Civilization {
     public ArrayList<Hull> hulls;
     public ArrayList<Field> fields;
     public ArrayList<JSONObject> shipComponentList;
+    public ArrayList<EngineTechnology> engineTechs;
 
     public HashMap<Resource, Integer> resourceList;
 
@@ -135,6 +137,8 @@ public class Civilization {
         hullMaterials = new ArrayList<>();
         hulls = new ArrayList<>();
         shipComponentList = new ArrayList<>();
+        
+        engineTechs = new ArrayList<>();
 
         fields = new ArrayList<>();
         multipliers = new HashMap<>();

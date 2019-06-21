@@ -167,7 +167,7 @@ public class HullCreator extends JPanel {
         estThrustField = new JFormattedTextField(formatter);
         estThrustField.setText("1");
         estThrustField.setColumns(16);
-        meganewtonsText = new JLabel("mn");
+        meganewtonsText = new JLabel("kn");
         
         
         hullViewer.add(className);
@@ -205,9 +205,9 @@ public class HullCreator extends JPanel {
 
     private void saveHull(){
         //Do the things
-        long mass = Long.parseLong(massTextField.getText());
-        long space = Long.parseLong(spaceBox.getText());
-        long thrust = Long.parseLong(estThrustField.getText());
+        long mass = Long.parseLong(massTextField.getText().replaceAll(",", ""));
+        long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
+        long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
         int shipType = GameController.shipTypes.get((String)hullComboBox.getSelectedItem());
         HullMaterial material = (HullMaterial)hullMaterialComboBox.getSelectedItem();
         

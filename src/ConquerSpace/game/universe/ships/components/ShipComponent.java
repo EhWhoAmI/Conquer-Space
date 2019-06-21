@@ -5,7 +5,6 @@ package ConquerSpace.game.universe.ships.components;
  * @author Zyun
  */
 public class ShipComponent {
-
     //Mass in KG
     protected int mass;
     //Cost in credits
@@ -45,14 +44,6 @@ public class ShipComponent {
         return name;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public int getRating() {
         return rating;
     }
@@ -79,5 +70,10 @@ public class ShipComponent {
 
     public Object clone() {
         return new ShipComponent(mass, cost, name);
+    }
+    
+    @Override
+    public String toString() {
+        return getName();
     }
 }

@@ -13,7 +13,8 @@ public class ShipClass {
     private String name;
     private Hull hull;
     public ArrayList<ShipComponent> components;
-    private int mass = 0;
+    private int mass = 1;
+    private long estimatedThrust = 0;
 
     public ShipClass(String name, Hull h) {
         this.name = name;
@@ -45,6 +46,12 @@ public class ShipClass {
     public int getMass() {
         return mass;
     }
-    
-    
+
+    public long getEstimatedThrust() {
+        return estimatedThrust;
+    }
+
+    public void setEstimatedThrust(long estimatedThrust) {
+        this.estimatedThrust = estimatedThrust;
+    }
 }

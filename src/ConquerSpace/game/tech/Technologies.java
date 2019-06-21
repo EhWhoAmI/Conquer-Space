@@ -4,6 +4,7 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.CQSPLogger;
 import java.io.File;
@@ -215,6 +216,19 @@ public class Technologies {
                     filter(e -> e.getString("id").equals(compName)).findFirst().orElseGet(null);
             if (s != null) {
                 c.addShipComponent(s);
+            }
+        } else if (action.startsWith("thrust")) {
+            //Do component
+            char[] dst = new char[50];
+
+            action.getChars("thrust".length() + 1, action.length() - 1, dst, 0);
+
+            String compName = (new String(dst).trim());
+            int id = Integer.parseInt(compName);
+
+            EngineTechnology t = GameController.engineTechnologys.stream().filter(a -> a.getId() == id ).findFirst().orElse(null);
+            if (t != null) {
+                c.engineTechs.add(t);
             }
         }
     }

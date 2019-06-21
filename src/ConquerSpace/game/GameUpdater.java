@@ -2,6 +2,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
+import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
@@ -22,6 +23,8 @@ import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
+import ConquerSpace.game.universe.ships.SpaceShip;
+import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -47,7 +50,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -145,6 +147,7 @@ public class GameUpdater {
         readSatellites();
         readShipTypes();
         readShipComponents();
+        readEngineTechs();
 
         //All the home planets of the civs are theirs.
         //Set home planet and sector
@@ -167,6 +170,12 @@ public class GameUpdater {
             Technology[] teks = Technologies.getTechsByTag("space travel base");
             //To research this
             c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
+
+            //Propulsion
+            teks = Technologies.getTechsByTag("Propulsion");
+            //To research this
+            c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
+
             c.calculateTechLevel();
 
             //Add civ values
@@ -192,14 +201,14 @@ public class GameUpdater {
                 String person = "name";
                 person = gen.getName((int) Math.round(Math.random()));
                 Scientist nerd = new Scientist(person, age);
-                nerd.setSkill((int)(Math.random() * 5) + 1);
+                nerd.setSkill((int) (Math.random() * 5) + 1);
                 c.unrecruitedPeople.add(nerd);
             }
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             c.hullMaterials.add(material);
 
             UniversePath p = c.getStartingPlanet();
-            
+
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
 
@@ -241,7 +250,7 @@ public class GameUpdater {
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
-                //Actions.launchShip(s, starting, c);
+                Actions.launchShip(s, starting, c);
                 //Set ownership
 
                 starting.setOwnerID(c.getID());
@@ -428,50 +437,6 @@ public class GameUpdater {
                 for (int i = 0; i < content.length(); i++) {
                     satellites.add(content.getJSONObject(i));
                 }
-//                //Read info. This one is a bit different, because the format is different
-//                //for each type.
-//                String name = root.getString("name");
-//
-//                String type = root.getString("type");
-//                int mass = root.getInt("mass");
-//                int distance = root.getInt("dist");
-//
-//                int typeID = -1;
-//                switch (type.toLowerCase()) {
-//                    case "none":
-//                        //Nothing to read.
-//                        typeID = SatelliteTypes.NONE;
-//                        break;
-//                    case "telescope":
-//                        typeID = SatelliteTypes.TELESCOPE;
-//                        break;
-//                    case "military":
-//                        typeID = SatelliteTypes.MILITARY;
-//                        break;
-//                }
-//                //That is it for now
-//                int id = root.getInt("id");
-//
-//                //Get type, and do the thing
-//                Satellite s = null;
-//                switch (typeID) {
-//                    case SatelliteTypes.NONE:
-//                        s = new NoneSatellite(distance, mass);
-//                        s.setId(id);
-//                        s.setName(name);
-//                        break;
-//                    case SatelliteTypes.TELESCOPE:
-//                        s = new SpaceTelescope(distance, mass);
-//                        s.setId(id);
-//                        s.setName(name);
-//                        int range;
-//                        //if(root.get("range") instanceof Integer)
-//                        range = root.getInt("range");
-//                        //else
-//                            //range = root.getString("range"));
-//                        ((SpaceTelescope) s).setRange(range);
-//                }
-                //satellites.add(root);
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);
             } catch (IOException ex) {
@@ -556,6 +521,51 @@ public class GameUpdater {
         }
     }
 
+    public static void readEngineTechs() {
+        GameController.engineTechnologys = new ArrayList<>();
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.ship.engine.tech");
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (!f.getName().endsWith(".json")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    JSONObject obj = root.getJSONObject(i);
+                    String name = obj.getString("name");
+                    int id = obj.getInt("id");
+                    float efficiency = obj.getFloat("efficiency");
+                    float power = obj.getFloat("thrust_multiplier");
+                    EngineTechnology tech = new EngineTechnology(name, efficiency, power);
+                    tech.setId(id);
+                    GameController.engineTechnologys.add(tech);
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+    }
+
     //Here is where a lot of the math is gonna be held.
     public static class Calculators {
 
@@ -599,20 +609,6 @@ public class GameUpdater {
         sys.setX(pt.x);
         sys.setY(pt.y);
 
-        //Move ships
-        for (Ship ship : sys.spaceShips) {
-            double x = ship.getGoingToX() - ship.getX();
-            double y = ship.getGoingToY() - ship.getY();
-
-            //Normalize
-            double len = Math.sqrt(x * x + y * y);
-            if (len > 0) {
-                x /= len;
-                y /= len;
-            }
-            ship.translate((long) (x * ship.getMaxSpeed() * 5), (long) (y * ship.getMaxSpeed() * 5));
-
-        }
         //Process turn of the planets then the stars.
         //Maybe later the objects in space.
         for (int i = 0; i < sys.getPlanetCount(); i++) {
@@ -741,6 +737,37 @@ public class GameUpdater {
                     //add to index
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
                     c.resourceList.put(type, amountToAdd);
+                }
+            }
+        }
+    }
+
+    public void moveShips() {
+        for (int sys = 0; sys < Globals.universe.getStarSystemCount(); sys++) {
+            StarSystem system = Globals.universe.getStarSystem(sys);
+            //Process ships
+            //Move ships
+            for (Ship ship : system.spaceShips) {
+                double x = ship.getGoingToX() - ship.getX();
+                double y = ship.getGoingToY() - ship.getY();
+
+                //Normalize
+                double len = Math.sqrt(x * x + y * y);
+                if (len > 0) {
+                    x /= len;
+                    y /= len;
+                }
+                double distance = Math.sqrt(Math.pow(ship.getGoingToX() - ship.getX(), 2) + Math.pow(ship.getGoingToY() - ship.getY(), 2));
+                double objX = (x * ship.getMaxSpeed());
+                double objY = (y * ship.getMaxSpeed());
+                if (Math.sqrt(Math.pow(objX - ship.getX(), 2) + Math.pow(objY - ship.getY(), 2)) >= distance) {
+                    objX = ship.getGoingToX();
+                    objY = ship.getGoingToY();
+                    ship.setX((long)objX);
+                    ship.setY((long)objY);
+                } else {
+                    System.out.println(objX + " " + ship.getMaxSpeed());
+                    ship.translate((long) (objX), (long) (objY));
                 }
             }
         }

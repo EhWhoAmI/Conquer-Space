@@ -43,7 +43,6 @@ public class TerrainRenderer {
                     //System.err.println(planetDisplaying);
                     planetDisplaying.setRGB(x, y,
                             terrainColorses[x][y].getRGB());
-
                 }
             }
         }
