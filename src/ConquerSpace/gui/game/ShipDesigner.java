@@ -576,7 +576,6 @@ public class ShipDesigner extends JPanel {
             //System.out.println("");
             if (objects.contains(id)) {
                 int index = objects.indexOf(id);
-                System.out.println(quantities.get(index) + 1);
                 quantities.set(index, (quantities.get(index) + 1));
             } else {
                 objects.add(id);

@@ -261,8 +261,8 @@ public class GameWindow extends JFrame implements GUI {
         UniverseRenderer universeRenderer;
         private boolean isDragging = false;
         private Point startPoint;
-        private int translateX = 0;
-        private int translateY = 0;
+        private double translateX = 0;
+        private double translateY = 0;
         static final int DRAW_UNIVERSE = 0;
         static final int DRAW_STAR_SYSTEM = 1;
         int drawing = DRAW_UNIVERSE;
@@ -277,17 +277,17 @@ public class GameWindow extends JFrame implements GUI {
          * can zoom to a max of 5.
          *
          */
-        private float scale = 1.0f;
+        private double scale = 1.0f;
 
         @Override
         protected void paintComponent(Graphics g) {
             switch (drawing) {
                 case DRAW_UNIVERSE:
-                    universeRenderer.drawUniverse(g, new Point(translateX, translateY), scale);
+                    universeRenderer.drawUniverse(g, translateX, translateY, scale);
                     break;
                 case DRAW_STAR_SYSTEM:
                     assert systemRenderer == null;
-                    systemRenderer.drawStarSystem(g, new Point(translateX, translateY), scale);
+                    systemRenderer.drawStarSystem(g, translateX, translateY, scale);
                     break;
                 default:
                     break;
@@ -335,8 +335,8 @@ public class GameWindow extends JFrame implements GUI {
                     case DRAW_STAR_SYSTEM:
                         for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
-                            if (Math.hypot((translateX + (planet.getX() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getX(),
-                                    (translateY + (planet.getY() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize()) {
+                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getX(),
+                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
                                 //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                 //add(d);
                                 mainInterfaceWindow.setSelectedPlanet(planet);
@@ -395,8 +395,8 @@ public class GameWindow extends JFrame implements GUI {
                     case DRAW_STAR_SYSTEM:
                         for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
-                            if (Math.hypot((translateX + (planet.getX() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getX(),
-                                    (translateY + (planet.getY() / 10_000_000) * currentStarSystemSizeOfAU + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize()) {
+                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getX(),
+                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
                                 JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
                                 planetName.addActionListener(a -> {
                                     //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
@@ -422,8 +422,8 @@ public class GameWindow extends JFrame implements GUI {
                     gohereMenu.addActionListener(a -> {
                         //Move position
                         //Convert
-                        long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) / currentStarSystemSizeOfAU) * 10_000_000;
-                        long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) / currentStarSystemSizeOfAU) * 10_000_000);
+                        long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
+                        long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
                         Actions.moveShip(s, c, gotoX, gotoY, universe);
                     });
 

@@ -49,7 +49,7 @@ public class UniverseRenderer {
         //Calculate size
     }
 
-    public void drawUniverse(Graphics g, Point translate, float scale) {
+    public void drawUniverse(Graphics g, double translateX, double translateY, double scale) {
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
 
@@ -57,7 +57,7 @@ public class UniverseRenderer {
         g2d.setColor(new Color(0, 0, 255));
         g2d.fill(bg);
 
-        Ellipse2D.Float universeCircle = new Ellipse2D.Float(translate.x * scale, translate.y * scale, universeDrawnSize * scale, universeDrawnSize * scale);
+        Ellipse2D.Double universeCircle = new Ellipse2D.Double(translateX * scale, translateY * scale, universeDrawnSize * scale, universeDrawnSize * scale);
         g2d.setColor(Color.BLACK);
         g2d.fill(universeCircle);
 
@@ -78,9 +78,9 @@ public class UniverseRenderer {
                             g2d.setColor(universe.getCivilization(universe.control.get(sys.getUniversePath())).getColor());
                     }
                     //Control, if any...
-                    Ellipse2D.Float control = new Ellipse2D.Float(
-                            scale * (sys.getX() * sizeOfLTYR + translate.x + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
-                            scale * (sys.getY() * sizeOfLTYR + translate.y + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                    Ellipse2D.Double control = new Ellipse2D.Double(
+                            scale * (sys.getX() * sizeOfLTYR + translateX + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                            scale * (sys.getY() * sizeOfLTYR + translateY + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
                             (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10),
                             (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10));
                     g2d.fill(control);
@@ -114,25 +114,25 @@ public class UniverseRenderer {
                 }
                 g2d.setColor(c);
                 
-                Ellipse2D.Float system = new Ellipse2D.Float(
-                        scale * (sys.getX() * sizeOfLTYR + translate.x + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                        scale * (sys.getY() * sizeOfLTYR + translate.y + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                Ellipse2D.Double system = new Ellipse2D.Double(
+                        scale * (sys.getX() * sizeOfLTYR + translateX + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                        scale * (sys.getY() * sizeOfLTYR + translateY + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
                 
             } else {
                 //Draw stars and stuff...
                 g2d.setColor(Color.GRAY);
-                Ellipse2D.Float system = new Ellipse2D.Float(
-                        scale * (sys.getX() * sizeOfLTYR + translate.x + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                        scale * (sys.getY() * sizeOfLTYR + translate.y + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                Ellipse2D.Double system = new Ellipse2D.Double(
+                        scale * (sys.getX() * sizeOfLTYR + translateX + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                        scale * (sys.getY() * sizeOfLTYR + translateY + bounds.height / 2) - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
             }
         }
         //Draw scale line
         // TODO: MAKE ACCURATE
-        Line2D.Float line = new Line2D.Float(10, 20, sizeOfLTYR * 30 * scale + 10, 20);
+        Line2D.Double line = new Line2D.Double(10, 20, (sizeOfLTYR * 30 * scale + 10), 20);
         g2d.draw(line);
         g2d.drawString("30 light years", 10, 10);
     }

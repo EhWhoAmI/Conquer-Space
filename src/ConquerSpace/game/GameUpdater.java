@@ -243,13 +243,16 @@ public class GameUpdater {
                         default:
                             pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
                     }
-                    //= new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
                     starting.buildings.put(pt2, test2);
+
+                    //Set name...
+                    starting.setName(c.getHomePlanetName());
                 }
 
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
+                s.setEstimatedThrust(10_000_000);
                 Actions.launchShip(s, starting, c);
                 //Set ownership
 
@@ -760,13 +763,12 @@ public class GameUpdater {
                 double distance = Math.sqrt(Math.pow(ship.getGoingToX() - ship.getX(), 2) + Math.pow(ship.getGoingToY() - ship.getY(), 2));
                 double objX = (x * ship.getMaxSpeed());
                 double objY = (y * ship.getMaxSpeed());
-                if (Math.sqrt(Math.pow(objX - ship.getX(), 2) + Math.pow(objY - ship.getY(), 2)) >= distance) {
+                if (Math.sqrt(Math.pow(objX+ship.getX() - ship.getX(), 2) + Math.pow(objY+ship.getY() - ship.getY(), 2)) >= distance) {
                     objX = ship.getGoingToX();
                     objY = ship.getGoingToY();
-                    ship.setX((long)objX);
-                    ship.setY((long)objY);
+                    ship.setX((long) objX);
+                    ship.setY((long) objY);
                 } else {
-                    System.out.println(objX + " " + ship.getMaxSpeed());
                     ship.translate((long) (objX), (long) (objY));
                 }
             }

@@ -22,6 +22,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class SystemRenderer {
 
+    public static final int PLANET_DIVISOR = 7;
     private Dimension bounds;
 
     private Universe universe;
@@ -42,13 +43,10 @@ public class SystemRenderer {
             }
         }
 
-        sizeofAU = 1;
-        if (size != 0) {
-            sizeofAU = (int) (Math.floor(systemDrawnSize / (int) (size / 10000000) + 1));
-        }
+        sizeofAU = 15;
     }
 
-    public void drawStarSystem(Graphics g, Point translate, float scale) {
+    public void drawStarSystem(Graphics g, double translateX, double translateY, double scale) {
         Graphics2D g2d = (Graphics2D) g;
 
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
@@ -57,9 +55,10 @@ public class SystemRenderer {
 
         for (int i = 0; i < sys.getStarCount(); i++) {
             Star star = sys.getStar(i);
-            Ellipse2D.Float thingy = new Ellipse2D.Float(
-                    (translate.x - star.starSize / 100000 + bounds.width / 2) * scale,
-                    (translate.y - star.starSize / 100000 + bounds.height / 2) * scale,
+
+            Ellipse2D.Double thingy = new Ellipse2D.Double(
+                    (translateX + bounds.width / 2) * scale - star.starSize / 50000 / 2,
+                    (translateY + bounds.height / 2) * scale - star.starSize / 50000 / 2,
                     star.starSize / 50000, star.starSize / 50000);
             Color c;
             switch (star.type) {
@@ -94,17 +93,21 @@ public class SystemRenderer {
         for (int i = 0; i < sys.getPlanetCount(); i++) {
             Planet p = sys.getPlanet(i);
             //Draw orbit circle
-            Ellipse2D.Float circle = new Ellipse2D.Float(
-                    (translate.x + bounds.width / 2 - p.getOrbitalDistance() / 10_000_000 * sizeofAU) * scale,
-                    (translate.y + bounds.height / 2 - p.getOrbitalDistance() / 10_000_000 * sizeofAU) * scale,
-                    (p.getOrbitalDistance() / 10_000_000) * sizeofAU * 2 * scale,
-                    (p.getOrbitalDistance() / 10_000_000) * sizeofAU * 2 * scale);
+            Ellipse2D.Double circle = new Ellipse2D.Double(
+                    (translateX + bounds.width / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000) * scale,
+                    (translateY + bounds.height / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000) * scale,
+                    (p.getOrbitalDistance()) * sizeofAU / 10_000_000 * 2 * scale,
+                    (p.getOrbitalDistance()) * sizeofAU / 10_000_000 * 2 * scale);
             g2d.setColor(Color.WHITE);
             g2d.draw(circle);
+        }
 
-            Ellipse2D.Float planet = new Ellipse2D.Float((translate.x + (p.getX() / 10_000_000) * sizeofAU + bounds.width / 2) * scale - (p.getPlanetSize() / 2),
-                    (translate.y + (p.getY() / 10_000_000) * sizeofAU + bounds.height / 2) * scale - (p.getPlanetSize() / 2),
-                    p.getPlanetSize(), p.getPlanetSize());
+        for (int i = 0; i < sys.getPlanetCount(); i++) {
+            Planet p = sys.getPlanet(i);
+            //Draw orbit circle
+            Ellipse2D.Double planet = new Ellipse2D.Double((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale - (p.getPlanetSize() / PLANET_DIVISOR / 2),
+                    (translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.height / 2) * scale - (p.getPlanetSize() / PLANET_DIVISOR / 2),
+                    p.getPlanetSize() / PLANET_DIVISOR, p.getPlanetSize() / PLANET_DIVISOR);
             switch (p.getPlanetType()) {
                 case PlanetTypes.GAS:
                     g2d.setColor(Color.MAGENTA);
@@ -112,7 +115,6 @@ public class SystemRenderer {
                 case PlanetTypes.ROCK:
                     g2d.setColor(Color.ORANGE);
                     break;
-
             }
             //g2d.setColor(p.g());
             g2d.fill(planet);
@@ -121,27 +123,28 @@ public class SystemRenderer {
             //Draw name and background
             if (!p.getName().equals("")) {
                 g2d.setColor(Color.red);
-                g2d.fill(new Rectangle2D.Float(
-                        (translate.x + (p.getX() / 10_000_000) * sizeofAU + bounds.width / 2) * scale,
-                        (translate.y + (p.getY() / 10_000_000) * sizeofAU + bounds.width / 2) * scale - g2d.getFontMetrics().getHeight(),
+                g2d.fill(new Rectangle2D.Double(
+                        (translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
+                        (translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale + (p.getPlanetSize() / PLANET_DIVISOR / 2),
                         (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3)
                 );
 
                 g2d.setColor(Color.white);
-                
+
                 g2d.drawString(p.getName(),
-                        (translate.x + (p.getX() / 10_000_000) * sizeofAU + bounds.width / 2)* scale,
-                        (translate.y + (p.getY() / 10_000_000) * sizeofAU + bounds.width / 2) * scale);
+                        (float) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale) - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
+                        (float) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale) + (p.getPlanetSize() / PLANET_DIVISOR / 2) + g2d.getFontMetrics().getHeight());
             }
         }
 
         //draw spaceships
         for (Ship ship : sys.spaceShips) {
-            int x = (int) (ship.getX() / 10000000);
-            int y = (int) (ship.getY() / 10000000);
+            double x = (ship.getX());
+            double y = (ship.getY());
             //Draw dot
             g2d.setColor(Color.yellow);
-            g2d.fill(new Ellipse2D.Float((translate.x + x * sizeofAU + bounds.width / 2)* scale, (translate.y + y * sizeofAU + bounds.width / 2)* scale, 10, 10));
+            g2d.fill(new Ellipse2D.Double((translateX + x * sizeofAU / 10_000_000+ bounds.width / 2) * scale - 5,
+                    (translateY + y * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5, 10, 10));
             ship.getName();
         }
         //Draw scale line

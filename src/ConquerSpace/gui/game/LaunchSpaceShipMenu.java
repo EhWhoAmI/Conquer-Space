@@ -63,7 +63,6 @@ public class LaunchSpaceShipMenu extends JPanel {
             //Create ship and launch
             //get ship
             if (p != null) {
-                System.out.println(p.getUniversePath().toString());
                 Ship ship = new Ship(spaceShipList.getSelectedValue(),
                         0, 0, new Vector(0, 0),
                         p.getUniversePath());

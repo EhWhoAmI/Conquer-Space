@@ -124,7 +124,6 @@ public class MainMenu extends JFrame implements WindowListener {
                         System.getProperty("user.dir")
                         + "/assets/img/cqspbanner.png")), null, 0, 0);
             } catch (IOException ex) {
-                System.out.println("sdf");
             }
 
         }
