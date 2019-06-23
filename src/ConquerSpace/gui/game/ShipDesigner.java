@@ -197,7 +197,7 @@ public class ShipDesigner extends JPanel {
         hullTypeName = new JLabel("");
 
         massLabel = new JLabel("Mass:");
-        mass = new JLabel("" + mass);
+        mass = new JLabel("" + massValue);
         massUnit = new JLabel("kg");
 
         volumeLabel = new JLabel("Volume");
@@ -297,6 +297,10 @@ public class ShipDesigner extends JPanel {
             int row = componentTable.getSelectedRow();
             JSONObject v = componentTableModel.get(row);
             installedShipComponentsTableModel.add(v);
+            //Add mass
+            
+            massValue += v.getInt("mass");
+            mass.setText("" + massValue);
             //Get information
             if (v.get("type").equals("engine")) {
                 //Get type

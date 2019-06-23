@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.ShipComponentTypes;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
  * @author Zyun
  */
 public class ShipComponentDesigner extends JPanel {
+
     private JMenuBar menuBar;
 
     private DefaultListModel<ShipComponentContainer> componentsListModel;
@@ -43,6 +45,9 @@ public class ShipComponentDesigner extends JPanel {
     private JLabel nameLabel;
     private JTextField nameTextField;
     private JButton selectRandomNameButton;
+    private JLabel massLabel;
+    private JLabel massText;
+    private JLabel massUnit;
 
     private JPanel upperPanel;
     private JPanel lowerPanel;
@@ -71,6 +76,8 @@ public class ShipComponentDesigner extends JPanel {
     private JSpinner thrustRatingSpinner;
     private final String ENGINE_COMPONENT = "engine";
 
+    private int mass = 0;
+
     public ShipComponentDesigner(Civilization c) {
         setLayout(new BorderLayout());
 
@@ -87,26 +94,32 @@ public class ShipComponentDesigner extends JPanel {
                 obj.put("volume", 0);
                 String type = "";
                 int rating = 0;
+                int mass = 0;
                 switch (componentTypeList.getSelectedIndex()) {
                     case ShipComponentTypes.TEST_COMPONENT:
                         type = "test";
+                        mass = 18000;
                         break;
                     case ShipComponentTypes.SCIENCE_COMPONENT:
                         type = "science";
                         break;
                     case ShipComponentTypes.ENGINE_COMPONENT:
                         type = "engine";
-                        obj.put("eng-tech", ((EngineTechnology)engineTechBox.getSelectedItem()).getId());
-                        rating = ((int)thrustRatingSpinner.getValue());
+                        obj.put("eng-tech", ((EngineTechnology) engineTechBox.getSelectedItem()).getId());
+                        rating = ((int) thrustRatingSpinner.getValue());
+                        EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
+
+                        mass = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
                         break;
                 }
                 obj.put("type", type);
-                
+
                 //What ever, who cares
                 obj.put("rating", rating);
                 obj.put("cost", 0);
-                obj.put("mass", 0);
+                obj.put("mass", mass);
                 c.shipComponentList.add(obj);
+                componentsListModel.addElement(new ShipComponentContainer(obj));
             }
         });
 
@@ -130,7 +143,7 @@ public class ShipComponentDesigner extends JPanel {
         componentPanel.setLayout(new VerticalFlowLayout());
 
         upperPanel = new JPanel();
-        upperPanel.setLayout(new GridLayout(1, 3));
+        upperPanel.setLayout(new GridLayout(2, 3));
 
         nameLabel = new JLabel("Name: ");
         nameTextField = new JTextField();
@@ -139,6 +152,15 @@ public class ShipComponentDesigner extends JPanel {
         upperPanel.add(nameLabel);
         upperPanel.add(nameTextField);
         upperPanel.add(selectRandomNameButton);
+
+        //Add other stats
+        massLabel = new JLabel("Mass");
+        massText = new JLabel("0");
+        massUnit = new JLabel("kg");
+
+        upperPanel.add(massLabel);
+        upperPanel.add(massText);
+        upperPanel.add(massUnit);
 
         componentPanel.add(upperPanel);
 
@@ -171,14 +193,25 @@ public class ShipComponentDesigner extends JPanel {
             engineTechBox = new JComboBox<>(engineTechBoxModel);
             engineComponent.add(engineTechnologyLabel);
             engineComponent.add(engineTechBox);
-            
+
             thrustRatingLabel = new JLabel("Thrust Rating (kn)");
             thrustRatingSpinner = new JSpinner(new SpinnerNumberModel(100, 0, Integer.MAX_VALUE, 1));
-            
+
+            thrustRatingSpinner.addChangeListener(a -> {
+                //Calculate the mass...
+                if (engineTechBox.getSelectedItem() != null) {
+                    EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
+                    //Set mass
+                    int i = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                    massText.setText("" + i);
+                }
+            });
+
             engineComponent.add(thrustRatingLabel);
             engineComponent.add(thrustRatingSpinner);
             lowerPanel.add(engineComponent, ENGINE_COMPONENT);
         }
+        massText.setText("" + 18000);
 
         componentPanel.add(lowerPanel);
         componentTypeListModel = new DefaultListModel<>();
@@ -205,6 +238,7 @@ public class ShipComponentDesigner extends JPanel {
                 switch (selected) {
                     case ShipComponentTypes.TEST_COMPONENT:
                         cardLayout.show(lowerPanel, TEST_COMPONENT);
+                        massText.setText("" + 18000);
                         break;
                     case ShipComponentTypes.SCIENCE_COMPONENT:
                         cardLayout.show(lowerPanel, SCIENCE_COMPONENT);
@@ -214,6 +248,13 @@ public class ShipComponentDesigner extends JPanel {
                         engineTechBoxModel.removeAllElements();
                         for (EngineTechnology t : c.engineTechs) {
                             engineTechBoxModel.addElement(t);
+                        }
+
+                        if (engineTechBox.getSelectedItem() != null) {
+                            EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
+                            //Set mass
+                            int i = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                            massText.setText("" + i);
                         }
                         cardLayout.show(lowerPanel, ENGINE_COMPONENT);
                         break;

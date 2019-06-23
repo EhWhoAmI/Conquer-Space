@@ -582,6 +582,12 @@ public class GameUpdater {
                 return (int) (((double) quality / 100d) * size * size * Math.PI);
             }
         }
+        
+        public static class Engine {
+            public static int getEngineMass(int thrust, EngineTechnology tech) {
+                return (int)(tech.getThrustMultiplier() * thrust);
+            }
+        }
     }
 
     //A class to hold the stats and position of a star system for vision.
