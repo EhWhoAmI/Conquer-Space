@@ -5,7 +5,7 @@ package ConquerSpace.game.universe.resources;
  * @author zyunl
  */
 public class ResourceVein {
-
+    private int id;
     private Resource resourceType;
     private int resourceAmount;
     private float difficulty;
@@ -64,5 +64,13 @@ public class ResourceVein {
     
     public void removeResources(int amount) {
         resourceAmount-=amount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

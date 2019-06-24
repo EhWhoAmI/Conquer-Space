@@ -3,12 +3,17 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameSpeeds;
 import ConquerSpace.game.StarDate;
+import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -26,6 +32,7 @@ import javax.swing.Timer;
  */
 public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
+    private static final Logger LOGGER = CQSPLogger.getLogger(TurnSaveWindow.class.getName());
     private JLabel turnLabel;
     //Public for the action listeners later on
     public JButton pausePlayButton;
@@ -83,7 +90,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         speedComboBox.setSelectedItem("Normal");
         speedComboBox.setFocusable(false);
-        
+
         alertsButton.setFocusable(false);
         alertsButton.addActionListener((e) -> {
             AlertDisplayer disp = AlertDisplayer.getInstance();
@@ -92,8 +99,8 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         exitGameButton.setFocusable(false);
         exitGameButton.addActionListener((e) -> {
-            System.exit(0);
             GameController.musicPlayer.clean();
+            System.exit(0);
         });
 
         manualButton.setFocusable(false);
@@ -103,6 +110,18 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
 
         saveGameButton.setFocusable(false);
+        saveGameButton.addActionListener(e -> {
+            this.getTopLevelAncestor().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            SaveGame game = new SaveGame(System.getProperty("user.dir") + "/save/");
+            long before = System.currentTimeMillis();
+            try {
+                game.save(u, date);
+            } catch (IOException ex) {
+                ExceptionHandling.ExceptionMessageBox("IO EXCEPTION!", ex);
+            }
+            LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
+            this.getTopLevelAncestor().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        });
 
         runningstatsButton.setFocusable(false);
         runningstatsButton.addActionListener((e) -> {

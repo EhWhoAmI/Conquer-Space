@@ -48,7 +48,7 @@ public class PlayerController implements CivilizationController {
 
     @Override
     public void init(Universe u, StarDate d, Civilization c) {
-        mainwindow = new GameWindow(u, this, c);
+        mainwindow = new GameWindow(u, this, c, d);
 
         tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();

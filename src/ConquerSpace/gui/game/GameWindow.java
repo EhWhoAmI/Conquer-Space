@@ -1,6 +1,9 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameController;
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
@@ -14,6 +17,8 @@ import ConquerSpace.gui.renderers.SystemDrawStats;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ExceptionHandling;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -25,12 +30,16 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
@@ -42,7 +51,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class GameWindow extends JFrame implements GUI {
+public class GameWindow extends JFrame implements GUI, WindowListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(GameWindow.class.getName());
 
@@ -59,11 +68,15 @@ public class GameWindow extends JFrame implements GUI {
 
     private Timer gameTickTimer;
 
-    public GameWindow(Universe u, PlayerController controller, Civilization c) {
+    private StarDate d;
+
+    public GameWindow(Universe u, PlayerController controller, Civilization c, StarDate d) {
         this.controller = controller;
         this.c = c;
         this.u = u;
+        this.d = d;
         //Edit menu bar
+        addWindowListener(this);
         init();
     }
 
@@ -156,7 +169,6 @@ public class GameWindow extends JFrame implements GUI {
 
         JMenuItem techResearcher = new JMenuItem("Research Techonologies");
         techResearcher.addActionListener(e -> {
-            ResearchViewer viewer = new ResearchViewer(u.getCivilization(0));
             //addFrame(viewer);
         });
 
@@ -250,6 +262,51 @@ public class GameWindow extends JFrame implements GUI {
     public void reload() {
         init();
         clean();
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+        if (JOptionPane.showConfirmDialog(this,
+                "Do you want to save the game before exiting?", "Save game",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            SaveGame game = new SaveGame(System.getProperty("user.dir") + "/save/");
+            long before = System.currentTimeMillis();
+            try {
+                game.save(u, d);
+            } catch (IOException ex) {
+                ExceptionHandling.ExceptionMessageBox("IO EXCEPTION!", ex);
+            }
+            LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            GameController.musicPlayer.clean();
+            System.exit(0);
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
     }
 
     /**

@@ -4,6 +4,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.ships.components.ShipComponent;
 import ConquerSpace.game.universe.ships.hull.Hull;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -25,10 +26,10 @@ public class Ship implements SpaceShip, Orbitable {
 
     private int id;
     private Hull hull;
-    private ArrayList<ShipComponent> components;
+    public ArrayList<ShipComponent> components;
     private long maxSpeed = 1_0000_000;
     private int throttle = 0;
-    
+
     private long estimatedThrust = 0;
 
     public Ship(ShipClass sclass, long X, long Y, Vector v, UniversePath location) {
@@ -99,7 +100,7 @@ public class Ship implements SpaceShip, Orbitable {
 
     @Override
     public String toString() {
-        if(getName().isEmpty()) {
+        if (getName().isEmpty()) {
             return "ship";
         }
         return (getName());
@@ -144,16 +145,16 @@ public class Ship implements SpaceShip, Orbitable {
     }
 
     public long getMaxSpeed() {
-        return estimatedThrust/mass;
+        return estimatedThrust / mass;
     }
 
     public int getMass() {
         return mass;
     }
-    
+
     public void translate(long x, long y) {
-        this.X+=x;
-        this.Y+=y;
+        this.X += x;
+        this.Y += y;
     }
 
     public int getThrottle() {
@@ -170,5 +171,17 @@ public class Ship implements SpaceShip, Orbitable {
 
     public long getEstimatedThrust() {
         return estimatedThrust;
+    }
+
+    public Hull getHull() {
+        return hull;
+    }
+
+    public String getShipClass() {
+        return sclass;
+    }
+
+    public int getId() {
+        return id;
     }
 }

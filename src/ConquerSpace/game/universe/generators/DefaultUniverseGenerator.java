@@ -104,12 +104,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     planetSize = randint(rand, 30, 100);
 
                 }
-
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
 
                 //Add resource veins
                 int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
-
+                int idCount = 0;
                 for (Resource res : GameController.resources) {
                     //Process...
                     float rarity = res.getRarity();
@@ -122,7 +121,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                         for (int resCount = 0; resCount < amount; resCount++) {
                             //Add the resource
                             ResourceVein vein = new ResourceVein(res, 10);
-
+                            vein.setId(idCount++);
                             vein.setRadius(randint(rand, 5, 50));
                             vein.setX(rand.nextInt(planetSize * 2));
                             vein.setY(rand.nextInt(planetSize));

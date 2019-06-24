@@ -2,13 +2,16 @@ package ConquerSpace.game.universe.ships;
 
 import ConquerSpace.game.universe.ships.components.ShipComponent;
 import ConquerSpace.game.universe.ships.hull.Hull;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Zyun
  */
-public class ShipClass {
+public class ShipClass implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String name;
     private Hull hull;

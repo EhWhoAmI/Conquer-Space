@@ -11,6 +11,9 @@
 # Logs
 /logs/
 
+# Saves
+/save/*
+
 # crash logs
 crashlog.txt
 

@@ -13,6 +13,7 @@ import java.util.stream.Stream;
  * @author Zyun
  */
 public class StarSystem extends SpaceObject {
+    private static final long serialVersionUID = 1L;
 
     /**
      * All planets in this star system.

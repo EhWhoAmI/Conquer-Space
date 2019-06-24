@@ -12,6 +12,8 @@ public class HullMaterial {
     
     //cost per kg
     private int cost;
+    
+    private int id;
 
     public int getCost() {
         return cost;
@@ -39,5 +41,13 @@ public class HullMaterial {
         this.strength = strength;
         this.density = density;
         this.cost = cost;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

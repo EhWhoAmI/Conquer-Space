@@ -205,6 +205,7 @@ public class GameUpdater {
                 c.unrecruitedPeople.add(nerd);
             }
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
+            material.setId(0);
             c.hullMaterials.add(material);
 
             UniversePath p = c.getStartingPlanet();

@@ -29,5 +29,5 @@ public class Point {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
-    }
+    }  
 }

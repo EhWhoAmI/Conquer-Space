@@ -50,7 +50,6 @@ public class Civilization {
 
     private String homePlanetName;
 
-    public ArrayList<UniversePath> control = new ArrayList<>();
     /**
      * The controller of this civ.
      */
@@ -98,7 +97,6 @@ public class Civilization {
         this.ID = ID;
 
         //Set a temp starting point as in 0:0:0
-        this.control.add(new UniversePath(0, 0, 0));
 
         vision = new HashMap<>();
 
@@ -170,10 +168,6 @@ public class Civilization {
         this.homePlanetName = homePlanetName;
     }
 
-    public void setHomeplanetPath(int homeSectorID, int homeSystemID, int homePlanetID) {
-        addControl(new UniversePath(homeSectorID, homeSystemID, homePlanetID));
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -202,16 +196,8 @@ public class Civilization {
         return controller;
     }
 
-    public int getHomePlanetID() {
-        return control.get(0).getPlanetID();
-    }
-
     public String getHomePlanetName() {
         return homePlanetName;
-    }
-
-    public int getHomeSystemID() {
-        return control.get(0).getSystemID();
     }
 
     public String getName() {
@@ -253,14 +239,6 @@ public class Civilization {
         builder.append(", Home system=Sector " + startingPlanet.toString());
         builder.append(">\n");
         return (builder.toString());
-    }
-
-    public void addControl(UniversePath p) {
-        if (!control.contains(p)) {
-            // we only add the planet
-            control.add(p);
-            vision.put(p, VisionTypes.KNOWS_ALL);
-        }
     }
 
     public void processTurn(int turn) {
