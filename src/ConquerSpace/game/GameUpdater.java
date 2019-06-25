@@ -158,6 +158,7 @@ public class GameUpdater {
         } catch (IOException ex) {
             //Ignore
         }
+        
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -255,9 +256,11 @@ public class GameUpdater {
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s.setEstimatedThrust(10_000_000);
                 Actions.launchShip(s, starting, c);
+                
                 //Set ownership
-
                 starting.setOwnerID(c.getID());
+                starting.scanned.add(c.getID());
+                starting.setHabitated(true);
 
                 c.habitatedPlanets.add(starting);
 

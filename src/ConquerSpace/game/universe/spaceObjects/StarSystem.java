@@ -39,6 +39,8 @@ public class StarSystem extends SpaceObject {
 
     private long xpos;
     private long ypos;
+    
+    private String name = "";
 
     /**
      * Creates a new star system.
@@ -195,5 +197,13 @@ public class StarSystem extends SpaceObject {
 
     public void setY(long y) {
         ypos = y;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

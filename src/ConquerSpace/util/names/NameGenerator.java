@@ -57,6 +57,10 @@ public class NameGenerator {
         //Process
     }
 
+    public int getRulesCount() {
+        return rules.length;
+    }
+    
     public String getName(int scheme) {
         String[] rule = rules[scheme].split("\\\\");
         //Get the data

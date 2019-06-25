@@ -45,10 +45,13 @@ public class Planet extends SpaceObject {
     
     public HashMap<Point, Building> buildings;
     
+    public ArrayList<Integer> scanned;
     
     private int terrainSeed;
     
     private int terrainColoringIndex;
+    
+    private boolean habitated = false;
     /**
      * Creates planet
      *
@@ -74,6 +77,8 @@ public class Planet extends SpaceObject {
         satellites = new ArrayList<>();
         resourceVeins = new ArrayList<>();
         buildings = new HashMap<>();
+        
+        scanned = new ArrayList<>();
     }
 
     /**
@@ -217,5 +222,13 @@ public class Planet extends SpaceObject {
 
     public void setTerrainSeed(int terrainSeed) {
         this.terrainSeed = terrainSeed;
+    }
+
+    public boolean isHabitated() {
+        return habitated;
+    }
+
+    public void setHabitated(boolean habitated) {
+        this.habitated = habitated;
     }
 }

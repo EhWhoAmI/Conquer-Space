@@ -17,16 +17,20 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainTile;
+import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author User
  */
 public class DefaultUniverseGenerator extends UniverseGenerator {
-
+    
     @Override
     public Universe generate(UniverseConfig u, CivilizationConfig c, long seed) {
         Universe universe = new Universe(seed);
@@ -35,7 +39,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Load resources
         GameUpdater.readResources();
-
+        
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         //Create star systems
         int starSystemCount = 100;
@@ -50,6 +54,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 starSystemCount = (rand.nextInt(150) + 300);
                 break;
         }
+        NameGenerator planetNameGenerator = null;
+        try {
+            planetNameGenerator = NameGenerator.getNameGenerator("planet.names");
+        } catch (IOException ex) {
+        }
         for (int i = 0; i < starSystemCount; i++) {
             //Create star system
             int dist = rand.nextInt(100);
@@ -60,7 +69,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             int starType = rand.nextInt(10000);
             int starSize;
             int solarRadius = 695508;
-
+            
             if (starType < 7) {
                 starType = StarTypes.TYPE_O;
                 starSize = randint(rand, (int) (6.6 * solarRadius), (int) (100 * solarRadius));
@@ -83,10 +92,10 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 starType = StarTypes.TYPE_M;
                 starSize = randint(rand, (int) (0.1 * solarRadius), (int) (0.7 * solarRadius));
             }
-
+            
             Star star = new Star(starType, starSize, 0);
             sys.addStar(star);
-
+            
             int planetCount = rand.nextInt(11);
             long lastDistance = 10000000;
             for (int k = 0; k < planetCount; k++) {
@@ -102,7 +111,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 } else {
                     //Rock
                     planetSize = randint(rand, 30, 100);
-
+                    
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
 
@@ -129,15 +138,21 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                         }
                     }
                 }
-
+                
                 if (planetType == PlanetTypes.ROCK) {
                     
                     p.setTerrainSeed(rand.nextInt());
                     //= terrainColorses;
                 }
+                //Set name
+                if (planetNameGenerator != null) {
+                    
+                    p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
+                }
                 //System.err.println(p.terrain.terrainColor[0][0]);
                 sys.addPlanet(p);
             }
+            //Set name
             //Add planets
             universe.addStarSystem(sys);
         }
@@ -163,11 +178,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
         UniversePath up = getRandomSuitablePlanet(rand, universe);
         playerCiv.setStartingPlanet(up);
-
+        
         universe.addCivilization(playerCiv);
         //Calculate number of civs
         int civCount = starSystemCount / 50;
-
+        
         for (int i = 0; i < civCount; i++) {
             //Create civ.
             Civilization civ = new Civilization(i + 1, universe);
@@ -184,18 +199,18 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         }
         return universe;
     }
-
+    
     private static int randint(Random rand, int min, int max) {
         return (rand.nextInt((max - min)) + min);
     }
-
+    
     private UniversePath getRandomSuitablePlanet(Random rand, Universe u) {
         //Select
         int randomSS = rand.nextInt(u.getStarSystemCount());
         StarSystem sys = u.getStarSystem(randomSS);
         //Get planets
         int randomP = 0;
-
+        
         do {
             //Loop through the numbers
             if (sys.getPlanetCount() <= 0 || randomP >= sys.getPlanetCount()) {

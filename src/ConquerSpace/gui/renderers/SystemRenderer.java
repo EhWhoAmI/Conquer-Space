@@ -122,14 +122,17 @@ public class SystemRenderer {
 
             //Draw name and background
             if (!p.getName().equals("")) {
-                g2d.setColor(Color.red);
-                g2d.fill(new Rectangle2D.Double(
-                        (translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
-                        (translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale + (p.getPlanetSize() / PLANET_DIVISOR / 2),
-                        (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3)
-                );
+                g2d.setColor(Color.gray);
 
-                g2d.setColor(Color.white);
+                if (p.isHabitated()) {
+                    g2d.setColor(Color.red);
+                    g2d.fill(new Rectangle2D.Double(
+                            (translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
+                            (translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale + (p.getPlanetSize() / PLANET_DIVISOR / 2),
+                            (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3)
+                    );
+                    g2d.setColor(Color.white);
+                }
 
                 g2d.drawString(p.getName(),
                         (float) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) * scale) - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
@@ -143,13 +146,14 @@ public class SystemRenderer {
             double y = (ship.getY());
             //Draw dot
             g2d.setColor(Color.yellow);
-            g2d.fill(new Ellipse2D.Double((translateX + x * sizeofAU / 10_000_000+ bounds.width / 2) * scale - 5,
+            g2d.fill(new Ellipse2D.Double((translateX + x * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5,
                     (translateY + y * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5, 10, 10));
             ship.getName();
         }
         //Draw scale line
         // TODO: MAKE ACCURATE!
-        Line2D.Float line = new Line2D.Float(10, 20, 50, 20);
+        Line2D.Float line = new Line2D.Float(10, 20, (float) (sizeofAU * 20 * scale + 10), 20);
+        g2d.setColor(Color.yellow);
         g2d.draw(line);
         g2d.drawString((20d / (double) sizeofAU) + " AU", 10, 10);
     }

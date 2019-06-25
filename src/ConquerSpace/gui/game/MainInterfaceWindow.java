@@ -27,9 +27,10 @@ public class MainInterfaceWindow extends JInternalFrame {
 
     private JPanel planetInfoSheetContainer;
     private PlanetInfoSheet planetInfoSheet;
+    private ShrinkedPlanetSheet shrinkedPlanetSheet;
     private SpaceShipOverview spaceShipOverview;
     private HullCreator hullCreator;
-    
+
     private PersonWindow personWindow;
     private RecruitingPerson recruitingPerson;
 
@@ -41,6 +42,8 @@ public class MainInterfaceWindow extends JInternalFrame {
 
     private Planet selectedPlanet = null;
 
+    private boolean toShowResources = true;
+
     public MainInterfaceWindow(Civilization c, Universe u) {
         this.c = c;
         this.u = u;
@@ -51,7 +54,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         setClosable(true);
         setMaximizable(true);
         setResizable(true);
-        setVisible(true);
+        //setVisible(true);
         pack();
         Dimension d = getToolkit().getScreenSize();
         setSize(d.width - 100, d.height - 100);
@@ -74,7 +77,7 @@ public class MainInterfaceWindow extends JInternalFrame {
                     //Do stuff
                     Planet p = (Planet) selectedNode.getUserObject();
                     //Selected planet
-                    setSelectedPlanet(p);
+                    setSelectedPlanet(p, p.scanned.contains(c.getID()));
                     setSelectedTab(1);
                 }
                 //process
@@ -102,10 +105,10 @@ public class MainInterfaceWindow extends JInternalFrame {
         JTabbedPane peopleTabs = new JTabbedPane();
         personWindow = new PersonWindow(c);
         peopleTabs.add("Person List", personWindow);
-        
+
         recruitingPerson = new RecruitingPerson(c);
         peopleTabs.add("Recruitment", recruitingPerson);
-        
+
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
         tabs.add("Ships", spaceShipOverview);
@@ -114,7 +117,7 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
-        
+
         // Updating code
         Timer t = new Timer(500, a -> {
             recruitingPerson.update();
@@ -152,11 +155,16 @@ public class MainInterfaceWindow extends JInternalFrame {
         tabs.setSelectedIndex(tab);
     }
 
-    public void setSelectedPlanet(Planet p) {
+    public void setSelectedPlanet(Planet p, boolean toShowResources) {
         selectedPlanet = p;
         planetInfoSheetContainer.removeAll();
-        planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
-        planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
+        if (toShowResources) {
+            planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
+            planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
+        } else {
+            shrinkedPlanetSheet = new ShrinkedPlanetSheet(u, p, c);
+            planetInfoSheetContainer.add(shrinkedPlanetSheet, BorderLayout.CENTER);
+        }
         setSelectedTab(1);
         setVisible(true);
     }

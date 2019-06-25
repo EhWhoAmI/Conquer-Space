@@ -358,6 +358,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 translateY -= ((startPoint.y - e.getY()) * (1 / scale));
                 startPoint = e.getPoint();
                 repaint();
+                System.out.println(translateX + " " + translateY);
             }
         }
 
@@ -396,7 +397,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                                     (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
                                 //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                 //add(d);
-                                mainInterfaceWindow.setSelectedPlanet(planet);
+                                //Check if scanned
+                                mainInterfaceWindow.setSelectedPlanet(planet, planet.scanned.contains(c.getID()));
                                 mainInterfaceWindow.setSelectedTab(1);
 
                                 break;
@@ -436,7 +438,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                             if (Math.hypot((scale * (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) - e.getX()),
                                     (scale * (sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(c.getID()) > VisionTypes.UNDISCOVERED) {
                                         JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
                                         systemInfo.addActionListener(a -> {
                                             see(sys.getId());
@@ -454,14 +456,21 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
                             if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getX(),
                                     (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
-                                JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
-                                planetName.addActionListener(a -> {
-                                    //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
-                                    //addFrame(d);
-                                    mainInterfaceWindow.setSelectedPlanet(planet);
-                                    mainInterfaceWindow.setSelectedTab(1);
-                                });
-                                popupMenu.add(planetName);
+                                if (planet.scanned.contains(c.getID())) {
+                                    JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
+                                    planetName.addActionListener(a -> {
+                                        mainInterfaceWindow.setSelectedPlanet(planet, true);
+                                        mainInterfaceWindow.setSelectedTab(1);
+                                    });
+                                    popupMenu.add(planetName);
+                                } else {
+                                    JMenuItem text = new JMenuItem("Planet Unexplored");
+                                    text.addActionListener(a -> {
+                                        mainInterfaceWindow.setSelectedPlanet(planet, false);
+                                        mainInterfaceWindow.setSelectedTab(1);
+                                    });
+                                    popupMenu.add(text);
+                                }
                                 break;
                             }
                         }
@@ -514,8 +523,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
             drawing = DRAW_STAR_SYSTEM;
             systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
             currentStarSystemSizeOfAU = systemRenderer.sizeofAU;
-            translateX = 0;
-            translateY = 0;
+            scale = 1;
+            //Get Star position and position it like that...
+            translateX = -1500 / 2 + getSize().width/2;
+            translateY = -1500 / 2 + getSize().height/2;
             repaint();
         }
 
@@ -531,8 +542,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         }
 
         public void recenter() {
-            translateX = 0;
-            translateY = 0;
+            translateX = -1500 / 2 + getSize().width/2;
+            translateY = -1500 / 2 + getSize().height/2;
             scale = 1f;
         }
     }

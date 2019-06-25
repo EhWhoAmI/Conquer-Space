@@ -1,15 +1,11 @@
-package ConquerSpace.gui.game.planetdisplayer;
+package ConquerSpace.gui.game;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.generators.TerrainGenerator;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
-import ConquerSpace.game.universe.spaceObjects.terrain.TerrainTile;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
@@ -24,8 +20,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -38,13 +32,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
 /**
- * Display sectors and stuff.
  *
- * @author Zyun
+ * @author zyunl
  */
-public class PlanetOverview extends JPanel {
-
-    private static final int TILE_SIZE = 7;
+public class ShrinkedPlanetSheet extends JPanel {
+     private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
     private JPanel planetSectors;
     //private JList<Orbitable> satelliteList;
@@ -58,7 +50,7 @@ public class PlanetOverview extends JPanel {
     private ButtonGroup resourceButtonGroup;
     private JRadioButton[] showResources;
 
-    public PlanetOverview(Universe u, Planet p, Civilization c) {
+    public ShrinkedPlanetSheet(Universe u, Planet p, Civilization c) {
         this.p = p;
         setLayout(new GridLayout(2, 1));
 
@@ -141,7 +133,6 @@ public class PlanetOverview extends JPanel {
         });
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
-        planetSectors.add(buildingPanel);
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
