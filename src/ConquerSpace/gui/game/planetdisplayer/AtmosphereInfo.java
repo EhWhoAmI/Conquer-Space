@@ -5,15 +5,12 @@ import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.gui.game.ShipInformationMenu;
-import com.alee.extended.layout.HorizontalFlowLayout;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 /**

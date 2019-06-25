@@ -6,7 +6,6 @@ import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.ResourceLoader;
 import java.util.ArrayList;
 
 /**

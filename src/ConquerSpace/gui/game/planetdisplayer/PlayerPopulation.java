@@ -4,7 +4,6 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 

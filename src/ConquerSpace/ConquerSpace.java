@@ -9,7 +9,6 @@ import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
 import java.awt.AWTEvent;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +20,6 @@ import java.util.Locale;
 import java.util.Properties;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.FontUIResource;
 import org.apache.logging.log4j.Logger;
 
 /*

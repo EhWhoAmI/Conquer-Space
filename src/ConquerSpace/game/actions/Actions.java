@@ -3,7 +3,6 @@ package ConquerSpace.game.actions;
 import ConquerSpace.Globals;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
-import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -75,6 +74,7 @@ public class Actions {
         what.setLocation(planet.getUniversePath());
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
+        civ.spaceships.add(what);
     }
     
     public static void moveShip(Ship what, Civilization civ, long x, long y, Universe u) {

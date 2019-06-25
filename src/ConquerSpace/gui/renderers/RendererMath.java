@@ -1,7 +1,6 @@
 package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.universe.GalacticLocation;
-import java.awt.Point;
 
 /**
  * Does all the math for rendering.

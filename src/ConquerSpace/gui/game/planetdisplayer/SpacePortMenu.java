@@ -6,7 +6,6 @@ import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.gui.game.LaunchSpaceShipMenu;
 import com.alee.extended.layout.VerticalFlowLayout;

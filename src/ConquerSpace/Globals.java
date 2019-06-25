@@ -2,11 +2,7 @@ package ConquerSpace;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.ResourceLoader;
-import java.io.FileNotFoundException;
 import java.util.Properties;
-import java.util.Scanner;
-import javax.script.ScriptEngineManager;
 
 /**
  * Global variables of the game.

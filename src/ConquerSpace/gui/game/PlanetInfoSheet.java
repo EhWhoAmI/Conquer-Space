@@ -5,7 +5,6 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.gui.game.planetdisplayer.SpacePortMenu;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;

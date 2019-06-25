@@ -16,14 +16,10 @@ import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.game.universe.spaceObjects.terrain.TerrainTile;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

@@ -4,7 +4,6 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.ships.components.ShipComponent;
 import ConquerSpace.game.universe.ships.hull.Hull;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

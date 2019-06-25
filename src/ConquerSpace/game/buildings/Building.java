@@ -1,7 +1,6 @@
 package ConquerSpace.game.buildings;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 /**
  * A building is defined as a series of points

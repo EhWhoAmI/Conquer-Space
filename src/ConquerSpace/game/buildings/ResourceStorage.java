@@ -5,7 +5,6 @@ import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 

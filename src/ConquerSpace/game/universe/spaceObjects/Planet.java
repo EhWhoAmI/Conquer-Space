@@ -7,8 +7,6 @@ import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.spaceObjects.terrain.Terrain;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 

@@ -1,6 +1,5 @@
 package ConquerSpace.util;
 
-import ConquerSpace.Globals;
 import java.util.HashMap;
 
 /**

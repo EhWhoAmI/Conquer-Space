@@ -1,7 +1,5 @@
 package ConquerSpace.game.universe.spaceObjects.terrain;
 
-import java.awt.Color;
-
 /**
  *
  * @author zyunl

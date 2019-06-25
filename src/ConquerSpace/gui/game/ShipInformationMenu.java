@@ -5,7 +5,6 @@ import ConquerSpace.game.universe.civilization.controllers.PlayerController.Play
 import ConquerSpace.game.universe.ships.Ship;
 import java.awt.GridLayout;
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 

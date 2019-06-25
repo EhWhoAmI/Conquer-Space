@@ -13,11 +13,10 @@ import ConquerSpace.game.universe.civilization.controllers.CivilizationControlle
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
-import ConquerSpace.game.universe.resources.RawResourceTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
-import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
@@ -81,7 +80,7 @@ public class Civilization {
     public ArrayList<VisionPoint> visionPoints;
     public ArrayList<ResourceStockpile> resourceStorages;
 
-    public ArrayList<SpaceShip> spaceships;
+    public ArrayList<Ship> spaceships;
     public ArrayList<ShipClass> shipClasses;
     public ArrayList<HullMaterial> hullMaterials;
     public ArrayList<Hull> hulls;

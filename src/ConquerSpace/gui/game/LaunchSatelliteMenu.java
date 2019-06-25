@@ -1,19 +1,15 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.game.universe.ships.satellites.Satellites;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
-import ConquerSpace.game.universe.ships.satellites.SpaceTelescope;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
