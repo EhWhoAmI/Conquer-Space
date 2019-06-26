@@ -16,7 +16,7 @@ public class ShipInformationMenu extends JPanel {
 
     private JLabel shipNameLabel;
     private JLabel shipNameText;
-    
+
     //private JButton gotoPositionButton;
     private JButton selectButton;
 
@@ -33,8 +33,7 @@ public class ShipInformationMenu extends JPanel {
             JLabel currentlyOrbitingText = new JLabel(ship.getOrbiting().toString());
             add(currentlyOrbitingLabel);
             add(currentlyOrbitingText);
-        }
-        else {
+        } else {
             JLabel currentPositionLabel = new JLabel("Current Position: ");
             JLabel currentPositionText = new JLabel(ship.getLocation().toString());
             add(currentPositionLabel);
@@ -42,7 +41,9 @@ public class ShipInformationMenu extends JPanel {
         }
         selectButton = new JButton("Select this Ship");
         selectButton.addActionListener(a -> {
-            ((PlayerController)c.controller).selectedShips.add(ship);
+            if (!((PlayerController) c.controller).selectedShips.contains(ship)) {
+                ((PlayerController) c.controller).selectedShips.add(ship);
+            }
         });
         add(selectButton);
         setVisible(true);

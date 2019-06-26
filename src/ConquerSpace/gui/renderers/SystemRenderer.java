@@ -1,6 +1,7 @@
 package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.Star;
@@ -140,14 +141,14 @@ public class SystemRenderer {
         }
 
         //draw spaceships
-        for (Ship ship : sys.spaceShips) {
+        for (SpaceShip ship : sys.spaceShips) {
             double x = (ship.getX());
             double y = (ship.getY());
             //Draw dot
             g2d.setColor(Color.yellow);
             g2d.fill(new Ellipse2D.Double((translateX + x * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5,
                     (translateY + y * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5, 10, 10));
-            ship.getName();
+            //ship.getName();
         }
         //Draw scale line
         // TODO: MAKE ACCURATE!

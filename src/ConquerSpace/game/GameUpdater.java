@@ -4,6 +4,8 @@ import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.actions.ShipAction;
+import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
@@ -252,7 +254,7 @@ public class GameUpdater {
 
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
-                Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 0, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
+                Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s.setEstimatedThrust(10_000_000);
                 Actions.launchShip(s, starting, c);
                 
@@ -463,8 +465,6 @@ public class GameUpdater {
     }
 
     public static void readShipTypes() {
-        ArrayList<JSONObject> components = new ArrayList<>();
-
         try {
             //Open file
             Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/assets/data/ship_types/shipTypes.txt"));
@@ -755,30 +755,17 @@ public class GameUpdater {
     }
 
     public void moveShips() {
-        for (int sys = 0; sys < Globals.universe.getStarSystemCount(); sys++) {
-            StarSystem system = Globals.universe.getStarSystem(sys);
-            //Process ships
-            //Move ships
-            for (Ship ship : system.spaceShips) {
-                double x = ship.getGoingToX() - ship.getX();
-                double y = ship.getGoingToY() - ship.getY();
-
-                //Normalize
-                double len = Math.sqrt(x * x + y * y);
-                if (len > 0) {
-                    x /= len;
-                    y /= len;
-                }
-                double distance = Math.sqrt(Math.pow(ship.getGoingToX() - ship.getX(), 2) + Math.pow(ship.getGoingToY() - ship.getY(), 2));
-                double objX = (x * ship.getMaxSpeed());
-                double objY = (y * ship.getMaxSpeed());
-                if (Math.sqrt(Math.pow(objX+ship.getX() - ship.getX(), 2) + Math.pow(objY+ship.getY() - ship.getY(), 2)) >= distance) {
-                    objX = ship.getGoingToX();
-                    objY = ship.getGoingToY();
-                    ship.setX((long) objX);
-                    ship.setY((long) objY);
+        for (int sys = 0; sys < Globals.universe.getCivilizationCount(); sys++) {
+            Civilization c = Globals.universe.getCivilization(sys);
+            //Process ship actions
+            for (Ship ship : c.spaceships) {
+                ShipAction sa = ship.getActionAndPopIfDone();
+                
+                //If not done
+                if(!sa.checkIfDone()) {
+                    //System.out.println(sa.getClass());
+                    sa.doAction();
                 } else {
-                    ship.translate((long) (objX), (long) (objY));
                 }
             }
         }

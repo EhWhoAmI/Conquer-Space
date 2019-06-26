@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  * @author Zyun
  */
-public class Fleet implements SpaceShip{
+public class Fleet extends SpaceShip{
     private ArrayList<Division> divisions;
     private String name;
     private int id;
@@ -73,5 +73,15 @@ public class Fleet implements SpaceShip{
 
     public void setLocation(UniversePath location) {
         this.location = location;
+    }
+    
+        @Override
+    public long getSpeed() {
+        return 0;
+    }
+
+    @Override
+    public UniversePath getOrbiting() {
+        return null;
     }
 }

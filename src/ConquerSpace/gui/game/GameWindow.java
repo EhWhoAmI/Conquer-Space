@@ -3,6 +3,9 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.actions.ShipMoveAction;
+import ConquerSpace.game.actions.ShipSurveyAction;
+import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -77,7 +80,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         addWindowListener(this);
         init();
         //A window to greet the user
-        JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can go to space.\nOur destiny is with the stars.");
+        //JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can go to space.\nOur destiny is with the stars.");
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -425,6 +428,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 //Show popup menu
                 JPopupMenu popupMenu = new JPopupMenu();
 
+                boolean overPlanet = false;
+                Planet overWhat = null;
                 //Show info and specific information of the sectors and stuff
                 switch (drawing) {
                     case DRAW_UNIVERSE:
@@ -470,6 +475,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                                     });
                                     popupMenu.add(text);
                                 }
+                                overPlanet = true;
+                                overWhat = planet;
                                 break;
                             }
                         }
@@ -483,16 +490,65 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 for (Ship s : ((PlayerController) c.controller).selectedShips) {
                     JMenu men = new JMenu(s.toString());
                     JMenuItem gohereMenu = new JMenuItem("Go here");
-
                     gohereMenu.addActionListener(a -> {
                         //Move position
                         //Convert
                         long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
                         long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
-                        Actions.moveShip(s, c, gotoX, gotoY, universe);
-                    });
 
+                        //Get Location
+                        ShipMoveAction action = new ShipMoveAction(s);
+                        action.setPosition(new ConquerSpace.game.universe.Point(gotoX, gotoY));
+                        s.addAction(action);
+                    });
                     men.add(gohereMenu);
+
+                    //Check if orbiting a planet...
+                    if (overPlanet && overWhat != null) {
+                        //Orbit it! 
+                        JMenuItem orbiting = new JMenuItem("Orbit " + overWhat.getName());
+                        final Planet p = overWhat;
+                        orbiting.addActionListener(a -> {
+                            //Move position
+                            //Convert
+
+                            //Get Location
+                            ToOrbitAction action = new ToOrbitAction(s);
+                            action.setPlanet(p);
+                            s.addAction(action);
+                        });
+                        men.add(orbiting);
+                    }
+                    //If science ship
+                    long stype = s.getHull().getShipType();
+                    //Survey ship and over planet
+                    if (stype == 70 && overPlanet && !overWhat.scanned.contains(c.getID())) {
+                        JMenuItem surveryor = new JMenuItem("Survey planet");
+                        final Planet p = overWhat;
+
+                        surveryor.addActionListener(a -> {
+                            //Move position
+                            //Convert
+                            long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
+                            long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
+
+                            //Get Location
+                            ShipSurveyAction survey = new ShipSurveyAction(s);
+                            survey.setProgressPerTick(5);
+                            survey.setFinishedProgress(100);
+                            survey.setToSurvey(p);
+                            survey.setCivID(c.getID());
+
+                            //Also orbit planet
+                            //Actions.moveShip(s, c, gotoX, gotoY, universe);
+                            ToOrbitAction orbitAction = new ToOrbitAction(s);
+                            orbitAction.setPlanet(p);
+                            s.addAction(orbitAction);
+                            s.addAction(survey);
+                        });
+                        men.add(surveryor);
+                    }
+
                     selectedShips.add(men);
                 }
 
@@ -524,8 +580,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
             currentStarSystemSizeOfAU = systemRenderer.sizeofAU;
             scale = 1;
             //Get Star position and position it like that...
-            translateX = -1500 / 2 + getSize().width/2;
-            translateY = -1500 / 2 + getSize().height/2;
+            translateX = -1500 / 2 + getSize().width / 2;
+            translateY = -1500 / 2 + getSize().height / 2;
             repaint();
         }
 
@@ -541,8 +597,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         }
 
         public void recenter() {
-            translateX = -1500 / 2 + getSize().width/2;
-            translateY = -1500 / 2 + getSize().height/2;
+            translateX = -1500 / 2 + getSize().width / 2;
+            translateY = -1500 / 2 + getSize().height / 2;
             scale = 1f;
         }
     }

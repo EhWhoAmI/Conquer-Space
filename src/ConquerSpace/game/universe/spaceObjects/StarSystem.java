@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.universe.ships.SpaceShip;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -34,7 +35,7 @@ public class StarSystem extends SpaceObject {
      */
     private GalacticLocation location;
 
-    public ArrayList<Ship> spaceShips;
+    public ArrayList<SpaceShip> spaceShips;
 
     private long xpos;
     private long ypos;
@@ -162,15 +163,15 @@ public class StarSystem extends SpaceObject {
         return (builder.toString());
     }
 
-    public void addSpaceShip(Ship ship) {
+    public void addSpaceShip(SpaceShip ship) {
         spaceShips.add(ship);
     }
 
-    public Ship getSpaceShip(int id) {
+    public SpaceShip getSpaceShip(int id) {
         return spaceShips.get(id);
     }
 
-    public Stream<Ship> getSpaceShipStream() {
+    public Stream<SpaceShip> getSpaceShipStream() {
         return spaceShips.stream();
     }
 

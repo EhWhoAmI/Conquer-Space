@@ -5,7 +5,9 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
@@ -36,7 +38,8 @@ import javax.swing.border.TitledBorder;
  * @author zyunl
  */
 public class ShrinkedPlanetSheet extends JPanel {
-     private static final int TILE_SIZE = 7;
+
+    private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
     private JPanel planetSectors;
     //private JList<Orbitable> satelliteList;
@@ -47,13 +50,20 @@ public class ShrinkedPlanetSheet extends JPanel {
     private JLabel orbitDistance;
     private JLabel disclaimerLabel;
     private Planet p;
-    private JButton switchButton;
-    private ButtonGroup resourceButtonGroup;
-    private JRadioButton[] showResources;
+    //private ButtonGroup resourceButtonGroup;
+    //private JRadioButton[] showResources;
+
+    private JTabbedPane infoPane;
+
+    private AtmosphereInfo atmosphereInfo;
 
     public ShrinkedPlanetSheet(Universe u, Planet p, Civilization c) {
         this.p = p;
-        setLayout(new GridLayout(2, 1));
+        infoPane = new JTabbedPane();
+
+        JPanel planetOverviewPanel = new JPanel();
+
+        planetOverviewPanel.setLayout(new GridLayout(2, 1));
 
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
@@ -94,37 +104,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         JTabbedPane buildingPanel = new JTabbedPane();
 
         JPanel buttonsWrapper = new JPanel();
-        switchButton = new JButton("Change view");
-        switchButton.addActionListener(a -> {
-            if (sectorDisplayer.whatToShow == 0) {
-                sectorDisplayer.setWhatToShow(1);
-            } else {
-                sectorDisplayer.setWhatToShow(0);
-            }
-        });
-        JPanel buttonGroupWrapper = new JPanel();
-        buttonGroupWrapper.setLayout(new VerticalFlowLayout());
-        resourceButtonGroup = new ButtonGroup();
-        showResources = new JRadioButton[GameController.resources.size() + 1];
-        showResources[0] = new JRadioButton("All Resources");
-        showResources[0].addActionListener(a -> {
-            sectorDisplayer.resourceToShow = -1;
-        });
-        
-        buttonGroupWrapper.add(showResources[0]);
-        resourceButtonGroup.add(showResources[0]);
-        for (int i = 1; i < GameController.resources.size() + 1; i++) {
-            showResources[i] = new JRadioButton(GameController.resources.get(i - 1).getName());
-            int val = i - 1;
-            showResources[i].addActionListener(a -> {
-                sectorDisplayer.setResourceViewing(val);
-            });
-            resourceButtonGroup.add(showResources[i]);
-            buttonGroupWrapper.add(showResources[i]);
-        }
 
-        buttonsWrapper.add(switchButton);
-        buttonsWrapper.add(buttonGroupWrapper);
         buildingPanel.add("Map", buttonsWrapper);
 
         buildingPanel.addChangeListener(a -> {
@@ -144,8 +124,14 @@ public class ShrinkedPlanetSheet extends JPanel {
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
 
-        add(planetOverview);
-        add(planetSectors);
+        planetOverviewPanel.add(planetOverview);
+        planetOverviewPanel.add(planetSectors);
+        infoPane.add("Planet Overview", planetOverviewPanel);
+
+        //Add atmosphere info
+        atmosphereInfo = new AtmosphereInfo(p, c);
+        infoPane.add("Atmosphere Info", atmosphereInfo);
+        add(infoPane);
         //Add empty panel
         //add(new JPanel());
     }
@@ -168,14 +154,19 @@ public class ShrinkedPlanetSheet extends JPanel {
         private TerrainRenderer renderer;
 
         public PlanetSectorDisplayer(Planet p, Civilization c) {
+            double scale = 2;
+
             this.c = c;
+            if (p.getPlanetType() == PlanetTypes.GAS) {
+                scale = .5;
+            }
             setPreferredSize(
-                    new Dimension(p.getPlanetSize() * 4, p.getPlanetSize() * 2));
+                    new Dimension((int) (p.getPlanetSize() * 2 * scale), (int) (p.getPlanetSize() * scale)));
             menu = new JPopupMenu();
             addMouseListener(this);
             renderer = new TerrainRenderer(p);
-            img = renderer.getImage(2);
 
+            img = renderer.getImage(scale);
         }
 
         @Override

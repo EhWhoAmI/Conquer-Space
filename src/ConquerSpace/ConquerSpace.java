@@ -144,6 +144,9 @@ public class ConquerSpace {
             LOGGER.warn("", ex);
         }
         GameController.musicPlayer = new MusicPlayer();
+        if (Globals.settings.getProperty("music").equals("no")) {
+            GameController.musicPlayer.setToPlay(false);
+        }
         // Load all the files.
         InitialLoading loading = new InitialLoading();
         loading.setVisible(true);

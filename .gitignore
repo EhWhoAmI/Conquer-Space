@@ -25,3 +25,6 @@ universe.dump
 
 # Javadoc files
 /docs/
+
+# Settings
+settings.properties

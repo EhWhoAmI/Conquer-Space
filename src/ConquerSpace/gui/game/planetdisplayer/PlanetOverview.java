@@ -173,7 +173,7 @@ public class PlanetOverview extends JPanel {
             menu = new JPopupMenu();
             addMouseListener(this);
             renderer = new TerrainRenderer(p);
-            img = renderer.getImage(2);
+            img = renderer.getImage(2d);
 
         }
 

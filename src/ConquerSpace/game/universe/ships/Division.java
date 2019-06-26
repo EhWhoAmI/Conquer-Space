@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  * @author Zyun
  */
-public class Division implements SpaceShip{
+public class Division extends SpaceShip{
     private int id;
     private ArrayList<Ship> ships;
 
@@ -79,6 +79,16 @@ public class Division implements SpaceShip{
 
     public void setY(long Y) {
         this.Y = Y;
+    }
+
+    @Override
+    public long getSpeed() {
+        return 0;
+    }
+
+    @Override
+    public UniversePath getOrbiting() {
+        return null;
     }
     
     

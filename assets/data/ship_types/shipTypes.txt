@@ -8,7 +8,6 @@
 "survey ship" 70
 "colony ship" 80
 "repair ship" 90
-"blockade runner" 100
 
 "corvette" 1000
 "destroyer tender" 1030

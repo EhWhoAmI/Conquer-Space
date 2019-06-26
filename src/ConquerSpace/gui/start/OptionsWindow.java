@@ -3,11 +3,14 @@ package ConquerSpace.gui.start;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.util.CQSPLogger;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -39,6 +42,7 @@ public class OptionsWindow extends JFrame {
 
     private OptionsWindow() {
         setTitle("Options");
+        setLayout(new VerticalFlowLayout());
         logsPanel = new JPanel();
         logsPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Logs"));
 
@@ -75,11 +79,13 @@ public class OptionsWindow extends JFrame {
             //Write
             File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
             if (settingsFile.exists()) {
-                FileInputStream fis = null;
+                FileOutputStream fis = null;
                 try {
                     //Read from file.
-                    fis = new FileInputStream(settingsFile);
-                    Globals.settings.load(fis);
+                    fis = new FileOutputStream(settingsFile);
+                    PrintWriter pw = new PrintWriter(fis);
+                    Globals.settings.list(pw);
+                    pw.close();
                 } catch (FileNotFoundException ex) {
                 } catch (IOException ex) {
                 } finally {

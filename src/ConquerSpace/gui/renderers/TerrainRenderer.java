@@ -15,14 +15,13 @@ import java.util.HashMap;
 public class TerrainRenderer {
 
     private Planet p;
-    private int scale;
 
     public TerrainRenderer(Planet p) {
         this.p = p;
 
     }
 
-    public Image getImage(int scale) {
+    public Image getImage(double scale) {
         BufferedImage planetDisplaying = new BufferedImage(p.getPlanetSize() * 2, p.getPlanetSize(), BufferedImage.TYPE_3BYTE_BGR);
         //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors = new HashMap<>();
@@ -46,6 +45,7 @@ public class TerrainRenderer {
                 }
             }
         }
-        return ((planetDisplaying.getScaledInstance(p.getPlanetSize() * 2 * scale, p.getPlanetSize() * scale, Image.SCALE_DEFAULT)));
+        return ((planetDisplaying.getScaledInstance((int) (p.getPlanetSize() * 2 * scale), (int) (p.getPlanetSize() * scale), Image.SCALE_DEFAULT)));
+        
     }
 }
