@@ -15,13 +15,14 @@ import javax.swing.table.AbstractTableModel;
  * @author Zyun
  */
 public class ShipListManager extends JPanel {
-
-    private String[] colunms = {"Name", "Class", "Location", "Speed", "Status"};
     private ShipTableModel model;
     private JScrollPane scrollPane;
     private JTable table;
+    
+    private Civilization c;
 
     public ShipListManager(Universe u, Civilization c) {
+        this.c = c;
         //setTitle("All Ships");
         setLayout(new BorderLayout());
         model = new ShipTableModel();
@@ -36,11 +37,18 @@ public class ShipListManager extends JPanel {
         };
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-        //pack();
-        setVisible(true);
-        //setResizable(true);
+        update();
     }
 
+    public void update() {
+        //Populate table
+        model.empty();
+        for(Ship s : c.spaceships) {
+            //process
+            model.add(s);
+        }
+    }
+    
     //Table model
     private class ShipTableModel extends AbstractTableModel {
 

@@ -45,6 +45,7 @@ public class ShrinkedPlanetSheet extends JPanel {
     private JLabel planetType;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
+    private JLabel disclaimerLabel;
     private Planet p;
     private JButton switchButton;
     private ButtonGroup resourceButtonGroup;
@@ -58,6 +59,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
         planetOverview.setBorder(new TitledBorder("Planet Info"));
         //If name is nothing, then call it unnamed planet
+        disclaimerLabel = new JLabel("You need to survey this planet before you can see the resources!");
         planetName = new JLabel();
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
@@ -108,6 +110,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         showResources[0].addActionListener(a -> {
             sectorDisplayer.resourceToShow = -1;
         });
+        
         buttonGroupWrapper.add(showResources[0]);
         resourceButtonGroup.add(showResources[0]);
         for (int i = 1; i < GameController.resources.size() + 1; i++) {
@@ -134,6 +137,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
         //Add components
+        planetOverview.add(disclaimerLabel);
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
         planetOverview.add(planetType);

@@ -70,7 +70,7 @@ public class ConquerSpace {
      * Localization.
      */
     public static Messages localeMessages;
-    
+
     /**
      * Main class.
      *
@@ -84,7 +84,7 @@ public class ConquerSpace {
         //Init settings, and read from file if possible
         Globals.settings = new Properties();
         //Check for the existance of the settings file
-        File settingsFile = new File(System.getProperty("user.home") + "/.conquerspace/settings.properties");
+        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
         if (settingsFile.exists()) {
             try {
                 //Read from file.
@@ -120,6 +120,8 @@ public class ConquerSpace {
                 //Version
                 Globals.settings.setProperty("version", VERSION.toString());
                 Globals.settings.setProperty("debug", "no");
+
+                Globals.settings.setProperty("music", "yes");
 
                 Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
             } catch (IOException ex) {

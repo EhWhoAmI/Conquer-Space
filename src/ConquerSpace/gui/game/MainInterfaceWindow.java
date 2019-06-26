@@ -50,7 +50,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         init();
         update();
         expandAllNodes(universeBreakdown, 0, universeBreakdown.getRowCount());
-
+        
         setClosable(true);
         setMaximizable(true);
         setResizable(true);
@@ -120,8 +120,6 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         // Updating code
         Timer t = new Timer(500, a -> {
-            recruitingPerson.update();
-            personWindow.update();
             update();
         });
         t.setRepeats(true);
@@ -139,6 +137,10 @@ public class MainInterfaceWindow extends JInternalFrame {
             system.add(dm);
             universeBreakdownTreeModel.add(system);
         }
+
+        spaceShipOverview.update();
+        recruitingPerson.update();
+        personWindow.update();
     }
 
     private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {

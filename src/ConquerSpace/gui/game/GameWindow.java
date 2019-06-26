@@ -76,6 +76,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         //Edit menu bar
         addWindowListener(this);
         init();
+        //A window to greet the user
+        JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can go to space.\nOur destiny is with the stars.");
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -356,7 +358,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 translateY -= ((startPoint.y - e.getY()) * (1 / scale));
                 startPoint = e.getPoint();
                 repaint();
-                System.out.println(translateX + " " + translateY);
             }
         }
 

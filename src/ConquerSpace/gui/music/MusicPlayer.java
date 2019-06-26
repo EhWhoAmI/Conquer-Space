@@ -21,6 +21,8 @@ public class MusicPlayer {
     private OggClip clip;
     private JSONArray musicArray;
 
+    private boolean toPlay = true;
+
     public MusicPlayer() {
         FileInputStream fis = null;
         try {
@@ -34,18 +36,27 @@ public class MusicPlayer {
             musicArray = new JSONArray(text);
             Thread t = new Thread(() -> {
                 for (;;) {
-                    try {
-                        int i = (int) (Math.random() * musicArray.length());
-                        JSONObject obj = musicArray.getJSONObject(i);
-                        clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
-                        clip.play();
-                        Thread.sleep(1000 * obj.getInt("length"));
-                        clip.stop();
-                        clip.close();
-                    } catch (IOException ex) {
-                        LOGGER.error(ex);
-                    } catch (InterruptedException ex) {
-                        LOGGER.error(ex);
+                    if (toPlay) {
+                        try {
+                            int i = (int) (Math.random() * musicArray.length());
+                            JSONObject obj = musicArray.getJSONObject(i);
+                            clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
+                            clip.play();
+                            int length = obj.getInt("length");
+                            for (int index = 0; index < length; index++) {
+                                if (!toPlay) {
+                                    break;
+                                }
+                                Thread.sleep(1000);
+                            }
+
+                            clip.stop();
+                            clip.close();
+                        } catch (IOException ex) {
+                            LOGGER.error(ex);
+                        } catch (InterruptedException ex) {
+                            LOGGER.error(ex);
+                        }
                     }
                 }
             });
@@ -62,13 +73,21 @@ public class MusicPlayer {
             }
         }
     }
-    
+
     public void stopMusic() {
         clip.stop();
     }
-    
+
     public void clean() {
         clip.stop();
         clip.close();
+    }
+
+    public void setToPlay(boolean toPlay) {
+        this.toPlay = toPlay;
+    }
+
+    public boolean isPlaying() {
+        return toPlay;
     }
 }
