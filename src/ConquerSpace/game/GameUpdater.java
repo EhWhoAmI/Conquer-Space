@@ -5,6 +5,7 @@ import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
+import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
@@ -159,7 +160,7 @@ public class GameUpdater {
         } catch (IOException ex) {
             //Ignore
         }
-        
+
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -257,7 +258,11 @@ public class GameUpdater {
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s.setEstimatedThrust(10_000_000);
                 Actions.launchShip(s, starting, c);
-                
+
+                Ship s2 = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
+                s2.setEstimatedThrust(10_000_000);
+                Actions.launchShip(s2, starting, c);
+
                 //Set ownership
                 starting.setOwnerID(c.getID());
                 starting.scanned.add(c.getID());
@@ -585,10 +590,11 @@ public class GameUpdater {
                 return (int) (((double) quality / 100d) * size * size * Math.PI);
             }
         }
-        
+
         public static class Engine {
+
             public static int getEngineMass(int thrust, EngineTechnology tech) {
-                return (int)(tech.getThrustMultiplier() * thrust);
+                return (int) (tech.getThrustMultiplier() * thrust);
             }
         }
     }
@@ -760,12 +766,15 @@ public class GameUpdater {
             //Process ship actions
             for (Ship ship : c.spaceships) {
                 ShipAction sa = ship.getActionAndPopIfDone();
-                
-                //If not done
-                if(!sa.checkIfDone()) {
+
+                if (!sa.checkIfDone()) {
                     //System.out.println(sa.getClass());
                     sa.doAction();
                 } else {
+                    //Next action and init
+                    if (ship.getActionAndPopIfDone() instanceof ShipMoveAction) {
+                    }
+                    ship.getActionAndPopIfDone().initAction();
                 }
             }
         }

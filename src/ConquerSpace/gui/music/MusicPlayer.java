@@ -42,6 +42,8 @@ public class MusicPlayer {
                             JSONObject obj = musicArray.getJSONObject(i);
                             clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
                             clip.play();
+                            Thread.sleep(500);
+
                             int length = obj.getInt("length");
                             for (int index = 0; index < length; index++) {
                                 if (!toPlay) {

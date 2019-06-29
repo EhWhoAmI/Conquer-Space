@@ -49,5 +49,4 @@ public class ShipInformationMenu extends JPanel {
         setVisible(true);
         //setSize(100, 100);
     }
-
 }

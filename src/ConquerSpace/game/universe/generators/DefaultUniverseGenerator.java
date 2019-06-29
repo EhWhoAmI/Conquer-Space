@@ -16,6 +16,7 @@ import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
 import java.io.IOException;
@@ -136,8 +137,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 }
                 
                 if (planetType == PlanetTypes.ROCK) {
-                    
                     p.setTerrainSeed(rand.nextInt());
+                    p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_COLORS));
                     //= terrainColorses;
                 }
                 //Set name

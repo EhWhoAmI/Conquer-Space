@@ -5,9 +5,13 @@ import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -15,10 +19,13 @@ import javax.swing.table.AbstractTableModel;
  * @author Zyun
  */
 public class ShipListManager extends JPanel {
+
     private ShipTableModel model;
     private JScrollPane scrollPane;
     private JTable table;
-    
+
+    private ShipDetailsSideWindow shipDetailsSideWindow = null;
+
     private Civilization c;
 
     public ShipListManager(Universe u, Civilization c) {
@@ -33,8 +40,23 @@ public class ShipListManager extends JPanel {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-
         };
+
+        table.getSelectionModel().addListSelectionListener(l -> {
+            if (l.getValueIsAdjusting() && table.getSelectedRow()>-1) {
+                Ship s = model.get(table.getSelectedRow());
+                //Window
+                if (shipDetailsSideWindow == null || shipDetailsSideWindow.isClosed()) {
+                    //Clear...
+                    shipDetailsSideWindow = null;
+                    shipDetailsSideWindow = new ShipDetailsSideWindow(s, c);
+                    ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(shipDetailsSideWindow);
+                    shipDetailsSideWindow.toFront();
+                    int height = shipDetailsSideWindow.getDesktopPane().getHeight();
+                    shipDetailsSideWindow.setLocation(0, height - shipDetailsSideWindow.getHeight());
+                }
+            }
+        });
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
         update();
@@ -42,13 +64,19 @@ public class ShipListManager extends JPanel {
 
     public void update() {
         //Populate table
-        model.empty();
-        for(Ship s : c.spaceships) {
+        int selected = table.getSelectedRow();
+        //model.empty();
+        for (Ship s : c.spaceships) {
             //process
-            model.add(s);
+            if(!model.objects.contains(s)) {
+                model.add(s);
+            }
+        }
+        if (selected > -1) {
+            //table.setRowSelectionInterval(selected, 0);
         }
     }
-    
+
     //Table model
     private class ShipTableModel extends AbstractTableModel {
 

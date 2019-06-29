@@ -42,7 +42,7 @@ public abstract class SpaceShip implements Orbitable{
     public final ShipAction getActionAndPopIfDone() {
         if (commands.size() > 0) {
             ShipAction act = commands.get(0);
-            if (act.checkIfDone()) {                
+            if (act.checkIfDone()) {
                 return commands.remove(0);
                 //return act;
             } else {
@@ -54,6 +54,9 @@ public abstract class SpaceShip implements Orbitable{
     }
 
     public void addAction(ShipAction act) {
+        //If empty, init
+        if(commands.isEmpty())
+            act.initAction();
         commands.add(act);
     }
 

@@ -24,4 +24,8 @@ public class ShipAction {
     public boolean checkIfDone() {
         return true;
     }
+    
+    public void initAction() {
+        
+    }
 }

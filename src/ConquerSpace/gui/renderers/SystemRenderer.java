@@ -1,5 +1,8 @@
 package ConquerSpace.gui.renderers;
 
+import ConquerSpace.game.actions.ShipAction;
+import ConquerSpace.game.actions.ShipMoveAction;
+import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -12,6 +15,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -48,7 +52,9 @@ public class SystemRenderer {
 
     public void drawStarSystem(Graphics g, double translateX, double translateY, double scale) {
         Graphics2D g2d = (Graphics2D) g;
-
+        g2d.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
         g2d.fill(bg);
@@ -148,6 +154,38 @@ public class SystemRenderer {
             g2d.setColor(Color.yellow);
             g2d.fill(new Ellipse2D.Double((translateX + x * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5,
                     (translateY + y * sizeofAU / 10_000_000 + bounds.width / 2) * scale - 5, 10, 10));
+            //Show actions
+            long previousX = ship.getX();
+            long previousY = ship.getY();
+            for (ShipAction act : ship.commands) {
+                if (act instanceof ShipMoveAction) {
+                    //Draw line
+                    ShipMoveAction move = (ShipMoveAction) act;
+                    Line2D.Double line = new Line2D.Double(
+                            (translateX + previousX * sizeofAU / 10_000_000 + bounds.width / 2) * scale,
+                            (translateY + previousY * sizeofAU / 10_000_000 + bounds.width / 2) * scale,
+                            (translateX + move.getPosition().getX() * sizeofAU / 10_000_000 + bounds.width / 2) * scale,
+                            (translateY + move.getPosition().getY() * sizeofAU / 10_000_000 + bounds.width / 2) * scale);
+                    g2d.setColor(Color.green);
+
+                    g2d.draw(line);
+                    previousX = move.getPosition().getX();
+                    previousY = move.getPosition().getY();
+                    //Get current location and draw
+
+                } else if (act instanceof ToOrbitAction) {
+                    ToOrbitAction move = (ToOrbitAction) act;
+                    Line2D.Double line = new Line2D.Double(
+                            (translateX + previousX * sizeofAU / 10_000_000 + bounds.width / 2) * scale,
+                            (translateY + previousY * sizeofAU / 10_000_000 + bounds.width / 2) * scale,
+                            (translateX + move.getPosition().getX() * sizeofAU / 10_000_000 + bounds.width / 2) * scale,
+                            (translateY + move.getPosition().getY() * sizeofAU / 10_000_000 + bounds.width / 2) * scale);
+                    g2d.setColor(Color.cyan);
+                    g2d.draw(line);
+                    previousX = move.getPosition().getX();
+                    previousY = move.getPosition().getY();
+                }
+            }
             //ship.getName();
         }
         //Draw scale line

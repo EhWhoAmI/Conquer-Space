@@ -33,6 +33,7 @@ public class SpaceShipOverview extends JPanel {
     }
 
     public void update() {
-        shipDesigner.update();
+        //shipDesigner.update();
+        shipListManager.update();
     }
 }

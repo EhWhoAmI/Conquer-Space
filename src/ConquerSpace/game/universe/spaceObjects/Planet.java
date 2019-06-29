@@ -229,4 +229,12 @@ public class Planet extends SpaceObject {
     public void setHabitated(boolean habitated) {
         this.habitated = habitated;
     }
+
+    public void setTerrainColoringIndex(int terrainColoringIndex) {
+        this.terrainColoringIndex = terrainColoringIndex;
+    }
+
+    public int getTerrainColoringIndex() {
+        return terrainColoringIndex;
+    }
 }

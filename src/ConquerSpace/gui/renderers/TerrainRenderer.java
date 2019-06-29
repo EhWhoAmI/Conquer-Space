@@ -3,6 +3,7 @@ package ConquerSpace.gui.renderers;
 import ConquerSpace.game.universe.generators.TerrainGenerator;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
+import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -24,14 +25,7 @@ public class TerrainRenderer {
     public Image getImage(double scale) {
         BufferedImage planetDisplaying = new BufferedImage(p.getPlanetSize() * 2, p.getPlanetSize(), BufferedImage.TYPE_3BYTE_BGR);
         //System.out.println(planetDisplaying);
-        HashMap<Float, Color> colors = new HashMap<>();
-        //Set planet tileset...
-        //And composotion
-        colors.put(-1f, new Color(69, 24, 4));
-        colors.put(-0.25f, new Color(193, 68, 14));
-        colors.put(0.25f, new Color(231, 125, 17));
-        colors.put(0.75f, new Color(253, 166, 0));
-        colors.put(0.9f, new Color(240, 231, 231));
+        HashMap<Float, Color> colors = TerrainColoring.getTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         Color[][] terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 6, 0.5f, 2.8f, 0.5f, p.getPlanetSize() * 2, p.getPlanetSize(), 0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 6, colors);
 

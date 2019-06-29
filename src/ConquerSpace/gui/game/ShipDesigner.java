@@ -81,7 +81,7 @@ public class ShipDesigner extends JPanel {
     private JTabbedPane componentTableTabs;
 
     private JTable hullTable;
-    private DefaultTableModel hullTableModel;
+    private HullTableModel hullTableModel;
     private String[] hullTableColunms = {"Name", "Mass", "Space", "Type", "Rated Thrust", "Material"};
     private JScrollPane hullTableScrollPane;
     private JPanel hullTableContainer;
@@ -101,7 +101,7 @@ public class ShipDesigner extends JPanel {
     long preparedThrust = 0;
 
     long massValue = 0;
-    
+
     Hull selectedHull = null;
 
     public ShipDesigner(Civilization c) {
@@ -117,9 +117,8 @@ public class ShipDesigner extends JPanel {
             //Save the ship class
             ///Get the hull
             int row = hullTable.getSelectedRow();
-            if (c.hulls.isEmpty()) {
+            if (selectedHull == null) {
                 JOptionPane.showMessageDialog(this, "You need to have a hull in order for the ship to work!");
-
             } else {
                 Hull hull = selectedHull;
                 if (hull != null) {
@@ -265,19 +264,10 @@ public class ShipDesigner extends JPanel {
         componentTable = new JTable(componentTableModel);
         componentTableScrollPane = new JScrollPane(componentTable);
 
-        hullTableModel = new DefaultTableModel(hullTableColunms, 0);
+        hullTableModel = new HullTableModel();
         //Fill the table
         for (Hull h : c.hulls) {
-            String[] data = new String[6];
-            //Just for notes
-            //hullTableColunms = {"Name", "Mass", "Space", "Type", "Rated Thrust", "Material"};
-            data[0] = h.getName();
-            data[1] = "" + h.getMass();
-            data[2] = "" + h.getSpace();
-            data[3] = "" + h.getShipType();
-            data[4] = "" + h.getThrust();
-            data[5] = h.getMaterial().getName();
-            hullTableModel.addRow(data);
+            hullTableModel.add(h);
         }
 
         hullTable = new JTable(hullTableModel) {
@@ -296,14 +286,14 @@ public class ShipDesigner extends JPanel {
             JSONObject v = componentTableModel.get(row);
             installedShipComponentsTableModel.add(v);
             //Add mass
-            
+
             massValue += v.getInt("mass");
             mass.setText("" + massValue);
             //Get information
             if (v.get("type").equals("engine")) {
                 //Get type
                 //Get rating in mn and set value
-                preparedThrust =+ v.getInt("rating");
+                preparedThrust = +v.getInt("rating");
                 thrust.setText(preparedThrust + "/" + hullRatedThrust);
                 if (preparedThrust > hullRatedThrust) {
                     thrust.setForeground(Color.red);
@@ -334,8 +324,7 @@ public class ShipDesigner extends JPanel {
 
             //Calculate all the values needed
             //Get the hull
-            Hull hull = c.hulls.stream().findFirst().filter(h -> (h.getName().toLowerCase().
-                    equals(hullTable.getValueAt(row, 0).toString().toLowerCase()))).orElseGet(null);
+            Hull hull = hullTableModel.get(row);
             selectedHull = hull;
             if (hull != null) {
                 mass.setText("" + hull.getMass());
@@ -389,23 +378,17 @@ public class ShipDesigner extends JPanel {
     }
 
     public void update() {
-        hullTableModel.setRowCount(0);
         for (Hull h : c.hulls) {
-            String[] data = new String[6];
-            //Just for notes
-            //hullTableColunms = {"Name", "Mass", "Space", "Type", "Rated Thrust", "Material"};
-            data[0] = h.getName();
-            data[1] = "" + h.getMass();
-            data[2] = "" + h.getSpace();
-            data[3] = "" + h.getShipType();
-            data[4] = "" + h.getThrust();
-            data[5] = h.getMaterial().getName();
-            hullTableModel.addRow(data);
+            if (!hullTableModel.objects.contains(h)) {
+                hullTableModel.add(h);
+            }
         }
+        hullTableModel.fireTableDataChanged();
 
-        componentTableModel.empty();
         for (JSONObject obj : c.shipComponentList) {
-            componentTableModel.add(obj);
+            if (!componentTableModel.objects.contains(obj)) {
+                componentTableModel.add(obj);
+            }
         }
         componentTableModel.fireTableDataChanged();
     }
@@ -584,6 +567,74 @@ public class ShipDesigner extends JPanel {
                 quantities.add(1);
             }
             fireTableDataChanged();
+        }
+
+        public void empty() {
+            objects.clear();
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunms[column];
+        }
+
+        @Override
+        public Class getColumnClass(int column) {
+            return String.class;
+        }
+    }
+
+    private class HullTableModel extends AbstractTableModel {
+
+        private String[] colunms = {"Name", "Mass", "Space", "Type", "Rated Thrust", "Material"};
+        private ArrayList<Hull> objects;
+
+        public HullTableModel() {
+            objects = new ArrayList<>();
+        }
+
+        @Override
+        public int getRowCount() {
+            return objects.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunms.length;
+        }
+
+        // {"Name", "Mass", "Space", "Type", "Rated Thrust", "Material"};
+        @Override
+        public Object getValueAt(int arg0, int arg1) {
+            Hull h = objects.get(arg0);
+            switch (arg1) {
+                case 0:
+                    return h.getName();
+                case 1:
+                    return h.getMass();
+                case 2:
+                    return h.getSpace();
+                case 3:
+                    return h.getShipType();
+                case 4:
+                    return h.getThrust();
+                case 5:
+                    return h.getMaterial().getName();
+                //break;
+            }
+            return "";
+        }
+
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+        public Hull get(int id) {
+            return objects.get(id);
+        }
+
+        public void add(Hull id) {
+            objects.add(id);
         }
 
         public void empty() {

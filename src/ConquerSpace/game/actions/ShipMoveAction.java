@@ -12,6 +12,8 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 public class ShipMoveAction extends ShipAction {
 
     private Point position;
+    
+    private boolean done = false;
 
     public ShipMoveAction(Ship ship) {
         super(ship);
@@ -19,23 +21,6 @@ public class ShipMoveAction extends ShipAction {
 
     public void setPosition(Point position) {
         this.position = position;
-        if (ship.isOrbiting()) {
-            //Exit orbit
-            if (Globals.universe.getSpaceObject(ship.getOrbiting()) instanceof Planet) {
-                Planet p = (Planet) Globals.universe.getSpaceObject(ship.getOrbiting());
-                //Remove from orbit
-                p.getSatellites().remove(ship);
-
-                ship.setX(p.getX());
-                ship.setY(p.getY());
-                ship.setIsOrbiting(false);
-
-                //Add
-                Globals.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
-            }
-        }
-        ship.setGoingToX(position.getX());
-        ship.setGoingToY(position.getY());
     }
 
     @Override
@@ -66,6 +51,31 @@ public class ShipMoveAction extends ShipAction {
 
     @Override
     public boolean checkIfDone() {
-        return (ship.getX() == ship.getGoingToX() && ship.getY() == ship.getGoingToY());
+        return (ship.getX() == position.getX()&& ship.getY() == position.getY());
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    @Override
+    public void initAction() {
+        if (ship.isOrbiting()) {
+            //Exit orbit
+            if (Globals.universe.getSpaceObject(ship.getOrbiting()) instanceof Planet) {
+                Planet p = (Planet) Globals.universe.getSpaceObject(ship.getOrbiting());
+                //Remove from orbit
+                p.getSatellites().remove(ship);
+
+                ship.setX(p.getX());
+                ship.setY(p.getY());
+                ship.setIsOrbiting(false);
+
+                //Add
+                Globals.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
+            }
+        }
+        ship.setGoingToX(position.getX());
+        ship.setGoingToY(position.getY());
     }
 }

@@ -42,7 +42,6 @@ public class TerrainGenerator {
         for (Map.Entry<Float, Color> entry : colors.entrySet()) {
             Float key = entry.getKey();
             Color value = entry.getValue();
-            
             renderer.addGradientPoint(key, new ConquerSpace.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
         }
         renderer.render();

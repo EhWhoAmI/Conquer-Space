@@ -23,7 +23,9 @@ import ConquerSpace.util.ExceptionHandling;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -244,8 +246,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         //desktopPane.setBackground(Color.cyan);
         setJMenuBar(menuBar);
         setContentPane(desktopPane);
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
 
-        setSize(getToolkit().getScreenSize());
+        setSize(rect.width, rect.height);
         setVisible(true);
 
         //See home planet
@@ -551,8 +554,15 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
                     selectedShips.add(men);
                 }
+                //Add a delete all selected ships
+                JMenuItem deleteSelectedShips = new JMenuItem("Delete Selected Ships");
+                deleteSelectedShips.addActionListener(a -> {
+                    ((PlayerController) c.controller).selectedShips.clear();
+                });
 
                 popupMenu.add(selectedShips);
+                popupMenu.add(deleteSelectedShips);
+
                 popupMenu.show(this, e.getX(), e.getY());
             }
         }

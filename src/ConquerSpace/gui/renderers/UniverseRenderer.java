@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -51,7 +52,10 @@ public class UniverseRenderer {
     public void drawUniverse(Graphics g, double translateX, double translateY, double scale) {
         //Paint bounds dark blue.
         Graphics2D g2d = (Graphics2D) g;
-
+        g2d.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(new Color(0, 0, 255));
         g2d.fill(bg);
