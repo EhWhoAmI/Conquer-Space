@@ -24,16 +24,22 @@ import javax.swing.JTabbedPane;
 public class SpacePortMenu extends JPanel {
 
     private ArrayList<SpacePortLaunchPad> launchPads;
-    
+
     private JList<SpacePortLaunchPad> launchPadList;
 
+    private DefaultListModel<SpacePortLaunchPad> spaceLPModel;
+    private Planet p;
+    private Civilization c;
+
     public SpacePortMenu(Planet p, Civilization c) {
+        this.p = p;
+        this.c = c;
         setLayout(new VerticalFlowLayout());
         launchPads = new ArrayList<>();
         //Do stuff
         //Compile all the launch pads on the planet
 
-        DefaultListModel<SpacePortLaunchPad> spaceLPModel = new DefaultListModel<>();
+        spaceLPModel = new DefaultListModel<>();
 
         for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
             Point key = entry.getKey();
@@ -69,8 +75,27 @@ public class SpacePortMenu extends JPanel {
             LaunchSpaceShipMenu launchSpaceShipMenu = new LaunchSpaceShipMenu(launchPadList.getSelectedValue(), c, p);
             launchSpaceShipJPanelMenuContainer.add(launchSpaceShipMenu);
         });
-        
+
         add(launchPadListScrollPane);
         add(pane);
+    }
+
+    public void update() {
+        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
+            Point key = entry.getKey();
+            Building value = entry.getValue();
+
+            //Do stuff...
+            if (value instanceof SpacePort) {
+                SpacePort port = (SpacePort) value;
+                //Do things
+                for (SpacePortLaunchPad lp : port.launchPads) {
+                    if (!launchPads.contains(lp)) {
+                        launchPads.add(lp);
+                        spaceLPModel.addElement(lp);
+                    }
+                }
+            }
+        }
     }
 }

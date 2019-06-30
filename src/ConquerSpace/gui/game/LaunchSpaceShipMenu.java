@@ -45,11 +45,12 @@ public class LaunchSpaceShipMenu extends JPanel {
         spaceShipList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //Get selected number and display
-                ShipClass sc = spaceShipList.getSelectedValue();
-                massLabel.setText("Mass: " + sc.getMass());
+                if (!spaceShipList.isSelectionEmpty()) {
+                    //Get selected number and display
+                    ShipClass sc = spaceShipList.getSelectedValue();
+                    massLabel.setText("Mass: " + sc.getMass());
+                }
             }
-
         });
 
         launchSpaceShipMenu = new JPanel();
@@ -61,14 +62,13 @@ public class LaunchSpaceShipMenu extends JPanel {
         launchButton.addActionListener(a -> {
             //Create ship and launch
             //get ship
-            if (p != null) {
+            if (p != null && !spaceShipList.isSelectionEmpty()) {
                 Ship ship = new Ship(spaceShipList.getSelectedValue(),
                         0, 0, new Vector(0, 0),
                         p.getUniversePath());
                 ship.setEstimatedThrust(spaceShipList.getSelectedValue().getEstimatedThrust());
                 Actions.launchShip(ship, p, c);
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Planet is null!");
             }
         });

@@ -81,10 +81,10 @@ public class GameController {
     public synchronized void tick() {
         //DO ticks
         Globals.date.increment(1);
-        
+
         //Move ships
         updater.moveShips();
-        
+
         //Check for month increase
         if (Globals.date.bigint % GameRefreshRate == 0) {
             long start = System.currentTimeMillis();
@@ -123,6 +123,7 @@ public class GameController {
                     String person = "name";
                     person = gen.getName((int) Math.round(Math.random()));
                     Scientist nerd = new Scientist(person, age);
+                    nerd.setSkill((int) (Math.random() * 5) + 1);
                     c.unrecruitedPeople.add(nerd);
                 }
             }

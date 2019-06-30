@@ -181,6 +181,28 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
                 list.addElement(t);
             }
         }
+
+        //Update table
+        int selectedTech = techTable.getSelectedRow();
+        techTableModel.setRowCount(0);
+        for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
+            techTableModel.addRow(new String[]{t.getName(), c.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
+        }
+                
+        if(selectedTech > -1) {
+            techTable.setRowSelectionInterval(selectedTech, selectedTech);
+        }
+        
+        int selected = personComboBox.getSelectedIndex();
+        if (!personComboBox.isPopupVisible()) {
+            personComboBoxModel.removeAllElements();
+            for (Person p : c.people) {
+                if (p instanceof Scientist) {
+                    personComboBoxModel.addElement(p);
+                }
+            }
+            personComboBox.setSelectedIndex(selected);
+        }
     }
 
     @Override

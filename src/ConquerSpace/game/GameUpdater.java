@@ -589,6 +589,12 @@ public class GameUpdater {
             public static int getLensMass(int quality, int size) {
                 return (int) (((double) quality / 100d) * size * size * Math.PI);
             }
+
+            public static int getLensSize(int quality, int range) {
+                //Math.PI * (size) * (size) + 1
+
+                return (int) (Math.sqrt((Math.pow(Math.E, range/2) - 1)/Math.PI));
+            }
         }
 
         public static class Engine {

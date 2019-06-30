@@ -65,6 +65,7 @@ public class BuildingMenu extends JPanel {
 
     private JPanel buildingInfoPanel;
     private JComboBox<String> buildingType;
+    private DefaultComboBoxModel<String> buildingModel;
     private JPanel buildPanelXYPosContainer;
     private JLabel xPosLabel;
     private JLabel yPosLabel;
@@ -91,8 +92,11 @@ public class BuildingMenu extends JPanel {
     private final String RESOURCE_STOCKPILE = "Resource Storage";
     private final String RESOURCE_MINER = "Resource Miner";
 
+    private Civilization c;
+
     public BuildingMenu(Universe u, Planet p, Civilization c) {
         this.p = p;
+        this.c = c;
         setLayout(new BorderLayout());
 
         planetSectors = new JPanel();
@@ -105,7 +109,7 @@ public class BuildingMenu extends JPanel {
         buildingThingPanel.setLayout(new VerticalFlowLayout());
         //Format build tab
         buildingInfoPanel = new JPanel();
-        DefaultComboBoxModel<String> buildingModel = new DefaultComboBoxModel<>();
+        buildingModel = new DefaultComboBoxModel<>();
         buildingModel.addElement(RESIDENTIAL);
         if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
             //Do things
@@ -149,22 +153,24 @@ public class BuildingMenu extends JPanel {
         //Do whatever, add action listeners
         buildingType = new JComboBox<String>(buildingModel);
         buildingType.addActionListener(a -> {
-            switch ((String) buildingType.getSelectedItem()) {
-                case RESIDENTIAL:
-                    buildCardLayout.show(mainItemContainer, RESIDENTIAL);
-                    break;
-                case LAUNCH:
-                    buildCardLayout.show(mainItemContainer, LAUNCH);
-                    break;
-                case OBSERVATORY:
-                    buildCardLayout.show(mainItemContainer, OBSERVATORY);
-                    break;
-                case RESOURCE_STOCKPILE:
-                    buildCardLayout.show(mainItemContainer, RESOURCE_STOCKPILE);
-                    break;
-                case RESOURCE_MINER:
-                    buildCardLayout.show(mainItemContainer, RESOURCE_MINER);
-                    break;
+            if (buildingType.getSelectedIndex() > -1) {
+                switch ((String) buildingType.getSelectedItem()) {
+                    case RESIDENTIAL:
+                        buildCardLayout.show(mainItemContainer, RESIDENTIAL);
+                        break;
+                    case LAUNCH:
+                        buildCardLayout.show(mainItemContainer, LAUNCH);
+                        break;
+                    case OBSERVATORY:
+                        buildCardLayout.show(mainItemContainer, OBSERVATORY);
+                        break;
+                    case RESOURCE_STOCKPILE:
+                        buildCardLayout.show(mainItemContainer, RESOURCE_STOCKPILE);
+                        break;
+                    case RESOURCE_MINER:
+                        buildCardLayout.show(mainItemContainer, RESOURCE_MINER);
+                        break;
+                }
             }
         });
 
@@ -212,13 +218,13 @@ public class BuildingMenu extends JPanel {
                 int x = (int) xposSpinner.getValue();
                 int y = (int) yPosSpinner.getValue();
                 Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
-                for(ResourceVein v : p.resourceVeins) {
-                    if(Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
+                for (ResourceVein v : p.resourceVeins) {
+                    if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
                         miner.setVeinMining(v);
                         break;
                     }
                 }
-                
+
                 Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), miner, 0, 1);
                 toReset = true;
             }
@@ -276,6 +282,24 @@ public class BuildingMenu extends JPanel {
         //add(new JPanel());
     }
 
+    public void update() {
+        if (!buildingType.isPopupVisible()) {
+            //Then update
+            int selected = buildingType.getSelectedIndex();
+            buildingModel.removeAllElements();
+            buildingModel.addElement(RESIDENTIAL);
+            if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
+                //Do things
+                buildingModel.addElement(LAUNCH);
+            }
+            buildingModel.addElement(OBSERVATORY);
+            buildingModel.addElement(RESOURCE_STOCKPILE);
+            buildingModel.addElement(RESOURCE_MINER);
+
+            buildingType.setSelectedIndex(selected);
+        }
+    }
+
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {
 
         private final int SHOW_ALL = -1;
@@ -292,7 +316,7 @@ public class BuildingMenu extends JPanel {
         private Image img;
         private Terrain terrain;
         private Point lastClicked;
-                private TerrainRenderer renderer;
+        private TerrainRenderer renderer;
 
         int size = 2;
 
@@ -664,7 +688,7 @@ public class BuildingMenu extends JPanel {
             miningSpeedSpinner = new JSpinner(miningSpeedSpinnerNumberModel);
 
             setLayout(new GridBagLayout());
-            
+
             GridBagConstraints constraints = new GridBagConstraints();
 
             constraints.gridx = 0;
@@ -674,7 +698,7 @@ public class BuildingMenu extends JPanel {
             constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             add(resourceToMineLabel, constraints);
-            
+
             constraints.gridx = 1;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -682,7 +706,7 @@ public class BuildingMenu extends JPanel {
             constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             add(resourceToMine, constraints);
-            
+
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -690,7 +714,7 @@ public class BuildingMenu extends JPanel {
             constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             add(miningSpeed, constraints);
-            
+
             constraints.gridx = 1;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;

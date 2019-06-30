@@ -108,7 +108,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         });
 
         windows.add(timeIncrementwindow);
-        windows.add(reloadWindows);
+        //windows.add(reloadWindows);
 
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");

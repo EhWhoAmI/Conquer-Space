@@ -141,6 +141,11 @@ public class MainInterfaceWindow extends JInternalFrame {
         spaceShipOverview.update();
         recruitingPerson.update();
         personWindow.update();
+        researchViewer.update();
+        
+        if(planetInfoSheet != null) {
+            planetInfoSheet.update();
+        }
     }
 
     private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {

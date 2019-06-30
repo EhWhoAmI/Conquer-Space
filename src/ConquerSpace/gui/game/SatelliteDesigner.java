@@ -36,7 +36,7 @@ public class SatelliteDesigner extends JPanel {
     private JPanel satelliteDesignerPanel;
     private JList satelliteTypeList;
 
-    private DefaultListModel<String> satelliteListModel;
+    private DefaultListModel<SatelliteWrapper> satelliteListModel;
     private DefaultListModel<String> satelliteTypeListModel;
 
     private JLabel satelliteNameLabel;
@@ -110,6 +110,7 @@ public class SatelliteDesigner extends JPanel {
                 obj.put("cost", new JSONArray(new Integer[]{0}));
                 obj.put("id", c.satelliteTemplates.size());
                 c.satelliteTemplates.add(obj);
+                satelliteListModel.addElement(new SatelliteWrapper(obj));
             }
         });
 
@@ -233,7 +234,30 @@ public class SatelliteDesigner extends JPanel {
         Dimension d = satelliteList.getPreferredSize();
         d.width = 100;
         satelliteList.setPreferredSize(d);
-        
+
+        satelliteList.addListSelectionListener(l -> {
+            //Get type of satellite
+            SatelliteWrapper wrapper = ((SatelliteWrapper) satelliteList.getSelectedValue());
+
+            if (wrapper != null) {
+                JSONObject obj = wrapper.getObject();
+                satelliteNameField.setText(obj.getString("name"));
+                satelliteMassValueLabel.setText(obj.getInt("mass"));
+                switch (obj.getString("type")) {
+                    case "none":
+                        break;
+                    case "telescope":
+                        //Add Info
+                        //System.out.println(obj.getInt("range"));
+                        telescopeSatelliteSizeSpinner.setValue(GameUpdater.Calculators.Optics.getLensSize(0, obj.getInt("range")));
+                        telescopeSatelliteRangeValueLabel.setText(obj.getInt("range") + " light years");
+                        break;
+                    case "military":
+                        break;
+                }
+            }
+        });
+
         d = satelliteTypeList.getPreferredSize();
         d.width = 100;
         satelliteTypeList.setPreferredSize(d);
@@ -247,5 +271,24 @@ public class SatelliteDesigner extends JPanel {
 
         setVisible(true);
         //setSize(100, 100);
+    }
+
+    private class SatelliteWrapper {
+
+        private JSONObject object;
+
+        public SatelliteWrapper(JSONObject object) {
+            this.object = object;
+        }
+
+        @Override
+        public String toString() {
+            return object.getString("name");
+        }
+
+        public JSONObject getObject() {
+            return object;
+        }
+
     }
 }

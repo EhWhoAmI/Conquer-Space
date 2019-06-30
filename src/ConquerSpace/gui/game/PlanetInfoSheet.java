@@ -23,17 +23,33 @@ import javax.swing.JTabbedPane;
 public class PlanetInfoSheet extends JPanel {
 
     private JTabbedPane tpane;
-
+    private PlanetOverview overview;
+    private PlayerPopulation population;
+    private SpacePortMenu spacePort;
+    private AtmosphereInfo atmosphere;
+    private BuildingMenu building;
+    
+    private Civilization c;
+    private Planet p;
+    
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
+        this.c = c;
+        this.p = p;
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
-        tpane.add("Overview", new PlanetOverview(u, p, c));
+        overview = new PlanetOverview(u, p, c);
+        atmosphere = new AtmosphereInfo(p, c);
+        population = new PlayerPopulation(p, 0);
+        spacePort = new SpacePortMenu(p, c);
+        building = new BuildingMenu(u, p, c);
+
+        tpane.add("Overview", overview);
         //tpane.add("Resources", new PlanetResources(p));
-        tpane.add("Population", new PlayerPopulation(p, 0));
-        tpane.add("Space Port", new SpacePortMenu(p, c));
-        tpane.add("Atmosphere", new AtmosphereInfo(p, c));
-        tpane.add("Building", new BuildingMenu(u, p, c));
-        
+        tpane.add("Population", population);
+        tpane.add("Space Port", spacePort);
+        tpane.add("Atmosphere", atmosphere);
+        tpane.add("Building", building);
+
         tpane.setEnabledAt(2, false);
         //Check if planet contains space port
         for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
@@ -58,6 +74,23 @@ public class PlanetInfoSheet extends JPanel {
     }
 
     public void update() {
+        spacePort.update();
+        
+        tpane.setEnabledAt(2, false);
+        //Check if planet contains space port
+        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
+            Point key = entry.getKey();
+            Building value = entry.getValue();
 
+            //Do stuff...
+            if (value instanceof SpacePort) {
+                tpane.setEnabledAt(2, true);
+                break;
+            }
+        }
+        if (c.values.get("haslaunch") != 1) {
+            tpane.setEnabledAt(2, false);
+        }
+        building.update();
     }
 }
