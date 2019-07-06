@@ -2,6 +2,7 @@ package ConquerSpace.gui.start;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.localeMessages;
+import ConquerSpace.game.GameController;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -73,7 +74,9 @@ public class MainMenu extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-
+        //Stop playing sound
+        GameController.musicPlayer.clean();
+        System.exit(0);
     }
 
     @Override

@@ -257,11 +257,11 @@ public class GameUpdater {
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s.setEstimatedThrust(10_000_000);
-                Actions.launchShip(s, starting, c);
+                //Actions.launchShip(s, starting, c);
 
                 Ship s2 = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s2.setEstimatedThrust(10_000_000);
-                Actions.launchShip(s2, starting, c);
+                //Actions.launchShip(s2, starting, c);
 
                 //Set ownership
                 starting.setOwnerID(c.getID());

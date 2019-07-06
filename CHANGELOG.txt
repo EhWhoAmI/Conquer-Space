@@ -4,4 +4,32 @@ Changelog:
 Massive changes:
 We removed the planet sector system, and replaced it with terrain.
 Buildings have been shaken up also
-Planets now have terrain, and more feasible sizes. (like wide and, and shorter)
+Planets now have terrain, and more feasible sizes. (like wide and shorter)
+
+New Stuff:
+Added Music.
+There are a few tracks(7 to be exact).
+You can add your own music by using the json format. Remember, the length of the music is in seconds.
+You can also turn it off in the options.
+
+Added a couple other actions you can do. 
+You can now orbit planets, and survey them. (with survey ships)
+
+Ship engines now work. They emit thrust, and affects the speed of the ship.
+
+You can queue actions to go places. 
+
+Put name generator, and one name list.
+Add recruitable scientists with different skills. It is free to recruit them. For now.
+
+Add planet names
+
+Resource storages and miners.
+
+UI improvements:
+UI is now in one window.
+We made it so that you can load the various things from the lists. 
+There are also a couple other UI bugfixes and glitch fixes. 
+Zooming now does not make things funky and weird.
+
+Made the Scientist tab better to see what researcher is researching what.
