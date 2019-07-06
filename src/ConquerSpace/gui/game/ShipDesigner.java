@@ -3,6 +3,7 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.ShipClass;
 import ConquerSpace.game.universe.ships.components.EngineComponent;
+import ConquerSpace.game.universe.ships.components.ShipComponent;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -167,6 +168,78 @@ public class ShipDesigner extends JPanel {
         }
         shipClassesList = new JList<>(shipClassListModel);
         //shipClassesList.setVisibleRowCount(16);
+
+        shipClassesList.setVisibleRowCount(16);
+
+        shipClassesList.addListSelectionListener(l -> {
+            ShipClass s = shipClassesList.getSelectedValue();
+
+            //Set all the values
+            mass.setText("" + s.getMass());
+            massValue = s.getMass();
+
+            className.setText(s.getName());
+
+            //Thrust
+            hullRatedThrust = s.getHull().getThrust();
+            preparedThrust = s.getEstimatedThrust();
+            thrust.setText("" + s.getEstimatedThrust());
+
+            
+            //Set UI
+            thrust.setText(preparedThrust + "/" + hullRatedThrust);
+            if (preparedThrust > hullRatedThrust) {
+                thrust.setForeground(Color.red);
+                thrust.setToolTipText("Too much thrust!");
+            } else {
+                thrust.setForeground(Color.black);
+                thrust.setToolTipText("");
+            }
+            //Set acceleration
+            if (massValue > 0) {
+                long mn = (preparedThrust) / massValue; //No need to multiply because mass is also in kg
+                estimatedAcc.setText("" + NumberFormat.getInstance().format(mn));
+            }
+
+            //Set hull
+            Hull hull = s.getHull();
+            if (hull != null) {
+                mass.setText("" + hull.getMass());
+                massValue = hull.getMass();
+                volume.setText("0/" + hull.getSpace());
+                thrust.setText(preparedThrust + "/" + hull.getThrust());
+                hullRatedThrust = hull.getThrust();
+                if (preparedThrust > hullRatedThrust) {
+                    thrust.setForeground(Color.red);
+                    thrust.setToolTipText("Too much thrust!");
+                } else {
+                    thrust.setForeground(Color.black);
+                    thrust.setToolTipText("");
+                }
+                if (massValue > 0) {
+                    long mn = (preparedThrust * 1000l) / massValue;
+                    estimatedAcc.setText("" + NumberFormat.getInstance().format(mn));
+                }
+            }
+
+            //Fill tables
+            //Oof skip...
+            for(ShipComponent sc : s.components) {
+                //To json
+                JSONObject obj = new JSONObject();
+                sc.getMass();
+                sc.getCost();
+                sc.getName();
+                
+                
+                sc.getRatingType();
+                
+                sc.getRating();
+                
+                //installedShipComponentsTableModel.add();
+                
+            }
+        });
 
         shipClassesScrollPane = new JScrollPane(shipClassesList);
         shipClassesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

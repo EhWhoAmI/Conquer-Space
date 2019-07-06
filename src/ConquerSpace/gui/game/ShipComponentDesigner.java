@@ -134,6 +134,46 @@ public class ShipComponentDesigner extends JPanel {
         dim.width = 100;
         componentsList.setPreferredSize(dim);
 
+        componentsList.addListSelectionListener(l -> {
+            //Set the component name
+            JSONObject object = componentsList.getSelectedValue().object;
+            nameTextField.setText(object.getString("name"));
+            //Set seleceted
+            //Get type
+            switch (object.getString("type")) {
+                case "test":
+                    //Set values
+                    cardLayout.show(lowerPanel, TEST_COMPONENT);
+                    break;
+                case "science":
+                    cardLayout.show(lowerPanel, SCIENCE_COMPONENT);
+                    break;
+                case "engine":
+                    EngineTechnology engt = c.engineTechs.stream().filter(o -> o.getId() == object.getInt("eng-tech")).findFirst().get();
+                    //Set the stuff
+                    //Set selectdd thing
+                    componentTypeList.setSelectedIndex(4);
+                    engineTechBox.setSelectedItem(engt);
+
+                    engineTechBoxModel.removeAllElements();
+                    for (EngineTechnology t : c.engineTechs) {
+                        engineTechBoxModel.addElement(t);
+                    }
+
+                    if (engineTechBox.getSelectedItem() != null) {
+                        EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
+                        //Set mass
+                        int i = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                        massText.setText("" + i);
+                    }
+                    cardLayout.show(lowerPanel, ENGINE_COMPONENT);
+                    break;
+            }
+            //Set mass
+            int mass = object.getInt("mass");
+            massText.setText("" + mass);
+        });
+
         for (JSONObject obj : c.shipComponentList) {
             componentsListModel.addElement(new ShipComponentContainer(obj));
         }

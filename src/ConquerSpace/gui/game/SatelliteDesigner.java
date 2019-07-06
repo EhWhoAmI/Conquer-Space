@@ -113,7 +113,13 @@ public class SatelliteDesigner extends JPanel {
                 satelliteListModel.addElement(new SatelliteWrapper(obj));
             }
         });
-
+        
+        newMenu.addActionListener(l -> {
+            //Reset data...
+            satelliteTypeList.setSelectedIndex(0);
+            satelliteNameField.setText("");
+        });
+        
         satelliteMenu.add(saveSatelliteMenu);
         satelliteMenu.add(newMenu);
         menuBar.add(satelliteMenu);
@@ -242,7 +248,7 @@ public class SatelliteDesigner extends JPanel {
             if (wrapper != null) {
                 JSONObject obj = wrapper.getObject();
                 satelliteNameField.setText(obj.getString("name"));
-                satelliteMassValueLabel.setText(obj.getInt("mass"));
+                satelliteMassValueLabel.setText(obj.getInt("mass") + "");
                 switch (obj.getString("type")) {
                     case "none":
                         break;

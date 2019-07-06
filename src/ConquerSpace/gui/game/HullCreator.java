@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
@@ -34,6 +35,7 @@ import javax.swing.text.NumberFormatter;
 
 /**
  * Design and create a file
+ *
  * @author Zyun
  */
 public class HullCreator extends JPanel {
@@ -64,10 +66,9 @@ public class HullCreator extends JPanel {
     private JLabel massUnitText;
     private JLabel hullMaterialLabel;
     private JComboBox<HullMaterial> hullMaterialComboBox;
-    
-    
+
     private JLabel emptyLabel;
-    
+
     private Civilization c;
 
     @SuppressWarnings("unchecked")
@@ -81,7 +82,9 @@ public class HullCreator extends JPanel {
         JMenu newStuff = new JMenu("Hulls");
         JMenuItem newHull = new JMenuItem("New Hull");
         JMenuItem saveHull = new JMenuItem("Save Hull");
-        saveHull.addActionListener(a -> {saveHull();});
+        saveHull.addActionListener(a -> {
+            saveHull();
+        });
         newStuff.add(newHull);
         newStuff.add(saveHull);
         menubar.add(newStuff);
@@ -104,7 +107,7 @@ public class HullCreator extends JPanel {
         };
         formatter.setAllowsInvalid(false);
         formatter.setValueClass(Long.class);
-        
+
         //Set components
         //Ship class list
         hullListContainer = new JPanel();
@@ -117,6 +120,25 @@ public class HullCreator extends JPanel {
         shipHullList = new JList<>(hullListModel);
         shipHullList.setVisibleRowCount(16);
 
+        shipHullList.addListSelectionListener(l -> {
+            //Selected hull
+            Hull h = shipHullList.getSelectedValue();
+            //Set the various values
+            massTextField.setText("" + h.getMass());
+            spaceBox.setText("" + h.getSpace());
+            estThrustField.setText("" + h.getThrust());
+            for (Map.Entry<String, Integer> entry : GameController.shipTypes.entrySet()) {
+                String key = entry.getKey();
+                Integer value = entry.getValue();
+                //Compare
+                int type = (int) h.getShipType();
+                if (type == value) {
+                    hullComboBox.setSelectedItem(key);
+                }
+            }
+            className.setText(h.getName());
+        });
+
         hullScrollPane = new JScrollPane(shipHullList);
         hullScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         hullScrollPane.setSize(30, 310);
@@ -128,7 +150,7 @@ public class HullCreator extends JPanel {
         rootContainer.add(hullListContainer);
 
         hullViewer = new JPanel();
-        
+
         className = new JTextField();
         className.setColumns(16);
         className.setText(UUID.randomUUID().toString());
@@ -142,13 +164,12 @@ public class HullCreator extends JPanel {
         hullMatVector.sort(Comparator.naturalOrder());
         hullMaterialComboBox = new JComboBox<>(hullMatVector);
         hullMaterialComboBox.setFocusable(false);
-        
+
         massLabel = new JLabel("Mass: ");
         massTextField = new JFormattedTextField(formatter);
         massTextField.setText("1");
         massUnitText = new JLabel("kg");
-        
-        
+
         hullComboBoxLabel = new JLabel("Hull for type: ");
         Vector v = new Vector((GameController.shipTypes.keySet()));
         v.sort(Comparator.naturalOrder());
@@ -161,14 +182,13 @@ public class HullCreator extends JPanel {
         spaceBox.setText("0");
         spaceBox.setColumns(16);
         meterscubedlabel = new JLabel("<html>m<sup>3</sup></html");
-        
+
         estThrust = new JLabel("Rated thrust: ");
         estThrustField = new JFormattedTextField(formatter);
         estThrustField.setText("1");
         estThrustField.setColumns(16);
         meganewtonsText = new JLabel("kn");
-        
-        
+
         hullViewer.add(className);
         hullViewer.add(classText);
         hullViewer.add(selectRandomNameButton);
@@ -187,7 +207,7 @@ public class HullCreator extends JPanel {
         hullViewer.add(estThrust);
         hullViewer.add(estThrustField);
         hullViewer.add(meganewtonsText);
-        
+
         hullViewer.setLayout(new GridLayout(6, 3));
         hullViewer.setBorder(new TitledBorder(new LineBorder(Color.gray), "Hull Designer"));
         rootContainer.add(hullViewer);
@@ -202,14 +222,14 @@ public class HullCreator extends JPanel {
         //pack();
     }
 
-    private void saveHull(){
+    private void saveHull() {
         //Do the things
         long mass = Long.parseLong(massTextField.getText().replaceAll(",", ""));
         long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
         long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
-        int shipType = GameController.shipTypes.get((String)hullComboBox.getSelectedItem());
-        HullMaterial material = (HullMaterial)hullMaterialComboBox.getSelectedItem();
-        
+        int shipType = GameController.shipTypes.get((String) hullComboBox.getSelectedItem());
+        HullMaterial material = (HullMaterial) hullMaterialComboBox.getSelectedItem();
+
         Hull hull = new Hull(mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);
         c.hulls.add(hull);
