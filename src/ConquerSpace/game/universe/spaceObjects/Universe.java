@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.ships.SpaceShip;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,14 +22,17 @@ public class Universe extends SpaceObject {
     private ArrayList<StarSystem> starSystems;
 
     public HashMap<UniversePath, Integer> control;
-    
+
     private ArrayList<Resource> resources;
+
+    public ArrayList<SpaceShip> spaceShips;
 
     public Universe(long seed) {
         this.seed = seed;
         civs = new ArrayList<>();
         control = new HashMap<>();
         starSystems = new ArrayList<>();
+        spaceShips = new ArrayList<>();
     }
 
     /**

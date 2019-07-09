@@ -19,7 +19,7 @@ public class Ship extends SpaceShip {
     
     private ShipClass shipClass;
 
-    public Ship(ShipClass sclass, long X, long Y, Vector v, UniversePath location) {
+    public Ship(ShipClass sclass, double X, double Y, Vector v, UniversePath location) {
         this.X = X;
         this.Y = Y;
         goingToX = X;

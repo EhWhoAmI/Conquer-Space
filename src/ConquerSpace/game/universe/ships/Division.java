@@ -11,9 +11,6 @@ import java.util.ArrayList;
 public class Division extends SpaceShip{
     private int id;
     private ArrayList<Ship> ships;
-
-    private long X;
-    private long Y;
     private Vector v;
     private UniversePath location;
     private int parentfleetID;
@@ -50,12 +47,12 @@ public class Division extends SpaceShip{
     }
 
     @Override
-    public long getX() {
+    public double getX() {
         return X;
     }
 
     @Override
-    public long getY() {
+    public double getY() {
         return Y;
     }
 
@@ -73,11 +70,11 @@ public class Division extends SpaceShip{
         this.v = v;
     }
 
-    public void setX(long X) {
+    public void setX(double X) {
         this.X = X;
     }
 
-    public void setY(long Y) {
+    public void setY(double Y) {
         this.Y = Y;
     }
 

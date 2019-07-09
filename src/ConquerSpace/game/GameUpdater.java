@@ -68,11 +68,8 @@ public class GameUpdater {
 
     private Universe universe;
 
-    private ArrayList<StarSystemStats> visionStats;
-
     public GameUpdater(Universe u, StarDate s) {
         universe = u;
-        visionStats = new ArrayList<>();
     }
 
     public void calculateControl() {
@@ -125,8 +122,8 @@ public class GameUpdater {
                 ConquerSpace.game.universe.Point pos = pt.getPosition();
                 for (int g = 0; g < universe.getStarSystemCount(); g++) {
                     //Difference between points...
-                    int dist = (int) Math.hypot(pos.getY() - visionStats.get(universe.getStarSystem(g).getId()).position.y,
-                            pos.getX() - visionStats.get(universe.getStarSystem(g).getId()).position.x);
+                    int dist = (int) Math.hypot(pos.getY() - universe.getStarSystem(g).getY(),
+                            pos.getX() - universe.getStarSystem(g).getX());
                     if (dist < range) {
                         //Its in!
                         int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
@@ -256,8 +253,8 @@ public class GameUpdater {
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
-                s.setEstimatedThrust(10_000_000);
-                //Actions.launchShip(s, starting, c);
+                s.setEstimatedThrust(500_000 * 149_598_000);
+                Actions.launchShip(s, starting, c);
 
                 Ship s2 = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s2.setEstimatedThrust(10_000_000);
@@ -284,16 +281,7 @@ public class GameUpdater {
         calculateControl();
 
         //Do calculations for system position
-        calculateSystemPositions();
         calculateVision();
-    }
-
-    public void calculateSystemPositions() {
-        for (int i = 0; i < universe.getStarSystemCount(); i++) {
-            StarSystem sys = universe.getStarSystem(i);
-            //Do the position
-            visionStats.add(new StarSystemStats(RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation(), new Point(0, 0), 1), sys.getId()));
-        }
     }
 
     public static void readResources() {
@@ -778,8 +766,6 @@ public class GameUpdater {
                     sa.doAction();
                 } else {
                     //Next action and init
-                    if (ship.getActionAndPopIfDone() instanceof ShipMoveAction) {
-                    }
                     ship.getActionAndPopIfDone().initAction();
                 }
             }

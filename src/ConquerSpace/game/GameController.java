@@ -42,6 +42,8 @@ public class GameController {
     public static HashMap<String, Integer> shipTypes;
     public static GameUpdater updater;
     public static MusicPlayer musicPlayer;
+    
+    public static final int AU_IN_LTYR = 63241;
 
     /**
      * Constructor. Inits all components.

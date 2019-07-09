@@ -14,14 +14,15 @@ public abstract class SpaceShip implements Orbitable{
 
     private static int ticker = 0;
     protected String name = "";
-    protected long X;
-    protected long Y;
+    protected double X;
+    protected double Y;
     protected Vector v;
     protected UniversePath location;
     protected boolean isOrbiting = false;
-    protected int mass;
-    protected long goingToX;
-    protected long goingToY;
+    protected long mass;
+    protected int goingToStarSystem = -1;
+    protected double goingToX;
+    protected double goingToY;
 
     protected int id;
     protected long maxSpeed = 1_0000_000;
@@ -55,8 +56,9 @@ public abstract class SpaceShip implements Orbitable{
 
     public void addAction(ShipAction act) {
         //If empty, init
-        if(commands.isEmpty())
+        if(commands.isEmpty()) {
             act.initAction();
+        }
         commands.add(act);
     }
 
@@ -68,19 +70,19 @@ public abstract class SpaceShip implements Orbitable{
         return isOrbiting;
     }
 
-    public long getGoingToX() {
+    public double getGoingToX() {
         return goingToX;
     }
 
-    public long getGoingToY() {
+    public double getGoingToY() {
         return goingToY;
     }
 
-    public void setGoingToX(long goingToX) {
+    public void setGoingToX(double goingToX) {
         this.goingToX = goingToX;
     }
 
-    public void setGoingToY(long goingToY) {
+    public void setGoingToY(double goingToY) {
         this.goingToY = goingToY;
     }
 
@@ -97,11 +99,11 @@ public abstract class SpaceShip implements Orbitable{
         return estimatedThrust / mass;
     }
 
-    public int getMass() {
+    public long getMass() {
         return mass;
     }
 
-    public void translate(long x, long y) {
+    public void translate(double x, double y) {
         this.X += x;
         this.Y += y;
     }
@@ -126,25 +128,34 @@ public abstract class SpaceShip implements Orbitable{
         return id;
     }
     
-    public void setX(long X) {
+    public void setX(double X) {
         this.X = X;
     }
 
-    public void setY(long Y) {
+    public void setY(double Y) {
         this.Y = Y;
     }
     
     public abstract long getSpeed();
     
-    public long getX() {
+    public double getX() {
         return X;
     }
 
-    public long getY() {
+    public double getY() {
         return Y;
     }
     
     public void setLocation(UniversePath location) {
         this.location = location;
+        goingToStarSystem = location.getSystemID();
+    }
+
+    public void setGoingToStarSystem(int goingToStarSystem) {
+        this.goingToStarSystem = goingToStarSystem;
+    }
+
+    public int getGoingToStarSystem() {
+        return goingToStarSystem;
     }
 }

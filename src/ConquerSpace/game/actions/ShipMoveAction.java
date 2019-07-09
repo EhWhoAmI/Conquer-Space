@@ -2,8 +2,10 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.universe.Point;
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.StarSystem;
 
 /**
  *
@@ -12,7 +14,8 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 public class ShipMoveAction extends ShipAction {
 
     private Point position;
-    
+    private int starSystem;
+
     private boolean done = false;
 
     public ShipMoveAction(Ship ship) {
@@ -25,6 +28,7 @@ public class ShipMoveAction extends ShipAction {
 
     @Override
     public void doAction() {
+
         double x = ship.getGoingToX() - ship.getX();
         double y = ship.getGoingToY() - ship.getY();
 
@@ -35,10 +39,12 @@ public class ShipMoveAction extends ShipAction {
             y /= len;
         }
         double distance = Math.sqrt(Math.pow(ship.getGoingToX() - ship.getX(), 2) + Math.pow(ship.getGoingToY() - ship.getY(), 2));
-        double objX = (x * ship.getSpeed());
-        double objY = (y * ship.getSpeed());
+        double speed = ship.getSpeed();
 
-        if (Math.sqrt(Math.pow(objX + ship.getX() - ship.getX(), 2) + Math.pow(objY + ship.getY() - ship.getY(), 2)) >= distance) {
+        double objX = (x * speed);
+        double objY = (y * speed);
+
+        if (Math.sqrt(Math.pow(objX, 2) + Math.pow(objY, 2)) >= distance) {
             objX = ship.getGoingToX();
             objY = ship.getGoingToY();
             ship.setX((long) objX);
@@ -46,12 +52,11 @@ public class ShipMoveAction extends ShipAction {
         } else {
             ship.translate((long) (objX), (long) (objY));
         }
-
     }
 
     @Override
     public boolean checkIfDone() {
-        return (ship.getX() == position.getX()&& ship.getY() == position.getY());
+        return (ship.getX() == position.getX() && ship.getY() == position.getY());
     }
 
     public Point getPosition() {
@@ -77,5 +82,13 @@ public class ShipMoveAction extends ShipAction {
         }
         ship.setGoingToX(position.getX());
         ship.setGoingToY(position.getY());
+    }
+
+    public void setStarSystem(int starSystem) {
+        this.starSystem = starSystem;
+    }
+
+    public int getStarSystem() {
+        return starSystem;
     }
 }

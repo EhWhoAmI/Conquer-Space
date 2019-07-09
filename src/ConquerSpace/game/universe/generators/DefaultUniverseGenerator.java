@@ -58,7 +58,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         }
         for (int i = 0; i < starSystemCount; i++) {
             //Create star system
-            int dist = rand.nextInt(100);
+                int dist = rand.nextInt(6324100);
             float degrees = (rand.nextFloat() * 360);
             StarSystem sys = new StarSystem(i, new GalacticLocation(degrees, dist));
 

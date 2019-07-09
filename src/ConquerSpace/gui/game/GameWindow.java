@@ -3,6 +3,8 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.actions.ExitStarSystemAction;
+import ConquerSpace.game.actions.InterstellarTravelAction;
 import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ShipSurveyAction;
 import ConquerSpace.game.actions.ToOrbitAction;
@@ -360,8 +362,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         @Override
         public void mouseDragged(MouseEvent e) {
             if (isDragging && SwingUtilities.isLeftMouseButton(e)) {
-                translateX -= ((startPoint.x - e.getX()) * (1 / scale));
-                translateY -= ((startPoint.y - e.getY()) * (1 / scale));
+                translateX -= ((startPoint.x - e.getX()) * (scale));
+                translateY -= ((startPoint.y - e.getY()) * (scale));
                 startPoint = e.getPoint();
                 repaint();
             }
@@ -383,8 +385,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
                             StarSystem sys = universe.getStarSystem(i);
-                            if (Math.hypot((scale * (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) - e.getX()),
-                                    (scale * (sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
+                            if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
+                                    ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
                                     if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         see(sys.getId());
@@ -398,8 +400,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                     case DRAW_STAR_SYSTEM:
                         for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
-                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getX(),
-                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
+                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
+                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
                                 //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                 //add(d);
                                 //Check if scanned
@@ -442,10 +444,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
                             StarSystem sys = universe.getStarSystem(i);
-                            if (Math.hypot((scale * (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) - e.getX()),
-                                    (scale * (sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR * scale)) {
+                            if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
+                                    ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(c.getID()) > VisionTypes.UNDISCOVERED) {
+                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
                                         systemInfo.addActionListener(a -> {
                                             see(sys.getId());
@@ -461,8 +463,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                     case DRAW_STAR_SYSTEM:
                         for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
-                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getX(),
-                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) * scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
+                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
+                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
                                 if (planet.scanned.contains(c.getID())) {
                                     JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
                                     planetName.addActionListener(a -> {
@@ -496,13 +498,32 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                     gohereMenu.addActionListener(a -> {
                         //Move position
                         //Convert
-                        long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
-                        long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
+                        //Check the location and where it is
+                        if (drawing == DRAW_UNIVERSE) {
+                            //Convert
+                            double gotoX = (e.getX() * scale - translateX - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
+                            double gotoY = (e.getY() * scale - translateY - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
+                            InterstellarTravelAction action = new InterstellarTravelAction(s);
+                            action.setPositionX(gotoX);
+                            action.setPositionY(gotoY);
+                            s.addAction(action);
+                        } else if (drawing == DRAW_STAR_SYSTEM) {
+                            long gotoX = (long) (((e.getX() * scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
+                            long gotoY = (long) ((((e.getY() * scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
 
-                        //Get Location
-                        ShipMoveAction action = new ShipMoveAction(s);
-                        action.setPosition(new ConquerSpace.game.universe.Point(gotoX, gotoY));
-                        s.addAction(action);
+                            //Get Location
+                            ShipMoveAction action = new ShipMoveAction(s);
+                            action.setPosition(new ConquerSpace.game.universe.Point(gotoX, gotoY));
+
+                            s.addAction(action);
+
+                            //Add an extra action to move...
+                            StarSystem sys = universe.getStarSystem(drawingStarSystem);
+                            if (Math.hypot(gotoX, gotoY) > (sys.getPlanet(sys.getPlanetCount() - 1).getOrbitalDistance() + 10 * 10_000_000)) {
+                                ExitStarSystemAction act = new ExitStarSystemAction(s);
+                                s.addAction(act);
+                            }
+                        }
                     });
                     men.add(gohereMenu);
 
@@ -532,8 +553,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         surveryor.addActionListener(a -> {
                             //Move position
                             //Convert
-                            long gotoX = (long) (((e.getX() / scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
-                            long gotoY = (long) ((((e.getY() / scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
 
                             //Get Location
                             ShipSurveyAction survey = new ShipSurveyAction(s);
@@ -552,8 +571,16 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         men.add(surveryor);
                     }
 
+                    //Add a delete ship action thing
+                    JMenuItem deleteShipAction = new JMenuItem("Delete Ship Actions");
+                    deleteShipAction.addActionListener(l -> {
+                        s.commands.clear();
+                    });
+                    men.add(deleteShipAction);
+                    
                     selectedShips.add(men);
                 }
+                
                 //Add a delete all selected ships
                 JMenuItem deleteSelectedShips = new JMenuItem("Delete Selected Ships");
                 deleteSelectedShips.addActionListener(a -> {
@@ -598,9 +625,17 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             //Change scroll
-            float scroll = (float) e.getUnitsToScroll();
-            if ((scale + (scroll / 10)) > 0) {
-                scale += (scroll / 10);
+            double scroll = (double) e.getUnitsToScroll();
+            double scrollBefore = scale;
+            double newScale = (Math.exp(scroll * 0.01) * scale);
+            if (newScale > 0) {
+                scale = newScale;
+                double msX = ((e.getX() * scale));
+                double msY = ((e.getY() * scale));
+                double scaleChanged = scale - scrollBefore;
+
+                translateX += ((msX * scaleChanged)) / scale;
+                translateY += ((msY * scaleChanged)) / scale;
             }
             //Now repaint
             repaint();

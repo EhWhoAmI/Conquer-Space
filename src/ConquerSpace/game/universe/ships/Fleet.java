@@ -12,8 +12,6 @@ public class Fleet extends SpaceShip{
     private ArrayList<Division> divisions;
     private String name;
     private int id;
-    private long X;
-    private long Y;
     private Vector v;
     private UniversePath location;
     
@@ -45,12 +43,12 @@ public class Fleet extends SpaceShip{
     }
 
     @Override
-    public long getX() {
+    public double getX() {
         return X;
     }
 
     @Override
-    public long getY() {
+    public double getY() {
         return Y;
     }
 
@@ -63,11 +61,11 @@ public class Fleet extends SpaceShip{
         this.v = v;
     }
 
-    public void setX(long X) {
+    public void setX(double X) {
         this.X = X;
     }
 
-    public void setY(long Y) {
+    public void setY(double Y) {
         this.Y = Y;
     }
 
