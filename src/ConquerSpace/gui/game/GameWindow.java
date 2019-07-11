@@ -500,14 +500,41 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         //Convert
                         //Check the location and where it is
                         if (drawing == DRAW_UNIVERSE) {
+                            //Check if inside star system
+
                             //Convert
                             double gotoX = (e.getX() * scale - translateX - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
                             double gotoY = (e.getY() * scale - translateY - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
+
+                            if (s.getLocation().getSystemID() > -1) {
+                                //Then get quickest route to out of system, and do the things
+                                //Ah well, get slope because the path can be direct...
+                                StarSystem system = universe.getStarSystem(s.getLocation().getSystemID());
+                                double slopeX = gotoX - system.getX();
+                                double slopeY = gotoY - system.getY();
+                                double slope = (slopeY / slopeX);
+                                //Add move action
+                                
+                                //Get distance to intersect
+                                
+                                long x = (long) (slope * 10_000_000_000l);
+                                //Get distance of ship to 
+                                ShipMoveAction action = new ShipMoveAction(s);
+                                action.setPosition(new ConquerSpace.game.universe.Point(100l, x));
+
+                                s.addAction(action);
+                                //Add exit star system action
+                                ExitStarSystemAction act = new ExitStarSystemAction(s);
+                                s.addAction(act);
+                            }
                             InterstellarTravelAction action = new InterstellarTravelAction(s);
                             action.setPositionX(gotoX);
                             action.setPositionY(gotoY);
                             s.addAction(action);
                         } else if (drawing == DRAW_STAR_SYSTEM) {
+                            //Check if in star system
+                            //Then check the goto position
+
                             long gotoX = (long) (((e.getX() * scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
                             long gotoY = (long) ((((e.getY() * scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
 
@@ -577,10 +604,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         s.commands.clear();
                     });
                     men.add(deleteShipAction);
-                    
+
                     selectedShips.add(men);
                 }
-                
+
                 //Add a delete all selected ships
                 JMenuItem deleteSelectedShips = new JMenuItem("Delete Selected Ships");
                 deleteSelectedShips.addActionListener(a -> {

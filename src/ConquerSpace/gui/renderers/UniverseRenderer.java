@@ -68,7 +68,7 @@ public class UniverseRenderer {
         g2d.fill(universeCircle);
 
         //X Y grid for reference
-        Line2D.Double xline = new Line2D.Double(
+        /*Line2D.Double xline = new Line2D.Double(
                 (translateX + bounds.width / 2) / scale,
                 (translateY + bounds.width / 2 + 10000) / scale,
                 (translateX + bounds.width / 2) / scale,
@@ -84,7 +84,7 @@ public class UniverseRenderer {
                 (translateY + bounds.width / 2) / scale
         );
         g2d.setColor(Color.WHITE);
-        g2d.draw(yline);
+        g2d.draw(yline);*/
 
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             //Check vision
@@ -211,7 +211,7 @@ public class UniverseRenderer {
         g2d.draw(line);
         g2d.drawString("30 light years", 10, 10);
 
-        Ellipse2D.Double system = new Ellipse2D.Double(
+        /*Ellipse2D.Double system = new Ellipse2D.Double(
                 (-632410 * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
                 (632410 * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
                 GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
@@ -222,6 +222,6 @@ public class UniverseRenderer {
                 GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
         g2d.setColor(Color.blue);
 
-        g2d.fill(system);
+        g2d.fill(system);*/
     }
 }

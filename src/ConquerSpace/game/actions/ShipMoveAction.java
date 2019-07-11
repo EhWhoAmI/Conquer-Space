@@ -51,11 +51,16 @@ public class ShipMoveAction extends ShipAction {
             ship.setY((long) objY);
         } else {
             ship.translate((long) (objX), (long) (objY));
-        }
+        }       
     }
 
     @Override
     public boolean checkIfDone() {
+        //if out of star system
+        StarSystem sys = Globals.universe.getStarSystem(ship.getLocation().getSystemID());
+        if(Math.sqrt(Math.pow(ship.getX(), 2) + Math.pow(ship.getY(), 2)) >= (sys.getPlanet(sys.getPlanetCount()-1).getOrbitalDistance() + 10)) {
+            return true;
+        }
         return (ship.getX() == position.getX() && ship.getY() == position.getY());
     }
 
