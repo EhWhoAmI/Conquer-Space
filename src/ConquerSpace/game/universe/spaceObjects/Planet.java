@@ -50,6 +50,8 @@ public class Planet extends SpaceObject {
     private int terrainColoringIndex;
     
     private boolean habitated = false;
+    
+    private float degreesPerTurn = 0.0f;
     /**
      * Creates planet
      *
@@ -124,6 +126,8 @@ public class Planet extends SpaceObject {
      * @param degs degrees
      */
     public void modDegrees(float degs) {
+        degrees+=degs;
+        degrees %= 360;
     }
 
     public int getOwnerID() {
@@ -236,5 +240,13 @@ public class Planet extends SpaceObject {
 
     public int getTerrainColoringIndex() {
         return terrainColoringIndex;
+    }
+
+    public void setDegreesPerTurn(float degreesPerTurn) {
+        this.degreesPerTurn = degreesPerTurn;
+    }
+
+    public float getDegreesPerTurn() {
+        return degreesPerTurn;
     }
 }

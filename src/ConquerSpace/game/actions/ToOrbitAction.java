@@ -23,8 +23,8 @@ public class ToOrbitAction extends ShipAction {
 
     @Override
     public void doAction() {
-        double x = ship.getGoingToX() - ship.getX();
-        double y = ship.getGoingToY() - ship.getY();
+        double x = position.getX() - ship.getX();
+        double y = position.getY() - ship.getY();
 
         //Normalize
         double len = Math.sqrt(x * x + y * y);
@@ -32,12 +32,12 @@ public class ToOrbitAction extends ShipAction {
             x /= len;
             y /= len;
         }
-        double distance = Math.sqrt(Math.pow(ship.getGoingToX() - ship.getX(), 2) + Math.pow(ship.getGoingToY() - ship.getY(), 2));
+        double distance = Math.sqrt(Math.pow(position.getX() - ship.getX(), 2) + Math.pow(position.getY() - ship.getY(), 2));
         double objX = (x * ship.getSpeed());
         double objY = (y * ship.getSpeed());
-        if (Math.sqrt(Math.pow(objX + ship.getX() - ship.getX(), 2) + Math.pow(objY + ship.getY() - ship.getY(), 2)) >= distance) {
-            objX = ship.getGoingToX();
-            objY = ship.getGoingToY();
+        if (Math.sqrt(Math.pow(objX, 2) + Math.pow(objY, 2)) >= distance) {
+            objX = position.getX();
+            objY = position.getY();
             ship.setX((long) objX);
             ship.setY((long) objY);
             //Enter orbit

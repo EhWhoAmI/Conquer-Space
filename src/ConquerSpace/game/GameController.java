@@ -33,8 +33,8 @@ public class GameController {
     public static int GameRefreshRate = (5 * 24);
 
     public static ArrayList<LaunchSystem> launchSystems;
-    private Timer ticker;
-    public static ArrayList<Satellite> satellites;
+    private Timer ticker; 
+   public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
     public static ArrayList<JSONObject> shipComponentTemplates;
     public static ArrayList<Resource> resources;

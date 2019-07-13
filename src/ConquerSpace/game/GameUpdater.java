@@ -253,7 +253,7 @@ public class GameUpdater {
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
-                s.setEstimatedThrust(500_000 * 149_598_000);
+                s.setEstimatedThrust(5000);
                 Actions.launchShip(s, starting, c);
 
                 Ship s2 = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
@@ -581,7 +581,7 @@ public class GameUpdater {
             public static int getLensSize(int quality, int range) {
                 //Math.PI * (size) * (size) + 1
 
-                return (int) (Math.sqrt((Math.pow(Math.E, range/2) - 1)/Math.PI));
+                return (int) (Math.sqrt((Math.pow(Math.E, range / 2) - 1) / Math.PI));
             }
         }
 
@@ -634,6 +634,10 @@ public class GameUpdater {
 
     public void processPlanet(Planet p, StarDate date) {
         //Calculate position
+        //Increase degrees
+        //Calculate degrees to mod
+        
+        p.modDegrees(p.getDegreesPerTurn());
         RendererMath.Point pt
                 = RendererMath.polarCoordToCartesianCoord(p.getOrbitalDistance(),
                         p.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
