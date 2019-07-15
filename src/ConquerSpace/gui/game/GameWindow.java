@@ -84,7 +84,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         addWindowListener(this);
         init();
         //A window to greet the user
-        //JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can go to space.\nOur destiny is with the stars.");
+        JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
+                + "May we live and prosper in these exciting new times.");
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -163,7 +164,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
         JMenuItem allCivInfo = new JMenuItem("My Civilization");
         allCivInfo.addActionListener((e) -> {
-            addFrame(new CivInfoOverview(u.getCivilization(0), u));
+            //addFrame(new CivInfoOverview(u.getCivilization(0), u));
         });
         ownCivInfo.add(allCivInfo);
 
@@ -229,7 +230,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         menuBar.add(game);
         menuBar.add(views);
         menuBar.add(menu);
-        menuBar.add(ownCivInfo);
+        //menuBar.add(ownCivInfo);
         //menuBar.add(techonology);
         menuBar.add(ships);
         menuBar.add(resources);

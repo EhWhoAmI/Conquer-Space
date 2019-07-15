@@ -7,6 +7,8 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.gui.game.ShipInformationMenu;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -52,6 +54,24 @@ public class AtmosphereInfo extends JPanel {
                 shipInformationMenu = new ShipInformationMenu((Ship) shipsInOrbitList.getSelectedValue(), c);
                 shipInfoContainer.removeAll();
                 shipInfoContainer.add(shipInformationMenu);
+            }
+        });
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent arg0) {
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent arg0) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent arg0) {
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent arg0) {
+                updateList();
             }
         });
         add(stuffInOrbitPanel, BorderLayout.NORTH);

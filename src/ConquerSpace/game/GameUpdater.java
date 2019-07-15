@@ -13,6 +13,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceGatherer;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.people.Scientist;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
@@ -218,6 +219,13 @@ public class GameUpdater {
                     PopulationStorage test = new PopulationStorage();
                     //Distribute
                     //Add random positions
+                    int popCount = selector.nextInt(10);
+                    for (int k = 0; k < popCount; k++) {
+                        //Add a couple of population to the mix...
+                        PopulationUnit u = new PopulationUnit();
+                        c.population.add(u);
+                        test.population.add(u);
+                    }
                     int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
                     int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
                     ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(x, y);
@@ -245,9 +253,14 @@ public class GameUpdater {
                             pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
                     }
                     starting.buildings.put(pt2, test2);
+                    int popCount2 = selector.nextInt(10);
+                    for (int k = 0; k < popCount2; k++) {
+                        //Add a couple of population to the mix...
+                        PopulationUnit u = new PopulationUnit();
+                        c.population.add(u);
+                        test2.population.add(u);
+                    }
 
-                    //Set name...
-                    starting.setName(c.getHomePlanetName());
                 }
 
                 //resourceStorage.addResource(RawResourceTypes., 0);
@@ -264,6 +277,7 @@ public class GameUpdater {
                 starting.setOwnerID(c.getID());
                 starting.scanned.add(c.getID());
                 starting.setHabitated(true);
+                starting.setName(c.getHomePlanetName());
 
                 c.habitatedPlanets.add(starting);
 
@@ -636,7 +650,7 @@ public class GameUpdater {
         //Calculate position
         //Increase degrees
         //Calculate degrees to mod
-        
+
         p.modDegrees(p.getDegreesPerTurn());
         RendererMath.Point pt
                 = RendererMath.polarCoordToCartesianCoord(p.getOrbitalDistance(),

@@ -30,6 +30,8 @@ public class MainInterfaceWindow extends JInternalFrame {
     private ShrinkedPlanetSheet shrinkedPlanetSheet;
     private SpaceShipOverview spaceShipOverview;
     private HullCreator hullCreator;
+    
+    private CivInfoOverview civInfoOverview;
 
     private PersonWindow personWindow;
     private RecruitingPerson recruitingPerson;
@@ -108,12 +110,15 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         recruitingPerson = new RecruitingPerson(c);
         peopleTabs.add("Recruitment", recruitingPerson);
+        
+        civInfoOverview = new CivInfoOverview(c, u);
 
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
         tabs.add("Ships", spaceShipOverview);
         tabs.add("Engineering", shipComponentsOverview);
         tabs.add("People", peopleTabs);
+        tabs.add("My Civilization", civInfoOverview);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);

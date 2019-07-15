@@ -122,7 +122,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     float rarity = res.getRarity();
                     float probality = rand.nextFloat();
                     //Then count
-                    if (probality < rarity) {
+                    if (true) {
                         //Then add a certain amount
                         int amount = (int) (rarity * resourceCount * probality);
                         //Add that amount

@@ -152,6 +152,20 @@ public class BuildingMenu extends JPanel {
 
         //Do whatever, add action listeners
         buildingType = new JComboBox<String>(buildingModel);
+        buildingType.addActionListener(l -> {//Then update
+            int selected = buildingType.getSelectedIndex();
+            buildingModel.removeAllElements();
+            buildingModel.addElement(RESIDENTIAL);
+            if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
+                //Do things
+                buildingModel.addElement(LAUNCH);
+            }
+            buildingModel.addElement(OBSERVATORY);
+            buildingModel.addElement(RESOURCE_STOCKPILE);
+            buildingModel.addElement(RESOURCE_MINER);
+
+            buildingType.setSelectedIndex(selected);
+        });
         buildingType.addActionListener(a -> {
             if (buildingType.getSelectedIndex() > -1) {
                 switch ((String) buildingType.getSelectedItem()) {
@@ -283,6 +297,7 @@ public class BuildingMenu extends JPanel {
     }
 
     public void update() {
+        /*
         if (!buildingType.isPopupVisible()) {
             //Then update
             int selected = buildingType.getSelectedIndex();
@@ -297,7 +312,7 @@ public class BuildingMenu extends JPanel {
             buildingModel.addElement(RESOURCE_MINER);
 
             buildingType.setSelectedIndex(selected);
-        }
+        }*/
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {

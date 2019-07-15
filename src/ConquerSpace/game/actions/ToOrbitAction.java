@@ -71,8 +71,12 @@ public class ToOrbitAction extends ShipAction {
 
                 //Add
                 Globals.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
-            }
+            }   
         }
+        //Predict going to location...
+        //Get changing degrexes per turn, and get distance from planet
+        
+        
         ship.setGoingToX(position.getX());
         ship.setGoingToY(position.getY());
     }

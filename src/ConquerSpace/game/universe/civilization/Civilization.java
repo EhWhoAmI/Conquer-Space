@@ -4,6 +4,7 @@ import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.tech.Technologies;
@@ -92,6 +93,8 @@ public class Civilization {
 
     public ArrayList<Planet> habitatedPlanets;
     
+    public ArrayList<PopulationUnit> population;
+    
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
@@ -144,6 +147,8 @@ public class Civilization {
         habitatedPlanets = new ArrayList<>();
         
         resourceList = new HashMap<>();
+        
+        population = new ArrayList<>();
         //Initialize resources
     }
 
