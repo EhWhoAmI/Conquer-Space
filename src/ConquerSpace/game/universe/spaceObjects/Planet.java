@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -52,6 +53,9 @@ public class Planet extends SpaceObject {
     private boolean habitated = false;
     
     private float degreesPerTurn = 0.0f;
+    
+    public ArrayList<City> cities;
+    
     /**
      * Creates planet
      *
@@ -79,6 +83,7 @@ public class Planet extends SpaceObject {
         buildings = new HashMap<>();
         
         scanned = new ArrayList<>();
+        cities = new ArrayList<>();
     }
 
     /**

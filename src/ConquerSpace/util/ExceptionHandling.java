@@ -32,14 +32,14 @@ public class ExceptionHandling {
                     + "Conquer Space v " + ConquerSpace.ConquerSpace.VERSION.toString() + "\n"
                     + "Build: " + ConquerSpace.ConquerSpace.BUILD_NUMBER + "\n\n" + what;
             exit = JOptionPane.showConfirmDialog(
-                    null, String.format(localeMessages.getMessage("errorhandlingheader"), 
-                            ConquerSpace.ConquerSpace.VERSION, 
+                    null, String.format(localeMessages.getMessage("errorhandlingheader"),
+                            ConquerSpace.ConquerSpace.VERSION,
                             ConquerSpace.ConquerSpace.VERSION)
-                            + "\n\n" + what + 
-                            "\n\nDo you want to quit the game?"
-                    , ex.getClass().getName()
-                                    + ": " + ex.getMessage(),
-                            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    + "\n\n" + what
+                    + "\n\nDo you want to quit the game?",
+                     ex.getClass().getName()
+                    + ": " + ex.getMessage(),
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             //Create dump file
             File file = new File("crashlog.txt");
             if (!file.exists()) {
@@ -53,6 +53,7 @@ public class ExceptionHandling {
             ex.printStackTrace(writer);
             writer.println();
             writer.close();
+            ex.printStackTrace();
         } catch (FileNotFoundException ex1) {
             //Wat. Problem happens in a problem.......
         } catch (IOException ex1) {
@@ -82,12 +83,12 @@ public class ExceptionHandling {
                     + "Here's some information for the developers.\n\n"
                     + "Conquer Space v " + ConquerSpace.ConquerSpace.VERSION.toString() + "\n"
                     + "Build: " + ConquerSpace.ConquerSpace.BUILD_NUMBER + "\n\n" + what;
-            exit = JOptionPane.showConfirmDialog(null, 
-                    String.format(localeMessages.getMessage("errorhandlingheader"), 
-                            ConquerSpace.ConquerSpace.VERSION, ConquerSpace.ConquerSpace.VERSION) 
-                            + "\n\n" + what + "\n\nDo you want to quit the game?"
-                    , ex.getClass().getName() + ": " + ex.getMessage()
-                    , JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);            //Create dump file
+            exit = JOptionPane.showConfirmDialog(null,
+                    String.format(localeMessages.getMessage("errorhandlingheader"),
+                            ConquerSpace.ConquerSpace.VERSION, ConquerSpace.ConquerSpace.VERSION)
+                    + "\n\n" + what + "\n\nDo you want to quit the game?",
+                     ex.getClass().getName() + ": " + ex.getMessage(),
+                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);            //Create dump file
             File file = new File("crashlog.txt");
             if (!file.exists()) {
                 file.createNewFile();
@@ -100,6 +101,7 @@ public class ExceptionHandling {
             ex.printStackTrace(writer);
             writer.println();
             writer.close();
+            ex.printStackTrace();
         } catch (FileNotFoundException ex1) {
             //Wat. Problem happens in a problem.......
         } catch (IOException ex1) {

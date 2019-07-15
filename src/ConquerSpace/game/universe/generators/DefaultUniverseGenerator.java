@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameUpdater;
+import ConquerSpace.game.life.Species;
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.UniversePath;
@@ -185,7 +186,10 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
         UniversePath up = getRandomSuitablePlanet(rand, universe);
         playerCiv.setStartingPlanet(up);
+        //Generate Species
+        Species playerSpecies = new Species(1, 1, c.speciesName);
 
+        playerCiv.setFoundingSpecies(playerSpecies);
         universe.addCivilization(playerCiv);
         //Calculate number of civs
         int civCount = starSystemCount / 50;
@@ -202,6 +206,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = getRandomSuitablePlanet(rand, universe);
             civ.setStartingPlanet(up1);
+            Species civSpecies = new Species(1, 1, "");
+            civ.setFoundingSpecies(civSpecies);
             universe.addCivilization(civ);
         }
         return universe;

@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe.civilization;
 
+import ConquerSpace.game.life.Species;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
@@ -94,6 +95,8 @@ public class Civilization {
     public ArrayList<Planet> habitatedPlanets;
     
     public ArrayList<PopulationUnit> population;
+    
+    private Species foundingSpecies;
     
     public Civilization(int ID, Universe u) {
         this.ID = ID;
@@ -350,5 +353,13 @@ public class Civilization {
         }
         //Or else add it
         fields.add(new Field(f, amount));
+    }
+
+    public void setFoundingSpecies(Species foundingSpecies) {
+        this.foundingSpecies = foundingSpecies;
+    }
+
+    public Species getFoundingSpecies() {
+        return foundingSpecies;
     }
 }

@@ -5,10 +5,9 @@ import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
-import ConquerSpace.game.actions.ShipMoveAction;
-import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
+import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceGatherer;
 import ConquerSpace.game.buildings.SpacePort;
@@ -214,8 +213,16 @@ public class GameUpdater {
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
 
+                NameGenerator townGen = null;
+                try {
+                    townGen = NameGenerator.getNameGenerator("town.names");
+                } catch (IOException ex) {
+                    //Ignore
+                }
                 int popStorMas = (selector.nextInt(5) + 3);
                 for (int count = 0; count < popStorMas; count++) {
+                    City city = new City();
+                    city.setName(townGen.getName(0));
                     PopulationStorage test = new PopulationStorage();
                     //Distribute
                     //Add random positions
@@ -223,9 +230,11 @@ public class GameUpdater {
                     for (int k = 0; k < popCount; k++) {
                         //Add a couple of population to the mix...
                         PopulationUnit u = new PopulationUnit();
+                        u.setSpecies(c.getFoundingSpecies());
                         c.population.add(u);
                         test.population.add(u);
                     }
+                    city.storages.add(test);
                     int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
                     int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
                     ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(x, y);
@@ -257,10 +266,14 @@ public class GameUpdater {
                     for (int k = 0; k < popCount2; k++) {
                         //Add a couple of population to the mix...
                         PopulationUnit u = new PopulationUnit();
+                        u.setSpecies(c.getFoundingSpecies());
                         c.population.add(u);
                         test2.population.add(u);
                     }
-
+                    city.storages.add(test2);
+                    //Set growth
+                    //Add city
+                    starting.cities.add(city);
                 }
 
                 //resourceStorage.addResource(RawResourceTypes., 0);
@@ -712,6 +725,32 @@ public class GameUpdater {
             }
         }
 
+        //Process population
+        for (City city : p.cities) {
+            float increment = 0;
+
+            for (PopulationStorage storage : city.storages) {
+                for (PopulationUnit unit : storage.population) {
+                    //Fraction it so it does not accelerate at a crazy rate
+                    //Do subtractions here in the future, like happiness, and etc.
+                    increment += (unit.getSpecies().getBreedingRate()/50);
+                }
+            }
+            increment += city.getPopulationUnitPercentage();
+            //Increment the value...
+            city.setPopulationUnitPercentage(increment);
+            if (increment > 100) {
+                //Add population to city and stuff. Danm you have to get the civ. that is annoying
+                int owner = p.getOwnerID();
+                Civilization c = universe.getCivilization(owner);
+                //Add to storage
+                PopulationUnit unit = new PopulationUnit();
+                unit.setSpecies(c.getFoundingSpecies());
+                c.population.add(unit);
+                city.storages.get(0).population.add(unit);
+                city.setPopulationUnitPercentage(0);
+            }
+        }
     }
 
     public void processStar(Star s, StarDate date) {
