@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -28,7 +30,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class NewGame extends JFrame implements ActionListener {
+public class NewGame extends JFrame implements ActionListener, WindowListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(NewGame.class.getName());
 
@@ -183,6 +185,8 @@ public class NewGame extends JFrame implements ActionListener {
         add(quoteLabel);
         add(exitButton);
 
+        addWindowListener(this);
+        
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         LOGGER.trace("Loaded new game UI.");
@@ -195,52 +199,52 @@ public class NewGame extends JFrame implements ActionListener {
             //Show loading screen
             Loading load = new Loading();
             UniverseConfig config = new UniverseConfig();
-                //This button will only be pressed by the `done` button.
-                //Read all the info, pass to scripts.
-                config.setUniverseSize((String) universeSizeBox.getSelectedItem());
-                config.setUniverseShape((String) universeTypeComboBox.getSelectedItem());
-                config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
-                config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
-                config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
+            //This button will only be pressed by the `done` button.
+            //Read all the info, pass to scripts.
+            config.setUniverseSize((String) universeSizeBox.getSelectedItem());
+            config.setUniverseShape((String) universeTypeComboBox.getSelectedItem());
+            config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
+            config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
+            config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
 
-                long seed;
-                LOGGER.trace("Parsing seed.");
-                try {
-                    seed = Long.parseLong(seedText.getText()); // This will pass a nfe.
-                    LOGGER.trace("Seed is long value.");
-                } catch (NumberFormatException nfe) {
-                    seed = seedText.getText().hashCode();
-                    LOGGER.trace("Seed is string literal.");
-                }
-                LOGGER.info("Seed: " + seed);
+            long seed;
+            LOGGER.trace("Parsing seed.");
+            try {
+                seed = Long.parseLong(seedText.getText()); // This will pass a nfe.
+                LOGGER.trace("Seed is long value.");
+            } catch (NumberFormatException nfe) {
+                seed = seedText.getText().hashCode();
+                LOGGER.trace("Seed is string literal.");
+            }
+            LOGGER.info("Seed: " + seed);
 
-                config.setSeed(seed);
+            config.setSeed(seed);
 
-                //Set the player Civ options
-                CivilizationConfig civilizationConfig = new CivilizationConfig();
-                civilizationConfig.setCivColor(civColor);
-                civilizationConfig.setCivSymbol((String) civSymbolSpinner.getValue());
-                civilizationConfig.setCivilizationName(civNameTextField.getText());
-                civilizationConfig.setCivilizationPreferredClimate((String) civTempResistanceComboBox.getSelectedItem());
-                civilizationConfig.setHomePlanetName(civHomePlanetName.getText());
-                civilizationConfig.setSpeciesName(speciesNameField.getText());
-                config.setCivilizationConfig(civilizationConfig);
+            //Set the player Civ options
+            CivilizationConfig civilizationConfig = new CivilizationConfig();
+            civilizationConfig.setCivColor(civColor);
+            civilizationConfig.setCivSymbol((String) civSymbolSpinner.getValue());
+            civilizationConfig.setCivilizationName(civNameTextField.getText());
+            civilizationConfig.setCivilizationPreferredClimate((String) civTempResistanceComboBox.getSelectedItem());
+            civilizationConfig.setHomePlanetName(civHomePlanetName.getText());
+            civilizationConfig.setSpeciesName(speciesNameField.getText());
+            config.setCivilizationConfig(civilizationConfig);
 
-                // Start time of logging
-                long loadingStart = System.currentTimeMillis();
-                DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
-                Universe universe = gen.generate(config, civilizationConfig, seed);
-                //Logger end time
-                long loadingEnd = System.currentTimeMillis();
-                LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
+            // Start time of logging
+            long loadingStart = System.currentTimeMillis();
+            DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
+            Universe universe = gen.generate(config, civilizationConfig, seed);
+            //Logger end time
+            long loadingEnd = System.currentTimeMillis();
+            LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
 
-                // Log info
-                //LOGGER.info("Universe:" + universe.toReadableString());
-                //Insert universe into globals
-                Globals.universe = universe;
-                System.gc();
-                load.setVisible(false);
-                new GameController();
+            // Log info
+            //LOGGER.info("Universe:" + universe.toReadableString());
+            //Insert universe into globals
+            Globals.universe = universe;
+            System.gc();
+            load.setVisible(false);
+            new GameController();
         } else if (e.getSource() == civColorChooserButton) {
             //Show the civ color chooser
             civColor = JColorChooser.showDialog(null, "Choose Civilization Color", civColor);
@@ -250,5 +254,36 @@ public class NewGame extends JFrame implements ActionListener {
 
     public Universe getUniverse() {
         return universe;
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+        //Stop playing sound
+        GameController.musicPlayer.clean();
+        System.exit(0);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
     }
 }
