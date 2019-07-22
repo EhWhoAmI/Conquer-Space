@@ -49,8 +49,11 @@ public class PlanetOverview extends JPanel {
     private JLabel orbitDistance;
     private Planet p;
     private JButton switchButton;
+    private JButton showNothing;
     private ButtonGroup resourceButtonGroup;
     private JRadioButton[] showResources;
+
+    private boolean showPlanetTerrain = true;
 
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
@@ -102,6 +105,17 @@ public class PlanetOverview extends JPanel {
                 sectorDisplayer.setWhatToShow(0);
             }
         });
+
+        showNothing = new JButton("Hide terrain");
+        showNothing.addActionListener(a -> {
+            if (showPlanetTerrain) {
+                showNothing.setText("Show Terrain");
+            } else {
+                showNothing.setText("Hide Terrain");
+            }
+            showPlanetTerrain = !showPlanetTerrain;
+        });
+
         JPanel buttonGroupWrapper = new JPanel();
         buttonGroupWrapper.setLayout(new VerticalFlowLayout());
         resourceButtonGroup = new ButtonGroup();
@@ -123,6 +137,7 @@ public class PlanetOverview extends JPanel {
         }
 
         buttonsWrapper.add(switchButton);
+        buttonsWrapper.add(showNothing);
         buttonsWrapper.add(buttonGroupWrapper);
         buildingPanel.add("Map", buttonsWrapper);
 
@@ -187,8 +202,15 @@ public class PlanetOverview extends JPanel {
                 //Set opacity
                 //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
             }
-            g2d.drawImage(img, 0, 0, null);
-
+            //Draw planet terrain
+            if (showPlanetTerrain) {
+                g2d.drawImage(img, 0, 0, null);
+            } else {
+                //Black for visibility
+                Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
+                g2d.setColor(Color.black);
+                g2d.fill(background);
+            }
             if (whatToShow == PLANET_RESOURCES || whatToShow == SHOW_ALL_RESOURCES) {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
@@ -204,11 +226,13 @@ public class PlanetOverview extends JPanel {
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Light grey rectangle so you can see stuff
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-                Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
-                g2d.setColor(Color.lightGray);
+                if (showPlanetTerrain) {
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+                    Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
+                    g2d.setColor(Color.lightGray);
+                    g2d.fill(background);
+                }
 
-                g2d.fill(background);
                 //Draw buildings
                 for (Map.Entry<ConquerSpace.game.universe.Point, Building> en : p.buildings.entrySet()) {
                     ConquerSpace.game.universe.Point p = en.getKey();

@@ -92,6 +92,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         desktopPane.add(frame);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void init() {
         desktopPane = new CQSPDesktop(u);

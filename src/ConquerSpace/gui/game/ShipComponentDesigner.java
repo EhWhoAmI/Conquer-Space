@@ -77,6 +77,7 @@ public class ShipComponentDesigner extends JPanel {
 
     private int mass = 0;
 
+    @SuppressWarnings("unchecked")
     public ShipComponentDesigner(Civilization c) {
         setLayout(new BorderLayout());
 

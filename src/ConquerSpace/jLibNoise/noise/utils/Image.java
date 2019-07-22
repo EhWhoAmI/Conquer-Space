@@ -25,7 +25,6 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 import ConquerSpace.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Implements an image, a 2-dimensional array of color values.

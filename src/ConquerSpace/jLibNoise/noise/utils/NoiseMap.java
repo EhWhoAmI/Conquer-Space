@@ -25,7 +25,6 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 import ConquerSpace.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Implements a noise map, a 2-dimensional array of floating-point values.

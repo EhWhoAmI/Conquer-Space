@@ -32,6 +32,7 @@ public class LaunchSatelliteMenu extends JPanel {
     private JLabel satelliteMass;
     private JButton buildAndLaunchButton;
 
+    @SuppressWarnings("unchecked")
     public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         //The launch pad type and stuff as title
         //title = new JLabel("Launch Satellite");

@@ -32,6 +32,7 @@ public class LaunchSpaceShipMenu extends JPanel {
     private JLabel massLabel;
     private JButton launchButton;
 
+    @SuppressWarnings("unchecked")
     public LaunchSpaceShipMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
         setLayout(new GridLayout(1, 3));
 

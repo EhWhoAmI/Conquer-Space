@@ -87,7 +87,6 @@ public class OptionsWindow extends JFrame {
                     Globals.settings.list(pw);
                     pw.close();
                 } catch (FileNotFoundException ex) {
-                } catch (IOException ex) {
                 } finally {
                     try {
                         fis.close();

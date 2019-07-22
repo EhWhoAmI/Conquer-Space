@@ -25,7 +25,7 @@ package ConquerSpace.jLibNoise.noise.module;
 
 import ConquerSpace.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.jLibNoise.noise.ExceptionNoModule;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import ConquerSpace.jLibNoise.noise.utils.NotImplementedException;
 
 /**
  * Abstract base class for noise modules.

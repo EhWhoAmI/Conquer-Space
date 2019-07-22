@@ -8,7 +8,10 @@ import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
 import java.awt.AWTEvent;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
+import java.awt.SplashScreen;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +21,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.logging.log4j.Logger;
@@ -148,10 +153,7 @@ public class ConquerSpace {
             GameController.musicPlayer.setToPlay(false);
         }
         // Load all the files.
-        InitialLoading loading = new InitialLoading();
-        loading.setVisible(true);
-        loading.run();
-        loading.dispose();
+        loadFiles();
 
         //New Game Menu
         MainMenu menu = new MainMenu();
@@ -171,5 +173,69 @@ public class ConquerSpace {
                 }
             }
         }
+    }
+
+    public static void loadFiles() {
+        long startTime = System.currentTimeMillis();
+        try {
+            //Load the file check.
+            Scanner fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
+            int files = 0;
+            while (fileScanner.hasNextLine()) {
+                files++;
+                fileScanner.nextLine();
+            }
+            LOGGER.info("Asset Files: " + files);
+            //Reset Scanner
+            fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
+            int fileIndex = 0;
+            int filesMissing = 0;
+            while (fileScanner.hasNextLine()) {
+                fileIndex++;
+
+                String fileName = fileScanner.nextLine();
+
+                LOGGER.trace("Verifying file " + fileName);
+
+                //Check for it
+                File f = new File(System.getProperty("user.dir") + "/" + fileName);
+                //Next we have to determine the importance of the file. -- TODO
+                //File exists or not, and warn noone. XD
+                if (!f.exists()) {
+                    LOGGER.warn("Can't find file " + fileName + ". not fatal.");
+                    filesMissing++;
+                } else {
+                    LOGGER.trace("File " + fileName + " exists");
+                }
+            }
+            if (filesMissing == 0) {
+                LOGGER.info("No files missing.");
+            } else {
+                LOGGER.warn(filesMissing + " file(s) missing.");
+                int toexit = JOptionPane.showConfirmDialog(null, "You have "
+                        + filesMissing + " files missing. Make sure they are there"
+                        + ". \nSomething will go wrong if you don't fix"
+                        + "it. \nWe need all the files that we have. "
+                        + "Exit?", "Files missing",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                if (toexit == JOptionPane.YES_OPTION) {
+                    //Then exit
+                    System.exit(0);
+                }
+                //or else leave the user to his or her own troubles. HEHEHE...
+            }
+        } catch (FileNotFoundException ex) {
+            //Cannot fine FILELIST
+            LOGGER.error("File not found Error: ", ex);
+            ExceptionHandling.ExceptionMessageBox("File FILELIST not found. Plea"
+                    + "se find it online or somewhere! We cannot check for any f"
+                    + "iles we need.", ex);
+            System.exit(1);
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        //Log how long that took
+        LOGGER.info("Took " + (endTime - startTime) + "ms to load.");
     }
 }

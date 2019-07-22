@@ -9,8 +9,10 @@ import ConquerSpace.game.buildings.AdministrativeCenter;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceGatherer;
+import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
@@ -70,8 +72,11 @@ public class GameUpdater {
 
     private Universe universe;
 
+    private StarDate starDate;
+
     public GameUpdater(Universe u, StarDate s) {
         universe = u;
+        starDate = s;
     }
 
     public void calculateControl() {
@@ -206,7 +211,7 @@ public class GameUpdater {
                 nerd.setSkill((int) (Math.random() * 5) + 1);
                 c.unrecruitedPeople.add(nerd);
             }
-            
+
             //Admins
             peopleCount = (int) (Math.random() * 5) + 5;
 
@@ -226,7 +231,7 @@ public class GameUpdater {
 
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
-
+                c.setCapitalPlanet(starting);
                 NameGenerator townGen = null;
                 try {
                     townGen = NameGenerator.getNameGenerator("town.names");
@@ -249,6 +254,7 @@ public class GameUpdater {
 
                     if (count == 0) {
                         test = administrativeCenter;
+                        c.setCapitalCity(city);
                     }
 
                     test.setMaxStorage(selector.nextInt(15) + 1);
@@ -308,6 +314,43 @@ public class GameUpdater {
                     starting.cities.add(city);
                 }
 
+                //Add storage
+                ResourceStorage storage = new ResourceStorage(starting);
+                //Add all possible resources
+                //Get starting resources...
+                for (Resource res : GameController.resources) {
+                    storage.addResourceTypeStore(res);
+                }
+
+                int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(x, y);
+
+                while (starting.buildings.containsKey(pt)) {
+                    x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                    y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                    pt = new ConquerSpace.game.universe.Point(x, y);
+                }
+                c.resourceStorages.add(storage);
+                starting.buildings.put(pt, storage);
+                //Add observetory
+                StarSystem container = universe.getStarSystem(starting.getParentStarSystem());
+                Observatory observatory = new Observatory(10*GameController.AU_IN_LTYR, 100, c.getID(),
+                        new ConquerSpace.game.universe.Point(container.getX(), container.getY()));
+
+                x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                pt = new ConquerSpace.game.universe.Point(x, y);
+
+                while (starting.buildings.containsKey(pt)) {
+                    x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                    y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                    pt = new ConquerSpace.game.universe.Point(x, y);
+                }
+
+                c.visionPoints.add(observatory);
+                starting.buildings.put(pt, observatory);
+
                 //resourceStorage.addResource(RawResourceTypes., 0);
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
@@ -340,6 +383,7 @@ public class GameUpdater {
         calculateControl();
 
         //Do calculations for system position
+        updateObjectPositions();
         calculateVision();
     }
 
@@ -799,7 +843,7 @@ public class GameUpdater {
                 rs.addResource(resourceType, amount);
                 break;
             }
-        }       
+        }
     }
 
     public void processResearch() {
@@ -857,6 +901,28 @@ public class GameUpdater {
                     //Next action and init
                     ship.getActionAndPopIfDone().initAction();
                 }
+            }
+        }
+    }
+
+    public void updateObjectPositions() {
+        //Loop through star systems
+        for (int i = 0; i < universe.getStarSystemCount(); i++) {
+            StarSystem system = universe.getStarSystem(i);
+            RendererMath.Point pt
+                    = RendererMath.polarCoordToCartesianCoord(system.getGalaticLocation().getDistance(),
+                            system.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
+
+            system.setX(pt.x);
+            system.setY(pt.y);
+            for (int k = 0; k < system.getPlanetCount(); k++) {
+                Planet planet = system.getPlanet(k);
+                RendererMath.Point ppt
+                        = RendererMath.polarCoordToCartesianCoord(planet.getOrbitalDistance(),
+                                planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
+
+                planet.setX(ppt.x);
+                planet.setY(ppt.y);
             }
         }
     }

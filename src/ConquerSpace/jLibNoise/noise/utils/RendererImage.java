@@ -403,6 +403,7 @@ public class RendererImage {
      * the source height map.
      * @post The original contents of the destination image is destroyed.
      */
+    @SuppressWarnings("deprecation")
     public void render() {
         if (sourceNoiseMap == null
                 || destImage == null
