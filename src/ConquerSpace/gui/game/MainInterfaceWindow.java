@@ -35,6 +35,8 @@ public class MainInterfaceWindow extends JInternalFrame {
 
     private PersonWindow personWindow;
     private RecruitingPerson recruitingPerson;
+    
+    private ResourceManager resourceManager;
 
     private Civilization c;
     private Universe u;
@@ -112,6 +114,8 @@ public class MainInterfaceWindow extends JInternalFrame {
         peopleTabs.add("Recruitment", recruitingPerson);
         
         civInfoOverview = new CivInfoOverview(c, u);
+        
+        resourceManager = new ResourceManager(c);
 
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
@@ -119,6 +123,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         tabs.add("Engineering", shipComponentsOverview);
         tabs.add("People", peopleTabs);
         tabs.add("My Civilization", civInfoOverview);
+        tabs.add("Resources", resourceManager);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
@@ -147,6 +152,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         recruitingPerson.update();
         personWindow.update();
         researchViewer.update();
+        resourceManager.update();
         
         if(planetInfoSheet != null) {
             planetInfoSheet.update();

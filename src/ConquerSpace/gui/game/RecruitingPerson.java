@@ -46,13 +46,21 @@ public class RecruitingPerson extends JPanel {
 
         probablePersonList.addListSelectionListener(l -> {
             //Change text
+            container.removeAll();
             if (probablePersonList.getSelectedIndex() > -1) {
                 name.setText("Name: " + probablePersonList.getSelectedValue().getName());
                 personAgeLabel.setText("Age: " + probablePersonList.getSelectedValue().getAge());
                 personJobLabel.setText("Job: " + probablePersonList.getSelectedValue().getJobName());
-                if(probablePersonList.getSelectedValue() instanceof Scientist) {
-                    skillLabel.setText("Skill: " + ((Scientist)probablePersonList.getSelectedValue()).getSkill());
-                }   
+                container.add(name);
+                container.add(personAgeLabel);
+                container.add(personJobLabel);
+
+                if (probablePersonList.getSelectedValue() instanceof Scientist) {
+                    skillLabel.setText("Skill: " + ((Scientist) probablePersonList.getSelectedValue()).getSkill());
+                    container.add(skillLabel);
+                }
+                container.add(recruitButton);
+
             }
         });
 
@@ -80,7 +88,10 @@ public class RecruitingPerson extends JPanel {
         container.add(name);
         container.add(personAgeLabel);
         container.add(personJobLabel);
-        container.add(skillLabel);
+
+        if (probablePersonList.getSelectedValue() instanceof Scientist) {
+            container.add(skillLabel);
+        }
         container.add(recruitButton);
         add(listScrollPane);
         add(container);

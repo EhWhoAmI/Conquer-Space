@@ -129,7 +129,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                         //Add that amount
                         for (int resCount = 0; resCount < amount; resCount++) {
                             //Add the resource
-                            ResourceVein vein = new ResourceVein(res, 10);
+                            int resourceVolume = randint(rand, 50000, 100000);
+                            ResourceVein vein = new ResourceVein(res, resourceVolume);
                             vein.setId(idCount++);
                             vein.setRadius(randint(rand, 5, 50));
                             vein.setX(rand.nextInt(planetSize * 2));

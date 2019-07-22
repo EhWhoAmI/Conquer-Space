@@ -221,7 +221,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         JMenu resources = new JMenu("Resources");
         JMenuItem resourceIndex = new JMenuItem("Resources");
         resourceIndex.addActionListener(a -> {
-            addFrame(new ResourceManager(c));
+            //addFrame(new ResourceManager(c));
         });
 
         resources.add(resourceIndex);

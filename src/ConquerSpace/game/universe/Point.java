@@ -28,6 +28,10 @@ public class Point {
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+        if(obj instanceof Point) {
+            Point ither = (Point) obj;
+            return ((ither.x == x) && (ither.y == y));
+        }
+        return false;
     }  
 }

@@ -93,7 +93,7 @@ public class Resource {
     public boolean equals(Object obj) {
         if (obj instanceof Resource) {
             Resource res = (Resource) obj;
-            return (res.name == name && res.id == id);
+            return (res.name.equals(name) && res.id == id);
         }
         return false;
     }

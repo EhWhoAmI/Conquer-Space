@@ -29,7 +29,7 @@ public class Observatory extends Building implements VisionPoint {
 
     @Override
     public Color getColor() {
-        return Color.CYAN;
+        return Color.white;
     }
 
     public int getLensSize() {

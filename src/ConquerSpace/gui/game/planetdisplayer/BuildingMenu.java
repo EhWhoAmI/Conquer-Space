@@ -5,6 +5,7 @@ import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.Observatory;
+import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceGatherer;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
@@ -29,6 +30,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,6 +46,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -192,65 +195,78 @@ public class BuildingMenu extends JPanel {
         buildButton.addActionListener(a -> {
             String item = (String) buildingType.getSelectedItem();
             boolean toReset = false;
-            if (item.equals(RESIDENTIAL)) {
-                ConquerSpace.game.buildings.PopulationStorage storage = new ConquerSpace.game.buildings.PopulationStorage();
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), storage, 0, 1);
-                //Reset...
-                toReset = true;
-            } else if (item.equals(LAUNCH)) {
-                //Get civ launching type...
-                //SpacePortBuilding port = new SpacePortBuilding(0, (Integer)buildSpaceLaunchSite.maxPopulation.getValue(), (LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), p);
-                //Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int)xposSpinner.getValue(), (int)yPosSpinner.getValue()), port, 0, 1);
-                SpacePort port = new SpacePort((LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), (Integer) buildSpaceLaunchSite.maxPopulation.getValue());
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), port, 0, 1);
-                toReset = true;
-            } else if (item.equals(OBSERVATORY)) {
-                StarSystem sys = u.getStarSystem(p.getParentStarSystem());
-                Observatory observatory = new Observatory(
-                        GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
-                        (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
-                        c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
-                //Add visionpoint to civ
-                c.visionPoints.add(observatory);
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), observatory, 0, 1);
-                toReset = true;
-            } else if (item.equals(RESOURCE_STOCKPILE)) {
-                ResourceStorage stor = new ResourceStorage(p);
-                //Add the stuff...
-                Iterator<Resource> res = buildResourceStorageMenu.resourceInsertedListModel.elements().asIterator();
-                while (res.hasNext()) {
-                    Resource next = res.next();
-                    stor.addResourceTypeStore(next);
-                }
-                c.resourceStorages.add(stor);
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), stor, 0, 1);
-                toReset = true;
-            } else if (item.equals(RESOURCE_MINER)) {
-                ResourceGatherer miner = new ResourceGatherer(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
-                //Add the stuff...
-                //Get the map of things, and calculate the stuff
-                int x = (int) xposSpinner.getValue();
-                int y = (int) yPosSpinner.getValue();
-                Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
-                for (ResourceVein v : p.resourceVeins) {
-                    if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
-                        miner.setVeinMining(v);
-                        break;
-                    }
-                }
-
-                Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue()), miner, 0, 1);
-                toReset = true;
+            //Get x and y position
+            ConquerSpace.game.universe.Point buildingPos = new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue());
+            //Check if any buildings there:
+            int toBuild = JOptionPane.YES_OPTION;
+            if (p.buildings.containsKey(buildingPos)) {
+                toBuild = JOptionPane.showConfirmDialog(null, "Do you want to demolish a " + p.buildings.get(buildingPos).toString() + " on the tile you are building?",
+                        "Are you sure you want to demolish a building?", JOptionPane.YES_NO_OPTION);
             }
-            if (toReset) {
-                if ((int) xposSpinner.getValue() > 0) {
-                    xposSpinner.setValue(xposSpinner.getNextValue());
-                } else {
-                    xposSpinner.setValue(1);
+            if (toBuild == JOptionPane.YES_OPTION) {
+                if (item.equals(RESIDENTIAL)) {
+                    PopulationStorage storage = new PopulationStorage();
+                    storage.setMaxStorage((int) popStoragePanel.maxPopulationTextField.getValue());
+                    Actions.buildBuilding(p, buildingPos, storage, 0, 1);
+                    //Reset...
+                    toReset = true;
+                } else if (item.equals(LAUNCH)) {
+                    //Get civ launching type...
+                    //SpacePortBuilding port = new SpacePortBuilding(0, (Integer)buildSpaceLaunchSite.maxPopulation.getValue(), (LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), p);
+                    //Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int)xposSpinner.getValue(), (int)yPosSpinner.getValue()), port, 0, 1);
+                    SpacePort port = new SpacePort((LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), (Integer) buildSpaceLaunchSite.maxPopulation.getValue());
+                    Actions.buildBuilding(p, buildingPos, port, 0, 1);
+                    toReset = true;
+                } else if (item.equals(OBSERVATORY)) {
+                    StarSystem sys = u.getStarSystem(p.getParentStarSystem());
+                    Observatory observatory = new Observatory(
+                            GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
+                            (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
+                            c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
+                    //Add visionpoint to civ
+                    c.visionPoints.add(observatory);
+                    Actions.buildBuilding(p, buildingPos, observatory, 0, 1);
+                    toReset = true;
+                } else if (item.equals(RESOURCE_STOCKPILE)) {
+                    ResourceStorage stor = new ResourceStorage(p);
+                    //Add the stuff...
+
+                    for(int i = 0; i < buildResourceStorageMenu.resourceToPut.getModel().getSize(); i++) {
+                    
+                        Resource next =  buildResourceStorageMenu.resourceToPut.getModel().getElementAt(i);
+
+                        stor.addResourceTypeStore(next);
+                    }
+                    c.resourceStorages.add(stor);
+                    Actions.buildBuilding(p, buildingPos, stor, 0, 1);
+                    toReset = true;
+                } else if (item.equals(RESOURCE_MINER)) {
+                    ResourceGatherer miner = new ResourceGatherer(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
+                    //Add the stuff...
+                    //Get the map of things, and calculate the stuff
+                    int x = (int) xposSpinner.getValue();
+                    int y = (int) yPosSpinner.getValue();
+                    Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
+                    for (ResourceVein v : p.resourceVeins) {
+                        if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
+                            miner.setVeinMining(v);
+                            break;
+                        }
+                    }
+
+                    Actions.buildBuilding(p, buildingPos, miner, 0, 1);
+                    toReset = true;
                 }
-                //yPosSpinner.setValue(0);
-                //Then show alert
-                //But like it will be annoying....
+                if (toReset) {
+                    if ((int) xposSpinner.getValue() > 0) {
+                        xposSpinner.setValue(xposSpinner.getNextValue());
+                    } else {
+                        xposSpinner.setValue(1);
+                    }
+                    //yPosSpinner.setValue(0);
+                    //Then show alert
+                    //But like it will be annoying....
+                }
             }
         });
 
@@ -297,22 +313,6 @@ public class BuildingMenu extends JPanel {
     }
 
     public void update() {
-        /*
-        if (!buildingType.isPopupVisible()) {
-            //Then update
-            int selected = buildingType.getSelectedIndex();
-            buildingModel.removeAllElements();
-            buildingModel.addElement(RESIDENTIAL);
-            if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
-                //Do things
-                buildingModel.addElement(LAUNCH);
-            }
-            buildingModel.addElement(OBSERVATORY);
-            buildingModel.addElement(RESOURCE_STOCKPILE);
-            buildingModel.addElement(RESOURCE_MINER);
-
-            buildingType.setSelectedIndex(selected);
-        }*/
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {
@@ -440,6 +440,7 @@ public class BuildingMenu extends JPanel {
 
         long maxPopulation;
         private JLabel amount;
+        private JLabel amountEnding;
         JSpinner maxPopulationTextField;
 
         public BuildPopulationStorage() {
@@ -449,7 +450,7 @@ public class BuildingMenu extends JPanel {
             GridBagConstraints constraints = new GridBagConstraints();
             amount = new JLabel("Max Population");
 
-            SpinnerNumberModel model = new SpinnerNumberModel(10000l, 0l, Long.MAX_VALUE, 1000);
+            SpinnerNumberModel model = new SpinnerNumberModel(200, 10, Integer.MAX_VALUE, 10);
             maxPopulationTextField = new JSpinner(model);
             ((JSpinner.DefaultEditor) maxPopulationTextField.getEditor()).getTextField().setEditable(false);
 
@@ -467,6 +468,16 @@ public class BuildingMenu extends JPanel {
             constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             add(maxPopulationTextField, constraints);
+
+            amountEnding = new JLabel("million people");
+            constraints.gridx = 2;
+            constraints.gridy = 0;
+            constraints.anchor = GridBagConstraints.NORTHWEST;
+            constraints.weightx = 1;
+            constraints.weighty = 1;
+            constraints.insets = new Insets(2, 5, 0, 0);
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            add(amountEnding, constraints);
         }
 
         //Determine price
@@ -475,7 +486,7 @@ public class BuildingMenu extends JPanel {
         public void actionPerformed(ActionEvent e) {
             //Calculate the cost...
             try {
-                maxPopulation = (Long) maxPopulationTextField.getValue();
+                maxPopulation = (Integer) maxPopulationTextField.getValue();
 
             } catch (NumberFormatException | ArithmeticException nfe) {
                 //Because who cares!
@@ -602,6 +613,7 @@ public class BuildingMenu extends JPanel {
         private DefaultListModel<Resource> resourceToPutListModel;
         private DefaultListModel<Resource> resourceInsertedListModel;
 
+        @SuppressWarnings("unchecked")
         public BuildResourceStorageMenu() {
             setLayout(new BorderLayout());
             JPanel ResourceAmountStorage = new JPanel();

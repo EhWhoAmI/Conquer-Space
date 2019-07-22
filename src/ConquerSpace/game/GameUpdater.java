@@ -5,12 +5,14 @@ import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
+import ConquerSpace.game.buildings.AdministrativeCenter;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceGatherer;
 import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Fields;
@@ -204,6 +206,18 @@ public class GameUpdater {
                 nerd.setSkill((int) (Math.random() * 5) + 1);
                 c.unrecruitedPeople.add(nerd);
             }
+            
+            //Admins
+            peopleCount = (int) (Math.random() * 5) + 5;
+
+            for (int peep = 0; peep < peopleCount; peep++) {
+                int age = (int) (Math.random() * 40) + 20;
+                String person = "name";
+                person = gen.getName((int) Math.round(Math.random()));
+                Administrator dude = new Administrator(person, age);
+                //nerd.setSkill((int) (Math.random() * 5) + 1);
+                c.unrecruitedPeople.add(dude);
+            }
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             material.setId(0);
             c.hullMaterials.add(material);
@@ -217,16 +231,32 @@ public class GameUpdater {
                 try {
                     townGen = NameGenerator.getNameGenerator("town.names");
                 } catch (IOException ex) {
-                    //Ignore
+                    //Ignore, assume all ok
                 }
+
+                //Amount of pop storages
                 int popStorMas = (selector.nextInt(5) + 3);
+
+                //Add admin center and capital city.
+                AdministrativeCenter administrativeCenter = new AdministrativeCenter();
+
                 for (int count = 0; count < popStorMas; count++) {
                     City city = new City();
                     city.setName(townGen.getName(0));
-                    PopulationStorage test = new PopulationStorage();
+
+                    PopulationStorage test;
+                    test = new PopulationStorage();
+
+                    if (count == 0) {
+                        test = administrativeCenter;
+                    }
+
+                    test.setMaxStorage(selector.nextInt(15) + 1);
                     //Distribute
                     //Add random positions
-                    int popCount = selector.nextInt(10);
+                    int popCount = (selector.nextInt(10) + 1);
+                    test.setMaxStorage(selector.nextInt(popCount + 5) + 1);
+
                     for (int k = 0; k < popCount; k++) {
                         //Add a couple of population to the mix...
                         PopulationUnit u = new PopulationUnit();
@@ -243,7 +273,7 @@ public class GameUpdater {
                     //Expand sector
                     //Choose a direction, and expand...
                     PopulationStorage test2 = new PopulationStorage();
-                    int dir = selector.nextInt(4);
+                    int dir = selector.nextInt(4) + 1;
                     ConquerSpace.game.universe.Point pt2;
                     switch (dir) {
                         case 0:
@@ -263,6 +293,8 @@ public class GameUpdater {
                     }
                     starting.buildings.put(pt2, test2);
                     int popCount2 = selector.nextInt(10);
+                    test2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
+
                     for (int k = 0; k < popCount2; k++) {
                         //Add a couple of population to the mix...
                         PopulationUnit u = new PopulationUnit();
@@ -733,7 +765,7 @@ public class GameUpdater {
                 for (PopulationUnit unit : storage.population) {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
-                    increment += (unit.getSpecies().getBreedingRate()/50);
+                    increment += (unit.getSpecies().getBreedingRate() / 50);
                 }
             }
             increment += city.getPopulationUnitPercentage();
@@ -767,7 +799,7 @@ public class GameUpdater {
                 rs.addResource(resourceType, amount);
                 break;
             }
-        }
+        }       
     }
 
     public void processResearch() {

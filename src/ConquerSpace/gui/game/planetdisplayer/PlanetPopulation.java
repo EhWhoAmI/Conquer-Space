@@ -77,7 +77,7 @@ public class PlanetPopulation extends JPanel {
             cityData.removeAll();
             int popcount = 0;
             float increment = 0;
-
+            int maxPop = 0;
             for (PopulationStorage stor : cityList.getSelectedValue().storages) {
                 popcount += stor.population.size();
                 for (PopulationUnit unit : stor.population) {
@@ -85,14 +85,18 @@ public class PlanetPopulation extends JPanel {
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
                 }
+                maxPop += stor.getMaxStorage();
             }
             JLabel popCount = new JLabel("Population: " + (popcount * 10) + " million people");
             cityData.add(popCount);
 
             //Growth
             JLabel growthAmount = new JLabel("Growth: " + (cityList.getSelectedValue().getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
-
             cityData.add(growthAmount);
+            
+            //Max population
+            JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
+            cityData.add(maxPopulation);
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);

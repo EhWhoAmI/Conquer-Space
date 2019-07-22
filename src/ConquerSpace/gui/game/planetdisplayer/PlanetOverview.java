@@ -203,6 +203,12 @@ public class PlanetOverview extends JPanel {
                 }
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
+                //Light grey rectangle so you can see stuff
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+                Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
+                g2d.setColor(Color.lightGray);
+
+                g2d.fill(background);
                 //Draw buildings
                 for (Map.Entry<ConquerSpace.game.universe.Point, Building> en : p.buildings.entrySet()) {
                     ConquerSpace.game.universe.Point p = en.getKey();

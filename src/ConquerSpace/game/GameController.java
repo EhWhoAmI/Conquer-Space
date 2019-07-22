@@ -1,6 +1,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
@@ -33,8 +34,8 @@ public class GameController {
     public static int GameRefreshRate = (5 * 24);
 
     public static ArrayList<LaunchSystem> launchSystems;
-    private Timer ticker; 
-   public static ArrayList<Satellite> satellites;
+    private Timer ticker;
+    public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
     public static ArrayList<JSONObject> shipComponentTemplates;
     public static ArrayList<Resource> resources;
@@ -42,7 +43,7 @@ public class GameController {
     public static HashMap<String, Integer> shipTypes;
     public static GameUpdater updater;
     public static MusicPlayer musicPlayer;
-    
+
     public static final int AU_IN_LTYR = 63241;
 
     /**
@@ -127,6 +128,18 @@ public class GameController {
                     Scientist nerd = new Scientist(person, age);
                     nerd.setSkill((int) (Math.random() * 5) + 1);
                     c.unrecruitedPeople.add(nerd);
+
+                }
+                //Admins
+                peopleCount = (int) (Math.random() * 5) + 5;
+
+                for (int peep = 0; peep < peopleCount; peep++) {
+                    int age = (int) (Math.random() * 40) + 20;
+                    String person = "name";
+                    person = gen.getName((int) Math.round(Math.random()));
+                    Administrator dude = new Administrator(person, age);
+                    //nerd.setSkill((int) (Math.random() * 5) + 1);
+                    c.unrecruitedPeople.add(dude);
                 }
             }
         }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author zyunl
  */
 public class PopulationStorage extends Building {
-
+    private int maxStorage;
     public ArrayList<PopulationUnit> population;
 
     public PopulationStorage() {
@@ -21,6 +21,14 @@ public class PopulationStorage extends Building {
     }
 
     public int getPopulations() {
-        return 0;
+        return population.size();
+    }
+
+    public int getMaxStorage() {
+        return maxStorage;
+    }
+
+    public void setMaxStorage(int maxStorage) {
+        this.maxStorage = maxStorage;
     }
 }
