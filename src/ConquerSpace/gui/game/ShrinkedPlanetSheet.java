@@ -34,7 +34,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
 /**
- *
+ * A planet that has not been surveyed yet.
  * @author zyunl
  */
 public class ShrinkedPlanetSheet extends JPanel {

@@ -28,14 +28,17 @@ public class MainInterfaceWindow extends JInternalFrame {
     private JPanel planetInfoSheetContainer;
     private PlanetInfoSheet planetInfoSheet;
     private ShrinkedPlanetSheet shrinkedPlanetSheet;
+    private UnownedPlanetInfoMenu unownedPlanetInfoMenu;
     private SpaceShipOverview spaceShipOverview;
     private HullCreator hullCreator;
     
+    private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
+
     private CivInfoOverview civInfoOverview;
 
     private PersonWindow personWindow;
     private RecruitingPerson recruitingPerson;
-    
+
     private ResourceManager resourceManager;
 
     private Civilization c;
@@ -54,7 +57,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         init();
         update();
         expandAllNodes(universeBreakdown, 0, universeBreakdown.getRowCount());
-        
+
         setClosable(true);
         setMaximizable(true);
         setResizable(true);
@@ -98,6 +101,10 @@ public class MainInterfaceWindow extends JInternalFrame {
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
 
         JTabbedPane shipsComponentsOverviewPanel = new JTabbedPane();
+        
+        buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(c);
+        shipsComponentsOverviewPanel.add("Design Ship", buildSpaceShipAutomationMenu);
+        
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(c);
         shipsComponentsOverviewPanel.add("Ship Components", shipComponentDesigner);
 
@@ -112,9 +119,9 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         recruitingPerson = new RecruitingPerson(c);
         peopleTabs.add("Recruitment", recruitingPerson);
-        
+
         civInfoOverview = new CivInfoOverview(c, u);
-        
+
         resourceManager = new ResourceManager(c);
 
         tabs.add("Research and Science", researchViewer);
@@ -153,8 +160,8 @@ public class MainInterfaceWindow extends JInternalFrame {
         personWindow.update();
         researchViewer.update();
         resourceManager.update();
-        
-        if(planetInfoSheet != null) {
+
+        if (planetInfoSheet != null) {
             planetInfoSheet.update();
         }
     }
@@ -177,8 +184,14 @@ public class MainInterfaceWindow extends JInternalFrame {
         selectedPlanet = p;
         planetInfoSheetContainer.removeAll();
         if (toShowResources) {
-            planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
-            planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
+            //Check if owned or not
+            if (p.getOwnerID() == (c.getID())) {
+                planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
+                planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
+            } else {
+                unownedPlanetInfoMenu = new UnownedPlanetInfoMenu(u, selectedPlanet, c);
+                planetInfoSheetContainer.add(unownedPlanetInfoMenu, BorderLayout.CENTER);
+            }
         } else {
             shrinkedPlanetSheet = new ShrinkedPlanetSheet(u, p, c);
             planetInfoSheetContainer.add(shrinkedPlanetSheet, BorderLayout.CENTER);

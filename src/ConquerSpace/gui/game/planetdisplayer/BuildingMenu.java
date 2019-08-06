@@ -328,7 +328,7 @@ public class BuildingMenu extends JPanel {
         private Civilization c;
         private Color color;
         private Point point;
-        private Image img;
+        private Image img = null;
         private Terrain terrain;
         private Point lastClicked;
         private TerrainRenderer renderer;
@@ -342,13 +342,15 @@ public class BuildingMenu extends JPanel {
             menu = new JPopupMenu();
             addMouseListener(this);
             renderer = new TerrainRenderer(p);
-            img = renderer.getImage(2d);
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
+            if (img == null) {
+                img = renderer.getImage(2d);
+            }
             //The thingy has to be a square number
             //Times to draw the thingy
             if (whatToShow == PLANET_RESOURCES) {
