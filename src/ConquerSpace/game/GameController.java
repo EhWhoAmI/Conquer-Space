@@ -41,6 +41,7 @@ public class GameController {
     public static ArrayList<Resource> resources;
     public static ArrayList<EngineTechnology> engineTechnologys;
     public static HashMap<String, Integer> shipTypes;
+    public static HashMap<String, Integer> shipTypeClasses;
     public static GameUpdater updater;
     public static MusicPlayer musicPlayer;
 
@@ -53,6 +54,7 @@ public class GameController {
         //Init python engine
         satelliteTemplates = new ArrayList<>();
         shipTypes = new HashMap<>();
+        shipTypeClasses = new HashMap<>();
         shipComponentTemplates = new ArrayList<>();
 
         //Init universe

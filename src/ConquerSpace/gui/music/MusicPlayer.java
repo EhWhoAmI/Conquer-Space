@@ -81,8 +81,10 @@ public class MusicPlayer {
     }
 
     public void clean() {
-        clip.stop();
-        clip.close();
+        if (clip != null) {
+            clip.stop();
+            clip.close();
+        }
     }
 
     public void setToPlay(boolean toPlay) {

@@ -563,7 +563,7 @@ public class GameUpdater {
     public static void readShipTypes() {
         try {
             //Open file
-            Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/assets/data/ship_types/shipTypes.txt"));
+            Scanner s = new Scanner(ResourceLoader.getResourceByFile("text.ship.types.types"));
             while (s.hasNextLine()) {
                 String st = s.nextLine();
                 if (st.startsWith("#")) {
@@ -578,6 +578,24 @@ public class GameUpdater {
                     //Get number
                     int number = Integer.parseInt(st.substring(i + 2));
                     GameController.shipTypes.put(sb.toString(), number);
+                }
+            }
+            //Open file
+            Scanner s2 = new Scanner(ResourceLoader.getResourceByFile("text.ship.types.classification"));
+            while (s2.hasNextLine()) {
+                String st = s2.nextLine();
+                if (st.startsWith("#")) {
+                    continue;
+                } else if (st.startsWith("\"")) {
+                    //Parse string
+                    StringBuilder sb = new StringBuilder();
+                    int i;
+                    for (i = 1; i < st.length() && st.charAt(i) != '\"'; i++) {
+                        sb.append(st.charAt(i));
+                    }
+                    //Get number
+                    int number = Integer.parseInt(st.substring(i + 2));
+                    GameController.shipTypeClasses.put(sb.toString(), number);
                 }
             }
         } catch (FileNotFoundException ex) {

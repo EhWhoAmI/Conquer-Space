@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -231,17 +232,17 @@ public class ShipDesigner extends JPanel {
                 sc.getCost();
                 sc.getName();
                 
-                
                 sc.getRatingType();
-                
                 sc.getRating();
-                
                 //installedShipComponentsTableModel.add();
                 
             }
         });
 
+        shipClassesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         shipClassesScrollPane = new JScrollPane(shipClassesList);
+        
         shipClassesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //shipClassesScrollPane.setSize(30, 310);
         shipClassesListContainer.setLayout(new VerticalFlowLayout());
@@ -464,6 +465,11 @@ public class ShipDesigner extends JPanel {
             }
         }
         componentTableModel.fireTableDataChanged();
+        
+        //Update ship class list
+        for (ShipClass sc : c.shipClasses) {
+            shipClassListModel.addElement(sc);
+        }
     }
 
     private static class ShipComponentContainer {

@@ -1,0 +1,10 @@
+# Comments start with hashtags
+# the id is the ship type id divided by a hundred.
+# So it is something like this:
+# 1040 -- the first two digits are the ship type class, and the other two are the ship type
+
+"Science" 0
+"Construction" 1
+"Colony" 2
+"Industrial" 3
+"Military" 10
