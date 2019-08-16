@@ -7,23 +7,17 @@ import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerListModel;
-import javax.swing.border.LineBorder;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -34,32 +28,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(NewGame.class.getName());
 
-    private JLabel universeSizeLabel;
-    private JComboBox<String> universeSizeBox;
-    private JLabel universeTypeLabel;
-    private JComboBox<String> universeTypeComboBox;
-    private JLabel universeHistoryLabel;
-    private JComboBox<String> universeHistoryComboBox;
-    private JLabel planetCommonalityLabel;
-    private JComboBox<String> planetCommonalityComboBox;
-    private JLabel civilizationsLabel;
-    private JComboBox<String> civilazitionComboBox;
-    private JLabel seedLabel;
-    private JTextField seedText;
-
-    private JLabel civNameLabel;
-    private JTextField civNameTextField;
-    private JLabel civColorLabel;
-    private JButton civColorChooserButton;
-    private JLabel civSymbolLabel;
-    private JSpinner civSymbolSpinner;
-    private JLabel civHomePlanetNameLabel;
-    private JTextField civHomePlanetName;
-    private JLabel civTempResistanceLabel;
-    private JComboBox<String> civTempResistanceComboBox;
-    private JLabel speciesNameLabel;
-    private JTextField speciesNameField;
-
+    UniverseConfigPanel universeConfigPanel;
     private JLabel quoteLabel;
     private JButton exitButton;
 
@@ -72,121 +41,25 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
     public NewGame() {
         setSize(500, 400);
         setTitle("New Game");
-        setLayout(new GridLayout(2, 1, 10, 10));
+        setLayout(new VerticalFlowLayout(10, 10));
         //Add components
-        JPanel lsidePan = new JPanel();
-        lsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));
-        lsidePan.setLayout(new GridLayout(3, 4, 10, 10));
 
-        universeSizeLabel = new JLabel("Universe Size");
-        universeSizeBox = new JComboBox<>();
-        universeSizeBox.addItem("Small");
-        universeSizeBox.addItem("Medium");
-        universeSizeBox.addItem("Large");
+        universeConfigPanel = new UniverseConfigPanel();
 
-        universeTypeLabel = new JLabel("Universe Type");
-        universeTypeComboBox = new JComboBox<>();
-        //Remove spiral and elliptical for now because it is easier
-        //universeTypeComboBox.addItem("Spiral");
-        universeTypeComboBox.addItem("Irregular");
-        //universeTypeComboBox.addItem("Elliptical");
-
-        //Doesnt make a difference for now...
-        universeHistoryLabel = new JLabel("Universe Age");
-        universeHistoryComboBox = new JComboBox<>();
-        universeHistoryComboBox.addItem("Short");
-        universeHistoryComboBox.addItem("Medium");
-        universeHistoryComboBox.addItem("Long");
-        universeHistoryComboBox.addItem("Ancient");
-
-        planetCommonalityLabel = new JLabel("Planet Commonality");
-        planetCommonalityComboBox = new JComboBox<>();
-        planetCommonalityComboBox.addItem("Common");
-        planetCommonalityComboBox.addItem("Sparse");
-
-        civilizationsLabel = new JLabel("Civilization Count");
-        civilazitionComboBox = new JComboBox<>();
-        civilazitionComboBox.addItem("Sparse");
-        civilazitionComboBox.addItem("Common");
-
-        seedLabel = new JLabel("Seed");
-        seedText = new JTextField();
-        if (Globals.settings.getProperty("debug") != null && Globals.settings.getProperty("debug").equals("yes")) {
-            seedText.setText("test");
-        } else {
-            seedText.setText("" + System.currentTimeMillis());
-        }
+        JPanel bottomContainer = new JPanel();
+        bottomContainer.setLayout(new GridLayout(1, 2));
 
         quoteLabel = new JLabel("Good luck -- Have Fun!");
         exitButton = new JButton("Done!");
         exitButton.addActionListener(this);
+        bottomContainer.add(quoteLabel);
+        bottomContainer.add(exitButton);
 
-        JPanel rsidePan = new JPanel();
-        rsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));
-        rsidePan.setLayout(new GridLayout(3, 4, 10, 10));
-
-        civNameLabel = new JLabel("Civilization Name");
-        civNameTextField = new JTextField("Humans");
-
-        civSymbolLabel = new JLabel("Civilization Symbol");
-        //symbol list (Alphabet)
-        String[] list = new String[26];
-        for (int i = 0; i < list.length; i++) {
-            list[i] = String.valueOf((char) (i + 65));
-        }
-        SpinnerListModel mod = new SpinnerListModel(list);
-        civSymbolSpinner = new JSpinner(mod);
-
-        civColorLabel = new JLabel("Civilization Color");
-        civColorChooserButton = new JButton("Choose");
-        civColorChooserButton.setBackground(civColor);
-        civColorChooserButton.addActionListener(this);
-
-        civHomePlanetNameLabel = new JLabel("Home Planet Name");
-        civHomePlanetName = new JTextField("Earth");
-
-        civTempResistanceLabel = new JLabel("Civilization Preferred Climate");
-        civTempResistanceComboBox = new JComboBox<>();
-        civTempResistanceComboBox.addItem("Varied");
-        civTempResistanceComboBox.addItem("Cold");
-        civTempResistanceComboBox.addItem("Hot");
-
-        speciesNameLabel = new JLabel("Species Name");
-        speciesNameField = new JTextField("Earthlings");
-
-        lsidePan.add(universeSizeLabel);
-        lsidePan.add(universeSizeBox);
-        lsidePan.add(universeTypeLabel);
-        lsidePan.add(universeTypeComboBox);
-        lsidePan.add(universeHistoryLabel);
-        lsidePan.add(universeHistoryComboBox);
-        lsidePan.add(planetCommonalityLabel);
-        lsidePan.add(planetCommonalityComboBox);
-        lsidePan.add(civilizationsLabel);
-        lsidePan.add(civilazitionComboBox);
-        lsidePan.add(seedLabel);
-        lsidePan.add(seedText);
-
-        rsidePan.add(civNameLabel);
-        rsidePan.add(civNameTextField);
-        rsidePan.add(civSymbolLabel);
-        rsidePan.add(civSymbolSpinner);
-        rsidePan.add(civColorLabel);
-        rsidePan.add(civColorChooserButton);
-        rsidePan.add(civHomePlanetNameLabel);
-        rsidePan.add(civHomePlanetName);
-        rsidePan.add(civTempResistanceLabel);
-        rsidePan.add(civTempResistanceComboBox);
-        rsidePan.add(speciesNameLabel);
-        rsidePan.add(speciesNameField);
-
-        add(lsidePan);
-        add(rsidePan);
-        add(quoteLabel);
-        add(exitButton);
+        add(universeConfigPanel);
+        add(bottomContainer);
 
         addWindowListener(this);
-        
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         LOGGER.trace("Loaded new game UI.");
@@ -201,19 +74,19 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             UniverseConfig config = new UniverseConfig();
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
-            config.setUniverseSize((String) universeSizeBox.getSelectedItem());
-            config.setUniverseShape((String) universeTypeComboBox.getSelectedItem());
-            config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());
-            config.setCivilizationCount((String) civilazitionComboBox.getSelectedItem());
-            config.setPlanetCommonality((String) planetCommonalityComboBox.getSelectedItem());
+            config.setUniverseSize((String) universeConfigPanel.universeSizeBox.getSelectedItem());
+            config.setUniverseShape((String) universeConfigPanel.universeTypeComboBox.getSelectedItem());
+            config.setUniverseAge((String) universeConfigPanel.universeHistoryComboBox.getSelectedItem());
+            config.setCivilizationCount((String) universeConfigPanel.civilazitionComboBox.getSelectedItem());
+            config.setPlanetCommonality((String) universeConfigPanel.planetCommonalityComboBox.getSelectedItem());
 
             long seed;
             LOGGER.trace("Parsing seed.");
             try {
-                seed = Long.parseLong(seedText.getText()); // This will pass a nfe.
+                seed = Long.parseLong(universeConfigPanel.seedText.getText()); // This will pass a nfe.
                 LOGGER.trace("Seed is long value.");
             } catch (NumberFormatException nfe) {
-                seed = seedText.getText().hashCode();
+                seed = universeConfigPanel.seedText.getText().hashCode();
                 LOGGER.trace("Seed is string literal.");
             }
             LOGGER.info("Seed: " + seed);
@@ -223,11 +96,11 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             //Set the player Civ options
             CivilizationConfig civilizationConfig = new CivilizationConfig();
             civilizationConfig.setCivColor(civColor);
-            civilizationConfig.setCivSymbol((String) civSymbolSpinner.getValue());
-            civilizationConfig.setCivilizationName(civNameTextField.getText());
-            civilizationConfig.setCivilizationPreferredClimate((String) civTempResistanceComboBox.getSelectedItem());
-            civilizationConfig.setHomePlanetName(civHomePlanetName.getText());
-            civilizationConfig.setSpeciesName(speciesNameField.getText());
+            civilizationConfig.setCivSymbol((String) universeConfigPanel.civSymbolSpinner.getValue());
+            civilizationConfig.setCivilizationName(universeConfigPanel.civNameTextField.getText());
+            civilizationConfig.setCivilizationPreferredClimate((String) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
+            civilizationConfig.setHomePlanetName(universeConfigPanel.civHomePlanetName.getText());
+            civilizationConfig.setSpeciesName(universeConfigPanel.speciesNameField.getText());
             config.setCivilizationConfig(civilizationConfig);
 
             // Start time of logging
@@ -245,10 +118,6 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             System.gc();
             load.setVisible(false);
             new GameController();
-        } else if (e.getSource() == civColorChooserButton) {
-            //Show the civ color chooser
-            civColor = JColorChooser.showDialog(null, "Choose Civilization Color", civColor);
-            civColorChooserButton.setBackground(civColor);
         }
     }
 
