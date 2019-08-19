@@ -22,6 +22,7 @@ import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -350,10 +351,12 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         protected void paintComponent(Graphics g) {
             switch (drawing) {
                 case DRAW_UNIVERSE:
+                    setBackground(new Color(0, 0, 255));
                     universeRenderer.drawUniverse(g, translateX, translateY, scale);
                     break;
                 case DRAW_STAR_SYSTEM:
                     assert systemRenderer == null;
+                    setBackground(Color.BLACK);
                     systemRenderer.drawStarSystem(g, translateX, translateY, scale);
                     break;
                 default:
@@ -516,9 +519,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                                 double slopeY = gotoY - system.getY();
                                 double slope = (slopeY / slopeX);
                                 //Add move action
-                                
+
                                 //Get distance to intersect
-                                
                                 long x = (long) (slope * 10_000_000_000l);
                                 //Get distance of ship to 
                                 ShipMoveAction action = new ShipMoveAction(s);

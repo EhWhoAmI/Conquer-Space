@@ -1,5 +1,6 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.buildings.area.Area;
 import java.util.ArrayList;
 
 /**
@@ -10,12 +11,14 @@ public class City {
 
     private String name;
     public ArrayList<PopulationStorage> storages;
+    public ArrayList<Area> areas;
 
     //% to completing a unit
     private float populationUnitPercentage = 0;
 
     public City() {
         storages = new ArrayList<>();
+        areas = new ArrayList<>();
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
