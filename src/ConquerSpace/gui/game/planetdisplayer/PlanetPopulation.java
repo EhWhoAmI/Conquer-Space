@@ -3,6 +3,8 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -30,6 +32,8 @@ public class PlanetPopulation extends JPanel {
     private JPanel cityListPanel;
     private DefaultListModel<City> cityListModel;
     private JList<City> cityList;
+    private DefaultListModel<AreaWrapper> areaListModel;
+    private JList<AreaWrapper> areaList;
 
     private JPanel cityData;
 
@@ -61,7 +65,7 @@ public class PlanetPopulation extends JPanel {
         populationCount = new JLabel("Population: " + (pop * 10) + " million");
         currentStats.add(populationCount);
 
-        averageGrowthSum/=p.cities.size();
+        averageGrowthSum /= p.cities.size();
         averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + averageGrowthSum + "% every 40 days");
         currentStats.add(averagePlanetPopGrowthLabel);
 
@@ -93,10 +97,20 @@ public class PlanetPopulation extends JPanel {
             //Growth
             JLabel growthAmount = new JLabel("Growth: " + (cityList.getSelectedValue().getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
             cityData.add(growthAmount);
-            
+
             //Max population
             JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
             cityData.add(maxPopulation);
+
+            //Areas
+            areaListModel = new DefaultListModel<>();
+            for(Area a : cityList.getSelectedValue().areas) {
+                AreaWrapper wrap = new AreaWrapper(a);
+                areaListModel.addElement(wrap);
+            }
+            areaList = new JList<>(areaListModel);
+            JScrollPane areascrollPane = new JScrollPane(areaList);
+            cityData.add(areascrollPane);
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);
@@ -111,5 +125,23 @@ public class PlanetPopulation extends JPanel {
 
         add(currentStats);
         add(cityListPanel);
+    }
+
+    private class AreaWrapper {
+        Area area;
+
+        public AreaWrapper(Area area) {
+            this.area = area;
+        }
+
+        @Override
+        public String toString() {
+            if(area instanceof ResearchArea) {
+                return "Research";
+            }
+            return "";
+        }
+        
+        
     }
 }
