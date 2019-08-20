@@ -9,6 +9,7 @@ import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.FieldNode;
+import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
@@ -87,27 +88,28 @@ public class Civilization {
     public ArrayList<ShipClass> shipClasses;
     public ArrayList<HullMaterial> hullMaterials;
     public ArrayList<Hull> hulls;
-    public ArrayList<Field> fields;
+    public Field fields;
     public ArrayList<JSONObject> shipComponentList;
     public ArrayList<EngineTechnology> engineTechs;
 
     public HashMap<Resource, Integer> resourceList;
 
     public ArrayList<Planet> habitatedPlanets;
-    
+
     public ArrayList<PopulationUnit> population;
-    
+
     private Species foundingSpecies;
-    
+
     private City capitalCity;
-    
+
     private Planet capitalPlanet;
-    
+
+    private int techPoints = 0; //Research months or whatever
+
     public Civilization(int ID, Universe u) {
         this.ID = ID;
 
         //Set a temp starting point as in 0:0:0
-
         vision = new HashMap<>();
 
         //Add all the vision.
@@ -129,10 +131,10 @@ public class Civilization {
         civResearch = new HashMap<>();
 
         currentlyResearchingTechonologys = new HashMap<>();
-        
+
         people = new ArrayList<>();
         unrecruitedPeople = new ArrayList<>();
-        
+
         launchSystems = new ArrayList<>();
         satelliteTemplates = new ArrayList<>();
 
@@ -145,17 +147,16 @@ public class Civilization {
         hullMaterials = new ArrayList<>();
         hulls = new ArrayList<>();
         shipComponentList = new ArrayList<>();
-        
+
         engineTechs = new ArrayList<>();
 
-        fields = new ArrayList<>();
         multipliers = new HashMap<>();
         values = new HashMap<>();
 
         habitatedPlanets = new ArrayList<>();
-        
+
         resourceList = new HashMap<>();
-        
+
         population = new ArrayList<>();
         //Initialize resources
     }
@@ -334,32 +335,6 @@ public class Civilization {
         multipliers.put(key, value);
     }
 
-    public void upgradeField(FieldNode f) {
-        //Loop through
-        for (Field field : fields) {
-            if (field.getNode().equals(f)) {
-                //Increment field value
-                field.incrementLevel(1);
-                return;
-            }
-        }
-        //Or else add it
-        fields.add(new Field(f, 1));
-    }
-
-    public void upgradeField(FieldNode f, int amount) {
-        //Loop through
-        for (Field field : fields) {
-            if (field.getNode().equals(f)) {
-                //Increment field value
-                field.incrementLevel(amount);
-                return;
-            }
-        }
-        //Or else add it
-        fields.add(new Field(f, amount));
-    }
-
     public void setFoundingSpecies(Species foundingSpecies) {
         this.foundingSpecies = foundingSpecies;
     }
@@ -382,5 +357,28 @@ public class Civilization {
 
     public void setCapitalPlanet(Planet capitalPlanet) {
         this.capitalPlanet = capitalPlanet;
+    }
+
+    public int getTechPoints() {
+        return techPoints;
+    }
+
+    public void setTechPoints(int techPoints) {
+        this.techPoints = techPoints;
+    }
+
+    //Field stuff
+    public void upgradeField(String name, int amount) {
+        //Search for field...
+        if (fields != null) {
+            Field f = fields.getNode("name");
+            if (f != null) {
+                f.incrementLevel(amount);
+            }
+        }
+    }
+
+    public void setField(Field start) {
+        fields = start;
     }
 }

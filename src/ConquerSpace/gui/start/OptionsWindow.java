@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,7 +39,7 @@ public class OptionsWindow extends JFrame {
     private JLabel deleteLogsLabel;
     private JButton deleteLogsButton;
     private JPanel musicPanel;
-    private JToggleButton musicOnButton;
+    private JCheckBox musicOnButton;
 
     private OptionsWindow() {
         setTitle("Options");
@@ -64,8 +65,11 @@ public class OptionsWindow extends JFrame {
 
         musicPanel = new JPanel();
         musicPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Music"));
-        musicOnButton = new JToggleButton("Music");
-        musicOnButton.addActionListener(a -> {
+        musicOnButton = new JCheckBox("Music");
+        if (Globals.settings.get("music").equals("yes")) {
+            musicOnButton.setSelected(true);
+        }
+        musicOnButton.addChangeListener(a -> {
             if (Globals.settings.get("music").equals("no")) {
                 musicOnButton.setSelected(true);
                 Globals.settings.setProperty("music", "yes");

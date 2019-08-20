@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
-    <node name="Knowledge">
-        <node name="Science">
-            <node name="Biology"/>
+<node name="Knowledge">
+    <node name="Science">
+        <node name="Biology">
             <node name="Genetics"/>
             <node name="Microbiology"/>
             <node name="Virology"/>
             <node name="Zoology"/>
             <node name="Pharmacology"/>
-            <node name="Physics"/>
-            <node name="Chemistry"/>
-            <node name="Biochemistry"/>
-            <node name="Social"/>
-            <node name="Mathematics"/>
-            <node name="Engineering"/>
             <node name="Medicine"/>
-            <node name="Computer Science"/>
-            <node name="Quantum Physics"/>
-            <node name="Astronomy"/>
-            <node name="Psychology"/>
-            <node name="Ballistics"/>
-            <node name="Aeronautics"/>
         </node>
+        <node name="Physics">
+            <node name="Quantum Physics"/>
+            <node name="Ballistics"/>
+        </node>
+        <node name="Chemistry"/>
+        <node name="Biochemistry"/>
+        <node name="Social"/>
+        <node name="Mathematics">
+            <node name="Algebra"/>
+            <node name="Number Theory"/>
+            <node name="Geometry"/>
+            <node name="Topology"/>
+            <node name="Calculus"/>
+        </node>
+        <node name="Engineering"/>
+        <node name="Computer Science"> <!--No AI because AI is too generic XD-->
+            <node name="Machine Learning"/> 
+        </node>
+        <node name="Astronomy">
+            <node name="Astrophysics"/>
+        </node>
+        <node name="Psychology"/>
+        <node name="Aeronautics"/>
     </node>
-</root>
+</node>

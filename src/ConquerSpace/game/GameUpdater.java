@@ -129,11 +129,11 @@ public class GameUpdater {
                 ConquerSpace.game.universe.Point pos = pt.getPosition();
                 for (int g = 0; g < universe.getStarSystemCount(); g++) {
                     //Difference between points...
-                    int dist = (int) Math.hypot(pos.getY() - universe.getStarSystem(g).getY(),
+                    double dist = Math.hypot(pos.getY() - universe.getStarSystem(g).getY(),
                             pos.getX() - universe.getStarSystem(g).getX());
                     if (dist < range) {
                         //Its in!
-                        int amount = ((int) ((1 - ((float) dist / (float) range)) * 100));
+                        int amount = ((int) ((1 - ((double) dist / (double) range)) * 100));
                         //int previous = universe.getCivilization(pt.getCivilization().vision.get(universe.getStarSystem(g).getUniversePath()));
                         universe.getCivilization(pt.getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
                                 (amount > 100) ? 100 : (amount));
@@ -154,7 +154,10 @@ public class GameUpdater {
         readShipTypes();
         readShipComponents();
         readEngineTechs();
-
+        
+        //Do calculations for system position before initing for observataries
+        updateObjectPositions();
+        
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
@@ -165,10 +168,14 @@ public class GameUpdater {
             //Ignore
         }
 
+        final int CIV_STARTING_TECH_PTS = 100;
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
-            //Add all starting techs
+            //Science
+            //Add fields
+            c.fields = (Fields.toField(Fields.fieldNodeRoot));
+            //Add all starting techs            
             for (Technology tech : Technologies.getTechsByTag("Starting")) {
                 c.researchTech(tech);
             }
@@ -182,6 +189,9 @@ public class GameUpdater {
             teks = Technologies.getTechsByTag("Propulsion");
             //To research this
             c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
+
+            //Add starting tech points...
+            c.setTechPoints(CIV_STARTING_TECH_PTS);
 
             c.calculateTechLevel();
 
@@ -335,7 +345,7 @@ public class GameUpdater {
                 starting.buildings.put(pt, storage);
                 //Add observetory
                 StarSystem container = universe.getStarSystem(starting.getParentStarSystem());
-                Observatory observatory = new Observatory(10*GameController.AU_IN_LTYR, 100, c.getID(),
+                Observatory observatory = new Observatory(10 * GameController.AU_IN_LTYR, 100, c.getID(),
                         new ConquerSpace.game.universe.Point(container.getX(), container.getY()));
 
                 x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
@@ -382,8 +392,6 @@ public class GameUpdater {
 
         calculateControl();
 
-        //Do calculations for system position
-        updateObjectPositions();
         calculateVision();
     }
 

@@ -60,10 +60,30 @@ public class FieldNode {
     }
 
     public FieldNode getNode(int i) {
-        return(fieldNodes.get(i));
+        return (fieldNodes.get(i));
     }
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+    
+    public FieldNode findNode(FieldNode node) {
+        for (FieldNode f : fieldNodes) {
+            if (f.name.equals(node.name)) {
+                return f;
+            } else {
+                //Search children
+                FieldNode field = f.findNode(node);
+                if(field != null)
+                    return field;
+                
+            }
+        }
+        return null;
     }
 }

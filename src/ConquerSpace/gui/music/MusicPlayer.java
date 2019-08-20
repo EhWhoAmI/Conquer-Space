@@ -41,7 +41,9 @@ public class MusicPlayer {
                             int i = (int) (Math.random() * musicArray.length());
                             JSONObject obj = musicArray.getJSONObject(i);
                             clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
+                            //if (toPlay) {
                             clip.play();
+                            //}
                             //Thread.sleep(500);
 
                             int length = obj.getInt("length");
@@ -51,17 +53,21 @@ public class MusicPlayer {
                                 }
                                 Thread.sleep(1000);
                             }
-
+                            //if (toPlay) {
                             clip.stop();
                             clip.close();
+                            //}
                         } catch (IOException ex) {
                             LOGGER.error(ex);
                         } catch (InterruptedException ex) {
                             LOGGER.error(ex);
+                        } catch (NullPointerException npe) {
+                            //Ignore...
                         }
                     }
                 }
-            });
+            }
+            );
             t.start();
         } catch (FileNotFoundException ex) {
             LOGGER.warn("No Music!", ex);

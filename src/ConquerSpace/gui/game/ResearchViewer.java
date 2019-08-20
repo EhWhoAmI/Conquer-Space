@@ -30,6 +30,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
 
     private JTabbedPane pane;
 
+    private JLabel techPointLabel;
     private JPanel techResearcher;
     private JList<Technology> tech;
     private DefaultListModel<Technology> list;
@@ -50,6 +51,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
     private JTable techTable;
     private DefaultTableModel techTableModel;
 
+    private FieldViewer fieldViewer;
     private Civilization c;
 
     public ResearchViewer(Civilization c) {
@@ -63,6 +65,9 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
 
     public void init() {
         setLayout(new BorderLayout());
+        
+        techPointLabel = new JLabel("Tech Points: " + c.getTechPoints());
+        add(techPointLabel, BorderLayout.NORTH);
         pane = new JTabbedPane();
         techResearcher = new JPanel();
         techResearcher.setLayout(new GridLayout(1, 2));
@@ -151,9 +156,12 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         });
         techonologyViewer = new TechonologyViewer(c);
 
+        fieldViewer = new FieldViewer(c);
+        
         pane.addTab("Research", techResearcher);
         pane.addTab("Researching", researchProgressPanel);
         pane.addTab("Researched Techs", techonologyViewer);
+        pane.addTab("Fields", fieldViewer);
 
         pane.addChangeListener(a -> {
             update();

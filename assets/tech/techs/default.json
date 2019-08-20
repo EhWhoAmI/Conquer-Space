@@ -113,7 +113,7 @@
         "upgradable": true,
         "onupgrade": [],
         "difficulty": 0,
-        "action": ["field(science)", "field(biology)", "field(chemistry)",
+        "action": ["field(science:10)", "field(biology:10)", "field(chemistry:10)",
             "tech(flight):20", "tech(rocket science):20"],
         "fields": [
             "Knowledge"
