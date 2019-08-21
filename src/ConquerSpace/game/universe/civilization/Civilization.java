@@ -371,8 +371,11 @@ public class Civilization {
     public void upgradeField(String name, int amount) {
         //Search for field...
         if (fields != null) {
-            Field f = fields.getNode("name");
+            Field f = fields.getNode(name);
             if (f != null) {
+                if(f.getLevel() < 0){
+                    f.setLevel(0);
+                }
                 f.incrementLevel(amount);
             }
         }

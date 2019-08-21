@@ -2,6 +2,7 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.universe.civilization.Civilization;
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,6 +15,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 /**
@@ -29,10 +31,14 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
     private boolean isDragging = false;
     private Point startPoint;
 
-    //private int lastRow = 0;
-    //private int lastCol = 0;
     private HashMap<Integer, Integer> colCount = new HashMap<>();
 
+    /*
+    Note to future me:
+    I want to add colors for the different values, so here is a list of what you can add:
+    Ranking in the universe
+    Discovered or not, IDK
+     */
     public FieldViewer(Civilization civ) {
         this.civ = civ;
         addMouseMotionListener(this);
@@ -61,26 +67,32 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
         }
         col = colCount.get(i);
         //Ignore all root
-        
+
         //Draw it
         //Draw square
         int height = g2d.getFontMetrics().getHeight();
         Rectangle2D.Double rect2d = new Rectangle2D.Double(rowLength * col + translateX, i * rowHeight + translateY, blockWidth, blockHeight);
+        //Background color.
+        g2d.setColor(Color.CYAN);
+        g2d.fill(rect2d);
+        g2d.setColor(Color.BLACK);
         g2d.draw(rect2d);
+
         g2d.drawString(f.getName(), (float) (5 + translateX + rowLength * col), (float) (i * rowHeight + height + translateY));
-        g2d.drawString(f.getLevel() + "", (float) (5 + translateX + rowLength * col), (float) (i * rowHeight + 2 * height + translateY));
-        
+        g2d.drawString("Level: " + f.getLevel(), (float) (5 + translateX + rowLength * col), (float) (i * rowHeight + 2 * height + translateY));
+
         //Draw line
         //g2d.drawLine
-        Line2D.Float ln = new Line2D.Float((int) (previous.x + translateX), (int) (previous.y + translateY), (int) (rowLength*col + blockWidth/2 + translateX), (int) (i*rowHeight + translateY));
+        Line2D.Float ln = new Line2D.Float((int) (previous.x + translateX), (int) (previous.y + translateY), (int) (rowLength * col + blockWidth / 2 + translateX), (int) (i * rowHeight + translateY));
         g2d.draw(ln);
-        
-        
+
         //Do sub stuff
         i++;
         //Add for this row...
         for (int k = 0; k < f.getChildCount(); k++) {
-            doField(g2d, i, k, f.getNode(k), new Point(rowLength*col + blockWidth/2, (i-1)*rowHeight+blockHeight));
+            if (f.getNode(k).getLevel() > -1) {
+                doField(g2d, i, k, f.getNode(k), new Point(rowLength * col + blockWidth / 2, (i - 1) * rowHeight + blockHeight));
+            }
         }
     }
 
@@ -119,6 +131,12 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
     @Override
     public void mouseReleased(MouseEvent e) {
         isDragging = false;
+        if (SwingUtilities.isRightMouseButton(e)) {
+            //Show right click menu
+            JPopupMenu popupMenu = new JPopupMenu();
+            //Leave dormant for now.
+            popupMenu.show(this, e.getX(), e.getY());
+        }
     }
 
     @Override

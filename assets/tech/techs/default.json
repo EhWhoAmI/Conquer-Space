@@ -99,7 +99,7 @@
         "difficulty": 0,
         "action": [],
         "fields": [
-            "Knowledge", "Medicine"
+            "Medicine"
         ],
         "tags": ["Starting"],
         "floor": 6,
@@ -131,7 +131,7 @@
         "difficulty": 2,
         "action": ["thrust(1)"],
         "fields": [
-            "Knowledge", "Chemistry"
+            "Chemistry"
         ],
         "tags": ["Propulsion"],
         "floor": 7,
@@ -146,7 +146,7 @@
         "difficulty": 3,
         "action": ["thrust(2)"],
         "fields": [
-            "Knowledge", "Chemistry"
+            "Chemistry"
         ],
         "tags": ["Propulsion"],
         "floor": 7,
@@ -161,7 +161,7 @@
         "difficulty": 3,
         "action": ["thrust(0)"],
         "fields": [
-            "Knowledge", "Chemistry"
+            "Chemistry"
         ],
         "tags": ["Propulsion"],
         "floor": 7,
@@ -176,7 +176,7 @@
         "difficulty": 3,
         "action": ["thrust(3)"],
         "fields": [
-            "Knowledge", "Chemistry"
+            "Chemistry"
         ],
         "tags": ["Propulsion"],
         "floor": 7,
@@ -191,7 +191,7 @@
         "difficulty": 2,
         "action": ["thrust(4)"],
         "fields": [
-            "Knowledge", "Chemistry"
+            "Chemistry"
         ],
         "tags": ["Propulsion"],
         "floor": 7,
@@ -206,7 +206,7 @@
         "difficulty": 2,
         "action": ["tech(space planes):100"],
         "fields": [
-            "Knowledge", "Aeronautics"
+            "Aeronautics"
         ],
         "tags": ["space travel base"],
         "floor": 8,
@@ -221,7 +221,7 @@
         "difficulty": 5,
         "action": ["launch(Space Plane)"],
         "fields": [
-            "Knowledge", "Aeronautics"
+            "Aeronautics"
         ],
         "tags": ["space travel"],
         "floor": 9,
@@ -236,7 +236,7 @@
         "difficulty": 2,
         "action": ["tech(rocketery):100"],
         "fields": [
-            "Knowledge", "Physics"
+            "Physics"
         ],
         "tags": ["space travel base"],
         "floor": 8,
@@ -251,7 +251,7 @@
         "difficulty": 5,
         "action": ["launch(Rocket)"],
         "fields": [
-            "Knowledge", "Aeronautics"
+            "Aeronautics"
         ],
         "tags": ["space travel"],
         "floor": 9,
@@ -266,7 +266,7 @@
         "difficulty": 0,
         "action": ["tech(optics):100"],
         "fields": [
-            "Knowledge", "Astronomy"
+            "Astronomy"
         ],
         "tags": ["Starting", "astronomy"],
         "floor": 10,
@@ -281,7 +281,7 @@
         "difficulty": 1,
         "action": ["tech(telescopes):100", "tech(radio telescopes):100", "tech(x-ray telescopes):100"],
         "fields": [
-            "Knowledge", "Astronomy"
+            "Astronomy"
         ],
         "tags": ["astronomy"],
         "floor": 11,
@@ -296,7 +296,7 @@
         "difficulty": 1,
         "action": [],
         "fields": [
-            "Knowledge", "Astronomy"
+            "Astronomy"
         ],
         "tags": ["astronomy"],
         "floor": 12,
@@ -311,7 +311,7 @@
         "difficulty": 1,
         "action": [],
         "fields": [
-            "Knowledge", "Astronomy"
+            "Astronomy"
         ],
         "tags": ["astronomy"],
         "floor": 13,
@@ -326,7 +326,7 @@
         "difficulty": 1,
         "action": [],
         "fields": [
-            "Knowledge", "Astronomy"
+            "Astronomy"
         ],
         "tags": ["astronomy"],
         "floor": 14,
@@ -341,7 +341,7 @@
         "difficulty": 1,
         "action": [],
         "fields": [
-            "Knowledge", "Astronomy"
+            "Astronomy"
         ],
         "tags": ["astronomy"],
         "floor": 15,

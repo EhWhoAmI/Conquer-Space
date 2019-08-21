@@ -16,7 +16,8 @@ public class Field {
 
     public Field(String name) {
         this.name = name;
-        this.level = 0;
+        //-1 is undiscovered, 0 is possible, anything more than that is it exists.
+        this.level = -1;
         nodes = new ArrayList();
     }
 
@@ -74,20 +75,22 @@ public class Field {
     }
 
     public Field findNode(Field node) {
+        if (this.name.toLowerCase().equals(node.name.toLowerCase())) {
+            return this;
+        }
         for (Field f : nodes) {
-            if (f.name.equals(node.name)) {
+            if (f.name.toLowerCase().equals(node.name.toLowerCase())) {
                 return f;
             } else {
                 //Search children
                 Field field = f.findNode(node);
-                if(field != null)
+                if (field != null) {
                     return field;
+                }
             }
         }
         return null;
     }
-
-    
 
     public int getChildCount() {
         return (nodes.size());

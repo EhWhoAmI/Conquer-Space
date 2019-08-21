@@ -38,6 +38,9 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
     private JLabel techName;
     private JLabel techdifficulity;
     private JLabel techEstTime;
+
+    private DefaultListModel<String> fieldListModel;
+    private JList<String> fieldList;
     private JButton researchButton;
 
     private DefaultComboBoxModel<Person> personComboBoxModel;
@@ -65,7 +68,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
 
     public void init() {
         setLayout(new BorderLayout());
-        
+
         techPointLabel = new JLabel("Tech Points: " + c.getTechPoints());
         add(techPointLabel, BorderLayout.NORTH);
         pane = new JTabbedPane();
@@ -94,6 +97,12 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
 
         techEstTime = new JLabel("");
         techInfoPanel.add(techEstTime);
+
+        fieldListModel = new DefaultListModel<>();
+        fieldList = new JList<>(fieldListModel);
+        JScrollPane listPane = new JScrollPane(fieldList);
+        techInfoPanel.add(new JLabel("Fields:"));
+        techInfoPanel.add(listPane);
 
         personComboBoxModel = new DefaultComboBoxModel<>();
         for (Person p : c.people) {
@@ -157,7 +166,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         techonologyViewer = new TechonologyViewer(c);
 
         fieldViewer = new FieldViewer(c);
-        
+
         pane.addTab("Research", techResearcher);
         pane.addTab("Researching", researchProgressPanel);
         pane.addTab("Researched Techs", techonologyViewer);
@@ -176,6 +185,12 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
                 researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
                 //720 is number of ticks in a month
                 estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+
+                //Get the text
+                fieldListModel.clear();
+                for (String s : tech.getSelectedValue().getFields()) {
+                    fieldListModel.addElement(s);
+                }
             } else {
                 //Set everything to empty
                 researchingTech.setText("");
@@ -196,11 +211,11 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
             techTableModel.addRow(new String[]{t.getName(), c.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
         }
-                
-        if(selectedTech > -1) {
+
+        if (selectedTech > -1) {
             techTable.setRowSelectionInterval(selectedTech, selectedTech);
         }
-        
+
         int selected = personComboBox.getSelectedIndex();
         if (!personComboBox.isPopupVisible()) {
             personComboBoxModel.removeAllElements();
@@ -220,6 +235,12 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
             techName.setText(selected.getName());
             techdifficulity.setText("Difficulty: " + selected.getDifficulty());
             techEstTime.setText("Estimated time to completion: " + (Technologies.estFinishTime(selected) / 720) + " months");
+
+            //Get the text
+            fieldListModel.clear();
+            for (String s : tech.getSelectedValue().getFields()) {
+                fieldListModel.addElement(s);
+            }
         }
     }
 }
