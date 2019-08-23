@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class TerrainColoring {
 
-    public static final int NUMBER_OF_COLORS = 3;
+    public static final int NUMBER_OF_COLORS = 4;
 
     public static HashMap<Float, Color> getTerrainColoring(int i) {
         HashMap<Float, Color> colors = new HashMap<>();
@@ -34,6 +34,10 @@ public class TerrainColoring {
                 colors.put(0.5f, new Color(218, 217, 215));
                 colors.put(0.7f, new Color(240, 240, 240));
                 colors.put(1f, new Color(195, 194, 190));
+                break;
+            case 3:
+                colors.put(-1f, new Color(225, 255, 255));
+                colors.put(0.7f, new Color(182, 196, 219));
         }
         return colors;
     }
