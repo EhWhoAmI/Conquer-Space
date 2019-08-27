@@ -15,10 +15,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -33,15 +35,31 @@ public class SystemRenderer {
     private StarSystem sys;
     public int sizeofAU;
 
+    private BufferedImage[] systemTerrain;
+
     public SystemRenderer(StarSystem sys, Universe u, Dimension bounds) {
         this.bounds = bounds;
         universe = u;
         this.sys = sys;
+
+        //Terrain
+        systemTerrain = new BufferedImage[sys.getPlanetCount()];
+        //The terrain will be circles
+
         //Size of star system
         long size = 0;
         for (int i = 0; i < sys.getPlanetCount(); i++) {
             if (sys.getPlanet(i).getOrbitalDistance() > size) {
                 size = sys.getPlanet(i).getOrbitalDistance();
+            }
+            //render terrain
+            if (sys.getPlanet(i).getPlanetType() == PlanetTypes.ROCK) {
+                TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
+                systemTerrain[i] = toBufferedImage(tr.getImage(i));
+                //Modify
+                resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
+                //Graphics g = systemTerrain[i].getGraphics();
+
             }
         }
 
@@ -138,6 +156,8 @@ public class SystemRenderer {
                     g2d.setColor(Color.ORANGE);
                     break;
             }
+            g2d.drawImage(systemTerrain[i], (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)),
+                    (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.height / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)), null);
             //g2d.setColor(p.g());
             g2d.fill(planet);
             //Draw owner
@@ -221,5 +241,34 @@ public class SystemRenderer {
         g2d.setColor(Color.yellow);
         g2d.draw(line);
         g2d.drawString((20d / (double) sizeofAU) + " AU", 10, 10);
+    }
+
+    public static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
+    }
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
+        Graphics2D g = dimg.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
+        g.dispose();
+        return dimg;
     }
 }
