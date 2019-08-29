@@ -11,6 +11,7 @@ import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -21,6 +22,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 
 /**
  *
@@ -55,11 +58,23 @@ public class SystemRenderer {
             //render terrain
             if (sys.getPlanet(i).getPlanetType() == PlanetTypes.ROCK) {
                 TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
-                systemTerrain[i] = toBufferedImage(tr.getImage(i));
-                //Modify
-                resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
-                //Graphics g = systemTerrain[i].getGraphics();
+                systemTerrain[i] = toBufferedImage(tr.getImage(0.15));
 
+                //Create copy
+                BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
+                systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight(), systemTerrain[i].getWidth(), BufferedImage.TYPE_INT_ARGB);
+
+                for (int x = 0; x < temp.getWidth(); x++) {
+                    for (int y = 0; y < temp.getHeight(); y++) {
+                        //Draw
+                        int centerX = temp.getWidth() / 2;
+
+                        int centerY = temp.getHeight() / 2;
+                        if (Math.sqrt((centerY - y) * (centerY - y) + (centerX - x) * (centerX - x)) <= temp.getWidth() / 2) {
+                            systemTerrain[i].setRGB(x, y, temp.getRGB(x, y));
+                        }
+                    }
+                }
             }
         }
 
@@ -156,10 +171,11 @@ public class SystemRenderer {
                     g2d.setColor(Color.ORANGE);
                     break;
             }
+            g2d.fill(planet);
+
             g2d.drawImage(systemTerrain[i], (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)),
                     (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.height / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)), null);
             //g2d.setColor(p.g());
-            g2d.fill(planet);
             //Draw owner
 
             //Draw name and background
@@ -270,5 +286,12 @@ public class SystemRenderer {
         g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
         g.dispose();
         return dimg;
+    }
+
+    static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 }

@@ -23,7 +23,7 @@ public class TerrainRenderer {
     }
 
     public Image getImage(double scale) {
-        BufferedImage planetDisplaying = new BufferedImage(p.getPlanetSize() * 2, p.getPlanetSize(), BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage planetDisplaying = new BufferedImage(p.getPlanetSize() * 2, p.getPlanetSize(), BufferedImage.TYPE_INT_ARGB);
         //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors = TerrainColoring.getTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
