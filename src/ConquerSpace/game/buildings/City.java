@@ -1,24 +1,25 @@
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.people.PersonEnterable;
+import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
 
 /**
  *
  * @author zyunl
  */
-public class City {
-
+public class City implements PersonEnterable{
+    
     private String name;
     public ArrayList<PopulationStorage> storages;
-    public ArrayList<Area> areas;
 
+    private UniversePath location;
     //% to completing a unit
     private float populationUnitPercentage = 0;
 
-    public City() {
+    public City(UniversePath location) {
         storages = new ArrayList<>();
-        areas = new ArrayList<>();
+        this.location = location;
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
@@ -40,5 +41,10 @@ public class City {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public UniversePath getUniversePath() {
+        return location;
     }
 }

@@ -5,8 +5,8 @@ import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.Observatory;
-import ConquerSpace.game.buildings.PopulationStorage;
-import ConquerSpace.game.buildings.ResourceGatherer;
+import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -205,7 +205,7 @@ public class BuildingMenu extends JPanel {
             }
             if (toBuild == JOptionPane.YES_OPTION) {
                 if (item.equals(RESIDENTIAL)) {
-                    PopulationStorage storage = new PopulationStorage();
+                    CityDistrict storage = new CityDistrict();
                     storage.setMaxStorage((int) popStoragePanel.maxPopulationTextField.getValue());
                     Actions.buildBuilding(p, buildingPos, storage, 0, 1);
                     //Reset...
@@ -241,7 +241,7 @@ public class BuildingMenu extends JPanel {
                     Actions.buildBuilding(p, buildingPos, stor, 0, 1);
                     toReset = true;
                 } else if (item.equals(RESOURCE_MINER)) {
-                    ResourceGatherer miner = new ResourceGatherer(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
+                    ResourceMinerDistrict miner = new ResourceMinerDistrict(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
                     //Add the stuff...
                     //Get the map of things, and calculate the stuff
                     int x = (int) xposSpinner.getValue();

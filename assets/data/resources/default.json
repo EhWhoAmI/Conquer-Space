@@ -8,7 +8,9 @@
         "difficulty": 42,
         "distribution": 0,
         "color": [192,192,192],
-        "mineable": true
+        "mineable": true,
+        "raw":true,
+        "materials":[]
     }, 
     {
         "name": "gas",
@@ -19,7 +21,9 @@
         "difficulty": 42,
         "distribution": 0,
         "color": [217, 66, 247],
-        "mineable": true
+        "mineable": true,
+        "raw":true,
+        "materials":[]
     },
     {
         "name": "rock",
@@ -30,6 +34,21 @@
         "difficulty": 42,
         "distribution": 0,
         "color": [128, 128, 128],
-        "mineable": true
+        "mineable": true,
+        "raw":true,
+        "materials":[]
+    },
+    {
+        "name": "aluminium",
+        "id": 3,
+        "rarity": 0.7,
+        "value": 3,
+        "density": 7,
+        "difficulty": 42,
+        "distribution": 0,
+        "color": [0, 128, 128],
+        "mineable": true,
+        "raw":true,
+        "materials":[]
     }
 ]

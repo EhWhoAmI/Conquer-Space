@@ -5,8 +5,8 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.Observatory;
-import ConquerSpace.game.buildings.PopulationStorage;
-import ConquerSpace.game.buildings.ResourceGatherer;
+import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.Point;
@@ -242,8 +242,8 @@ public class SaveGame {
                 buildingObject.put("type", res.getType().getId());
                 arr.put(storedResource);
             }
-        } else if (what instanceof PopulationStorage) {
-            PopulationStorage stor = (PopulationStorage) what;
+        } else if (what instanceof CityDistrict) {
+            CityDistrict stor = (CityDistrict) what;
             buildingObject.put("type", "population");
             int pop = stor.getPopulations();
             buildingObject.put("population", pop);
@@ -265,8 +265,8 @@ public class SaveGame {
                 arr.put(storedResource);
             }
             buildingObject.put("resources", arr);
-        } else if (what instanceof ResourceGatherer) {
-            ResourceGatherer gatherer = (ResourceGatherer) what;
+        } else if (what instanceof ResourceMinerDistrict) {
+            ResourceMinerDistrict gatherer = (ResourceMinerDistrict) what;
             //Get the stuff
             buildingObject.put("type", "gatherer");
             buildingObject.put("resource", gatherer.getVeinMining().getId());

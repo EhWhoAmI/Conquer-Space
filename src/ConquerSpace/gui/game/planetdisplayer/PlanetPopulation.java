@@ -2,6 +2,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
@@ -32,8 +33,8 @@ public class PlanetPopulation extends JPanel {
     private JPanel cityListPanel;
     private DefaultListModel<City> cityListModel;
     private JList<City> cityList;
-    private DefaultListModel<AreaWrapper> areaListModel;
-    private JList<AreaWrapper> areaList;
+    //private DefaultListModel<AreaWrapper> areaListModel;
+    //private JList<AreaWrapper> areaList;
 
     private JPanel cityData;
 
@@ -49,8 +50,8 @@ public class PlanetPopulation extends JPanel {
             Point key = entry.getKey();
             Building value = entry.getValue();
             float increment = 0;
-            if (value instanceof PopulationStorage) {
-                PopulationStorage storage = (PopulationStorage) value;
+            if (value instanceof CityDistrict) {
+                CityDistrict storage = (CityDistrict) value;
                 pop += storage.population.size();
                 //process pops
                 for (PopulationUnit unit : storage.population) {
@@ -83,8 +84,8 @@ public class PlanetPopulation extends JPanel {
             float increment = 0;
             int maxPop = 0;
             for (PopulationStorage stor : cityList.getSelectedValue().storages) {
-                popcount += stor.population.size();
-                for (PopulationUnit unit : stor.population) {
+                popcount += stor.getPopulationArrayList().size();
+                for (PopulationUnit unit : stor.getPopulationArrayList()) {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
@@ -103,14 +104,14 @@ public class PlanetPopulation extends JPanel {
             cityData.add(maxPopulation);
 
             //Areas
-            areaListModel = new DefaultListModel<>();
-            for(Area a : cityList.getSelectedValue().areas) {
-                AreaWrapper wrap = new AreaWrapper(a);
-                areaListModel.addElement(wrap);
-            }
-            areaList = new JList<>(areaListModel);
-            JScrollPane areascrollPane = new JScrollPane(areaList);
-            cityData.add(areascrollPane);
+            //areaListModel = new DefaultListModel<>();
+            //for(Area a : cityList.getSelectedValue().areas) {
+                //AreaWrapper wrap = new AreaWrapper(a);
+                //areaListModel.addElement(wrap);
+            //}
+            //areaList = new JList<>(areaListModel);
+            //JScrollPane areascrollPane = new JScrollPane(areaList);
+            //cityData.add(areascrollPane);
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);

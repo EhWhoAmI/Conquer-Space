@@ -1,5 +1,7 @@
 package ConquerSpace.game.people;
 
+import ConquerSpace.game.life.Job;
+
 /**
  *
  * @author Zyun
@@ -7,6 +9,8 @@ package ConquerSpace.game.people;
 public class Person {
     private String name;
     private int age;
+    private PersonEnterable position;
+    
     //Not sure what to add to this for now
     //private ArrayList<?> multipliers;
     //Job??
@@ -42,5 +46,13 @@ public class Person {
     
     public String getJobName() {
         return "None";
+    }
+
+    public PersonEnterable getPosition() {
+        return position;
+    }
+
+    public void setPosition(PersonEnterable position) {
+        this.position = position;
     }
 }

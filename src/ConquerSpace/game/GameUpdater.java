@@ -10,10 +10,12 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.Observatory;
+import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.PopulationStorage;
-import ConquerSpace.game.buildings.ResourceGatherer;
+import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
@@ -168,7 +170,7 @@ public class GameUpdater {
             //Ignore
         }
 
-        final int CIV_STARTING_TECH_PTS = 100;
+        final int CIV_STARTING_TECH_PTS = 5;
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -256,15 +258,17 @@ public class GameUpdater {
                 AdministrativeCenter administrativeCenter = new AdministrativeCenter();
 
                 for (int count = 0; count < popStorMas; count++) {
-                    City city = new City();
+                    City city = new City(starting.getUniversePath());
                     city.setName(townGen.getName(0));
 
-                    PopulationStorage test;
-                    test = new PopulationStorage();
+                    CityDistrict test;
+                    test = new CityDistrict();
 
                     if (count == 0) {
                         test = administrativeCenter;
                         c.setCapitalCity(city);
+                        //Add the capitol areas
+                        test.areas.add(new CapitolArea());
                     }
 
                     test.setMaxStorage(selector.nextInt(15) + 1);
@@ -275,7 +279,7 @@ public class GameUpdater {
 
                     for (int k = 0; k < popCount; k++) {
                         //Add a couple of population to the mix...
-                        PopulationUnit u = new PopulationUnit();
+                        PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
                         u.setSpecies(c.getFoundingSpecies());
                         c.population.add(u);
                         test.population.add(u);
@@ -288,7 +292,7 @@ public class GameUpdater {
 
                     //Expand sector
                     //Choose a direction, and expand...
-                    PopulationStorage test2 = new PopulationStorage();
+                    CityDistrict test2 = new CityDistrict();
                     int dir = selector.nextInt(4) + 1;
                     ConquerSpace.game.universe.Point pt2;
                     switch (dir) {
@@ -313,7 +317,7 @@ public class GameUpdater {
 
                     for (int k = 0; k < popCount2; k++) {
                         //Add a couple of population to the mix...
-                        PopulationUnit u = new PopulationUnit();
+                        PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
                         u.setSpecies(c.getFoundingSpecies());
                         c.population.add(u);
                         test2.population.add(u);
@@ -807,8 +811,8 @@ public class GameUpdater {
             } else if (building instanceof ResourceStockpile) {
                 //Process...
                 ResourceStockpile stockpile = (ResourceStockpile) building;
-            } else if (building instanceof ResourceGatherer) {
-                ResourceGatherer gatherer = (ResourceGatherer) building;
+            } else if (building instanceof ResourceMinerDistrict) {
+                ResourceMinerDistrict gatherer = (ResourceMinerDistrict) building;
                 ResourceVein vein = gatherer.getVeinMining();
                 if (vein.getResourceAmount() > 0) {
                     vein.removeResources((int) gatherer.getAmountMined());
@@ -832,7 +836,7 @@ public class GameUpdater {
             float increment = 0;
 
             for (PopulationStorage storage : city.storages) {
-                for (PopulationUnit unit : storage.population) {
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
@@ -846,10 +850,10 @@ public class GameUpdater {
                 int owner = p.getOwnerID();
                 Civilization c = universe.getCivilization(owner);
                 //Add to storage
-                PopulationUnit unit = new PopulationUnit();
+                PopulationUnit unit = new PopulationUnit(c.getFoundingSpecies());
                 unit.setSpecies(c.getFoundingSpecies());
                 c.population.add(unit);
-                city.storages.get(0).population.add(unit);
+                city.storages.get(0).getPopulationArrayList().add(unit);
                 city.setPopulationUnitPercentage(0);
             }
         }

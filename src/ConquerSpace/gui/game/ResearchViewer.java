@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.tech.Technologies;
@@ -31,6 +32,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
     private JTabbedPane pane;
 
     private JLabel techPointLabel;
+    private JLabel techPointCount;
+    private JButton instantReshButton;
     private JPanel techResearcher;
     private JList<Technology> tech;
     private DefaultListModel<Technology> list;
@@ -69,8 +72,6 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
     public void init() {
         setLayout(new BorderLayout());
 
-        techPointLabel = new JLabel("Tech Points: " + c.getTechPoints());
-        add(techPointLabel, BorderLayout.NORTH);
         pane = new JTabbedPane();
         techResearcher = new JPanel();
         techResearcher.setLayout(new GridLayout(1, 2));
@@ -128,6 +129,38 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
             }
         });
         techInfoPanel.add(researchButton);
+        //If has tech points
+        techPointLabel = new JLabel("Tech Points: " + c.getTechPoints());
+        techPointCount = new JLabel("Counts for 0 tech points");
+        instantReshButton = new JButton("Instantly research!");
+        instantReshButton.addActionListener(l -> {
+            //calculate and add
+            if (!tech.isSelectionEmpty()) {
+                if (tech.getSelectedValue().getDifficulty() <= c.getTechPoints()) {
+                    Technology t = tech.getSelectedValue();
+                    c.researchTech(t);
+                    c.setTechPoints(c.getTechPoints() - t.getDifficulty());
+                    techPointLabel.setText("Tech Points: " + c.getTechPoints());
+                    list.removeElement(tech.getSelectedValue());
+                    c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " has been automatically researched!"));
+                }
+
+                //Remove from list
+                if (c.getTechPoints() <= 0) {
+                    //Remove
+                    techInfoPanel.remove(techPointLabel);
+                    techInfoPanel.remove(techPointCount);
+                    techInfoPanel.remove(instantReshButton);
+                }
+            }
+
+        });
+
+        if (c.getTechPoints() > 0) {
+            techInfoPanel.add(techPointLabel);
+            techInfoPanel.add(techPointCount);
+            techInfoPanel.add(instantReshButton);
+        }
 
         researchProgressPanel = new JPanel();
         researchProgressPanel.setLayout(new VerticalFlowLayout());
@@ -240,6 +273,17 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
             fieldListModel.clear();
             for (String s : tech.getSelectedValue().getFields()) {
                 fieldListModel.addElement(s);
+            }
+
+            //check for tech points
+            if (c.getTechPoints() > 0) {
+                //Set value
+                techPointCount.setText("Counts for " + selected.getDifficulty() + " tech points");
+            } else {
+                //Remove
+                techInfoPanel.remove(techPointLabel);
+                techInfoPanel.remove(techPointCount);
+                techInfoPanel.remove(instantReshButton);
             }
         }
     }

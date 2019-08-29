@@ -1,6 +1,8 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.buildings.area.Area;
 import java.awt.Color;
+import java.util.ArrayList;
 
 /**
  * A building is defined as a series of points
@@ -8,8 +10,11 @@ import java.awt.Color;
  */
 public class Building {
     private Color color;
+    public ArrayList<Area> areas;
+    
 
     public Building() {
+        areas = new ArrayList<>();
     }
 
     public Color getColor() {

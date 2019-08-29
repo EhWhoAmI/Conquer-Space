@@ -9,7 +9,7 @@ import java.awt.Color;
  *
  * @author
  */
-public class AdministrativeCenter extends PopulationStorage {
+public class AdministrativeCenter extends CityDistrict {
 
     @Override
     public Color getColor() {

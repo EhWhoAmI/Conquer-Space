@@ -8,13 +8,15 @@
             <node name="Zoology"/>
             <node name="Pharmacology"/>
             <node name="Medicine"/>
+            <node name="Biochemistry">
+                <node name="Protein Science"/>
+            </node>
         </node>
         <node name="Physics">
             <node name="Quantum Physics"/>
             <node name="Ballistics"/>
         </node>
         <node name="Chemistry"/>
-        <node name="Biochemistry"/>
         <node name="Social"/>
         <node name="Mathematics">
             <node name="Algebra"/>

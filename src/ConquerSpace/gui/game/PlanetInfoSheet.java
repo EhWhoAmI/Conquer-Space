@@ -44,7 +44,7 @@ public class PlanetInfoSheet extends JPanel {
         population = new PlanetPopulation(p, 0);
         spacePort = new SpacePortMenu(p, c);
         building = new BuildingMenu(u, p, c);
-        industry = new PlanetIndustry();
+        industry = new PlanetIndustry(p, c);
 
         tpane.add("Overview", overview);
         //tpane.add("Resources", new PlanetResources(p));
