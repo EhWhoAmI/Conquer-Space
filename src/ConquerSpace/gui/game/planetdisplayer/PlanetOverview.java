@@ -99,11 +99,9 @@ public class PlanetOverview extends JPanel {
         JPanel buttonsWrapper = new JPanel();
         switchButton = new JButton("Change view");
         switchButton.addActionListener(a -> {
-            if (sectorDisplayer.whatToShow == 0) {
-                sectorDisplayer.setWhatToShow(1);
-            } else {
-                sectorDisplayer.setWhatToShow(0);
-            }
+            sectorDisplayer.whatToShow++;
+            
+            sectorDisplayer.whatToShow%=4;
         });
 
         showNothing = new JButton("Hide terrain");
@@ -173,6 +171,7 @@ public class PlanetOverview extends JPanel {
         static final int PLANET_BUILDINGS = 0;
         static final int PLANET_RESOURCES = 1;
         static final int SHOW_ALL_RESOURCES = 2;
+        static final int SHOW_TERRAIN = 3;
         private JPopupMenu menu;
         private Civilization c;
         private Color color;

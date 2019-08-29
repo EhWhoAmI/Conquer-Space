@@ -40,6 +40,5 @@ public class TerrainRenderer {
             }
         }
         return ((planetDisplaying.getScaledInstance((int) (p.getPlanetSize() * 2 * scale), (int) (p.getPlanetSize() * scale), Image.SCALE_DEFAULT)));
-        
     }
 }
