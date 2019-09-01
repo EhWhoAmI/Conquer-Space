@@ -14,10 +14,12 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -88,7 +90,7 @@ public class SystemRenderer {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
-        g2d.fill(bg);
+        //g2d.fill(bg);
 
         //X Y grid for reference
         /*Line2D.Double xline = new Line2D.Double(
@@ -166,17 +168,46 @@ public class SystemRenderer {
             switch (p.getPlanetType()) {
                 case PlanetTypes.GAS:
                     g2d.setColor(Color.MAGENTA);
+                    g2d.fill(planet);
+
                     break;
                 case PlanetTypes.ROCK:
                     g2d.setColor(Color.ORANGE);
                     break;
             }
-            g2d.fill(planet);
 
             g2d.drawImage(systemTerrain[i], (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)),
                     (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.height / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)), null);
             //g2d.setColor(p.g());
+            int planetX = (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            int planetY = (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+
+            //Draw shadow
+            //Get slope
+            double slope = (((translateY + bounds.height / 2) / scale)
+                    - ((int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale)))
+                    / (((translateX + bounds.width / 2) / scale) - ((int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale)));
+            //Do it!
+            GradientPaint shadow = new GradientPaint(planetX, planetY, new Color(0, 0, 0, 0),
+                    (float) (planetX + (p.getPlanetSize() / PLANET_DIVISOR) / 1.1), (float) (planetY + (p.getPlanetSize() / PLANET_DIVISOR) / 1.1), Color.BLACK);
+
+//            g2d.setColor(Color.RED);
+//            g2d.fill(new Ellipse2D.Float((float) planetX, (float) planetY, 10, 10));
+//            g2d.setColor(Color.BLUE);
+//            g2d.fill(new Ellipse2D.Float((float) (planetX + (p.getPlanetSize() / PLANET_DIVISOR / 2)), (float) (planetY + (p.getPlanetSize() / PLANET_DIVISOR / 2)), 10, 10));
+            //g2d.setPaint(shadow);
             //Draw owner
+            g2d.setColor(Color.BLACK);
+            Arc2D.Float shadowArc = new Arc2D.Float(Arc2D.CHORD);
+            shadowArc.height = (p.getPlanetSize() / PLANET_DIVISOR);
+            shadowArc.width = (p.getPlanetSize() / PLANET_DIVISOR);
+            shadowArc.x = (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            shadowArc.y = (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.height / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            shadowArc.start = (int) (p.getPlanetDegrees() - 100);
+            shadowArc.extent = (200);
+            g2d.fill(shadowArc);
+            /*g.fillArc((int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)),
+                    (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.height / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)), (p.getPlanetSize() / PLANET_DIVISOR), (p.getPlanetSize() / PLANET_DIVISOR), (int) (p.getPlanetDegrees() - 90), (180));*/
 
             //Draw name and background
             if (!p.getName().equals("")) {
