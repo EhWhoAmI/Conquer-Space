@@ -1,6 +1,7 @@
 package ConquerSpace.game.population;
 
 import ConquerSpace.game.life.Job;
+import ConquerSpace.game.life.JobType;
 import ConquerSpace.game.life.Species;
 
 /**
@@ -15,7 +16,7 @@ public class PopulationUnit {
     private Job job;
 
     public PopulationUnit(Species species) {
-        job = new Job("Jobless");
+        job = new Job(JobType.Jobless);
         this.species = species;
     }
     

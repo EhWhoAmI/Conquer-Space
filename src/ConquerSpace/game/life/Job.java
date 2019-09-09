@@ -1,5 +1,6 @@
 package ConquerSpace.game.life;
 
+import ConquerSpace.game.universe.resources.Resource;
 import java.util.HashMap;
 
 /**
@@ -10,20 +11,34 @@ public class Job {
     /**
      * The resources to add...
      */
-    public HashMap<Integer, Integer> resources;
+    public HashMap<Resource, Integer> resources;
 
-    private String name;
+    private JobType jobType;
+    private JobRank jobRank = JobRank.Low;
     
-    public Job(String name) {
-        this.name = name;
+    public Job(JobType jobType) {
+        this.jobType = jobType;
         resources = new HashMap<>();
     }
 
-    public String getName() {
-        return name;
+    public JobType getJobType() {
+        return jobType;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setJobType(JobType name) {
+        this.jobType = name;
+    }
+
+    @Override
+    public String toString() {
+        return jobType.getName();
+    }
+
+    public void setJobRank(JobRank jobRank) {
+        this.jobRank = jobRank;
+    }
+
+    public JobRank getJobRank() {
+        return jobRank;
     }
 }

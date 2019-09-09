@@ -9,6 +9,7 @@ import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -231,9 +232,8 @@ public class BuildingMenu extends JPanel {
                     ResourceStorage stor = new ResourceStorage(p);
                     //Add the stuff...
 
-                    for(int i = 0; i < buildResourceStorageMenu.resourceToPut.getModel().getSize(); i++) {
-                    
-                        Resource next =  buildResourceStorageMenu.resourceToPut.getModel().getElementAt(i);
+                    for (int i = 0; i < buildResourceStorageMenu.resourceToPut.getModel().getSize(); i++) {
+                        Resource next = buildResourceStorageMenu.resourceToPut.getModel().getElementAt(i);
 
                         stor.addResourceTypeStore(next);
                     }
@@ -253,7 +253,8 @@ public class BuildingMenu extends JPanel {
                             break;
                         }
                     }
-
+                    //Add miners
+                    miner.population.add(new PopulationUnit(c.getFoundingSpecies()));
                     Actions.buildBuilding(p, buildingPos, miner, 0, 1);
                     toReset = true;
                 }
@@ -363,12 +364,14 @@ public class BuildingMenu extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (ResourceVein v : p.resourceVeins) {
-                    //Draw...
-                    if (resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) {
-                        Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * size, v.getY() * size, v.getRadius() * size, v.getRadius() * size);
-                        g2d.setColor(v.getResourceType().getColor());
-                        g2d.fill(circe);
+                if (((String) buildingType.getSelectedItem()).equals(RESOURCE_MINER)) {
+                    for (ResourceVein v : p.resourceVeins) {
+                        //Draw...
+                        if ((resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) && ((Resource)buildMiningStorageMenu.resourceToMine.getSelectedItem()).equals(v.getResourceType())) {
+                            Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * size, v.getY() * size, v.getRadius() * size, v.getRadius() * size);
+                            g2d.setColor(v.getResourceType().getColor());
+                            g2d.fill(circe);
+                        }
                     }
                 }
             }
@@ -697,7 +700,7 @@ public class BuildingMenu extends JPanel {
 
     private class BuildResourceGenerationMenu extends JPanel {
 
-        private JComboBox<Resource> resourceToMine;
+        JComboBox<Resource> resourceToMine;
         private JLabel resourceToMineLabel;
         private JLabel miningSpeed;
         private JSpinner miningSpeedSpinner;

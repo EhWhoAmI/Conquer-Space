@@ -29,7 +29,7 @@ public class Universe extends SpaceObject {
     public ArrayList<SpaceShip> spaceShips;
     
     public ArrayList<Species> species;
-
+    
     public Universe(long seed) {
         this.seed = seed;
         civs = new ArrayList<>();

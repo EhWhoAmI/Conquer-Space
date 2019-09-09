@@ -79,6 +79,8 @@ public class PlanetInfoSheet extends JPanel {
 
     public void update() {
         spacePort.update();
+        industry.update();
+        population.update();
         
         tpane.setEnabledAt(2, false);
         //Check if planet contains space port

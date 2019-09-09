@@ -16,6 +16,8 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.life.JobRank;
+import ConquerSpace.game.life.JobType;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
@@ -156,10 +158,10 @@ public class GameUpdater {
         readShipTypes();
         readShipComponents();
         readEngineTechs();
-        
+
         //Do calculations for system position before initing for observataries
         updateObjectPositions();
-        
+
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
@@ -170,7 +172,7 @@ public class GameUpdater {
             //Ignore
         }
 
-        final int CIV_STARTING_TECH_PTS = 5;
+        final int CIV_STARTING_TECH_PTS = 10;
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -785,7 +787,7 @@ public class GameUpdater {
             resources.put(r, 0);
         }
 
-        //Process buildings
+        //Process buildings, and jobs
         for (Map.Entry<ConquerSpace.game.universe.Point, Building> entry : p.buildings.entrySet()) {
             ConquerSpace.game.universe.Point key = entry.getKey();
             Building building = entry.getValue();
@@ -798,8 +800,50 @@ public class GameUpdater {
                 } else {
                     //Done!
                     //Replace
+                    //Check if can add to city
+                    if (build.getToBuild() instanceof PopulationStorage) {
+                        //Check for cities near it
+                        boolean created = false;
+                        cityloop:
+                        for (City c : p.cities) {
+                            //Check for locations
+                            for (PopulationStorage stor : c.storages) {
+                                //Find the storage
+                                ConquerSpace.game.universe.Point storagePoint = p.buildings
+                                        .entrySet()
+                                        .stream()
+                                        .filter(ent -> stor.equals(ent.getValue()))
+                                        .map(Map.Entry::getKey).findFirst().get();
+                                if (storagePoint != null) {
+                                    //Check if next to city point
+                                    if (storagePoint.getX() + 1 == key.getX()
+                                            || storagePoint.getX() - 1 == key.getX()
+                                            || storagePoint.getY() + 1 == key.getY()
+                                            || storagePoint.getY() - 1 == key.getY()) {
+                                        //Add to city
+                                        c.storages.add((PopulationStorage) build.getToBuild());
+                                        created = true;
+                                        break cityloop;
+                                    }
+                                }
+                            }
+                        }
+                        //Create city
+                        if (!created) {
+                            City city = new City(p.getUniversePath());
+                            city.setName("Another City");
+                        }
+                    }
                     p.buildings.put(key, build.getToBuild());
                 }
+            } else if (building instanceof AdministrativeCenter) {
+                //Set jobs
+                AdministrativeCenter adminCenter = (AdministrativeCenter) building;
+                for (PopulationUnit j : adminCenter.population) {
+                    j.getJob().setJobType(JobType.Administrator);
+                    j.getJob().setJobRank(JobRank.High);
+                }
+
             } else if (building instanceof SpacePort) {
                 //Process
                 SpacePort build = (SpacePort) building;
@@ -814,22 +858,28 @@ public class GameUpdater {
             } else if (building instanceof ResourceMinerDistrict) {
                 ResourceMinerDistrict gatherer = (ResourceMinerDistrict) building;
                 ResourceVein vein = gatherer.getVeinMining();
-                if (vein.getResourceAmount() > 0) {
-                    vein.removeResources((int) gatherer.getAmountMined());
+                if (vein != null && vein.getResourceAmount() > 0) {
                     //Get the resource stockpiles
+                    //Just stuff the resource into the jobs
+                    for (PopulationUnit j : gatherer.getPopulationArrayList()) {
+                        vein.removeResources((int) gatherer.getAmountMined());
+                        j.getJob().resources.put(vein.getResourceType(), (int) gatherer.getAmountMined());
+                        j.getJob().setJobType(JobType.Miner);
+                        j.getJob().setJobRank(JobRank.Low);
+                    }
                     resources.put(gatherer.getResourceMining(), (int) (resources.get(gatherer.getResourceMining()) + gatherer.getAmountMined()));
                 }
 
             }
         }
         //Process storing of resourcese
-        if (p.getOwnerID() >= 0) {
-            for (Map.Entry<Resource, Integer> re : resources.entrySet()) {
-                Resource key = re.getKey();
-                Integer value = re.getValue();
-                storeResource(key, value, p.getOwnerID(), p.getUniversePath());
-            }
-        }
+//        if (p.getOwnerID() >= 0) {
+//            for (Map.Entry<Resource, Integer> re : resources.entrySet()) {
+//                Resource key = re.getKey();
+//                Integer value = re.getValue();
+//                storeResource(key, value, p.getOwnerID(), p.getUniversePath());
+//            }
+//        }
 
         //Process population
         for (City city : p.cities) {
@@ -837,9 +887,15 @@ public class GameUpdater {
 
             for (PopulationStorage storage : city.storages) {
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
+                    //Population increment
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
+
+                    //Process job
+                    for (Resource r : unit.getJob().resources.keySet()) {
+                        storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
+                    }
                 }
             }
             increment += city.getPopulationUnitPercentage();
@@ -853,7 +909,9 @@ public class GameUpdater {
                 PopulationUnit unit = new PopulationUnit(c.getFoundingSpecies());
                 unit.setSpecies(c.getFoundingSpecies());
                 c.population.add(unit);
-                city.storages.get(0).getPopulationArrayList().add(unit);
+                //Add to random population storage
+                //TODO: do something that actually calculates the probalities
+                city.storages.get((int) (Math.random() * city.storages.size())).getPopulationArrayList().add(unit);
                 city.setPopulationUnitPercentage(0);
             }
         }
@@ -865,6 +923,9 @@ public class GameUpdater {
 
     public void storeResource(Resource resourceType, int amount, int owner, UniversePath from) {
         //Process
+        //Get closest resources storage
+        //No matter their alleigence, they will store resource to the closest resource storage...
+        //Search planet, because we don't have space storages for now.
         Civilization c = universe.getCivilization(owner);
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...

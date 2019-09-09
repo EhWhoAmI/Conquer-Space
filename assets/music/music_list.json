@@ -40,5 +40,17 @@
         "composer": "Nirekin Inc.",
         "file": "Icarus.ogg",
         "length": 147
+    }, 
+    {
+        "name": "Gravity",
+        "composer": "Nirekin Inc.",
+        "file": "Gravity.ogg",
+        "length": 121
+    },
+    {
+        "name": "Solemn Anomaly",
+        "composer": "Nirekin Inc.",
+        "file": "SolemnAnomaly.ogg",
+        "length": 144
     }
 ]

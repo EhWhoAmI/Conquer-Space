@@ -1,5 +1,15 @@
 Changelog:
 
+0.0.2:
+Jobs:
+Now, resources are gonna be generated using population and jobs. 
+For now, jobs generate resources, and all that you need, but when we get to government types and the like, we'll allow for taxes, and remove the ability to generate your own resources, depending on your government type. You can then use the taxes you levy to buy all kinds of stuff.
+
+
+
+Add shadows to planets.
+
+
 0.0.1:
 Massive changes:
 We removed the planet sector system, and replaced it with terrain.

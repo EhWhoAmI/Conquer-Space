@@ -69,7 +69,7 @@ public class ConquerSpace {
     /**
      * The version of the game.
      */
-    public static final Version VERSION = new Version(0, 0, 1, "indev-snapshot-2-b" + BUILD_NUMBER);
+    public static final Version VERSION = new Version(0, 0, 2, "indev-snapshot-2-b" + BUILD_NUMBER);
 
     /**
      * Localization.

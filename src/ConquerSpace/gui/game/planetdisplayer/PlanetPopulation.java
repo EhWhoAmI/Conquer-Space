@@ -6,12 +6,14 @@ import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
+import ConquerSpace.game.life.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -19,7 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -27,6 +32,9 @@ import javax.swing.border.LineBorder;
  */
 public class PlanetPopulation extends JPanel {
 
+    private JTabbedPane tabs;
+
+    private JPanel growthPanel;
     private JPanel currentStats;
     private JLabel populationCount;
     private JLabel averagePlanetPopGrowthLabel;
@@ -38,8 +46,19 @@ public class PlanetPopulation extends JPanel {
 
     private JPanel cityData;
 
+    private JPanel jobContainer;
+    private PopulationTableModel jobListModel;
+    private JTable jobList;
+
+    private Planet p;
+
     public PlanetPopulation(Planet p, int turn) {
+        this.p = p;
+        tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
+
+        growthPanel = new JPanel();
+        growthPanel.setLayout(new VerticalFlowLayout());
         currentStats = new JPanel(new VerticalFlowLayout());
 
         currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
@@ -106,8 +125,8 @@ public class PlanetPopulation extends JPanel {
             //Areas
             //areaListModel = new DefaultListModel<>();
             //for(Area a : cityList.getSelectedValue().areas) {
-                //AreaWrapper wrap = new AreaWrapper(a);
-                //areaListModel.addElement(wrap);
+            //AreaWrapper wrap = new AreaWrapper(a);
+            //areaListModel.addElement(wrap);
             //}
             //areaList = new JList<>(areaListModel);
             //JScrollPane areascrollPane = new JScrollPane(areaList);
@@ -124,11 +143,30 @@ public class PlanetPopulation extends JPanel {
         cityData.setLayout(new VerticalFlowLayout());
         cityListPanel.add(cityData, BorderLayout.CENTER);
 
-        add(currentStats);
-        add(cityListPanel);
+        jobContainer = new JPanel();
+        jobContainer.setLayout(new BorderLayout());
+        jobListModel = new PopulationTableModel();
+        for (City city : p.cities) {
+            for (PopulationStorage stor : city.storages) {
+                for (PopulationUnit unit : stor.getPopulationArrayList()) {
+                    jobListModel.addModel(new PopulationModel(unit, city));
+                }
+            }
+        }
+        jobList = new JTable(jobListModel);
+        jobList.setAutoCreateRowSorter(true);
+        JScrollPane jobscrollPane = new JScrollPane(jobList);
+        jobContainer.add(jobscrollPane, BorderLayout.WEST);
+
+        growthPanel.add(currentStats);
+        growthPanel.add(cityListPanel);
+        tabs.add(growthPanel, "Population Growth");
+        tabs.add(jobContainer, "Jobs");
+        add(tabs);
     }
 
     private class AreaWrapper {
+
         Area area;
 
         public AreaWrapper(Area area) {
@@ -137,12 +175,89 @@ public class PlanetPopulation extends JPanel {
 
         @Override
         public String toString() {
-            if(area instanceof ResearchArea) {
+            if (area instanceof ResearchArea) {
                 return "Research";
             }
             return "";
         }
-        
-        
+    }
+
+    public void update() {
+        int selectedRow = jobList.getSelectedRow();
+        jobListModel.clear();
+        for (City city : p.cities) {
+            for (PopulationStorage stor : city.storages) {
+                for (PopulationUnit unit : stor.getPopulationArrayList()) {
+                    jobListModel.addModel(new PopulationModel(unit, city));
+                }
+            }
+        }
+        jobListModel.fireTableDataChanged();
+        if (selectedRow > -1) {
+            jobList.setRowSelectionInterval(selectedRow, selectedRow);
+        }
+        //jobList.setR(selectedJob);
+    }
+
+    private class PopulationModel {
+
+        PopulationUnit unit;
+        City container;
+
+        public PopulationModel(PopulationUnit unit, City container) {
+            this.unit = unit;
+            this.container = container;
+        }
+    }
+
+    private class PopulationTableModel extends AbstractTableModel {
+
+        private String[] colunms = {"Species", "Happiness", "Job", "Job Rank", "City"};
+        private ArrayList<PopulationModel> data;
+
+        public PopulationTableModel() {
+            data = new ArrayList<>();
+        }
+
+        @Override
+        public int getRowCount() {
+            return data.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunms.length;
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            PopulationModel unit = data.get(row);
+            switch (col) {
+                case 0:
+                    return unit.unit.getSpecies().getName();
+                case 1:
+                    return unit.unit.getHappiness();
+                case 2:
+                    return unit.unit.getJob().getJobType().getName();
+                case 3:
+                    return unit.unit.getJob().getJobRank();
+                case 4:
+                    return unit.container.getName();
+            }
+            return "";
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunms[column];
+        }
+
+        public void addModel(PopulationModel mod) {
+            data.add(mod);
+        }
+
+        public void clear() {
+            data.clear();
+        }
     }
 }
