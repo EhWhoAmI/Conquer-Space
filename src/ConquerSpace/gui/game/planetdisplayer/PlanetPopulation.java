@@ -6,7 +6,7 @@ import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.life.Job;
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.spaceObjects.Planet;

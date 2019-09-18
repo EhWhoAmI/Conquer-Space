@@ -1,4 +1,4 @@
-package ConquerSpace.game.life;
+package ConquerSpace.game.population;
 
 /**
  *

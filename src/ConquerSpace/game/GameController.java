@@ -1,6 +1,8 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.events.Event;
+import ConquerSpace.game.events.PopulationEvent;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -40,6 +42,8 @@ public class GameController {
     public static ArrayList<JSONObject> shipComponentTemplates;
     public static ArrayList<Resource> resources;
     public static ArrayList<EngineTechnology> engineTechnologys;
+    public static ArrayList<JSONObject> events;
+
     public static HashMap<String, Integer> shipTypes;
     public static HashMap<String, Integer> shipTypeClasses;
     public static GameUpdater updater;
@@ -145,5 +149,8 @@ public class GameController {
                 }
             }
         }
+        /*if (Globals.date.bigint % 500 == 0) {
+            
+        }*/
     }
 }

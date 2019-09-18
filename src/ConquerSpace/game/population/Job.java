@@ -1,4 +1,4 @@
-package ConquerSpace.game.life;
+package ConquerSpace.game.population;
 
 import ConquerSpace.game.universe.resources.Resource;
 import java.util.HashMap;

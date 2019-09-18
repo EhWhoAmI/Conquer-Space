@@ -9,6 +9,7 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.game.planetdisplayer.BuildingMenu;
+import ConquerSpace.gui.game.planetdisplayer.LocalLifeMenu;
 import ConquerSpace.gui.game.planetdisplayer.PlanetIndustry;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
 import ConquerSpace.gui.game.planetdisplayer.PlanetPopulation;
@@ -30,6 +31,7 @@ public class PlanetInfoSheet extends JPanel {
     private AtmosphereInfo atmosphere;
     private BuildingMenu building;
     private PlanetIndustry industry;
+    private LocalLifeMenu localLifeMenu;
     
     private Civilization c;
     private Planet p;
@@ -45,6 +47,7 @@ public class PlanetInfoSheet extends JPanel {
         spacePort = new SpacePortMenu(p, c);
         building = new BuildingMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
+        localLifeMenu = new LocalLifeMenu(p, c);
 
         tpane.add("Overview", overview);
         //tpane.add("Resources", new PlanetResources(p));
@@ -53,6 +56,7 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add("Atmosphere", atmosphere);
         tpane.add("Building", building);
         tpane.add("Industry", industry);
+        tpane.add("Local Life", localLifeMenu);
 
         tpane.setEnabledAt(2, false);
         //Check if planet contains space port

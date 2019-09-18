@@ -2,7 +2,9 @@ package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameUpdater;
-import ConquerSpace.game.life.Species;
+import ConquerSpace.game.life.LifeTrait;
+import ConquerSpace.game.life.Microscopic;
+import ConquerSpace.game.population.Species;
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.UniversePath;
@@ -30,6 +32,11 @@ import java.util.Random;
 public class DefaultUniverseGenerator extends UniverseGenerator {
 
     public static final double G = 6.674 * Math.pow(10, -11);          //Gravitational constant, same for everything
+    /**
+     * Percentage that life happens on all planets. Only planets with life will
+     * start of with life.
+     */
+    public static final double LIFE_OCCURANCE = 1;
 
     @Override
     public Universe generate(UniverseConfig u, CivilizationConfig c, long seed) {
@@ -159,6 +166,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 p.setDegreesPerTurn((float) degs);
                 //System.err.println(p.terrain.terrainColor[0][0]);
                 p.modDegrees(rand.nextInt(360));
+
+                //Seed life
+                if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
+                    generateLocalLife(rand, p);
+                }
                 sys.addPlanet(p);
             }
             //Set name
@@ -248,5 +260,25 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             randomP++;
         } while (true);
         return new UniversePath(randomSS, randomP);
+    }
+
+    private void generateLocalLife(Random rand, Planet p) {
+        //Get distance from planet and calculate...
+        //Then the planet has life
+        //Stages it has life, and how evolved it is
+        int lifeLength = rand.nextInt(10);
+        //Initialize life
+        Microscopic micro = new Microscopic(10);
+        micro.setBiomass(100000);
+        //Set name
+        //Add random trait
+        LifeTrait randomLifeTrait = LifeTrait.values()[rand.nextInt(LifeTrait.values().length)];
+        micro.lifetraits.add(randomLifeTrait);
+        micro.setName(randomLifeTrait.name());
+
+        p.localLife.add(micro);
+
+        for (int i = 0; i < lifeLength; i++) {
+        }
     }
 }

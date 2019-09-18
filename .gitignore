@@ -28,3 +28,6 @@ universe.dump
 
 # Settings
 settings.properties
+
+# Mapping files
+mapping.txt

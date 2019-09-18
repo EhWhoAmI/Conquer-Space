@@ -1,0 +1,22 @@
+[
+    {
+        "id": 0,
+        "level": 1,
+        "title": "New Event",
+        "content": "Something happens",
+        "conditions": {
+
+        },
+        "effects": {
+
+        },
+        "options": [
+            {
+                "text": "Ok, So be it.",
+                "effects": {
+                    
+                }
+            }
+        ]
+    }
+]

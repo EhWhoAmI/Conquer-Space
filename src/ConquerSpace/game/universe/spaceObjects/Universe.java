@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
-import ConquerSpace.game.life.Species;
+import ConquerSpace.game.population.Species;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;

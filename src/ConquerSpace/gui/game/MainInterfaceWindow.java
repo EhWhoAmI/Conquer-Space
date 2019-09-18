@@ -40,7 +40,7 @@ public class MainInterfaceWindow extends JInternalFrame {
     private RecruitingPerson recruitingPerson;
 
     private ResourceManager resourceManager;
-
+    
     private Civilization c;
     private Universe u;
 

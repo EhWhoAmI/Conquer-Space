@@ -16,8 +16,10 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.CapitolArea;
-import ConquerSpace.game.life.JobRank;
-import ConquerSpace.game.life.JobType;
+import ConquerSpace.game.events.Event;
+import ConquerSpace.game.events.PopulationEvent;
+import ConquerSpace.game.population.JobRank;
+import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
@@ -158,6 +160,9 @@ public class GameUpdater {
         readShipTypes();
         readShipComponents();
         readEngineTechs();
+        
+        //Events
+        readPopulationEvents();
 
         //Do calculations for system position before initing for observataries
         updateObjectPositions();
@@ -462,6 +467,50 @@ public class GameUpdater {
             }
         }
         GameController.resources = resources;
+    }
+
+    public static void readPopulationEvents() {
+        ArrayList<JSONObject> events = new ArrayList<>();
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.events.population");
+
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (f.getName().endsWith(".txt")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    JSONObject obj = root.getJSONObject(i);
+                    //int id = obj.getInt("id");
+                    //String eventText = obj.getString("text");
+                    //events.add(new PopulationEvent(id, eventText));
+                    events.add(obj);
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        GameController.events = events;
     }
 
     public static void readLaunchSystems() {

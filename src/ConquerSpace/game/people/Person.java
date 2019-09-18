@@ -1,6 +1,6 @@
 package ConquerSpace.game.people;
 
-import ConquerSpace.game.life.Job;
+import ConquerSpace.game.population.Job;
 
 /**
  *

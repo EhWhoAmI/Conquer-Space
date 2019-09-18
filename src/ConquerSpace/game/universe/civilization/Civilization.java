@@ -1,7 +1,8 @@
 package ConquerSpace.game.universe.civilization;
 
 import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.life.Species;
+import ConquerSpace.game.events.Event;
+import ConquerSpace.game.population.Species;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
@@ -97,6 +98,8 @@ public class Civilization {
     public ArrayList<Planet> habitatedPlanets;
 
     public ArrayList<PopulationUnit> population;
+    
+    public ArrayList<Event> events;
 
     private Species foundingSpecies;
 
@@ -158,7 +161,8 @@ public class Civilization {
         resourceList = new HashMap<>();
 
         population = new ArrayList<>();
-        //Initialize resources
+        
+        events = new ArrayList<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {

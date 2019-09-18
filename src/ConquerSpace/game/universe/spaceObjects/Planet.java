@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -31,7 +32,6 @@ public class Planet extends SpaceObject {
     int id;
 
     private int ownerID = ControlTypes.NONE_CONTROLLED;
-    private int surfaceArea;
     //Empty as default -- undiscovered
     private String name = "";
     //public PlanetSector[] planetSectors;
@@ -57,6 +57,10 @@ public class Planet extends SpaceObject {
     public ArrayList<City> cities;
     
     /**
+     * If this is empty, the planet does not have life.
+    */
+    public ArrayList<LocalLife> localLife;
+    /**
      * Creates planet
      *
      * @param planetType Type of planet. See <code>PlanetTypes</code>
@@ -75,7 +79,6 @@ public class Planet extends SpaceObject {
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
-        surfaceArea = (int) Math.pow(Math.ceil(planetSize/2), 2);
         //planetSectors = new PlanetSector[surfaceArea];
         economy = new Economy();
         satellites = new ArrayList<>();
@@ -84,6 +87,7 @@ public class Planet extends SpaceObject {
         
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
+        localLife = new ArrayList<>();
     }
 
     /**
@@ -141,10 +145,6 @@ public class Planet extends SpaceObject {
 
     public long getPopulation() {
         return 0;//population.population.get(population.population.size() - 1);
-    }
-
-    public int getSurfaceArea() {
-        return surfaceArea;
     }
 
     public void setOwnerID(int ownerID) {

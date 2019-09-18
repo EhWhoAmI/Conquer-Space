@@ -3,7 +3,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.life.Job;
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;

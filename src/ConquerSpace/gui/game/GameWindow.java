@@ -70,6 +70,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
     private MainInterfaceWindow mainInterfaceWindow;
 
+    private NewsWindow newsWindow;
+
     private Universe u;
 
     private Timer gameTickTimer;
@@ -100,7 +102,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         menuBar = new JMenuBar();
 
         mainInterfaceWindow = new MainInterfaceWindow(c, u);
+        newsWindow = new NewsWindow(c);
         addFrame(mainInterfaceWindow);
+        addFrame(newsWindow);
         JMenu windows = new JMenu("Windows");
         JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
         timeIncrementwindow.addActionListener(a -> {
@@ -240,6 +244,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         //Set timer
         gameTickTimer = new Timer(100, a -> {
             mainInterfaceWindow.update();
+            newsWindow.update();
             desktopPane.repaint();
         });
 
