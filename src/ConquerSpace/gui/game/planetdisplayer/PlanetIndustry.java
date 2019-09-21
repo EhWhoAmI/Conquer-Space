@@ -1,20 +1,24 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.population.Job;
-import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -28,7 +32,14 @@ public class PlanetIndustry extends JPanel {
     private DefaultListModel<Area> areaDefaultListModel;
     private JList<Area> areaList;
 
-    
+    //Sorts out all the buildings and places
+    private JPanel jobSortingOutPanel;
+    private DefaultListModel<String> industryListModel;
+    private JList<String> industryList;
+
+    private JPanel industryInfoContainer;
+    private CardLayout industryInfoCardLayout;
+    private FarmingInfoPanel farmingInfoPanel;
 
     private Planet p;
 
@@ -37,15 +48,10 @@ public class PlanetIndustry extends JPanel {
         setLayout(new VerticalFlowLayout());
         add(new JLabel("Industry"));
         tabs = new JTabbedPane();
-        //Industry stuff:
-        //Includes:
-        //Labs,
-        //Foundry,
-        //Ship yard,
-        //Production line,
-        //Mill
-        //Etc... 
+        //Industry stuff includes:
+        //Labs, Foundry, Ship yard, Production line, Mill, Etc... 
         //Get the cities of the planet...
+
         areaContainer = new JPanel();
         areaContainer.setLayout(new BorderLayout());
         areaDefaultListModel = new DefaultListModel<>();
@@ -59,14 +65,33 @@ public class PlanetIndustry extends JPanel {
         areaContainer.add(scrollPane, BorderLayout.WEST);
         tabs.add(areaContainer, "Areas");
 
-        
-        
-        //Do other UI
+        jobSortingOutPanel = new JPanel();
+
+        industryListModel = new DefaultListModel<>();
+        industryListModel.addElement("Farming");
+        industryList = new JList<>(industryListModel);
+
+        industryList.addListSelectionListener(l -> {
+            if (industryList.getSelectedValue().equals("Farming")) {
+                industryInfoCardLayout.show(industryInfoContainer, "Farm");
+            }
+        });
+
+        industryInfoContainer = new JPanel();
+        industryInfoCardLayout = new CardLayout();
+        industryInfoContainer.setLayout(industryInfoCardLayout);
+
+        jobSortingOutPanel.add(new JScrollPane(industryList));
+        jobSortingOutPanel.add(industryInfoContainer);
+
+        farmingInfoPanel = new FarmingInfoPanel(p, c);
+
+        industryInfoContainer.add("Farm", farmingInfoPanel);
+        tabs.add(jobSortingOutPanel, "Industries");
         add(tabs);
     }
 
     public void update() {
-//        
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
         for (Building city : p.buildings.values()) {
@@ -75,5 +100,76 @@ public class PlanetIndustry extends JPanel {
             }
         }
         areaList.setSelectedIndex(selectedArea);
+    }
+
+    private class FarmingInfoPanel extends JPanel {
+
+        private JTable farmTable;
+        private FarmTableTableModel farmTableTableModel;
+        
+        private JLabel thing;
+
+        public FarmingInfoPanel(Planet p, Civilization c) {
+            farmTableTableModel = new FarmTableTableModel();
+
+            farmTable = new JTable(farmTableTableModel);
+            add(new JScrollPane(farmTable));
+            update();
+        }
+
+        public void update() {
+            
+            for (Map.Entry<Point, Building> en : p.buildings.entrySet()) {
+                Point key = en.getKey();
+                Building value = en.getValue();
+                if (value instanceof FarmBuilding) {
+                    farmTableTableModel.addFarmBuilding((FarmBuilding) value);
+                }
+            }
+        }
+
+    }
+
+    private class FarmTableTableModel extends AbstractTableModel {
+
+        private String[] colunms = {"Type", "Productivity"};
+
+        private ArrayList<FarmBuilding> farmBuildingArrayList;
+
+        public FarmTableTableModel() {
+            farmBuildingArrayList = new ArrayList<>();
+        }
+
+        @Override
+        public int getRowCount() {
+            return farmBuildingArrayList.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunms.length;
+        }
+
+        @Override
+        public Object getValueAt(int row, int column) {
+            FarmBuilding fb = farmBuildingArrayList.get(row);
+            if (column == 0) {
+                return fb.getFarmType();
+            }
+            if (column == 1) {
+                return (fb.getProductivity());
+            }
+
+            return "";
+        }
+
+        public void addFarmBuilding(FarmBuilding building) {
+            farmBuildingArrayList.add(building);
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunms[column];
+        }
     }
 }

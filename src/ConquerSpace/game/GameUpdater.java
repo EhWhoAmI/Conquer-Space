@@ -11,6 +11,7 @@ import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
@@ -18,6 +19,9 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.events.PopulationEvent;
+import ConquerSpace.game.life.Fauna;
+import ConquerSpace.game.life.LifeTrait;
+import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.JobRank;
 import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.people.Administrator;
@@ -160,7 +164,7 @@ public class GameUpdater {
         readShipTypes();
         readShipComponents();
         readEngineTechs();
-        
+
         //Events
         readPopulationEvents();
 
@@ -376,7 +380,7 @@ public class GameUpdater {
                 //Add ship
                 Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s.setEstimatedThrust(5000);
-                Actions.launchShip(s, starting, c);
+                //Actions.launchShip(s, starting, c);
 
                 Ship s2 = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 s2.setEstimatedThrust(10_000_000);
@@ -387,7 +391,29 @@ public class GameUpdater {
                 starting.scanned.add(c.getID());
                 starting.setHabitated(true);
                 starting.setName(c.getHomePlanetName());
+                
+                //Add livestock
+                //Create a test crop so that you can grow stuff
+                Fauna faun = new Fauna(0.01f);
+                faun.lifetraits.add(LifeTrait.Delicious);
+                faun.lifetraits.add(LifeTrait.Photosynthetic);
+                faun.setName("Potatoe");
+                faun.setBiomass(100_000);
+                
+                starting.localLife.add(faun);
+                
+                FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
+                faceBook.farmCreatures.add(faun);
+                faceBook.setProductivity(10);
+                //Add a farm
+                while (starting.buildings.containsKey(pt)) {
+                    x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                    y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                    pt = new ConquerSpace.game.universe.Point(x, y);
+                }
 
+                starting.buildings.put(pt, faceBook);
+                
                 c.habitatedPlanets.add(starting);
 
                 //Add resources
@@ -963,6 +989,13 @@ public class GameUpdater {
                 city.storages.get((int) (Math.random() * city.storages.size())).getPopulationArrayList().add(unit);
                 city.setPopulationUnitPercentage(0);
             }
+        }
+
+        //Process locallife
+        for (LocalLife localLife : p.localLife) {
+            int biomass = localLife.getBiomass();
+            float breedingRate = localLife.getReproductionRate();
+            localLife.setBiomass((int) (breedingRate * biomass) + biomass);
         }
     }
 

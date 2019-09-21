@@ -268,8 +268,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Stages it has life, and how evolved it is
         int lifeLength = rand.nextInt(10);
         //Initialize life
-        Microscopic micro = new Microscopic(10);
-        micro.setBiomass(100000);
+        Microscopic micro = new Microscopic(0.1f);
+        micro.setBiomass(10000);
         //Set name
         //Add random trait
         LifeTrait randomLifeTrait = LifeTrait.values()[rand.nextInt(LifeTrait.values().length)];
