@@ -41,6 +41,7 @@ public class GameController {
     public static ArrayList<JSONObject> satelliteTemplates;
     public static ArrayList<JSONObject> shipComponentTemplates;
     public static ArrayList<Resource> resources;
+    public static Resource foodResource = null;
     public static ArrayList<EngineTechnology> engineTechnologys;
     public static ArrayList<JSONObject> events;
 

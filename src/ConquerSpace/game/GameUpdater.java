@@ -2,7 +2,6 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import static ConquerSpace.game.GameController.GameRefreshRate;
-import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.buildings.AdministrativeCenter;
@@ -17,8 +16,6 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.CapitolArea;
-import ConquerSpace.game.events.Event;
-import ConquerSpace.game.events.PopulationEvent;
 import ConquerSpace.game.life.Fauna;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -391,7 +388,7 @@ public class GameUpdater {
                 starting.scanned.add(c.getID());
                 starting.setHabitated(true);
                 starting.setName(c.getHomePlanetName());
-                
+
                 //Add livestock
                 //Create a test crop so that you can grow stuff
                 Fauna faun = new Fauna(0.01f);
@@ -399,21 +396,26 @@ public class GameUpdater {
                 faun.lifetraits.add(LifeTrait.Photosynthetic);
                 faun.setName("Potatoe");
                 faun.setBiomass(100_000);
-                
+
                 starting.localLife.add(faun);
-                
+
                 FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
                 faceBook.farmCreatures.add(faun);
-                faceBook.setProductivity(10);
+                faceBook.setProductivity(1000);
                 //Add a farm
                 while (starting.buildings.containsKey(pt)) {
                     x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
                     y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
                     pt = new ConquerSpace.game.universe.Point(x, y);
                 }
+                //Add population
+                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
+                u.setSpecies(c.getFoundingSpecies());
+                c.population.add(u);
+                faceBook.getPopulationArrayList().add(u);
 
                 starting.buildings.put(pt, faceBook);
-                
+
                 c.habitatedPlanets.add(starting);
 
                 //Add resources
@@ -475,6 +477,10 @@ public class GameUpdater {
                     res.setMineable(mineable);
                     res.setColor(color.getInt(0), color.getInt(1), color.getInt(2));
                     resources.add(res);
+
+                    if (name.equals("food")) {
+                        GameController.foodResource = res;
+                    }
                 }
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found!", ex);
@@ -945,6 +951,17 @@ public class GameUpdater {
                     resources.put(gatherer.getResourceMining(), (int) (resources.get(gatherer.getResourceMining()) + gatherer.getAmountMined()));
                 }
 
+            } else if (building instanceof FarmBuilding) {
+                //Get the resources
+                FarmBuilding farmBuilding = (FarmBuilding) building;
+                //System.out.println("hh" + farmBuilding.getProductivity());
+                for (PopulationUnit j : farmBuilding.getPopulationArrayList()) {
+                    j.getJob().resources.put(GameController.foodResource, farmBuilding.getProductivity());
+                    j.getJob().setJobType(JobType.Farmer);
+                    j.getJob().setJobRank(JobRank.Low);
+                }
+                resources.put(GameController.foodResource, (resources.get(GameController.foodResource) + farmBuilding.getProductivity()));
+                //System.out.println((resources.get(GameController.foodResource) + farmBuilding.getProductivity()));
             }
         }
         //Process storing of resourcese
@@ -959,6 +976,7 @@ public class GameUpdater {
         //Process population
         for (City city : p.cities) {
             float increment = 0;
+            increment += city.getPopulationUnitPercentage();
 
             for (PopulationStorage storage : city.storages) {
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
@@ -966,14 +984,8 @@ public class GameUpdater {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
-
-                    //Process job
-                    for (Resource r : unit.getJob().resources.keySet()) {
-                        storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
-                    }
                 }
             }
-            increment += city.getPopulationUnitPercentage();
             //Increment the value...
             city.setPopulationUnitPercentage(increment);
             if (increment > 100) {
@@ -991,6 +1003,29 @@ public class GameUpdater {
             }
         }
 
+        for (Map.Entry<ConquerSpace.game.universe.Point, Building> entry : p.buildings.entrySet()) {
+            ConquerSpace.game.universe.Point key = entry.getKey();
+            Building value = entry.getValue();
+            if (value instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) value;
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+                    //Add normal pop upkeep
+                    int foodToDealWith = -unit.getSpecies().getFoodPerMonth();
+                    if(unit.getJob().resources.containsKey(GameController.foodResource)) {
+                        foodToDealWith += unit.getJob().resources.get(GameController.foodResource);
+                    }
+                    unit.getJob().resources.put(GameController.foodResource, foodToDealWith);
+                    //Population increment
+                    //Fraction it so it does not accelerate at a crazy rate
+                    //Do subtractions here in the future, like happiness, and etc.
+                    //Process job
+                    for (Resource r : unit.getJob().resources.keySet()) {
+                        storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
+                    }
+                    //All people consume food
+                }
+            }
+        }
         //Process locallife
         for (LocalLife localLife : p.localLife) {
             int biomass = localLife.getBiomass();
@@ -1017,6 +1052,22 @@ public class GameUpdater {
                 break;
             }
         }
+    }
+    
+    public boolean removeResource(Resource resourceType, int amount, int owner, UniversePath from) {
+        //Process
+        //Get closest resources storage
+        //No matter their alleigence, they will store resource to the closest resource storage...
+        //Search planet, because we don't have space storages for now.
+        Civilization c = universe.getCivilization(owner);
+        for (ResourceStockpile rs : c.resourceStorages) {
+            //Get by positon...
+            //For now, we process only if it is on the planet or not.
+            if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void processResearch() {
@@ -1047,6 +1098,9 @@ public class GameUpdater {
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
+            for (Map.Entry<Resource, Integer> entry : c.resourceList.entrySet()) {
+                c.resourceList.put(entry.getKey(), 0);
+            }
             //Process resources
             for (ResourceStockpile s : c.resourceStorages) {
                 //Get resource types allowed, and do stuff

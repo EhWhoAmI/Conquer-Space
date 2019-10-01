@@ -98,4 +98,10 @@ public class Resource {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    
 }

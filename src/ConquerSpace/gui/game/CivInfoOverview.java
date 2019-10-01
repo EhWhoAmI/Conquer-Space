@@ -51,7 +51,7 @@ public class CivInfoOverview extends JPanel {
         populationPanel.add(populationLabel);
 
         mainTabs.addTab("Civilization", mainPanel);
-        mainTabs.addTab("Resources", resourcesPanel);
+        //mainTabs.addTab("Resources", resourcesPanel);
         mainTabs.addTab("Population", populationPanel);
         add(mainTabs, BorderLayout.CENTER);
 

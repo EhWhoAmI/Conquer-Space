@@ -3,9 +3,11 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -18,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -107,18 +110,42 @@ public class PlanetIndustry extends JPanel {
         private JTable farmTable;
         private FarmTableTableModel farmTableTableModel;
         
-        private JLabel thing;
+        private JPanel farmInfoPanel;
+        private DefaultListModel<LocalLife> localLifeInFarmListModel;
+        private JList<LocalLife> localLifeInFarmList;
 
         public FarmingInfoPanel(Planet p, Civilization c) {
+            setLayout(new HorizontalFlowLayout());
             farmTableTableModel = new FarmTableTableModel();
 
             farmTable = new JTable(farmTableTableModel);
+            
+            farmInfoPanel = new JPanel();
+            farmInfoPanel.setLayout(new VerticalFlowLayout());
+            localLifeInFarmListModel = new DefaultListModel<>();
+            localLifeInFarmList = new JList<>(localLifeInFarmListModel);
+            
+            farmInfoPanel.add(new JLabel("Farm Creatures"));
+            farmInfoPanel.add(new JScrollPane(localLifeInFarmList));
+            ListSelectionModel farmTableSelectionModel = farmTable.getSelectionModel();
+            farmTableSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            farmTableSelectionModel.addListSelectionListener(l -> {
+                if(farmTable.getSelectedRow() > -1) {
+                    FarmBuilding fb = farmTableTableModel.getFarmBuilding(farmTable.getSelectedRow());
+                    //Populate the list...
+                    localLifeInFarmListModel.clear();
+                    for(LocalLife ll : fb.farmCreatures){
+                        localLifeInFarmListModel.addElement(ll);
+                    }
+                }
+            });
+            
             add(new JScrollPane(farmTable));
+            add(farmInfoPanel);
             update();
         }
 
         public void update() {
-            
             for (Map.Entry<Point, Building> en : p.buildings.entrySet()) {
                 Point key = en.getKey();
                 Building value = en.getValue();
@@ -170,6 +197,10 @@ public class PlanetIndustry extends JPanel {
         @Override
         public String getColumnName(int column) {
             return colunms[column];
+        }
+        
+        public FarmBuilding getFarmBuilding(int index) {
+            return farmBuildingArrayList.get(index);
         }
     }
 }

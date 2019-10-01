@@ -15,4 +15,6 @@ public interface ResourceStockpile {
     public boolean canStore(Resource type);
     
     public Resource[] storedTypes();
+    
+    public boolean removeResource(Resource type, int amount);
 }

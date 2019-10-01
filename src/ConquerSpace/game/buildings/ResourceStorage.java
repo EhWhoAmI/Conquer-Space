@@ -82,6 +82,15 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     public Color getColor() {
         return Color.CYAN;
     }
-    
-    
+
+    @Override
+    public boolean removeResource(Resource type, int amount) {
+        //Get the amount in the place
+        int currentlyStored = resources.get(type);
+        if(amount > currentlyStored)
+            return false;
+        
+        resources.put(type, currentlyStored-amount);
+        return true;
+    }
 }
