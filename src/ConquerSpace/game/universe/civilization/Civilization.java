@@ -9,8 +9,6 @@ import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
-import ConquerSpace.game.science.FieldNode;
-import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;

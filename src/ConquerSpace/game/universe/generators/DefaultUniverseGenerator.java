@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe.generators;
 
+import ConquerSpace.game.AssetReader;
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.Microscopic;
 import ConquerSpace.game.population.Species;
@@ -45,7 +45,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         Random rand = new Random(seed);
 
         //Load resources
-        GameUpdater.readResources();
+        AssetReader.readResources();
 
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         //Create star systems

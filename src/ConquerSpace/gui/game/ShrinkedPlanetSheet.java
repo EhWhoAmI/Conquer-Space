@@ -1,6 +1,5 @@
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -23,12 +22,9 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;

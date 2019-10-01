@@ -2,7 +2,6 @@ package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import java.util.ArrayList;
 import java.util.stream.Stream;

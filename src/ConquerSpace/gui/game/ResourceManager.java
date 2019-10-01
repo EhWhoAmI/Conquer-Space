@@ -3,7 +3,6 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;

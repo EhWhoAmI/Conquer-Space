@@ -39,7 +39,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;

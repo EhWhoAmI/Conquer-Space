@@ -2,7 +2,6 @@ package ConquerSpace.game.tech;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
-import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;

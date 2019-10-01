@@ -6,8 +6,6 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;

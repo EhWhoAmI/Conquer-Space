@@ -1,7 +1,6 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 

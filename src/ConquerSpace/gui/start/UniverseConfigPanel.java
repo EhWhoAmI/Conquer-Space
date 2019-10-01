@@ -1,11 +1,6 @@
 package ConquerSpace.gui.start;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.UniverseConfig;
-import ConquerSpace.game.universe.civilization.CivilizationConfig;
-import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
-import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

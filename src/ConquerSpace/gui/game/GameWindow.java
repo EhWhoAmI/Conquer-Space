@@ -2,7 +2,6 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.ExitStarSystemAction;
 import ConquerSpace.game.actions.InterstellarTravelAction;
 import ConquerSpace.game.actions.ShipMoveAction;

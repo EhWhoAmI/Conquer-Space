@@ -1,8 +1,6 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.events.Event;
-import ConquerSpace.game.events.PopulationEvent;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -48,6 +46,7 @@ public class GameController {
     public static HashMap<String, Integer> shipTypes;
     public static HashMap<String, Integer> shipTypeClasses;
     public static GameUpdater updater;
+    public static GameInitializer initer;
     public static MusicPlayer musicPlayer;
 
     public static final int AU_IN_LTYR = 63241;
@@ -64,7 +63,9 @@ public class GameController {
 
         //Init universe
         updater = new GameUpdater(Globals.universe, Globals.date);
-        updater.initGame();
+        initer = new GameInitializer(Globals.universe, Globals.date, updater);
+
+        initer.initGame();
 
         //Process the 0th turn and initalize the universe.
         updater.updateUniverse(Globals.universe, Globals.date);

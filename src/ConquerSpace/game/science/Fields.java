@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 /**

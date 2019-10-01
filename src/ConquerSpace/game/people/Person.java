@@ -1,7 +1,5 @@
 package ConquerSpace.game.people;
 
-import ConquerSpace.game.population.Job;
-
 /**
  *
  * @author Zyun
