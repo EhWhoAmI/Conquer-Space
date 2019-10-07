@@ -284,13 +284,26 @@ public class GameUpdater {
             } else if (building instanceof FarmBuilding) {
                 //Get the resources
                 FarmBuilding farmBuilding = (FarmBuilding) building;
+                //Calculate productivity
+                float value = 0;
+                for(LocalLife fc : farmBuilding.farmCreatures) {
+                    value += fc.getReproductionRate()*farmBuilding.getCapacity();
+                }
+                //Add to the capacity
+                farmBuilding.setCapacity((int) (farmBuilding.getCapacity() + value));
+                if(farmBuilding.getCapacity() > farmBuilding.getMaxCapacity()) {
+                    farmBuilding.setCapacity(farmBuilding.getMaxCapacity());
+                }
+                if(value > farmBuilding.getCapacity()) {
+                    value = farmBuilding.getCapacity();
+                }
+                farmBuilding.setProductivity((int)value);
                 //System.out.println("hh" + farmBuilding.getProductivity());
                 for (PopulationUnit j : farmBuilding.getPopulationArrayList()) {
                     j.getJob().resources.put(GameController.foodResource, farmBuilding.getProductivity());
                     j.getJob().setJobType(JobType.Farmer);
                     j.getJob().setJobRank(JobRank.Low);
                 }
-                resources.put(GameController.foodResource, (resources.get(GameController.foodResource) + farmBuilding.getProductivity()));
                 //System.out.println((resources.get(GameController.foodResource) + farmBuilding.getProductivity()));
             }
         }
@@ -341,9 +354,10 @@ public class GameUpdater {
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
                     //Add normal pop upkeep
                     int foodToDealWith = -unit.getSpecies().getFoodPerMonth();
-                    if (unit.getJob().resources.containsKey(GameController.foodResource)) {
+                    if (unit.getJob().getJobType() == JobType.Farmer) {
                         foodToDealWith += unit.getJob().resources.get(GameController.foodResource);
                     }
+
                     unit.getJob().resources.put(GameController.foodResource, foodToDealWith);
                     //Population increment
                     //Fraction it so it does not accelerate at a crazy rate

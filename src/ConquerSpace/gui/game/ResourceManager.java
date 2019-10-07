@@ -48,8 +48,7 @@ public class ResourceManager extends JPanel {
         int x = 0;
         for (Resource s : GameController.resources) {
             resourceTableModel.setValueAt(c.resourceList.get(s), x, 1);
-            System.out.println(c.resourceList.get(s));
-            x++;
+                x++;
         }
     }
 }

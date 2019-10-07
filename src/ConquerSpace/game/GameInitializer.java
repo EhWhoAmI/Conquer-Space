@@ -11,6 +11,7 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.Observatory;
+import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.life.Fauna;
@@ -18,12 +19,15 @@ import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.Species;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -259,9 +263,12 @@ public class GameInitializer {
                 }
                 c.resourceStorages.add(storage);
                 starting.buildings.put(pt, storage);
-                
+
                 //Add resource miner               
-                
+                for (Resource resource : GameController.resources) {
+                    createResourceMiners(starting, resource, c.getFoundingSpecies());
+                }
+
                 //Add observetory
                 StarSystem container = universe.getStarSystem(starting.getParentStarSystem());
                 Observatory observatory = new Observatory(10 * GameController.AU_IN_LTYR, 100, c.getID(),
@@ -280,6 +287,7 @@ public class GameInitializer {
                 c.visionPoints.add(observatory);
                 starting.buildings.put(pt, observatory);
 
+                createFarms(starting, selector, c);
                 //Add ship
                 //Ship s = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 //s.setEstimatedThrust(5000);
@@ -287,39 +295,11 @@ public class GameInitializer {
                 //Ship s2 = new Ship(new ShipClass("test", new Hull(1, 1, material, 70, 0, "adsdf")), 0, 0, new Vector(0, 0), starting.getUniversePath());
                 //s2.setEstimatedThrust(10_000_000);
                 //Actions.launchShip(s2, starting, c);
-                
                 //Set ownership
                 starting.setOwnerID(c.getID());
                 starting.scanned.add(c.getID());
                 starting.setHabitated(true);
                 starting.setName(c.getHomePlanetName());
-
-                //Add livestock
-                //Create a test crop so that you can grow stuff
-                Fauna faun = new Fauna(0.01f);
-                faun.lifetraits.add(LifeTrait.Delicious);
-                faun.lifetraits.add(LifeTrait.Photosynthetic);
-                faun.setName("Potatoe");
-                faun.setBiomass(100_000);
-
-                starting.localLife.add(faun);
-
-                FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
-                faceBook.farmCreatures.add(faun);
-                faceBook.setProductivity(1000);
-                //Add a farm
-                while (starting.buildings.containsKey(pt)) {
-                    x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
-                    y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
-                    pt = new ConquerSpace.game.universe.Point(x, y);
-                }
-                //Add population
-                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
-                u.setSpecies(c.getFoundingSpecies());
-                c.population.add(u);
-                faceBook.getPopulationArrayList().add(u);
-
-                starting.buildings.put(pt, faceBook);
 
                 c.habitatedPlanets.add(starting);
 
@@ -337,5 +317,58 @@ public class GameInitializer {
         updater.calculateControl();
 
         updater.calculateVision();
+    }
+
+    private void createResourceMiners(Planet p, Resource r, Species founding) {
+        //Find if vein exists on the planet
+        for (ResourceVein v : p.resourceVeins) {
+            //Get the resource vein and stuff
+            if (v.getResourceType().equals(r)) {
+                //Then place it in the center
+                ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
+
+                miner.population.add(new PopulationUnit(founding));
+                p.buildings.put(new Point(v.getX(), v.getY()), miner);
+                break;
+            }
+        }
+    }
+
+    private void createFarms(Planet starting, Random selector, Civilization c) {
+        //Based on population
+        //Add livestock
+        //Create a test crop so that you can grow stuff
+        Fauna faun = new Fauna(0.01f);
+        faun.lifetraits.add(LifeTrait.Delicious);
+        faun.lifetraits.add(LifeTrait.Photosynthetic);
+        faun.setName("Potatoe");
+        faun.setBiomass(100_000);
+
+        starting.localLife.add(faun);
+
+        int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+        int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+        ConquerSpace.game.universe.Point pt = new ConquerSpace.game.universe.Point(x, y);
+
+        for (int i = 0; i < 4; i++) {
+            FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
+            faceBook.farmCreatures.add(faun);
+            faceBook.setProductivity(250);
+            //The biomass capacity
+            faceBook.setMaxCapacity(250);
+            faceBook.setCapacity(10);
+            //Add a farm
+            do {
+                x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
+                y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+                pt = new ConquerSpace.game.universe.Point(x, y);
+            } while (starting.buildings.containsKey(pt));
+            //Add population
+            PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
+            u.setSpecies(c.getFoundingSpecies());
+            c.population.add(u);
+            faceBook.getPopulationArrayList().add(u);
+            starting.buildings.put(pt, faceBook);
+        }
     }
 }

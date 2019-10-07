@@ -2,6 +2,7 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.PopulationUnit;
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +14,8 @@ public class FarmBuilding extends Building implements PopulationStorage{
     public ArrayList<LocalLife> farmCreatures;
     private int productivity = 0;
     public ArrayList<PopulationUnit> population;
+    private int capacity = 0;
+    private int maxCapacity = 0;
     
     public FarmBuilding(FarmType ft) {
         farmType = ft;
@@ -49,5 +52,26 @@ public class FarmBuilding extends Building implements PopulationStorage{
 
     public void setFarmType(FarmType farmType) {
         this.farmType = farmType;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int maxCapacity) {
+        this.capacity = maxCapacity;
+    }
+    
+     @Override
+    public Color getColor() {
+        return Color.GREEN;
+    }
+
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
     }
 }
