@@ -46,6 +46,10 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
     JComboBox<String> civTempResistanceComboBox;
     JLabel speciesNameLabel;
     JTextField speciesNameField;
+    JLabel currencyNameLabel;
+    JTextField currencyNameTextField;
+    JLabel currencySymbolLabel;
+    JTextField currencySymbolTextField;
 
     Color civColor = Color.CYAN;
 
@@ -97,7 +101,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
 
         JPanel rsidePan = new JPanel();
         rsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));
-        rsidePan.setLayout(new GridLayout(3, 4, 10, 10));
+        rsidePan.setLayout(new GridLayout(4, 4, 10, 10));
 
         civNameLabel = new JLabel("Civilization Name");
         civNameTextField = new JTextField("Humans");
@@ -127,7 +131,13 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
 
         speciesNameLabel = new JLabel("Species Name");
         speciesNameField = new JTextField("Earthlings");
-
+        
+        currencyNameLabel = new JLabel("Currency Name");
+        currencyNameTextField = new JTextField("Money");
+        
+        currencySymbolLabel = new JLabel("Currency Symbol");
+        currencySymbolTextField = new JTextField("M");
+        
         lsidePan.add(universeSizeLabel);
         lsidePan.add(universeSizeBox);
         lsidePan.add(universeTypeLabel);
@@ -146,6 +156,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         rsidePan.add(civSymbolLabel);
         rsidePan.add(civSymbolSpinner);
         rsidePan.add(civColorLabel);
+        
         rsidePan.add(civColorChooserButton);
         rsidePan.add(civHomePlanetNameLabel);
         rsidePan.add(civHomePlanetName);
@@ -153,6 +164,10 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         rsidePan.add(civTempResistanceComboBox);
         rsidePan.add(speciesNameLabel);
         rsidePan.add(speciesNameField);
+        rsidePan.add(currencyNameLabel);
+        rsidePan.add(currencyNameTextField);
+        rsidePan.add(currencySymbolLabel);
+        rsidePan.add(currencySymbolTextField);
 
         add(lsidePan);
         add(rsidePan);

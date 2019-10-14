@@ -2,6 +2,7 @@ package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.AssetReader;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.Microscopic;
 import ConquerSpace.game.population.Species;
@@ -202,8 +203,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Generate Species
         Species playerSpecies = new Species(1, 1, c.speciesName);
 
+        //Set currency
+        Currency nationCurrency = new Currency();
+        nationCurrency.setName(c.civCurrencyName);
+        nationCurrency.setSymbol(c.civCurrencySymbol);
+        playerCiv.setNationalCurrency(nationCurrency);
+        nationCurrency.setController(playerCiv);
+
         playerCiv.setFoundingSpecies(playerSpecies);
         universe.addCivilization(playerCiv);
+
         //Calculate number of civs
         int civCount = starSystemCount / 50;
 
@@ -221,6 +230,15 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setStartingPlanet(up1);
             Species civSpecies = new Species(1, 1, "");
             civ.setFoundingSpecies(civSpecies);
+
+            //Create currency
+            nationCurrency = new Currency();
+            nationCurrency.setName("ISK");
+            nationCurrency.setSymbol("Z");
+            civ.setNationalCurrency(nationCurrency);
+            nationCurrency.setController(civ);
+
+            //universe.
             universe.addCivilization(civ);
         }
         return universe;

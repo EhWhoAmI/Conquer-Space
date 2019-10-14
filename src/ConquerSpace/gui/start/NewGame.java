@@ -101,6 +101,8 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             civilizationConfig.setCivilizationPreferredClimate((String) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
             civilizationConfig.setHomePlanetName(universeConfigPanel.civHomePlanetName.getText());
             civilizationConfig.setSpeciesName(universeConfigPanel.speciesNameField.getText());
+            civilizationConfig.setCivCurrencyName(universeConfigPanel.currencyNameTextField.getText());
+            civilizationConfig.setCivCurrencySymbol(universeConfigPanel.currencySymbolTextField.getText());
             config.setCivilizationConfig(civilizationConfig);
 
             // Start time of logging

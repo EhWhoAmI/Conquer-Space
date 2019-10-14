@@ -31,6 +31,7 @@ public class MainInterfaceWindow extends JInternalFrame {
     private UnownedPlanetInfoMenu unownedPlanetInfoMenu;
     private SpaceShipOverview spaceShipOverview;
     private HullCreator hullCreator;
+    private EconomyWindow economyWindow;
     
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
 
@@ -123,6 +124,8 @@ public class MainInterfaceWindow extends JInternalFrame {
         civInfoOverview = new CivInfoOverview(c, u);
 
         resourceManager = new ResourceManager(c);
+        
+        economyWindow = new EconomyWindow(c, u);
 
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
@@ -131,6 +134,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         tabs.add("People", peopleTabs);
         tabs.add("My Civilization", civInfoOverview);
         tabs.add("Resources", resourceManager);
+        tabs.add("Economy", economyWindow);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);

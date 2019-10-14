@@ -14,6 +14,7 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.Fauna;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.people.Administrator;
@@ -307,7 +308,7 @@ public class GameInitializer {
                 for (Resource res : GameController.resources) {
                     c.resourceList.put(res, 0);
                 }
-
+                
                 //Add Civ initalize values
                 c.values.put("haslaunch", 0);
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());

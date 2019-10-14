@@ -27,9 +27,23 @@ public class TerrainRenderer {
         //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors = TerrainColoring.getTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
-        Color[][] terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 6, 0.5f, 2.8f, 0.5f, p.getPlanetSize() * 2, p.getPlanetSize(), 0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 6, colors);
+        Color[][] terrainColorses = null;
 
         if (p.getPlanetType() == PlanetTypes.ROCK) {
+            terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 6, 0.5f, 2.8f, 0.5f, p.getPlanetSize() * 2, p.getPlanetSize(), 0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 6, colors);
+            for (int x = 0; x < p.getPlanetSize() * 2; x++) {
+                for (int y = 0; y < p.getPlanetSize(); y++) {
+                    //System.out.println(x + " " + y + ";" + p.terrain.terrainColor[x][y]);
+                    //System.err.println(planetDisplaying);
+                    planetDisplaying.setRGB(x, y,
+                            terrainColorses[x][y].getRGB());
+                }
+            }
+        } else if (p.getPlanetType() == PlanetTypes.GAS) {
+            //terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 6, 0.5f, 2.8f, 0.5f, p.getPlanetSize() * 2, p.getPlanetSize(), 0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 6, colors);
+        }
+
+        if (terrainColorses != null) {
             for (int x = 0; x < p.getPlanetSize() * 2; x++) {
                 for (int y = 0; y < p.getPlanetSize(); y++) {
                     //System.out.println(x + " " + y + ";" + p.terrain.terrainColor[x][y]);

@@ -35,12 +35,14 @@ public class CivInfoOverview extends JPanel {
         JLabel civTechLevel = new JLabel("Tech level: " + c.getTechLevel());
         JLabel civFoundingSpecies = new JLabel("Founding Species: " + c.getFoundingSpecies().getName());
         JLabel capital = new JLabel("Capital: " + c.getCapitalCity().getName() + " on " + c.getCapitalPlanet().getName());
+        JLabel currency = new JLabel("National currency: " + c.getNationalCurrency().getName());
 
         mainPanel.add(civName);
         mainPanel.add(civHomePlanet);
         mainPanel.add(civTechLevel);
         mainPanel.add(civFoundingSpecies);
         mainPanel.add(capital);
+        mainPanel.add(currency);
 
         resourcesPanel = new JPanel();
 

@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.civilization;
 
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.population.Species;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
@@ -96,7 +97,7 @@ public class Civilization {
     public ArrayList<Planet> habitatedPlanets;
 
     public ArrayList<PopulationUnit> population;
-    
+
     public ArrayList<Event> events;
 
     private Species foundingSpecies;
@@ -106,6 +107,13 @@ public class Civilization {
     private Planet capitalPlanet;
 
     private int techPoints = 0; //Research months or whatever
+
+    private Currency nationalCurrency;
+    
+    //Amount of money in millions of isk of their national currency ^
+    private long moneyReserves = 0;
+    
+    public ArrayList<Civilization> contacts;
 
     public Civilization(int ID, Universe u) {
         this.ID = ID;
@@ -159,8 +167,10 @@ public class Civilization {
         resourceList = new HashMap<>();
 
         population = new ArrayList<>();
-        
+
         events = new ArrayList<>();
+        
+        contacts = new ArrayList<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -375,7 +385,7 @@ public class Civilization {
         if (fields != null) {
             Field f = fields.getNode(name);
             if (f != null) {
-                if(f.getLevel() < 0){
+                if (f.getLevel() < 0) {
                     f.setLevel(0);
                 }
                 f.incrementLevel(amount);
@@ -385,5 +395,21 @@ public class Civilization {
 
     public void setField(Field start) {
         fields = start;
+    }
+
+    public void setNationalCurrency(Currency nationalCurrency) {
+        this.nationalCurrency = nationalCurrency;
+    }
+
+    public Currency getNationalCurrency() {
+        return nationalCurrency;
+    }
+
+    public void setMoneyReserves(long moneyReserves) {
+        this.moneyReserves = moneyReserves;
+    }
+
+    public long getMoneyReserves() {
+        return moneyReserves;
     }
 }

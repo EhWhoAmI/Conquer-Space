@@ -13,6 +13,24 @@ public class CivilizationConfig {
     public String speciesName;
     public String civilizationName;
     public String civilizationPreferredClimate;
+    public String civCurrencyName;
+    public String civCurrencySymbol;
+
+    public String getCivCurrencyName() {
+        return civCurrencyName;
+    }
+
+    public String getCivCurrencySymbol() {
+        return civCurrencySymbol;
+    }
+
+    public void setCivCurrencyName(String civCurrencyName) {
+        this.civCurrencyName = civCurrencyName;
+    }
+
+    public void setCivCurrencySymbol(String civCurrencySymbol) {
+        this.civCurrencySymbol = civCurrencySymbol;
+    }
 
     public void setCivColor(Color civColor) {
         this.civColor = civColor;
