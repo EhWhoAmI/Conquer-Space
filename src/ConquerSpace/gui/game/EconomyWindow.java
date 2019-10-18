@@ -68,7 +68,7 @@ public class EconomyWindow extends JPanel {
 
         civilizationTradeValue.setText("Trade Value: <Not implemented yet>");
         
-        civEconomicReserves.setText("Reserves: " + c.getNationalCurrency().getSymbol() + " " + c.getMoneyReserves());
+        civEconomicReserves.setText("Reserves: " + c.getNationalCurrency().getSymbol() + " million " + c.getMoneyReserves());
         currencyInflationRate.setText("Inflation rate: " + c.getNationalCurrency().getInflation()*100 + "%");
     }
 }
