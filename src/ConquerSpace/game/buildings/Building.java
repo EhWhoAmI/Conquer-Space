@@ -6,12 +6,13 @@ import java.util.ArrayList;
 
 /**
  * A building is defined as a series of points
+ *
  * @author zyunl
  */
-public class Building {
+public abstract class Building {
+
     private Color color;
     public ArrayList<Area> areas;
-    
 
     public Building() {
         areas = new ArrayList<>();

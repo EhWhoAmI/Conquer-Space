@@ -80,7 +80,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
             if (starType < 7) {
                 starType = StarTypes.TYPE_O;
-                starSize = randint(rand, (int) (6.6 * solarRadius), (int) (100 * solarRadius));
+                starSize = randint(rand, (int) (6.6 * solarRadius), (int) (100f * solarRadius));
             } else if (starType < 20) {
                 starType = StarTypes.TYPE_B;
                 starSize = randint(rand, (int) (1.8 * solarRadius), (int) (6.6 * solarRadius));
@@ -202,7 +202,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setStartingPlanet(up);
         //Generate Species
         Species playerSpecies = new Species(1, 1, c.speciesName);
-
+        playerSpecies.setUpkeep(0.05f);
+        
         //Set currency
         Currency nationCurrency = new Currency();
         nationCurrency.setName(c.civCurrencyName);

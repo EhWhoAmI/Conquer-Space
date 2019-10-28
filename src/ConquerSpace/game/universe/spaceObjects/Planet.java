@@ -3,6 +3,8 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.population.Job;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -56,6 +58,10 @@ public class Planet extends SpaceObject {
     
     public ArrayList<City> cities;
     
+    public ArrayList<Job> planetJobs;
+    
+    public ArrayList<PopulationUnit> population;
+    
     /**
      * If this is empty, the planet does not have life.
     */
@@ -87,6 +93,10 @@ public class Planet extends SpaceObject {
         
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
+        
+        planetJobs = new ArrayList<>();
+        population = new ArrayList<>();
+        
         localLife = new ArrayList<>();
     }
 

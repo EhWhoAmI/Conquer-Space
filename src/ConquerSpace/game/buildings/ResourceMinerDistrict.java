@@ -1,25 +1,31 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.Workable;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import java.awt.Color;
 import java.util.ArrayList;
 
 /**
- * More like a miner.
- * Desc: A district dedicated to the mining of a resource.
+ * More like a miner. Desc: A district dedicated to the mining of a resource.
+ *
  * @author zyunl
  */
-public class ResourceMinerDistrict extends Building implements PopulationStorage {
-    
+public class ResourceMinerDistrict extends Building implements PopulationStorage, Workable {
+
+    /**
+     * Maximum jobs in this district.
+     */
+    private int scale;
     private ResourceVein veinMining;
     private double amount;
     private Resource resourceMining;
     private int maxStorage;
     /*
     The population of the area...
-    */
+     */
     public ArrayList<PopulationUnit> population;
 
     public ResourceMinerDistrict(ResourceVein vein, double amount) {
@@ -63,5 +69,25 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     @Override
     public int getMaxStorage() {
         return maxStorage;
+    }
+
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    public double miningPerMonth() {
+        return (getAmountMined() / getScale());
+    }
+
+    @Override
+    public void processJob(Job j) {
+        //Is mining job, now subtract the stuff..
+        //subtract from resource vein
+        veinMining.removeResources((int)miningPerMonth());
+        j.resources.put(resourceMining, (int)miningPerMonth());
     }
 }

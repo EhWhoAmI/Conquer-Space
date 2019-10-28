@@ -4,6 +4,7 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -43,6 +44,10 @@ public class PlanetIndustry extends JPanel {
     private JPanel industryInfoContainer;
     private CardLayout industryInfoCardLayout;
     private FarmingInfoPanel farmingInfoPanel;
+    
+    private JPanel availableJobs;
+    private DefaultListModel<Job> availableJobListModel;
+    private JList<Job> availableJobList;
 
     private Planet p;
 
@@ -91,6 +96,13 @@ public class PlanetIndustry extends JPanel {
 
         industryInfoContainer.add("Farm", farmingInfoPanel);
         tabs.add(jobSortingOutPanel, "Industries");
+        
+        availableJobs = new JPanel();
+        availableJobListModel = new DefaultListModel<>();
+        availableJobList = new JList<>(availableJobListModel);
+        availableJobs.add(new JScrollPane(availableJobList));
+        tabs.add(availableJobs, "Available jobs");
+        
         add(tabs);
     }
 
@@ -103,6 +115,11 @@ public class PlanetIndustry extends JPanel {
             }
         }
         areaList.setSelectedIndex(selectedArea);
+        
+        availableJobListModel.clear();
+        for(Job j : p.planetJobs) {
+            availableJobListModel.addElement(j);
+        }
     }
 
     private class FarmingInfoPanel extends JPanel {

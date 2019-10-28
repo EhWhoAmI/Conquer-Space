@@ -1,6 +1,8 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.Workable;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -8,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author zyunl
  */
-public class CityDistrict extends Building implements PopulationStorage{
+public class CityDistrict extends Building implements PopulationStorage, Workable{
     private int maxStorage;
     public ArrayList<PopulationUnit> population;
 
@@ -36,6 +38,8 @@ public class CityDistrict extends Building implements PopulationStorage{
     public ArrayList<PopulationUnit> getPopulationArrayList() {
         return population;
     }
-    
-    
+
+    @Override
+    public void processJob(Job j) {
+    }    
 }

@@ -1,5 +1,7 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.population.Job;
+import ConquerSpace.game.population.Workable;
 import java.awt.Color;
 
 /**
@@ -9,10 +11,14 @@ import java.awt.Color;
  *
  * @author
  */
-public class AdministrativeCenter extends CityDistrict {
+public class AdministrativeCenter extends CityDistrict implements Workable{
 
     @Override
     public Color getColor() {
         return Color.red;
     }
+
+    @Override
+    public void processJob(Job j) {
+    }    
 }

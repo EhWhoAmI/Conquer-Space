@@ -13,13 +13,17 @@ import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.JobRank;
 import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.Workable;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
@@ -38,6 +42,7 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
@@ -192,6 +197,12 @@ public class GameUpdater {
         p.setX(pt.x);
         p.setY(pt.y);
 
+        organizePopulation(p);
+
+        processPlanetJobs(p, date);
+
+        assignJobs(p, date);
+
         processBuildings(p, date);
 
         processPopulation(p, date);
@@ -325,6 +336,101 @@ public class GameUpdater {
     }
 
     /**
+     * Creates the jobs for the planet and places it into the array list
+     *
+     * @param p
+     * @param date
+     */
+    public void processPlanetJobs(Planet p, StarDate date) {
+        //Add the jobs...
+        //Assign everyone an empty job...
+        //for(p.)
+        float upkeepAmount = 0;
+
+        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
+            Point key = entry.getKey();
+            Building building = entry.getValue();
+            //Get the building type
+            //Now get the type of building
+            if (building instanceof BuildingBuilding) {
+                //Add construction job
+                BuildingBuilding constructionWork = (BuildingBuilding) building;
+                int scale = constructionWork.getScale();
+                for (int i = 0; i < scale; i++) {
+                    Job constructionJob = new Job(JobType.Construction);
+                    constructionJob.setJobRank(JobRank.Low);
+                    p.planetJobs.add(constructionJob);
+                }
+            } else if (building instanceof CityDistrict) {
+                //Get the various jobs in a population storage
+                //There are a lot of jobs
+                //Check if admin center
+                CityDistrict city = (CityDistrict) building;
+                if (building instanceof AdministrativeCenter) {
+                    //An admin center deals with the planet, maybe the galaxy if necessary
+                    //Add jobs that deal with admin
+                    AdministrativeCenter center = (AdministrativeCenter) building;
+                    Job job = new Job(JobType.Administrator);
+                    job.setJobRank(JobRank.High);
+                    job.setWorkingFor(center);
+
+                    p.planetJobs.add(job);
+                }
+                Job job = new Job(JobType.Infrastructure);
+                job.setJobRank(JobRank.Low);
+                job.setWorkingFor(city);
+
+                p.planetJobs.add(job);
+
+                //Sort through areas
+                for (Area a : ((CityDistrict) building).areas) {
+                    processAreas(p, a, date);
+                }
+            } else if (building instanceof FarmBuilding) {
+                FarmBuilding farm = (FarmBuilding) building;
+                for (int i = 0; i < farm.getMaxCapacity() / 100; i++) {
+                    Job job = new Job(JobType.Farmer);
+                    job.setJobRank(JobRank.Low);
+                    job.setWorkingFor(farm);
+                    p.planetJobs.add(job);
+                }
+            } else if (building instanceof ResourceMinerDistrict) {
+                ResourceMinerDistrict district = (ResourceMinerDistrict) building;
+                for (int i = 0; i < district.getScale(); i++) {
+                    Job job = new Job(JobType.Miner);
+                    job.setJobRank(JobRank.Low);
+                    job.setWorkingFor(district);
+                    p.planetJobs.add(job);
+                }
+            } else if (building instanceof SpacePort) {
+                Job job = new Job(JobType.SpacePortEngineer);
+                job.setJobRank(JobRank.Medium);
+                p.planetJobs.add(job);
+            }
+
+            //Get number of people and add support jobs
+            if (building instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) building;
+                ArrayList<PopulationUnit> population = storage.getPopulationArrayList();
+                for (PopulationUnit unit : population) {
+                    upkeepAmount += unit.getSpecies().getUpkeep();
+                }
+            }
+        }
+        //Set the upkeep
+        int amount = Math.round(upkeepAmount);
+        for (int i = 0; i < amount; i++) {
+            Job job = new Job(JobType.PopUpkeepWorker);
+            job.setJobRank(JobRank.Medium);
+            p.planetJobs.add(job);
+        }
+    }
+
+    private void processAreas(Planet p, Area a, StarDate date) {
+
+    }
+
+    /**
      * Sets the jobs of people...
      *
      * @param p
@@ -381,12 +487,6 @@ public class GameUpdater {
                     p.buildings.put(key, build.getToBuild());
                 }
             } else if (building instanceof AdministrativeCenter) {
-                //Set jobs
-                AdministrativeCenter adminCenter = (AdministrativeCenter) building;
-                for (PopulationUnit j : adminCenter.population) {
-                    j.getJob().setJobType(JobType.Administrator);
-                    j.getJob().setJobRank(JobRank.High);
-                }
 
             } else if (building instanceof SpacePort) {
                 //Process
@@ -400,18 +500,6 @@ public class GameUpdater {
                 //Process...
                 ResourceStockpile stockpile = (ResourceStockpile) building;
             } else if (building instanceof ResourceMinerDistrict) {
-                ResourceMinerDistrict gatherer = (ResourceMinerDistrict) building;
-                ResourceVein vein = gatherer.getVeinMining();
-                if (vein != null && vein.getResourceAmount() > 0) {
-                    //Get the resource stockpiles
-                    //Just stuff the resource into the jobs
-                    for (PopulationUnit j : gatherer.getPopulationArrayList()) {
-                        vein.removeResources((int) gatherer.getAmountMined());
-                        j.getJob().resources.put(vein.getResourceType(), (int) gatherer.getAmountMined());
-                        j.getJob().setJobType(JobType.Miner);
-                        j.getJob().setJobRank(JobRank.Low);
-                    }
-                }
 
             } else if (building instanceof FarmBuilding) {
                 //Get the resources
@@ -431,15 +519,18 @@ public class GameUpdater {
                 }
                 farmBuilding.setProductivity((int) value);
                 //System.out.println("hh" + farmBuilding.getProductivity());
-                for (PopulationUnit j : farmBuilding.getPopulationArrayList()) {
-                    j.getJob().resources.put(GameController.foodResource, farmBuilding.getProductivity());
-                    j.getJob().setJobType(JobType.Farmer);
-                    j.getJob().setJobRank(JobRank.Low);
-                }
                 //System.out.println((resources.get(GameController.foodResource) + farmBuilding.getProductivity()));
             } else if (building instanceof CityDistrict) {
                 //Process the various jobs and stuff
                 //Get i-hub
+            }
+        }
+
+        //Process the toll on the places...
+        for (PopulationUnit unit : p.population) {
+            Workable workingFor = unit.getJob().getWorkingFor();
+            if (workingFor != null) {
+                workingFor.processJob(unit.getJob());
             }
         }
     }
@@ -458,7 +549,7 @@ public class GameUpdater {
                     increment += (unit.getSpecies().getBreedingRate() / 50);
                 }
             }
-            
+
             //Increment the value...
             city.setPopulationUnitPercentage(increment);
             if (increment > 100) {
@@ -486,7 +577,7 @@ public class GameUpdater {
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
                     //Add normal pop upkeep
                     //All people consume food
-                    processPopUpkeep(unit);
+                    processPopUnit(unit);
 
                     //Population increment
                     //Fraction it so it does not accelerate at a crazy rate
@@ -500,7 +591,21 @@ public class GameUpdater {
         }
     }
 
-    public void processPopUpkeep(PopulationUnit unit) {
+    public void assignJobs(Planet p, StarDate date) {
+        //Process through all the population units
+        for (int i = 0; i < p.population.size(); i++) {
+            //Add job
+            if (i < p.planetJobs.size()) {
+                //Set pop job
+                p.population.get(i).setJob(p.planetJobs.get(i));
+            } else {
+                p.population.get(i).getJob().setJobType(JobType.Jobless);
+                p.population.get(i).getJob().setJobRank(JobRank.Low);
+            }
+        }
+    }
+
+    public void processPopUnit(PopulationUnit unit) {
         Job popJob = unit.getJob();
         if (!popJob.resources.containsKey(GameController.foodResource)) {
             //Add the resource
@@ -508,7 +613,26 @@ public class GameUpdater {
         }
         //Then subtract it
         int food = popJob.resources.get(GameController.foodResource);
+        //if(food > 0) {
+        //}
         food -= unit.getSpecies().getFoodPerMonth();
         popJob.resources.put(GameController.foodResource, food);
+        //.out.println(food);
+    }
+
+    public void organizePopulation(Planet p) {
+        p.population.clear();
+        //Sort through all the districts
+        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
+            //Point key = entry.getKey();
+            Building value = entry.getValue();
+
+            if (value instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) value;
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+                    p.population.add(unit);
+                }
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ public class Job {
 
     private JobType jobType;
     private JobRank jobRank = JobRank.Low;
+    private Workable workingFor;
     
     public Job(JobType jobType) {
         this.jobType = jobType;
@@ -40,5 +41,13 @@ public class Job {
 
     public JobRank getJobRank() {
         return jobRank;
+    }
+    
+    public Workable getWorkingFor() {
+        return workingFor;
+    }
+
+    public void setWorkingFor(Workable workingFor) {
+        this.workingFor = workingFor;
     }
 }

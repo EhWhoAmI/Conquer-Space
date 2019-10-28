@@ -155,7 +155,7 @@ public class GameInitializer {
             if (v.getResourceType().equals(r)) {
                 //Then place it in the center
                 ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
-
+                miner.setScale(1);
                 miner.population.add(new PopulationUnit(founding));
                 p.buildings.put(new Point(v.getX(), v.getY()), miner);
                 break;
@@ -180,8 +180,8 @@ public class GameInitializer {
             faceBook.farmCreatures.add(faun);
             faceBook.setProductivity(250);
             //The biomass capacity
-            faceBook.setMaxCapacity(250);
-            faceBook.setCapacity(10);
+            faceBook.setMaxCapacity(5000);
+            faceBook.setCapacity(250);
             
             //Add a farm
             ConquerSpace.game.universe.Point pt = getRandomEmptyPoint(starting, selector);

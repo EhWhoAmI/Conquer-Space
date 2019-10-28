@@ -26,6 +26,4 @@ public class SpacePort extends Building{
     public Color getColor() {
         return Color.MAGENTA;
     }
-    
-    
 }

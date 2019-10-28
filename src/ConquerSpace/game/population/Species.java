@@ -11,6 +11,9 @@ public class Species {
     private float breedingRate;
 
     private String name;
+    
+    //The amount of support a pop unit needs (as in pop)
+    private float upkeep = 0;
 
     public Species(int foodPerMonth, float breedingRate, String name) {
         this.foodPerMonth = foodPerMonth;
@@ -40,6 +43,14 @@ public class Species {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public float getUpkeep() {
+        return upkeep;
+    }
+
+    public void setUpkeep(float upkeep) {
+        this.upkeep = upkeep;
     }
 }
 

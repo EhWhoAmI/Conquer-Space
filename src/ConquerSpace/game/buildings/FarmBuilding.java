@@ -1,22 +1,28 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.Workable;
 import java.awt.Color;
 import java.util.ArrayList;
 
 /**
- * Farms have 2 types, a crop one and a livestock one, maybe a combined one. We'll see.
+ * Farms have 2 types, a crop one and a livestock one, maybe a combined one.
+ * We'll see.   
+ *
  * @author zyunl
  */
-public class FarmBuilding extends Building implements PopulationStorage{
+public class FarmBuilding extends Building implements PopulationStorage, Workable {
+
     private FarmType farmType;
     public ArrayList<LocalLife> farmCreatures;
     private int productivity = 0;
     public ArrayList<PopulationUnit> population;
     private int capacity = 0;
     private int maxCapacity = 0;
-    
+
     public FarmBuilding(FarmType ft) {
         farmType = ft;
         farmCreatures = new ArrayList<>();
@@ -32,9 +38,9 @@ public class FarmBuilding extends Building implements PopulationStorage{
     public int getMaxStorage() {
         return 1;
     }
-    
+
     public static enum FarmType {
-        Livestock, 
+        Livestock,
         Crop;
     }
 
@@ -61,8 +67,8 @@ public class FarmBuilding extends Building implements PopulationStorage{
     public void setCapacity(int maxCapacity) {
         this.capacity = maxCapacity;
     }
-    
-     @Override
+
+    @Override
     public Color getColor() {
         return Color.GREEN;
     }
@@ -73,5 +79,11 @@ public class FarmBuilding extends Building implements PopulationStorage{
 
     public int getMaxCapacity() {
         return maxCapacity;
+    }
+
+    @Override
+    public void processJob(Job j) {
+        //Harvest a little
+        j.resources.put(GameController.foodResource, productivity);
     }
 }
