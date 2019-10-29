@@ -9,9 +9,11 @@ import java.util.HashMap;
  */
 public class TerrainColoring {
 
-    public static final int NUMBER_OF_COLORS = 4;
+    public static final int NUMBER_OF_ROCKY_COLORS = 4;
 
-    public static HashMap<Float, Color> getTerrainColoring(int i) {
+    public static final int NUMBER_OF_GASSY_COLORS = 2;
+
+    public static HashMap<Float, Color> getRockyTerrainColoring(int i) {
         HashMap<Float, Color> colors = new HashMap<>();
 
         switch (i) {
@@ -38,6 +40,28 @@ public class TerrainColoring {
             case 3:
                 colors.put(-1f, new Color(225, 255, 255));
                 colors.put(0.7f, new Color(182, 196, 219));
+        }
+        return colors;
+    }
+
+    public static HashMap<Float, Color> getGassyTerrainColoring(int i) {
+        HashMap<Float, Color> colors = new HashMap<>();
+
+        switch (i) {
+            case 0:
+                colors.put(-1f, new Color(200, 139, 58));
+                colors.put(-0.5f, new Color(167, 156, 134));
+                colors.put(-0.25f, new Color(210, 207, 218));
+                colors.put(0f, new Color(211, 156, 126));
+                colors.put(0.25f, new Color(144, 97, 77));
+                colors.put(0.75f, new Color(64, 68, 54));
+                break;
+            case 1:
+                colors.put(-1f, new Color(52, 62, 71));
+                colors.put(-0.75f, new Color(123, 120, 105));
+                colors.put(-.5f, new Color(164, 155, 114));
+                colors.put(0f, new Color(197, 171, 110));
+                colors.put(0.5f, new Color(195, 161, 113));
         }
         return colors;
     }

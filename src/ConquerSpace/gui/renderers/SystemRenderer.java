@@ -50,34 +50,39 @@ public class SystemRenderer {
         //The terrain will be circles
 
         //Size of star system
-        long size = 0;
-        for (int i = 0; i < sys.getPlanetCount(); i++) {
-            if (sys.getPlanet(i).getOrbitalDistance() > size) {
-                size = sys.getPlanet(i).getOrbitalDistance();
-            }
-            //render terrain
-            if (sys.getPlanet(i).getPlanetType() == PlanetTypes.ROCK) {
-                TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
-                systemTerrain[i] = toBufferedImage(tr.getImage(0.15));
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                long size = 0;
+                for (int i = 0; i < sys.getPlanetCount(); i++) {
+                    if (sys.getPlanet(i).getOrbitalDistance() > size) {
+                        size = sys.getPlanet(i).getOrbitalDistance();
+                    }
+                    //render terrain
+                    TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
+                    systemTerrain[i] = toBufferedImage(tr.getImage(0.15));
 
-                //Create copy
-                BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
-                systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight(), systemTerrain[i].getWidth(), BufferedImage.TYPE_INT_ARGB);
+                    //Create copy
+                    BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
+                    systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight(), systemTerrain[i].getWidth(), BufferedImage.TYPE_INT_ARGB);
 
-                for (int x = 0; x < temp.getWidth(); x++) {
-                    for (int y = 0; y < temp.getHeight(); y++) {
-                        //Draw
-                        int centerX = temp.getWidth() / 2;
+                    for (int x = 0; x < temp.getWidth(); x++) {
+                        for (int y = 0; y < temp.getHeight(); y++) {
+                            //Draw
+                            int centerX = temp.getWidth() / 2;
 
-                        int centerY = temp.getHeight() / 2;
-                        if (Math.sqrt((centerY - y) * (centerY - y) + (centerX - x) * (centerX - x)) <= temp.getWidth() / 2) {
-                            systemTerrain[i].setRGB(x, y, temp.getRGB(x, y));
+                            int centerY = temp.getHeight() / 2;
+                            if (Math.sqrt((centerY - y) * (centerY - y) + (centerX - x) * (centerX - x)) <= temp.getWidth() / 2) {
+                                systemTerrain[i].setRGB(x, y, temp.getRGB(x, y));
+                            }
                         }
                     }
                 }
             }
-        }
-
+        };
+        
+        Thread thread = new Thread(r);
+        thread.start();
         sizeofAU = 15;
     }
 
@@ -167,7 +172,6 @@ public class SystemRenderer {
                 case PlanetTypes.GAS:
                     g2d.setColor(Color.MAGENTA);
                     g2d.fill(planet);
-
                     break;
                 case PlanetTypes.ROCK:
                     g2d.setColor(Color.ORANGE);

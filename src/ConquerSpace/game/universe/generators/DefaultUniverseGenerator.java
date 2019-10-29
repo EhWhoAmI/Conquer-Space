@@ -119,7 +119,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 } else {
                     //Rock
                     planetSize = randint(rand, 30, 100);
-
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
 
@@ -150,12 +149,14 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
                 if (planetType == PlanetTypes.ROCK) {
                     p.setTerrainSeed(rand.nextInt());
-                    p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_COLORS));
+                    p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
                     //= terrainColorses;
+                } else if (planetType == PlanetTypes.GAS) {
+                    p.setTerrainSeed(rand.nextInt());
+                    p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_GASSY_COLORS));
                 }
                 //Set name
                 if (planetNameGenerator != null) {
-
                     p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
                 }
                 //Set changin degrees
