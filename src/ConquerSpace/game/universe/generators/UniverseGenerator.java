@@ -8,6 +8,6 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
  *
  * @author User
  */
-public abstract class UniverseGenerator {
+public abstract class UniverseGenerator {  
     public abstract Universe generate(UniverseConfig u, CivilizationConfig c, long seed);
 }

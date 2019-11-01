@@ -16,6 +16,8 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.people.Administrator;
+import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.JobRank;
 import ConquerSpace.game.population.JobType;
@@ -30,7 +32,6 @@ import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
@@ -42,6 +43,8 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.names.NameGenerator;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -143,14 +146,11 @@ public class GameUpdater {
             }
 
             public static int getLensSize(int quality, int range) {
-                //Math.PI * (size) * (size) + 1
-
                 return (int) (Math.sqrt((Math.pow(Math.E, range / 2) - 1) / Math.PI));
             }
         }
 
         public static class Engine {
-
             public static int getEngineMass(int thrust, EngineTechnology tech) {
                 return (int) (tech.getThrustMultiplier() * thrust);
             }
@@ -165,15 +165,6 @@ public class GameUpdater {
     }
 
     public void updateStarSystem(StarSystem sys, StarDate date) {
-        //Update the position
-        RendererMath.Point pt
-                = RendererMath.polarCoordToCartesianCoord(sys.getGalaticLocation().getDistance(),
-                        sys.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
-
-        sys.setX(pt.x);
-        sys.setY(pt.y);
-
-        //Process turn of the planets then the stars.
         //Maybe later the objects in space.
         for (int i = 0; i < sys.getPlanetCount(); i++) {
             processPlanet(sys.getPlanet(i), date);
@@ -185,18 +176,6 @@ public class GameUpdater {
     }
 
     public void processPlanet(Planet p, StarDate date) {
-        //Calculate position
-        //Increase degrees
-        //Calculate degrees to mod
-
-        p.modDegrees(p.getDegreesPerTurn());
-        RendererMath.Point pt
-                = RendererMath.polarCoordToCartesianCoord(p.getOrbitalDistance(),
-                        p.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
-
-        p.setX(pt.x);
-        p.setY(pt.y);
-
         organizePopulation(p);
 
         processPlanetJobs(p, date);
@@ -314,6 +293,7 @@ public class GameUpdater {
     }
 
     public void updateObjectPositions() {
+        long start = System.currentTimeMillis();
         //Loop through star systems
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystem(i);
@@ -325,6 +305,8 @@ public class GameUpdater {
             system.setY(pt.y);
             for (int k = 0; k < system.getPlanetCount(); k++) {
                 Planet planet = system.getPlanet(k);
+                planet.modDegrees(planet.getDegreesPerTurn());
+
                 RendererMath.Point ppt
                         = RendererMath.polarCoordToCartesianCoord(planet.getOrbitalDistance(),
                                 planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
@@ -333,6 +315,8 @@ public class GameUpdater {
                 planet.setY(ppt.y);
             }
         }
+        long end = System.currentTimeMillis();
+        LOGGER.info("Took " + (end - start) + " ms to process all star systems");
     }
 
     /**
@@ -632,6 +616,41 @@ public class GameUpdater {
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
                     p.population.add(unit);
                 }
+            }
+        }
+    }
+
+    public void createPeople() {
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+            Civilization c = Globals.universe.getCivilization(i);
+            NameGenerator gen = null;
+            try {
+                gen = NameGenerator.getNameGenerator("us.names");
+            } catch (IOException ex) {
+                //Ignore
+            }
+            //Create 5-10 random scientists
+            c.unrecruitedPeople.clear();
+            int peopleCount = (int) (Math.random() * 5) + 5;
+            for (int peep = 0; peep < peopleCount; peep++) {
+                int age = (int) (Math.random() * 40) + 20;
+                String person = "name";
+                person = gen.getName((int) Math.round(Math.random()));
+                Scientist nerd = new Scientist(person, age);
+                nerd.setSkill((int) (Math.random() * 5) + 1);
+                c.unrecruitedPeople.add(nerd);
+
+            }
+            //Admins
+            peopleCount = (int) (Math.random() * 5) + 5;
+
+            for (int peep = 0; peep < peopleCount; peep++) {
+                int age = (int) (Math.random() * 40) + 20;
+                String person = "name";
+                person = gen.getName((int) Math.round(Math.random()));
+                Administrator dude = new Administrator(person, age);
+                //nerd.setSkill((int) (Math.random() * 5) + 1);
+                c.unrecruitedPeople.add(dude);
             }
         }
     }

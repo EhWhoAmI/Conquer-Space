@@ -5,6 +5,7 @@ import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.Checksum;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
 import java.awt.AWTEvent;
@@ -15,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
@@ -60,7 +62,6 @@ public class ConquerSpace {
         } catch (IOException ex) {
             LOGGER.info("Io exception. No Problem.", ex);
         }
-
     }
 
     /**
@@ -73,6 +74,11 @@ public class ConquerSpace {
      */
     public static Messages localeMessages;
 
+    public static String codeChecksum = null;
+    public static String assetChecksum = null;
+
+    public static final boolean DEBUG = true;
+    
     /**
      * Main class.
      *
@@ -83,68 +89,16 @@ public class ConquerSpace {
         LOGGER.info("Run started: " + new Date().toString());
         LOGGER.info("Version " + VERSION.toString());
 
-        //Init settings, and read from file if possible
-        Globals.settings = new Properties();
-        //Check for the existance of the settings file
-        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
-        if (settingsFile.exists()) {
-            try {
-                //Read from file.
-                FileInputStream fis = new FileInputStream(settingsFile);
-                Globals.settings.load(fis);
+        //Generate hash to verify the version
+        generateChecksum();
 
-                //Get settings
-                String locale = Globals.settings.getProperty("locale");
-                String[] locales = locale.split("-");
-                localeMessages = new Messages(new Locale(locales[0], locales[1]));
+        configureSettings();
 
-                //get version
-                String version = Globals.settings.getProperty("version");
-                if (!(((version.split("-"))[0]).equals(VERSION.toString().split("-")[0]))) {
-                    //Then different version, update. How, idk.
-                }
-
-            } catch (IOException ex) {
-                LOGGER.warn("Cannot load settings. Using default", ex);
-            }
-        } else {
-            try {
-                if (!settingsFile.getParentFile().exists()) {
-                    settingsFile.getParentFile().mkdir();
-                }
-                settingsFile.createNewFile();
-                //Add default settings
-
-                //Default settings
-                Globals.settings.setProperty("locale", "en-US");
-                localeMessages = new Messages(new Locale("en", "US"));
-
-                //Version
-                Globals.settings.setProperty("version", VERSION.toString());
-                Globals.settings.setProperty("debug", "no");
-
-                Globals.settings.setProperty("music", "yes");
-
-                Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
-            } catch (IOException ex) {
-                LOGGER.warn("Unable to create settings file!", ex);
-            }
-        }
         //Set catch all exceptions
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
 
-        try {
-            //Set look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            LOGGER.warn("", ex);
-        } catch (InstantiationException ex) {
-            LOGGER.warn("", ex);
-        } catch (IllegalAccessException ex) {
-            LOGGER.warn("", ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            LOGGER.warn("", ex);
-        }
+        initLookAndFeel();
+
         GameController.musicPlayer = new MusicPlayer();
         if (Globals.settings.getProperty("music").equals("no")) {
             GameController.musicPlayer.setToPlay(false);
@@ -155,21 +109,6 @@ public class ConquerSpace {
         //New Game Menu
         MainMenu menu = new MainMenu();
         menu.setVisible(true);
-    }
-
-    static class EventQueueProxy extends EventQueue {
-
-        protected void dispatchEvent(AWTEvent newEvent) {
-            try {
-                super.dispatchEvent(newEvent);
-            } catch (Throwable t) {
-                ExceptionHandling.ExceptionMessageBox("Exception!", t);
-                //Also print stack trace if debug
-                if (true) {
-                    t.printStackTrace();
-                }
-            }
-        }
     }
 
     public static void loadFiles() {
@@ -234,5 +173,122 @@ public class ConquerSpace {
 
         //Log how long that took
         LOGGER.info("Took " + (endTime - startTime) + "ms to load.");
+    }
+
+    public static void initLookAndFeel() {
+        try {
+            //Set look and feel
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            LOGGER.warn("", ex);
+        } catch (InstantiationException ex) {
+            LOGGER.warn("", ex);
+        } catch (IllegalAccessException ex) {
+            LOGGER.warn("", ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            LOGGER.warn("", ex);
+        }
+    }
+
+    public static void configureSettings() {
+        //Init settings, and read from file if possible
+        Globals.settings = new Properties();
+        //Check for the existance of the settings file
+        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
+        if (settingsFile.exists()) {
+            try {
+                //Read from file.
+                FileInputStream fis = new FileInputStream(settingsFile);
+                Globals.settings.load(fis);
+
+                //Get settings
+                String locale = Globals.settings.getProperty("locale");
+                String[] locales = locale.split("-");
+                localeMessages = new Messages(new Locale(locales[0], locales[1]));
+
+                //get version
+                String version = Globals.settings.getProperty("version");
+                if (!(((version.split("-"))[0]).equals(VERSION.toString().split("-")[0]))) {
+                    //Then different version, update. How, idk.
+                }
+
+            } catch (IOException ex) {
+                LOGGER.warn("Cannot load settings. Using default", ex);
+            }
+        } else {
+            try {
+                if (!settingsFile.getParentFile().exists()) {
+                    settingsFile.getParentFile().mkdir();
+                }
+                settingsFile.createNewFile();
+                //Add default settings
+
+                //Default settings
+                Globals.settings.setProperty("locale", "en-US");
+                localeMessages = new Messages(new Locale("en", "US"));
+
+                //Version
+                Globals.settings.setProperty("version", VERSION.toString());
+                Globals.settings.setProperty("debug", "no");
+
+                Globals.settings.setProperty("music", "yes");
+
+                Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+            } catch (IOException ex) {
+                LOGGER.warn("Unable to create settings file!", ex);
+            }
+        }
+    }
+
+    public static void generateChecksum() {
+        //Get current file
+        File codeFile = new File(ConquerSpace.class.getProtectionDomain().getCodeSource()
+                .getLocation().getPath());
+        File assetFolder = new File(System.getProperty("user.dir") + "/assets/data");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                long start = System.currentTimeMillis();
+                try {
+                    codeChecksum = Checksum.hashFolder(codeFile);
+                    LOGGER.info("Done with code checksum");
+                    assetChecksum = Checksum.hashFolder(assetFolder);
+                    LOGGER.info("Done with asset checksum");
+                } catch (NoSuchAlgorithmException ex) {
+                    LOGGER.warn("", ex);
+                } catch (IOException ex) {
+                    LOGGER.warn("", ex);
+                }
+                LOGGER.info("Code checksum: " + codeChecksum);
+                LOGGER.info("Asset checksum: " + assetChecksum);
+                long end = System.currentTimeMillis();
+                LOGGER.info("Time needed to calculate checksum: " + (end - start));
+            }
+        };
+        Thread checksumThread = new Thread(runnable);
+        checksumThread.setName("checksum");
+        checksumThread.start();
+    }
+
+    public static void initalizeCommandLineArgs() {
+
+    }
+
+    /**
+     * For processing exceptions and things like that.
+     */
+    static class EventQueueProxy extends EventQueue {
+
+        protected void dispatchEvent(AWTEvent newEvent) {
+            try {
+                super.dispatchEvent(newEvent);
+            } catch (Throwable t) {
+                ExceptionHandling.ExceptionMessageBox("Exception!", t);
+                //Also print stack trace if debug
+                if (true) {
+                    t.printStackTrace();
+                }
+            }
+        }
     }
 }

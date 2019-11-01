@@ -39,6 +39,8 @@ public class DebugStatsWindow extends JInternalFrame {
     private JButton runTrashCompactor;
 
     private JButton openConsole;
+
+    private JButton deviceInfo;
     /**
      * Universe
      */
@@ -55,6 +57,8 @@ public class DebugStatsWindow extends JInternalFrame {
         Runtime runtime = Runtime.getRuntime();
         memoryusedLabel = new JLabel("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
         threadCountLabel = new JLabel("Threads currently running: " + Thread.getAllStackTraces().size());
+        deviceInfo = new JButton("Current runtime stats");
+
         dumpUniverseButton = new JButton("Dump universe");
         dumpUniverseButton.setFocusable(false);
         dumpUniverseButton.addActionListener((e) -> {
@@ -87,6 +91,26 @@ public class DebugStatsWindow extends JInternalFrame {
             CQSPConsole con = new CQSPConsole(u, u.getCivilization(0));
             getDesktopPane().add(con);
         });
+
+        deviceInfo.addActionListener((e) -> {
+            //Writes the debug stats to a file...
+            FileWriter writer = null;
+            try {
+                //Write the universe to file
+                writer = new FileWriter("./runstats.txt");
+                PrintWriter pw = new PrintWriter(writer);
+                pw.println("This file contains data about your computer. You do not need to ");
+            } catch (IOException ex) {
+                LOGGER.error("Cannot write to file!", ex);
+            } finally {
+                try {
+                    writer.close();
+                } catch (IOException ex) {
+                    LOGGER.error("Cannot close file!", ex);
+                }
+            }
+        });
+
         add(memoryusedLabel);
         add(threadCountLabel);
         add(dumpUniverseButton);
@@ -230,8 +254,8 @@ public class DebugStatsWindow extends JInternalFrame {
         }
         return displaySize;
     }
-    
-        public static String byteCountToDisplaySize(final long size) {
+
+    public static String byteCountToDisplaySize(final long size) {
         return byteCountToDisplaySize(BigInteger.valueOf(size));
     }
 }

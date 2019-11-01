@@ -1,6 +1,5 @@
 package ConquerSpace.gui.renderers;
 
-import ConquerSpace.game.universe.generators.TerrainGenerator;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;

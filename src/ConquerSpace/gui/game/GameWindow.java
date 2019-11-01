@@ -103,7 +103,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         mainInterfaceWindow = new MainInterfaceWindow(c, u);
         newsWindow = new NewsWindow(c);
         addFrame(mainInterfaceWindow);
-        addFrame(newsWindow);
+        //addFrame(newsWindow);
         JMenu windows = new JMenu("Windows");
         JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
         timeIncrementwindow.addActionListener(a -> {
@@ -195,34 +195,32 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
             //addFrame(new ShipListManager(u, c));
         });
 
-        JMenuItem fleets = new JMenuItem("Fleets");
-
-        JMenuItem shipDesigner = new JMenuItem("Ship designer");
-        shipDesigner.addActionListener(a -> {
-            // addFrame(new ShipDesigner(c));
-        });
-
-        JMenuItem shipComponentDesigner = new JMenuItem("Ship Component Designer");
-        shipComponentDesigner.addActionListener(a -> {
-        });
-
-        JMenuItem satelliteDesigner = new JMenuItem("Satellite designer");
-        satelliteDesigner.addActionListener(a -> {
-            //addFrame(new SatelliteDesigner(c));
-        });
-
-        JMenuItem hullDesigner = new JMenuItem("Create new hull type");
-        hullDesigner.addActionListener(a -> {
-            //addFrame(new HullCreator(c));
-        });
-
+//        JMenuItem fleets = new JMenuItem("Fleets");
+//
+//        JMenuItem shipDesigner = new JMenuItem("Ship designer");
+//        shipDesigner.addActionListener(a -> {
+//            // addFrame(new ShipDesigner(c));
+//        });
+//
+//        JMenuItem shipComponentDesigner = new JMenuItem("Ship Component Designer");
+//        shipComponentDesigner.addActionListener(a -> {
+//        });
+//
+//        JMenuItem satelliteDesigner = new JMenuItem("Satellite designer");
+//        satelliteDesigner.addActionListener(a -> {
+//            //addFrame(new SatelliteDesigner(c));
+//        });
+//
+//        JMenuItem hullDesigner = new JMenuItem("Create new hull type");
+//        hullDesigner.addActionListener(a -> {
+//            //addFrame(new HullCreator(c));
+//        });
         //ships.add(allShips);
-        ships.add(fleets);
+        //ships.add(fleets);
         //ships.add(shipDesigner);
         //ships.add(shipComponentDesigner);
         //ships.add(satelliteDesigner);
         //ships.add(hullDesigner);
-
         JMenu resources = new JMenu("Resources");
         JMenuItem resourceIndex = new JMenuItem("Resources");
         resourceIndex.addActionListener(a -> {
@@ -375,6 +373,11 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 translateY -= ((startPoint.y - e.getY()) * (scale));
                 startPoint = e.getPoint();
                 repaint();
+            } else if(isDragging && SwingUtilities.isMiddleMouseButton(e)) {
+                //Set point of the start and end
+                if(drawing == DRAW_STAR_SYSTEM) {
+                    systemRenderer.setMeasureDistance(startPoint, e.getPoint());
+                }
             }
         }
 
@@ -453,7 +456,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
                             StarSystem sys = universe.getStarSystem(i);
-                            if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
+                            if (Math.hypot(( (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
                                     if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
@@ -627,6 +630,12 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
                 popupMenu.show(this, e.getX(), e.getY());
             }
+            if(SwingUtilities.isMiddleMouseButton(e)) {
+                //Set point of the start and end
+                if(drawing == DRAW_STAR_SYSTEM) {
+                    systemRenderer.endMeasureDistance();
+                }
+            }
         }
 
         @Override
@@ -663,14 +672,17 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
             double scroll = (double) e.getUnitsToScroll();
             double scrollBefore = scale;
             double newScale = (Math.exp(scroll * 0.01) * scale);
-            if (newScale > 0) {
-                scale = newScale;
-                double msX = ((e.getX() * scale));
-                double msY = ((e.getY() * scale));
-                double scaleChanged = scale - scrollBefore;
+            //Limit scale
+            if (newScale > 0.05) {
+                if (newScale > 0) {
+                    scale = newScale;
+                    double msX = ((e.getX() * scale));
+                    double msY = ((e.getY() * scale));
+                    double scaleChanged = scale - scrollBefore;
 
-                translateX += ((msX * scaleChanged)) / scale;
-                translateY += ((msY * scaleChanged)) / scale;
+                    translateX += ((msX * scaleChanged)) / scale;
+                    translateY += ((msY * scaleChanged)) / scale;
+                }
             }
             //Now repaint
             repaint();

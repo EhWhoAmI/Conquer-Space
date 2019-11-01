@@ -48,7 +48,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Load resources
         AssetReader.readResources();
 
-        TerrainGenerator terrainGenerator = new TerrainGenerator();
         //Create star systems
         int starSystemCount = 100;
         switch (u.universeSize) {
@@ -62,11 +61,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 starSystemCount = (rand.nextInt(150) + 300);
                 break;
         }
+
         NameGenerator planetNameGenerator = null;
         try {
             planetNameGenerator = NameGenerator.getNameGenerator("planet.names");
         } catch (IOException ex) {
         }
+
         for (int i = 0; i < starSystemCount; i++) {
             //Create star system
             int dist = rand.nextInt(6324100);
@@ -74,36 +75,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             StarSystem sys = new StarSystem(i, new GalacticLocation(degrees, dist));
 
             //Add stars
-            int starType = rand.nextInt(10000);
-            int starSize;
-            int solarRadius = 695508;
-
-            if (starType < 7) {
-                starType = StarTypes.TYPE_O;
-                starSize = randint(rand, (int) (6.6 * solarRadius), (int) (100f * solarRadius));
-            } else if (starType < 20) {
-                starType = StarTypes.TYPE_B;
-                starSize = randint(rand, (int) (1.8 * solarRadius), (int) (6.6 * solarRadius));
-            } else if (starType < 90) {
-                starType = StarTypes.TYPE_A;
-                starSize = randint(rand, (int) (1.4 * solarRadius), (int) (1.8 * solarRadius));
-            } else if (starType < 390) {
-                starType = StarTypes.TYPE_F;
-                starSize = randint(rand, (int) (1.15 * solarRadius), (int) (1.4 * solarRadius));
-            } else if (starType < 1290) {
-                starType = StarTypes.TYPE_G;
-                starSize = randint(rand, (int) (0.96 * solarRadius), (int) (1.15 * solarRadius));
-            } else if (starType < 2500) {
-                starType = StarTypes.TYPE_K;
-                starSize = randint(rand, (int) (0.7 * solarRadius), (int) (0.96 * solarRadius));
-            } else {
-                starType = StarTypes.TYPE_M;
-                starSize = randint(rand, (int) (0.1 * solarRadius), (int) (0.7 * solarRadius));
-            }
-
-            Star star = new Star(starType, starSize, 0);
+            Star star = generateStar(rand);
             sys.addStar(star);
-
+            
             int planetCount = rand.nextInt(11);
             long lastDistance = 10000000;
             for (int k = 0; k < planetCount; k++) {
@@ -204,7 +178,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Generate Species
         Species playerSpecies = new Species(1, 1, c.speciesName);
         playerSpecies.setUpkeep(0.05f);
-        
+
         //Set currency
         Currency nationCurrency = new Currency();
         nationCurrency.setName(c.civCurrencyName);
@@ -280,6 +254,39 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             randomP++;
         } while (true);
         return new UniversePath(randomSS, randomP);
+    }
+
+    private Star generateStar(Random rand) {
+        int starType = rand.nextInt(10000);
+        int starSize;
+        int solarRadius = 695508;
+
+        if (starType < 7) {
+            starType = StarTypes.TYPE_O;
+            starSize = randint(rand, (int) (6.6 * solarRadius), (int) (100f * solarRadius));
+        } else if (starType < 20) {
+            starType = StarTypes.TYPE_B;
+            starSize = randint(rand, (int) (1.8 * solarRadius), (int) (6.6 * solarRadius));
+        } else if (starType < 90) {
+            starType = StarTypes.TYPE_A;
+            starSize = randint(rand, (int) (1.4 * solarRadius), (int) (1.8 * solarRadius));
+        } else if (starType < 390) {
+            starType = StarTypes.TYPE_F;
+            starSize = randint(rand, (int) (1.15 * solarRadius), (int) (1.4 * solarRadius));
+        } else if (starType < 1290) {
+            starType = StarTypes.TYPE_G;
+            starSize = randint(rand, (int) (0.96 * solarRadius), (int) (1.15 * solarRadius));
+        } else if (starType < 2500) {
+            starType = StarTypes.TYPE_K;
+            starSize = randint(rand, (int) (0.7 * solarRadius), (int) (0.96 * solarRadius));
+        } else {
+            starType = StarTypes.TYPE_M;
+            starSize = randint(rand, (int) (0.1 * solarRadius), (int) (0.7 * solarRadius));
+        }
+
+        Star star = new Star(starType, starSize, 0);
+        return star;
+
     }
 
     private void generateLocalLife(Random rand, Planet p) {

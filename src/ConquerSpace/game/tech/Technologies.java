@@ -6,6 +6,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.ResourceLoader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,15 +23,16 @@ import org.json.JSONObject;
  * @author Zyun
  */
 public class Technologies {
-    
+
     private static final Logger LOGGER = CQSPLogger.getLogger(Technologies.class.getName());
     public static ArrayList<Technology> techonologies = new ArrayList<>();
-    
+
     public static final int RESEARCHED = 101;
     public static final int REVEALED = 100;
-    
+
     public static void readTech() {
-        File techFolder = new File(System.getProperty("user.dir") + "/assets/tech/techs");
+        File techFolder = ResourceLoader.getResourceByFile("text.tech.techs");
+
         File[] tempFiles = techFolder.listFiles();
         for (File f : tempFiles) {
             try {
@@ -41,7 +43,7 @@ public class Technologies {
             }
         }
     }
-    
+
     public static void readTechFromFile(File file) throws FileNotFoundException, IOException, JSONException {
         FileInputStream fis = new FileInputStream(file);
         byte[] data = new byte[(int) file.length()];
@@ -62,7 +64,7 @@ public class Technologies {
 
             //Tech level
             int level = techonology.getInt("level");
-            
+
             int type = -1;
             switch (techonology.getString("type")) {
                 case "UNLOCK":
@@ -75,7 +77,7 @@ public class Technologies {
 
             //Difficulty
             int difficulty = techonology.getInt("difficulty");
-            
+
             JSONArray fieldsArray = techonology.getJSONArray("fields");
 
             //Loop over fields
@@ -83,16 +85,16 @@ public class Technologies {
             for (int j = 0; j < fieldsArray.length(); j++) {
                 fields[j] = fieldsArray.getString(j);
             }
-            
+
             JSONArray tagsArray = techonology.getJSONArray("tags");
-            
+
             String[] tags = new String[tagsArray.length()];
             for (int j = 0; j < tagsArray.length(); j++) {
                 tags[j] = tagsArray.getString(j);
             }
-            
+
             JSONArray actionsarry = techonology.getJSONArray("action");
-            
+
             String[] actions = new String[actionsarry.length()];
             for (int j = 0; j < actionsarry.length(); j++) {
                 actions[j] = actionsarry.getString(j);
@@ -107,20 +109,20 @@ public class Technologies {
             techonologies.add(t);
         }
     }
-    
+
     public static Technology getTechByName(String s) {
         return (techonologies.stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
     }
-    
+
     public static Technology[] getTechsByTag(String tag) {
         Object[] techList = techonologies.stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray();
         return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
-    
+
     public static Technology getTechByID(int id) {
         return (techonologies.stream().filter(e -> e.getId() == id).findFirst().get());
     }
-    
+
     public static void parseAction(String action, Civilization c) {
         if (action.startsWith("tech")) {
             //Is boosting chance for tech
@@ -176,7 +178,7 @@ public class Technologies {
 
             //Remove trailing white space.
             String launchName = (new String(dst).trim());
-            
+
             LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
             if (sys != null) {
                 c.launchSystems.add(sys);
@@ -203,11 +205,11 @@ public class Technologies {
         } else if (action.startsWith("component")) {
             //Do component
             char[] dst = new char[50];
-            
+
             action.getChars("component".length() + 1, action.length() - 1, dst, 0);
-            
+
             String compName = (new String(dst).trim());
-            
+
             JSONObject s = GameController.shipComponentTemplates.stream().
                     filter(e -> e.getString("id").equals(compName)).findFirst().orElseGet(null);
             if (s != null) {
@@ -216,12 +218,12 @@ public class Technologies {
         } else if (action.startsWith("thrust")) {
             //Do component
             char[] dst = new char[50];
-            
+
             action.getChars("thrust".length() + 1, action.length() - 1, dst, 0);
-            
+
             String compName = (new String(dst).trim());
             int id = Integer.parseInt(compName);
-            
+
             EngineTechnology t = GameController.engineTechnologys.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
             if (t != null) {
                 c.engineTechs.add(t);
@@ -238,7 +240,7 @@ public class Technologies {
     public static int estFinishTime(Technology t) {
         return t.getDifficulty() * 1000;
     }
-    
+
     public static FieldNode findNode(FieldNode n, String s) {
         if (n == null) {
             return null;

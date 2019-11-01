@@ -9,5 +9,5 @@ assets/manuals/res/0.png
 assets/manuals/res/1.png
 assets/manuals/res/2.png
 assets/manuals/manlist.properties
-assets/tech/fields.xml
-assets/tech/techs/default.json
+assets/data/tech/fields.xml
+assets/data/tech/techs/default.json

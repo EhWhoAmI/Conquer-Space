@@ -76,10 +76,12 @@
     <target name="-post-compile">
         <copy todir="${dist.dir}/assets" >  
             <fileset dir="assets" includes="**"/>  
-            
+        </copy>
+        <copy todir="${dist.dir}" >  
+            <fileset file="runCQSP.bat"/>  
         </copy> 
     </target>
-    <target name="-post-jar">
+    <target name="-post-clean">
         <buildnumber file="assets/BUILDNO"/>
         <echo message="Changing build number"/>
     </target>

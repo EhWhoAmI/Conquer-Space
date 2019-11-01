@@ -166,7 +166,7 @@ public class MainMenu extends JFrame implements WindowListener {
             });
 
             about.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, String.format(localeMessages.getMessage("start.gui.MainMenu.versiontext"), ConquerSpace.VERSION.toString()), localeMessages.getMessage("start.gui.MainMenu.about"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, String.format(localeMessages.getMessage("start.gui.MainMenu.versiontext"), ConquerSpace.VERSION.toString(), System.getProperty("java.version")), localeMessages.getMessage("start.gui.MainMenu.about"), JOptionPane.INFORMATION_MESSAGE);
             });
 
             manual.addActionListener(e -> {
@@ -184,10 +184,6 @@ public class MainMenu extends JFrame implements WindowListener {
                     fis.close();
                     String text = new String(data);
 
-//                    JPanel pan = new JPanel();
-//                    pan.setLayout(new VerticalFlowLayout(5, 5));
-//                    JLabel l = new JLabel("<html>" + text.replace("\n", "<br/>") + "</html>");
-//                    pan.add(l);
                     JEditorPane pane = new JEditorPane("text/html", text);
                     pane.setEditable(false);
                     JScrollPane scroll = new JScrollPane(pane);

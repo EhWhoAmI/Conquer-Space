@@ -68,6 +68,7 @@ public class MusicPlayer {
                 }
             }
             );
+            t.setName("musicplayer");
             t.start();
         } catch (FileNotFoundException ex) {
             LOGGER.warn("No Music!", ex);

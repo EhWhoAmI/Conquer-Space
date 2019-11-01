@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.text.NumberFormat;
 import java.util.Map;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -54,11 +55,11 @@ public class PlanetOverview extends JPanel {
     private JRadioButton[] showResources;
 
     private boolean showPlanetTerrain = true;
-
+    private NumberFormat numberFormatter;
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
         setLayout(new GridLayout(2, 1));
-
+        numberFormatter = NumberFormat.getInstance();
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
         planetOverview.setBorder(new TitledBorder("Planet Info"));
@@ -67,7 +68,7 @@ public class PlanetOverview extends JPanel {
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
         ownerLabel = new JLabel();
-        orbitDistance = new JLabel("Distance: " + p.getOrbitalDistance() + " km");
+        orbitDistance = new JLabel("Distance: " + numberFormatter.format(p.getOrbitalDistance()) + " km, " + numberFormatter.format((double)p.getOrbitalDistance()/149598000d) + " AU");
 
         //Init planetname
         if (p.getName().equals("")) {

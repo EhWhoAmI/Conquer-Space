@@ -78,6 +78,7 @@ public class AlertNotification extends JInternalFrame implements Runnable {
     public void setVisible(boolean aFlag) {
         super.setVisible(aFlag);
         Thread t = new Thread(this);
+        t.setName("Alert");
         t.start();
     }
 }

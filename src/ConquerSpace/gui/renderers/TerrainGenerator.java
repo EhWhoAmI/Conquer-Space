@@ -1,4 +1,4 @@
-package ConquerSpace.game.universe.generators;
+package ConquerSpace.gui.renderers;
 
 import ConquerSpace.jLibNoise.noise.module.Perlin;
 import ConquerSpace.jLibNoise.noise.utils.Image;
