@@ -10,24 +10,16 @@ import javax.swing.JTabbedPane;
  * @author zyunl
  */
 public class SpaceShipOverview extends JPanel {
-
-    private ShipDesigner shipDesigner;
     private ShipListManager shipListManager;
-    private SatelliteDesigner satelliteDesigner;
     private JTabbedPane tabs;
 
     public SpaceShipOverview(Civilization civ, Universe u) {
         tabs = new JTabbedPane();
-        shipDesigner = new ShipDesigner(civ);
         shipListManager = new ShipListManager(u, civ);
-        satelliteDesigner = new SatelliteDesigner(civ);
-
+        
         tabs.add("Ship List", shipListManager);
-        tabs.add("Ship Designer", shipDesigner);
-        tabs.add("Satellite Designer", satelliteDesigner);
 
         tabs.addChangeListener(l -> {
-            shipDesigner.update();
         });
         add(tabs);
     }

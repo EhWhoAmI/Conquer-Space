@@ -55,6 +55,8 @@ public class ShipListManager extends JPanel {
                 }
             }
         });
+        table.getTableHeader().setReorderingAllowed(false);
+        
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
         update();

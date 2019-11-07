@@ -9,7 +9,6 @@ import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import static ConquerSpace.gui.game.GameWindow.CQSPDesktop.BOUNDS_SIZE;
 import ConquerSpace.util.CQSPLogger;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -283,22 +282,18 @@ public class SystemRenderer {
 
             //Get length of line to get the distance
             double distance = pointDistance(measureStart.x, measureStart.y, measureEnd.x, measureEnd.y);
-            double spaceLength = distance/ scale*sizeofAU;//((sizeofAU * number) = pixels*scale
+            //Length in km
+            double spaceLength = distance*scale*10_000_000/sizeofAU;//(previousY * sizeofAU) = px 
 
             //Get the halfway point to draw the text
             g2d.setColor(Color.blue);
-            g2d.drawString(String.format("%.3f pixels, %.3f AU, %.3f km" + (sizeofAU * spaceLength / scale), distance, spaceLength, spaceLength*149598000), (measureStart.x + measureEnd.x) / 2 + 10, (measureStart.y + measureEnd.y) / 2 + 10);
+            g2d.drawString(String.format("%.3f km, %.3f AU", spaceLength, spaceLength/149598000), (measureStart.x + measureEnd.x) / 2 + 10, (measureStart.y + measureEnd.y) / 2 + 10);
             g2d.setColor(Color.orange);
 
             Line2D.Float measureLine = new Line2D.Float(measureStart, measureEnd);
 
             g2d.draw(measureLine);
-
         }
-
-        Line2D.Float newLine = new Line2D.Float(100, 100, 100, 200);
-        g2d.setColor(Color.orange);
-        g2d.draw(newLine);
 
         //Draw scale line
         //Limit size of scale...

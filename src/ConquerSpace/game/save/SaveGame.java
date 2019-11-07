@@ -93,10 +93,10 @@ public class SaveGame {
                 JSONObject obj = new JSONObject();
 
                 obj.put("id", system.getId());
-                obj.put("degrees", system.getGalaticLocation().getDegrees());
-                obj.put("distance", system.getGalaticLocation().getDistance());
-                obj.put("planet-count", system.getPlanetCount());
-                obj.put("star-count", system.getStarCount());
+                obj.put("deg", system.getGalaticLocation().getDegrees());
+                obj.put("dist", system.getGalaticLocation().getDistance());
+                obj.put("planet-c", system.getPlanetCount());
+                obj.put("star-c", system.getStarCount());
 
                 //Now stuff everything into that
                 ArrayList<JSONObject> planets = new ArrayList<>();
@@ -108,8 +108,8 @@ public class SaveGame {
                     object.put("size", planet.getPlanetSize());
                     object.put("seed", planet.getTerrainSeed());
                     object.put("name", planet.getName());
-                    object.put("distance", planet.getOrbitalDistance());
-                    object.put("degrees", planet.getPlanetDegrees());
+                    object.put("dist", planet.getOrbitalDistance());
+                    object.put("deg", planet.getPlanetDegrees());
 
                     //Buildings
                     ArrayList<JSONObject> buildings = new ArrayList<>();
@@ -119,19 +119,19 @@ public class SaveGame {
                         JSONObject building = parseBuilding(key, value);
                         buildings.add(building);
                     }
-                    object.put("buildings", buildings);
+                    object.put("ings", buildings);
 
                     //Resource veins
                     ArrayList<JSONObject> veins = new ArrayList<>();
                     for (ResourceVein v : planet.resourceVeins) {
                         JSONObject veinObject = new JSONObject();
                         veinObject.put("id", v.getId());
-                        veinObject.put("difficulty", v.getDifficulty());
+                        veinObject.put("diff", v.getDifficulty());
                         veinObject.put("radius", v.getRadius());
                         veinObject.put("x", v.getX());
                         veinObject.put("y", v.getY());
-                        veinObject.put("resource", v.getResourceType().getId());
-                        veinObject.put("amount", v.getResourceAmount());
+                        veinObject.put("res", v.getResourceType().getId());
+                        veinObject.put("amt", v.getResourceAmount());
                         veins.add(veinObject);
                     }
                     object.put("veins", veins);

@@ -133,6 +133,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         techPointLabel = new JLabel("Tech Points: " + c.getTechPoints());
         techPointCount = new JLabel("Counts for 0 tech points");
         instantReshButton = new JButton("Instantly research!");
+        instantReshButton.setToolTipText("Used to research technology instantly, so that the game is not a drag.");
         instantReshButton.addActionListener(l -> {
             //calculate and add
             if (!tech.isSelectionEmpty()) {
@@ -153,7 +154,6 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
                     techInfoPanel.remove(instantReshButton);
                 }
             }
-
         });
 
         if (c.getTechPoints() > 0) {
@@ -161,6 +161,9 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
             techInfoPanel.add(techPointCount);
             techInfoPanel.add(instantReshButton);
         }
+
+        //Hide all the UI because nothing is selected
+        techInfoPanel.setVisible(false);
 
         researchProgressPanel = new JPanel();
         researchProgressPanel.setLayout(new VerticalFlowLayout());
@@ -221,8 +224,10 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
 
                 //Get the text
                 fieldListModel.clear();
-                for (String s : tech.getSelectedValue().getFields()) {
-                    fieldListModel.addElement(s);
+                if (tech.getSelectedValue() != null) {
+                    for (String s : tech.getSelectedValue().getFields()) {
+                        fieldListModel.addElement(s);
+                    }
                 }
             } else {
                 //Set everything to empty
@@ -285,6 +290,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
                 techInfoPanel.remove(techPointCount);
                 techInfoPanel.remove(instantReshButton);
             }
+            techInfoPanel.setVisible(true);
         }
     }
 }

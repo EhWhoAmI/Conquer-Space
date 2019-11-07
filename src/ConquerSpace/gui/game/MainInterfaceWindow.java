@@ -32,8 +32,9 @@ public class MainInterfaceWindow extends JInternalFrame {
     private SpaceShipOverview spaceShipOverview;
     private HullCreator hullCreator;
     private EconomyWindow economyWindow;
-    
+
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
+    private SatelliteDesigner satelliteDesigner;
 
     private CivInfoOverview civInfoOverview;
 
@@ -41,7 +42,7 @@ public class MainInterfaceWindow extends JInternalFrame {
     private RecruitingPerson recruitingPerson;
 
     private ResourceManager resourceManager;
-    
+
     private Civilization c;
     private Universe u;
 
@@ -102,10 +103,13 @@ public class MainInterfaceWindow extends JInternalFrame {
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
 
         JTabbedPane shipsComponentsOverviewPanel = new JTabbedPane();
-        
+
         buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(c);
         shipsComponentsOverviewPanel.add("Design Ship", buildSpaceShipAutomationMenu);
-        
+
+        satelliteDesigner = new SatelliteDesigner(c);
+        shipsComponentsOverviewPanel.add("Design Satellite", satelliteDesigner);
+
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(c);
         shipsComponentsOverviewPanel.add("Ship Components", shipComponentDesigner);
 
@@ -124,7 +128,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         civInfoOverview = new CivInfoOverview(c, u);
 
         resourceManager = new ResourceManager(c);
-        
+
         economyWindow = new EconomyWindow(c, u);
 
         tabs.add("Research and Science", researchViewer);

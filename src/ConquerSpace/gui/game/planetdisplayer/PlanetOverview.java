@@ -9,6 +9,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -58,7 +59,7 @@ public class PlanetOverview extends JPanel {
     private NumberFormat numberFormatter;
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
-        setLayout(new GridLayout(2, 1));
+        setLayout(new VerticalFlowLayout());
         numberFormatter = NumberFormat.getInstance();
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
@@ -80,7 +81,7 @@ public class PlanetOverview extends JPanel {
         //Init planetPath
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
-        name.append("" + p.getParentStarSystem());
+        name.append(p.getParentStarSystem());
         name.append(" Planet id " + p.getId());
         planetPath.setText(name.toString());
 

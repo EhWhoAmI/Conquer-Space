@@ -329,6 +329,7 @@ public class ShipDesigner extends JPanel {
 
         //Tables and stuff
         JPanel shipContainerThings = new JPanel();
+        shipContainerThings.setLayout(new HorizontalFlowLayout());
         shipComponentsContainer = new JPanel();
         componentTableTabs = new JTabbedPane();
 
