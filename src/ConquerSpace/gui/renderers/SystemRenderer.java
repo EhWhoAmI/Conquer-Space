@@ -24,8 +24,11 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import org.apache.logging.log4j.Logger;
-
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;import org.apache.logging.log4j.Logger;
 /**
  *
  * @author Zyun
@@ -42,8 +45,8 @@ public class SystemRenderer {
     public int sizeofAU;
 
     private BufferedImage[] systemTerrain;
-    private Thread rendererThread;
-
+//Background skybox
+    private BufferedImage skybox;	private Thread rendererThread;
     boolean processedRenders = false;
     double scaleSize = 20;
 
@@ -96,9 +99,12 @@ public class SystemRenderer {
                 LOGGER.info("Time to render system: " + (end - beginning));
             }
         };
-        rendererThread = new Thread(r);
-        rendererThread.setName("renderer");
-        sizeofAU = 15;
+        
+try {
+            skybox = ImageIO.read(new File("assets/img/bg.png"));
+        } catch (IOException ex) {
+        } rendererThread = new Thread(r);
+        rendererThread.setName("renderer");        sizeofAU = 15;
     }
 
     public void drawStarSystem(Graphics g, double translateX, double translateY, double scale) {
@@ -108,12 +114,15 @@ public class SystemRenderer {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
+        if (skybox != null) {
+            g2d.drawImage(skybox, (int) ((translateX / scale) * 0.025) - 30, (int) ((translateY / scale) * 0.025) - 30, null);
+        }
+        //Render bg image
         //g2d.fill(bg);
-        if (!processedRenders) {
+if (!processedRenders) {
             rendererThread.start();
             processedRenders = true;
-        }
-        //X Y grid for reference
+        }        //X Y grid for reference
         /*Line2D.Double xline = new Line2D.Double(
                 (translateX + bounds.width / 2) / scale,
                 (translateY + bounds.width / 2 + 10000) / scale,
