@@ -1,5 +1,6 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
@@ -22,10 +23,10 @@ import org.json.JSONObject;
  * @author zyunl
  */
 public class AssetReader {
-    
-        private static final Logger LOGGER = CQSPLogger.getLogger(AssetReader.class.getName());
 
-        public static void readResources() {
+    private static final Logger LOGGER = CQSPLogger.getLogger(AssetReader.class.getName());
+
+    public static void readResources() {
         ArrayList<Resource> resources = new ArrayList<>();
         File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.resources");
 
@@ -370,5 +371,48 @@ public class AssetReader {
                 }
             }
         }
+    }
+
+    public static void readPersonalityTraits() {
+        ArrayList<PersonalityTrait> traits = new ArrayList<>();
+        File traitsDir = ResourceLoader.getResourceByFile("dirs.traits");
+        File[] files = traitsDir.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (!f.getName().endsWith(".json")) {
+                    continue;
+                }   //Read, there is only one object
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    JSONObject obj = root.getJSONObject(i);
+                    String name = obj.getString("name");
+                    PersonalityTrait trait = new PersonalityTrait();
+                    trait.setName(name);
+                    traits.add(trait);
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        GameController.personalityTraits = traits;
     }
 }

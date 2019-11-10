@@ -1,8 +1,10 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.people.Person;
+import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
@@ -26,11 +28,14 @@ public class PersonWindow extends JPanel {
     private JLabel personAgeLabel;
     private JLabel personJobLabel;
     private JLabel skillLabel;
+    private JLabel positionLabel;
+    private DefaultListModel<PersonalityTrait> personalityListModel;
+    private JList<PersonalityTrait> personPersonalityList;
 
     private int previouslySelected = 0;
     private Civilization c;
 
-    public PersonWindow(Civilization c) {
+    public PersonWindow(Civilization c, Universe u) {
         this.c = c;
         setLayout(new GridLayout(1, 2));
         listModel = new DefaultListModel<>();
@@ -46,8 +51,14 @@ public class PersonWindow extends JPanel {
                 name.setText("Name: " + personList.getSelectedValue().getName());
                 personAgeLabel.setText("Age: " + personList.getSelectedValue().getAge());
                 personJobLabel.setText("Job: " + personList.getSelectedValue().getJobName());
-                if(personList.getSelectedValue() instanceof Scientist) {
-                    skillLabel.setText("Skill: " + ((Scientist)personList.getSelectedValue()).getSkill());
+                if (personList.getSelectedValue() instanceof Scientist) {
+                    skillLabel.setText("Skill: " + ((Scientist) personList.getSelectedValue()).getSkill());
+                }
+                positionLabel.setText("Location: " + personList.getSelectedValue().getPosition().getName() + ", " + u.getSpaceObject(personList.getSelectedValue().getPosition().getUniversePath()));
+
+                personalityListModel.clear();
+                for (PersonalityTrait pt : personList.getSelectedValue().traits) {
+                    personalityListModel.addElement(pt);
                 }
             }
         });
@@ -62,13 +73,19 @@ public class PersonWindow extends JPanel {
         personAgeLabel = new JLabel("Age: " + personList.getSelectedValue().getAge());
 
         personJobLabel = new JLabel("Job: " + personList.getSelectedValue().getJobName());
-        
+
         skillLabel = new JLabel("Skill: ");
+        positionLabel = new JLabel("Location: ");
+
+        personalityListModel = new DefaultListModel<>();
+        personPersonalityList = new JList<>(personalityListModel);
 
         container.add(name);
         container.add(personAgeLabel);
         container.add(personJobLabel);
         container.add(skillLabel);
+        container.add(positionLabel);
+        container.add(new JScrollPane(personPersonalityList));
         add(pane);
         add(container);
     }

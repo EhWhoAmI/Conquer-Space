@@ -8,4 +8,5 @@ import ConquerSpace.game.universe.UniversePath;
  */
 public interface PersonEnterable {
     public UniversePath getUniversePath();
+    public String getName();
 }

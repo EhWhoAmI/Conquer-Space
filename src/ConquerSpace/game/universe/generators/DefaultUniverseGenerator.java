@@ -11,6 +11,7 @@ import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
+import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -196,7 +197,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             //Create civ.
             Civilization civ = new Civilization(i + 1, universe);
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
-            civ.setController(new PlayerController());
+            civ.setController(new AIController());
             civ.setHomePlanetName("");
             civ.setName("");
             civ.setSpeciesName("");

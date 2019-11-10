@@ -1,5 +1,7 @@
 package ConquerSpace.game.people;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Zyun
@@ -8,6 +10,7 @@ public class Person {
     private String name;
     private int age;
     private PersonEnterable position;
+    public ArrayList<PersonalityTrait> traits;
     
     //Not sure what to add to this for now
     //private ArrayList<?> multipliers;
@@ -16,6 +19,7 @@ public class Person {
     public Person(String name, int age) {
         this.name = name;
         this.age = age;
+        traits = new ArrayList<>();
     }
 
     public int getAge() {

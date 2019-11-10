@@ -119,10 +119,10 @@ public class MainInterfaceWindow extends JInternalFrame {
         shipComponentsOverview.add(shipsComponentsOverviewPanel, BorderLayout.CENTER);
 
         JTabbedPane peopleTabs = new JTabbedPane();
-        personWindow = new PersonWindow(c);
+        personWindow = new PersonWindow(c, u);
         peopleTabs.add("Person List", personWindow);
 
-        recruitingPerson = new RecruitingPerson(c);
+        recruitingPerson = new RecruitingPerson(c, u);
         peopleTabs.add("Recruitment", recruitingPerson);
 
         civInfoOverview = new CivInfoOverview(c, u);

@@ -1,11 +1,6 @@
 package ConquerSpace.game;
 
-import static ConquerSpace.game.AssetReader.readEngineTechs;
-import static ConquerSpace.game.AssetReader.readLaunchSystems;
-import static ConquerSpace.game.AssetReader.readPopulationEvents;
-import static ConquerSpace.game.AssetReader.readSatellites;
-import static ConquerSpace.game.AssetReader.readShipComponents;
-import static ConquerSpace.game.AssetReader.readShipTypes;
+import static ConquerSpace.game.AssetReader.*;
 import ConquerSpace.game.buildings.AdministrativeCenter;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
@@ -17,6 +12,7 @@ import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.life.Fauna;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.people.Administrator;
+import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Species;
@@ -71,6 +67,7 @@ public class GameInitializer {
         readShipTypes();
         readShipComponents();
         readEngineTechs();
+        readPersonalityTraits();
 
         //Events
         readPopulationEvents();
@@ -95,11 +92,6 @@ public class GameInitializer {
             initializeTech(c, selector);
 
             initalizeCivValues(c);
-
-            initalizeRecruitedPeople(c, gen, selector);
-
-            //Add unrecruited people
-            createUnrecruitedPeople(c, gen);
 
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             material.setId(0);
@@ -140,6 +132,12 @@ public class GameInitializer {
                 //Add Civ initalize values
                 c.values.put("haslaunch", 0);
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
+
+                //Deal with people
+                initalizeRecruitedPeople(c, gen, selector);
+
+                //Add unrecruited people
+                createUnrecruitedPeople(c, starting, gen);
             }
         }
 
@@ -182,7 +180,7 @@ public class GameInitializer {
             //The biomass capacity
             faceBook.setMaxCapacity(5000);
             faceBook.setCapacity(250);
-            
+
             //Add a farm
             ConquerSpace.game.universe.Point pt = getRandomEmptyPoint(starting, selector);
             //Add population
@@ -310,9 +308,10 @@ public class GameInitializer {
     }
 
     private void createCityDistrict(Planet starting, Civilization c, ConquerSpace.game.universe.Point pt, City city) {
-        
+
     }
-    private void createUnrecruitedPeople(Civilization c, NameGenerator gen) {
+
+    private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen) {
         c.unrecruitedPeople.clear();
         int peopleCount = (int) (Math.random() * 5) + 5;
 
@@ -322,6 +321,11 @@ public class GameInitializer {
             person = gen.getName((int) Math.round(Math.random()));
             Scientist nerd = new Scientist(person, age);
             nerd.setSkill((int) (Math.random() * 5) + 1);
+            nerd.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+
+            //Set location
+            nerd.setPosition(c.getCapitalCity());
+
             c.unrecruitedPeople.add(nerd);
         }
 
@@ -334,6 +338,9 @@ public class GameInitializer {
             person = gen.getName((int) Math.round(Math.random()));
             Administrator dude = new Administrator(person, age);
             //nerd.setSkill((int) (Math.random() * 5) + 1);
+            dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+            dude.setPosition(c.getCapitalCity());
+
             c.unrecruitedPeople.add(dude);
         }
     }
@@ -373,6 +380,10 @@ public class GameInitializer {
 
         Scientist r = new Scientist(name, 20);
         r.setSkill(1);
+        //Add random trait 
+        r.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+        r.setPosition(c.getCapitalCity());
+        
         c.people.add(r);
     }
 

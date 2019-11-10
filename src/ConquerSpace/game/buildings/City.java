@@ -30,6 +30,7 @@ public class City implements PersonEnterable{
         return populationUnitPercentage;
     }
 
+    @Override
     public String getName() {
         return name;
     }

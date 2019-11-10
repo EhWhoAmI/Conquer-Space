@@ -1,0 +1,1916 @@
+[
+    {
+        "name": "Accessible"
+    },
+    {
+        "name": "Active"
+    },
+    {
+        "name": "Adaptable"
+    },
+    {
+        "name": "Admirable"
+    },
+    {
+        "name": "Adventurous"
+    },
+    {
+        "name": "Agreeable"
+    },
+    {
+        "name": "Alert"
+    },
+    {
+        "name": "Allocentric"
+    },
+    {
+        "name": "Amiable"
+    },
+    {
+        "name": "Anticipative"
+    },
+    {
+        "name": "Appreciative"
+    },
+    {
+        "name": "Articulate"
+    },
+    {
+        "name": "Aspiring"
+    },
+    {
+        "name": "Athletic"
+    },
+    {
+        "name": "Attractive"
+    },
+    {
+        "name": "Balanced"
+    },
+    {
+        "name": "Benevolent"
+    },
+    {
+        "name": "Brilliant"
+    },
+    {
+        "name": "Calm"
+    },
+    {
+        "name": "Capable"
+    },
+    {
+        "name": "Captivating"
+    },
+    {
+        "name": "Caring"
+    },
+    {
+        "name": "Challenging"
+    },
+    {
+        "name": "Charismatic"
+    },
+    {
+        "name": "Charming"
+    },
+    {
+        "name": "Cheerful"
+    },
+    {
+        "name": "Clean"
+    },
+    {
+        "name": "Clear-headed"
+    },
+    {
+        "name": "Clever"
+    },
+    {
+        "name": "Colorful"
+    },
+    {
+        "name": "Companionly"
+    },
+    {
+        "name": "Compassionate"
+    },
+    {
+        "name": "Conciliatory"
+    },
+    {
+        "name": "Confident"
+    },
+    {
+        "name": "Conscientious"
+    },
+    {
+        "name": "Considerate"
+    },
+    {
+        "name": "Constant"
+    },
+    {
+        "name": "Contemplative"
+    },
+    {
+        "name": "Cooperative"
+    },
+    {
+        "name": "Courageous"
+    },
+    {
+        "name": "Courteous"
+    },
+    {
+        "name": "Creative"
+    },
+    {
+        "name": "Cultured"
+    },
+    {
+        "name": "Curious"
+    },
+    {
+        "name": "Daring"
+    },
+    {
+        "name": "Debonair"
+    },
+    {
+        "name": "Decent"
+    },
+    {
+        "name": "Decisive"
+    },
+    {
+        "name": "Dedicated"
+    },
+    {
+        "name": "Deep"
+    },
+    {
+        "name": "Dignified"
+    },
+    {
+        "name": "Directed"
+    },
+    {
+        "name": "Disciplined"
+    },
+    {
+        "name": "Discreet"
+    },
+    {
+        "name": "Dramatic"
+    },
+    {
+        "name": "Dutiful"
+    },
+    {
+        "name": "Dynamic"
+    },
+    {
+        "name": "Earnest"
+    },
+    {
+        "name": "Ebullient"
+    },
+    {
+        "name": "Educated"
+    },
+    {
+        "name": "Efficient"
+    },
+    {
+        "name": "Elegant"
+    },
+    {
+        "name": "Eloquent"
+    },
+    {
+        "name": "Empathetic"
+    },
+    {
+        "name": "Energetic"
+    },
+    {
+        "name": "Enthusiastic"
+    },
+    {
+        "name": "Esthetic"
+    },
+    {
+        "name": "Exciting"
+    },
+    {
+        "name": "Extraordinary"
+    },
+    {
+        "name": "Fair"
+    },
+    {
+        "name": "Faithful"
+    },
+    {
+        "name": "Farsighted"
+    },
+    {
+        "name": "Felicific"
+    },
+    {
+        "name": "Firm"
+    },
+    {
+        "name": "Flexible"
+    },
+    {
+        "name": "Focused"
+    },
+    {
+        "name": "Forecful"
+    },
+    {
+        "name": "Forgiving"
+    },
+    {
+        "name": "Forthright"
+    },
+    {
+        "name": "Freethinking"
+    },
+    {
+        "name": "Friendly"
+    },
+    {
+        "name": "Fun-loving"
+    },
+    {
+        "name": "Gallant"
+    },
+    {
+        "name": "Generous"
+    },
+    {
+        "name": "Gentle"
+    },
+    {
+        "name": "Genuine"
+    },
+    {
+        "name": "Good-natured"
+    },
+    {
+        "name": "Gracious"
+    },
+    {
+        "name": "Hardworking"
+    },
+    {
+        "name": "Healthy"
+    },
+    {
+        "name": "Hearty"
+    },
+    {
+        "name": "Helpful"
+    },
+    {
+        "name": "Herioc"
+    },
+    {
+        "name": "High-minded"
+    },
+    {
+        "name": "Honest"
+    },
+    {
+        "name": "Honorable"
+    },
+    {
+        "name": "Humble"
+    },
+    {
+        "name": "Humorous"
+    },
+    {
+        "name": "Idealistic"
+    },
+    {
+        "name": "Imaginative"
+    },
+    {
+        "name": "Impressive"
+    },
+    {
+        "name": "Incisive"
+    },
+    {
+        "name": "Incorruptible"
+    },
+    {
+        "name": "Independent"
+    },
+    {
+        "name": "Individualistic"
+    },
+    {
+        "name": "Innovative"
+    },
+    {
+        "name": "Inoffensive"
+    },
+    {
+        "name": "Insightful"
+    },
+    {
+        "name": "Insouciant"
+    },
+    {
+        "name": "Intelligent"
+    },
+    {
+        "name": "Intuitive"
+    },
+    {
+        "name": "Invulnerable"
+    },
+    {
+        "name": "Kind"
+    },
+    {
+        "name": "Knowledge"
+    },
+    {
+        "name": "Leaderly"
+    },
+    {
+        "name": "Leisurely"
+    },
+    {
+        "name": "Liberal"
+    },
+    {
+        "name": "Logical"
+    },
+    {
+        "name": "Lovable"
+    },
+    {
+        "name": "Loyal"
+    },
+    {
+        "name": "Lyrical"
+    },
+    {
+        "name": "Magnanimous"
+    },
+    {
+        "name": "Many-sided"
+    },
+    {
+        "name": "Masculine  (Manly)"
+    },
+    {
+        "name": "Mature"
+    },
+    {
+        "name": "Methodical"
+    },
+    {
+        "name": "Maticulous"
+    },
+    {
+        "name": "Moderate"
+    },
+    {
+        "name": "Modest"
+    },
+    {
+        "name": "Multi-leveled"
+    },
+    {
+        "name": "Neat"
+    },
+    {
+        "name": "Nonauthoritarian"
+    },
+    {
+        "name": "Objective"
+    },
+    {
+        "name": "Observant"
+    },
+    {
+        "name": "Open"
+    },
+    {
+        "name": "Optimistic"
+    },
+    {
+        "name": "Orderly"
+    },
+    {
+        "name": "Organized"
+    },
+    {
+        "name": "Original"
+    },
+    {
+        "name": "Painstaking"
+    },
+    {
+        "name": "Passionate"
+    },
+    {
+        "name": "Patient"
+    },
+    {
+        "name": "Patriotic"
+    },
+    {
+        "name": "Peaceful"
+    },
+    {
+        "name": "Perceptive"
+    },
+    {
+        "name": "Perfectionist"
+    },
+    {
+        "name": "Personable"
+    },
+    {
+        "name": "Persuasive"
+    },
+    {
+        "name": "Planful"
+    },
+    {
+        "name": "Playful"
+    },
+    {
+        "name": "Polished"
+    },
+    {
+        "name": "Popular"
+    },
+    {
+        "name": "Practical"
+    },
+    {
+        "name": "Precise"
+    },
+    {
+        "name": "Principled"
+    },
+    {
+        "name": "Profound"
+    },
+    {
+        "name": "Protean"
+    },
+    {
+        "name": "Protective"
+    },
+    {
+        "name": "Providential"
+    },
+    {
+        "name": "Prudent"
+    },
+    {
+        "name": "Punctual"
+    },
+    {
+        "name": "Pruposeful"
+    },
+    {
+        "name": "Rational"
+    },
+    {
+        "name": "Realistic"
+    },
+    {
+        "name": "Reflective"
+    },
+    {
+        "name": "Relaxed"
+    },
+    {
+        "name": "Reliable"
+    },
+    {
+        "name": "Resourceful"
+    },
+    {
+        "name": "Respectful"
+    },
+    {
+        "name": "Responsible"
+    },
+    {
+        "name": "Responsive"
+    },
+    {
+        "name": "Reverential"
+    },
+    {
+        "name": "Romantic"
+    },
+    {
+        "name": "Rustic"
+    },
+    {
+        "name": "Sage"
+    },
+    {
+        "name": "Sane"
+    },
+    {
+        "name": "Scholarly"
+    },
+    {
+        "name": "Scrupulous"
+    },
+    {
+        "name": "Secure"
+    },
+    {
+        "name": "Selfless"
+    },
+    {
+        "name": "Self-critical"
+    },
+    {
+        "name": "Self-defacing"
+    },
+    {
+        "name": "Self-denying"
+    },
+    {
+        "name": "Self-reliant"
+    },
+    {
+        "name": "Self-sufficent"
+    },
+    {
+        "name": "Sensitive"
+    },
+    {
+        "name": "Sentimental"
+    },
+    {
+        "name": "Seraphic"
+    },
+    {
+        "name": "Serious"
+    },
+    {
+        "name": "Sexy"
+    },
+    {
+        "name": "Sharing"
+    },
+    {
+        "name": "Shrewd"
+    },
+    {
+        "name": "Simple"
+    },
+    {
+        "name": "Skillful"
+    },
+    {
+        "name": "Sober"
+    },
+    {
+        "name": "Sociable"
+    },
+    {
+        "name": "Solid"
+    },
+    {
+        "name": "Sophisticated"
+    },
+    {
+        "name": "Spontaneous"
+    },
+    {
+        "name": "Sporting"
+    },
+    {
+        "name": "Stable"
+    },
+    {
+        "name": "Steadfast"
+    },
+    {
+        "name": "Steady"
+    },
+    {
+        "name": "Stoic"
+    },
+    {
+        "name": "Strong"
+    },
+    {
+        "name": "Studious"
+    },
+    {
+        "name": "Suave"
+    },
+    {
+        "name": "Subtle"
+    },
+    {
+        "name": "Sweet"
+    },
+    {
+        "name": "Sympathetic"
+    },
+    {
+        "name": "Systematic"
+    },
+    {
+        "name": "Tasteful"
+    },
+    {
+        "name": "Teacherly"
+    },
+    {
+        "name": "Thorough"
+    },
+    {
+        "name": "Tidy"
+    },
+    {
+        "name": "Tolerant"
+    },
+    {
+        "name": "Tractable"
+    },
+    {
+        "name": "Trusting"
+    },
+    {
+        "name": "Uncomplaining"
+    },
+    {
+        "name": "Understanding"
+    },
+    {
+        "name": "Undogmatic"
+    },
+    {
+        "name": "Unfoolable"
+    },
+    {
+        "name": "Upright"
+    },
+    {
+        "name": "Urbane"
+    },
+    {
+        "name": "Venturesome"
+    },
+    {
+        "name": "Vivacious"
+    },
+    {
+        "name": "Warm"
+    },
+    {
+        "name": "Well-bred"
+    },
+    {
+        "name": "Well-read"
+    },
+    {
+        "name": "Well-rounded"
+    },
+    {
+        "name": "Winning"
+    },
+    {
+        "name": "Wise"
+    },
+    {
+        "name": "Witty"
+    },
+    {
+        "name": "Youthful"
+    },
+    {
+        "name": "Absentminded"
+    },
+    {
+        "name": "Aggressive"
+    },
+    {
+        "name": "Ambitious"
+    },
+    {
+        "name": "Amusing"
+    },
+    {
+        "name": "Artful"
+    },
+    {
+        "name": "Ascetic"
+    },
+    {
+        "name": "Authoritarian"
+    },
+    {
+        "name": "Big-thinking"
+    },
+    {
+        "name": "Boyish"
+    },
+    {
+        "name": "Breezy"
+    },
+    {
+        "name": "Businesslike"
+    },
+    {
+        "name": "Busy"
+    },
+    {
+        "name": "Casual"
+    },
+    {
+        "name": "Crebral"
+    },
+    {
+        "name": "Chummy"
+    },
+    {
+        "name": "Circumspect"
+    },
+    {
+        "name": "Competitive"
+    },
+    {
+        "name": "Complex"
+    },
+    {
+        "name": "Confidential"
+    },
+    {
+        "name": "Conservative"
+    },
+    {
+        "name": "Contradictory"
+    },
+    {
+        "name": "Crisp"
+    },
+    {
+        "name": "Cute"
+    },
+    {
+        "name": "Deceptive"
+    },
+    {
+        "name": "Determined"
+    },
+    {
+        "name": "Dominating"
+    },
+    {
+        "name": "Dreamy"
+    },
+    {
+        "name": "Driving"
+    },
+    {
+        "name": "Droll"
+    },
+    {
+        "name": "Dry"
+    },
+    {
+        "name": "Earthy"
+    },
+    {
+        "name": "Effeminate"
+    },
+    {
+        "name": "Emotional"
+    },
+    {
+        "name": "Enigmatic"
+    },
+    {
+        "name": "Experimental"
+    },
+    {
+        "name": "Familial"
+    },
+    {
+        "name": "Folksy"
+    },
+    {
+        "name": "Formal"
+    },
+    {
+        "name": "Freewheeling"
+    },
+    {
+        "name": "Frugal"
+    },
+    {
+        "name": "Glamorous"
+    },
+    {
+        "name": "Guileless"
+    },
+    {
+        "name": "High-spirited"
+    },
+    {
+        "name": "Huried"
+    },
+    {
+        "name": "Hypnotic"
+    },
+    {
+        "name": "Iconoclastic"
+    },
+    {
+        "name": "Idiosyncratic"
+    },
+    {
+        "name": "Impassive"
+    },
+    {
+        "name": "Impersonal"
+    },
+    {
+        "name": "Impressionable"
+    },
+    {
+        "name": "Intense"
+    },
+    {
+        "name": "Invisible"
+    },
+    {
+        "name": "Irreligious"
+    },
+    {
+        "name": "Irreverent"
+    },
+    {
+        "name": "Maternal"
+    },
+    {
+        "name": "Mellow"
+    },
+    {
+        "name": "Modern"
+    },
+    {
+        "name": "Moralistic"
+    },
+    {
+        "name": "Mystical"
+    },
+    {
+        "name": "Neutral"
+    },
+    {
+        "name": "Noncommittal"
+    },
+    {
+        "name": "Noncompetitive"
+    },
+    {
+        "name": "Obedient"
+    },
+    {
+        "name": "Old-fashined"
+    },
+    {
+        "name": "Ordinary"
+    },
+    {
+        "name": "Outspoken"
+    },
+    {
+        "name": "Paternalistic"
+    },
+    {
+        "name": "Physical"
+    },
+    {
+        "name": "Placid"
+    },
+    {
+        "name": "Political"
+    },
+    {
+        "name": "Predictable"
+    },
+    {
+        "name": "Preoccupied"
+    },
+    {
+        "name": "Private"
+    },
+    {
+        "name": "Progressive"
+    },
+    {
+        "name": "Proud"
+    },
+    {
+        "name": "Pure"
+    },
+    {
+        "name": "Questioning"
+    },
+    {
+        "name": "Quiet"
+    },
+    {
+        "name": "Religious"
+    },
+    {
+        "name": "Reserved"
+    },
+    {
+        "name": "Restrained"
+    },
+    {
+        "name": "Retiring"
+    },
+    {
+        "name": "Sarcastic"
+    },
+    {
+        "name": "Self-conscious"
+    },
+    {
+        "name": "Sensual"
+    },
+    {
+        "name": "Skeptical"
+    },
+    {
+        "name": "Smooth"
+    },
+    {
+        "name": "Soft"
+    },
+    {
+        "name": "Solemn"
+    },
+    {
+        "name": "Solitary"
+    },
+    {
+        "name": "Stern"
+    },
+    {
+        "name": "Stoiid"
+    },
+    {
+        "name": "Strict"
+    },
+    {
+        "name": "Stubborn"
+    },
+    {
+        "name": "Stylish"
+    },
+    {
+        "name": "Subjective"
+    },
+    {
+        "name": "Surprising"
+    },
+    {
+        "name": "Soft"
+    },
+    {
+        "name": "Tough"
+    },
+    {
+        "name": "Unaggressive"
+    },
+    {
+        "name": "Unambitious"
+    },
+    {
+        "name": "Unceremonious"
+    },
+    {
+        "name": "Unchanging"
+    },
+    {
+        "name": "Undemanding"
+    },
+    {
+        "name": "Unfathomable"
+    },
+    {
+        "name": "Unhurried"
+    },
+    {
+        "name": "Uninhibited"
+    },
+    {
+        "name": "Unpatriotic"
+    },
+    {
+        "name": "Unpredicatable"
+    },
+    {
+        "name": "Unreligious"
+    },
+    {
+        "name": "Unsentimental"
+    },
+    {
+        "name": "Whimsical"
+    },
+    {
+        "name": "Abrasive"
+    },
+    {
+        "name": "Abrupt"
+    },
+    {
+        "name": "Agonizing"
+    },
+    {
+        "name": "Aimless"
+    },
+    {
+        "name": "Airy"
+    },
+    {
+        "name": "Aloof"
+    },
+    {
+        "name": "Amoral"
+    },
+    {
+        "name": "Angry"
+    },
+    {
+        "name": "Anxious"
+    },
+    {
+        "name": "Apathetic"
+    },
+    {
+        "name": "Arbitrary"
+    },
+    {
+        "name": "Argumentative"
+    },
+    {
+        "name": "Arrogantt"
+    },
+    {
+        "name": "Artificial"
+    },
+    {
+        "name": "Asocial"
+    },
+    {
+        "name": "Assertive"
+    },
+    {
+        "name": "Astigmatic"
+    },
+    {
+        "name": "Barbaric"
+    },
+    {
+        "name": "Bewildered"
+    },
+    {
+        "name": "Bizarre"
+    },
+    {
+        "name": "Bland"
+    },
+    {
+        "name": "Blunt"
+    },
+    {
+        "name": "Biosterous"
+    },
+    {
+        "name": "Brittle"
+    },
+    {
+        "name": "Brutal"
+    },
+    {
+        "name": "Calculating"
+    },
+    {
+        "name": "Callous"
+    },
+    {
+        "name": "Cantakerous"
+    },
+    {
+        "name": "Careless"
+    },
+    {
+        "name": "Cautious"
+    },
+    {
+        "name": "Charmless"
+    },
+    {
+        "name": "Childish"
+    },
+    {
+        "name": "Clumsy"
+    },
+    {
+        "name": "Coarse"
+    },
+    {
+        "name": "Cold"
+    },
+    {
+        "name": "Colorless"
+    },
+    {
+        "name": "Complacent"
+    },
+    {
+        "name": "Complaintive"
+    },
+    {
+        "name": "Compulsive"
+    },
+    {
+        "name": "Conceited"
+    },
+    {
+        "name": "Condemnatory"
+    },
+    {
+        "name": "Conformist"
+    },
+    {
+        "name": "Confused"
+    },
+    {
+        "name": "Contemptible"
+    },
+    {
+        "name": "Conventional"
+    },
+    {
+        "name": "Cowardly"
+    },
+    {
+        "name": "Crafty"
+    },
+    {
+        "name": "Crass"
+    },
+    {
+        "name": "Crazy"
+    },
+    {
+        "name": "Criminal"
+    },
+    {
+        "name": "Critical"
+    },
+    {
+        "name": "Crude"
+    },
+    {
+        "name": "Cruel"
+    },
+    {
+        "name": "Cynical"
+    },
+    {
+        "name": "Decadent"
+    },
+    {
+        "name": "Deceitful"
+    },
+    {
+        "name": "Delicate"
+    },
+    {
+        "name": "Demanding"
+    },
+    {
+        "name": "Dependent"
+    },
+    {
+        "name": "Desperate"
+    },
+    {
+        "name": "Destructive"
+    },
+    {
+        "name": "Devious"
+    },
+    {
+        "name": "Difficult"
+    },
+    {
+        "name": "Dirty"
+    },
+    {
+        "name": "Disconcerting"
+    },
+    {
+        "name": "Discontented"
+    },
+    {
+        "name": "Discouraging"
+    },
+    {
+        "name": "Discourteous"
+    },
+    {
+        "name": "Dishonest"
+    },
+    {
+        "name": "Disloyal"
+    },
+    {
+        "name": "Disobedient"
+    },
+    {
+        "name": "Disorderly"
+    },
+    {
+        "name": "Disorganized"
+    },
+    {
+        "name": "Disputatious"
+    },
+    {
+        "name": "Disrespectful"
+    },
+    {
+        "name": "Disruptive"
+    },
+    {
+        "name": "Dissolute"
+    },
+    {
+        "name": "Dissonant"
+    },
+    {
+        "name": "Distractible"
+    },
+    {
+        "name": "Disturbing"
+    },
+    {
+        "name": "Dogmatic"
+    },
+    {
+        "name": "Domineering"
+    },
+    {
+        "name": "Dull"
+    },
+    {
+        "name": "Easily Discouraged"
+    },
+    {
+        "name": "Egocentric"
+    },
+    {
+        "name": "Enervated"
+    },
+    {
+        "name": "Envious"
+    },
+    {
+        "name": "Erratic"
+    },
+    {
+        "name": "Escapist"
+    },
+    {
+        "name": "Excitable"
+    },
+    {
+        "name": "Expedient"
+    },
+    {
+        "name": "Extravagant"
+    },
+    {
+        "name": "Extreme"
+    },
+    {
+        "name": "Faithless"
+    },
+    {
+        "name": "False"
+    },
+    {
+        "name": "Fanatical"
+    },
+    {
+        "name": "Fanciful"
+    },
+    {
+        "name": "Fatalistic"
+    },
+    {
+        "name": "Fawning"
+    },
+    {
+        "name": "Fearful"
+    },
+    {
+        "name": "Fickle"
+    },
+    {
+        "name": "Fiery"
+    },
+    {
+        "name": "Fixed"
+    },
+    {
+        "name": "Flamboyant"
+    },
+    {
+        "name": "Foolish"
+    },
+    {
+        "name": "Forgetful"
+    },
+    {
+        "name": "Fraudulent"
+    },
+    {
+        "name": "Frightening"
+    },
+    {
+        "name": "Frivolous"
+    },
+    {
+        "name": "Gloomy"
+    },
+    {
+        "name": "Graceless"
+    },
+    {
+        "name": "Grand"
+    },
+    {
+        "name": "Greedy"
+    },
+    {
+        "name": "Grim"
+    },
+    {
+        "name": "Gullible"
+    },
+    {
+        "name": "Hateful"
+    },
+    {
+        "name": "Haughty"
+    },
+    {
+        "name": "Hedonistic"
+    },
+    {
+        "name": "Hesitant"
+    },
+    {
+        "name": "Hidebound"
+    },
+    {
+        "name": "High-handed"
+    },
+    {
+        "name": "Hostile"
+    },
+    {
+        "name": "Ignorant"
+    },
+    {
+        "name": "Imitative"
+    },
+    {
+        "name": "Impatient"
+    },
+    {
+        "name": "Impractical"
+    },
+    {
+        "name": "Imprudent"
+    },
+    {
+        "name": "Impulsive"
+    },
+    {
+        "name": "Inconsiderate"
+    },
+    {
+        "name": "Incurious"
+    },
+    {
+        "name": "Indecisive"
+    },
+    {
+        "name": "Indulgent"
+    },
+    {
+        "name": "Inert"
+    },
+    {
+        "name": "Inhibited"
+    },
+    {
+        "name": "Insecure"
+    },
+    {
+        "name": "Insensitive"
+    },
+    {
+        "name": "Insincere"
+    },
+    {
+        "name": "Insulting"
+    },
+    {
+        "name": "Intolerant"
+    },
+    {
+        "name": "Irascible"
+    },
+    {
+        "name": "Irrational"
+    },
+    {
+        "name": "Irresponsible"
+    },
+    {
+        "name": "Irritable"
+    },
+    {
+        "name": "Lazy"
+    },
+    {
+        "name": "Libidinous"
+    },
+    {
+        "name": "Loquacious"
+    },
+    {
+        "name": "Malicious"
+    },
+    {
+        "name": "Mannered"
+    },
+    {
+        "name": "Mannerless"
+    },
+    {
+        "name": "Mawkish"
+    },
+    {
+        "name": "Mealymouthed"
+    },
+    {
+        "name": "Mechanical"
+    },
+    {
+        "name": "Meddlesome"
+    },
+    {
+        "name": "Melancholic"
+    },
+    {
+        "name": "Meretricious"
+    },
+    {
+        "name": "Messy"
+    },
+    {
+        "name": "Miserable"
+    },
+    {
+        "name": "Miserly"
+    },
+    {
+        "name": "Misguided"
+    },
+    {
+        "name": "Mistaken"
+    },
+    {
+        "name": "Money-minded"
+    },
+    {
+        "name": "Monstrous"
+    },
+    {
+        "name": "Moody"
+    },
+    {
+        "name": "Morbid"
+    },
+    {
+        "name": "Muddle-headed"
+    },
+    {
+        "name": "Naive"
+    },
+    {
+        "name": "Narcissistic"
+    },
+    {
+        "name": "Narrow"
+    },
+    {
+        "name": "Narrow-minded"
+    },
+    {
+        "name": "Natty"
+    },
+    {
+        "name": "Negativistic"
+    },
+    {
+        "name": "Neglectful"
+    },
+    {
+        "name": "Neurotic"
+    },
+    {
+        "name": "Nihilistic"
+    },
+    {
+        "name": "Obnoxious"
+    },
+    {
+        "name": "Obsessive"
+    },
+    {
+        "name": "Obvious"
+    },
+    {
+        "name": "Odd"
+    },
+    {
+        "name": "Offhand"
+    },
+    {
+        "name": "One-dimensional"
+    },
+    {
+        "name": "One-sided"
+    },
+    {
+        "name": "Opinionated"
+    },
+    {
+        "name": "Opportunistic"
+    },
+    {
+        "name": "Oppressed"
+    },
+    {
+        "name": "Outrageous"
+    },
+    {
+        "name": "Overimaginative"
+    },
+    {
+        "name": "Paranoid"
+    },
+    {
+        "name": "Passive"
+    },
+    {
+        "name": "Pedantic"
+    },
+    {
+        "name": "Perverse"
+    },
+    {
+        "name": "Petty"
+    },
+    {
+        "name": "Pharissical"
+    },
+    {
+        "name": "Phlegmatic"
+    },
+    {
+        "name": "Plodding"
+    },
+    {
+        "name": "Pompous"
+    },
+    {
+        "name": "Possessive"
+    },
+    {
+        "name": "Power-hungry"
+    },
+    {
+        "name": "Predatory"
+    },
+    {
+        "name": "Prejudiced"
+    },
+    {
+        "name": "Presumptuous"
+    },
+    {
+        "name": "Pretentious"
+    },
+    {
+        "name": "Prim"
+    },
+    {
+        "name": "Procrastinating"
+    },
+    {
+        "name": "Profligate"
+    },
+    {
+        "name": "Provocative"
+    },
+    {
+        "name": "Pugnacious"
+    },
+    {
+        "name": "Puritanical"
+    },
+    {
+        "name": "Quirky"
+    },
+    {
+        "name": "Reactionary"
+    },
+    {
+        "name": "Reactive"
+    },
+    {
+        "name": "Regimental"
+    },
+    {
+        "name": "Regretful"
+    },
+    {
+        "name": "Repentant"
+    },
+    {
+        "name": "Repressed"
+    },
+    {
+        "name": "Resentful"
+    },
+    {
+        "name": "Ridiculous"
+    },
+    {
+        "name": "Rigid"
+    },
+    {
+        "name": "Ritualistic"
+    },
+    {
+        "name": "Rowdy"
+    },
+    {
+        "name": "Ruined"
+    },
+    {
+        "name": "Sadistic"
+    },
+    {
+        "name": "Sanctimonious"
+    },
+    {
+        "name": "Scheming"
+    },
+    {
+        "name": "Scornful"
+    },
+    {
+        "name": "Secretive"
+    },
+    {
+        "name": "Sedentary"
+    },
+    {
+        "name": "Selfish"
+    },
+    {
+        "name": "Self-indulgent"
+    },
+    {
+        "name": "Shallow"
+    },
+    {
+        "name": "Shortsighted"
+    },
+    {
+        "name": "Shy"
+    },
+    {
+        "name": "Silly"
+    },
+    {
+        "name": "Single-minded"
+    },
+    {
+        "name": "Sloppy"
+    },
+    {
+        "name": "Slow"
+    },
+    {
+        "name": "Sly"
+    },
+    {
+        "name": "Small-thinking"
+    },
+    {
+        "name": "Softheaded"
+    },
+    {
+        "name": "Sordid"
+    },
+    {
+        "name": "Steely"
+    },
+    {
+        "name": "Stiff"
+    },
+    {
+        "name": "Strong-willed"
+    },
+    {
+        "name": "Stupid"
+    },
+    {
+        "name": "Submissive"
+    },
+    {
+        "name": "Superficial"
+    },
+    {
+        "name": "Superstitious"
+    },
+    {
+        "name": "Suspicious"
+    },
+    {
+        "name": "Tactless"
+    },
+    {
+        "name": "Tasteless"
+    },
+    {
+        "name": "Tense"
+    },
+    {
+        "name": "Thievish"
+    },
+    {
+        "name": "Thoughtless"
+    },
+    {
+        "name": "Timid"
+    },
+    {
+        "name": "Transparent"
+    },
+    {
+        "name": "Treacherous"
+    },
+    {
+        "name": "Trendy"
+    },
+    {
+        "name": "Troublesome"
+    },
+    {
+        "name": "Unappreciative"
+    },
+    {
+        "name": "Uncaring"
+    },
+    {
+        "name": "Uncharitable"
+    },
+    {
+        "name": "Unconvincing"
+    },
+    {
+        "name": "Uncooperative"
+    },
+    {
+        "name": "Uncreative"
+    },
+    {
+        "name": "Uncritical"
+    },
+    {
+        "name": "Unctuous"
+    },
+    {
+        "name": "Undisciplined"
+    },
+    {
+        "name": "Unfriendly"
+    },
+    {
+        "name": "Ungrateful"
+    },
+    {
+        "name": "Unhealthy"
+    },
+    {
+        "name": "Unimaginative"
+    },
+    {
+        "name": "Unimpressive"
+    },
+    {
+        "name": "Unlovable"
+    },
+    {
+        "name": "Unpolished"
+    },
+    {
+        "name": "Unprincipled"
+    },
+    {
+        "name": "Unrealistic"
+    },
+    {
+        "name": "Unreflective"
+    },
+    {
+        "name": "Unreliable"
+    },
+    {
+        "name": "Unrestrained"
+    },
+    {
+        "name": "Unself-critical"
+    },
+    {
+        "name": "Unstable"
+    },
+    {
+        "name": "Vacuous"
+    },
+    {
+        "name": "Vague"
+    },
+    {
+        "name": "Venal"
+    },
+    {
+        "name": "Venomous"
+    },
+    {
+        "name": "Vindictive"
+    },
+    {
+        "name": "Vulnerable"
+    },
+    {
+        "name": "Weak"
+    },
+    {
+        "name": "Weak-willed"
+    },
+    {
+        "name": "Well-meaning"
+    },
+    {
+        "name": "Willful"
+    },
+    {
+        "name": "Wishful"
+    },
+    {
+        "name": "Zany"
+    }
+]

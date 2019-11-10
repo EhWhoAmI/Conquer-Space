@@ -26,9 +26,8 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import javax.imageio.ImageIO;
 /**
  *
  * @author Zyun

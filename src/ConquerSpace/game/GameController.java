@@ -1,6 +1,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
@@ -15,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 /**
- *    The controller of the game UI.
+ * The controller of the game UI.
  *
  * @author Zyun
  */
@@ -37,6 +38,7 @@ public class GameController {
     public static Resource foodResource = null;
     public static ArrayList<EngineTechnology> engineTechnologys;
     public static ArrayList<JSONObject> events;
+    public static ArrayList<PersonalityTrait> personalityTraits;
 
     public static HashMap<String, Integer> shipTypes;
     public static HashMap<String, Integer> shipTypeClasses;
@@ -67,7 +69,9 @@ public class GameController {
 
         //Globals.universe.processTurn(GameRefreshRate, Globals.date);
         //Load the player
-        Globals.universe.getCivilization(0).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+            Globals.universe.getCivilization(i).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
+        }
 
         int tickerSpeed = 10;
         ticker = new Timer(tickerSpeed, (e) -> {

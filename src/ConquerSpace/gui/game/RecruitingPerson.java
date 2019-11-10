@@ -1,8 +1,10 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.people.Person;
+import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
@@ -24,6 +26,9 @@ public class RecruitingPerson extends JPanel {
     private JLabel personAgeLabel;
     private JLabel personJobLabel;
     private JLabel skillLabel;
+    private JLabel positionLabel;
+    private DefaultListModel<PersonalityTrait> personalityListModel;
+    private JList<PersonalityTrait> personPersonalityList;
 
     private JButton recruitButton;
     private JPanel container;
@@ -32,7 +37,7 @@ public class RecruitingPerson extends JPanel {
 
     private int previouslySelected;
 
-    public RecruitingPerson(Civilization c) {
+    public RecruitingPerson(Civilization c, Universe u) {
         this.c = c;
         setLayout(new GridLayout(1, 2));
         //Generate people and things like that
@@ -59,8 +64,16 @@ public class RecruitingPerson extends JPanel {
                     skillLabel.setText("Skill: " + ((Scientist) probablePersonList.getSelectedValue()).getSkill());
                     container.add(skillLabel);
                 }
+                
+                positionLabel.setText("Location: " + probablePersonList.getSelectedValue().getPosition().getName() + ", " + u.getSpaceObject(probablePersonList.getSelectedValue().getPosition().getUniversePath()));
+                container.add(positionLabel);
+                
+                personalityListModel.clear();
+                for (PersonalityTrait pt : probablePersonList.getSelectedValue().traits) {
+                    personalityListModel.addElement(pt);
+                }
+                container.add(new JScrollPane(personPersonalityList));
                 container.add(recruitButton);
-
             }
         });
 
@@ -76,6 +89,7 @@ public class RecruitingPerson extends JPanel {
         personJobLabel = new JLabel("Job: " + probablePersonList.getSelectedValue().getJobName());
         skillLabel = new JLabel("Skill: ");
         recruitButton = new JButton("Recruit!");
+        positionLabel = new JLabel("Location: ");
         recruitButton.addActionListener(a -> {
             if (probablePersonList.getSelectedIndex() > -1) {
                 Person p = probablePersonList.getSelectedValue();
@@ -84,6 +98,8 @@ public class RecruitingPerson extends JPanel {
                 c.people.add(p);
             }
         });
+        personalityListModel = new DefaultListModel<>();
+        personPersonalityList = new JList<>(personalityListModel);
 
         container.add(name);
         container.add(personAgeLabel);
@@ -92,6 +108,9 @@ public class RecruitingPerson extends JPanel {
         if (probablePersonList.getSelectedValue() instanceof Scientist) {
             container.add(skillLabel);
         }
+        container.add(positionLabel);
+        container.add(new JScrollPane(personPersonalityList));
+
         container.add(recruitButton);
         add(listScrollPane);
         add(container);

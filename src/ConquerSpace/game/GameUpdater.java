@@ -14,7 +14,6 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
@@ -151,6 +150,7 @@ public class GameUpdater {
         }
 
         public static class Engine {
+
             public static int getEngineMass(int thrust, EngineTechnology tech) {
                 return (int) (tech.getThrustMultiplier() * thrust);
             }
@@ -638,8 +638,11 @@ public class GameUpdater {
                 person = gen.getName((int) Math.round(Math.random()));
                 Scientist nerd = new Scientist(person, age);
                 nerd.setSkill((int) (Math.random() * 5) + 1);
-                c.unrecruitedPeople.add(nerd);
+                nerd.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+                nerd.setPosition(c.getCapitalCity());
 
+                c.unrecruitedPeople.add(nerd);
+                //Generate personality
             }
             //Admins
             peopleCount = (int) (Math.random() * 5) + 5;
@@ -649,6 +652,9 @@ public class GameUpdater {
                 String person = "name";
                 person = gen.getName((int) Math.round(Math.random()));
                 Administrator dude = new Administrator(person, age);
+                dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+                dude.setPosition(c.getCapitalCity());
+
                 //nerd.setSkill((int) (Math.random() * 5) + 1);
                 c.unrecruitedPeople.add(dude);
             }
