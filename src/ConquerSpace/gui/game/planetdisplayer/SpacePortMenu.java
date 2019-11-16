@@ -2,6 +2,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
@@ -41,8 +42,8 @@ public class SpacePortMenu extends JPanel {
 
         spaceLPModel = new DefaultListModel<>();
 
-        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
-            Point key = entry.getKey();
+        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+            GeographicPoint key = entry.getKey();
             Building value = entry.getValue();
 
             //Do stuff...
@@ -81,8 +82,8 @@ public class SpacePortMenu extends JPanel {
     }
 
     public void update() {
-        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
-            Point key = entry.getKey();
+        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+            GeographicPoint key = entry.getKey();
             Building value = entry.getValue();
 
             //Do stuff...

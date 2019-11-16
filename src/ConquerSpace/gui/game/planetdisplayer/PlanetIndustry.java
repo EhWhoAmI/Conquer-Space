@@ -5,6 +5,7 @@ import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.Job;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -163,8 +164,8 @@ public class PlanetIndustry extends JPanel {
         }
 
         public void update() {
-            for (Map.Entry<Point, Building> en : p.buildings.entrySet()) {
-                Point key = en.getKey();
+            for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                GeographicPoint key = en.getKey();
                 Building value = en.getValue();
                 if (value instanceof FarmBuilding) {
                     farmTableTableModel.addFarmBuilding((FarmBuilding) value);
@@ -172,6 +173,10 @@ public class PlanetIndustry extends JPanel {
             }
         }
 
+    }
+    
+    private class MiningInfoPanel extends JPanel {
+        
     }
 
     private class FarmTableTableModel extends AbstractTableModel {

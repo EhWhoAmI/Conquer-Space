@@ -1,6 +1,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -192,8 +193,8 @@ public class ShrinkedPlanetSheet extends JPanel {
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Draw buildings
-                for (Map.Entry<ConquerSpace.game.universe.Point, Building> en : p.buildings.entrySet()) {
-                    ConquerSpace.game.universe.Point p = en.getKey();
+                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                    GeographicPoint p = en.getKey();
                     Building Building = en.getValue();
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);

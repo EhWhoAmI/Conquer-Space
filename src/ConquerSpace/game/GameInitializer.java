@@ -19,6 +19,7 @@ import ConquerSpace.game.population.Species;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -107,10 +108,8 @@ public class GameInitializer {
 
                 createResourceStorages(c, selector, starting);
 
-                //Add resource miner
-                for (Resource resource : GameController.resources) {
-                    createResourceMiners(starting, resource, c.getFoundingSpecies());
-                }
+                //Add resource miners
+                createResourceMiners(starting, c, c.getFoundingSpecies());
 
                 createObservatory(starting, c, selector);
 
@@ -146,18 +145,19 @@ public class GameInitializer {
         updater.calculateVision();
     }
 
-    private void createResourceMiners(Planet p, Resource r, Species founding) {
+    private void createResourceMiners(Planet p, Civilization c, Species founding) {
         //Find if vein exists on the planet
+        int i = 0;
         for (ResourceVein v : p.resourceVeins) {
             //Get the resource vein and stuff
-            if (v.getResourceType().equals(r)) {
-                //Then place it in the center
-                ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
-                miner.setScale(1);
-                miner.population.add(new PopulationUnit(founding));
-                p.buildings.put(new Point(v.getX(), v.getY()), miner);
-                break;
-            }
+            //Then place it in the center
+            ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
+            //System.out.println
+            miner.setOwner(c);
+            miner.setScale(1);
+            
+            miner.population.add(new PopulationUnit(founding));
+            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
         }
     }
 
@@ -173,16 +173,17 @@ public class GameInitializer {
 
         starting.localLife.add(faun);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 10; i++) {
             FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
             faceBook.farmCreatures.add(faun);
-            faceBook.setProductivity(250);
+            faceBook.setProductivity(1000);
             //The biomass capacity
             faceBook.setMaxCapacity(5000);
-            faceBook.setCapacity(250);
-
+            faceBook.setCapacity(1000);
+            faceBook.setManpower(10);
+            faceBook.setOwner(c);
             //Add a farm
-            ConquerSpace.game.universe.Point pt = getRandomEmptyPoint(starting, selector);
+            GeographicPoint pt = getRandomEmptyPoint(starting, selector);
             //Add population
             PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
             u.setSpecies(c.getFoundingSpecies());
@@ -198,9 +199,8 @@ public class GameInitializer {
         Observatory observatory = new Observatory(10 * GameController.AU_IN_LTYR, 100, c.getID(),
                 new ConquerSpace.game.universe.Point(container.getX(), container.getY()));
 
-        int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
-        int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
-        ConquerSpace.game.universe.Point pt = getRandomEmptyPoint(starting, selector);
+        observatory.setOwner(c);
+        GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
         c.visionPoints.add(observatory);
         starting.buildings.put(pt, observatory);
@@ -209,13 +209,14 @@ public class GameInitializer {
     private void createResourceStorages(Civilization c, Random selector, Planet starting) {
         //Add storage
         ResourceStorage storage = new ResourceStorage(starting);
+        storage.setOwner(c);
         //Add all possible resources
         //Get starting resources...
         for (Resource res : GameController.resources) {
             storage.addResourceTypeStore(res);
         }
 
-        ConquerSpace.game.universe.Point pt = getRandomEmptyPoint(starting, selector);
+        GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
         c.resourceStorages.add(storage);
         starting.buildings.put(pt, storage);
@@ -238,7 +239,6 @@ public class GameInitializer {
         for (int count = 0; count < popStorMas; count++) {
             City city = new City(starting.getUniversePath());
             city.setName(townGen.getName(0));
-
             CityDistrict test;
             test = new CityDistrict();
 
@@ -249,10 +249,11 @@ public class GameInitializer {
                 test.areas.add(new CapitolArea());
             }
 
-            test.setMaxStorage(selector.nextInt(15) + 1);
+            test.setMaxStorage(selector.nextInt(30) + 1);
+            test.setOwner(c);
             //Distribute
             //Add random positions
-            int popCount = (selector.nextInt(10) + 1);
+            int popCount = (selector.nextInt(25) + 1);
             test.setMaxStorage(selector.nextInt(popCount + 5) + 1);
 
             for (int k = 0; k < popCount; k++) {
@@ -264,7 +265,7 @@ public class GameInitializer {
             }
             city.storages.add(test);
 
-            ConquerSpace.game.universe.Point pt = getRandomEmptyPoint(starting, selector);
+            GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
             starting.buildings.put(pt, test);
 
@@ -272,27 +273,27 @@ public class GameInitializer {
             //Choose a direction, and expand...
             CityDistrict test2 = new CityDistrict();
             int dir = selector.nextInt(4) + 1;
-            ConquerSpace.game.universe.Point pt2;
+            GeographicPoint pt2;
             switch (dir) {
                 case 0:
-                    pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                    pt2 = new GeographicPoint(pt.getX(), pt.getY() + 1);
                     break;
                 case 1:
-                    pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() - 1);
+                    pt2 = new GeographicPoint(pt.getX(), pt.getY() - 1);
                     break;
                 case 2:
-                    pt2 = new ConquerSpace.game.universe.Point(pt.getX() + 1, pt.getY());
+                    pt2 = new GeographicPoint(pt.getX() + 1, pt.getY());
                     break;
                 case 3:
-                    pt2 = new ConquerSpace.game.universe.Point(pt.getX() - 1, pt.getY());
+                    pt2 = new GeographicPoint(pt.getX() - 1, pt.getY());
                     break;
                 default:
-                    pt2 = new ConquerSpace.game.universe.Point(pt.getX(), pt.getY() + 1);
+                    pt2 = new GeographicPoint(pt.getX(), pt.getY() + 1);
             }
             starting.buildings.put(pt2, test2);
-            int popCount2 = selector.nextInt(10);
+            int popCount2 = (selector.nextInt(25) + 1);
             test2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
-
+            test2.setOwner(c);
             for (int k = 0; k < popCount2; k++) {
                 //Add a couple of population to the mix...
                 PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
@@ -383,7 +384,7 @@ public class GameInitializer {
         //Add random trait 
         r.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
         r.setPosition(c.getCapitalCity());
-        
+
         c.people.add(r);
     }
 
@@ -392,13 +393,13 @@ public class GameInitializer {
         c.putValue("optics.quality", 100);
     }
 
-    private ConquerSpace.game.universe.Point getRandomEmptyPoint(Planet starting, Random selector) {
-        ConquerSpace.game.universe.Point pt;
+    private GeographicPoint getRandomEmptyPoint(Planet starting, Random selector) {
+        GeographicPoint pt;
 
         do {
             int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
             int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
-            pt = new ConquerSpace.game.universe.Point(x, y);
+            pt = new GeographicPoint(x, y);
         } while (starting.buildings.containsKey(pt));
         return pt;
     }

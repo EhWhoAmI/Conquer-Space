@@ -10,6 +10,7 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -74,6 +75,9 @@ public class BuildingMenu extends JPanel {
     private JLabel yPosLabel;
     private JSpinner xposSpinner;
     private JSpinner yPosSpinner;
+    
+    //private 
+    //private JTable resourceCost;
 
     private CardLayout buildCardLayout;
 
@@ -196,7 +200,7 @@ public class BuildingMenu extends JPanel {
             String item = (String) buildingType.getSelectedItem();
             boolean toReset = false;
             //Get x and y position
-            ConquerSpace.game.universe.Point buildingPos = new ConquerSpace.game.universe.Point((int) xposSpinner.getValue(), (int) yPosSpinner.getValue());
+            GeographicPoint buildingPos = new GeographicPoint((int) xposSpinner.getValue(), (int) yPosSpinner.getValue());
             //Check if any buildings there:
             int toBuild = JOptionPane.YES_OPTION;
             if (p.buildings.containsKey(buildingPos)) {
@@ -376,8 +380,8 @@ public class BuildingMenu extends JPanel {
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Draw buildings
-                for (Map.Entry<ConquerSpace.game.universe.Point, Building> en : p.buildings.entrySet()) {
-                    ConquerSpace.game.universe.Point p = en.getKey();
+                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                    GeographicPoint p = en.getKey();
                     Building Building = en.getValue();
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * size, p.getY() * size, size, size);

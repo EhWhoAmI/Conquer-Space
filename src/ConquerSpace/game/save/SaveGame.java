@@ -9,6 +9,7 @@ import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
@@ -113,8 +114,8 @@ public class SaveGame {
 
                     //Buildings
                     ArrayList<JSONObject> buildings = new ArrayList<>();
-                    for (Map.Entry<Point, Building> entry : planet.buildings.entrySet()) {
-                        Point key = entry.getKey();
+                    for (Map.Entry<GeographicPoint, Building> entry : planet.buildings.entrySet()) {
+                        GeographicPoint key = entry.getKey();
                         Building value = entry.getValue();
                         JSONObject building = parseBuilding(key, value);
                         buildings.add(building);
@@ -216,7 +217,7 @@ public class SaveGame {
         }
     }
 
-    private JSONObject parseBuilding(Point key, Building what) {
+    private JSONObject parseBuilding(GeographicPoint key, Building what) {
         JSONObject buildingObject = new JSONObject();
         buildingObject.put("x", key.getX());
         buildingObject.put("y", key.getY());

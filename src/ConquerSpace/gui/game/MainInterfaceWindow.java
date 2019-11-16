@@ -168,6 +168,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         personWindow.update();
         researchViewer.update();
         resourceManager.update();
+        economyWindow.update();
 
         if (planetInfoSheet != null) {
             planetInfoSheet.update();

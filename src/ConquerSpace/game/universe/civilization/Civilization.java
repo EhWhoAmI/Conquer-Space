@@ -8,6 +8,7 @@ import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
+import ConquerSpace.game.population.Employer;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.tech.Technologies;
@@ -39,7 +40,7 @@ import org.json.JSONObject;
  *
  * @author Zyun
  */
-public class Civilization {
+public class Civilization implements Employer{
 
     public static final int CIV_TECH_RESEARCH_CHANCE = 0;
     public static final int CIV_TECH_RESEARCH_AMOUNT = 1;
@@ -411,5 +412,20 @@ public class Civilization {
 
     public long getMoneyReserves() {
         return moneyReserves;
+    }
+
+    @Override
+    public Currency getCurrency() {
+        return nationalCurrency;
+    }
+
+    @Override
+    public long getMoney() {
+        return moneyReserves;
+    }
+
+    @Override
+    public void changeMoney(long amount) {
+        moneyReserves += amount;
     }
 }

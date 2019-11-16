@@ -1,13 +1,15 @@
 package ConquerSpace.game.corp;
 
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.economy.Currency;
+import ConquerSpace.game.population.Employer;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 
 /**
  *
  * @author zyunl
  */
-public class Company {
+public class Company implements Employer{
     private String name;
     private int affiliation;
     private City cityBasedIn;
@@ -46,5 +48,20 @@ public class Company {
 
     public void setPlanetBasedIn(Planet planetBasedIn) {
         this.planetBasedIn = planetBasedIn;
+    }
+
+    @Override
+    public Currency getCurrency() {
+        return null;
+    }
+
+    @Override
+    public long getMoney() {
+        return 0;
+    }
+
+    @Override
+    public void changeMoney(long amount) {
+        //Do nothing!
     }
 }

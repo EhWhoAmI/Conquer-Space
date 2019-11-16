@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Farms have 2 types, a crop one and a livestock one, maybe a combined one.
- * We'll see.   
+ * We'll see.
  *
  * @author zyunl
  */
@@ -22,6 +22,7 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     public ArrayList<PopulationUnit> population;
     private int capacity = 0;
     private int maxCapacity = 0;
+    private int manPower = 0;
 
     public FarmBuilding(FarmType ft) {
         farmType = ft;
@@ -85,5 +86,13 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     public void processJob(Job j) {
         //Harvest a little
         j.resources.put(GameController.foodResource, productivity);
+    }
+
+    public int getManpower() {
+        return manPower;
+    }
+
+    public void setManpower(int manPower) {
+        this.manPower = manPower;
     }
 }

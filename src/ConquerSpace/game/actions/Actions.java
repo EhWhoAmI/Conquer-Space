@@ -1,9 +1,11 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
@@ -37,15 +39,16 @@ public class Actions {
      * Builds a building on the planet.
      *
      * @param p planet you want to build on.
-     * @param sectorID ID of planet sector
+     * @param pt of planet sector
      * @param what What do you want to build?
      * @param owner You the owner
      * @param turns number of months...
      * @return Success or not
      */
-    public static int buildBuilding(Planet p, Point pt, Building what, int owner, int turns) {
+    public static int buildBuilding(Planet p, GeographicPoint pt, Building what, int owner, int turns) {
         if (p.getOwnerID() == owner) {
             BuildingBuilding buildings = new BuildingBuilding(what, pt, 10);
+            //Determine cost...
             p.buildings.put(pt, buildings);
             return BUILD_BUILDING_SUCCESS;
         } else {
@@ -63,10 +66,10 @@ public class Actions {
             StarSystem sys = Globals.universe.getStarSystem(whichPlanet.getParentStarSystem());
             obs.setPosition(new Point(sys.getX(), sys.getY()));
             c.visionPoints.add((VisionPoint) what);
-            
+
         }
         what.setOrbiting(whichPlanet.getUniversePath());
-        
+
         whichPlanet.addSatellite(what);
     }
 
@@ -76,15 +79,15 @@ public class Actions {
         planet.putShipInOrbit(what);
         civ.spaceships.add(what);
     }
-    
+
     public static void moveShip(Ship what, Civilization civ, long x, long y, Universe u) {
-        if(what.isOrbiting()) {
+        if (what.isOrbiting()) {
             //Exit orbit
-            if( u.getSpaceObject(what.getOrbiting()) instanceof Planet) {
-                Planet p = (Planet)u.getSpaceObject(what.getOrbiting());
+            if (u.getSpaceObject(what.getOrbiting()) instanceof Planet) {
+                Planet p = (Planet) u.getSpaceObject(what.getOrbiting());
                 //Remove from orbit
                 p.getSatellites().remove(what);
-                
+
                 what.setX(p.getX());
                 what.setY(p.getY());
                 what.setIsOrbiting(false);

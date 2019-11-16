@@ -1,5 +1,6 @@
 package ConquerSpace.game.population;
 
+import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.universe.resources.Resource;
 import java.util.HashMap;
 
@@ -16,6 +17,9 @@ public class Job {
     private JobType jobType;
     private JobRank jobRank = JobRank.Low;
     private Workable workingFor;
+    private Currency currency;
+    private Employer employer;
+    private int pay;
     
     public Job(JobType jobType) {
         this.jobType = jobType;
@@ -49,5 +53,29 @@ public class Job {
 
     public void setWorkingFor(Workable workingFor) {
         this.workingFor = workingFor;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setPay(int pay) {
+        this.pay = pay;
+    }
+
+    public int getPay() {
+        return pay;
+    }
+
+    public void setEmployer(Employer employer) {
+        this.employer = employer;
+    }
+
+    public Employer getEmployer() {
+        return employer;
     }
 }

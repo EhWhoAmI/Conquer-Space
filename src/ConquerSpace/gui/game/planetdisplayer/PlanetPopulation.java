@@ -7,6 +7,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -64,8 +65,8 @@ public class PlanetPopulation extends JPanel {
         int pop = 0;
         //Get average growth
         float averageGrowthSum = 0;
-        for (Map.Entry<Point, Building> entry : p.buildings.entrySet()) {
-            Point key = entry.getKey();
+        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+            GeographicPoint key = entry.getKey();
             Building value = entry.getValue();
             float increment = 0;
             if (value instanceof CityDistrict) {

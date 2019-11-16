@@ -23,7 +23,7 @@ public class Point {
 
     @Override
     public int hashCode() {
-        return (int) (Long.parseLong("" + x + y) % Integer.MAX_VALUE);
+        return (("" + x + y).hashCode());
     }
 
     @Override

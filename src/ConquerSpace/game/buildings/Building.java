@@ -1,6 +1,7 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.population.Employer;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public abstract class Building {
 
     private Color color;
     public ArrayList<Area> areas;
+    private Employer owner;
 
     public Building() {
         areas = new ArrayList<>();
@@ -24,5 +26,13 @@ public abstract class Building {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void setOwner(Employer owner) {
+        this.owner = owner;
+    }
+
+    public Employer getOwner() {
+        return owner;
     }
 }

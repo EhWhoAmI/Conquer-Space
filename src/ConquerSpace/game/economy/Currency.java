@@ -23,7 +23,7 @@ public class Currency {
      * The people who print the money...
      */
     private Civilization controller;
-
+   
     public long getInCirculation() {
         return inCirculation;
     }

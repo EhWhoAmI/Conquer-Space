@@ -5,6 +5,7 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -44,7 +45,7 @@ public class Planet extends SpaceObject {
     
     private ArrayList<Orbitable> satellites;
     
-    public HashMap<Point, Building> buildings;
+    public HashMap<GeographicPoint, Building> buildings;
     
     public ArrayList<Integer> scanned;
     
