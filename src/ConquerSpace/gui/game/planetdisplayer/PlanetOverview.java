@@ -10,16 +10,17 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
@@ -32,6 +33,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -56,8 +58,11 @@ public class PlanetOverview extends JPanel {
     private ButtonGroup resourceButtonGroup;
     private JRadioButton[] showResources;
 
+    private JPanel planetBuildingInfoPanel;
+
     private boolean showPlanetTerrain = true;
     private NumberFormat numberFormatter;
+
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
         setLayout(new VerticalFlowLayout());
@@ -70,7 +75,7 @@ public class PlanetOverview extends JPanel {
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
         ownerLabel = new JLabel();
-        orbitDistance = new JLabel("Distance: " + numberFormatter.format(p.getOrbitalDistance()) + " km, " + numberFormatter.format((double)p.getOrbitalDistance()/149598000d) + " AU");
+        orbitDistance = new JLabel("Distance: " + numberFormatter.format(p.getOrbitalDistance()) + " km, " + numberFormatter.format((double) p.getOrbitalDistance() / 149598000d) + " AU");
 
         //Init planetname
         if (p.getName().equals("")) {
@@ -103,8 +108,7 @@ public class PlanetOverview extends JPanel {
         switchButton = new JButton("Change view");
         switchButton.addActionListener(a -> {
             sectorDisplayer.whatToShow++;
-            
-            sectorDisplayer.whatToShow%=4;
+            sectorDisplayer.whatToShow %= 4;
         });
 
         showNothing = new JButton("Hide terrain");
@@ -150,6 +154,9 @@ public class PlanetOverview extends JPanel {
             }
         });
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
+
+        planetBuildingInfoPanel = new JPanel();
+
         planetSectors.add(sectorsScrollPane);
         planetSectors.add(buildingPanel);
         //Add components
@@ -161,11 +168,12 @@ public class PlanetOverview extends JPanel {
 
         add(planetOverview);
         add(planetSectors);
+        add(planetBuildingInfoPanel);
         //Add empty panel
         //add(new JPanel());
     }
 
-    private class PlanetSectorDisplayer extends JPanel implements MouseListener {
+    private class PlanetSectorDisplayer extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
 
         private final int SHOW_ALL = -1;
         int resourceToShow = SHOW_ALL;
@@ -182,6 +190,12 @@ public class PlanetOverview extends JPanel {
         private Image img = null;
         private Point lastClicked;
         private TerrainRenderer renderer;
+        double scale = 1;
+        private Point scrollPoint = new Point();
+        double translateX = 0;
+        double translateY = 0;
+        private Point startPoint = new Point();
+        private boolean isDragging = false;
 
         public PlanetSectorDisplayer(Planet p, Civilization c) {
             this.c = c;
@@ -189,16 +203,23 @@ public class PlanetOverview extends JPanel {
                     new Dimension(p.getPlanetSize() * 4, p.getPlanetSize() * 2));
             menu = new JPopupMenu();
             addMouseListener(this);
+            addMouseWheelListener(this);
+            addMouseMotionListener(this);
             renderer = new TerrainRenderer(p);
+            setToolTipText("Use the right mouse button to move");
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
+            //Zoom and stuff
+
             if (img == null) {
                 img = renderer.getImage(2d);
             }
+            g2d.scale(scale, scale);
+            g2d.translate(translateX, translateY);
             //The thingy has to be a square number
             //Times to draw the thingy
             if (whatToShow == PLANET_RESOURCES) {
@@ -263,15 +284,37 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            lastClicked = e.getPoint();
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                lastClicked = e.getPoint();
+                //Calculate the position
+                int x = (int) ((lastClicked.getX()) / scale - translateX) / 2;
+                int y = (int) ((lastClicked.getY()) / scale - translateY) / 2;
+
+                Building b = p.buildings.get(new GeographicPoint(x, y));
+                if (b != null) {
+                    //Now put the window on, so that you know what is going on
+                    planetBuildingInfoPanel.removeAll();
+                    BuildingInfoContainer container = new BuildingInfoContainer(b);
+                    planetBuildingInfoPanel.add(container);
+                }
+            }
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                //Start dragging
+                startPoint = e.getPoint();
+                isDragging = true;
+            }
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                //End Dragging
+                isDragging = false;
+            }
         }
 
         @Override
@@ -298,6 +341,44 @@ public class PlanetOverview extends JPanel {
         public void showLocation(Point pt, Color c) {
             point = pt;
             color = c;
+        }
+
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            //Scroll in
+            double scroll = (double) e.getUnitsToScroll();
+            double scrollBefore = scale;
+            double newScale = (Math.exp(scroll * 0.01) * scale);
+            //Limit scale
+            if (newScale > 0.05) {
+                if (newScale > 0) {
+                    scale = newScale;
+                    double msX = ((e.getX() * scale));
+                    double msY = ((e.getY() * scale));
+                    double scaleChanged = scale - scrollBefore;
+
+                    //scrollPoint.x += ((msX * scaleChanged)) / scale;
+                    //scrollPoint.y += ((msY * scaleChanged)) / scale;
+                }
+            }
+            //Now repaint
+            repaint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                //Move it
+                //Check if still in view
+                translateX -= ((startPoint.x - e.getX()) / (scale));
+                translateY -= ((startPoint.y - e.getY()) / (scale));
+                startPoint = e.getPoint();
+                repaint();
+            }
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent arg0) {
         }
     }
 }

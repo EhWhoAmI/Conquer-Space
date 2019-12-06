@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class CityDistrict extends Building implements PopulationStorage, Workable{
     private int maxStorage;
     public ArrayList<PopulationUnit> population;
+    private City city;
 
     public CityDistrict() {
         population = new ArrayList<>();
@@ -42,4 +43,12 @@ public class CityDistrict extends Building implements PopulationStorage, Workabl
     @Override
     public void processJob(Job j) {
     }    
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 }

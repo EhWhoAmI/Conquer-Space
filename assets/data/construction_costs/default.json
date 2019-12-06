@@ -1,0 +1,5 @@
+{
+    "residential": {
+        "base-cost": {"iron" : 10}
+    }
+}

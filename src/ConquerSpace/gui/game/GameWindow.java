@@ -38,7 +38,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -256,6 +258,12 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
 
         setSize(rect.width, rect.height);
+        
+        try {
+            setIconImage(ImageIO.read(new File("assets/img/icon.png")));
+        } catch (IOException ioe) {
+        }
+
         setVisible(true);
 
         //See home planet
@@ -373,9 +381,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 translateY -= ((startPoint.y - e.getY()) * (scale));
                 startPoint = e.getPoint();
                 repaint();
-            } else if(isDragging && SwingUtilities.isMiddleMouseButton(e)) {
+            } else if (isDragging && SwingUtilities.isMiddleMouseButton(e)) {
                 //Set point of the start and end
-                if(drawing == DRAW_STAR_SYSTEM) {
+                if (drawing == DRAW_STAR_SYSTEM) {
                     systemRenderer.setMeasureDistance(startPoint, e.getPoint());
                 }
             }
@@ -456,7 +464,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
                             StarSystem sys = universe.getStarSystem(i);
-                            if (Math.hypot(( (sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
+                            if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
                                     if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
@@ -630,9 +638,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
                 popupMenu.show(this, e.getX(), e.getY());
             }
-            if(SwingUtilities.isMiddleMouseButton(e)) {
+            if (SwingUtilities.isMiddleMouseButton(e)) {
                 //Set point of the start and end
-                if(drawing == DRAW_STAR_SYSTEM) {
+                if (drawing == DRAW_STAR_SYSTEM) {
                     systemRenderer.endMeasureDistance();
                 }
             }

@@ -48,4 +48,11 @@ public class City implements PersonEnterable{
     public UniversePath getUniversePath() {
         return location;
     }
+    
+    public void addDistrict(PopulationStorage stor) {
+        storages.add(stor);
+        if(stor instanceof CityDistrict) {
+            ((CityDistrict) stor).setCity(this);
+        }
+    }
 }

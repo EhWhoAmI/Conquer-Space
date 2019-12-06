@@ -263,7 +263,7 @@ public class GameInitializer {
                 c.population.add(u);
                 test.population.add(u);
             }
-            city.storages.add(test);
+            city.addDistrict(test);
 
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
@@ -301,7 +301,8 @@ public class GameInitializer {
                 c.population.add(u);
                 test2.population.add(u);
             }
-            city.storages.add(test2);
+            //test2.setCity(city);
+            city.addDistrict(test2);
             //Set growth
             //Add city
             starting.cities.add(city);

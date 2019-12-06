@@ -180,7 +180,7 @@ public class GameUpdater {
     public void processPlanet(Planet p, StarDate date) {
         organizePopulation(p);
 
-        processPlanetJobs(p, date);
+        createPlanetJobs(p, date);
         
         assignJobs(p, date);
 
@@ -318,7 +318,6 @@ public class GameUpdater {
             }
         }
         long end = System.currentTimeMillis();
-        LOGGER.info("Took " + (end - start) + " ms to process all star systems");
     }
 
     /**
@@ -327,7 +326,7 @@ public class GameUpdater {
      * @param p
      * @param date
      */
-    public void processPlanetJobs(Planet p, StarDate date) {
+    public void createPlanetJobs(Planet p, StarDate date) {
         //Add the jobs...
         //Assign everyone an empty job...
         //for(p.)
@@ -346,6 +345,7 @@ public class GameUpdater {
                     Job constructionJob = new Job(JobType.Construction);
                     constructionJob.setJobRank(JobRank.Low);
                     constructionJob.setEmployer(constructionWork.getOwner());
+                    constructionJob.setWorkingFor(constructionWork);
                     //Set them to use resources for the construction
                     for (Map.Entry<Resource, Integer> set : constructionWork.resourcesNeeded.entrySet()) {
                         Resource resource = set.getKey();
@@ -353,6 +353,7 @@ public class GameUpdater {
                         //Add to the job
                         constructionJob.resources.put(resource, -amount);
                     }
+                    //Add job to building
                     p.planetJobs.add(constructionJob);
                 }
             } else if (building instanceof CityDistrict) {
@@ -445,7 +446,6 @@ public class GameUpdater {
                 BuildingBuilding build = (BuildingBuilding) building;
                 if (build.getLength() > 0) {
                     //build.incrementTick();
-                    build.decrementLength(GameController.GameRefreshRate);
                 } else {
                     //Done!
                     //Replace
@@ -569,7 +569,6 @@ public class GameUpdater {
         }
 
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
             Building value = entry.getValue();
             if (value instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) value;

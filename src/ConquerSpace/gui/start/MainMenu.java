@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -40,7 +41,6 @@ public class MainMenu extends JFrame implements WindowListener {
     //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
 
-
     /**
      * Constructor, show main menu.
      */
@@ -56,6 +56,11 @@ public class MainMenu extends JFrame implements WindowListener {
         //Add the classes on the bottom
         add(topBanner, BorderLayout.NORTH);
         add(new BottomMenu(), BorderLayout.SOUTH);
+        
+        try {
+            setIconImage(ImageIO.read(new File("assets/img/icon.png")));
+        } catch (IOException ioe) {
+        }
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addWindowListener(this);
@@ -186,7 +191,14 @@ public class MainMenu extends JFrame implements WindowListener {
 
                     JEditorPane pane = new JEditorPane("text/html", text);
                     pane.setEditable(false);
+                    pane.setSize(500, 300);
                     JScrollPane scroll = new JScrollPane(pane);
+                    scroll.setMaximumSize(new Dimension(500, 250));
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            scroll.getVerticalScrollBar().setValue(0);
+                        }
+                    });
                     pane.addHyperlinkListener((s) -> {
                         if (s.getInputEvent() instanceof MouseEvent) {
                             MouseEvent me = (MouseEvent) s.getInputEvent();
@@ -201,10 +213,11 @@ public class MainMenu extends JFrame implements WindowListener {
                         }
 
                     });
-
-                    JOptionPane.showMessageDialog(this, scroll, localeMessages.
-                            getMessage("start.gui.MainMenu.credits"),
-                            JOptionPane.INFORMATION_MESSAGE);
+                    JFrame frame = new JFrame();
+                    frame.add(scroll);
+                    frame.setSize(300, 500);
+                    frame.setTitle(localeMessages.getMessage("start.gui.MainMenu.credits"));
+                    frame.setVisible(true);
                 } catch (FileNotFoundException ex) {
                     LOGGER.warn("", ex);
                 } catch (IOException ex) {

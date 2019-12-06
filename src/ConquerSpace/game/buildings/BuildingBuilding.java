@@ -3,7 +3,6 @@ package ConquerSpace.game.buildings;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.resources.Resource;
 import java.awt.Color;
 import java.util.HashMap;
@@ -43,7 +42,7 @@ public class BuildingBuilding extends Building implements Workable{
 
     @Override
     public Color getColor() {
-        return Color.GREEN;
+        return Color.PINK;
     }
 
     public void setPt(GeographicPoint pt) {
@@ -68,6 +67,7 @@ public class BuildingBuilding extends Building implements Workable{
 
     @Override
     public void processJob(Job j) {
+        decrementLength(1);
     }
 
     public int getCost() {
