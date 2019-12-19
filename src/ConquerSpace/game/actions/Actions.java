@@ -45,11 +45,12 @@ public class Actions {
      * @param turns number of months...
      * @return Success or not
      */
-    public static int buildBuilding(Planet p, GeographicPoint pt, Building what, int owner, int turns) {
-        if (p.getOwnerID() == owner) {
+    public static int buildBuilding(Planet p, GeographicPoint pt, Building what, Civilization owner, int turns) {
+        if (p.getOwnerID() == owner.getID()) {
             BuildingBuilding buildings = new BuildingBuilding(what, pt, turns);
             buildings.setScale(1);
             //Determine cost...
+            
             p.buildings.put(pt, buildings);
             return BUILD_BUILDING_SUCCESS;
         } else {

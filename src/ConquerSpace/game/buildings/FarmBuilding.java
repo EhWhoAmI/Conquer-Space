@@ -95,4 +95,9 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     public void setManpower(int manPower) {
         this.manPower = manPower;
     }
+
+    @Override
+    public String getType() {
+        return "farm";
+    }
 }

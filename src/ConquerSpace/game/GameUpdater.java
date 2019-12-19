@@ -307,7 +307,6 @@ public class GameUpdater {
             system.setY(pt.y);
             for (int k = 0; k < system.getPlanetCount(); k++) {
                 Planet planet = system.getPlanet(k);
-                planet.modDegrees(planet.getDegreesPerTurn());
 
                 RendererMath.Point ppt
                         = RendererMath.polarCoordToCartesianCoord(planet.getOrbitalDistance(),

@@ -70,7 +70,7 @@ public class Civilization implements Employer{
     public HashMap<Technology, Integer> civResearch;
     public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
 
-    public HashMap<String, Integer> multipliers;
+    public HashMap<String, Double> multipliers;
     public HashMap<String, Integer> values;
 
     private int techLevel = 0;
@@ -340,11 +340,11 @@ public class Civilization implements Employer{
         values.put(key, value);
     }
 
-    public void putMultiplier(String key, Integer value) {
+    public void putMultiplier(String key, Double value) {
         multipliers.put(key, value);
     }
 
-    public void putMultiplier(String key, int value) {
+    public void putMultiplier(String key, double value) {
         multipliers.put(key, value);
     }
 

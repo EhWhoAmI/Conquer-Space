@@ -12,11 +12,11 @@ import java.util.ArrayList;
  * @author zyunl
  */
 public abstract class Building {
-
     private Color color;
     public ArrayList<Area> areas;
     public ArrayList<Job> jobs;
     private Employer owner;
+    private String type;
 
     public Building() {
         areas = new ArrayList<>();
@@ -37,5 +37,9 @@ public abstract class Building {
 
     public Employer getOwner() {
         return owner;
+    }
+
+    public String getType() {
+        return type;
     }
 }

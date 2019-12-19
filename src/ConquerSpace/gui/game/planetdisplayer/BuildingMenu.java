@@ -4,6 +4,8 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.BuildingCost;
+import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
@@ -52,8 +54,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -70,15 +74,17 @@ public class BuildingMenu extends JPanel {
     private JPanel buildingInfoPanel;
     private JComboBox<String> buildingType;
     private DefaultComboBoxModel<String> buildingModel;
-    private JPanel buildPanelXYPosContainer;
+    private JPanel buildLogisticsPanel;
     private JLabel xPosLabel;
     private JLabel yPosLabel;
     private JSpinner xposSpinner;
     private JSpinner yPosSpinner;
-    
+    private JPanel costPanel;
+    private JTable costTable;
+    private DefaultTableModel costTableModel;
+
     //private 
     //private JTable resourceCost;
-
     private CardLayout buildCardLayout;
 
     private BuildPopulationStorage popStoragePanel;
@@ -177,18 +183,25 @@ public class BuildingMenu extends JPanel {
             if (buildingType.getSelectedIndex() > -1) {
                 switch ((String) buildingType.getSelectedItem()) {
                     case RESIDENTIAL:
+                        //Configure cost
+                        //BuildingCostGetter.getCost("", c);
                         buildCardLayout.show(mainItemContainer, RESIDENTIAL);
                         break;
                     case LAUNCH:
+                        //Configure cost
                         buildCardLayout.show(mainItemContainer, LAUNCH);
                         break;
                     case OBSERVATORY:
+                        //Configure cost
+                        setBuildingCost(BuildingCostGetter.getCost("observatory", c));
                         buildCardLayout.show(mainItemContainer, OBSERVATORY);
                         break;
                     case RESOURCE_STOCKPILE:
+                        //Configure cost
                         buildCardLayout.show(mainItemContainer, RESOURCE_STOCKPILE);
                         break;
                     case RESOURCE_MINER:
+                        //Configure cost
                         buildCardLayout.show(mainItemContainer, RESOURCE_MINER);
                         break;
                 }
@@ -211,7 +224,7 @@ public class BuildingMenu extends JPanel {
                 if (item.equals(RESIDENTIAL)) {
                     CityDistrict storage = new CityDistrict();
                     storage.setMaxStorage((int) popStoragePanel.maxPopulationTextField.getValue());
-                    Actions.buildBuilding(p, buildingPos, storage, 0, 1);
+                    Actions.buildBuilding(p, buildingPos, storage, c, 1);
                     //Reset...
                     toReset = true;
                 } else if (item.equals(LAUNCH)) {
@@ -219,7 +232,7 @@ public class BuildingMenu extends JPanel {
                     //SpacePortBuilding port = new SpacePortBuilding(0, (Integer)buildSpaceLaunchSite.maxPopulation.getValue(), (LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), p);
                     //Actions.buildBuilding(p, new ConquerSpace.game.universe.Point((int)xposSpinner.getValue(), (int)yPosSpinner.getValue()), port, 0, 1);
                     SpacePort port = new SpacePort((LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), (Integer) buildSpaceLaunchSite.maxPopulation.getValue());
-                    Actions.buildBuilding(p, buildingPos, port, 0, 1);
+                    Actions.buildBuilding(p, buildingPos, port, c, 1);
                     toReset = true;
                 } else if (item.equals(OBSERVATORY)) {
                     StarSystem sys = u.getStarSystem(p.getParentStarSystem());
@@ -229,7 +242,7 @@ public class BuildingMenu extends JPanel {
                             c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
                     //Add visionpoint to civ
                     c.visionPoints.add(observatory);
-                    Actions.buildBuilding(p, buildingPos, observatory, 0, 1);
+                    Actions.buildBuilding(p, buildingPos, observatory, c, 1);
                     toReset = true;
                 } else if (item.equals(RESOURCE_STOCKPILE)) {
                     ResourceStorage stor = new ResourceStorage(p);
@@ -241,7 +254,7 @@ public class BuildingMenu extends JPanel {
                         stor.addResourceTypeStore(next);
                     }
                     c.resourceStorages.add(stor);
-                    Actions.buildBuilding(p, buildingPos, stor, 0, 1);
+                    Actions.buildBuilding(p, buildingPos, stor, c, 1);
                     toReset = true;
                 } else if (item.equals(RESOURCE_MINER)) {
                     ResourceMinerDistrict miner = new ResourceMinerDistrict(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
@@ -258,7 +271,7 @@ public class BuildingMenu extends JPanel {
                     }
                     //Add miners
                     miner.population.add(new PopulationUnit(c.getFoundingSpecies()));
-                    Actions.buildBuilding(p, buildingPos, miner, 0, 1);
+                    Actions.buildBuilding(p, buildingPos, miner, c, 1);
                     toReset = true;
                 }
                 if (toReset) {
@@ -279,15 +292,17 @@ public class BuildingMenu extends JPanel {
         buildingInfoPanel.add(mainItemContainer, BorderLayout.CENTER);
         buildingInfoPanel.add(buildButton, BorderLayout.SOUTH);
 
-        buildPanelXYPosContainer = new JPanel();
-        buildPanelXYPosContainer.setLayout(new GridLayout(2, 2));
+        buildLogisticsPanel = new JPanel();
+        buildLogisticsPanel.setLayout(new VerticalFlowLayout());
+
+        JPanel xypositionPanel = new JPanel();
 
         xPosLabel = new JLabel("X");
         SpinnerNumberModel xSpinnerMod = new SpinnerNumberModel(0, 0, p.getPlanetSize() * 2, -1);
         xposSpinner = new JSpinner(xSpinnerMod);
 
-        buildPanelXYPosContainer.add(xPosLabel);
-        buildPanelXYPosContainer.add(xposSpinner);
+        xypositionPanel.add(xPosLabel);
+        xypositionPanel.add(xposSpinner);
 
         yPosLabel = new JLabel("Y");
         SpinnerNumberModel ySpinnerMod = new SpinnerNumberModel(0, 0, p.getPlanetSize(), -1);
@@ -302,11 +317,21 @@ public class BuildingMenu extends JPanel {
         xposSpinner.addChangeListener(listener);
         yPosSpinner.addChangeListener(listener);
 
-        buildPanelXYPosContainer.add(yPosLabel);
-        buildPanelXYPosContainer.add(yPosSpinner);
+        xypositionPanel.add(yPosLabel);
+        xypositionPanel.add(yPosSpinner);
+
+        buildLogisticsPanel.add(xypositionPanel);
+        
+        costPanel = new JPanel();
+        //Add the tables 
+        costTableModel = new DefaultTableModel(new String[]{"Resource", "Amount"}, 0);
+        costTable = new JTable(costTableModel);
+        costPanel.add(new JScrollPane(costTable));
+        buildLogisticsPanel.add(new JLabel("Cost per turn"));
+        buildLogisticsPanel.add(costPanel);
 
         buildingThingPanel.add(buildingInfoPanel);
-        buildingThingPanel.add(buildPanelXYPosContainer);
+        buildingThingPanel.add(buildLogisticsPanel);
 
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
@@ -317,6 +342,15 @@ public class BuildingMenu extends JPanel {
     }
 
     public void update() {
+    }
+    
+    public void setBuildingCost(BuildingCost cost) {
+        costTableModel.setRowCount(0);
+        for (Map.Entry<Resource, Integer> entry : cost.cost.entrySet()) {
+            Resource key = entry.getKey();
+            Integer value = entry.getValue();
+            costTableModel.addRow(new String[]{key.getName(), value.toString()}); 
+        }
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener {
@@ -370,7 +404,7 @@ public class BuildingMenu extends JPanel {
                 if (((String) buildingType.getSelectedItem()).equals(RESOURCE_MINER)) {
                     for (ResourceVein v : p.resourceVeins) {
                         //Draw...
-                        if ((resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) && ((Resource)buildMiningStorageMenu.resourceToMine.getSelectedItem()).equals(v.getResourceType())) {
+                        if ((resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) && ((Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem()).equals(v.getResourceType())) {
                             Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * size, v.getY() * size, v.getRadius() * size, v.getRadius() * size);
                             g2d.setColor(v.getResourceType().getColor());
                             g2d.fill(circe);

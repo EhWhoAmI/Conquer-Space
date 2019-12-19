@@ -1,5 +1,16 @@
 {
-    "residential": {
-        "base-cost": {"iron" : 10}
+    "farm": {
+        "base-cost": {
+            "rock": 10,
+            "iron": 5
+        },
+        "scale": 1
+    },
+    "observatory": {
+        "base-cost": {
+            "rock": 10,
+            "iron": 5
+        },
+        "scale": 1
     }
 }

@@ -1,5 +1,6 @@
 package ConquerSpace.game;
 
+import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.resources.Resource;
@@ -414,5 +415,9 @@ public class AssetReader {
             }
         }
         GameController.personalityTraits = traits;
+    }
+    
+    public static void readBuildingCosts() {
+        BuildingCostGetter.initializeBuildingCosts();
     }
 }

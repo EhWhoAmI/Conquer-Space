@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public class MultiplierProcessor {
 
-    public static int process(String text, HashMap<String, Integer> values, HashMap<String, Integer> multipliers) throws IllegalArgumentException {
+    public static int process(String text, HashMap<String, Integer> values, HashMap<String, Double> multipliers) throws IllegalArgumentException {
         //Split
         return 0;
     }

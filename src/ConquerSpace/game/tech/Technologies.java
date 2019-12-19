@@ -153,9 +153,9 @@ public class Technologies {
             String[] splitAction = action.split(":");
             if (c.multipliers.containsKey(splitAction[0])) {
                 //Then add
-                c.multipliers.put(splitAction[0], c.multipliers.get(splitAction[0]) + Integer.parseInt(splitAction[1]));
+                c.multipliers.put(splitAction[0], c.multipliers.get(splitAction[0]) + Double.parseDouble(splitAction[1]));
             } else {
-                c.multipliers.put(splitAction[0], Integer.parseInt(splitAction[1]));
+                c.multipliers.put(splitAction[0], Double.parseDouble(splitAction[1]));
             }
         } else if (action.startsWith("field")) {
             action = action.replace("field(", "");

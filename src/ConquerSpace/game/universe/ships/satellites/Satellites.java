@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * @author Zyun
  */
 public class Satellites {
-    public static Satellite parseSatellite(JSONObject object, HashMap<String, Integer> multipliers, HashMap<String, Integer> values) {
+    public static Satellite parseSatellite(JSONObject object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {
         //Parse
         Satellite satellite;
         String name = object.getString("name");

@@ -70,6 +70,8 @@ public class GameInitializer {
         readEngineTechs();
         readPersonalityTraits();
 
+        readBuildingCosts();
+
         //Events
         readPopulationEvents();
 
@@ -155,7 +157,7 @@ public class GameInitializer {
             //System.out.println
             miner.setOwner(c);
             miner.setScale(1);
-            
+
             miner.population.add(new PopulationUnit(founding));
             p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
         }
