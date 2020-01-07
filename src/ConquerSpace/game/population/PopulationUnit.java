@@ -8,19 +8,19 @@ package ConquerSpace.game.population;
 public class PopulationUnit {
 
     private byte happiness;
-    private Species species;
+    private Race species;
     private Job job;
 
-    public PopulationUnit(Species species) {
+    public PopulationUnit(Race species) {
         job = new Job(JobType.Jobless);
         this.species = species;
     }
     
-    public Species getSpecies() {
+    public Race getSpecies() {
         return species;
     }
 
-    public void setSpecies(Species species) {
+    public void setSpecies(Race species) {
         this.species = species;
     }
 

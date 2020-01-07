@@ -3,7 +3,7 @@ package ConquerSpace.game.universe.civilization;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
-import ConquerSpace.game.population.Species;
+import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
@@ -101,7 +101,7 @@ public class Civilization implements Employer{
 
     public ArrayList<Event> events;
 
-    private Species foundingSpecies;
+    private Race foundingSpecies;
 
     private City capitalCity;
 
@@ -348,11 +348,11 @@ public class Civilization implements Employer{
         multipliers.put(key, value);
     }
 
-    public void setFoundingSpecies(Species foundingSpecies) {
+    public void setFoundingSpecies(Race foundingSpecies) {
         this.foundingSpecies = foundingSpecies;
     }
 
-    public Species getFoundingSpecies() {
+    public Race getFoundingSpecies() {
         return foundingSpecies;
     }
 

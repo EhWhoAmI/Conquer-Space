@@ -9,13 +9,14 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
-import ConquerSpace.game.life.Fauna;
 import ConquerSpace.game.life.LifeTrait;
+import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
-import ConquerSpace.game.population.Species;
+import ConquerSpace.game.population.Race;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
@@ -25,6 +26,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.farm.Crop;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -147,7 +149,7 @@ public class GameInitializer {
         updater.calculateVision();
     }
 
-    private void createResourceMiners(Planet p, Civilization c, Species founding) {
+    private void createResourceMiners(Planet p, Civilization c, Race founding) {
         //Find if vein exists on the planet
         int i = 0;
         for (ResourceVein v : p.resourceVeins) {
@@ -167,17 +169,32 @@ public class GameInitializer {
         //Based on population
         //Add livestock
         //Create a test crop so that you can grow stuff
-        Fauna faun = new Fauna(0.01f);
-        faun.lifetraits.add(LifeTrait.Delicious);
-        faun.lifetraits.add(LifeTrait.Photosynthetic);
-        faun.setName("Potatoe");
-        faun.setBiomass(100_000);
+        Species potato = new Species();
+        potato.setName("Potato");
+        potato.lifeTraits.add(LifeTrait.Rooted);
+        potato.lifeTraits.add(LifeTrait.Delicious);
+        potato.lifeTraits.add(LifeTrait.Photosynthetic);
 
-        starting.localLife.add(faun);
-
+        //Add the biomass
+        //Set the amount on planet...
+        LocalLife localLife = new LocalLife();
+        localLife.setSpecies(potato);
+        localLife.setBiomass(100_000);
+        starting.localLife.add(localLife);
+//        Fauna faun = new Fauna(0.01f);
+//        faun.lifetraits.add(LifeTrait.Delicious);
+//        faun.lifetraits.add(LifeTrait.Photosynthetic);
+//        faun.setName("Potatoe");
+//        faun.setBiomass(100_000);
+//        starting.localLife.add(faun);
         for (int i = 0; i < 10; i++) {
             FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
-            faceBook.farmCreatures.add(faun);
+            //Add crops
+            Crop crop = new Crop(potato);
+            crop.setTimeLeft(25);
+            crop.setYield(10000);
+            faceBook.crops.add(crop);
+            //faceBook.farmCreatures.add(faun);
             faceBook.setProductivity(1000);
             //The biomass capacity
             faceBook.setMaxCapacity(5000);

@@ -4,7 +4,7 @@ package ConquerSpace.game.population;
  * Species or race
  * @author zyunl
  */
-public class Species {
+public class Race {
     //Usage of food per month
     private int foodPerMonth;
     //Base increase in population per year. Will be incremented per every couple of ticks
@@ -15,7 +15,7 @@ public class Species {
     //The amount of support a pop unit needs (as in pop)
     private float upkeep = 0;
 
-    public Species(int foodPerMonth, float breedingRate, String name) {
+    public Race(int foodPerMonth, float breedingRate, String name) {
         this.foodPerMonth = foodPerMonth;
         this.breedingRate = breedingRate;
         this.name = name;

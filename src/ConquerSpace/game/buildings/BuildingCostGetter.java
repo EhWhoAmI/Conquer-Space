@@ -1,7 +1,6 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.util.ResourceLoader;
@@ -12,9 +11,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -74,14 +70,7 @@ public class BuildingCostGetter {
     }
 
     public static BuildingCost getCost(Building building, Civilization c) {
-        //Return cost
-        //Get the thing...
-        BuildingCost actualCost = new BuildingCost();
-        //Search for it...
-        BuildingCost theoreticalCost = buildingCosts.get(building.getType());
-        //Compute the things...
-        //
-        return null;
+        return getCost(building.getType(), c);
     }
 
     public static BuildingCost getCost(String name, Civilization c) {

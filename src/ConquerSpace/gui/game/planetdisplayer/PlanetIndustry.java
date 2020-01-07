@@ -8,6 +8,7 @@ import ConquerSpace.game.population.Job;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.resources.farm.Crop;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -129,8 +130,8 @@ public class PlanetIndustry extends JPanel {
         private FarmTableTableModel farmTableTableModel;
         
         private JPanel farmInfoPanel;
-        private DefaultListModel<LocalLife> localLifeInFarmListModel;
-        private JList<LocalLife> localLifeInFarmList;
+        private DefaultListModel<Crop> localLifeInFarmListModel;
+        private JList<Crop> localLifeInFarmList;
 
         public FarmingInfoPanel(Planet p, Civilization c) {
             setLayout(new HorizontalFlowLayout());
@@ -143,7 +144,7 @@ public class PlanetIndustry extends JPanel {
             localLifeInFarmListModel = new DefaultListModel<>();
             localLifeInFarmList = new JList<>(localLifeInFarmListModel);
             
-            farmInfoPanel.add(new JLabel("Farm Creatures"));
+            farmInfoPanel.add(new JLabel("Crops"));
             farmInfoPanel.add(new JScrollPane(localLifeInFarmList));
             ListSelectionModel farmTableSelectionModel = farmTable.getSelectionModel();
             farmTableSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -152,8 +153,9 @@ public class PlanetIndustry extends JPanel {
                     FarmBuilding fb = farmTableTableModel.getFarmBuilding(farmTable.getSelectedRow());
                     //Populate the list...
                     localLifeInFarmListModel.clear();
-                    for(LocalLife ll : fb.farmCreatures){
-                        localLifeInFarmListModel.addElement(ll);
+                    //Add the crops
+                    for(Crop crop : fb.crops) {
+                        localLifeInFarmListModel.addElement(crop);
                     }
                 }
             });
@@ -178,10 +180,10 @@ public class PlanetIndustry extends JPanel {
     private class MiningInfoPanel extends JPanel {
         
     }
-
+    
     private class FarmTableTableModel extends AbstractTableModel {
 
-        private String[] colunms = {"Type", "Productivity"};
+        private String[] colunms = {"Farm Type", "Productivity"};
 
         private ArrayList<FarmBuilding> farmBuildingArrayList;
 

@@ -10,7 +10,9 @@ public enum LifeTrait {
     HighAcidTolerance("High Acidity Tolerance"),
     HighAkalineTolerance("High Akaline Tolerance"),
     HighPHRange("High PH Range Tolerance"),
-    Domesticated("Domesticated");
+    Domesticated("Domesticated"),
+    Rooted("Rooted") /* For plants */,
+    Microscopic("Microscopic");
     
     private String name;
     

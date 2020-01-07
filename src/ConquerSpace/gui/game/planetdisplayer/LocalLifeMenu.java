@@ -36,12 +36,12 @@ public class LocalLifeMenu extends JPanel {
         localLifeList.addListSelectionListener(l -> {
             if(localLifeList.getSelectedValue() != null) {
                 LocalLife ll = localLifeList.getSelectedValue();
-                lifeName.setText(ll.getName());
+                lifeName.setText(ll.getSpecies().getName());
                 lifeBiomass.setText(ll.getBiomass() + " tons of biomass");
-                reproductionRate.setText(ll.getReproductionRate() + " next month");
+                reproductionRate.setText(ll.getSpecies().getBaseBreedingRate() + " next month");
                 
                 lifeTraitListModel.clear();
-                for(LifeTrait lt : ll.lifetraits) {
+                for(LifeTrait lt : ll.getSpecies().lifeTraits) {
                     lifeTraitListModel.addElement(lt);
                 }
             }

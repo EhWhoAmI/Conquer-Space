@@ -4,8 +4,9 @@ import ConquerSpace.game.AssetReader;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
-import ConquerSpace.game.life.Microscopic;
-import ConquerSpace.game.population.Species;
+import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.life.Species;
+import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.UniversePath;
@@ -177,7 +178,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         UniversePath up = getRandomSuitablePlanet(rand, universe);
         playerCiv.setStartingPlanet(up);
         //Generate Species
-        Species playerSpecies = new Species(1, 1, c.speciesName);
+        Race playerSpecies = new Race(1, 1, c.speciesName);
         playerSpecies.setUpkeep(0.05f);
 
         //Set currency
@@ -205,7 +206,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = getRandomSuitablePlanet(rand, universe);
             civ.setStartingPlanet(up1);
-            Species civSpecies = new Species(1, 1, "");
+            Race civSpecies = new Race(1, 1, "");
             civ.setFoundingSpecies(civSpecies);
 
             //Create currency
@@ -296,15 +297,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Stages it has life, and how evolved it is
         int lifeLength = rand.nextInt(10);
         //Initialize life
-        Microscopic micro = new Microscopic(0.1f);
-        micro.setBiomass(10000);
+        Species micro = new Species();
         //Set name
         //Add random trait
         LifeTrait randomLifeTrait = LifeTrait.values()[rand.nextInt(LifeTrait.values().length)];
-        micro.lifetraits.add(randomLifeTrait);
+        micro.lifeTraits.add(randomLifeTrait);
         micro.setName(randomLifeTrait.name());
-
-        p.localLife.add(micro);
+        LocalLife life = new LocalLife();
+        life.setSpecies(micro);
+        
+        p.localLife.add(life);
 
         for (int i = 0; i < lifeLength; i++) {
         }

@@ -5,7 +5,6 @@ package ConquerSpace.game;
  * @author Zyun
  */
 public class GameSpeeds {
-
     public static final int SLOWEST = 30;
     public static final int SLOWER = 25;
     public static final int SLOW = 20;

@@ -1,6 +1,6 @@
 package ConquerSpace.game.universe.spaceObjects;
 
-import ConquerSpace.game.population.Species;
+import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
@@ -28,7 +28,7 @@ public class Universe extends SpaceObject {
 
     public ArrayList<SpaceShip> spaceShips;
     
-    public ArrayList<Species> species;
+    public ArrayList<Race> species;
     
     public Universe(long seed) {
         this.seed = seed;

@@ -5,6 +5,7 @@ import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Workable;
+import ConquerSpace.game.universe.resources.farm.Crop;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -17,17 +18,21 @@ import java.util.ArrayList;
 public class FarmBuilding extends Building implements PopulationStorage, Workable {
 
     private FarmType farmType;
-    public ArrayList<LocalLife> farmCreatures;
+    public ArrayList<Crop> crops;
     private int productivity = 0;
     public ArrayList<PopulationUnit> population;
     private int capacity = 0;
     private int maxCapacity = 0;
     private int manPower = 0;
+    private int amountFarmed = 0;
+    private int harvestersNeeded = 0;
+    public ArrayList<Crop> harvestable;
 
     public FarmBuilding(FarmType ft) {
         farmType = ft;
-        farmCreatures = new ArrayList<>();
         population = new ArrayList<>();
+        crops = new ArrayList<>();
+        harvestable = new ArrayList<>();
     }
 
     @Override
@@ -85,7 +90,13 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     @Override
     public void processJob(Job j) {
         //Harvest a little
-        j.resources.put(GameController.foodResource, productivity);
+        //Check if harvest season...
+        if (!harvestable.isEmpty()) {
+            Crop c = harvestable.remove(0);
+            j.resources.put(GameController.foodResource, c.getYield());
+            //Regrow
+            c.setTimeLeft(25);
+        }
     }
 
     public int getManpower() {
@@ -99,5 +110,25 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     @Override
     public String getType() {
         return "farm";
+    }
+
+    public void setManPower(int manPower) {
+        this.manPower = manPower;
+    }
+
+    public void setAmountFarmed(int amountFarmed) {
+        this.amountFarmed = amountFarmed;
+    }
+
+    public int getAmountFarmed() {
+        return amountFarmed;
+    }
+
+    public void setHarvestersNeeded(int harvestersNeeded) {
+        this.harvestersNeeded = harvestersNeeded;
+    }
+
+    public int getHarvestersNeeded() {
+        return harvestersNeeded;
     }
 }

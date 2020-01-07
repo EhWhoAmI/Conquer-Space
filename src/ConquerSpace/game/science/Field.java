@@ -18,7 +18,7 @@ public class Field {
         this.name = name;
         //-1 is undiscovered, 0 is possible, anything more than that is it exists.
         this.level = -1;
-        nodes = new ArrayList();
+        nodes = new ArrayList<>();
     }
 
     public int getLevel() {

@@ -33,6 +33,7 @@ import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.universe.resources.farm.Crop;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
@@ -181,7 +182,7 @@ public class GameUpdater {
         organizePopulation(p);
 
         createPlanetJobs(p, date);
-        
+
         assignJobs(p, date);
 
         processBuildings(p, date);
@@ -191,7 +192,7 @@ public class GameUpdater {
         //Process locallife
         for (LocalLife localLife : p.localLife) {
             int biomass = localLife.getBiomass();
-            float breedingRate = localLife.getReproductionRate();
+            float breedingRate = localLife.getSpecies().getBaseBreedingRate();
             localLife.setBiomass((int) (breedingRate * biomass) + biomass);
         }
     }
@@ -503,19 +504,21 @@ public class GameUpdater {
                 //Get the resources
                 FarmBuilding farmBuilding = (FarmBuilding) building;
                 //Calculate productivity
-                float value = 0;
-                for (LocalLife fc : farmBuilding.farmCreatures) {
-                    value += fc.getReproductionRate() * farmBuilding.getCapacity();
+                farmBuilding.setHarvestersNeeded(0);
+               
+                int yield = 0;
+                for (Crop c : farmBuilding.crops) {
+                    c.subtractTime();
+                    if (c.getTimeLeft() <= 0) {
+                        //Prepare crop for harvesting
+                        farmBuilding.harvestable.add(c);
+                        
+                        //Check for harvesters
+                        farmBuilding.setHarvestersNeeded(farmBuilding.getHarvestersNeeded() + 1);
+                    }
                 }
-                //Add to the capacity
-                farmBuilding.setCapacity((int) (farmBuilding.getCapacity() + value));
-                if (farmBuilding.getCapacity() > farmBuilding.getMaxCapacity()) {
-                    farmBuilding.setCapacity(farmBuilding.getMaxCapacity());
-                }
-                if (value > farmBuilding.getCapacity()) {
-                    value = farmBuilding.getCapacity();
-                }
-                farmBuilding.setProductivity((int) value);
+                farmBuilding.setAmountFarmed(yield);
+
                 //System.out.println("hh" + farmBuilding.getProductivity());
                 //System.out.println((resources.get(GameController.foodResource) + farmBuilding.getProductivity()));
             } else if (building instanceof CityDistrict) {
