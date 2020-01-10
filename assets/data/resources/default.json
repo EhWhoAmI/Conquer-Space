@@ -63,5 +63,31 @@
         "mineable": false,
         "raw":true,
         "materials":[]
+    },
+    {
+        "name": "copper",
+        "id": 5,
+        "rarity": 0.3,
+        "value": 20,
+        "density": 16,
+        "difficulty": 32,
+        "distribution": 0,
+        "color": [184, 115, 51],
+        "mineable": true,
+        "raw":true,
+        "materials":[]
+    },
+    {
+        "name": "nickel",
+        "id": 6,
+        "rarity": 0.3,
+        "value": 15,
+        "density": 13,
+        "difficulty": 12,
+        "distribution": 0,
+        "color": [237, 237, 235],
+        "mineable": true,
+        "raw":true,
+        "materials":[]
     }
 ]

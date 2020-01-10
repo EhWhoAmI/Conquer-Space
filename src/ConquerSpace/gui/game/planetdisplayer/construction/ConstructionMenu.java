@@ -1,4 +1,4 @@
-package ConquerSpace.gui.game.planetdisplayer;
+package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameUpdater;
@@ -63,7 +63,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author zyunl
  */
-public class BuildingMenu extends JPanel {
+public class ConstructionMenu extends JPanel {
 
     private Planet p;
 
@@ -97,6 +97,8 @@ public class BuildingMenu extends JPanel {
 
     private BuildResourceGenerationMenu buildMiningStorageMenu;
 
+    private BuildIndustrialAreaMenu buildIndustrialAreaMenu;
+
     private JButton buildButton;
 
     private final String RESIDENTIAL = "Residential area";
@@ -104,10 +106,11 @@ public class BuildingMenu extends JPanel {
     private final String OBSERVATORY = "Observatory";
     private final String RESOURCE_STOCKPILE = "Resource Storage";
     private final String RESOURCE_MINER = "Resource Miner";
+    private final String INDUSTRIAL_DISTRICT = "Industrial Area";
 
     private Civilization c;
 
-    public BuildingMenu(Universe u, Planet p, Civilization c) {
+    public ConstructionMenu(Universe u, Planet p, Civilization c) {
         this.p = p;
         this.c = c;
         setLayout(new BorderLayout());
@@ -131,6 +134,7 @@ public class BuildingMenu extends JPanel {
         buildingModel.addElement(OBSERVATORY);
         buildingModel.addElement(RESOURCE_STOCKPILE);
         buildingModel.addElement(RESOURCE_MINER);
+        buildingModel.addElement(INDUSTRIAL_DISTRICT);
 
         JPanel mainItemContainer = new JPanel();
         buildCardLayout = new CardLayout();
@@ -145,6 +149,8 @@ public class BuildingMenu extends JPanel {
         buildResourceStorageMenu = new BuildResourceStorageMenu();
 
         buildMiningStorageMenu = new BuildResourceGenerationMenu();
+
+        buildIndustrialAreaMenu = new BuildIndustrialAreaMenu();
 
         JPanel container = new JPanel(new BorderLayout());
         mainItemContainer.add(popStoragePanel, RESIDENTIAL);
@@ -161,6 +167,10 @@ public class BuildingMenu extends JPanel {
 
         mainItemContainer.add(buildMiningStorageMenu, RESOURCE_MINER);
 
+        container = new JPanel(new BorderLayout());
+        container.add(buildIndustrialAreaMenu, BorderLayout.CENTER);
+        mainItemContainer.add(container, INDUSTRIAL_DISTRICT);
+
         buildCardLayout.show(mainItemContainer, RESIDENTIAL);
 
         //Do whatever, add action listeners
@@ -176,9 +186,11 @@ public class BuildingMenu extends JPanel {
             buildingModel.addElement(OBSERVATORY);
             buildingModel.addElement(RESOURCE_STOCKPILE);
             buildingModel.addElement(RESOURCE_MINER);
+            buildingModel.addElement(INDUSTRIAL_DISTRICT);
 
             buildingType.setSelectedIndex(selected);
         });
+
         buildingType.addActionListener(a -> {
             if (buildingType.getSelectedIndex() > -1) {
                 switch ((String) buildingType.getSelectedItem()) {
@@ -203,6 +215,9 @@ public class BuildingMenu extends JPanel {
                     case RESOURCE_MINER:
                         //Configure cost
                         buildCardLayout.show(mainItemContainer, RESOURCE_MINER);
+                        break;
+                    case INDUSTRIAL_DISTRICT:
+                        buildCardLayout.show(mainItemContainer, INDUSTRIAL_DISTRICT);
                         break;
                 }
             }
@@ -321,7 +336,7 @@ public class BuildingMenu extends JPanel {
         xypositionPanel.add(yPosSpinner);
 
         buildLogisticsPanel.add(xypositionPanel);
-        
+
         costPanel = new JPanel();
         //Add the tables 
         costTableModel = new DefaultTableModel(new String[]{"Resource", "Amount"}, 0);
@@ -343,13 +358,13 @@ public class BuildingMenu extends JPanel {
 
     public void update() {
     }
-    
+
     public void setBuildingCost(BuildingCost cost) {
         costTableModel.setRowCount(0);
         for (Map.Entry<Resource, Integer> entry : cost.cost.entrySet()) {
             Resource key = entry.getKey();
             Integer value = entry.getValue();
-            costTableModel.addRow(new String[]{key.getName(), value.toString()}); 
+            costTableModel.addRow(new String[]{key.getName(), value.toString()});
         }
     }
 
@@ -475,322 +490,6 @@ public class BuildingMenu extends JPanel {
         public void showLocation(Point pt, Color c) {
             point = pt;
             color = c;
-        }
-    }
-
-    private class BuildPopulationStorage extends JPanel implements ActionListener {
-
-        long maxPopulation;
-        private JLabel amount;
-        private JLabel amountEnding;
-        JSpinner maxPopulationTextField;
-
-        public BuildPopulationStorage() {
-            GridBagLayout gridbag = new GridBagLayout();
-
-            setLayout(gridbag);
-            GridBagConstraints constraints = new GridBagConstraints();
-            amount = new JLabel("Max Population");
-
-            SpinnerNumberModel model = new SpinnerNumberModel(200, 10, Integer.MAX_VALUE, 10);
-            maxPopulationTextField = new JSpinner(model);
-            ((JSpinner.DefaultEditor) maxPopulationTextField.getEditor()).getTextField().setEditable(false);
-
-            constraints.gridx = 0;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            add(amount, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(maxPopulationTextField, constraints);
-
-            amountEnding = new JLabel("million people");
-            constraints.gridx = 2;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.insets = new Insets(2, 5, 0, 0);
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(amountEnding, constraints);
-        }
-
-        //Determine price
-        //Add this 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //Calculate the cost...
-            try {
-                maxPopulation = (Integer) maxPopulationTextField.getValue();
-
-            } catch (NumberFormatException | ArithmeticException nfe) {
-                //Because who cares!
-
-            }
-        }
-    }
-
-    private class BuildSpaceLaunchSite extends JPanel implements ActionListener {
-
-        private JLabel amount;
-
-        private JSpinner maxPopulation;
-        private JLabel launchTypes;
-        private JComboBox<LaunchSystem> launchTypesValue;
-
-        public BuildSpaceLaunchSite(Civilization c) {
-            setLayout(new GridLayout(2, 2));
-            amount = new JLabel("Amount of launch ports");
-
-            launchTypes = new JLabel("Launch types");
-
-            SpinnerNumberModel model = new SpinnerNumberModel(3, 0, 5000, 1);
-
-            maxPopulation = new JSpinner(model);
-            ((JSpinner.DefaultEditor) maxPopulation.getEditor()).getTextField().setEditable(false);
-
-            launchTypesValue = new JComboBox<LaunchSystem>();
-
-            for (LaunchSystem t : c.launchSystems) {
-                launchTypesValue.addItem(t);
-            }
-            add(amount);
-            add(maxPopulation);
-            add(launchTypes);
-            add(launchTypesValue);
-        }
-
-        //Determine price
-        //Add this 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //Calculate the cost...
-            long pop = 0;
-            try {
-                pop = (Long) maxPopulation.getValue();
-
-            } catch (NumberFormatException | ArithmeticException nfe) {
-                //Because who cares!
-            }
-        }
-    }
-
-    private class BuildObservatoryMenu extends JPanel {
-
-        private JLabel lensSizeLabel;
-        private JSpinner lensSizeSpinner;
-        private JLabel telescopeRangeLabel;
-        private JLabel telescopeRangeValueLabel;
-
-        public BuildObservatoryMenu() {
-            GridBagLayout layout = new GridBagLayout();
-            setLayout(layout);
-            GridBagConstraints constraints = new GridBagConstraints();
-
-            lensSizeLabel = new JLabel("Lens Size(cm)");
-
-            SpinnerNumberModel model = new SpinnerNumberModel(50, 0, 5000, 1);
-
-            lensSizeSpinner = new JSpinner(model);
-            ((JSpinner.DefaultEditor) lensSizeSpinner.getEditor()).getTextField().setEditable(false);
-
-            lensSizeSpinner.addChangeListener(a -> {
-                //Calculate
-                telescopeRangeValueLabel.setText(GameUpdater.Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()) + " light years");
-
-            });
-
-            telescopeRangeLabel = new JLabel("Range: ");
-            telescopeRangeValueLabel = new JLabel("0 light years");
-
-            constraints.gridx = 0;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.ipady = 5;
-            add(lensSizeLabel, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.ipady = 5;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(lensSizeSpinner, constraints);
-
-            constraints.gridx = 0;
-            constraints.gridy = 1;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            add(telescopeRangeLabel, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 1;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(telescopeRangeValueLabel, constraints);
-        }
-    }
-
-    public class BuildResourceStorageMenu extends JPanel {
-
-        private JLabel resourceSize;
-        private JSpinner resourceSizeSpinner;
-        private JButton insertResourceButton;
-        private JButton removeResourceButton;
-        private JList<Resource> resourceToPut;
-        private JList<Resource> resourceInserted;
-        private DefaultListModel<Resource> resourceToPutListModel;
-        private DefaultListModel<Resource> resourceInsertedListModel;
-
-        @SuppressWarnings("unchecked")
-        public BuildResourceStorageMenu() {
-            setLayout(new BorderLayout());
-            JPanel ResourceAmountStorage = new JPanel();
-            resourceSize = new JLabel("Amount of Resources:");
-            SpinnerNumberModel mod = new SpinnerNumberModel(1000, 0, Integer.MAX_VALUE, 100);
-            resourceSizeSpinner = new JSpinner(mod);
-
-            ResourceAmountStorage.add(resourceSize);
-            ResourceAmountStorage.add(resourceSizeSpinner);
-
-            JPanel resourcePanel = new JPanel();
-            resourcePanel.setLayout(new GridBagLayout());
-            GridBagConstraints constraints = new GridBagConstraints();
-
-            removeResourceButton = new JButton("Remove Resource");
-            removeResourceButton.addActionListener(a -> {
-                if (resourceToPut.getSelectedIndex() > -1) {
-                    resourceInsertedListModel.addElement(resourceToPut.getSelectedValue());
-                    resourceToPutListModel.remove(resourceToPut.getSelectedIndex());
-                }
-            });
-
-            resourceToPutListModel = new DefaultListModel<>();
-            resourceToPut = new JList(resourceToPutListModel);
-
-            JScrollPane resourceToPutScrollPane = new JScrollPane(resourceToPut);
-
-            constraints.gridx = 0;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            resourcePanel.add(removeResourceButton, constraints);
-
-            constraints.gridx = 0;
-            constraints.gridy = 1;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            resourcePanel.add(resourceToPutScrollPane, constraints);
-
-            insertResourceButton = new JButton("Add resource");
-
-            insertResourceButton.addActionListener(a -> {
-                if (resourceInserted.getSelectedIndex() > -1) {
-                    resourceToPutListModel.addElement(resourceInserted.getSelectedValue());
-                    resourceInsertedListModel.remove(resourceInserted.getSelectedIndex());
-                }
-            });
-            resourceInsertedListModel = new DefaultListModel<>();
-            for (Resource res : GameController.resources) {
-                resourceInsertedListModel.addElement(res);
-            }
-            resourceInserted = new JList<>(resourceInsertedListModel);
-            JScrollPane resourceInsertedScrollPane = new JScrollPane(resourceInserted);
-
-            constraints.gridx = 1;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            resourcePanel.add(insertResourceButton, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 1;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            resourcePanel.add(resourceInsertedScrollPane, constraints);
-
-            add(ResourceAmountStorage, BorderLayout.NORTH);
-            add(resourcePanel, BorderLayout.SOUTH);
-        }
-    }
-
-    private class BuildResourceGenerationMenu extends JPanel {
-
-        JComboBox<Resource> resourceToMine;
-        private JLabel resourceToMineLabel;
-        private JLabel miningSpeed;
-        private JSpinner miningSpeedSpinner;
-
-        public BuildResourceGenerationMenu() {
-            resourceToMineLabel = new JLabel("Mining resource: ");
-
-            DefaultComboBoxModel<Resource> resourceComboBoxModel = new DefaultComboBoxModel<>();
-            //Add the resources
-            for (Resource res : GameController.resources) {
-                resourceComboBoxModel.addElement(res);
-            }
-            resourceToMine = new JComboBox<>(resourceComboBoxModel);
-
-            miningSpeed = new JLabel("Mining speed, units per month");
-            SpinnerNumberModel miningSpeedSpinnerNumberModel = new SpinnerNumberModel(10f, 0f, 50000f, 0.5f);
-            miningSpeedSpinner = new JSpinner(miningSpeedSpinnerNumberModel);
-
-            setLayout(new GridBagLayout());
-
-            GridBagConstraints constraints = new GridBagConstraints();
-
-            constraints.gridx = 0;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(resourceToMineLabel, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 0;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(resourceToMine, constraints);
-
-            constraints.gridx = 0;
-            constraints.gridy = 1;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(miningSpeed, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 1;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(miningSpeedSpinner, constraints);
         }
     }
 }

@@ -5,15 +5,16 @@ import ConquerSpace.game.buildings.AdministrativeCenter;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.FarmBuilding;
+import ConquerSpace.game.buildings.IndustrialDistrict;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.buildings.area.industrial.ForgeArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
-import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
@@ -21,7 +22,6 @@ import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
@@ -115,9 +115,11 @@ public class GameInitializer {
                 //Add resource miners
                 createResourceMiners(starting, c, c.getFoundingSpecies());
 
-                createObservatory(starting, c, selector);
-
                 createFarms(starting, selector, c);
+
+                createIndustrialZones(c, selector, starting);
+                
+                createObservatory(starting, c, selector);
 
                 //Set ownership
                 starting.setOwnerID(c.getID());
@@ -239,6 +241,16 @@ public class GameInitializer {
 
         c.resourceStorages.add(storage);
         starting.buildings.put(pt, storage);
+    }
+
+    private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
+        for (int i = 0; i < 10; i++) {
+            IndustrialDistrict district = new IndustrialDistrict();
+            //Add areas
+            district.areas.add(new ForgeArea());
+            GeographicPoint pt = getRandomEmptyPoint(starting, selector);
+            starting.buildings.put(pt, district);
+        }
     }
 
     private void createPopulationStorages(Planet starting, Civilization c, Random selector) {

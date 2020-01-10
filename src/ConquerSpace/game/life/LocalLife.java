@@ -12,7 +12,7 @@ public class LocalLife {
     private Species species;
 
     public LocalLife() {
-    }
+    }   
 
     public void setBiomass(int biomass) {
         this.biomass = biomass;
@@ -28,7 +28,7 @@ public class LocalLife {
 
     public Species getSpecies() {
         return species;
-    }    
+    }
 
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
-import ConquerSpace.gui.game.planetdisplayer.BuildingMenu;
+import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionMenu;
 import ConquerSpace.gui.game.planetdisplayer.LocalLifeMenu;
 import ConquerSpace.gui.game.planetdisplayer.PlanetIndustry;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
@@ -30,7 +30,7 @@ public class PlanetInfoSheet extends JPanel {
     private PlanetPopulation population;
     private SpacePortMenu spacePort;
     private AtmosphereInfo atmosphere;
-    private BuildingMenu building;
+    private ConstructionMenu building;
     private PlanetIndustry industry;
     private LocalLifeMenu localLifeMenu;
     
@@ -46,7 +46,7 @@ public class PlanetInfoSheet extends JPanel {
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetPopulation(p, 0);
         spacePort = new SpacePortMenu(p, c);
-        building = new BuildingMenu(u, p, c);
+        building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
 
