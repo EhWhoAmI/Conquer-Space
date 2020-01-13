@@ -90,4 +90,11 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
         veinMining.removeResources((int)miningPerMonth());
         j.resources.put(resourceMining, (int)miningPerMonth());
     }
+
+    @Override
+    public String getType() {
+        return "Mining District";
+    }
+    
+    
 }

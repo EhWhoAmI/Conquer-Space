@@ -109,7 +109,7 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
 
     @Override
     public String getType() {
-        return "farm";
+        return "Farm";
     }
 
     public void setManPower(int manPower) {

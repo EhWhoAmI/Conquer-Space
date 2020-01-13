@@ -242,9 +242,13 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
         //Set timer
         gameTickTimer = new Timer(100, a -> {
-            mainInterfaceWindow.update();
-            newsWindow.update();
-            desktopPane.repaint();
+            try {
+                mainInterfaceWindow.update();
+                newsWindow.update();
+                desktopPane.repaint();
+            } catch (Exception e) {
+                LOGGER.warn("Exception!", e);
+            }
         });
 
         gameTickTimer.setRepeats(true);
@@ -258,7 +262,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
 
         setSize(rect.width, rect.height);
-        
+
         try {
             setIconImage(ImageIO.read(new File("assets/img/icon.png")));
         } catch (IOException ioe) {
@@ -296,7 +300,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            SaveGame game = new SaveGame(System.getProperty("user.dir") + "/save/");
+            SaveGame game = new SaveGame(SaveGame.getSaveFolder());
             long before = System.currentTimeMillis();
             try {
                 game.save(u, d);
@@ -312,6 +316,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
+        System.exit(0);
     }
 
     @Override

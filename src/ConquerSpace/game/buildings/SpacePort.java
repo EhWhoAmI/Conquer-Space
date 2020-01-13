@@ -26,4 +26,9 @@ public class SpacePort extends Building{
     public Color getColor() {
         return Color.MAGENTA;
     }
+    
+     @Override
+    public String getType() {
+        return "Space Port";
+    }
 }

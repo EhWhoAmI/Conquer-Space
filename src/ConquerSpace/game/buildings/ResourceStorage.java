@@ -93,4 +93,9 @@ public class ResourceStorage extends Building implements ResourceStockpile {
         resources.put(type, currentlyStored-amount);
         return true;
     }
+    
+     @Override
+    public String getType() {
+        return "Resource Storage";
+    }
 }

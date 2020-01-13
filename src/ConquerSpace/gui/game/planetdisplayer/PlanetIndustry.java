@@ -3,10 +3,8 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.farm.Crop;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -16,6 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.Map;
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,7 +47,7 @@ public class PlanetIndustry extends JPanel {
     private FarmingInfoPanel farmingInfoPanel;
     
     private JPanel availableJobs;
-    private DefaultListModel<Job> availableJobListModel;
+    private JobListModel availableJobListModel;
     private JList<Job> availableJobList;
 
     private Planet p;
@@ -100,7 +99,7 @@ public class PlanetIndustry extends JPanel {
         tabs.add(jobSortingOutPanel, "Industries");
         
         availableJobs = new JPanel();
-        availableJobListModel = new DefaultListModel<>();
+        availableJobListModel = new JobListModel(p.planetJobs);
         availableJobList = new JList<>(availableJobListModel);
         availableJobs.add(new JScrollPane(availableJobList));
         tabs.add(availableJobs, "Available jobs");
@@ -117,11 +116,6 @@ public class PlanetIndustry extends JPanel {
             }
         }
         areaList.setSelectedIndex(selectedArea);
-        
-        availableJobListModel.clear();
-        for(Job j : p.planetJobs) {
-            availableJobListModel.addElement(j);
-        }
     }
 
     private class FarmingInfoPanel extends JPanel {
@@ -172,8 +166,8 @@ public class PlanetIndustry extends JPanel {
                 if (value instanceof FarmBuilding) {
                     farmTableTableModel.addFarmBuilding((FarmBuilding) value);
                 }
-            }
-        }
+            } 
+       }
 
     }
     
@@ -226,5 +220,25 @@ public class PlanetIndustry extends JPanel {
         public FarmBuilding getFarmBuilding(int index) {
             return farmBuildingArrayList.get(index);
         }
+    }
+    
+    private class JobListModel extends AbstractListModel<Job>{
+
+        ArrayList<Job> jobs;
+
+        public JobListModel(ArrayList<Job> jobs) {
+            this.jobs = jobs;
+        }
+        
+        @Override
+        public int getSize() {
+            return jobs.size();
+        }
+
+        @Override
+        public Job getElementAt(int index) {
+            return jobs.get(index);
+        }
+        
     }
 }

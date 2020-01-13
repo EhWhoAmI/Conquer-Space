@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;

@@ -112,7 +112,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         saveGameButton.setFocusable(false);
         saveGameButton.addActionListener(e -> {
             this.getTopLevelAncestor().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            SaveGame game = new SaveGame(System.getProperty("user.dir") + "/save/");
+            SaveGame game = new SaveGame(SaveGame.getSaveFolder());
             long before = System.currentTimeMillis();
             try {
                 game.save(u, date);

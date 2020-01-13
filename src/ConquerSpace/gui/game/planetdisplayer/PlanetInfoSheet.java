@@ -1,4 +1,4 @@
-package ConquerSpace.gui.game;
+package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.SpacePort;
@@ -12,6 +12,7 @@ import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionMenu;
 import ConquerSpace.gui.game.planetdisplayer.LocalLifeMenu;
 import ConquerSpace.gui.game.planetdisplayer.PlanetIndustry;
+import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
 import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
 import ConquerSpace.gui.game.planetdisplayer.PlanetPopulation;
 import java.awt.BorderLayout;
@@ -25,18 +26,19 @@ import javax.swing.JTabbedPane;
  */
 public class PlanetInfoSheet extends JPanel {
 
-    private JTabbedPane tpane;
-    private PlanetOverview overview;
-    private PlanetPopulation population;
-    private SpacePortMenu spacePort;
-    private AtmosphereInfo atmosphere;
-    private ConstructionMenu building;
-    private PlanetIndustry industry;
-    private LocalLifeMenu localLifeMenu;
-    
+    JTabbedPane tpane;
+    PlanetOverview overview;
+    PlanetPopulation population;
+    SpacePortMenu spacePort;
+    AtmosphereInfo atmosphere;
+    ConstructionMenu building;
+    PlanetIndustry industry;
+    LocalLifeMenu localLifeMenu;
+    PlanetMap planetMap;
+
     private Civilization c;
     private Planet p;
-    
+
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
         this.c = c;
         this.p = p;
@@ -49,6 +51,7 @@ public class PlanetInfoSheet extends JPanel {
         building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
+        planetMap = new PlanetMap(p, this);
 
         tpane.add("Overview", overview);
         //tpane.add("Resources", new PlanetResources(p));
@@ -58,6 +61,7 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add("Construction", building);
         tpane.add("Industry", industry);
         tpane.add("Local Life", localLifeMenu);
+        tpane.add("Map", planetMap);
 
         tpane.setEnabledAt(2, false);
         //Check if planet contains space port
@@ -86,7 +90,7 @@ public class PlanetInfoSheet extends JPanel {
         spacePort.update();
         industry.update();
         population.update();
-        
+
         tpane.setEnabledAt(2, false);
         //Check if planet contains space port
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {

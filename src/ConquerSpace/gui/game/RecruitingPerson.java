@@ -7,6 +7,8 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,7 +23,7 @@ import javax.swing.JScrollPane;
 public class RecruitingPerson extends JPanel {
 
     private JList<Person> probablePersonList;
-    private DefaultListModel<Person> personListModel;
+    private PersonListModel personListModel;
     private JLabel name;
     private JLabel personAgeLabel;
     private JLabel personJobLabel;
@@ -35,16 +37,11 @@ public class RecruitingPerson extends JPanel {
 
     private Civilization c;
 
-    private int previouslySelected;
-
     public RecruitingPerson(Civilization c, Universe u) {
         this.c = c;
         setLayout(new GridLayout(1, 2));
         //Generate people and things like that
-        personListModel = new DefaultListModel<>();
-        for (Person p : c.unrecruitedPeople) {
-            personListModel.addElement(p);
-        }
+        personListModel = new PersonListModel(c.unrecruitedPeople);
 
         probablePersonList = new JList<>(personListModel);
         probablePersonList.setSelectedIndex(1);
@@ -64,10 +61,10 @@ public class RecruitingPerson extends JPanel {
                     skillLabel.setText("Skill: " + ((Scientist) probablePersonList.getSelectedValue()).getSkill());
                     container.add(skillLabel);
                 }
-                
+
                 positionLabel.setText("Location: " + probablePersonList.getSelectedValue().getPosition().getName() + ", " + u.getSpaceObject(probablePersonList.getSelectedValue().getPosition().getUniversePath()));
                 container.add(positionLabel);
-                
+
                 personalityListModel.clear();
                 for (PersonalityTrait pt : probablePersonList.getSelectedValue().traits) {
                     personalityListModel.addElement(pt);
@@ -93,7 +90,6 @@ public class RecruitingPerson extends JPanel {
         recruitButton.addActionListener(a -> {
             if (probablePersonList.getSelectedIndex() > -1) {
                 Person p = probablePersonList.getSelectedValue();
-                personListModel.remove(probablePersonList.getSelectedIndex());
                 c.unrecruitedPeople.remove(p);
                 c.people.add(p);
             }
@@ -117,11 +113,30 @@ public class RecruitingPerson extends JPanel {
     }
 
     public void update() {
-        previouslySelected = probablePersonList.getSelectedIndex();
-        personListModel.clear();
-        for (Person p : c.unrecruitedPeople) {
-            personListModel.addElement(p);
+        probablePersonList.updateUI();
+    }
+
+    private class PersonListModel extends AbstractListModel<Person> {
+
+        ArrayList<Person> person;
+        long before = 0, after = System.currentTimeMillis();
+
+        public PersonListModel(ArrayList<Person> person) {
+            this.person = person;
         }
-        probablePersonList.setSelectedIndex(previouslySelected);
+
+        @Override
+        public int getSize() {
+            return person.size();
+        }
+
+        @Override
+        public Person getElementAt(int index) {
+            if (person.size() > 0) {
+                return person.get(index);
+            }
+            return null;
+        }
+
     }
 }

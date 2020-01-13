@@ -49,4 +49,9 @@ public class Observatory extends Building implements VisionPoint {
     public Point getPosition() {
         return point;
     }
+
+    @Override
+    public String getType() {
+        return "Observatory";
+    }
 }

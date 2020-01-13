@@ -20,5 +20,10 @@ public class AdministrativeCenter extends CityDistrict implements Workable{
 
     @Override
     public void processJob(Job j) {
-    }    
+    }
+
+    @Override
+    public String getType() {
+        return "Administrative Center";
+    }
 }

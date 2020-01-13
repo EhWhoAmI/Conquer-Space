@@ -9,9 +9,9 @@ import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.Timer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
@@ -74,17 +74,25 @@ public class GameController {
         }
 
         int tickerSpeed = 10;
-        ticker = new Timer(tickerSpeed, (e) -> {
-            ticker.setDelay(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
-            updater.calculateVision();
 
-            if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
-                tick();
+        ticker = new Timer();
+        Runnable action = new Runnable() {
+            public void run() {
+                ticker.setWait(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
+                updater.calculateVision();
+                
+                if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
+                    tick();
+                }
             }
-        }
-        );
-        //Start ticker
+        };
+        ticker.setAction(action);
+
+        ticker.setWait(tickerSpeed);
         ticker.start();
+
+        //Start ticker
+        //ticker.start();
     }
 
     //Process ingame tick.

@@ -107,13 +107,13 @@ public class GameInitializer {
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
                 c.setCapitalPlanet(starting);
-
-                createPopulationStorages(starting, c, selector);
+                
+                //Add resource miners
+                createResourceMiners(starting, c, c.getFoundingSpecies());
 
                 createResourceStorages(c, selector, starting);
 
-                //Add resource miners
-                createResourceMiners(starting, c, c.getFoundingSpecies());
+                createPopulationStorages(starting, c, selector);
 
                 createFarms(starting, selector, c);
 

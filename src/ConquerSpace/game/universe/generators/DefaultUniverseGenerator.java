@@ -79,7 +79,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             //Add stars
             Star star = generateStar(rand);
             sys.addStar(star);
-            
+
             int planetCount = rand.nextInt(11);
             long lastDistance = 10000000;
             for (int k = 0; k < planetCount; k++) {
@@ -115,7 +115,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                             int resourceVolume = randint(rand, 50000, 100000);
                             ResourceVein vein = new ResourceVein(res, resourceVolume);
                             vein.setId(idCount++);
-                            vein.setRadius(randint(rand, 5, 50));
+                            vein.setRadius(randint(rand, 5, 15));
                             vein.setX(rand.nextInt(planetSize * 2));
                             vein.setY(rand.nextInt(planetSize));
                             p.resourceVeins.add(vein);
@@ -305,7 +305,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         micro.setName(randomLifeTrait.name());
         LocalLife life = new LocalLife();
         life.setSpecies(micro);
-        
+
         p.localLife.add(life);
 
         for (int i = 0; i < lifeLength; i++) {

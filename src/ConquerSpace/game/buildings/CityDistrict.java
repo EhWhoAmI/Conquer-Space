@@ -51,4 +51,9 @@ public class CityDistrict extends Building implements PopulationStorage, Workabl
     public void setCity(City city) {
         this.city = city;
     }
+
+    @Override
+    public String getType() {
+        return "City District";
+    }
 }

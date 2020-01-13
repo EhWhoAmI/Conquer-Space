@@ -164,6 +164,11 @@ public class PlanetPopulation extends JPanel {
         tabs.add(jobContainer, "Jobs");
         add(tabs);
     }
+    
+    public void showCity(City whichCity) {
+        //Determine if on planet
+        cityList.setSelectedValue(whichCity, true);
+    }
 
     private class AreaWrapper {
 

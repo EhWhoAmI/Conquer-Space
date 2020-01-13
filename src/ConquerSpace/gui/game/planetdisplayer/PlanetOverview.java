@@ -242,7 +242,10 @@ public class PlanetOverview extends JPanel {
                 for (ResourceVein v : p.resourceVeins) {
                     //Draw...
                     if (resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) {
-                        Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);
+                        Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * 2,
+                                (v.getY() - v.getRadius()) * 2,
+                                v.getRadius() * 2 * 2,
+                                v.getRadius() * 2 * 2);
                         g2d.setColor(v.getResourceType().getColor());
                         g2d.fill(circe);
                     }
