@@ -4,17 +4,9 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
-import ConquerSpace.gui.game.planetdisplayer.SpacePortMenu;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
-import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionMenu;
-import ConquerSpace.gui.game.planetdisplayer.LocalLifeMenu;
-import ConquerSpace.gui.game.planetdisplayer.PlanetIndustry;
-import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
-import ConquerSpace.gui.game.planetdisplayer.PlanetOverview;
-import ConquerSpace.gui.game.planetdisplayer.PlanetPopulation;
 import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -31,39 +23,41 @@ public class PlanetInfoSheet extends JPanel {
     PlanetPopulation population;
     SpacePortMenu spacePort;
     AtmosphereInfo atmosphere;
-    ConstructionMenu building;
     PlanetIndustry industry;
     LocalLifeMenu localLifeMenu;
     PlanetMap planetMap;
+    PlanetEconomy planetEconomy;
 
     private Civilization c;
     private Planet p;
+    
+    private final int spacePortIndex = 3;
 
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
         this.c = c;
         this.p = p;
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
+        
         overview = new PlanetOverview(u, p, c);
         atmosphere = new AtmosphereInfo(p, c);
-        population = new PlanetPopulation(p, 0);
+        population = new PlanetPopulation(u, p, 0);
         spacePort = new SpacePortMenu(p, c);
-        building = new ConstructionMenu(u, p, c);
+        //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
-        planetMap = new PlanetMap(p, this);
+        planetMap = new PlanetMap(p, c, u, this);
+        planetEconomy = new PlanetEconomy();
 
         tpane.add("Overview", overview);
-        //tpane.add("Resources", new PlanetResources(p));
-        tpane.add("Population", population);
+        tpane.add("Map", planetMap);
+        tpane.add("Cities", population);
         tpane.add("Space Port", spacePort);
         tpane.add("Atmosphere", atmosphere);
-        tpane.add("Construction", building);
         tpane.add("Industry", industry);
         tpane.add("Local Life", localLifeMenu);
-        tpane.add("Map", planetMap);
 
-        tpane.setEnabledAt(2, false);
+        tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
@@ -71,12 +65,12 @@ public class PlanetInfoSheet extends JPanel {
 
             //Do stuff...
             if (value instanceof SpacePort) {
-                tpane.setEnabledAt(2, true);
+                tpane.setEnabledAt(spacePortIndex, true);
                 break;
             }
         }
         if (c.values.get("haslaunch") != 1) {
-            tpane.setEnabledAt(2, false);
+            tpane.setEnabledAt(spacePortIndex, false);
         }
 
         add(tpane, BorderLayout.CENTER);
@@ -91,21 +85,20 @@ public class PlanetInfoSheet extends JPanel {
         industry.update();
         population.update();
 
-        tpane.setEnabledAt(2, false);
+        tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
             Building value = entry.getValue();
 
-            //Do stuff...
+            //Enable space port tab
             if (value instanceof SpacePort) {
-                tpane.setEnabledAt(2, true);
+                tpane.setEnabledAt(spacePortIndex, true);
                 break;
             }
         }
         if (c.values.get("haslaunch") != 1) {
-            tpane.setEnabledAt(2, false);
+            tpane.setEnabledAt(spacePortIndex, false);
         }
-        building.update();
     }
 }

@@ -9,7 +9,9 @@ import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -52,7 +54,7 @@ public class PlanetPopulation extends JPanel {
 
     private Planet p;
 
-    public PlanetPopulation(Planet p, int turn) {
+    public PlanetPopulation(Universe u, Planet p, int turn) {
         this.p = p;
         tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
@@ -87,14 +89,13 @@ public class PlanetPopulation extends JPanel {
 
         averageGrowthSum /= p.cities.size();
         averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + averageGrowthSum + "% every 40 days");
-        currentStats.add(averagePlanetPopGrowthLabel);
 
         cityListPanel = new JPanel();
         cityListPanel.setLayout(new BorderLayout());
 
         cityListModel = new DefaultListModel<>();
-        for (City c : p.cities) {
-            cityListModel.addElement(c);
+        for (City city : p.cities) {
+            cityListModel.addElement(city);
         }
         cityList = new JList<>(cityListModel);
         cityList.addListSelectionListener(l -> {
@@ -111,6 +112,17 @@ public class PlanetPopulation extends JPanel {
                 }
                 maxPop += stor.getMaxStorage();
             }
+
+            //Check if capital city
+            for (int i = 0; i < u.getCivilizationCount(); i++) {
+                if (u.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
+                    JLabel isCapital = new JLabel("Capital City of " + u.getCivilization(i).getName());
+                    cityData.add(isCapital);
+                    break;
+                }
+            }
+
+            //Population
             JLabel popCount = new JLabel("Population: " + (popcount * 10) + " million people");
             cityData.add(popCount);
 
@@ -164,7 +176,7 @@ public class PlanetPopulation extends JPanel {
         tabs.add(jobContainer, "Jobs");
         add(tabs);
     }
-    
+
     public void showCity(City whichCity) {
         //Determine if on planet
         cityList.setSelectedValue(whichCity, true);

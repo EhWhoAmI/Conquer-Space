@@ -98,31 +98,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
 
-                //Add resource veins
-                int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
-                int idCount = 0;
-                for (Resource res : GameController.resources) {
-                    //Process...
-                    float rarity = res.getRarity();
-                    float probality = rand.nextFloat();
-                    //Then count
-                    if (true) {
-                        //Then add a certain amount
-                        int amount = (int) (rarity * resourceCount * probality);
-                        //Add that amount
-                        for (int resCount = 0; resCount < amount; resCount++) {
-                            //Add the resource
-                            int resourceVolume = randint(rand, 50000, 100000);
-                            ResourceVein vein = new ResourceVein(res, resourceVolume);
-                            vein.setId(idCount++);
-                            vein.setRadius(randint(rand, 5, 15));
-                            vein.setX(rand.nextInt(planetSize * 2));
-                            vein.setY(rand.nextInt(planetSize));
-                            p.resourceVeins.add(vein);
-                        }
-                    }
-                }
-
+                generateResourceVeins(p, rand);
                 if (planetType == PlanetTypes.ROCK) {
                     p.setTerrainSeed(rand.nextInt());
                     p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
@@ -135,9 +111,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 if (planetNameGenerator != null) {
                     p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
                 }
+
                 //Set changin degrees
                 //Closer it is, the faster it is...
-                //Numbers!
                 //mass is size times 100,000,0000
                 double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
                 //degs *= 10;
@@ -176,6 +152,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         }
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
         UniversePath up = getRandomSuitablePlanet(rand, universe);
+        up = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+        starSystemCount++;
         playerCiv.setStartingPlanet(up);
         //Generate Species
         Race playerSpecies = new Race(1, 1, c.speciesName);
@@ -205,6 +183,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             int civPreferredClimate1 = rand.nextInt(3);
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = getRandomSuitablePlanet(rand, universe);
+            up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+            starSystemCount++;
             civ.setStartingPlanet(up1);
             Race civSpecies = new Race(1, 1, "");
             civ.setFoundingSpecies(civSpecies);
@@ -233,6 +213,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Get planets
         int randomP = 0;
 
+        main:
         do {
             //Loop through the numbers
             if (sys.getPlanetCount() <= 0 || randomP >= sys.getPlanetCount()) {
@@ -256,6 +237,81 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             randomP++;
         } while (true);
         return new UniversePath(randomSS, randomP);
+    }
+
+    /**
+     * Creates a suitable planet and star system for the civ to live in
+     *
+     * @param c the civ
+     * @param u universe
+     * @return the universe path the new star system and planet is in
+     */
+    private UniversePath createSuitablePlanet(Civilization c, Universe u, Random rand, int lastPlanet, NameGenerator planetNameGenerator) {
+        //Make the things
+        int dist = rand.nextInt(6324100);
+        float degrees = (rand.nextFloat() * 360);
+        StarSystem sys = new StarSystem(lastPlanet, new GalacticLocation(degrees, dist));
+
+        //Add stars
+        Star star = generateStar(rand);
+        sys.addStar(star);
+
+        int planetCount = rand.nextInt(5) + 6;
+        long lastDistance = 10000000;
+        Planet living = null;
+        for (int k = 0; k < planetCount; k++) {
+            //Add planets
+            //Set stuff
+            int planetType = Math.round(rand.nextFloat());
+            //System.out.println(planetType);
+            long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
+            lastDistance = orbitalDistance;
+            int planetSize;
+            if (planetType == PlanetTypes.GAS) {
+                planetSize = randint(rand, 50, 500);
+            } else {
+                //Rock
+                planetSize = randint(rand, 30, 100);
+            }
+            Planet p = new Planet(planetType, orbitalDistance, planetSize, k, lastPlanet);
+
+            generateResourceVeins(p, rand);
+            if (planetType == PlanetTypes.ROCK) {
+                p.setTerrainSeed(rand.nextInt());
+                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
+                //= terrainColorses;
+                if (living == null) {
+                    living = p;
+                }
+            } else if (planetType == PlanetTypes.GAS) {
+                p.setTerrainSeed(rand.nextInt());
+                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_GASSY_COLORS));
+            }
+            //Set name
+            if (planetNameGenerator != null) {
+                p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
+            }
+
+            //Set changin degrees
+            //Closer it is, the faster it is...
+            //mass is size times 100,000,0000
+            double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
+            //degs *= 10;
+            p.setDegreesPerTurn((float) degs);
+            //System.err.println(p.terrain.terrainColor[0][0]);
+            p.modDegrees(rand.nextInt(360));
+
+            //Seed life
+            if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
+                generateLocalLife(rand, p);
+            }
+            sys.addPlanet(p);
+        }
+
+        u.addStarSystem(sys);
+
+        //get a rocky planet
+        return living.getUniversePath();
     }
 
     private Star generateStar(Random rand) {
@@ -289,6 +345,34 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         Star star = new Star(starType, starSize, 0);
         return star;
 
+    }
+
+    public void generateResourceVeins(Planet p, Random rand) {
+        int planetSize = p.getPlanetSize();
+        //Add resource veins
+        int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
+        int idCount = 0;
+        for (Resource res : GameController.resources) {
+            //Process... 
+            float rarity = res.getRarity();
+            float probality = rand.nextFloat();
+            //Then count
+            if (true) {
+                //Then add a certain amount
+                int amount = (int) (rarity * resourceCount * probality);
+                //Add that amount
+                for (int resCount = 0; resCount < amount; resCount++) {
+                    //Add the resource
+                    int resourceVolume = randint(rand, 50000, 100000);
+                    ResourceVein vein = new ResourceVein(res, resourceVolume);
+                    vein.setId(idCount++);
+                    vein.setRadius(randint(rand, 5, 15));
+                    vein.setX(rand.nextInt(planetSize * 2));
+                    vein.setY(rand.nextInt(planetSize));
+                    p.resourceVeins.add(vein);
+                }
+            }
+        }
     }
 
     private void generateLocalLife(Random rand, Planet p) {

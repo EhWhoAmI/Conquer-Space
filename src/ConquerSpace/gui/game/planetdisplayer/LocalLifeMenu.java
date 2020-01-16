@@ -4,6 +4,7 @@ import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
@@ -62,6 +63,7 @@ public class LocalLifeMenu extends JPanel {
         localLifeInfo.add(reproductionRate);
         localLifeInfo.add(new JScrollPane(lifeTraitList));
 
+        setLayout(new HorizontalFlowLayout());
         add(new JScrollPane(localLifeList));
         add(localLifeInfo);
     }

@@ -2,6 +2,8 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -25,6 +27,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
 import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,6 +37,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -42,6 +46,8 @@ import javax.swing.border.TitledBorder;
  * @author Zyun
  */
 public class PlanetOverview extends JPanel {
+
+    private Planet p;
 
     private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
@@ -52,7 +58,11 @@ public class PlanetOverview extends JPanel {
     private JLabel planetType;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
-    private Planet p;
+
+    private JPanel currentStats;
+    private JLabel populationCount;
+    private JLabel averagePlanetPopGrowthLabel;
+
     private JButton switchButton;
     private JButton showNothing;
     private ButtonGroup resourceButtonGroup;
@@ -98,6 +108,37 @@ public class PlanetOverview extends JPanel {
             ownerLabel.setText("No owner");
         }
 
+        currentStats = new JPanel(new VerticalFlowLayout());
+
+        currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
+        
+        int pop = 0;
+        //Get average growth
+        float averageGrowthSum = 0;
+        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+            Building value = entry.getValue();
+            float increment = 0;
+            if (value instanceof CityDistrict) {
+                CityDistrict storage = (CityDistrict) value;
+                pop += storage.population.size();
+                //process pops
+                for (PopulationUnit unit : storage.population) {
+                    //Fraction it so it does not accelerate at a crazy rate
+                    //Do subtractions here in the future, like happiness, and etc.
+                    increment += (unit.getSpecies().getBreedingRate() / 50);
+                }
+            }
+            averageGrowthSum += increment;
+        }
+
+        populationCount = new JLabel("Population: " + (pop * 10) + " million");
+        currentStats.add(populationCount);
+
+        averageGrowthSum /= p.cities.size();
+        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + averageGrowthSum + "% every 40 days");
+        currentStats.add(averagePlanetPopGrowthLabel);
+
+        //Map
         planetSectors = new JPanel();
         PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p, c);
         JPanel wrapper = new JPanel();
@@ -153,9 +194,8 @@ public class PlanetOverview extends JPanel {
                 sectorDisplayer.whatToShow = PlanetSectorDisplayer.PLANET_BUILDINGS;
             }
         });
-        JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
 
-        planetBuildingInfoPanel = new JPanel();
+        JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
 
         planetSectors.add(sectorsScrollPane);
         planetSectors.add(buildingPanel);
@@ -167,10 +207,8 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(orbitDistance);
 
         add(planetOverview);
+        add(currentStats);
         add(planetSectors);
-        add(planetBuildingInfoPanel);
-        //Add empty panel
-        //add(new JPanel());
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
@@ -287,20 +325,6 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                lastClicked = e.getPoint();
-                //Calculate the position
-                int x = (int) ((lastClicked.getX()) / scale - translateX) / 2;
-                int y = (int) ((lastClicked.getY()) / scale - translateY) / 2;
-
-                Building b = p.buildings.get(new GeographicPoint(x, y));
-                if (b != null) {
-                    //Now put the window on, so that you know what is going on
-                    planetBuildingInfoPanel.removeAll();
-                    BuildingInfoContainer container = new BuildingInfoContainer(b);
-                    planetBuildingInfoPanel.add(container);
-                }
-            }
         }
 
         @Override

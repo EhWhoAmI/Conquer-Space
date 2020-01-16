@@ -1,12 +1,15 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -47,7 +50,11 @@ public class PlanetMap extends JPanel {
 
     private PlanetInfoSheet parent;
     private Image mapImage;
+
     private Planet p;
+    private Civilization c;
+    private Universe u;
+
     private double tileSize = 2;
     private double scale = 1;
     private double translateX = 0;
@@ -73,20 +80,24 @@ public class PlanetMap extends JPanel {
 
     private ButtonGroup viewMenuButtonGroup;
     private JRadioButton normalViewButton;
-
+    private JRadioButton buildMenuButton;
     private JRadioButton showResourceButton;
+
     private JMenuItem resetViewButton;
     private JMenuItem hideTerrainButton;
 
     private final int NORMAL_VIEW = 0;
     private final int RESOURCE_VIEW = 1;
-    //if -1, then all
+    private final int BUILDING_VIEW = 2;
+    //if -1, then all resources
     private int resourceShown = -1;
     private int displayedView = NORMAL_VIEW;
     private boolean showTerrain = true;
 
-    public PlanetMap(Planet p, PlanetInfoSheet parent) {
+    public PlanetMap(Planet p, Civilization c, Universe u, PlanetInfoSheet parent) {
         this.p = p;
+        this.c = c;
+        this.u = u;
         this.parent = parent;
 
         setLayout(new BorderLayout());
@@ -112,6 +123,9 @@ public class PlanetMap extends JPanel {
                 displayedView = NORMAL_VIEW;
             } else if (e.getSource().equals(showResourceButton)) {
                 displayedView = RESOURCE_VIEW;
+            } else if (e.getSource().equals(buildMenuButton)) {
+                displayedView = BUILDING_VIEW;
+                //Show building menu
             }
 
             map.repaint();
@@ -125,8 +139,12 @@ public class PlanetMap extends JPanel {
         showResourceButton = new JRadioButton("Resource View");
         viewMenuButtonGroup.add(showResourceButton);
         showResourceButton.addActionListener(viewActionListener);
-
         viewMenu.add(showResourceButton);
+
+        buildMenuButton = new JRadioButton("Construction View");
+        viewMenuButtonGroup.add(buildMenuButton);
+        buildMenuButton.addActionListener(viewActionListener);
+        viewMenu.add(buildMenuButton);
 
         viewMenu.addSeparator();
         resetViewButton = new JMenuItem("Reset View");
@@ -173,6 +191,7 @@ public class PlanetMap extends JPanel {
 
         menuBar.add(viewMenu);
         menuBar.add(showResourceMenu);
+
         map = new MapPanel();
 
         add(menuBar, BorderLayout.NORTH);
@@ -180,14 +199,25 @@ public class PlanetMap extends JPanel {
 
     }
 
+    public void resetBuildingIndicator() {
+        map.currentlyBuildingPoint = null;
+        map.isActive = false;
+    }
+    
     private class MapPanel extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
 
         private BufferedImage resourceImage = null;
         boolean needRefresh = false;
 
+        GeographicPoint currentlyBuildingPoint;
+        boolean isActive = false;
+        
+        int mouseX = 0;
+        int mouseY = 0;
+
         public MapPanel() {
             setBackground(Color.black);
-            
+
             addMouseWheelListener(this);
             addMouseMotionListener(this);
             addMouseListener(this);
@@ -199,14 +229,14 @@ public class PlanetMap extends JPanel {
             Graphics2D g2d = (Graphics2D) g;
             g2d.translate(translateX, translateY);
             g2d.scale(scale, scale);
-            
+
             //Terrain
             if (showTerrain) {
                 g2d.drawImage(mapImage, 0, 0, null);
             }
-            
+
             //Normal view 
-            if (displayedView == NORMAL_VIEW) {
+            if (displayedView == NORMAL_VIEW || displayedView == BUILDING_VIEW) {
                 //Draw buildings
                 for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
                     GeographicPoint p = en.getKey();
@@ -236,7 +266,24 @@ public class PlanetMap extends JPanel {
                         }
                     }
                 }
+
                 g2d.drawImage(resourceImage, 0, 0, null);
+            }
+
+            if (displayedView == BUILDING_VIEW) {
+                //Building UI
+                Rectangle2D.Double mouseBox = new Rectangle2D.Double(mouseX * tileSize, mouseY * tileSize, tileSize, tileSize);
+                g2d.setColor(Color.PINK);
+                g2d.fill(mouseBox);
+                if (currentlyBuildingPoint != null) {
+                    //Draw it
+                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX()-1) * tileSize, (currentlyBuildingPoint.getY()-1) * tileSize, tileSize*3, tileSize*3);
+                    g2d.setColor(Color.RED);
+                    g2d.fill(buildingPointOutside);
+                    Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
+                    g2d.setColor(Color.BLUE);
+                    g2d.fill(buildingPointInside);
+                }
             }
         }
 
@@ -254,6 +301,11 @@ public class PlanetMap extends JPanel {
 
         @Override
         public void mouseMoved(MouseEvent e) {
+            //Track mouse position
+            Point pt = convertPoint(e.getX(), e.getY());
+            mouseX = pt.x;
+            mouseY = pt.y;
+
             hideToolTip();
             showToolTip(e);
             repaint();
@@ -272,6 +324,18 @@ public class PlanetMap extends JPanel {
                 Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
                     showBuildingInfo(b);
+                }
+            } else if (SwingUtilities.isRightMouseButton(e) && displayedView == BUILDING_VIEW) {
+                //Make the things
+                //Create construction panel
+                //Check if point is within bounds
+                if (mouseX > 0 && mouseY > 0 && mouseX < (p.getPlanetSize() * 2) && mouseY < p.getPlanetSize() && !isActive) {
+                    GeographicPoint pt = new GeographicPoint(mouseX, mouseY);
+                    currentlyBuildingPoint = pt;
+                    isActive = true;
+                    ConstructionPanel construction = new ConstructionPanel(c, p, u, pt, PlanetMap.this);
+                    ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(construction);
+                    construction.toFront();
                 }
             }
         }
@@ -330,6 +394,8 @@ public class PlanetMap extends JPanel {
                 String topText = "";
                 if (b instanceof CityDistrict) {
                     topText = ((CityDistrict) b).getCity().getName();
+                } else if (b instanceof BuildingBuilding) {
+                    topText = "Building " + ((BuildingBuilding) b).getToBuild().getType() + ", with " + ((BuildingBuilding) b).getLength() + " left";
                 }
 
                 toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + topText + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));

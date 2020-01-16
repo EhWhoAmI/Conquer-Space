@@ -107,7 +107,7 @@ public class GameInitializer {
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
                 c.setCapitalPlanet(starting);
-                
+
                 //Add resource miners
                 createResourceMiners(starting, c, c.getFoundingSpecies());
 
@@ -118,7 +118,7 @@ public class GameInitializer {
                 createFarms(starting, selector, c);
 
                 createIndustrialZones(c, selector, starting);
-                
+
                 createObservatory(starting, c, selector);
 
                 //Set ownership
@@ -134,8 +134,6 @@ public class GameInitializer {
                     c.resourceList.put(res, 0);
                 }
 
-                //Add Civ initalize values
-                c.values.put("haslaunch", 0);
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
 
                 //Deal with people
@@ -262,7 +260,7 @@ public class GameInitializer {
         }
 
         //Amount of pop storages
-        int popStorMas = (selector.nextInt(5) + 3);
+        int popStorMas = (selector.nextInt(7) + 5);
 
         //Add admin center and capital city.
         AdministrativeCenter administrativeCenter = new AdministrativeCenter();
@@ -423,6 +421,7 @@ public class GameInitializer {
     private void initalizeCivValues(Civilization c) {
         //Add civ values
         c.putValue("optics.quality", 100);
+        c.putValue("haslaunch", 0);
     }
 
     private GeographicPoint getRandomEmptyPoint(Planet starting, Random selector) {

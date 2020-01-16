@@ -74,7 +74,7 @@ public class PlanetIndustry extends JPanel {
         areaContainer.add(scrollPane, BorderLayout.WEST);
         tabs.add(areaContainer, "Areas");
 
-        jobSortingOutPanel = new JPanel();
+        jobSortingOutPanel = new JPanel(new HorizontalFlowLayout());
 
         industryListModel = new DefaultListModel<>();
         industryListModel.addElement("Farming");
