@@ -2,6 +2,7 @@ package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.actions.InterstellarTravelAction;
 import ConquerSpace.game.actions.ShipAction;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -28,10 +29,12 @@ public class UniverseRenderer {
 
     Universe universe;
     public int universeDrawnSize;
+    private Civilization c;
 
-    public UniverseRenderer(Dimension bounds, Universe universe) {
+    public UniverseRenderer(Dimension bounds, Universe universe, Civilization c) {
         this.bounds = bounds;
         this.universe = universe;
+        this.c = c;
         long universeRadius = 0;
         //LOGGER.info("Displaying universe " + universe.toReadableString());
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
@@ -85,13 +88,13 @@ public class UniverseRenderer {
         );
         g2d.setColor(Color.WHITE);
         g2d.draw(yline);*/
-
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             //Check vision
             StarSystem sys = universe.getStarSystem(i);
             // Draw star systems   
             //Check vision...
-            if (universe.getCivilization(0).vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
+            //System.out.println(sys);
+            if (c.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
                 //Control
                 if (universe.control.get(sys.getUniversePath()) > -1) {
                     switch (universe.getCivilization(0).vision.
@@ -154,6 +157,7 @@ public class UniverseRenderer {
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
             }
+
         }
 
         //Spaceships

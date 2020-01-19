@@ -15,6 +15,7 @@ import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
+import ConquerSpace.game.universe.civilization.government.Government;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
@@ -115,6 +116,8 @@ public class Civilization implements Employer{
     private long moneyReserves = 0;
     
     public ArrayList<Civilization> contacts;
+    
+    public Government government;
 
     public Civilization(int ID, Universe u) {
         this.ID = ID;
@@ -122,18 +125,6 @@ public class Civilization implements Employer{
         //Set a temp starting point as in 0:0:0
         vision = new HashMap<>();
 
-        //Add all the vision.
-        for (int i = 0; i < u.getStarSystemCount(); i++) {
-            StarSystem s = u.getStarSystem(i);
-            this.vision.put(new UniversePath(i), VisionTypes.UNDISCOVERED);
-            for (int h = 0; h < s.getPlanetCount(); h++) {
-                //Add planets
-                this.vision.put(new UniversePath(i, h), VisionTypes.UNDISCOVERED);
-            }
-            for (int h2 = 0; h2 < s.getStarCount(); h2++) {
-                this.vision.put(new UniversePath(i, h2, true), VisionTypes.UNDISCOVERED);
-            }
-        }
         pop = new Population();
         economy = new Economy();
 
@@ -172,6 +163,8 @@ public class Civilization implements Employer{
         events = new ArrayList<>();
         
         contacts = new ArrayList<>();
+        
+        government = new Government();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
@@ -427,5 +420,9 @@ public class Civilization implements Employer{
     @Override
     public void changeMoney(long amount) {
         moneyReserves += amount;
+    }
+    
+    public void passEvent(Event e) {
+        controller.passEvent(e);
     }
 }

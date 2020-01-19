@@ -24,6 +24,7 @@ import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.resources.farm.Crop;
@@ -93,10 +94,14 @@ public class GameInitializer {
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
+            initVision(c, universe);
+            
             //Science
             initializeTech(c, selector);
 
             initalizeCivValues(c);
+            
+            initializeGovernment(c, gen);
 
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             material.setId(0);
@@ -142,6 +147,7 @@ public class GameInitializer {
                 //Add unrecruited people
                 createUnrecruitedPeople(c, starting, gen);
             }
+            c.government.getLeader().setPosition(c.getCapitalCity());
         }
 
         updater.calculateControl();
@@ -253,8 +259,11 @@ public class GameInitializer {
 
     private void createPopulationStorages(Planet starting, Civilization c, Random selector) {
         NameGenerator townGen = null;
+        NameGenerator gen = null;
+
         try {
             townGen = NameGenerator.getNameGenerator("town.names");
+            gen = NameGenerator.getNameGenerator("us.names");
         } catch (IOException ex) {
             //Ignore, assume all ok
         }
@@ -332,6 +341,13 @@ public class GameInitializer {
             }
             //test2.setCity(city);
             city.addDistrict(test2);
+            //Add leader to city
+
+            Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
+            gov.setPosition(city);
+            city.setGovernor(gov);
+            c.people.add(gov);
+
             //Set growth
             //Add city
             starting.cities.add(city);
@@ -433,5 +449,35 @@ public class GameInitializer {
             pt = new GeographicPoint(x, y);
         } while (starting.buildings.containsKey(pt));
         return pt;
+    }
+
+    private void initializeGovernment(Civilization c, NameGenerator gen) {
+        c.government.setLeaderTitle("Supreme Leader");
+        //Create person
+        int age = (int) (Math.random() * 40) + 20;
+        String person = "name";
+        person = gen.getName((int) Math.round(Math.random()));
+        Administrator dude = new Administrator(person, age);
+        //nerd.setSkill((int) (Math.random() * 5) + 1);
+        dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+        dude.setPosition(c.getCapitalCity());
+        dude.setRole("Ruling " + c.getSpeciesName());
+        
+        c.people.add(dude);
+        c.government.setLeader(dude);
+    }
+    
+    private void initVision(Civilization c, Universe u) {
+        for (int i = 0; i < u.getStarSystemCount(); i++) {
+            StarSystem s = u.getStarSystem(i);
+            c.vision.put(new UniversePath(i), VisionTypes.UNDISCOVERED);
+            for (int h = 0; h < s.getPlanetCount(); h++) {
+                //Add planets
+                c.vision.put(new UniversePath(i, h), VisionTypes.UNDISCOVERED);
+            }
+            for (int h2 = 0; h2 < s.getStarCount(); h2++) {
+                c.vision.put(new UniversePath(i, h2, true), VisionTypes.UNDISCOVERED);
+            }
+        }
     }
 }

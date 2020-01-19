@@ -259,10 +259,59 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         int planetCount = rand.nextInt(5) + 6;
         long lastDistance = 10000000;
         Planet living = null;
-        for (int k = 0; k < planetCount; k++) {
+        int k = 0;
+        for (k = 0; k < planetCount; k++) {
             //Add planets
             //Set stuff
             int planetType = Math.round(rand.nextFloat());
+            //System.out.println(planetType);
+            long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
+            lastDistance = orbitalDistance;
+            int planetSize;
+            if (planetType == PlanetTypes.GAS) {
+                planetSize = randint(rand, 50, 500);
+            } else {
+                //Rock
+                planetSize = randint(rand, 30, 100);
+            }
+            Planet p = new Planet(planetType, orbitalDistance, planetSize, k, lastPlanet);
+
+            generateResourceVeins(p, rand);
+            if (planetType == PlanetTypes.ROCK) {
+                p.setTerrainSeed(rand.nextInt());
+                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
+                //= terrainColorses;
+                if (living == null) {
+                    living = p;
+                }
+            } else if (planetType == PlanetTypes.GAS) {
+                p.setTerrainSeed(rand.nextInt());
+                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_GASSY_COLORS));
+            }
+            //Set name
+            if (planetNameGenerator != null) {
+                p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
+            }
+
+            //Set changin degrees
+            //Closer it is, the faster it is...
+            //mass is size times 100,000,0000
+            double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
+            //degs *= 10;
+            p.setDegreesPerTurn((float) degs);
+            //System.err.println(p.terrain.terrainColor[0][0]);
+            p.modDegrees(rand.nextInt(360));
+
+            //Seed life
+            if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
+                generateLocalLife(rand, p);
+            }
+            sys.addPlanet(p);
+        }
+        
+        if(living == null) {
+            //Add a rocky planet just to be sure.
+            int planetType = PlanetTypes.ROCK;
             //System.out.println(planetType);
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;

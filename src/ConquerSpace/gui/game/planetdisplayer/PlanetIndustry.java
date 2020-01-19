@@ -102,7 +102,7 @@ public class PlanetIndustry extends JPanel {
         availableJobListModel = new JobListModel(p.planetJobs);
         availableJobList = new JList<>(availableJobListModel);
         availableJobs.add(new JScrollPane(availableJobList));
-        tabs.add(availableJobs, "Available jobs");
+        //tabs.add(availableJobs, "Available jobs");
         
         add(tabs);
     }

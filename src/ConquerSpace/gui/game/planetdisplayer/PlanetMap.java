@@ -5,6 +5,7 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -419,6 +420,10 @@ public class PlanetMap extends JPanel {
 
                 //Switch tabs
                 parent.tpane.setSelectedComponent(parent.population);
+            } else if (building instanceof SpacePort) {
+                //parent.spacePort;
+                //Switch tabs
+                parent.tpane.setSelectedComponent(parent.spacePort);
             }
         }
 

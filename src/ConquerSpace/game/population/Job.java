@@ -6,9 +6,11 @@ import java.util.HashMap;
 
 /**
  * Job of the population
+ *
  * @author zyunl
  */
 public class Job {
+
     /**
      * The resources to add...
      */
@@ -20,7 +22,7 @@ public class Job {
     private Currency currency;
     private Employer employer;
     private int pay;
-    
+
     public Job(JobType jobType) {
         this.jobType = jobType;
         resources = new HashMap<>();
@@ -46,7 +48,7 @@ public class Job {
     public JobRank getJobRank() {
         return jobRank;
     }
-    
+
     public Workable getWorkingFor() {
         return workingFor;
     }
@@ -77,5 +79,20 @@ public class Job {
 
     public Employer getEmployer() {
         return employer;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Job) {
+            //Just check job name
+            return (((Job) obj).jobType == jobType);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return jobType.hashCode();
     }
 }

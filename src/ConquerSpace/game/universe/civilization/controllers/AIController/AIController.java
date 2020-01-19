@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.AIController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
@@ -13,11 +14,12 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Controller of the AI. Will need to link to scripts.
+ *
  * @author Zyun
  */
-public class AIController implements CivilizationController{
+public class AIController implements CivilizationController {
 
-        private static final Logger LOGGER = CQSPLogger.getLogger(AIController.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(AIController.class.getName());
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
@@ -25,7 +27,7 @@ public class AIController implements CivilizationController{
         //actions = (ArrayList <Action>) script.getObject("actions");
         ArrayList<Action> actions = new ArrayList<>();
         return actions;
-    }   
+    }
 
     @Override
     public void alert(Alert a) {
@@ -41,6 +43,8 @@ public class AIController implements CivilizationController{
     public void refreshUI() {
         //Ignore
     }
-    
-    
+
+    @Override
+    public void passEvent(Event e) {
+    }
 }

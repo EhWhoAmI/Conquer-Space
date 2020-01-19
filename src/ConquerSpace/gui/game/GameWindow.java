@@ -7,6 +7,7 @@ import ConquerSpace.game.actions.InterstellarTravelAction;
 import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ShipSurveyAction;
 import ConquerSpace.game.actions.ToOrbitAction;
+import ConquerSpace.game.events.Event;
 import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -94,6 +95,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
     public void addFrame(JInternalFrame frame) {
         desktopPane.add(frame);
+    }
+    
+    public void passEvent(Event e) {
+        mainInterfaceWindow.passEvent(e);
     }
 
     @SuppressWarnings("deprecation")
@@ -661,7 +666,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
         public CQSPDesktop(Universe u) {
             universe = u;
-            universeRenderer = new UniverseRenderer(new Dimension(1500, 1500), u);
+            universeRenderer = new UniverseRenderer(new Dimension(1500, 1500), u, c);
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);

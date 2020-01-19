@@ -1,5 +1,6 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.events.Event;
 import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -41,6 +42,8 @@ public class MainInterfaceWindow extends JInternalFrame {
 
     private PersonWindow personWindow;
     private RecruitingPerson recruitingPerson;
+
+    private EventViewer eventViewer;
 
     private ResourceManager resourceManager;
 
@@ -132,6 +135,8 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         economyWindow = new EconomyWindow(c, u);
 
+        eventViewer = new EventViewer();
+
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
         tabs.add("Ships", spaceShipOverview);
@@ -140,6 +145,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         tabs.add("My Civilization", civInfoOverview);
         tabs.add("Resources", resourceManager);
         tabs.add("Economy", economyWindow);
+        tabs.add("Events", eventViewer);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
@@ -208,5 +214,10 @@ public class MainInterfaceWindow extends JInternalFrame {
         }
         setSelectedTab(1);
         setVisible(true);
+    }
+
+    public void passEvent(Event e) {
+        //Add thing
+        eventViewer.passEvent(e);
     }
 }

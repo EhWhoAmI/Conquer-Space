@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.civilization.controllers.PlayerController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.ships.Ship;
@@ -71,4 +72,9 @@ public class PlayerController implements CivilizationController {
         
         init(u, d, c);
     }    
+
+    @Override
+    public void passEvent(Event e) {
+        mainwindow.passEvent(e);
+    }
 }

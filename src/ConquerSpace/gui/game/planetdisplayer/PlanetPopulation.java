@@ -48,10 +48,6 @@ public class PlanetPopulation extends JPanel {
 
     private JPanel cityData;
 
-    private JPanel jobContainer;
-    private PopulationTableModel jobListModel;
-    private JTable jobList;
-
     private Planet p;
 
     public PlanetPopulation(Universe u, Planet p, int turn) {
@@ -134,6 +130,8 @@ public class PlanetPopulation extends JPanel {
             JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
             cityData.add(maxPopulation);
 
+            JLabel governorLabel = new JLabel("Governor: " + cityList.getSelectedValue().getGovernor().getName());
+            cityData.add(governorLabel);
             //Areas
             //areaListModel = new DefaultListModel<>();
             //for(Area a : cityList.getSelectedValue().areas) {
@@ -155,31 +153,17 @@ public class PlanetPopulation extends JPanel {
         cityData.setLayout(new VerticalFlowLayout());
         cityListPanel.add(cityData, BorderLayout.CENTER);
 
-        jobContainer = new JPanel();
-        jobContainer.setLayout(new BorderLayout());
-        jobListModel = new PopulationTableModel();
-        for (City city : p.cities) {
-            for (PopulationStorage stor : city.storages) {
-                for (PopulationUnit unit : stor.getPopulationArrayList()) {
-                    jobListModel.addModel(new PopulationModel(unit, city));
-                }
-            }
-        }
-        jobList = new JTable(jobListModel);
-        jobList.setAutoCreateRowSorter(true);
-        JScrollPane jobscrollPane = new JScrollPane(jobList);
-        jobContainer.add(jobscrollPane, BorderLayout.WEST);
-
         growthPanel.add(currentStats);
         growthPanel.add(cityListPanel);
-        tabs.add(growthPanel, "Population Growth");
-        tabs.add(jobContainer, "Jobs");
-        add(tabs);
+        //tabs.add(jobContainer, "Jobs");
+        add(growthPanel);
     }
 
     public void showCity(City whichCity) {
         //Determine if on planet
-        cityList.setSelectedValue(whichCity, true);
+        if (whichCity != null && cityListModel.contains(whichCity)) {
+            cityList.setSelectedValue(whichCity, true);
+        }
     }
 
     private class AreaWrapper {
@@ -200,81 +184,5 @@ public class PlanetPopulation extends JPanel {
     }
 
     public void update() {
-        int selectedRow = jobList.getSelectedRow();
-        jobListModel.clear();
-        for (City city : p.cities) {
-            for (PopulationStorage stor : city.storages) {
-                for (PopulationUnit unit : stor.getPopulationArrayList()) {
-                    jobListModel.addModel(new PopulationModel(unit, city));
-                }
-            }
-        }
-        jobListModel.fireTableDataChanged();
-        if (selectedRow > -1) {
-            jobList.setRowSelectionInterval(selectedRow, selectedRow);
-        }
-        //jobList.setR(selectedJob);
-    }
-
-    private class PopulationModel {
-
-        PopulationUnit unit;
-        City container;
-
-        public PopulationModel(PopulationUnit unit, City container) {
-            this.unit = unit;
-            this.container = container;
-        }
-    }
-
-    private class PopulationTableModel extends AbstractTableModel {
-
-        private String[] colunms = {"Species", "Happiness", "Job", "Job Rank", "City"};
-        private ArrayList<PopulationModel> data;
-
-        public PopulationTableModel() {
-            data = new ArrayList<>();
-        }
-
-        @Override
-        public int getRowCount() {
-            return data.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return colunms.length;
-        }
-
-        @Override
-        public Object getValueAt(int row, int col) {
-            PopulationModel unit = data.get(row);
-            switch (col) {
-                case 0:
-                    return unit.unit.getSpecies().getName();
-                case 1:
-                    return unit.unit.getHappiness();
-                case 2:
-                    return unit.unit.getJob().getJobType().getName();
-                case 3:
-                    return unit.unit.getJob().getJobRank();
-                case 4:
-                    return unit.container.getName();
-            }
-            return "";
-        }
-
-        @Override
-        public String getColumnName(int column) {
-            return colunms[column];
-        }
-
-        public void addModel(PopulationModel mod) {
-            data.add(mod);
-        }
-
-        public void clear() {
-            data.clear();
-        }
     }
 }

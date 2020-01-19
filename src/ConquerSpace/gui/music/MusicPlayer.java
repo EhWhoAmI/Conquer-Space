@@ -23,6 +23,9 @@ public class MusicPlayer {
 
     private boolean toPlay = true;
 
+    Thread musicThread;
+    boolean toStop = false;
+
     public MusicPlayer() {
         FileInputStream fis = null;
         try {
@@ -34,7 +37,7 @@ public class MusicPlayer {
             fis.close();
             String text = new String(data);
             musicArray = new JSONArray(text);
-            Thread t = new Thread(() -> {
+            musicThread = new Thread(() -> {
                 for (;;) {
                     if (toPlay) {
                         try {
@@ -65,11 +68,13 @@ public class MusicPlayer {
                             //Ignore...
                         }
                     }
+                    if (toStop) {
+                        break;
+                    }
                 }
             }
             );
-            t.setName("musicplayer");
-            t.start();
+            musicThread.setName("musicplayer");
         } catch (FileNotFoundException ex) {
             LOGGER.warn("No Music!", ex);
         } catch (IOException ex) {
@@ -84,7 +89,10 @@ public class MusicPlayer {
     }
 
     public void stopMusic() {
-        clip.stop();
+        if (clip != null) {
+            clip.stop();
+        }
+        toStop = true;
     }
 
     public void clean() {
@@ -96,6 +104,11 @@ public class MusicPlayer {
 
     public void setToPlay(boolean toPlay) {
         this.toPlay = toPlay;
+    }
+
+    public void playMusic() {
+        this.toPlay = true;
+        musicThread.start();
     }
 
     public boolean isPlaying() {

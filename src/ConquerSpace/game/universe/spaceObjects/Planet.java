@@ -3,6 +3,7 @@ package ConquerSpace.game.universe.spaceObjects;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -62,6 +63,8 @@ public class Planet extends SpaceObject {
     public ArrayList<Job> planetJobs;
     
     public ArrayList<PopulationUnit> population;
+    
+    private Person governor;
     
     /**
      * If this is empty, the planet does not have life.
@@ -264,5 +267,13 @@ public class Planet extends SpaceObject {
 
     public float getDegreesPerTurn() {
         return degreesPerTurn;
+    }
+
+    public Person getGovernor() {
+        return governor;
+    }
+
+    public void setGovernor(Person governor) {
+        this.governor = governor;
     }
 }

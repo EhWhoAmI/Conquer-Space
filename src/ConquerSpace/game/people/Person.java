@@ -11,6 +11,8 @@ public class Person {
     private int age;
     private PersonEnterable position;
     public ArrayList<PersonalityTrait> traits;
+    private final Role role;
+    private int wealth;
     
     //Not sure what to add to this for now
     //private ArrayList<?> multipliers;
@@ -20,6 +22,7 @@ public class Person {
         this.name = name;
         this.age = age;
         traits = new ArrayList<>();
+        role = new Role();
     }
 
     public int getAge() {
@@ -56,5 +59,13 @@ public class Person {
 
     public void setPosition(PersonEnterable position) {
         this.position = position;
+    }
+    
+    public void setRole(String text) {
+        role.setText(text);
+    }
+    
+    public String roleText() {
+        return role.getText();
     }
 }

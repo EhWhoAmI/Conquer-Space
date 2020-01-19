@@ -20,6 +20,7 @@ public class CivInfoOverview extends JPanel {
     private JPanel mainPanel;
     private JPanel resourcesPanel;
     private JPanel populationPanel;
+    private JPanel governmentPanel;
     private JTabbedPane mainTabs;
 
     public CivInfoOverview(Civilization c, Universe u) {
@@ -51,9 +52,14 @@ public class CivInfoOverview extends JPanel {
         JLabel populationLabel = new JLabel("Population: " + (c.population.size() * 10) + " million");
         populationPanel.add(populationLabel);
 
+        governmentPanel = new JPanel(new VerticalFlowLayout());
+        JLabel civLeader = new JLabel(c.government.getLeaderTitle() + " " + c.government.getLeader().getName());
+        governmentPanel.add(civLeader);
+        
         mainTabs.addTab("Civilization", mainPanel);
         //mainTabs.addTab("Resources", resourcesPanel);
         mainTabs.addTab("Population", populationPanel);
+        mainTabs.addTab("Government", governmentPanel);
         add(mainTabs, BorderLayout.CENTER);
 
         //Updating code

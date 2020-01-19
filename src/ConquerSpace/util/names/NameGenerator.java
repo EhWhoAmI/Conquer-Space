@@ -149,8 +149,8 @@ public class NameGenerator {
     public static NameGenerator getNameGenerator(String name) throws FileNotFoundException, IOException {
         //Get from list
         Properties prop = new Properties();
-        prop.load(new FileInputStream("assets/data/names/names.properties"));
-        String fn = "assets/data/names/" + (String)prop.get(name);
+        prop.load(new FileInputStream("assets/names/names.properties"));
+        String fn = "assets/names/" + (String)prop.get(name);
         return (new NameGenerator(fn));
     }
 }

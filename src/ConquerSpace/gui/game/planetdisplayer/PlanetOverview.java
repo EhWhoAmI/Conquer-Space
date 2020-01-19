@@ -2,7 +2,11 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.population.Job;
+import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -10,12 +14,14 @@ import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -26,6 +32,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -36,9 +43,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Display sectors and stuff.
@@ -50,6 +60,10 @@ public class PlanetOverview extends JPanel {
     private Planet p;
 
     private static final int TILE_SIZE = 7;
+
+    private JPanel overviewPanel1;
+    private JPanel overviewPanel2;
+
     private JPanel planetOverview;
     private JPanel planetSectors;
     //private JList<Orbitable> satelliteList;
@@ -63,19 +77,21 @@ public class PlanetOverview extends JPanel {
     private JLabel populationCount;
     private JLabel averagePlanetPopGrowthLabel;
 
-    private JButton switchButton;
-    private JButton showNothing;
-    private ButtonGroup resourceButtonGroup;
-    private JRadioButton[] showResources;
-
-    private JPanel planetBuildingInfoPanel;
+    private final String[] jobListTableColunmNames = {"Job Name", "Count", "Percentage"};
+    private JPanel jobListPanel;
+    private JobTableModel jobListTableModel;
+    private JTable jobListTable;
 
     private boolean showPlanetTerrain = true;
     private NumberFormat numberFormatter;
+    
+    private int population;
 
     public PlanetOverview(Universe u, Planet p, Civilization c) {
         this.p = p;
-        setLayout(new VerticalFlowLayout());
+        setLayout(new GridLayout(1, 2));
+
+        overviewPanel1 = new JPanel(new VerticalFlowLayout());
         numberFormatter = NumberFormat.getInstance();
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
@@ -111,18 +127,18 @@ public class PlanetOverview extends JPanel {
         currentStats = new JPanel(new VerticalFlowLayout());
 
         currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
-        
-        int pop = 0;
+
+        population = 0;
         //Get average growth
         float averageGrowthSum = 0;
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
             Building value = entry.getValue();
             float increment = 0;
-            if (value instanceof CityDistrict) {
-                CityDistrict storage = (CityDistrict) value;
-                pop += storage.population.size();
+            if (value instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) value;
+                population += storage.getPopulationArrayList().size();
                 //process pops
-                for (PopulationUnit unit : storage.population) {
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
@@ -131,7 +147,7 @@ public class PlanetOverview extends JPanel {
             averageGrowthSum += increment;
         }
 
-        populationCount = new JLabel("Population: " + (pop * 10) + " million");
+        populationCount = new JLabel("Population: " + (population * 10) + " million");
         currentStats.add(populationCount);
 
         averageGrowthSum /= p.cities.size();
@@ -139,66 +155,15 @@ public class PlanetOverview extends JPanel {
         currentStats.add(averagePlanetPopGrowthLabel);
 
         //Map
-        planetSectors = new JPanel();
+        planetSectors = new JPanel(new VerticalFlowLayout());
         PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p, c);
-        JPanel wrapper = new JPanel();
+
+        JPanel wrapper = new JPanel(new VerticalFlowLayout());
+        wrapper.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map"));
         wrapper.add(sectorDisplayer);
-        JTabbedPane buildingPanel = new JTabbedPane();
 
-        JPanel buttonsWrapper = new JPanel();
-        switchButton = new JButton("Change view");
-        switchButton.addActionListener(a -> {
-            sectorDisplayer.whatToShow++;
-            sectorDisplayer.whatToShow %= 4;
-        });
+        planetSectors.add(wrapper);
 
-        showNothing = new JButton("Hide terrain");
-        showNothing.addActionListener(a -> {
-            if (showPlanetTerrain) {
-                showNothing.setText("Show Terrain");
-            } else {
-                showNothing.setText("Hide Terrain");
-            }
-            showPlanetTerrain = !showPlanetTerrain;
-        });
-
-        JPanel buttonGroupWrapper = new JPanel();
-        buttonGroupWrapper.setLayout(new VerticalFlowLayout());
-        resourceButtonGroup = new ButtonGroup();
-        showResources = new JRadioButton[GameController.resources.size() + 1];
-        showResources[0] = new JRadioButton("All Resources");
-        showResources[0].addActionListener(a -> {
-            sectorDisplayer.resourceToShow = -1;
-        });
-        buttonGroupWrapper.add(showResources[0]);
-        resourceButtonGroup.add(showResources[0]);
-        for (int i = 1; i < GameController.resources.size() + 1; i++) {
-            showResources[i] = new JRadioButton(GameController.resources.get(i - 1).getName());
-            int val = i - 1;
-            showResources[i].addActionListener(a -> {
-                sectorDisplayer.setResourceViewing(val);
-            });
-            resourceButtonGroup.add(showResources[i]);
-            buttonGroupWrapper.add(showResources[i]);
-        }
-
-        buttonsWrapper.add(switchButton);
-        buttonsWrapper.add(showNothing);
-        buttonsWrapper.add(buttonGroupWrapper);
-        buildingPanel.add("Map", buttonsWrapper);
-
-        buildingPanel.addChangeListener(a -> {
-            if (buildingPanel.getSelectedIndex() == 1) {
-                sectorDisplayer.whatToShow = PlanetSectorDisplayer.SHOW_ALL_RESOURCES;
-            } else if (buildingPanel.getSelectedIndex() == 0) {
-                sectorDisplayer.whatToShow = PlanetSectorDisplayer.PLANET_BUILDINGS;
-            }
-        });
-
-        JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
-
-        planetSectors.add(sectorsScrollPane);
-        planetSectors.add(buildingPanel);
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
@@ -206,9 +171,21 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
 
-        add(planetOverview);
-        add(currentStats);
-        add(planetSectors);
+        overviewPanel1.add(planetOverview);
+        overviewPanel1.add(currentStats);
+        overviewPanel1.add(planetSectors);
+
+        overviewPanel2 = new JPanel();
+
+        jobListPanel = new JPanel();
+        jobListTableModel = new JobTableModel();
+        jobListTable = new JTable(jobListTableModel);
+        jobListPanel.add(new JScrollPane(jobListTable));
+        
+        overviewPanel2.add(jobListPanel);
+        
+        add(overviewPanel1);
+        add(overviewPanel2);
     }
 
     private class PlanetSectorDisplayer extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
@@ -295,7 +272,7 @@ public class PlanetOverview extends JPanel {
                     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
                     Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
                     g2d.setColor(Color.lightGray);
-                    g2d.fill(background);
+                    //g2d.fill(background);
                 }
 
                 //Draw buildings
@@ -406,6 +383,73 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseMoved(MouseEvent arg0) {
+        }
+    }
+
+    private class JobTableModel extends AbstractTableModel {
+
+        HashMap<JobType, Integer> populationCount;
+
+        public JobTableModel() {
+            populationCount = new HashMap<>();
+            //Process the things
+            for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+                Building value = entry.getValue();
+                if (value instanceof PopulationStorage) {
+                    PopulationStorage coldStorage = (PopulationStorage) value;
+                    for (PopulationUnit unit : coldStorage.getPopulationArrayList()) {
+                        JobType job = unit.getJob().getJobType();
+                        if (populationCount.containsKey(job)) {
+                            //Add to it
+                            int i = (populationCount.get(job) + 1);
+                            populationCount.put(job, i);
+                        } else {
+                            populationCount.put(job, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public int getRowCount() {
+            return populationCount.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return jobListTableColunmNames.length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            //Get the colunm index text and stuff
+            int i = 0;
+            JobType jobType = null;
+            for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
+                if(i == rowIndex) {
+                    i = entry.getValue();
+                    jobType = entry.getKey();
+                    break;
+                }
+                i++;
+                
+            }
+            
+            switch (columnIndex) {
+                case 0:
+                    return jobType.getName();
+                case 1:
+                    return (i*10) + " million people";
+                case 2:
+                    return String.format("%.2f%%", (((double)i/(double)population) * 100));
+            }
+            return "";
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return jobListTableColunmNames[column];
         }
     }
 }

@@ -5,6 +5,7 @@ import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
@@ -27,6 +28,7 @@ public class PersonWindow extends JPanel {
     private JLabel name;
     private JLabel personAgeLabel;
     private JLabel personJobLabel;
+    private JLabel personRoleLabel;
     private JLabel skillLabel;
     private JLabel positionLabel;
     private DefaultListModel<PersonalityTrait> personalityListModel;
@@ -37,7 +39,7 @@ public class PersonWindow extends JPanel {
 
     public PersonWindow(Civilization c, Universe u) {
         this.c = c;
-        setLayout(new GridLayout(1, 2));
+        setLayout(new HorizontalFlowLayout());
         listModel = new DefaultListModel<>();
         for (Person p : c.people) {
             listModel.addElement(p);
@@ -51,6 +53,7 @@ public class PersonWindow extends JPanel {
                 name.setText("Name: " + personList.getSelectedValue().getName());
                 personAgeLabel.setText("Age: " + personList.getSelectedValue().getAge());
                 personJobLabel.setText("Job: " + personList.getSelectedValue().getJobName());
+                personRoleLabel.setText("Currently Doing: " + personList.getSelectedValue().roleText());
                 if (personList.getSelectedValue() instanceof Scientist) {
                     skillLabel.setText("Skill: " + ((Scientist) personList.getSelectedValue()).getSkill());
                 }
@@ -73,6 +76,7 @@ public class PersonWindow extends JPanel {
         personAgeLabel = new JLabel("Age: " + personList.getSelectedValue().getAge());
 
         personJobLabel = new JLabel("Job: " + personList.getSelectedValue().getJobName());
+        personRoleLabel = new JLabel("Currently Doing: " + personList.getSelectedValue().roleText());
 
         skillLabel = new JLabel("Skill: ");
         positionLabel = new JLabel("Location: ");
@@ -83,6 +87,7 @@ public class PersonWindow extends JPanel {
         container.add(name);
         container.add(personAgeLabel);
         container.add(personJobLabel);
+        container.add(personRoleLabel);
         container.add(skillLabel);
         container.add(positionLabel);
         container.add(new JScrollPane(personPersonalityList));

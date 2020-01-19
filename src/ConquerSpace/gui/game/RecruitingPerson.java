@@ -5,6 +5,7 @@ import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class RecruitingPerson extends JPanel {
 
     public RecruitingPerson(Civilization c, Universe u) {
         this.c = c;
-        setLayout(new GridLayout(1, 2));
+        setLayout(new HorizontalFlowLayout());
         //Generate people and things like that
         personListModel = new PersonListModel(c.unrecruitedPeople);
 
@@ -89,9 +90,13 @@ public class RecruitingPerson extends JPanel {
         positionLabel = new JLabel("Location: ");
         recruitButton.addActionListener(a -> {
             if (probablePersonList.getSelectedIndex() > -1) {
+                int previousSelection = probablePersonList.getSelectedIndex();
+                
                 Person p = probablePersonList.getSelectedValue();
                 c.unrecruitedPeople.remove(p);
                 c.people.add(p);
+                //Set selected value
+                probablePersonList.setSelectedIndex(previousSelection);
             }
         });
         personalityListModel = new DefaultListModel<>();

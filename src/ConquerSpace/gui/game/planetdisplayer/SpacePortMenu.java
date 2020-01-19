@@ -9,6 +9,7 @@ import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.gui.game.LaunchSpaceShipMenu;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class SpacePortMenu extends JPanel {
     public SpacePortMenu(Planet p, Civilization c) {
         this.p = p;
         this.c = c;
-        setLayout(new VerticalFlowLayout());
+        setLayout(new HorizontalFlowLayout());
         launchPads = new ArrayList<>();
         //Do stuff
         //Compile all the launch pads on the planet
@@ -60,10 +61,11 @@ public class SpacePortMenu extends JPanel {
 
         launchPadList = new JList<>(spaceLPModel);
         JScrollPane launchPadListScrollPane = new JScrollPane(launchPadList);
+        
         JTabbedPane pane = new JTabbedPane();
-        JPanel launchSatelliteMenuContainer = new JPanel();
+        JPanel launchSatelliteMenuContainer = new JPanel(new HorizontalFlowLayout());
         pane.add("Satellite", launchSatelliteMenuContainer);
-        JPanel launchSpaceShipJPanelMenuContainer = new JPanel();
+        JPanel launchSpaceShipJPanelMenuContainer = new JPanel(new HorizontalFlowLayout());
         pane.add("Space Ship", launchSpaceShipJPanelMenuContainer);
 
         //LaunchSatelliteMenu launchSatelliteMenu = new LaunchSatelliteMenu(pad, c, p, sys);
