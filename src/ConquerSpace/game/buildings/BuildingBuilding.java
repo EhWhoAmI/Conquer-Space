@@ -3,6 +3,7 @@ package ConquerSpace.game.buildings;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
 import java.awt.Color;
 import java.util.HashMap;
@@ -19,12 +20,14 @@ public class BuildingBuilding extends Building implements Workable{
     private int scale = 1;
     //Set the resources needed to build over time
     public HashMap<Resource, Integer> resourcesNeeded;
+    public Civilization builder;
     private int cost;
 
-    public BuildingBuilding(Building toBuild, GeographicPoint pt, int length) {
+    public BuildingBuilding(Building toBuild, GeographicPoint pt, int length, Civilization builder) {
         this.toBuild = toBuild;
         this.pt = pt;
         this.length = length;
+        this.builder = builder;
         resourcesNeeded = new HashMap<>();
     }
 
@@ -76,5 +79,9 @@ public class BuildingBuilding extends Building implements Workable{
 
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public Civilization getBuilder() {
+        return builder;
     }
 }

@@ -6,8 +6,8 @@ package ConquerSpace.game.events;
  */
 public class PopulationEvent extends Event {
 
-    public PopulationEvent(int id, String text) {
-        super(id, text);
+    public PopulationEvent(String text) {
+        super(text);
     }
 
 }

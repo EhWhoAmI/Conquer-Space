@@ -9,7 +9,7 @@ public class Event {
     private int id;
     private String text;
 
-    public Event(int id, String text) {
+    public Event(String text) {
         this.id = id;
         this.text = text;
     }

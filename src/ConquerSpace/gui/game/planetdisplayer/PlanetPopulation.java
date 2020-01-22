@@ -2,20 +2,18 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
+import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
-import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -46,9 +44,17 @@ public class PlanetPopulation extends JPanel {
     //private DefaultListModel<AreaWrapper> areaListModel;
     //private JList<AreaWrapper> areaList;
 
+    private JTable jobTable;
+    private JobTableModel jobTableModel;
+    private final String[] jobListTableColunmNames = {"Job Name", "Count", "Percentage"};
+
     private JPanel cityData;
 
     private Planet p;
+
+    private int population = 1;
+
+    private City currentlySelectedCity;
 
     public PlanetPopulation(Universe u, Planet p, int turn) {
         this.p = p;
@@ -67,11 +73,11 @@ public class PlanetPopulation extends JPanel {
             GeographicPoint key = entry.getKey();
             Building value = entry.getValue();
             float increment = 0;
-            if (value instanceof CityDistrict) {
-                CityDistrict storage = (CityDistrict) value;
-                pop += storage.population.size();
+            if (value instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) value;
+                pop += storage.getPopulationArrayList().size();
                 //process pops
-                for (PopulationUnit unit : storage.population) {
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     increment += (unit.getSpecies().getBreedingRate() / 50);
@@ -94,6 +100,7 @@ public class PlanetPopulation extends JPanel {
             cityListModel.addElement(city);
         }
         cityList = new JList<>(cityListModel);
+        cityList.setSelectedIndex(0);
         cityList.addListSelectionListener(l -> {
             cityData.removeAll();
             int popcount = 0;
@@ -125,13 +132,18 @@ public class PlanetPopulation extends JPanel {
             //Growth
             JLabel growthAmount = new JLabel("Growth: " + (cityList.getSelectedValue().getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
             cityData.add(growthAmount);
-
+            
+            //JLabel unemployment = new JLabel("Unemployment: " + );
+                    
             //Max population
             JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
             cityData.add(maxPopulation);
 
-            JLabel governorLabel = new JLabel("Governor: " + cityList.getSelectedValue().getGovernor().getName());
-            cityData.add(governorLabel);
+            //Check for govenor
+            if (cityList.getSelectedValue().getGovernor() != null) {
+                JLabel governorLabel = new JLabel("Governor: " + cityList.getSelectedValue().getGovernor().getName());
+                cityData.add(governorLabel);
+            }
             //Areas
             //areaListModel = new DefaultListModel<>();
             //for(Area a : cityList.getSelectedValue().areas) {
@@ -141,6 +153,11 @@ public class PlanetPopulation extends JPanel {
             //areaList = new JList<>(areaListModel);
             //JScrollPane areascrollPane = new JScrollPane(areaList);
             //cityData.add(areascrollPane);
+            cityData.add(new JLabel("Jobs"));
+            currentlySelectedCity = cityList.getSelectedValue();
+            jobTableModel = new JobTableModel();
+            jobTable = new JTable(jobTableModel);
+            cityData.add(new JScrollPane(jobTable));
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);
@@ -163,6 +180,7 @@ public class PlanetPopulation extends JPanel {
         //Determine if on planet
         if (whichCity != null && cityListModel.contains(whichCity)) {
             cityList.setSelectedValue(whichCity, true);
+            jobTableModel.setSelectedCity(whichCity);
         }
     }
 
@@ -185,4 +203,85 @@ public class PlanetPopulation extends JPanel {
 
     public void update() {
     }
+
+    private class JobTableModel extends AbstractTableModel {
+
+        HashMap<JobType, Integer> populationCount;
+
+        public JobTableModel() {
+            populationCount = new HashMap<>();
+            population = 0;
+            //Process the things
+            for (PopulationStorage value : currentlySelectedCity.storages) {
+                for (PopulationUnit unit : value.getPopulationArrayList()) {
+                    JobType job = unit.getJob().getJobType();
+                    if (populationCount.containsKey(job)) {
+                        //Add to it
+                        int i = (populationCount.get(job) + 1);
+                        populationCount.put(job, i);
+                    } else {
+                        populationCount.put(job, 1);
+                    }
+                    population++;
+                }
+            }
+        }
+
+        @Override
+        public int getRowCount() {
+            return populationCount.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return jobListTableColunmNames.length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            //Get the colunm index text and stuff
+            int i = 0;
+            JobType jobType = null;
+            for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
+                if (i == rowIndex) {
+                    i = entry.getValue();
+                    jobType = entry.getKey();
+                    break;
+                }
+                i++;
+            }
+
+            switch (columnIndex) {
+                case 0:
+                    return jobType.getName();
+                case 1:
+                    return (i * 10) + " million people";
+                case 2:
+                    return String.format("%.2f%%", (((double) i / (double) population) * 100));
+            }
+            return "";
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return jobListTableColunmNames[column];
+        }
+
+        public void setSelectedCity(City city) {
+            populationCount.clear();
+            for (PopulationStorage value : currentlySelectedCity.storages) {
+                for (PopulationUnit unit : value.getPopulationArrayList()) {
+                    JobType job = unit.getJob().getJobType();
+                    if (populationCount.containsKey(job)) {
+                        //Add to it
+                        int i = (populationCount.get(job) + 1);
+                        populationCount.put(job, i);
+                    } else {
+                        populationCount.put(job, 1);
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.IndustrialDistrict;
+import ConquerSpace.game.buildings.InfrastructureBuilding;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
@@ -95,12 +96,12 @@ public class GameInitializer {
             Civilization c = universe.getCivilization(i);
             //Add templates
             initVision(c, universe);
-            
+
             //Science
             initializeTech(c, selector);
 
             initalizeCivValues(c);
-            
+
             initializeGovernment(c, gen);
 
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
@@ -156,6 +157,8 @@ public class GameInitializer {
     }
 
     private void createResourceMiners(Planet p, Civilization c, Race founding) {
+        City city = new City(p.getUniversePath());
+        city.setName("Mines");
         //Find if vein exists on the planet
         int i = 0;
         for (ResourceVein v : p.resourceVeins) {
@@ -168,13 +171,17 @@ public class GameInitializer {
 
             miner.population.add(new PopulationUnit(founding));
             p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
+            city.addDistrict(miner);
         }
+        p.cities.add(city);
     }
 
     private void createFarms(Planet starting, Random selector, Civilization c) {
         //Based on population
         //Add livestock
         //Create a test crop so that you can grow stuff
+        City farmCity = new City(starting.getUniversePath());
+        farmCity.setName("Farms");
         Species potato = new Species();
         potato.setName("Potato");
         potato.lifeTraits.add(LifeTrait.Rooted);
@@ -187,12 +194,7 @@ public class GameInitializer {
         localLife.setSpecies(potato);
         localLife.setBiomass(100_000);
         starting.localLife.add(localLife);
-//        Fauna faun = new Fauna(0.01f);
-//        faun.lifetraits.add(LifeTrait.Delicious);
-//        faun.lifetraits.add(LifeTrait.Photosynthetic);
-//        faun.setName("Potatoe");
-//        faun.setBiomass(100_000);
-//        starting.localLife.add(faun);
+
         for (int i = 0; i < 10; i++) {
             FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
             //Add crops
@@ -215,7 +217,9 @@ public class GameInitializer {
             c.population.add(u);
             faceBook.getPopulationArrayList().add(u);
             starting.buildings.put(pt, faceBook);
+            farmCity.addDistrict(faceBook);
         }
+        starting.cities.add(farmCity);
     }
 
     private void createObservatory(Planet starting, Civilization c, Random selector) {
@@ -277,39 +281,39 @@ public class GameInitializer {
         for (int count = 0; count < popStorMas; count++) {
             City city = new City(starting.getUniversePath());
             city.setName(townGen.getName(0));
-            CityDistrict test;
-            test = new CityDistrict();
+            CityDistrict district;
+            district = new CityDistrict();
 
             if (count == 0) {
-                test = administrativeCenter;
+                district = administrativeCenter;
                 c.setCapitalCity(city);
                 //Add the capitol areas
-                test.areas.add(new CapitolArea());
+                district.areas.add(new CapitolArea());
             }
 
-            test.setMaxStorage(selector.nextInt(30) + 1);
-            test.setOwner(c);
+            district.setMaxStorage(selector.nextInt(30) + 1);
+            district.setOwner(c);
             //Distribute
             //Add random positions
             int popCount = (selector.nextInt(25) + 1);
-            test.setMaxStorage(selector.nextInt(popCount + 5) + 1);
+            district.setMaxStorage(selector.nextInt(popCount + 5) + 1);
 
             for (int k = 0; k < popCount; k++) {
                 //Add a couple of population to the mix...
                 PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
                 u.setSpecies(c.getFoundingSpecies());
                 c.population.add(u);
-                test.population.add(u);
+                district.population.add(u);
             }
-            city.addDistrict(test);
+            city.addDistrict(district);
 
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
-            starting.buildings.put(pt, test);
+            starting.buildings.put(pt, district);
 
             //Expand sector
             //Choose a direction, and expand...
-            CityDistrict test2 = new CityDistrict();
+            CityDistrict district2 = new CityDistrict();
             int dir = selector.nextInt(4) + 1;
             GeographicPoint pt2;
             switch (dir) {
@@ -328,21 +332,33 @@ public class GameInitializer {
                 default:
                     pt2 = new GeographicPoint(pt.getX(), pt.getY() + 1);
             }
-            starting.buildings.put(pt2, test2);
+            starting.buildings.put(pt2, district2);
             int popCount2 = (selector.nextInt(25) + 1);
-            test2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
-            test2.setOwner(c);
+            district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
+            district2.setOwner(c);
             for (int k = 0; k < popCount2; k++) {
                 //Add a couple of population to the mix...
                 PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
                 u.setSpecies(c.getFoundingSpecies());
                 c.population.add(u);
-                test2.population.add(u);
+                district2.population.add(u);
             }
             //test2.setCity(city);
-            city.addDistrict(test2);
-            //Add leader to city
+            city.addDistrict(district2);
 
+            //Attach infrastructure near city
+            InfrastructureBuilding infrastructureBuilding = new InfrastructureBuilding();
+
+            //Ensure point is near the thing
+            //pt2 = getRandomEmptyPoint(starting, selector);
+            int positionX = (selector.nextInt(10) - 5);
+            int positionY = (selector.nextInt(10) - 5);
+            positionX += pt.getX();
+            positionY += pt.getY();
+            
+            infrastructureBuilding.setConnectedTo(city);
+            starting.buildings.put(new GeographicPoint(positionX, positionY), infrastructureBuilding);
+            //Add leader to city
             Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
             gov.setPosition(city);
             city.setGovernor(gov);
@@ -462,11 +478,11 @@ public class GameInitializer {
         dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
         dude.setPosition(c.getCapitalCity());
         dude.setRole("Ruling " + c.getSpeciesName());
-        
+
         c.people.add(dude);
         c.government.setLeader(dude);
     }
-    
+
     private void initVision(Civilization c, Universe u) {
         for (int i = 0; i < u.getStarSystemCount(); i++) {
             StarSystem s = u.getStarSystem(i);

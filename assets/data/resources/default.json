@@ -10,10 +10,11 @@
         "color": [192,192,192],
         "mineable": true,
         "raw":true,
+        "tags":[],
         "materials":[]
     }, 
     {
-        "name": "gas",
+        "name": "hydrogen",
         "id": 1,
         "rarity": 0.7,
         "value": 3,
@@ -23,6 +24,7 @@
         "color": [217, 66, 247],
         "mineable": true,
         "raw":true,
+        "tags":[],
         "materials":[]
     },
     {
@@ -36,6 +38,7 @@
         "color": [128, 128, 128],
         "mineable": true,
         "raw":true,
+        "tags":[],
         "materials":[]
     },
     {
@@ -49,6 +52,7 @@
         "color": [0, 128, 128],
         "mineable": true,
         "raw":true,
+        "tags":[],
         "materials":[]
     },
     {
@@ -62,6 +66,7 @@
         "color": [0,255,0],
         "mineable": false,
         "raw":true,
+        "tags":[],
         "materials":[]
     },
     {
@@ -75,6 +80,7 @@
         "color": [184, 115, 51],
         "mineable": true,
         "raw":true,
+        "tags":[],
         "materials":[]
     },
     {
@@ -88,6 +94,21 @@
         "color": [237, 237, 235],
         "mineable": true,
         "raw":true,
+        "tags":[],
+        "materials":[]
+    },
+    {
+        "name": "hydrocarbons",
+        "id": 7,
+        "rarity": 0.35,
+        "value": 26,
+        "density": 13,
+        "difficulty": 12,
+        "distribution": 0,
+        "color": [50, 50, 50],
+        "mineable": true,
+        "raw":true,
+        "tags":[],
         "materials":[]
     }
 ]

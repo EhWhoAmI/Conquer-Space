@@ -47,7 +47,7 @@ public class Actions {
      */
     public static int buildBuilding(Planet p, GeographicPoint pt, Building what, Civilization owner, int turns) {
         if (p.getOwnerID() == owner.getID()) {
-            BuildingBuilding buildings = new BuildingBuilding(what, pt, turns);
+            BuildingBuilding buildings = new BuildingBuilding(what, pt, turns, owner);
             buildings.setScale(1);
             //Determine cost...
             

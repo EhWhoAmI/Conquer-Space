@@ -14,6 +14,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
@@ -483,6 +484,8 @@ public class GameUpdater {
                             city.setName("Another City");
                         }
                     }
+                    //Alert builder
+                    build.builder.passEvent(new Event("Building " + build.getToBuild().getType() + " finished"));
                     p.buildings.put(key, build.getToBuild());
                 }
             } else if (building instanceof AdministrativeCenter) {
