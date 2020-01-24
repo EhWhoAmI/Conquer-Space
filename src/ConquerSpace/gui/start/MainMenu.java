@@ -15,11 +15,13 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -56,7 +58,7 @@ public class MainMenu extends JFrame implements WindowListener {
         //Add the classes on the bottom
         add(topBanner, BorderLayout.NORTH);
         add(new BottomMenu(), BorderLayout.SOUTH);
-        
+
         try {
             setIconImage(ImageIO.read(new File("assets/img/icon.png")));
         } catch (IOException ioe) {
@@ -109,7 +111,20 @@ public class MainMenu extends JFrame implements WindowListener {
      */
     private class TopBanner extends JPanel {
 
+        int selectedImage;
+        BufferedImage image;
         Font f = new Font(getFont().getFontName(), Font.BOLD, 28);
+
+        public TopBanner() {
+            selectedImage = (int)(Math.random()*(2))+1;
+            try {
+                image = ImageIO.read(new File(
+                        System.getProperty("user.dir")
+                        + "/assets/img/cqspbanner" + selectedImage + ".png"));
+            } catch (IOException ex) {
+
+            }
+        }
 
         /**
          * The paint component part, for the title screen.
@@ -118,18 +133,12 @@ public class MainMenu extends JFrame implements WindowListener {
          */
         @Override
         protected void paintComponent(Graphics g) {
-            try {
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(Color.BLUE);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(Color.BLUE);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
 
-                //Image is a bit small though.
-                g2d.drawImage(ImageIO.read(new File(
-                        System.getProperty("user.dir")
-                        + "/assets/img/cqspbanner.png")), null, 0, 0);
-            } catch (IOException ex) {
-            }
-
+            //Image is a bit small though.
+            g2d.drawImage(image, null, 0, 0);
         }
     }
 

@@ -1,6 +1,7 @@
 package ConquerSpace.game.universe.resources;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 public class Resource {
 
@@ -10,16 +11,20 @@ public class Resource {
     private float rarity;
     private int difficulty;
     private boolean mineable;
+    private boolean raw;
     private float density;
     private int r;
     private int g;
     private int b;
+    private String[] tags;
+    private HashMap<String, Integer> attributes;
 
     public Resource(String name, int value, float rarity, int id) {
         this.name = name;
         this.value = value;
         this.rarity = rarity;
         this.id = id;
+        attributes = new HashMap<>();
     }
 
     public String getName() {
@@ -103,5 +108,23 @@ public class Resource {
         return name.hashCode();
     }
 
-    
+    public void setRaw(boolean raw) {
+        this.raw = raw;
+    }
+
+    public boolean isRaw() {
+        return raw;
+    }    
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public HashMap<String, Integer> getAttributes() {
+        return attributes;
+    }
 }

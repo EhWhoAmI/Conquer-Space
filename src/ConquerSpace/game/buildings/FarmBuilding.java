@@ -27,6 +27,7 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     private int amountFarmed = 0;
     private int harvestersNeeded = 0;
     public ArrayList<Crop> harvestable;
+    private City city;
 
     public FarmBuilding(FarmType ft) {
         farmType = ft;
@@ -43,6 +44,15 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     @Override
     public int getMaxStorage() {
         return 1;
+    }
+
+    @Override
+    public City getCity() {
+        return city;
+    }
+    
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public static enum FarmType {

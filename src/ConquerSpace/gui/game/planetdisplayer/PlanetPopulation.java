@@ -2,9 +2,11 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.buildings.InfrastructureBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
+import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -13,6 +15,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -103,10 +106,17 @@ public class PlanetPopulation extends JPanel {
         cityList.setSelectedIndex(0);
         cityList.addListSelectionListener(l -> {
             cityData.removeAll();
+
+            City selected = cityList.getSelectedValue();
+
             int popcount = 0;
             float increment = 0;
             int maxPop = 0;
-            for (PopulationStorage stor : cityList.getSelectedValue().storages) {
+            int energyUsage = 0;
+            int energyProvided = 0;
+            ArrayList<InfrastructureBuilding> building = new ArrayList<>();
+
+            for (PopulationStorage stor : selected.storages) {
                 popcount += stor.getPopulationArrayList().size();
                 for (PopulationUnit unit : stor.getPopulationArrayList()) {
                     //Fraction it so it does not accelerate at a crazy rate
@@ -114,6 +124,27 @@ public class PlanetPopulation extends JPanel {
                     increment += (unit.getSpecies().getBreedingRate() / 50);
                 }
                 maxPop += stor.getMaxStorage();
+                if (stor instanceof Building) {
+                    energyUsage += ((Building) stor).getEnergyUsage();
+                    //Get the infrastructure connected to.
+                    for (InfrastructureBuilding infra : ((Building) stor).infrastructure) {
+
+                        if (!building.contains(infra)) {
+                            building.add(infra);
+                            for (Area a : infra.areas) {
+                                //energyProvided += infra
+                                if(a instanceof PowerPlantArea) {
+                                    //Get the resource produced
+                                    
+                                    Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
+                                    if(energy != null) {
+                                        energyProvided += (((PowerPlantArea) a).getMaxVolume()*energy);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             //Check if capital city
@@ -129,19 +160,23 @@ public class PlanetPopulation extends JPanel {
             JLabel popCount = new JLabel("Population: " + (popcount * 10) + " million people");
             cityData.add(popCount);
 
+            //Get the number of powerplants leading to it
+            //Energy usage
+            JLabel energyUsageLabel = new JLabel("Energy Usage (used/provided): " + energyUsage + "/" + energyProvided);
+            cityData.add(energyUsageLabel);
+
             //Growth
-            JLabel growthAmount = new JLabel("Growth: " + (cityList.getSelectedValue().getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
+            JLabel growthAmount = new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
             cityData.add(growthAmount);
-            
+
             //JLabel unemployment = new JLabel("Unemployment: " + );
-                    
             //Max population
             JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
             cityData.add(maxPopulation);
 
             //Check for govenor
             if (cityList.getSelectedValue().getGovernor() != null) {
-                JLabel governorLabel = new JLabel("Governor: " + cityList.getSelectedValue().getGovernor().getName());
+                JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
                 cityData.add(governorLabel);
             }
             //Areas

@@ -10,4 +10,5 @@ import java.util.ArrayList;
 public interface PopulationStorage {
     public ArrayList<PopulationUnit> getPopulationArrayList();
     public int getMaxStorage();
+    public City getCity();
 }

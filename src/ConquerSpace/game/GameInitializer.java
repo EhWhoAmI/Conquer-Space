@@ -12,6 +12,7 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.buildings.area.industrial.ForgeArea;
+import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
@@ -194,6 +195,7 @@ public class GameInitializer {
         localLife.setSpecies(potato);
         localLife.setBiomass(100_000);
         starting.localLife.add(localLife);
+        InfrastructureBuilding infrastructureBuilding = new InfrastructureBuilding();
 
         for (int i = 0; i < 10; i++) {
             FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
@@ -218,7 +220,27 @@ public class GameInitializer {
             faceBook.getPopulationArrayList().add(u);
             starting.buildings.put(pt, faceBook);
             farmCity.addDistrict(faceBook);
+            infrastructureBuilding.connectedTo.add(faceBook);
+            faceBook.infrastructure.add(infrastructureBuilding);
         }
+
+        PowerPlantArea powerPlant = new PowerPlantArea();
+        //Get the resources needed for powering plant
+        Resource resource = null;
+        for (Resource res : GameController.resources) {
+            for (String tag : res.getTags()) {
+                if (tag.equals("energy")) {
+                    resource = res;
+                    break;
+                }
+            }
+        }
+
+        powerPlant.setUsedResource(resource);
+        powerPlant.setMaxVolume(1000);
+        infrastructureBuilding.areas.add(powerPlant);
+        //Connect it to many buildings
+        starting.buildings.put(getRandomEmptyPoint(starting, selector), infrastructureBuilding);
         starting.cities.add(farmCity);
     }
 
@@ -349,15 +371,32 @@ public class GameInitializer {
             //Attach infrastructure near city
             InfrastructureBuilding infrastructureBuilding = new InfrastructureBuilding();
 
+            //Add areas
+            infrastructureBuilding.connectedTo.add(district);
+            district.infrastructure.add(infrastructureBuilding);
+            infrastructureBuilding.connectedTo.add(district2);
+            district.infrastructure.add(infrastructureBuilding);
+
             //Ensure point is near the thing
             //pt2 = getRandomEmptyPoint(starting, selector);
-            int positionX = (selector.nextInt(10) - 5);
-            int positionY = (selector.nextInt(10) - 5);
-            positionX += pt.getX();
-            positionY += pt.getY();
-            
-            infrastructureBuilding.setConnectedTo(city);
-            starting.buildings.put(new GeographicPoint(positionX, positionY), infrastructureBuilding);
+            //Add areas
+            PowerPlantArea powerPlant = new PowerPlantArea();
+            //Get the resources needed for powering plant
+            Resource resource = null;
+            for (Resource res : GameController.resources) {
+                for (String tag : res.getTags()) {
+                    if (tag.equals("energy")) {
+                        resource = res;
+                        break;
+                    }
+                }
+            }
+
+            powerPlant.setUsedResource(resource);
+            powerPlant.setMaxVolume(1000);
+            infrastructureBuilding.areas.add(powerPlant);
+            //Connect it to many buildings
+            starting.buildings.put(getRandomEmptyPoint(starting, selector), infrastructureBuilding);
             //Add leader to city
             Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
             gov.setPosition(city);

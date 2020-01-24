@@ -17,10 +17,13 @@ public abstract class Building {
     public ArrayList<Job> jobs;
     private Employer owner;
     private String type;
+    private int energyUsage;
+    public ArrayList<InfrastructureBuilding> infrastructure;
 
     public Building() {
         areas = new ArrayList<>();
         jobs = new ArrayList<>();
+        infrastructure = new ArrayList<>();
     }
 
     public Color getColor() {
@@ -41,5 +44,13 @@ public abstract class Building {
 
     public String getType() {
         return type;
+    }
+
+    public int getEnergyUsage() {
+        return energyUsage;
+    }
+
+    public void setEnergyUsage(int energyUsage) {
+        this.energyUsage = energyUsage;
     }
 }

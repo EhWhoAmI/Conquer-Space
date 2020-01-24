@@ -11,7 +11,9 @@
         "mineable": true,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     }, 
     {
         "name": "hydrogen",
@@ -25,7 +27,9 @@
         "mineable": true,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     },
     {
         "name": "rock",
@@ -39,7 +43,9 @@
         "mineable": true,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     },
     {
         "name": "aluminium",
@@ -53,7 +59,9 @@
         "mineable": true,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     },
     {
         "name": "food",
@@ -67,7 +75,9 @@
         "mineable": false,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     },
     {
         "name": "copper",
@@ -81,7 +91,9 @@
         "mineable": true,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     },
     {
         "name": "nickel",
@@ -95,7 +107,9 @@
         "mineable": true,
         "raw":true,
         "tags":[],
-        "materials":[]
+        "materials":[],
+        "attributes": {
+        }
     },
     {
         "name": "hydrocarbons",
@@ -108,7 +122,10 @@
         "color": [50, 50, 50],
         "mineable": true,
         "raw":true,
-        "tags":[],
-        "materials":[]
+        "tags":["energy"],
+        "materials":[],
+        "attributes": {
+            "energy":100
+        }
     }
 ]

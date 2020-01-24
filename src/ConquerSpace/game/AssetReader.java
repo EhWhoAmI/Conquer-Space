@@ -13,6 +13,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -64,11 +67,31 @@ public class AssetReader {
 
                     boolean mineable = obj.getBoolean("mineable");
 
+                    JSONArray tags = obj.getJSONArray("tags");
+
+                    JSONObject attributes = obj.getJSONObject("attributes");
+
                     Resource res = new Resource(name, value, rarity, id);
                     res.setDensity(density);
                     res.setDifficulty(difficulty);
                     res.setMineable(mineable);
                     res.setColor(color.getInt(0), color.getInt(1), color.getInt(2));
+                    //res.setTags(tags.);
+                    String[] list = new String[tags.length()];
+                    for (int n = 0; n < tags.length(); n++) {
+                        list[n] = tags.getString(n);
+                    }
+                    res.setTags(list);
+
+                    //Attributes
+                    Iterator it = attributes.keys();
+                    while (it.hasNext()) {
+                        //Process it
+                        String label = (String) it.next();
+                        Integer number = (Integer) attributes.get(label);
+                        res.getAttributes().put(label, number);
+                    }
+
                     resources.add(res);
 
                     if (name.equals("food")) {
@@ -416,7 +439,7 @@ public class AssetReader {
         }
         GameController.personalityTraits = traits;
     }
-    
+
     public static void readBuildingCosts() {
         BuildingCostGetter.initializeBuildingCosts();
     }

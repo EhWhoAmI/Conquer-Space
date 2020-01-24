@@ -27,7 +27,6 @@ import ConquerSpace.game.population.Workable;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
@@ -508,14 +507,14 @@ public class GameUpdater {
                 FarmBuilding farmBuilding = (FarmBuilding) building;
                 //Calculate productivity
                 farmBuilding.setHarvestersNeeded(0);
-               
+
                 int yield = 0;
                 for (Crop c : farmBuilding.crops) {
                     c.subtractTime();
                     if (c.getTimeLeft() <= 0) {
                         //Prepare crop for harvesting
                         farmBuilding.harvestable.add(c);
-                        
+
                         //Check for harvesters
                         farmBuilding.setHarvestersNeeded(farmBuilding.getHarvestersNeeded() + 1);
                     }
@@ -527,6 +526,11 @@ public class GameUpdater {
             } else if (building instanceof CityDistrict) {
                 //Process the various jobs and stuff
                 //Get i-hub
+            }
+
+            if (building instanceof PopulationStorage) {
+                int energy = ((PopulationStorage) building).getPopulationArrayList().size() * 20;
+                building.setEnergyUsage(energy);
             }
         }
 

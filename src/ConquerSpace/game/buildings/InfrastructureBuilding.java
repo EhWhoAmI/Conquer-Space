@@ -1,30 +1,23 @@
 package ConquerSpace.game.buildings;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 /**
  *
  * @author zyunl
  */
 public class InfrastructureBuilding extends Building{
-    private City connectedTo = null;
+    public ArrayList<Building> connectedTo;
     //private int 
 
     public InfrastructureBuilding() {
+        connectedTo = new ArrayList<>();
     }
 
     @Override
     public Color getColor() {
         return Color.WHITE;
-    }
-
-    public City getConnectedTo() {
-        return connectedTo;
-    }
-
-    public void setConnectedTo(City connectedTo) {
-        this.connectedTo = connectedTo;
-        connectedTo.infrastructure.add(this);
     }
 
     @Override

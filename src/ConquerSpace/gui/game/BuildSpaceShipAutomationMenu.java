@@ -3,6 +3,7 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.ShipClass;
+import ConquerSpace.game.universe.ships.components.EngineComponent;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
@@ -141,6 +142,8 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             civ.hulls.add(selectedHull);
             ShipClass sc = new ShipClass(shipNameField.getText(), selectedHull);
             //Add components
+            
+            
             civ.shipClasses.add(sc);
         });
 

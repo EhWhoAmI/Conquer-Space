@@ -14,7 +14,6 @@ public class City implements PersonEnterable{
     private Person governor;
     private String name;
     public ArrayList<PopulationStorage> storages;
-    public ArrayList<InfrastructureBuilding> infrastructure;
 
     private UniversePath location;
     //% to completing a unit
@@ -22,7 +21,6 @@ public class City implements PersonEnterable{
 
     public City(UniversePath location) {
         storages = new ArrayList<>();
-        infrastructure = new ArrayList<>();
         this.location = location;
     }
 

@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class TerrainColoring {
 
-    public static final int NUMBER_OF_ROCKY_COLORS = 4;
+    public static final int NUMBER_OF_ROCKY_COLORS = 5;
 
     public static final int NUMBER_OF_GASSY_COLORS = 2;
 
@@ -40,6 +40,11 @@ public class TerrainColoring {
             case 3:
                 colors.put(-1f, new Color(225, 255, 255));
                 colors.put(0.7f, new Color(182, 196, 219));
+                break;
+            case 4:
+                colors.put(-1f, new Color(0, 0, 255));
+                colors.put(0.25f, new Color(182, 196, 219));
+                colors.put(0.5f, new Color(10, 196, 0));
         }
         return colors;
     }

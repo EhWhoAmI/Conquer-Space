@@ -23,6 +23,7 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     private double amount;
     private Resource resourceMining;
     private int maxStorage;
+    private City city;
     /*
     The population of the area...
      */
@@ -95,6 +96,13 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     public String getType() {
         return "Mining District";
     }
+
+    @Override
+    public City getCity() {
+        return city;
+    }
     
-    
+    public void setCity(City city) {
+        this.city = city;
+    }
 }
