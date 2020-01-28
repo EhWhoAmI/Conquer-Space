@@ -217,7 +217,7 @@ public class PlanetMap extends JPanel {
         int mouseY = 0;
 
         public MapPanel() {
-            setBackground(Color.black);
+            setBackground(Color.white);
 
             addMouseWheelListener(this);
             addMouseMotionListener(this);

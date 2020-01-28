@@ -14,7 +14,8 @@ public enum JobType {
     Research("Research"),
     AeronauticalEngineer("Aeronautical Engineer"),
     PopUpkeepWorker("Population Upkeep Worker"),
-    SpacePortEngineer("Space Port Engineer");
+    SpacePortEngineer("Space Port Engineer"),
+    PowerPlantTechnician("Power Plant Technician");
     
     private final String name;
 

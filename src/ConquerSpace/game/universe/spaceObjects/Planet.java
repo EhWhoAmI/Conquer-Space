@@ -25,11 +25,15 @@ public class Planet extends SpaceObject {
 
     private int planetType;
     private long orbitalDistance;
-    private int degrees;
+    private double degrees;
     private int planetSize;
     
-    private long xpos;
-    private long ypos;
+    private double semiMajorAxis;
+    private double eccentricity;
+    private double rotation;
+    
+    private double xpos;
+    private double ypos;
     
     public ArrayList<ResourceVein> resourceVeins;
     
@@ -185,7 +189,7 @@ public class Planet extends SpaceObject {
         this.parentStarSystem = parentStarSystem;
     }
     
-    public float getPlanetDegrees() {
+    public double getPlanetDegrees() {
         return (degrees);
     }
     
@@ -213,19 +217,19 @@ public class Planet extends SpaceObject {
         satellites.add(orb);
     }
     
-    public long getX() {
+    public double getX() {
         return xpos;
     }
     
-    public long getY() {
+    public double getY() {
         return ypos;
     }
     
-    public void setX(long x) {
+    public void setX(double x) {
         xpos = x;
     }
     
-    public void setY(long y) {
+    public void setY(double y) {
         ypos = y;
     }
 
@@ -275,5 +279,29 @@ public class Planet extends SpaceObject {
 
     public void setGovernor(Person governor) {
         this.governor = governor;
+    }
+
+    public void setSemiMajorAxis(double semiMajorAxis) {
+        this.semiMajorAxis = semiMajorAxis;
+    }
+
+    public double getSemiMajorAxis() {
+        return semiMajorAxis;
+    }
+
+    public void setEccentricity(double eccentricity) {
+        this.eccentricity = eccentricity;
+    }
+
+    public double getEccentricity() {
+        return eccentricity;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
     }
 }

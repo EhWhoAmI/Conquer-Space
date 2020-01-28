@@ -13,6 +13,8 @@ public class Resource {
     private boolean mineable;
     private boolean raw;
     private float density;
+    private int distributionLow;
+    private int distributionHigh;
     private int r;
     private int g;
     private int b;
@@ -126,5 +128,21 @@ public class Resource {
 
     public HashMap<String, Integer> getAttributes() {
         return attributes;
+    }
+
+    public int getDistributionLow() {
+        return distributionLow;
+    }
+
+    public int getDistributionHigh() {
+        return distributionHigh;
+    }
+
+    public void setDistributionHigh(int distributionHigh) {
+        this.distributionHigh = distributionHigh;
+    }
+
+    public void setDistributionLow(int distributionLow) {
+        this.distributionLow = distributionLow;
     }
 }

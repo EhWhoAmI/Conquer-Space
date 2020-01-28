@@ -66,7 +66,7 @@ public class Actions {
         if (what instanceof VisionPoint) {
             SpaceTelescope obs = ((SpaceTelescope) what);
             StarSystem sys = Globals.universe.getStarSystem(whichPlanet.getParentStarSystem());
-            obs.setPosition(new Point(sys.getX(), sys.getY()));
+            obs.setPosition(new Point((long)sys.getX(), (long)sys.getY()));
             c.visionPoints.add((VisionPoint) what);
 
         }

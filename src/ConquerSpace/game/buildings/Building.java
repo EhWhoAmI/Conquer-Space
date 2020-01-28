@@ -17,6 +17,8 @@ public abstract class Building {
     public ArrayList<Job> jobs;
     private Employer owner;
     private String type;
+    
+    //In Megawatts
     private int energyUsage;
     public ArrayList<InfrastructureBuilding> infrastructure;
 

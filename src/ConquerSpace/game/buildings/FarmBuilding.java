@@ -1,7 +1,6 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Workable;

@@ -36,8 +36,8 @@ public class StarSystem extends SpaceObject {
 
     public ArrayList<SpaceShip> spaceShips;
 
-    private long xpos;
-    private long ypos;
+    private double xpos;
+    private double ypos;
     
     private String name = "";
 
@@ -183,18 +183,18 @@ public class StarSystem extends SpaceObject {
         return (new UniversePath(id));
     }
 
-    public long getX() {
+    public double getX() {
         return xpos;
     }
-    public long getY() {
+    public double getY() {
         return ypos;
     }
 
-    public void setX(long x) {
+    public void setX(double x) {
         xpos = x;
     }
 
-    public void setY(long y) {
+    public void setY(double y) {
         ypos = y;
     }
 

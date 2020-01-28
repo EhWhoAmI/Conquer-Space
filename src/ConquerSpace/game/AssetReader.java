@@ -13,11 +13,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
+import org.hjson.JsonValue;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +38,7 @@ public class AssetReader {
             FileInputStream fis = null;
             try {
                 //If it is readme, continue
-                if (f.getName().endsWith(".txt")) {
+                if (f.getName().endsWith("readme.txt")) {
                     continue;
                 }   //Read, there is only one object
                 fis = new FileInputStream(f);
@@ -47,6 +46,7 @@ public class AssetReader {
                 fis.read(data);
                 fis.close();
                 String text = new String(data);
+                text = JsonValue.readHjson(text).toString();
                 JSONArray root = new JSONArray(text);
                 for (int i = 0; i < root.length(); i++) {
                     JSONObject obj = root.getJSONObject(i);
@@ -62,6 +62,8 @@ public class AssetReader {
                     float density = obj.getFloat("density");
 
                     int difficulty = obj.getInt("difficulty");
+                    
+                    JSONArray distribution = obj.getJSONArray("distribution");
 
                     JSONArray color = obj.getJSONArray("color");
 
@@ -75,6 +77,8 @@ public class AssetReader {
                     res.setDensity(density);
                     res.setDifficulty(difficulty);
                     res.setMineable(mineable);
+                    res.setDistributionLow(distribution.getInt(0));
+                    res.setDistributionHigh(distribution.getInt(1));
                     res.setColor(color.getInt(0), color.getInt(1), color.getInt(2));
                     //res.setTags(tags.);
                     String[] list = new String[tags.length()];

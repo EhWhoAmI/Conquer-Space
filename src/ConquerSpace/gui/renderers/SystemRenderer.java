@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
+
 /**
  *
  * @author Zyun
@@ -45,7 +46,8 @@ public class SystemRenderer {
 
     private BufferedImage[] systemTerrain;
 //Background skybox
-    private BufferedImage skybox;	private Thread rendererThread;
+    private BufferedImage skybox;
+    private Thread rendererThread;
     boolean processedRenders = false;
     double scaleSize = 20;
 
@@ -98,12 +100,14 @@ public class SystemRenderer {
                 LOGGER.info("Time to render system: " + (end - beginning));
             }
         };
-        
-try {
+
+        try {
             skybox = ImageIO.read(new File("assets/img/bg.png"));
         } catch (IOException ex) {
-        } rendererThread = new Thread(r);
-        rendererThread.setName("renderer");        sizeofAU = 15;
+        }
+        rendererThread = new Thread(r);
+        rendererThread.setName("renderer");
+        sizeofAU = 15;
     }
 
     public void drawStarSystem(Graphics g, double translateX, double translateY, double scale) {
@@ -118,10 +122,12 @@ try {
         }
         //Render bg image
         //g2d.fill(bg);
-if (!processedRenders) {
+        if (!processedRenders) {
             rendererThread.start();
             processedRenders = true;
-        }        //X Y grid for reference
+        }
+        
+        //X Y grid for reference
         /*Line2D.Double xline = new Line2D.Double(
                 (translateX + bounds.width / 2) / scale,
                 (translateY + bounds.width / 2 + 10000) / scale,
@@ -139,6 +145,8 @@ if (!processedRenders) {
         );
         g2d.setColor(Color.WHITE);
         g2d.draw(yline);*/
+        
+        
         for (int i = 0; i < sys.getStarCount(); i++) {
             Star star = sys.getStar(i);
 
@@ -179,9 +187,10 @@ if (!processedRenders) {
         for (int i = 0; i < sys.getPlanetCount(); i++) {
             Planet p = sys.getPlanet(i);
             //Draw orbit circle
+            //Do math...
             Ellipse2D.Double orbitCitcle = new Ellipse2D.Double(
-                    (translateX + bounds.width / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000) / scale,
-                    (translateY + bounds.height / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000) / scale,
+                    (translateX + bounds.width / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000d) / scale,
+                    (translateY + bounds.height / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000d) / scale,
                     (p.getOrbitalDistance()) * sizeofAU / 10_000_000 * 2 / scale,
                     (p.getOrbitalDistance()) * sizeofAU / 10_000_000 * 2 / scale);
             g2d.setColor(Color.WHITE);
@@ -191,14 +200,16 @@ if (!processedRenders) {
         for (int i = 0; i < sys.getPlanetCount(); i++) {
             Planet p = sys.getPlanet(i);
 
+            int planetX = (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000d + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            int planetY = (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000d + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            
             if (systemTerrain[i] != null) {
                 g2d.drawImage(systemTerrain[i],
-                        (int) ((translateX + (bounds.width / 2) + (p.getX()) * sizeofAU / 10_000_000) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)),
-                        (int) ((translateY + (bounds.height / 2) + (p.getY()) * sizeofAU / 10_000_000) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2)), null);
+                        planetX,
+                        planetY, null);
             }
             //g2d.setColor(p.g());
-            int planetX = (int) ((translateX + (p.getX()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
-            int planetY = (int) ((translateY + (p.getY()) * sizeofAU / 10_000_000 + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            
 
             //Draw shadow
             g2d.setColor(Color.BLACK);
@@ -291,11 +302,11 @@ if (!processedRenders) {
             //Get length of line to get the distance
             double distance = pointDistance(measureStart.x, measureStart.y, measureEnd.x, measureEnd.y);
             //Length in km
-            double spaceLength = distance*scale*10_000_000/sizeofAU;//(previousY * sizeofAU) = px 
+            double spaceLength = distance * scale * 10_000_000 / sizeofAU;//(previousY * sizeofAU) = px 
 
             //Get the halfway point to draw the text
             g2d.setColor(Color.blue);
-            g2d.drawString(String.format("%.3f km, %.3f AU", spaceLength, spaceLength/149598000), (measureStart.x + measureEnd.x) / 2 + 10, (measureStart.y + measureEnd.y) / 2 + 10);
+            g2d.drawString(String.format("%.3f km, %.3f AU", spaceLength, spaceLength / 149598000), (measureStart.x + measureEnd.x) / 2 + 10, (measureStart.y + measureEnd.y) / 2 + 10);
             g2d.setColor(Color.orange);
 
             Line2D.Float measureLine = new Line2D.Float(measureStart, measureEnd);

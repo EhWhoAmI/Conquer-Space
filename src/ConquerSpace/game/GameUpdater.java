@@ -14,6 +14,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
@@ -301,16 +302,21 @@ public class GameUpdater {
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystem(i);
             RendererMath.Point pt
-                    = RendererMath.polarCoordToCartesianCoord(system.getGalaticLocation().getDistance(),
+                    = RendererMath.polarCoordToCartesianCoord((double)system.getGalaticLocation().getDistance(),
                             system.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
 
             system.setX(pt.x);
             system.setY(pt.y);
             for (int k = 0; k < system.getPlanetCount(); k++) {
                 Planet planet = system.getPlanet(k);
-
+                //planet.modDegrees(1f);
+                double theta = Math.toRadians(planet.getPlanetDegrees());
+                double a = planet.getSemiMajorAxis();
+                //Eccentrcity
+                double e = planet.getEccentricity();
+                double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - planet.getRotation()));
                 RendererMath.Point ppt
-                        = RendererMath.polarCoordToCartesianCoord(planet.getOrbitalDistance(),
+                        = RendererMath.polarCoordToCartesianCoord((long)r,
                                 planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
 
                 planet.setX(ppt.x);
@@ -318,6 +324,7 @@ public class GameUpdater {
             }
         }
         long end = System.currentTimeMillis();
+        //System.out.println((end - start));
     }
 
     /**
@@ -376,11 +383,6 @@ public class GameUpdater {
                 job.setWorkingFor(city);
                 job.setEmployer(building.getOwner());
                 p.planetJobs.add(job);
-
-                //Sort through areas
-                for (Area a : ((CityDistrict) building).areas) {
-                    processAreas(p, a, date);
-                }
             } else if (building instanceof FarmBuilding) {
                 FarmBuilding farm = (FarmBuilding) building;
                 for (int i = 0; i < farm.getManpower(); i++) {
@@ -416,6 +418,11 @@ public class GameUpdater {
                     upkeepAmount += unit.getSpecies().getUpkeep();
                 }
             }
+
+            //Sort through areas
+            for (Area a : building.areas) {
+                processAreas(p, building, a, date);
+            }
         }
         //Set the upkeep
         int amount = Math.round(upkeepAmount);
@@ -426,8 +433,14 @@ public class GameUpdater {
         }
     }
 
-    private void processAreas(Planet p, Area a, StarDate date) {
+    private void processAreas(Planet p, Building b, Area a, StarDate date) {
+        if (a instanceof PowerPlantArea) {
+            PowerPlantArea powerPlant = (PowerPlantArea) a;
+            Job job = new Job(JobType.PowerPlantTechnician);
 
+            job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
+            p.planetJobs.add(job);
+        }
     }
 
     /**

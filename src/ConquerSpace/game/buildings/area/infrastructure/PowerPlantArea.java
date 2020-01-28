@@ -13,6 +13,11 @@ public class PowerPlantArea extends Area{
     //Amount of units needed to get each time
     private int maxVolume;
     
+    private int currentCapacity;
+    
+    //In megawatts
+    private int production;
+    
     @Override
     public String toString() {
         return "Power Plant";
@@ -32,5 +37,13 @@ public class PowerPlantArea extends Area{
 
     public void setMaxVolume(int maxVolume) {
         this.maxVolume = maxVolume;
+    }
+
+    public void setCurrentCapacity(int currentCapacity) {
+        this.currentCapacity = currentCapacity;
+    }
+
+    public int getCurrentCapacity() {
+        return currentCapacity;
     }
 }

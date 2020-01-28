@@ -75,7 +75,7 @@ public class ResourceViewer extends JFrame {
             value.setValue(selected.getValue());
             density.setValue(selected.getDensity());
             difficulty.setValue(selected.getDifficulty());;
-            //distribution.setValue(selected.());
+            //distribution.setValue(selected.getD);
             resourceColor = selected.getColor();
             setColorButton.setBackground(resourceColor);
             mineable.setSelected(selected.isMineable());

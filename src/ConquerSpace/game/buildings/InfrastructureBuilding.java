@@ -17,11 +17,16 @@ public class InfrastructureBuilding extends Building{
 
     @Override
     public Color getColor() {
-        return Color.WHITE;
+        return Color.orange;
     }
 
     @Override
     public String getType() {
         return "Infrastructure Hub";
+    }
+    
+    public void addBuilding(Building b) {
+        b.infrastructure.add(this);
+        connectedTo.add(b);
     }
 }

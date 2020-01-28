@@ -2,6 +2,7 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
+import ConquerSpace.game.population.Job;
 import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class City implements PersonEnterable{
     private Person governor;
     private String name;
     public ArrayList<PopulationStorage> storages;
+    public ArrayList<Job> jobs;
 
     private UniversePath location;
     //% to completing a unit

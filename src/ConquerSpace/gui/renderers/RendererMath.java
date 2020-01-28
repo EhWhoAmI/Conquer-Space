@@ -21,9 +21,9 @@ public class RendererMath {
      * <code>GalaticLocation</code>.
      * @return Point of the converted polar coordinate
      */
-    public static Point polarCoordToCartesianCoord(long distance, double degrees, Point center, int unitSize) {
-        long xpos;
-        long ypos;
+    public static Point polarCoordToCartesianCoord(double distance, double degrees, Point center, int unitSize) {
+        double xpos;
+        double ypos;
 
         double opp = (Math.sin(Math.toRadians(degrees)) * distance);
         double adj = (Math.cos(Math.toRadians(degrees)) * distance);
@@ -40,19 +40,19 @@ public class RendererMath {
 
     public static class Point {
 
-        public long x;
-        public long y;
+        public double x;
+        public double y;
 
-        public Point(long x, long y) {
+        public Point(double x, double y) {
             this.x = x;
             this.y = y;
         }
 
-        public long getX() {
+        public double getX() {
             return x;
         }
 
-        public long getY() {
+        public double getY() {
             return y;
         }
     }

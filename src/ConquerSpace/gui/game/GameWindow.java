@@ -31,6 +31,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -96,7 +97,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
     public void addFrame(JInternalFrame frame) {
         desktopPane.add(frame);
     }
-    
+
     public void passEvent(Event e) {
         mainInterfaceWindow.passEvent(e);
     }
@@ -246,7 +247,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         menuBar.add(resources);
 
         //Set timer
-        gameTickTimer = new Timer(100, a -> {
+        gameTickTimer = new Timer(40, a -> {
             try {
                 mainInterfaceWindow.update();
                 newsWindow.update();

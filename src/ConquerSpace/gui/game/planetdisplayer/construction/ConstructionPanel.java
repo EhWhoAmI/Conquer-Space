@@ -193,7 +193,7 @@ public class ConstructionPanel extends JInternalFrame {
                     Observatory observatory = new Observatory(
                             GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
                             (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
-                            c.getID(), new ConquerSpace.game.universe.Point(sys.getX(), sys.getY()));
+                            c.getID(), new ConquerSpace.game.universe.Point((long) sys.getX(), (long) sys.getY()));
                     //Add visionpoint to civ
                     c.visionPoints.add(observatory);
                     Actions.buildBuilding(p, buildingPos, observatory, c, 1);

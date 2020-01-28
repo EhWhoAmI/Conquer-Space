@@ -2,6 +2,7 @@ package ConquerSpace.game;
 
 import static ConquerSpace.game.AssetReader.*;
 import ConquerSpace.game.buildings.AdministrativeCenter;
+import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.FarmBuilding;
@@ -37,7 +38,11 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -127,6 +132,9 @@ public class GameInitializer {
                 createIndustrialZones(c, selector, starting);
 
                 createObservatory(starting, c, selector);
+
+                //Add infrastructure
+                createInfrastructure(starting, selector);
 
                 //Set ownership
                 starting.setOwnerID(c.getID());
@@ -248,7 +256,7 @@ public class GameInitializer {
         //Add observetory
         StarSystem container = universe.getStarSystem(starting.getParentStarSystem());
         Observatory observatory = new Observatory(10 * GameController.AU_IN_LTYR, 100, c.getID(),
-                new ConquerSpace.game.universe.Point(container.getX(), container.getY()));
+                new ConquerSpace.game.universe.Point((long) container.getX(), (long) container.getY()));
 
         observatory.setOwner(c);
         GeographicPoint pt = getRandomEmptyPoint(starting, selector);
@@ -368,35 +376,6 @@ public class GameInitializer {
             //test2.setCity(city);
             city.addDistrict(district2);
 
-            //Attach infrastructure near city
-            InfrastructureBuilding infrastructureBuilding = new InfrastructureBuilding();
-
-            //Add areas
-            infrastructureBuilding.connectedTo.add(district);
-            district.infrastructure.add(infrastructureBuilding);
-            infrastructureBuilding.connectedTo.add(district2);
-            district.infrastructure.add(infrastructureBuilding);
-
-            //Ensure point is near the thing
-            //pt2 = getRandomEmptyPoint(starting, selector);
-            //Add areas
-            PowerPlantArea powerPlant = new PowerPlantArea();
-            //Get the resources needed for powering plant
-            Resource resource = null;
-            for (Resource res : GameController.resources) {
-                for (String tag : res.getTags()) {
-                    if (tag.equals("energy")) {
-                        resource = res;
-                        break;
-                    }
-                }
-            }
-
-            powerPlant.setUsedResource(resource);
-            powerPlant.setMaxVolume(1000);
-            infrastructureBuilding.areas.add(powerPlant);
-            //Connect it to many buildings
-            starting.buildings.put(getRandomEmptyPoint(starting, selector), infrastructureBuilding);
             //Add leader to city
             Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
             gov.setPosition(city);
@@ -533,6 +512,47 @@ public class GameInitializer {
             for (int h2 = 0; h2 < s.getStarCount(); h2++) {
                 c.vision.put(new UniversePath(i, h2, true), VisionTypes.UNDISCOVERED);
             }
+        }
+    }
+
+    private void createInfrastructure(Planet p, Random selector) {
+        //Adds the infrastructure to the planet...
+        //Get building count
+        int buildingCount = p.buildings.size();
+        //Process them
+        Collection<Building> buildings = new ArrayList<>(p.buildings.values());
+        Iterator<Building> buildingIterator = buildings.iterator();
+        int infrastructureCount = (buildingCount / 5);
+        for (int k = 0; k < infrastructureCount; k++) {
+            //Create infrastructure building for multiple things
+            InfrastructureBuilding building = new InfrastructureBuilding();
+
+            //Ensure point is near the thing
+            //pt2 = getRandomEmptyPoint(starting, selector);
+            //Add areas
+            PowerPlantArea powerPlant = new PowerPlantArea();
+            //Get the resources needed for powering plant
+            Resource resource = null;
+            for (Resource res : GameController.resources) {
+                for (String tag : res.getTags()) {
+                    if (tag.equals("energy")) {
+                        resource = res;
+                        break;
+                    }
+                }
+            }
+
+            //Add the districts
+            for (int i = 0; i < 5; i++) {
+                Building b = buildingIterator.next();
+                building.addBuilding(b);
+            }
+            
+            powerPlant.setUsedResource(resource);
+            powerPlant.setMaxVolume(1000);
+            building.areas.add(powerPlant);
+            //Add infrastructure
+            p.buildings.put(getRandomEmptyPoint(p, selector), building);
         }
     }
 }

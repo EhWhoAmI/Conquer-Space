@@ -80,7 +80,7 @@ public class GameController {
             public void run() {
                 ticker.setWait(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
                 updater.calculateVision();
-                
+
                 if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
                     tick();
                 }
@@ -102,12 +102,13 @@ public class GameController {
 
         //Move ships
         updater.moveShips();
+        
+        updater.updateObjectPositions();
 
         //Check for month increase
         if (Globals.date.bigint % GameRefreshRate == 0) {
             long start = System.currentTimeMillis();
 
-            updater.updateObjectPositions();
             updater.updateUniverse(Globals.universe, Globals.date);
 
             for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {

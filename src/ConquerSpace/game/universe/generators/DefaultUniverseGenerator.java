@@ -275,7 +275,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 planetSize = randint(rand, 30, 100);
             }
             Planet p = new Planet(planetType, orbitalDistance, planetSize, k, lastPlanet);
+            p.setSemiMajorAxis((double) orbitalDistance);
+            //So a circle...
+            p.setEccentricity(0);
 
+            p.setRotation(rand.nextDouble() * 2 * Math.PI);
             generateResourceVeins(p, rand);
             if (planetType == PlanetTypes.ROCK) {
                 p.setTerrainSeed(rand.nextInt());
@@ -308,8 +312,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             }
             sys.addPlanet(p);
         }
-        
-        if(living == null) {
+
+        if (living == null) {
             //Add a rocky planet just to be sure.
             int planetType = PlanetTypes.ROCK;
             //System.out.println(planetType);
@@ -399,23 +403,25 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     public void generateResourceVeins(Planet p, Random rand) {
         int planetSize = p.getPlanetSize();
         //Add resource veins
-        int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
+
         int idCount = 0;
         for (Resource res : GameController.resources) {
             //Process... 
+            //Determines the resource 'richness' of a planet
+            int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
             float rarity = res.getRarity();
             float probality = rand.nextFloat();
             //Then count
             if (true) {
                 //Then add a certain amount
-                int amount = (int) (rarity * resourceCount * probality);
+                int amount = (int) (rarity * resourceCount * probality) * 2;
                 //Add that amount
                 for (int resCount = 0; resCount < amount; resCount++) {
                     //Add the resource
-                    int resourceVolume = randint(rand, 50000, 100000);
+                    int resourceVolume = (int) (randint(rand, 50000, 100000) * res.getDensity());
                     ResourceVein vein = new ResourceVein(res, resourceVolume);
                     vein.setId(idCount++);
-                    vein.setRadius(randint(rand, 5, 15));
+                    vein.setRadius(randint(rand, res.getDistributionLow(), res.getDistributionHigh()));
                     vein.setX(rand.nextInt(planetSize * 2));
                     vein.setY(rand.nextInt(planetSize));
                     p.resourceVeins.add(vein);
