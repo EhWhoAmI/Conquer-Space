@@ -24,6 +24,7 @@ import ConquerSpace.game.population.Job;
 import ConquerSpace.game.population.JobRank;
 import ConquerSpace.game.population.JobType;
 import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.Race;
 import ConquerSpace.game.population.Workable;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
@@ -46,9 +47,11 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.DistributedRandomNumberGenerator;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
@@ -302,7 +305,7 @@ public class GameUpdater {
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystem(i);
             RendererMath.Point pt
-                    = RendererMath.polarCoordToCartesianCoord((double)system.getGalaticLocation().getDistance(),
+                    = RendererMath.polarCoordToCartesianCoord((double) system.getGalaticLocation().getDistance(),
                             system.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
 
             system.setX(pt.x);
@@ -316,7 +319,7 @@ public class GameUpdater {
                 double e = planet.getEccentricity();
                 double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - planet.getRotation()));
                 RendererMath.Point ppt
-                        = RendererMath.polarCoordToCartesianCoord((long)r,
+                        = RendererMath.polarCoordToCartesianCoord((long) r,
                                 planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
 
                 planet.setX(ppt.x);
@@ -469,7 +472,7 @@ public class GameUpdater {
                         cityloop:
                         for (City c : p.cities) {
                             //Check for locations
-                            for (PopulationStorage stor : c.storages) {
+                            for (Building stor : c.buildings) {
                                 //Find the storage
                                 GeographicPoint storagePoint = p.buildings
                                         .entrySet()
@@ -483,7 +486,7 @@ public class GameUpdater {
                                             || storagePoint.getY() + 1 == key.getY()
                                             || storagePoint.getY() - 1 == key.getY()) {
                                         //Add to city
-                                        c.storages.add((PopulationStorage) build.getToBuild());
+                                        c.buildings.add(build.getToBuild());
                                         created = true;
                                         break cityloop;
                                     }
@@ -559,35 +562,7 @@ public class GameUpdater {
     public void processPopulation(Planet p, StarDate date) {
         //Process population
         for (City city : p.cities) {
-            float increment = 0;
-            increment += city.getPopulationUnitPercentage();
-
-            for (PopulationStorage storage : city.storages) {
-                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-                    //Population increment
-                    //Fraction it so it does not accelerate at a crazy rate
-                    //Do subtractions here in the future, like happiness, and etc.
-                    increment += (unit.getSpecies().getBreedingRate() / 50);
-                }
-            }
-
-            //Increment the value...
-            city.setPopulationUnitPercentage(increment);
-            if (increment > 100) {
-                //Add population to city and stuff. Danm you have to get the civ. that is annoying
-                int owner = p.getOwnerID();
-                Civilization c = universe.getCivilization(owner);
-
-                //Add to storage
-                PopulationUnit unit = new PopulationUnit(c.getFoundingSpecies());
-                unit.setSpecies(c.getFoundingSpecies());
-                c.population.add(unit);
-
-                //Add to random population storage
-                //TODO: do something that actually calculates the probalities
-                city.storages.get((int) (Math.random() * city.storages.size())).getPopulationArrayList().add(unit);
-                city.setPopulationUnitPercentage(0);
-            }
+            incrementCityPopulation(city);
         }
 
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
@@ -698,6 +673,68 @@ public class GameUpdater {
                 //nerd.setSkill((int) (Math.random() * 5) + 1);
                 c.unrecruitedPeople.add(dude);
             }
+        }
+    }
+
+    public void incrementCityPopulation(City city) {
+        float increment = 0;
+        increment += city.getPopulationUnitPercentage();
+        
+        HashMap<Race, Integer> species = new HashMap<>();
+        ArrayList<PopulationStorage> storages = new ArrayList<>();
+        int population = 0;
+        for (Building building : city.buildings) {
+            if (building instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) building;
+                storages.add(storage);
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+                    //Population increment
+                    //Fraction it so it does not accelerate at a crazy rate
+                    //Do subtractions here in the future, like happiness, and etc.
+                    increment += (unit.getSpecies().getBreedingRate() / 50);
+                    //Add to hashmap
+                    if (species.containsKey(unit.getSpecies())) {
+                        //Add to it...
+                        Integer count = species.get(unit.getSpecies());
+                        count++;
+                        species.put(unit.getSpecies(), count);
+                    } else {
+                        species.put(unit.getSpecies(), 1);
+                    }
+                    population++;
+                }
+            }
+        }
+
+        //Increment the value...
+        city.setPopulationUnitPercentage(increment);
+        if (increment > 100) {
+            //Add population to city and stuff.
+            //Get the species in the city...
+
+            //Add to storage
+            //Sum everything together for random numbers
+            DistributedRandomNumberGenerator generator = new DistributedRandomNumberGenerator();
+            int i = 0;
+            HashMap<Integer, Race> races = new HashMap<>();
+            for (Map.Entry<Race, Integer> entry : species.entrySet()) {
+                Race key = entry.getKey();
+                Integer value = entry.getValue();
+                generator.addNumber(i, ((double) value / (double) population));
+                races.put(i, key);
+                i++;
+            }
+
+            //Get the race
+            int speciesID = generator.getDistributedRandomNumber();
+            Race r = races.get(speciesID);
+            PopulationUnit unit = new PopulationUnit(r);
+            
+            //Increment population
+            int storageID = (int) (Math.random() * storages.size());
+            storages.get(storageID).getPopulationArrayList().add(unit);
+
+            city.setPopulationUnitPercentage(0);
         }
     }
 }

@@ -17,6 +17,7 @@ public abstract class Building {
     public ArrayList<Job> jobs;
     private Employer owner;
     private String type;
+    private City city;
     
     //In Megawatts
     private int energyUsage;
@@ -54,5 +55,13 @@ public abstract class Building {
 
     public void setEnergyUsage(int energyUsage) {
         this.energyUsage = energyUsage;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public City getCity() {
+        return city;
     }
 }

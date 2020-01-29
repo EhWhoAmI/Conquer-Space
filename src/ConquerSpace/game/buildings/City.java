@@ -3,8 +3,10 @@ package ConquerSpace.game.buildings;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Job;
+import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -14,15 +16,18 @@ public class City implements PersonEnterable{
     
     private Person governor;
     private String name;
-    public ArrayList<PopulationStorage> storages;
+    public ArrayList<Building> buildings;
     public ArrayList<Job> jobs;
 
     private UniversePath location;
+    
     //% to completing a unit
     private float populationUnitPercentage = 0;
+    
+    private HashMap<Race, Float> speciesRates;
 
     public City(UniversePath location) {
-        storages = new ArrayList<>();
+        buildings = new ArrayList<>();
         this.location = location;
     }
 
@@ -53,11 +58,9 @@ public class City implements PersonEnterable{
         return location;
     }
     
-    public void addDistrict(PopulationStorage stor) {
-        storages.add(stor);
-        if(stor instanceof CityDistrict) {
-            ((CityDistrict) stor).setCity(this);
-        }
+    public void addDistrict(Building stor) {
+        buildings.add(stor);
+        stor.setCity(this);
     }
 
     public Person getGovernor() {

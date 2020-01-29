@@ -116,29 +116,33 @@ public class PlanetPopulation extends JPanel {
             int energyProvided = 0;
             ArrayList<InfrastructureBuilding> building = new ArrayList<>();
 
-            for (PopulationStorage stor : selected.storages) {
-                popcount += stor.getPopulationArrayList().size();
-                for (PopulationUnit unit : stor.getPopulationArrayList()) {
-                    //Fraction it so it does not accelerate at a crazy rate
-                    //Do subtractions here in the future, like happiness, and etc.
-                    increment += (unit.getSpecies().getBreedingRate() / 50);
-                }
-                maxPop += stor.getMaxStorage();
-                if (stor instanceof Building) {
-                    energyUsage += ((Building) stor).getEnergyUsage();
-                    //Get the infrastructure connected to.
-                    for (InfrastructureBuilding infra : ((Building) stor).infrastructure) {
+            for (Building build : selected.buildings) {
+                if (build instanceof PopulationStorage) {
+                    PopulationStorage stor = (PopulationStorage) build;
 
-                        if (!building.contains(infra)) {
-                            building.add(infra);
-                            for (Area a : infra.areas) {
-                                //energyProvided += infra
-                                if(a instanceof PowerPlantArea) {
-                                    //Get the resource produced
-                                    
-                                    Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
-                                    if(energy != null) {
-                                        energyProvided += (((PowerPlantArea) a).getMaxVolume()*energy);
+                    popcount += stor.getPopulationArrayList().size();
+                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
+                        //Fraction it so it does not accelerate at a crazy rate
+                        //Do subtractions here in the future, like happiness, and etc.
+                        increment += (unit.getSpecies().getBreedingRate() / 50);
+                    }
+                    maxPop += stor.getMaxStorage();
+                    if (stor instanceof Building) {
+                        energyUsage += ((Building) stor).getEnergyUsage();
+                        //Get the infrastructure connected to.
+                        for (InfrastructureBuilding infra : ((Building) stor).infrastructure) {
+
+                            if (!building.contains(infra)) {
+                                building.add(infra);
+                                for (Area a : infra.areas) {
+                                    //energyProvided += infra
+                                    if (a instanceof PowerPlantArea) {
+                                        //Get the resource produced
+
+                                        Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
+                                        if (energy != null) {
+                                            energyProvided += (((PowerPlantArea) a).getMaxVolume() * energy);
+                                        }
                                     }
                                 }
                             }
@@ -247,17 +251,20 @@ public class PlanetPopulation extends JPanel {
             populationCount = new HashMap<>();
             population = 0;
             //Process the things
-            for (PopulationStorage value : currentlySelectedCity.storages) {
-                for (PopulationUnit unit : value.getPopulationArrayList()) {
-                    JobType job = unit.getJob().getJobType();
-                    if (populationCount.containsKey(job)) {
-                        //Add to it
-                        int i = (populationCount.get(job) + 1);
-                        populationCount.put(job, i);
-                    } else {
-                        populationCount.put(job, 1);
+            for (Building value : currentlySelectedCity.buildings) {
+                if (value instanceof PopulationStorage) {
+                    PopulationStorage stor = (PopulationStorage) value;
+                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
+                        JobType job = unit.getJob().getJobType();
+                        if (populationCount.containsKey(job)) {
+                            //Add to it
+                            int i = (populationCount.get(job) + 1);
+                            populationCount.put(job, i);
+                        } else {
+                            populationCount.put(job, 1);
+                        }
+                        population++;
                     }
-                    population++;
                 }
             }
         }
@@ -304,15 +311,18 @@ public class PlanetPopulation extends JPanel {
 
         public void setSelectedCity(City city) {
             populationCount.clear();
-            for (PopulationStorage value : currentlySelectedCity.storages) {
-                for (PopulationUnit unit : value.getPopulationArrayList()) {
-                    JobType job = unit.getJob().getJobType();
-                    if (populationCount.containsKey(job)) {
-                        //Add to it
-                        int i = (populationCount.get(job) + 1);
-                        populationCount.put(job, i);
-                    } else {
-                        populationCount.put(job, 1);
+            for (Building value : currentlySelectedCity.buildings) {
+                if (value instanceof PopulationStorage) {
+                    PopulationStorage stor = (PopulationStorage) value;
+                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
+                        JobType job = unit.getJob().getJobType();
+                        if (populationCount.containsKey(job)) {
+                            //Add to it
+                            int i = (populationCount.get(job) + 1);
+                            populationCount.put(job, i);
+                        } else {
+                            populationCount.put(job, 1);
+                        }
                     }
                 }
             }
