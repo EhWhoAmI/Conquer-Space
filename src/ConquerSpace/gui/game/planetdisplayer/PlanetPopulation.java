@@ -7,7 +7,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
-import ConquerSpace.game.population.JobType;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.spaceObjects.Planet;

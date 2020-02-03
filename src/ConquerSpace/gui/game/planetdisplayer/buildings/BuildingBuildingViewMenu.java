@@ -17,7 +17,7 @@ public class BuildingBuildingViewMenu extends JPanel{
         //Get the building
         add(new JLabel("Constructing a " + building.getToBuild().toString()));
         timeLeft = new JLabel("Construction progress: " + building.getLength() + ", estimated to be x months");
-        peopleWorking = new JLabel("Constructors: " + building.jobs.size());
+        peopleWorking = new JLabel("Constructors: " + 0);
         add(timeLeft);
         add(peopleWorking);
     }

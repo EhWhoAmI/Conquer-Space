@@ -1,8 +1,8 @@
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.population.Job;
+import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
-import ConquerSpace.game.population.Workable;
+import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import java.awt.Color;

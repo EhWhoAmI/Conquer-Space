@@ -19,13 +19,13 @@ import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.population.Employer;
-import ConquerSpace.game.population.Job;
-import ConquerSpace.game.population.JobRank;
-import ConquerSpace.game.population.JobType;
+import ConquerSpace.game.jobs.Employer;
+import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
-import ConquerSpace.game.population.Workable;
+import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -185,9 +185,11 @@ public class GameUpdater {
     public void processPlanet(Planet p, StarDate date) {
         organizePopulation(p);
 
-        createPlanetJobs(p, date);
+        processCities(p, date);
 
-        assignJobs(p, date);
+        //createPlanetJobs(p, date);
+
+        //assignJobs(p, date);
 
         processBuildings(p, date);
 
@@ -235,6 +237,14 @@ public class GameUpdater {
             }
         }
         return false;
+    }
+
+    public void processCities(Planet p, StarDate date) {
+        for (City c : p.cities) {
+            createCityJobs(c, date);
+            //Assign jobs
+            assignJobs(c, date);
+        }
     }
 
     public void processResearch() {
@@ -436,6 +446,104 @@ public class GameUpdater {
         }
     }
 
+    public void createCityJobs(City p, StarDate date) {
+        //Add the jobs...
+        //Assign everyone an empty job...
+        //for(p.)
+        float upkeepAmount = 0;
+        p.jobs.clear();
+        for (Building building : p.buildings) {
+            //Get the building type
+            //Now get the type of building
+            if (building instanceof BuildingBuilding) {
+                //Add construction job
+                BuildingBuilding constructionWork = (BuildingBuilding) building;
+                int scale = constructionWork.getScale();
+                for (int i = 0; i < scale; i++) {
+                    Job constructionJob = new Job(JobType.Construction);
+                    constructionJob.setJobRank(JobRank.Low);
+                    constructionJob.setEmployer(constructionWork.getOwner());
+                    constructionJob.setWorkingFor(constructionWork);
+                    //Set them to use resources for the construction
+                    for (Map.Entry<Resource, Integer> set : constructionWork.resourcesNeeded.entrySet()) {
+                        Resource resource = set.getKey();
+                        Integer amount = set.getValue();
+                        //Add to the job
+                        constructionJob.resources.put(resource, -amount);
+                    }
+                    //Add job to building
+                    p.jobs.add(constructionJob);
+                }
+            } else if (building instanceof CityDistrict) {
+                //Get the various jobs in a population storage
+                //There are a lot of jobs
+                //Check if admin center
+                CityDistrict city = (CityDistrict) building;
+                if (building instanceof AdministrativeCenter) {
+                    //An admin center deals with the planet, maybe the galaxy if necessary
+                    //Add jobs that deal with admin
+                    AdministrativeCenter center = (AdministrativeCenter) building;
+                    Job job = new Job(JobType.Administrator);
+                    job.setJobRank(JobRank.High);
+                    job.setWorkingFor(center);
+                    job.setEmployer(center.getOwner());
+                    p.jobs.add(job);
+                }
+                Job job = new Job(JobType.Infrastructure);
+                job.setJobRank(JobRank.Low);
+                job.setWorkingFor(city);
+                job.setEmployer(building.getOwner());
+                p.jobs.add(job);
+            } else if (building instanceof FarmBuilding) {
+                FarmBuilding farm = (FarmBuilding) building;
+                for (int i = 0; i < farm.getManpower(); i++) {
+                    Job job = new Job(JobType.Farmer);
+                    job.setJobRank(JobRank.Low);
+                    job.setWorkingFor(farm);
+                    //Set pay
+                    job.setPay(1);
+                    job.setEmployer(building.getOwner());
+                    p.jobs.add(job);
+                }
+            } else if (building instanceof ResourceMinerDistrict) {
+                ResourceMinerDistrict district = (ResourceMinerDistrict) building;
+                for (int i = 0; i < district.getScale(); i++) {
+                    Job job = new Job(JobType.Miner);
+                    job.setJobRank(JobRank.Low);
+                    job.setWorkingFor(district);
+                    job.setEmployer(building.getOwner());
+                    p.jobs.add(job);
+                }
+            } else if (building instanceof SpacePort) {
+                Job job = new Job(JobType.SpacePortEngineer);
+                job.setEmployer(building.getOwner());
+                job.setJobRank(JobRank.Medium);
+                p.jobs.add(job);
+            }
+
+            //Get number of people and add support jobs
+            if (building instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) building;
+                ArrayList<PopulationUnit> population = storage.getPopulationArrayList();
+                for (PopulationUnit unit : population) {
+                    upkeepAmount += unit.getSpecies().getUpkeep();
+                }
+            }
+
+            //Sort through areas
+            for (Area a : building.areas) {
+                processAreas(p, building, a, date);
+            }
+        }
+        //Set the upkeep
+        int amount = Math.round(upkeepAmount);
+        for (int i = 0; i < amount; i++) {
+            Job job = new Job(JobType.PopUpkeepWorker);
+            job.setJobRank(JobRank.Medium);
+            p.jobs.add(job);
+        }
+    }
+
     private void processAreas(Planet p, Building b, Area a, StarDate date) {
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
@@ -443,6 +551,16 @@ public class GameUpdater {
 
             job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
             p.planetJobs.add(job);
+        }
+    }
+
+    private void processAreas(City c, Building b, Area a, StarDate date) {
+        if (a instanceof PowerPlantArea) {
+            PowerPlantArea powerPlant = (PowerPlantArea) a;
+            Job job = new Job(JobType.PowerPlantTechnician);
+
+            job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
+            c.jobs.add(job);
         }
     }
 
@@ -600,6 +718,26 @@ public class GameUpdater {
         }
     }
 
+    public void assignJobs(City p, StarDate date) {
+        //Process through all the population units
+        int i = 0;
+        for (Building b : p.buildings) {
+            if (b instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) b;
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+                    if (i < p.jobs.size()) {
+                        //Set pop job
+                        unit.setJob(p.jobs.get(i));
+                    } else {
+                        unit.getJob().setJobType(JobType.Jobless);
+                        unit.getJob().setJobRank(JobRank.Low);
+                    }
+                    i++;
+                }
+            }
+        }
+    }
+
     public void processPopUnit(PopulationUnit unit) {
         Job popJob = unit.getJob();
         popJob.setPay(100);
@@ -679,7 +817,7 @@ public class GameUpdater {
     public void incrementCityPopulation(City city) {
         float increment = 0;
         increment += city.getPopulationUnitPercentage();
-        
+
         HashMap<Race, Integer> species = new HashMap<>();
         ArrayList<PopulationStorage> storages = new ArrayList<>();
         int population = 0;
@@ -729,7 +867,7 @@ public class GameUpdater {
             int speciesID = generator.getDistributedRandomNumber();
             Race r = races.get(speciesID);
             PopulationUnit unit = new PopulationUnit(r);
-            
+
             //Increment population
             int storageID = (int) (Math.random() * storages.size());
             storages.get(storageID).getPopulationArrayList().add(unit);

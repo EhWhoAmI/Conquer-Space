@@ -116,11 +116,13 @@ public class MainMenu extends JFrame implements WindowListener {
         Font f = new Font(getFont().getFontName(), Font.BOLD, 28);
 
         public TopBanner() {
-            selectedImage = (int)(Math.random()*(2))+1;
+            File dir = new File(System.getProperty("user.dir")
+                    + "/assets/img/banners");
+            File[] files = dir.listFiles();
+            //Select random file
+            selectedImage = (int) (Math.random() * (files.length)) + 1;
             try {
-                image = ImageIO.read(new File(
-                        System.getProperty("user.dir")
-                        + "/assets/img/cqspbanner" + selectedImage + ".png"));
+                image = ImageIO.read(files[selectedImage]);
             } catch (IOException ex) {
 
             }

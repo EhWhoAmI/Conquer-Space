@@ -1,5 +1,6 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import java.awt.Color;

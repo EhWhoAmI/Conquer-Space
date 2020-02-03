@@ -4,7 +4,7 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
-import ConquerSpace.game.population.Job;
+import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;

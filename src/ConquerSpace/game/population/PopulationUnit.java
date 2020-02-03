@@ -1,5 +1,8 @@
 package ConquerSpace.game.population;
 
+import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobType;
+
 /**
  * one pop unit is about 10 million-ish.
  *

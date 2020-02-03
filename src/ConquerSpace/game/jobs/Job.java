@@ -1,4 +1,4 @@
-package ConquerSpace.game.population;
+package ConquerSpace.game.jobs;
 
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.universe.resources.Resource;

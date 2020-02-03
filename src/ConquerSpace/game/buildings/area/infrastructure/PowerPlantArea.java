@@ -1,13 +1,15 @@
 package ConquerSpace.game.buildings.area.infrastructure;
 
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.resources.Resource;
 
 /**
  *
  * @author zyunl
  */
-public class PowerPlantArea extends Area{
+public class PowerPlantArea extends Area implements Workable{
     //Needs the attribute 'energy'
     private Resource usesResource;
     //Amount of units needed to get each time
@@ -45,5 +47,14 @@ public class PowerPlantArea extends Area{
 
     public int getCurrentCapacity() {
         return currentCapacity;
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        return null;
+    }
+
+    @Override
+    public void processJob(Job j) {
     }
 }

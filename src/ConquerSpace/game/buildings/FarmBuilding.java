@@ -1,9 +1,9 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.population.Job;
+import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
-import ConquerSpace.game.population.Workable;
+import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.resources.farm.Crop;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -52,6 +52,12 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     
     public void setCity(City city) {
         this.city = city;
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        //Create jobs
+        return null;
     }
 
     public static enum FarmType {

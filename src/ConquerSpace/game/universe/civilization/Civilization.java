@@ -8,7 +8,7 @@ import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.population.Employer;
+import ConquerSpace.game.jobs.Employer;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.tech.Technologies;

@@ -1,5 +1,6 @@
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.jobs.Job;
 import java.awt.Color;
 
 /**

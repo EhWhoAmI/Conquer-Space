@@ -1,7 +1,7 @@
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.population.Job;
-import ConquerSpace.game.population.Workable;
+import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Resource;
@@ -83,5 +83,10 @@ public class BuildingBuilding extends Building implements Workable{
 
     public Civilization getBuilder() {
         return builder;
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
     }
 }
