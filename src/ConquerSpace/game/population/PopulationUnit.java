@@ -10,9 +10,9 @@ import ConquerSpace.game.jobs.JobType;
  */
 public class PopulationUnit {
 
-    private byte happiness;
-    private Race species;
-    private Job job;
+    public byte happiness;
+    public Race species;
+    public Job job;
 
     public PopulationUnit(Race species) {
         job = new Job(JobType.Jobless);

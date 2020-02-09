@@ -98,10 +98,10 @@ public class PlanetIndustry extends JPanel {
         industryInfoContainer.add("Farm", farmingInfoPanel);
         tabs.add(jobSortingOutPanel, "Industries");
         
-        availableJobs = new JPanel();
-        availableJobListModel = new JobListModel(p.planetJobs);
-        availableJobList = new JList<>(availableJobListModel);
-        availableJobs.add(new JScrollPane(availableJobList));
+        //availableJobs = new JPanel();
+        //availableJobListModel = new JobListModel(p.planetJobs);
+        //availableJobList = new JList<>(availableJobListModel);
+        //availableJobs.add(new JScrollPane(availableJobList));
         //tabs.add(availableJobs, "Available jobs");
         
         add(tabs);

@@ -32,8 +32,8 @@ public class Planet extends SpaceObject {
     private double eccentricity;
     private double rotation;
     
-    private double xpos;
-    private double ypos;
+    public double xpos;
+    public double ypos;
     
     public ArrayList<ResourceVein> resourceVeins;
     
@@ -63,9 +63,7 @@ public class Planet extends SpaceObject {
     private float degreesPerTurn = 0.0f;
     
     public ArrayList<City> cities;
-    
-    public ArrayList<Job> planetJobs;
-    
+        
     public ArrayList<PopulationUnit> population;
     
     private Person governor;
@@ -102,7 +100,7 @@ public class Planet extends SpaceObject {
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
         
-        planetJobs = new ArrayList<>();
+        //planetJobs = new ArrayList<>();
         population = new ArrayList<>();
         
         localLife = new ArrayList<>();
