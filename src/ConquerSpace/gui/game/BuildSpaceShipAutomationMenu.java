@@ -3,20 +3,18 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.ShipClass;
-import ConquerSpace.game.universe.ships.components.EngineComponent;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.Hull;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
+import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -39,7 +37,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.LineBorder;
 import org.json.JSONObject;
 
 /**
@@ -114,9 +111,16 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     //Hull is null means it is self designed
     private Hull selectedHull = null;
 
+    private NameGenerator nameGenerator;
+
     public BuildSpaceShipAutomationMenu(Civilization c) {
         this.civ = c;
         setLayout(new BorderLayout());
+
+        try {
+            nameGenerator = NameGenerator.getNameGenerator("component.names");
+        } catch (IOException ex) {
+        }
 
         JMenuBar menuBar = new JMenuBar();
         JMenu newStuff = new JMenu("Classes");
@@ -142,8 +146,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             civ.hulls.add(selectedHull);
             ShipClass sc = new ShipClass(shipNameField.getText(), selectedHull);
             //Add components
-            
-            
+
             civ.shipClasses.add(sc);
         });
 
@@ -173,6 +176,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             shipNameField = new JTextField();
             shipNameField.setColumns(16);
             randomShipNameButton = new JButton("Choose random name");
+            randomShipNameButton.addActionListener(l -> {
+                shipNameField.setText(nameGenerator.getName(0));
+            });
 
             massLabel = new JLabel("Mass");
             massText = new JLabel("0");
@@ -669,7 +675,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             engineSelectionPanel.add(engineListScrollPane);
             engineSelectionPanel.add(engineInfoPanel);
             chooseEnginePanel.add(engineSelectionPanel);
-            
+
             //Other panel...
             closeButton = new JButton("Close");
             closeButton.addActionListener(l -> {

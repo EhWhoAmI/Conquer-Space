@@ -126,7 +126,9 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         runningstatsButton.setFocusable(false);
         runningstatsButton.addActionListener((e) -> {
             DebugStatsWindow win = DebugStatsWindow.getInstance(universe);
-            getDesktopPane().add(win);
+            if (!win.isShowing()) {
+                getDesktopPane().add(win);
+            }
         });
 
         pan.add(turnLabel);

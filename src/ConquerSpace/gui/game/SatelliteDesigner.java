@@ -3,6 +3,7 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
+import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -10,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -72,9 +74,16 @@ public class SatelliteDesigner extends JPanel {
 
     private int mass = 0;
 
+    private NameGenerator componentGenerator;
+
     @SuppressWarnings("unchecked")
     public SatelliteDesigner(Civilization c) {
         setLayout(new BorderLayout());
+
+        try {
+            componentGenerator = NameGenerator.getNameGenerator("component.names");
+        } catch (IOException ex) {
+        }
 
         menuBar = new JMenuBar();
         JMenu satelliteMenu = new JMenu("Satellites");
@@ -113,13 +122,13 @@ public class SatelliteDesigner extends JPanel {
                 satelliteListModel.addElement(new SatelliteWrapper(obj));
             }
         });
-        
+
         newMenu.addActionListener(l -> {
             //Reset data...
             satelliteTypeList.setSelectedIndex(0);
             satelliteNameField.setText("");
         });
-        
+
         satelliteMenu.add(saveSatelliteMenu);
         satelliteMenu.add(newMenu);
         menuBar.add(satelliteMenu);
@@ -143,6 +152,10 @@ public class SatelliteDesigner extends JPanel {
         satelliteNameLabel = new JLabel("Name: ");
         satelliteNameField = new JTextField();
         getRandomSatelliteNameButton = new JButton("Get random name");
+        
+        getRandomSatelliteNameButton.addActionListener(l -> {
+            satelliteNameField.setText(componentGenerator.getName(0));
+        });
 
         satelliteMassLabel = new JLabel("Mass: ");
         satelliteMassValueLabel = new JLabel("0");

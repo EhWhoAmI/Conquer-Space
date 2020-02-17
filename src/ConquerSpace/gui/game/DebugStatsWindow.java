@@ -45,7 +45,7 @@ public class DebugStatsWindow extends JInternalFrame {
      * Universe
      */
     private Universe universe;
-
+    
     /**
      * Creates the window, and adds all things.
      */

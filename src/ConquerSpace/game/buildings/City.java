@@ -21,6 +21,7 @@ public class City implements PersonEnterable, Workable {
     private String name;
     public ArrayList<Building> buildings;
     public ArrayList<Job> jobs;
+    public ArrayList<Person> peopleAtCity;
 
     private UniversePath location;
 
@@ -29,9 +30,9 @@ public class City implements PersonEnterable, Workable {
 
     //Growth rates of the species...
     private HashMap<Race, Float> speciesRates;
-    
+
     private boolean resetJobs = false;
-    
+
     private JobProcessor jobProcessor;
 
     public City(UniversePath location) {
@@ -39,6 +40,7 @@ public class City implements PersonEnterable, Workable {
         jobs = new ArrayList<>();
         //jobProcessor = new JobProcessor();
         this.location = location;
+        peopleAtCity = new ArrayList<>();
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
@@ -90,7 +92,7 @@ public class City implements PersonEnterable, Workable {
         //Add all children jobs
         for (Building b : buildings) {
             Job[] jobs = b.jobsNeeded();
-            for(Job j : jobs) {
+            for (Job j : jobs) {
                 jobsNeeded.add(j);
             }
         }
@@ -107,12 +109,27 @@ public class City implements PersonEnterable, Workable {
     public boolean toResetJobs() {
         return resetJobs;
     }
-    
+
     public void resetJobs() {
         resetJobs = true;
     }
-    
+
     public void doneResettingJobs() {
         resetJobs = false;
+    }
+    
+    public int getPopulationSize() {
+        int i = 0;
+        for (Building b : buildings) {
+            if (b instanceof PopulationStorage) {
+                i += ((PopulationStorage) b).getPopulationArrayList().size();
+            }
+        }
+        return i;
+    }
+
+    @Override
+    public ArrayList<Person> getPeopleArrayList() {
+        return peopleAtCity;
     }
 }

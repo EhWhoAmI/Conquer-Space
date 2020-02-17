@@ -1,6 +1,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.resources.Resource;
@@ -39,11 +40,13 @@ public class GameController {
     public static ArrayList<EngineTechnology> engineTechnologys;
     public static ArrayList<JSONObject> events;
     public static ArrayList<PersonalityTrait> personalityTraits;
+    public static ArrayList<Person> people = new ArrayList<>();
 
     public static HashMap<String, Integer> shipTypes;
     public static HashMap<String, Integer> shipTypeClasses;
     public static GameUpdater updater;
     public static GameInitializer initer;
+    public static PeopleProcessor peopleProcessor;
     public static MusicPlayer musicPlayer;
 
     public static final int AU_IN_LTYR = 63241;
@@ -61,7 +64,8 @@ public class GameController {
         //Init universe
         updater = new GameUpdater(Globals.universe, Globals.date);
         initer = new GameInitializer(Globals.universe, Globals.date, updater);
-
+        peopleProcessor = new PeopleProcessor(Globals.universe);
+        
         initer.initGame();
 
         //Process the 0th turn and initalize the universe.
@@ -120,6 +124,8 @@ public class GameController {
 
             //Increment resources
             updater.processResources();
+            
+            peopleProcessor.createPeople();
 
             long end = System.currentTimeMillis();
 

@@ -4,6 +4,7 @@ import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.ShipComponentTypes;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
+import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -11,6 +12,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -76,11 +80,18 @@ public class ShipComponentDesigner extends JPanel {
     private final String ENGINE_COMPONENT = "engine";
 
     private int mass = 0;
+    
+    private NameGenerator componentGenerator;
 
     @SuppressWarnings("unchecked")
     public ShipComponentDesigner(Civilization c) {
         setLayout(new BorderLayout());
 
+        try {
+            componentGenerator =  NameGenerator.getNameGenerator("component.names");
+        } catch (IOException ex) {
+        }
+        
         menuBar = new JMenuBar();
         JMenu menu = new JMenu("Ship Components");
 
@@ -188,6 +199,10 @@ public class ShipComponentDesigner extends JPanel {
         nameLabel = new JLabel("Name: ");
         nameTextField = new JTextField();
         selectRandomNameButton = new JButton("Get Random Name");
+        
+        selectRandomNameButton.addActionListener(l -> {
+            nameTextField.setText(componentGenerator.getName(0));
+        });
 
         upperPanel.add(nameLabel);
         upperPanel.add(nameTextField);
