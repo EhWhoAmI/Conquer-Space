@@ -1,12 +1,21 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.gui.game.engineering.SatelliteDesigner;
+import ConquerSpace.gui.game.engineering.BuildSpaceShipAutomationMenu;
+import ConquerSpace.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.gui.game.engineering.LaunchSystemDesigner;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -35,8 +44,10 @@ public class MainInterfaceWindow extends JInternalFrame {
     private HullCreator hullCreator;
     private EconomyWindow economyWindow;
 
+    JTabbedPane shipsComponentsOverviewPanel;
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
     private SatelliteDesigner satelliteDesigner;
+    private LaunchSystemDesigner launchSystemDesigner;
 
     private CivInfoOverview civInfoOverview;
 
@@ -106,13 +117,39 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
 
-        JTabbedPane shipsComponentsOverviewPanel = new JTabbedPane();
+        shipsComponentsOverviewPanel = new JTabbedPane();
 
         buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(c);
         shipsComponentsOverviewPanel.add("Design Ship", buildSpaceShipAutomationMenu);
 
         satelliteDesigner = new SatelliteDesigner(c);
         shipsComponentsOverviewPanel.add("Design Satellite", satelliteDesigner);
+
+        launchSystemDesigner = new LaunchSystemDesigner(c);
+        JPanel launchWrapper = new JPanel();
+        launchWrapper.setLayout(new VerticalFlowLayout());
+        launchWrapper.add(launchSystemDesigner);
+        shipsComponentsOverviewPanel.add("Design Launch System", launchWrapper);
+
+        updateComponents();
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                updateComponents();
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                updateComponents();
+            }
+        });
+
+        addPropertyChangeListener(l -> {
+            updateComponents();
+        });
 
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(c);
         shipsComponentsOverviewPanel.add("Ship Components", shipComponentDesigner);
@@ -219,5 +256,14 @@ public class MainInterfaceWindow extends JInternalFrame {
     public void passEvent(Event e) {
         //Add thing
         eventViewer.passEvent(e);
+    }
+
+    private void updateComponents() {
+        shipsComponentsOverviewPanel.setEnabledAt(2, false);
+        shipsComponentsOverviewPanel.setToolTipTextAt(2, "You need to research a launch system in the Research Tab!");
+        if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
+            shipsComponentsOverviewPanel.setEnabledAt(2, true);
+            shipsComponentsOverviewPanel.setToolTipText("");
+        }
     }
 }

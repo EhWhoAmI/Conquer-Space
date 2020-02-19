@@ -1,4 +1,4 @@
-package ConquerSpace.gui.game;
+package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
