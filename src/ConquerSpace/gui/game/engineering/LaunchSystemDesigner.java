@@ -52,7 +52,6 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         reusabilityCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         launchVehicleList = new javax.swing.JList<>();
 
@@ -233,13 +232,13 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
         launchVehicleList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane3.setViewportView(launchVehicleList);
 
-        jPanel2.add(jScrollPane3);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        add(jPanel2, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jScrollPane3, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
@@ -268,13 +267,15 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
 
     private void saveLaunchSystemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveLaunchSystemButtonActionPerformed
         //Do the things
-        LaunchVehicle vehicle = new LaunchVehicle();
-        vehicle.setName(nameField.getText());
-        vehicle.setSystemType((LaunchSystem) launchTypesValue.getSelectedItem());
-        vehicle.setMaximumMass((Integer) payloadmassSpinner.getValue());
-        vehicle.setReusability(reusabilityCheckbox.isSelected());
-        c.launchVehicles.add(vehicle);
-        launchVehicleListModel.fireEvent();
+        if (!nameField.getText().isEmpty()) {
+            LaunchVehicle vehicle = new LaunchVehicle();
+            vehicle.setName(nameField.getText());
+            vehicle.setSystemType((LaunchSystem) launchTypesValue.getSelectedItem());
+            vehicle.setMaximumMass((Integer) payloadmassSpinner.getValue());
+            vehicle.setReusability(reusabilityCheckbox.isSelected());
+            c.launchVehicles.add(vehicle);
+            launchVehicleListModel.fireEvent();
+        }
     }//GEN-LAST:event_saveLaunchSystemButtonActionPerformed
 
     private void updateComponent() {
@@ -291,7 +292,6 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JComboBox<LaunchSystem> launchTypesValue;
@@ -316,7 +316,7 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
         public LaunchVehicle getElementAt(int index) {
             return c.launchVehicles.get(index);
         }
-        
+
         public void fireEvent() {
             fireIntervalAdded(this, c.launchVehicles.size(), c.launchVehicles.size());
         }

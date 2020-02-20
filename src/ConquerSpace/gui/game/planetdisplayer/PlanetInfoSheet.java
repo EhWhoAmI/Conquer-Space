@@ -21,7 +21,7 @@ public class PlanetInfoSheet extends JPanel {
     JTabbedPane tpane;
     PlanetOverview overview;
     PlanetPopulation population;
-    SpacePortMenu spacePort;
+    SpacePortMenuSheet spacePort;
     AtmosphereInfo atmosphere;
     PlanetIndustry industry;
     LocalLifeMenu localLifeMenu;
@@ -42,7 +42,7 @@ public class PlanetInfoSheet extends JPanel {
         overview = new PlanetOverview(u, p, c);
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetPopulation(u, p, 0);
-        spacePort = new SpacePortMenu(p, c);
+        spacePort = new SpacePortMenuSheet(p, c);
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
@@ -81,7 +81,7 @@ public class PlanetInfoSheet extends JPanel {
     }
 
     public void update() {
-        spacePort.update();
+        //spacePort.update();
         industry.update();
         population.update();
 

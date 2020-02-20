@@ -463,7 +463,7 @@ public class GameUpdater {
             if (building instanceof BuildingBuilding) {
                 BuildingBuilding build = (BuildingBuilding) building;
                 if (build.getLength() > 0) {
-                    //build.incrementTick();
+                    build.decrementLength(1);
                 } else {
                     //Done!
                     //Replace
