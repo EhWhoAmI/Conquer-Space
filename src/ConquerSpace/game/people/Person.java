@@ -1,5 +1,6 @@
 package ConquerSpace.game.people;
 
+import ConquerSpace.game.jobs.Employer;
 import java.util.ArrayList;
 
 /**
@@ -8,11 +9,13 @@ import java.util.ArrayList;
  */
 public class Person {
     private String name;
-    private int age;
+    public int age;
     private PersonEnterable position;
     public ArrayList<PersonalityTrait> traits;
     private final Role role;
     private int wealth;
+    public Employer employer;
+    private boolean dead;
     
     //Not sure what to add to this for now
     //private ArrayList<?> multipliers;
@@ -20,6 +23,7 @@ public class Person {
 
     public Person(String name, int age) {
         this.name = name;
+        this.dead = false;
         this.age = age;
         traits = new ArrayList<>();
         role = new Role();
@@ -67,5 +71,13 @@ public class Person {
     
     public String roleText() {
         return role.getText();
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 }

@@ -18,6 +18,7 @@ import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
+import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
@@ -27,6 +28,11 @@ import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.civilization.government.Government;
+import ConquerSpace.game.universe.civilization.government.GovernmentPosition;
+import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPosition;
+import ConquerSpace.game.universe.civilization.government.PoliticalPowerSource;
+import ConquerSpace.game.universe.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
@@ -108,8 +114,6 @@ public class GameInitializer {
 
             initalizeCivValues(c);
 
-            initializeGovernment(c, gen);
-
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             material.setId(0);
             c.hullMaterials.add(material);
@@ -156,8 +160,12 @@ public class GameInitializer {
 
                 //Add unrecruited people
                 createUnrecruitedPeople(c, starting, gen);
+
+                //
+                initializeGovernment(c, gen);
+
             }
-            c.government.getLeader().setPosition(c.getCapitalCity());
+            c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
         }
 
         updater.calculateControl();
@@ -378,10 +386,10 @@ public class GameInitializer {
 
             //Add leader to city
             Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
-            gov.setPosition(city);
             city.setGovernor(gov);
-            c.people.add(gov);
 
+            c.people.add(gov);
+            PeopleProcessor.placePerson(city, gov);
             //Set growth
             //Add city
             starting.cities.add(city);
@@ -463,7 +471,7 @@ public class GameInitializer {
         r.setSkill(1);
         //Add random trait 
         r.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
-        r.setPosition(c.getCapitalCity());
+        PeopleProcessor.placePerson(c.getCapitalCity(), r);
 
         c.people.add(r);
     }
@@ -486,19 +494,47 @@ public class GameInitializer {
     }
 
     private void initializeGovernment(Civilization c, NameGenerator gen) {
-        c.government.setLeaderTitle("Supreme Leader");
         //Create person
         int age = (int) (Math.random() * 40) + 20;
         String person = "name";
         person = gen.getName((int) Math.round(Math.random()));
-        Administrator dude = new Administrator(person, age);
+        Administrator dude = new Administrator(person, 400);
         //nerd.setSkill((int) (Math.random() * 5) + 1);
         dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
         dude.setPosition(c.getCapitalCity());
         dude.setRole("Ruling " + c.getSpeciesName());
 
-        c.people.add(dude);
-        c.government.setLeader(dude);
+        c.government = new Government();
+        //Because democracy is for noobs
+        c.government.politicalPowerSource = PoliticalPowerSource.Autocracy;
+        //Set leader
+        HeritableGovernmentPosition leader = new HeritableGovernmentPosition();
+        leader.setName("God-Emperor");
+        leader.setMethod(PoliticalPowerTransitionMethod.Inherit);
+        c.government.officials.put(leader, dude);
+        c.government.headofGovernment = leader;
+        c.government.headofState = leader;
+        PeopleProcessor.placePerson(c.getCapitalCity(), dude);
+        dude.position = leader;
+        c.employ(dude);
+
+        person = gen.getName((int) Math.round(Math.random()));
+
+        Administrator crownPrince = new Administrator(person, 0);
+        //nerd.setSkill((int) (Math.random() * 5) + 1);
+        crownPrince.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+        crownPrince.setPosition(c.getCapitalCity());
+        crownPrince.setRole("Loafing around -- Lazy brat");
+        //Add heir to the throne of the GOD EMPEROR
+
+        GovernmentPosition crownPrincePosition = new GovernmentPosition();
+        c.government.officials.put(crownPrincePosition, crownPrince);
+        crownPrincePosition.setName("Crown Prince");
+        leader.nextInLine = crownPrincePosition;
+        crownPrince.position = crownPrincePosition;
+        
+        PeopleProcessor.placePerson(c.getCapitalCity(), crownPrince);
+        c.employ(crownPrince);
     }
 
     private void initVision(Civilization c, Universe u) {
@@ -547,7 +583,7 @@ public class GameInitializer {
                 Building b = buildingIterator.next();
                 building.addBuilding(b);
             }
-            
+
             powerPlant.setUsedResource(resource);
             powerPlant.setMaxVolume(1000);
             building.areas.add(powerPlant);

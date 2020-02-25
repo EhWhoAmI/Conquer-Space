@@ -31,6 +31,7 @@ public class PersonWindow extends JPanel {
     private JLabel personRoleLabel;
     private JLabel skillLabel;
     private JLabel positionLabel;
+    private JLabel isDeadLabel;
     private DefaultListModel<PersonalityTrait> personalityListModel;
     private JList<PersonalityTrait> personPersonalityList;
 
@@ -58,6 +59,11 @@ public class PersonWindow extends JPanel {
                     skillLabel.setText("Skill: " + ((Scientist) personList.getSelectedValue()).getSkill());
                 }
                 positionLabel.setText("Location: " + personList.getSelectedValue().getPosition().getName() + ", " + u.getSpaceObject(personList.getSelectedValue().getPosition().getUniversePath()));
+                if (personList.getSelectedValue().isDead()) {
+                    isDeadLabel.setText("Ded - F");
+                } else {
+                    isDeadLabel.setText("");
+                }
 
                 personalityListModel.clear();
                 for (PersonalityTrait pt : personList.getSelectedValue().traits) {
@@ -81,6 +87,8 @@ public class PersonWindow extends JPanel {
         skillLabel = new JLabel("Skill: ");
         positionLabel = new JLabel("Location: ");
 
+        isDeadLabel = new JLabel();
+
         personalityListModel = new DefaultListModel<>();
         personPersonalityList = new JList<>(personalityListModel);
 
@@ -90,6 +98,7 @@ public class PersonWindow extends JPanel {
         container.add(personRoleLabel);
         container.add(skillLabel);
         container.add(positionLabel);
+        container.add(isDeadLabel);
         container.add(new JScrollPane(personPersonalityList));
         add(pane);
         add(container);

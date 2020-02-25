@@ -64,9 +64,10 @@ public class GameController {
         //Init universe
         updater = new GameUpdater(Globals.universe, Globals.date);
         initer = new GameInitializer(Globals.universe, Globals.date, updater);
-        peopleProcessor = new PeopleProcessor(Globals.universe);
-        
+
         initer.initGame();
+
+        peopleProcessor = new PeopleProcessor(Globals.universe, Globals.date);
 
         //Process the 0th turn and initalize the universe.
         updater.updateUniverse(Globals.universe, Globals.date);
@@ -106,7 +107,7 @@ public class GameController {
 
         //Move ships
         updater.moveShips();
-        
+
         updater.updateObjectPositions();
 
         //Check for month increase
@@ -124,8 +125,10 @@ public class GameController {
 
             //Increment resources
             updater.processResources();
-            
+
             peopleProcessor.createPeople();
+
+            peopleProcessor.processPeople();
 
             long end = System.currentTimeMillis();
 

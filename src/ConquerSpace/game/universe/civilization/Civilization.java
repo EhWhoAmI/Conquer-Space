@@ -9,6 +9,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.jobs.Employer;
+import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.tech.Technologies;
@@ -428,5 +429,12 @@ public class Civilization implements Employer{
     
     public void passEvent(Event e) {
         controller.passEvent(e);
+    }
+    
+    public void employ(Person p) {
+        people.add(p);
+        if(p instanceof Administrator) {
+            ((Administrator) p).employer = this;
+        }
     }
 }

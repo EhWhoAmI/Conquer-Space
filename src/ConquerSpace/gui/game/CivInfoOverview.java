@@ -1,11 +1,14 @@
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.people.Person;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -53,9 +56,11 @@ public class CivInfoOverview extends JPanel {
         populationPanel.add(populationLabel);
 
         governmentPanel = new JPanel(new VerticalFlowLayout());
-        JLabel civLeader = new JLabel(c.government.getLeaderTitle() + " " + c.government.getLeader().getName());
+
+        Person p = c.government.officials.get(c.government.headofState);
+        JLabel civLeader = new JLabel(c.government.headofState.getName() + " " + p.getName());
         governmentPanel.add(civLeader);
-        
+
         mainTabs.addTab("Civilization", mainPanel);
         //mainTabs.addTab("Resources", resourcesPanel);
         mainTabs.addTab("Population", populationPanel);
@@ -67,7 +72,21 @@ public class CivInfoOverview extends JPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 //Update info...
+                Person p = c.government.officials.get(c.government.headofState);
+
                 populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
+                civLeader.setText(c.government.headofState.getName() + " " + p.getName());
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                //Update info...
+                Person p = c.government.officials.get(c.government.headofState);
+
+                populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
+                civLeader.setText(c.government.headofState.getName() + " " + p.getName());
             }
         });
         setVisible(true);

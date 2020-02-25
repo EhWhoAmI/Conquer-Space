@@ -3,8 +3,12 @@ package ConquerSpace.game;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.life.Species;
+import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
+import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Race;
+import ConquerSpace.game.universe.civilization.government.GovernmentPosition;
+import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -18,6 +22,7 @@ public class PeopleProcessor {
 
     Universe u;
     StarDate date;
+    private StarDate before;
 
     public void createPeople() {
         //Iterate through planets and check for peopl
@@ -52,12 +57,12 @@ public class PeopleProcessor {
 
     public Person createPerson(Race s) {
         //Set age...
-        int age = (int) (Math.random()*60);
-        
+        int age = (int) (Math.random() * 60);
+
         Person p = new Person("Bobby Tables", age);
         return p;
     }
-    
+
     public void processPeople() {
         for (int starSystemCount = 0; starSystemCount < u.getStarSystemCount(); starSystemCount++) {
             StarSystem starSystem = u.getStarSystem(starSystemCount);
@@ -67,17 +72,61 @@ public class PeopleProcessor {
 
                 //If city is populated
                 if (planet.isHabitated()) {
-                    for (City c : planet.cities) {
-                        for(Person p : c.peopleAtCity) {
-                            //Process stuff
-                        }
-                    }
+                    processPlanet(planet);
                 }
+            }
+        }
+        //Set previous date
+        resetDate();
+    }
+
+    public PeopleProcessor(Universe u, StarDate date) {
+        this.u = u;
+        this.date = date;
+        resetDate();
+    }
+
+    private void resetDate() {
+        before = new StarDate();
+        before.bigint = date.bigint;
+    }
+
+    public static void placePerson(PersonEnterable enter, Person who) {
+        enter.getPeopleArrayList().add(who);
+        who.setPosition(enter);
+    }
+
+    private void processDeath(Person p) {
+        //Kill him
+        //Remove from everywhere
+        p.setDead(true);
+        if (p instanceof Administrator) {
+            if (((Administrator) p).position instanceof HeritableGovernmentPosition) {
+                HeritableGovernmentPosition pos = (HeritableGovernmentPosition) ((Administrator) p).position;
+                GovernmentPosition nextPosition = pos.nextInLine;
+                //Get person
+                Person next = ((Administrator) p).employer.government.officials.get(nextPosition);
+                ((Administrator) p).employer.government.officials.put(pos, next);
+                next.setRole("GOT EM");
             }
         }
     }
 
-    public PeopleProcessor(Universe u) {
-        this.u = u;
+    private void processPlanet(Planet planet) {
+        for (City c : planet.cities) {
+            for (Person p : c.peopleAtCity) {
+                if (!p.isDead()) {
+                    //Process stuff
+                    //Increment age
+
+                    long previous = date.bigint - before.bigint;
+                    p.age += (int) previous;
+
+                    if (p.age > 500) {
+                        processDeath(p);
+                    }
+                }
+            }
+        }
     }
 }
