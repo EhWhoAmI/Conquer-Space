@@ -1,0 +1,23 @@
+[
+  {
+    name: Rocket
+    tech: rocketery:18
+    size: 10
+    safety: 100
+    cost: 50000
+    "construct-cost": 1000000
+    reusable: false
+    cargo: 200000
+  }
+  {
+    name: Space Plane
+    tech: space planes:16
+    size: 50
+    safety: 100
+    cost: 5000
+    "construct-cost": 100000
+    reusable: true
+    "reuse cost": 500
+    cargo: 200000
+  }
+]

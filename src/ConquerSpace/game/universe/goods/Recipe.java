@@ -7,7 +7,7 @@ import java.util.HashMap;
  * @author zyunl
  */
 public class Recipe {
-    HashMap<Goods, Integer> recipie;
+    HashMap<Good, Integer> recipie;
 
     public Recipe() {
         recipie = new HashMap<>();

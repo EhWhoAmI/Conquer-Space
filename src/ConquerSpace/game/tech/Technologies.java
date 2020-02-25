@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.apache.logging.log4j.Logger;
+import org.hjson.JsonValue;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,11 +36,13 @@ public class Technologies {
 
         File[] tempFiles = techFolder.listFiles();
         for (File f : tempFiles) {
-            try {
-                readTechFromFile(f);
-            } catch (IOException ex) {
-                LOGGER.warn("IOException", ex);
-            } catch (JSONException jsone) {
+            if (!f.getName().equals("readme.txt")) {
+                try {
+                    readTechFromFile(f);
+                } catch (IOException ex) {
+                    LOGGER.warn("IOException", ex);
+                } catch (JSONException jsone) {
+                }
             }
         }
     }
@@ -50,6 +53,8 @@ public class Technologies {
         fis.read(data);
         fis.close();
         String text = new String(data);
+        text = JsonValue.readHjson(text).toString();
+
         JSONArray techList = new JSONArray(text);
         //Iterate over the techonologies
         for (int i = 0; i < techList.length(); i++) {

@@ -1,0 +1,552 @@
+[
+  {
+    name: life
+    deps: []
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 0
+    action:
+    [
+      field(knowledge:10)
+    ]
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 0
+    id: 0
+  }
+  {
+    name: hunting and gathering
+    deps:
+    [
+      life
+    ]
+    level: 1
+    type: UNLOCK
+    upgradable: true
+    difficulty: 0
+    action: []
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 1
+    id: 2
+  }
+  {
+    name: primitive farming
+    deps:
+    [
+      life
+    ]
+    level: 2
+    type: UNLOCK
+    upgradable: true
+    difficulty: 0
+    action: []
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 2
+    id: 3
+  }
+  {
+    name: primitive houses
+    deps:
+    [
+      life
+    ]
+    level: 2
+    type: UNLOCK
+    upgradable: true
+    difficulty: 0
+    action: []
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 3
+    id: 5
+  }
+  {
+    name: primitive mining
+    deps:
+    [
+      life
+    ]
+    level: 2
+    type: UNLOCK
+    difficulty: 0
+    upgradable: true
+    action: []
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 4
+    id: 6
+  }
+  {
+    name: primitive power
+    deps:
+    [
+      life
+    ]
+    level: 3
+    type: UNLOCK
+    upgradable: true
+    difficulty: 0
+    action: []
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 5
+    id: 7
+  }
+  {
+    name: basic medicine
+    deps:
+    [
+      life
+    ]
+    level: 1
+    type: UNLOCK
+    upgradable: true
+    difficulty: 0
+    action: []
+    fields:
+    [
+      Medicine
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 6
+    id: 8
+  }
+  {
+    name: basic science
+    deps:
+    [
+      life
+    ]
+    level: 1
+    type: UNLOCK
+    upgradable: true
+    onupgrade: []
+    difficulty: 0
+    action:
+    [
+      field(science:10)
+      field(biology:10)
+      field(chemistry:10)
+      tech(flight):20
+      tech(rocket science):20
+    ]
+    fields:
+    [
+      Knowledge
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 7
+    id: 9
+  }
+  {
+    name: Chemical propulsion
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 2
+    action:
+    [
+      thrust(1)
+    ]
+    fields:
+    [
+      Chemistry
+    ]
+    tags:
+    [
+      Propulsion
+    ]
+    floor: 7
+    id: 10
+  }
+  {
+    name: Electrothermal propulsion
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 3
+    action:
+    [
+      thrust(2)
+    ]
+    fields:
+    [
+      Chemistry
+    ]
+    tags:
+    [
+      Propulsion
+    ]
+    floor: 7
+    id: 11
+  }
+  {
+    name: Ion propulsion
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 3
+    action:
+    [
+      thrust(0)
+    ]
+    fields:
+    [
+      Chemistry
+    ]
+    tags:
+    [
+      Propulsion
+    ]
+    floor: 7
+    id: 12
+  }
+  {
+    name: Plasma propulsion
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 3
+    action:
+    [
+      thrust(3)
+    ]
+    fields:
+    [
+      Chemistry
+    ]
+    tags:
+    [
+      Propulsion
+    ]
+    floor: 7
+    id: 13
+  }
+  {
+    name: Nuclear propulsion
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 2
+    action:
+    [
+      thrust(4)
+    ]
+    fields:
+    [
+      Chemistry
+    ]
+    tags:
+    [
+      Propulsion
+    ]
+    floor: 7
+    id: 14
+  }
+  {
+    name: flight
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 2
+    action:
+    [
+      tech(space planes):100
+    ]
+    fields:
+    [
+      Aeronautics
+    ]
+    tags:
+    [
+      space travel base
+    ]
+    floor: 8
+    id: 15
+  }
+  {
+    name: space planes
+    deps:
+    [
+      flight
+    ]
+    level: 7
+    type: UNLOCK
+    upgradable: true
+    difficulty: 5
+    action:
+    [
+      launch(Space Plane)
+    ]
+    fields:
+    [
+      Aeronautics
+    ]
+    tags:
+    [
+      space travel
+    ]
+    floor: 9
+    id: 16
+  }
+  {
+    name: rocket science
+    deps:
+    [
+      life
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 2
+    action:
+    [
+      tech(rocketery):100
+    ]
+    fields:
+    [
+      Physics
+    ]
+    tags:
+    [
+      space travel base
+    ]
+    floor: 8
+    id: 17
+  }
+  {
+    name: rocketery
+    deps:
+    [
+      rocket science
+    ]
+    level: 5
+    type: UNLOCK
+    upgradable: true
+    difficulty: 5
+    action:
+    [
+      launch(Rocket)
+    ]
+    fields:
+    [
+      Aeronautics
+    ]
+    tags:
+    [
+      space travel
+    ]
+    floor: 9
+    id: 18
+  }
+  {
+    name: astronomy
+    deps:
+    [
+      life
+    ]
+    level: 2
+    type: UNLOCK
+    upgradable: true
+    difficulty: 0
+    action:
+    [
+      tech(optics):100
+    ]
+    fields:
+    [
+      Astronomy
+    ]
+    tags:
+    [
+      Starting
+      astronomy
+    ]
+    floor: 10
+    id: 19
+  }
+  {
+    name: optics
+    deps:
+    [
+      astronomy
+    ]
+    level: 3
+    type: UNLOCK
+    upgradable: true
+    difficulty: 1
+    action:
+    [
+      tech(telescopes):100
+      tech(radio telescopes):100
+      tech(x-ray telescopes):100
+    ]
+    fields:
+    [
+      Astronomy
+    ]
+    tags:
+    [
+      astronomy
+    ]
+    floor: 11
+    id: 20
+  }
+  {
+    name: telescopes
+    deps:
+    [
+      life
+    ]
+    level: 3
+    type: UNLOCK
+    upgradable: true
+    difficulty: 1
+    action: []
+    fields:
+    [
+      Astronomy
+    ]
+    tags:
+    [
+      astronomy
+    ]
+    floor: 12
+    id: 21
+  }
+  {
+    name: radio telescopes
+    deps:
+    [
+      life
+    ]
+    level: 3
+    type: UNLOCK
+    upgradable: true
+    difficulty: 1
+    action: []
+    fields:
+    [
+      Astronomy
+    ]
+    tags:
+    [
+      astronomy
+    ]
+    floor: 13
+    id: 22
+  }
+  {
+    name: x-ray telescopes
+    deps:
+    [
+      life
+    ]
+    level: 3
+    type: UNLOCK
+    upgradable: true
+    difficulty: 1
+    action: []
+    fields:
+    [
+      Astronomy
+    ]
+    tags:
+    [
+      astronomy
+    ]
+    floor: 14
+    id: 24
+  }
+  {
+    name: space telescopes
+    deps:
+    [
+      telescopes
+    ]
+    level: 3
+    type: UNLOCK
+    upgradable: true
+    difficulty: 1
+    action: []
+    fields:
+    [
+      Astronomy
+    ]
+    tags:
+    [
+      astronomy
+    ]
+    floor: 15
+    id: 25
+  }
+]
