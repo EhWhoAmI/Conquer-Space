@@ -2,6 +2,7 @@ package ConquerSpace.gui.start;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
@@ -115,6 +116,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
             // Start time of logging
             long loadingStart = System.currentTimeMillis();
+            GameLoader.load();
             DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
             Universe universe = gen.generate(config, civilizationConfig, seed);
             //Logger end time

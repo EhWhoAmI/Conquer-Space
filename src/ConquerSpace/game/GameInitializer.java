@@ -34,9 +34,11 @@ import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPos
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerSource;
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.resources.farm.Crop;
+import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -74,23 +76,6 @@ public class GameInitializer {
     }
 
     public void initGame() {
-        //Init tech and fields
-        Fields.readFields();
-        Technologies.readTech();
-
-        //All things to load go here!!!
-        readLaunchSystems();
-        readSatellites();
-        readShipTypes();
-        readShipComponents();
-        readEngineTechs();
-        readPersonalityTraits();
-
-        readBuildingCosts();
-
-        //Events
-        readPopulationEvents();
-
         //Do calculations for system position before initing for observataries
         updater.updateObjectPositions();
 

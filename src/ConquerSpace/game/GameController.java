@@ -4,6 +4,8 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.goods.Element;
+import ConquerSpace.game.universe.goods.NonElement;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -48,19 +50,16 @@ public class GameController {
     public static GameInitializer initer;
     public static PeopleProcessor peopleProcessor;
     public static MusicPlayer musicPlayer;
-
+    
+    public static ArrayList<Element> elements;
+    public static ArrayList<NonElement> rawMaterials;
+    
     public static final int AU_IN_LTYR = 63241;
 
     /**
      * Constructor. Inits all components.
      */
     public GameController() {
-        //Init python engine
-        satelliteTemplates = new ArrayList<>();
-        shipTypes = new HashMap<>();
-        shipTypeClasses = new HashMap<>();
-        shipComponentTemplates = new ArrayList<>();
-
         //Init universe
         updater = new GameUpdater(Globals.universe, Globals.date);
         initer = new GameInitializer(Globals.universe, Globals.date, updater);

@@ -47,9 +47,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Create random 
         Random rand = new Random(seed);
 
-        //Load resources
-        AssetReader.readResources();
-
         //Create star systems
         int starSystemCount = 100;
         switch (u.universeSize) {
