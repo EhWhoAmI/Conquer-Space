@@ -1,3 +1,20 @@
+/*
+ * Conquer Space - Conquer Space!
+ * Copyright (C) 2019 EhWhoAmI
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
@@ -33,6 +50,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.resources.farm.Crop;
@@ -48,6 +66,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.CQSPLogger;
 import ConquerSpace.util.DistributedRandomNumberGenerator;
+import ConquerSpace.util.Warning;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -207,7 +226,7 @@ public class GameUpdater {
 
     }
 
-    public void storeResource(Resource resourceType, int amount, int owner, UniversePath from) {
+    public void storeResource(Good resourceType, int amount, int owner, UniversePath from) {
         //Process
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
@@ -232,9 +251,9 @@ public class GameUpdater {
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
-            if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
-                return true;
-            }
+            //if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
+                //return true;
+            //}
         }
         return false;
     }
@@ -272,6 +291,7 @@ public class GameUpdater {
         }
     }
 
+    @Warning("Warn")
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
@@ -282,10 +302,10 @@ public class GameUpdater {
             for (ResourceStockpile s : c.resourceStorages) {
                 //Get resource types allowed, and do stuff
                 //c.resourceList.
-                for (Resource type : s.storedTypes()) {
+                for (Good type : s.storedTypes()) {
                     //add to index
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
-                    c.resourceList.put(type, amountToAdd);
+                    //c.resourceList.put(type, amountToAdd);
                 }
             }
         }
@@ -363,7 +383,7 @@ public class GameUpdater {
                         Resource resource = set.getKey();
                         Integer amount = set.getValue();
                         //Add to the job
-                        constructionJob.resources.put(resource, -amount);
+                        //constructionJob.resources.put(resource, -amount);
                     }
                     //Add job to building
                     p.jobs.add(constructionJob);
@@ -443,7 +463,7 @@ public class GameUpdater {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
 
-            job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
+            //job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
             c.jobs.add(job);
         }
     }
@@ -580,7 +600,7 @@ public class GameUpdater {
                     //Fraction it so it does not accelerate at a crazy rate
                     //Do subtractions here in the future, like happiness, and etc.
                     //Process job
-                    for (Resource r : unit.getJob().resources.keySet()) {
+                    for (Good r : unit.getJob().resources.keySet()) {
                         storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
                     }
                 }
@@ -613,17 +633,17 @@ public class GameUpdater {
         popJob.setPay(100);
         if (!popJob.resources.containsKey(GameController.foodResource)) {
             //Add the resource
-            popJob.resources.put(GameController.foodResource, 0);
+            //popJob.resources.put(GameController.foodResource, 0);
         }
         //Then subtract it
-        int food = popJob.resources.get(GameController.foodResource);
+        //int food = popJob.resources.get(GameController.foodResource);
 
         Employer employer = popJob.getEmployer();
         if (employer != null) {
             employer.changeMoney(-popJob.getPay());
         }
-        food -= unit.getSpecies().getFoodPerMonth();
-        popJob.resources.put(GameController.foodResource, food);
+        //food -= unit.getSpecies().getFoodPerMonth();
+        //popJob.resources.put(GameController.foodResource, food);
         //.out.println(food);
     }
 

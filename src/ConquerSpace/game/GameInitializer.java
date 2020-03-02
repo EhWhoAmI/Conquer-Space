@@ -1,3 +1,20 @@
+/*
+ * Conquer Space - Conquer Space!
+ * Copyright (C) 2019 EhWhoAmI
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package ConquerSpace.game;
 
 import static ConquerSpace.game.AssetReader.*;
@@ -35,6 +52,7 @@ import ConquerSpace.game.universe.civilization.government.PoliticalPowerSource;
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.goods.Element;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.resources.farm.Crop;
@@ -264,9 +282,9 @@ public class GameInitializer {
         storage.setOwner(c);
         //Add all possible resources
         //Get starting resources...
-        for (Resource res : GameController.resources) {
+        /*for (Good res : GameController.rawMaterials) {
             storage.addResourceTypeStore(res);
-        }
+        }*/
 
         GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 

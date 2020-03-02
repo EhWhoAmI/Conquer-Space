@@ -1,3 +1,20 @@
+/*
+ * Conquer Space - Conquer Space!
+ * Copyright (C) 2019 EhWhoAmI
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package ConquerSpace.game.universe.spaceObjects;
 
 import ConquerSpace.game.buildings.Building;
@@ -11,6 +28,7 @@ import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import java.util.ArrayList;
@@ -36,6 +54,7 @@ public class Planet extends SpaceObject {
     public double ypos;
     
     public ArrayList<ResourceVein> resourceVeins;
+    public ArrayList<Stratum> strata;
     
     int id;
 

@@ -1,0 +1,24 @@
+[
+    {
+        name: Hematite 
+        // Iron ore
+        formula: [
+            "Iron:2"
+            "Oxygen:3"
+        ]
+    },
+    {
+        name: Magnetite 
+        // Iron ore
+        formula: [
+            "Iron:3"
+            "Oxygen:4"
+        ]
+    },
+    {
+        name: Graphite
+        formula: [
+            "Carbon:1"
+        ]
+    }
+]

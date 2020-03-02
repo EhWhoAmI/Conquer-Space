@@ -3,7 +3,7 @@
 /* Template for your convenience
 
 {
-    name: iron
+    name:
     id: 
     rarity: 
     value: 

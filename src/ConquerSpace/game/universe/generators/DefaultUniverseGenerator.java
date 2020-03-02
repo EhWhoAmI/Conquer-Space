@@ -1,3 +1,20 @@
+/*
+ * Conquer Space - Conquer Space!
+ * Copyright (C) 2019 EhWhoAmI
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.AssetReader;
@@ -14,6 +31,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.spaceObjects.Planet;
@@ -402,11 +420,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Add resource veins
 
         int idCount = 0;
-        for (Resource res : GameController.resources) {
+        /*for (Good res : GameController.ores) {
             //Process... 
             //Determines the resource 'richness' of a planet
             int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
-            float rarity = res.getRarity();
+            float rarity = 0;//res.getRarity();
             float probality = rand.nextFloat();
             //Then count
             if (true) {
@@ -415,16 +433,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 //Add that amount
                 for (int resCount = 0; resCount < amount; resCount++) {
                     //Add the resource
-                    int resourceVolume = (int) (randint(rand, 50000, 100000) * res.getDensity());
-                    ResourceVein vein = new ResourceVein(res, resourceVolume);
+                    //int resourceVolume = (int) (randint(rand, 50000, 100000) * res.getDensity());
+                    ResourceVein vein = new ResourceVein(res, 1);
                     vein.setId(idCount++);
-                    vein.setRadius(randint(rand, res.getDistributionLow(), res.getDistributionHigh()));
+                    //vein.setRadius(randint(rand, res.getDistributionLow(), res.getDistributionHigh()));
                     vein.setX(rand.nextInt(planetSize * 2));
                     vein.setY(rand.nextInt(planetSize));
                     p.resourceVeins.add(vein);
                 }
             }
-        }
+        }*/
     }
 
     private void generateLocalLife(Random rand, Planet p) {

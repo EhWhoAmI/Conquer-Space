@@ -1,7 +1,26 @@
+/*
+ * Conquer Space - Conquer Space!
+ * Copyright (C) 2019 EhWhoAmI
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package ConquerSpace.tools;
 
 import ConquerSpace.game.AssetReader;
+import static ConquerSpace.game.AssetReader.readHjsonFromDirInArray;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.universe.resources.Resource;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import java.awt.Color;
@@ -53,10 +72,12 @@ public class ResourceViewer extends JFrame {
 
     public ResourceViewer() {
         setTitle("Resource Config");
-        
+
         //Open resource file
         setLayout(new HorizontalFlowLayout());
-        AssetReader.readResources();
+
+        GameLoader.loadResources();
+
         resources = GameController.resources;
 
         //Open the text...

@@ -1,9 +1,27 @@
+/*
+ * Conquer Space - Conquer Space!
+ * Copyright (C) 2019 EhWhoAmI
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package ConquerSpace.game;
 
 import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.goods.Element;
+import ConquerSpace.game.universe.goods.NonElement;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -31,6 +49,7 @@ public class AssetReader {
     private static final Logger LOGGER = CQSPLogger.getLogger(AssetReader.class.getName());
 
     //This is kinda hacked together, but it's not too fancy
+    @SuppressWarnings("unchecked")
     public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, PassThingy thing) {
         ArrayList<T> elements = new ArrayList<>();
         //Get the launch systems folder
@@ -321,6 +340,10 @@ public class AssetReader {
         PersonalityTrait trait = new PersonalityTrait();
         trait.setName(name);
         return trait;
+    }
+    
+    public static Object processGood(JSONObject obj) {
+        return new NonElement("sadf", 0, 12, 4);
     }
 }
 
