@@ -61,7 +61,7 @@ import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.ArrayList;

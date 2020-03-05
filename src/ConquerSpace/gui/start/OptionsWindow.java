@@ -19,7 +19,7 @@ package ConquerSpace.gui.start;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.io.File;

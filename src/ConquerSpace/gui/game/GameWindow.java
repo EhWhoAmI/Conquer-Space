@@ -37,7 +37,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.GUI;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import java.awt.Color;
 import java.awt.Cursor;

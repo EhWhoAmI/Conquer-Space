@@ -30,7 +30,7 @@ import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.gui.music.MusicPlayer;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Timer;
 import java.util.ArrayList;
 import java.util.HashMap;

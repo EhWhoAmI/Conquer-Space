@@ -26,7 +26,7 @@ import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

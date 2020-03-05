@@ -21,10 +21,11 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Checksum;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
+import ConquerSpace.util.logging.SwingMessageAppender;
 import java.awt.AWTEvent;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -38,7 +39,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.logging.log4j.Logger;
@@ -107,8 +110,11 @@ public class ConquerSpace {
         LOGGER.info("Version " + VERSION.toString());
 
         //Generate hash to verify the version
-        generateChecksum();
-
+        //For error messages
+        if(!DEBUG) {
+            generateChecksum();
+        }
+        
         configureSettings();
 
         //Set catch all exceptions

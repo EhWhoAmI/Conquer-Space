@@ -27,7 +27,7 @@ import ConquerSpace.game.universe.goods.ResourceDistribution;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;
 import java.io.FileInputStream;

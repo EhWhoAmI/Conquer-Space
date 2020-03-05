@@ -64,7 +64,7 @@ import ConquerSpace.game.universe.spaceObjects.Star;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.DistributedRandomNumberGenerator;
 import ConquerSpace.util.Warning;
 import ConquerSpace.util.names.NameGenerator;

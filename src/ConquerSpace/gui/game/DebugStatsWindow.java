@@ -18,7 +18,8 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
+import ConquerSpace.util.logging.SwingMessageAppender;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -58,11 +59,13 @@ public class DebugStatsWindow extends JInternalFrame {
     private JButton openConsole;
 
     private JButton deviceInfo;
+
+    private JButton logger;
     /**
      * Universe
      */
     private Universe universe;
-    
+
     /**
      * Creates the window, and adds all things.
      */
@@ -75,6 +78,7 @@ public class DebugStatsWindow extends JInternalFrame {
         memoryusedLabel = new JLabel("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
         threadCountLabel = new JLabel("Threads currently running: " + Thread.getAllStackTraces().size());
         deviceInfo = new JButton("Current runtime stats");
+        logger = new JButton("Show Logs");
 
         dumpUniverseButton = new JButton("Dump universe");
         dumpUniverseButton.setFocusable(false);
@@ -128,11 +132,23 @@ public class DebugStatsWindow extends JInternalFrame {
             }
         });
 
+        logger.addActionListener(l -> {
+            JInternalFrame frame = new JInternalFrame();
+            frame.add(SwingMessageAppender.panel);
+            frame.pack();
+            frame.setResizable(true);
+            frame.setClosable(true);
+            frame.setVisible(true);
+            
+            getDesktopPane().add(frame);
+        });
+
         add(memoryusedLabel);
         add(threadCountLabel);
         add(dumpUniverseButton);
         add(runTrashCompactor);
         add(openConsole);
+        add(logger);
 
         pack();
 

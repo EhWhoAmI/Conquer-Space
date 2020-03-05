@@ -22,7 +22,7 @@ import ConquerSpace.game.GameSpeeds;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.spaceObjects.Universe;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import java.awt.Color;
 import java.awt.Cursor;

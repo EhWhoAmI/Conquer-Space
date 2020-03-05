@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.FileNotFoundException;
 import java.io.IOException;

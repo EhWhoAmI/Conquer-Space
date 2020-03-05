@@ -17,7 +17,7 @@
  */
 package ConquerSpace;
 
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import java.awt.GridLayout;
 import java.io.File;

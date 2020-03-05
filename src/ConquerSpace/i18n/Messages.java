@@ -17,7 +17,7 @@
  */
 package ConquerSpace.i18n;
 
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;

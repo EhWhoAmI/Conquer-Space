@@ -29,7 +29,7 @@ import ConquerSpace.gui.game.AlertDisplayer;
 import ConquerSpace.gui.game.AlertNotification;
 import ConquerSpace.gui.game.GameWindow;
 import ConquerSpace.gui.game.TurnSaveWindow;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;

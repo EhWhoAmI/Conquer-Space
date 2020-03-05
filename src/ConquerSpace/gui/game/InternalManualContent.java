@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import java.io.File;
 import java.io.IOException;

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Singleton;
 import java.awt.event.WindowAdapter;

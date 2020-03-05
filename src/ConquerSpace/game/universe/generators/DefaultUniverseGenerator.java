@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.universe.generators;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -37,16 +38,20 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.StarTypes;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Random;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author User
  */
 public class DefaultUniverseGenerator extends UniverseGenerator {
+
+    private static final Logger LOGGER = CQSPLogger.getLogger(ConquerSpace.class.getName());
 
     public static final double G = 6.674 * Math.pow(10, -11);          //Gravitational constant, same for everything
     /**
@@ -94,6 +99,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             int planetCount = rand.nextInt(11);
             long lastDistance = 10000000;
             for (int k = 0; k < planetCount; k++) {
+                LOGGER.trace("Starting planet generation");
+
                 //Add planets
                 //Set stuff
                 int planetType = Math.round(rand.nextFloat());
@@ -102,9 +109,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 lastDistance = orbitalDistance;
                 int planetSize;
                 if (planetType == PlanetTypes.GAS) {
+                    LOGGER.trace("Planet is gas");
                     planetSize = randint(rand, 100, 1000);
                 } else {
                     //Rock
+                    LOGGER.trace("Planet is rock");
                     planetSize = randint(rand, 30, 200);
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
@@ -134,13 +143,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
                 //Seed life
                 if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
+                    LOGGER.trace("Planet has life");
                     generateLocalLife(rand, p);
                 }
                 sys.addPlanet(p);
+                LOGGER.trace("Created planet " + p.getUniversePath() + " " + p.getName());
             }
             //Set name
             //Add planets
             universe.addStarSystem(sys);
+            LOGGER.trace("Created star system " + sys.getId() + " with " + sys.getPlanetCount());
         }
         //Do civs
         //Player civ

@@ -22,7 +22,7 @@ import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;
 import java.io.FileInputStream;

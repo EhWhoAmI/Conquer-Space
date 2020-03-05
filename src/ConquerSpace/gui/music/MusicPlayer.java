@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.music;
 
-import ConquerSpace.util.CQSPLogger;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
