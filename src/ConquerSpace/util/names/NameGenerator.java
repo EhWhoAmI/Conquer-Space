@@ -31,7 +31,7 @@ import org.json.JSONObject;
 /**
  * Creates a name generator from a json file
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class NameGenerator {
 

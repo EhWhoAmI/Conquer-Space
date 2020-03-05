@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.goods;
 
 /**
  * The needs to store the item. Nothing means you can just leave it in the sun.
- * @author zyunl
+ * @author EhWhoAmI
  */
 public enum StorageNeeds {
     LowPressure,

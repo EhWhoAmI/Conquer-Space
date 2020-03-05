@@ -45,17 +45,17 @@ public class Planet extends SpaceObject {
     private long orbitalDistance;
     private double degrees;
     private int planetSize;
-    
+
     private double semiMajorAxis;
     private double eccentricity;
     private double rotation;
-    
+
     public double xpos;
     public double ypos;
-    
+
     public ArrayList<ResourceVein> resourceVeins;
     public ArrayList<Stratum> strata;
-    
+
     int id;
 
     private int ownerID = ControlTypes.NONE_CONTROLLED;
@@ -66,31 +66,32 @@ public class Planet extends SpaceObject {
     private int parentStarSystem;
 
     public Economy economy;
-    
+
     private ArrayList<Orbitable> satellites;
-    
+
     public HashMap<GeographicPoint, Building> buildings;
-    
+
     public ArrayList<Integer> scanned;
-    
+
     private int terrainSeed;
-    
+
     private int terrainColoringIndex;
-    
+
     private boolean habitated = false;
-    
+
     private float degreesPerTurn = 0.0f;
-    
+
     public ArrayList<City> cities;
-        
+
     public ArrayList<PopulationUnit> population;
-    
+
     private Person governor;
-    
+
     /**
      * If this is empty, the planet does not have life.
-    */
+     */
     public ArrayList<LocalLife> localLife;
+
     /**
      * Creates planet
      *
@@ -99,7 +100,7 @@ public class Planet extends SpaceObject {
      * @param planetSize size of planet
      * @param id planet id
      * @param parentStarSystem parent star system
-     */    
+     */
     public Planet(int planetType, long orbitalDistance, int planetSize, int id, int parentStarSystem) {
         this.planetType = planetType;
         this.orbitalDistance = orbitalDistance;
@@ -114,14 +115,15 @@ public class Planet extends SpaceObject {
         economy = new Economy();
         satellites = new ArrayList<>();
         resourceVeins = new ArrayList<>();
+        strata = new ArrayList<>();
         buildings = new HashMap<>();
-        
+
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
-        
+
         //planetJobs = new ArrayList<>();
         population = new ArrayList<>();
-        
+
         localLife = new ArrayList<>();
     }
 
@@ -141,9 +143,8 @@ public class Planet extends SpaceObject {
             case PlanetTypes.GAS:
                 builder.append("gas");
         }
-        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize + 
-                "Rectangular Position: " + xpos + ", " + ypos+ ":\n");
-
+        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize
+                + "Rectangular Position: " + xpos + ", " + ypos + ":\n");
 
         builder.append(")\n");
         return (builder.toString());
@@ -167,10 +168,11 @@ public class Planet extends SpaceObject {
 
     /**
      * Change the degrees by <code>degs</code> degrees.
+     *
      * @param degs degrees
      */
     public void modDegrees(float degs) {
-        degrees+=degs;
+        degrees += degs;
         degrees %= 360;
     }
 
@@ -189,7 +191,7 @@ public class Planet extends SpaceObject {
     public void computeEconomy() {
 
     }
-    
+
     public int getParentStarSystem() {
         return parentStarSystem;
     }
@@ -205,54 +207,54 @@ public class Planet extends SpaceObject {
     void setParentStarSystem(int parentStarSystem) {
         this.parentStarSystem = parentStarSystem;
     }
-    
+
     public double getPlanetDegrees() {
         return (degrees);
     }
-    
+
     public UniversePath getUniversePath() {
         return (new UniversePath(parentStarSystem, id));
     }
-    
+
     public int getSatelliteCount() {
         return satellites.size();
     }
-    
+
     public Orbitable getSatellite(int i) {
         return satellites.get(i);
     }
-    
+
     public void addSatellite(Satellite s) {
         satellites.add(s);
     }
-    
+
     public ArrayList<Orbitable> getSatellites() {
         return satellites;
     }
-    
+
     public void putShipInOrbit(Orbitable orb) {
         satellites.add(orb);
     }
-    
+
     public double getX() {
         return xpos;
     }
-    
+
     public double getY() {
         return ypos;
     }
-    
+
     public void setX(double x) {
         xpos = x;
     }
-    
+
     public void setY(double y) {
         ypos = y;
     }
 
     @Override
     public String toString() {
-        if(name.isEmpty()) {
+        if (name.isEmpty()) {
             return (id + "");
         }
         return name;

@@ -49,7 +49,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  * A planet that has not been surveyed yet.
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ShrinkedPlanetSheet extends JPanel {
 

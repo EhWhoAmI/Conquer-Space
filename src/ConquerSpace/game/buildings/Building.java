@@ -28,7 +28,7 @@ import java.util.Arrays;
 /**
  * A building is defined as a series of points
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public abstract class Building implements Workable{
     private Color color;

@@ -19,7 +19,7 @@ package ConquerSpace.game.people;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PersonalityTrait {
     private String name;  

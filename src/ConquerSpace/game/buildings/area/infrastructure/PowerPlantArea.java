@@ -24,7 +24,7 @@ import ConquerSpace.game.universe.resources.Resource;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PowerPlantArea extends Area implements Workable{
     //Needs the attribute 'energy'

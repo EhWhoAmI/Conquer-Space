@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.civilization.government;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class GovernmentPosition {
     String name;

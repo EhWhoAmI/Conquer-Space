@@ -23,6 +23,8 @@ import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.NonElement;
+import ConquerSpace.game.universe.goods.Ore;
+import ConquerSpace.game.universe.goods.ResourceDistribution;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -70,7 +72,7 @@ public class GameController {
     
     public static ArrayList<Element> elements;
     public static ArrayList<NonElement> rawMaterials;
-    public static ArrayList<NonElement> ores;
+    public static ArrayList<Ore> ores;
     
     public static final int AU_IN_LTYR = 63241;
 

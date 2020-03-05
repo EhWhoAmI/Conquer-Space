@@ -25,7 +25,7 @@ import javax.swing.JList;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class NewsWindow extends JInternalFrame {
 

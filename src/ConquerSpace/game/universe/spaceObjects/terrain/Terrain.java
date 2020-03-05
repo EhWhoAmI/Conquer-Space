@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.spaceObjects.terrain;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Terrain {
 

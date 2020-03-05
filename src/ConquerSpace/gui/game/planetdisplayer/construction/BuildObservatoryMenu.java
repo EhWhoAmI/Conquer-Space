@@ -27,7 +27,7 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class BuildObservatoryMenu extends JPanel {
 

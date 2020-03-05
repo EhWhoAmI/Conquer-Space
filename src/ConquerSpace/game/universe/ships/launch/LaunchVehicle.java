@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.ships.launch;
 
 /**
  * Class of launch vehicle 
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class LaunchVehicle {
     public LaunchSystem systemType;

@@ -24,7 +24,7 @@ import javax.swing.JTabbedPane;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class SpaceShipOverview extends JPanel {
     private ShipListManager shipListManager;

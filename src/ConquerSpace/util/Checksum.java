@@ -26,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Checksum {
 

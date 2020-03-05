@@ -21,7 +21,7 @@ import ConquerSpace.game.jobs.Job;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public interface Workable {
     public Job[] jobsNeeded();

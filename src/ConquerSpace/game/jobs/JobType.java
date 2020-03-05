@@ -19,7 +19,7 @@ package ConquerSpace.game.jobs;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public enum JobType {
     Miner("Miner"), 

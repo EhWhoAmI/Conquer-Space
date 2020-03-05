@@ -33,7 +33,7 @@ import ConquerSpace.game.universe.spaceObjects.Universe;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PeopleProcessor {
 

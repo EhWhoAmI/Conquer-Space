@@ -19,7 +19,7 @@ package ConquerSpace.game;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class GameIndexer {
     public void takeCensus() {

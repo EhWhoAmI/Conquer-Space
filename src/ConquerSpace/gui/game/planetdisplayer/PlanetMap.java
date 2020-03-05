@@ -26,6 +26,7 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
@@ -62,7 +63,7 @@ import javax.swing.SwingUtilities;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PlanetMap extends JPanel {
 
@@ -221,7 +222,7 @@ public class PlanetMap extends JPanel {
         map.currentlyBuildingPoint = null;
         map.isActive = false;
     }
-    
+
     private class MapPanel extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
 
         private BufferedImage resourceImage = null;
@@ -229,7 +230,7 @@ public class PlanetMap extends JPanel {
 
         GeographicPoint currentlyBuildingPoint;
         boolean isActive = false;
-        
+
         int mouseX = 0;
         int mouseY = 0;
 
@@ -272,16 +273,14 @@ public class PlanetMap extends JPanel {
                     Graphics2D resourceGraphics = resourceImage.createGraphics();
                     resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));
 
-                    for (ResourceVein v : p.resourceVeins) {
-                        if (v.getResourceType().getId() == resourceShown || resourceShown == -1) {
-                            //Draw...
-                            Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * tileSize,
-                                    (v.getY() - v.getRadius()) * tileSize,
-                                    v.getRadius() * 2 * tileSize,
-                                    v.getRadius() * 2 * tileSize);
-                            resourceGraphics.setColor(Color.GRAY);
-                            resourceGraphics.fill(circe);
-                        }
+                    for (Stratum v : p.strata) {
+                        //Draw...
+                        Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * tileSize,
+                                (v.getY() - v.getRadius()) * tileSize,
+                                v.getRadius() * 2 * tileSize,
+                                v.getRadius() * 2 * tileSize);
+                        resourceGraphics.setColor(Color.GRAY);
+                        resourceGraphics.fill(circe);
                     }
                 }
 
@@ -295,7 +294,7 @@ public class PlanetMap extends JPanel {
                 g2d.fill(mouseBox);
                 if (currentlyBuildingPoint != null) {
                     //Draw it
-                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX()-1) * tileSize, (currentlyBuildingPoint.getY()-1) * tileSize, tileSize*3, tileSize*3);
+                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
                     g2d.setColor(Color.RED);
                     g2d.fill(buildingPointOutside);
                     Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);

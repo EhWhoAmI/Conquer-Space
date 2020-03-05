@@ -23,7 +23,7 @@ import javax.swing.JInternalFrame;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ShipDetailsSideWindow extends JInternalFrame {
 

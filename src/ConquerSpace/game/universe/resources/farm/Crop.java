@@ -21,7 +21,7 @@ import ConquerSpace.game.life.Species;
 
 /**
  * A crop that grows stuff.
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Crop {
     private int timeLeft;

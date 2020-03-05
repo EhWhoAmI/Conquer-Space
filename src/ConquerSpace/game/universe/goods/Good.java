@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.goods;
 
 /**
  * Type of good that can be transported
- * @author zyunl
+ * @author EhWhoAmI
  */
 public abstract class Good {
     String name;

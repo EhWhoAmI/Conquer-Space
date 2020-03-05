@@ -19,7 +19,7 @@ package ConquerSpace.gui;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public interface GUI {
     public void init();

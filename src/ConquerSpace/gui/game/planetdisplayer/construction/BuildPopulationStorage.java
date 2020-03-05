@@ -29,7 +29,7 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class BuildPopulationStorage extends JPanel implements ActionListener {
 

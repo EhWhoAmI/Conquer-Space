@@ -30,7 +30,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class City implements PersonEnterable, Workable {
 

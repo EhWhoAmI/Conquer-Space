@@ -27,6 +27,7 @@ import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.NonElement;
+import ConquerSpace.game.universe.goods.Ore;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -36,7 +37,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class GameLoader {
 
@@ -74,7 +75,8 @@ public class GameLoader {
         /*GameController.elements = readHjsonFromDirInArray("dirs.elements",
                 Element.class, AssetReader::processElement);*/
         
-        //GameController.ores = readHjsonFromDirInArray("dirs.ores", NonElement.class, AssetReader::processGood);
+        GameController.ores = readHjsonFromDirInArray("dirs.ores", Ore.class, AssetReader::processOre);
+        //Get list of distrubutions
 
         readBuildingCosts();
 

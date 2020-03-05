@@ -19,7 +19,7 @@ package ConquerSpace.util;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Timer {
 

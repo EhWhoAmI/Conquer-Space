@@ -27,7 +27,7 @@ import javax.swing.event.ListDataListener;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class LaunchSystemDesigner extends javax.swing.JPanel {
 

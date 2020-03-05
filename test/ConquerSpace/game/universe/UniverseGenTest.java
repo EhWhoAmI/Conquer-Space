@@ -7,7 +7,7 @@ import java.util.Random;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class UniverseGenTest {
 

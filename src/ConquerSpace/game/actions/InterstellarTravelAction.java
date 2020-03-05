@@ -21,7 +21,7 @@ import ConquerSpace.game.universe.ships.Ship;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class InterstellarTravelAction extends ShipAction {
 

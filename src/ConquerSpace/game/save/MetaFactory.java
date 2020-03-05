@@ -29,7 +29,7 @@ import org.json.JSONObject;
 /**
  * Creates the metadata of the game
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class MetaFactory {
 

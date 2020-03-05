@@ -19,6 +19,7 @@ package ConquerSpace.util;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.localeMessages;
+import ConquerSpace.Globals;
 import static ConquerSpace.gui.game.DebugStatsWindow.byteCountToDisplaySize;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,6 +86,11 @@ public class ExceptionHandling {
             } else {
                 writer.println("Asset checksum: not generated yet");
             }
+            
+            if(Globals.universe != null) {
+                writer.println("Universe seed: " + Globals.universe.getSeed());
+            }
+            
             writer.println("Java version: " + System.getProperty("java.version") + " running on " + System.getProperty("os.name"));
             writer.println("Threads running: " + Thread.getAllStackTraces().size());
             writer.println("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()));

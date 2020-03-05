@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class NonElement extends Good{
     public HashMap<Good, Integer> recipie;

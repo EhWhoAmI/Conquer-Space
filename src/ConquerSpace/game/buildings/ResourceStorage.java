@@ -28,7 +28,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ResourceStorage extends Building implements ResourceStockpile {
 

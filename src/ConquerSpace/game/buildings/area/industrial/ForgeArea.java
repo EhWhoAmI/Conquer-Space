@@ -21,7 +21,7 @@ import ConquerSpace.game.buildings.area.Area;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ForgeArea extends Area{
     @Override

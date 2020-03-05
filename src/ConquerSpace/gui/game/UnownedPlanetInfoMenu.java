@@ -51,7 +51,7 @@ import javax.swing.border.TitledBorder;
 /**
  * Window for the planet that is unowned, but surveyed
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class UnownedPlanetInfoMenu extends JPanel {
 

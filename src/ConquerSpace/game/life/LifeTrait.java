@@ -19,7 +19,7 @@ package ConquerSpace.game.life;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public enum LifeTrait {
     Photosynthetic("Photosynthetic"),

@@ -23,7 +23,7 @@ import ConquerSpace.game.jobs.JobType;
 /**
  * one pop unit is about 10 million-ish.
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PopulationUnit {
 

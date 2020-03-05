@@ -22,7 +22,7 @@ import java.awt.Color;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class IndustrialDistrict extends Building{
 

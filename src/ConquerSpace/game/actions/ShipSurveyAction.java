@@ -22,7 +22,7 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ShipSurveyAction extends ShipAction{
     //Progress

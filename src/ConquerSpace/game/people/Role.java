@@ -20,7 +20,7 @@ package ConquerSpace.game.people;
 /**
  * The role the person is playing in society.
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Role {
 

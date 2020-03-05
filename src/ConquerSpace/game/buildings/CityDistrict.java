@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class CityDistrict extends Building implements PopulationStorage, Workable{
     private int maxStorage;

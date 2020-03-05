@@ -19,7 +19,7 @@ package ConquerSpace.game.buildings.area;
 
 /**
  * Capital building thingy
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class CapitolArea extends Area{
     

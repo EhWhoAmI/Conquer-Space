@@ -29,7 +29,7 @@ import org.newdawn.easyogg.OggClip;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class MusicPlayer {
 

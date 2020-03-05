@@ -19,7 +19,7 @@ package ConquerSpace.game.population;
 
 /**
  * Defines the culture of the species, and its behaviour
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Culture {
     

@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Stratum {
     //Depth in kilometers
@@ -53,6 +53,20 @@ public class Stratum {
     public int getY() {
         return y;
     }
-    
-    
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }

@@ -21,7 +21,7 @@ import ConquerSpace.game.universe.ships.SpaceShip;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ShipAction {
 

@@ -28,7 +28,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class EconomyWindow extends JPanel {
 

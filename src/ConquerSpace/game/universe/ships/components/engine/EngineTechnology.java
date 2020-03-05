@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.ships.components.engine;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class EngineTechnology {
     private String name;

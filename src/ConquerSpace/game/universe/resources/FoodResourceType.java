@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.resources;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public enum FoodResourceType {
     //Defined as non-sentient but has a brain

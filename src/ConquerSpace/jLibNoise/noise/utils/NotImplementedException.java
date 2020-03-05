@@ -19,7 +19,7 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class NotImplementedException extends RuntimeException {
     private static final long serialVersionUID = 31415926535L;

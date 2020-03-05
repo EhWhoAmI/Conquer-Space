@@ -36,7 +36,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class RecruitingPerson extends JPanel {
 

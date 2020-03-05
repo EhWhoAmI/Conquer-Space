@@ -23,7 +23,7 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ToOrbitAction extends ShipAction {
 

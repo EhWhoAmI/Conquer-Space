@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class BuildingInfoContainer extends JPanel {
 

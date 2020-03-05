@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class BuildingBuildingViewMenu extends JPanel{
     private JLabel timeLeft;

@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class TerrainColoring {
 

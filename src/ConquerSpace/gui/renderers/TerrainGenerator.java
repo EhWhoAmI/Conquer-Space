@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * http://libnoise.sourceforge.net/tutorials/tutorial4.html
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class TerrainGenerator {
 

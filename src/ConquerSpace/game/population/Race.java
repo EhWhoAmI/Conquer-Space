@@ -19,7 +19,7 @@ package ConquerSpace.game.population;
 
 /**
  * Species or race
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Race {
     //Usage of food per month

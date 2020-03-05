@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.goods;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class GoodTag {
     

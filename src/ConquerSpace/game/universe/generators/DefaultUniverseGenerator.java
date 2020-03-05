@@ -17,8 +17,6 @@
  */
 package ConquerSpace.game.universe.generators;
 
-import ConquerSpace.game.AssetReader;
-import ConquerSpace.game.GameController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -31,9 +29,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.resources.Resource;
-import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
 import ConquerSpace.game.universe.spaceObjects.Star;
@@ -106,10 +102,10 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 lastDistance = orbitalDistance;
                 int planetSize;
                 if (planetType == PlanetTypes.GAS) {
-                    planetSize = randint(rand, 50, 500);
+                    planetSize = randint(rand, 100, 1000);
                 } else {
                     //Rock
-                    planetSize = randint(rand, 30, 100);
+                    planetSize = randint(rand, 30, 200);
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
 
@@ -419,7 +415,18 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         int planetSize = p.getPlanetSize();
         //Add resource veins
 
-        int idCount = 0;
+        int idCount = randint(rand, 5, 10);
+        //Add the veins
+        for (int i = 0; i < idCount; i++) {
+            //Create strata
+            Stratum stratum = new Stratum();
+
+            //Select the things
+            stratum.setRadius(randint(rand, 5, 15));
+            stratum.setX(rand.nextInt(planetSize * 2));
+            stratum.setY(rand.nextInt(planetSize));
+            p.strata.add(stratum);
+        }
         /*for (Good res : GameController.ores) {
             //Process... 
             //Determines the resource 'richness' of a planet

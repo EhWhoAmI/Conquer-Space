@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PopulationStorageViewMenu extends JPanel{
     public PopulationStorageViewMenu(CityDistrict district) {

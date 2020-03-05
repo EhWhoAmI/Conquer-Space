@@ -20,7 +20,7 @@ package ConquerSpace.game.universe.civilization.government;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class HeritableGovernmentPosition extends GovernmentPosition{
     public GovernmentPosition nextInLine;

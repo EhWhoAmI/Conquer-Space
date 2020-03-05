@@ -19,7 +19,7 @@ package ConquerSpace.game.universe;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class GeographicPoint {
     private int X;

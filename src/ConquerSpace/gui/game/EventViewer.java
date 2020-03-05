@@ -26,7 +26,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class EventViewer extends JPanel{
     private JList<Event> eventList;

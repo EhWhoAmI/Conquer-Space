@@ -22,6 +22,8 @@ import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.NonElement;
+import ConquerSpace.game.universe.goods.Ore;
+import ConquerSpace.game.universe.goods.ResourceDistribution;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -42,7 +44,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class AssetReader {
 
@@ -75,6 +77,8 @@ public class AssetReader {
                         elements.add((T) thing.thingy(obj));
                     } catch (ClassCastException e) {
                         LOGGER.error("CCE!", e);
+                    } catch (JSONException exception) {
+                        LOGGER.error("JSONException!", exception);
                     }
                 }
             } catch (FileNotFoundException ex) {
@@ -235,7 +239,6 @@ public class AssetReader {
     }
 
     public static Object processEngineTech(JSONObject obj) {
-        System.out.println(obj);
         String name = obj.getString("name");
         int id = obj.getInt("id");
         float efficiency = obj.getFloat("efficiency");
@@ -341,9 +344,38 @@ public class AssetReader {
         trait.setName(name);
         return trait;
     }
-    
+
     public static Object processGood(JSONObject obj) {
         return new NonElement("sadf", 0, 12, 4);
+    }
+
+    public static Object processOre(JSONObject obj) {
+        String name = obj.getString("name");
+        double density = obj.getDouble("density");
+        Ore element = new Ore(name, 0, 1, density);
+        //Process formula
+        obj.getJSONArray("formula");
+        
+        //Process distribution
+        JSONArray dist = obj.getJSONArray("distribution");
+        int distributionLow = dist.getInt(0);
+        int distributionHigh = dist.getInt(1);
+        JSONArray depth = obj.getJSONArray("depth");
+        int depthLow = depth.getInt(0);
+        int depthHigh = depth.getInt(1);
+        double rarity = obj.getDouble("rarity");
+        int abundance = obj.getInt("abundance");
+        int resourceDistDensity = obj.getInt("dist-density");
+        
+        element.dist.distributionLow = distributionLow;
+        element.dist.distributionHigh = distributionHigh;
+        element.dist.depthLow = depthLow;
+        element.dist.depthHigh = depthHigh;
+        element.dist.rarity = rarity;
+        element.dist.abundance = abundance;
+        element.dist.density = resourceDistDensity;
+        
+        return (element);
     }
 }
 

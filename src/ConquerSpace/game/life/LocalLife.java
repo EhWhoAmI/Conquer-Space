@@ -20,7 +20,7 @@ package ConquerSpace.game.life;
 /**
  * Life on a planet.
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class LocalLife {
 

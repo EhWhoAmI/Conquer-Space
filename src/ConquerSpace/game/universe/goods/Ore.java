@@ -15,19 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.gui.game.planetdisplayer.construction;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+package ConquerSpace.game.universe.goods;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class BuildIndustrialAreaMenu extends JPanel{
-
-    public BuildIndustrialAreaMenu() {
-        add(new JLabel("Just build it"));
+public class Ore extends NonElement{
+    public ResourceDistribution dist;
+    
+    public Ore(String name, int id, double volume, double mass) {
+        super(name, id, volume, mass);
+        dist = new ResourceDistribution();
     }
     
 }

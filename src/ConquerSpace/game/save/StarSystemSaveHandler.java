@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class StarSystemSaveHandler {
 

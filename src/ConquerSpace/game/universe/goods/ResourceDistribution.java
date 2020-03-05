@@ -15,12 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.resources;
+package ConquerSpace.game.universe.goods;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
-public class Ore {
-    
+public class ResourceDistribution {
+    public int distributionHigh;
+    public int distributionLow;
+    public int depthLow;
+    public int depthHigh;
+    public double rarity;
+    public int abundance;
+    public double density;
 }

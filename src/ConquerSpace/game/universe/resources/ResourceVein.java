@@ -21,7 +21,7 @@ import ConquerSpace.game.universe.goods.Good;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ResourceVein {
     private int id;

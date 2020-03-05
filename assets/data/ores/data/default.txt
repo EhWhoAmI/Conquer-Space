@@ -1,24 +1,69 @@
 [
     {
-        name: Hematite 
+        name: Hematite
+        density: 5.3
         // Iron ore
         formula: [
             "Iron:2"
             "Oxygen:3"
         ]
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 0.2
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
+        ]
     },
     {
-        name: Magnetite 
+        name: Magnetite
+        density: 5.15
         // Iron ore
         formula: [
             "Iron:3"
             "Oxygen:4"
         ]
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 0.2
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
+        ]
     },
     {
         name: Graphite
+        density: 2.26
         formula: [
             "Carbon:1"
+        ]
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 0.2
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
         ]
     }
 ]

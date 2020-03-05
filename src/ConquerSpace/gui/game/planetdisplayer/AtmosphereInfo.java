@@ -34,7 +34,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class AtmosphereInfo extends JPanel {
 

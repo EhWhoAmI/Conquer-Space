@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * More like a miner. Desc: A district dedicated to the mining of a resource.
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ResourceMinerDistrict extends Building implements PopulationStorage, Workable {
 

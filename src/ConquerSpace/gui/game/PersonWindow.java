@@ -33,7 +33,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PersonWindow extends JPanel {
 

@@ -21,7 +21,7 @@ import ConquerSpace.game.economy.Currency;
 
 /**
  * Employs population units and people
- * @author zyunl
+ * @author EhWhoAmI
  */
 public interface Employer {
     public Currency getCurrency();

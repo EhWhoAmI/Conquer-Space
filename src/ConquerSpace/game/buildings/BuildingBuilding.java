@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class BuildingBuilding extends Building implements Workable{
 

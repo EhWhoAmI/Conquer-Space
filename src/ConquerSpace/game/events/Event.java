@@ -19,7 +19,7 @@ package ConquerSpace.game.events;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Event {
 

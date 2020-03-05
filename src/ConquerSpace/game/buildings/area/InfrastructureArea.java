@@ -19,7 +19,7 @@ package ConquerSpace.game.buildings.area;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class InfrastructureArea extends Area{
     //The jobs provided

@@ -22,7 +22,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 /**
  * A nations currency
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Currency {
 

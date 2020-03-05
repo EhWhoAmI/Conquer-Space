@@ -24,7 +24,7 @@ import ConquerSpace.game.universe.spaceObjects.Planet;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Company implements Employer{
     private String name;

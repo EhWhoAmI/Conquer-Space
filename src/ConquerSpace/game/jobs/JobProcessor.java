@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class JobProcessor {
     private City city;

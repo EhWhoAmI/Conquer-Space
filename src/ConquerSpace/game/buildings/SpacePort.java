@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class SpacePort extends Building{
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();

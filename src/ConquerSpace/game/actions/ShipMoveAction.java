@@ -25,7 +25,7 @@ import ConquerSpace.game.universe.spaceObjects.StarSystem;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class ShipMoveAction extends ShipAction {
 

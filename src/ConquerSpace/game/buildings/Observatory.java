@@ -24,7 +24,7 @@ import java.awt.Color;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Observatory extends Building implements VisionPoint {
 

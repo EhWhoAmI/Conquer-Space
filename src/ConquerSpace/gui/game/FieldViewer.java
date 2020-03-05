@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class FieldViewer extends JPanel implements MouseMotionListener, MouseListener {
 

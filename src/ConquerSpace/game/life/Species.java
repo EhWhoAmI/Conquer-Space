@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Species on a planet, can go to other planets
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Species {
     public ArrayList<LifeTrait> lifeTraits;

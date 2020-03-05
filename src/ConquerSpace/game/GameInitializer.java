@@ -73,7 +73,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class GameInitializer {
 

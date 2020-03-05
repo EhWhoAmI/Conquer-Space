@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * Job of the population
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class Job {
 

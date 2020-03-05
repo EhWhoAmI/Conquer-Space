@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Farms have 2 types, a crop one and a livestock one, maybe a combined one.
  * We'll see.
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class FarmBuilding extends Building implements PopulationStorage, Workable {
 

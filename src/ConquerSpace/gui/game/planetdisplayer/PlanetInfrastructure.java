@@ -19,7 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmI
  */
 public class PlanetInfrastructure {
     
