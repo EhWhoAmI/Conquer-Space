@@ -15,7 +15,7 @@
             1
             30
         ]
-        rarity: 0.2
+        rarity: 1
         abundance: 50000
         dist-density: 32
         tags: [
@@ -38,7 +38,7 @@
             1
             30
         ]
-        rarity: 0.2
+        rarity: 1
         abundance: 50000
         dist-density: 32
         tags: [
@@ -59,7 +59,7 @@
             1
             30
         ]
-        rarity: 0.2
+        rarity: 1
         abundance: 50000
         dist-density: 32
         tags: [

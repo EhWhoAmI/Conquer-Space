@@ -25,11 +25,11 @@ import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -48,6 +48,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyVetoException;
 import java.util.Map;
 import javax.swing.ButtonGroup;
 import javax.swing.JDesktopPane;
@@ -60,12 +61,15 @@ import javax.swing.JToolTip;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PlanetMap extends JPanel {
+public class PlanetMap extends JDesktopPane {
+
+    private static final Logger LOGGER = CQSPLogger.getLogger(PlanetMap.class.getName());
 
     private PlanetInfoSheet parent;
     private Image mapImage;
@@ -108,6 +112,8 @@ public class PlanetMap extends JPanel {
     private final int NORMAL_VIEW = 0;
     private final int RESOURCE_VIEW = 1;
     private final int BUILDING_VIEW = 2;
+    private final int GEOLOGY_VIEW = 3;
+    
     //if -1, then all resources
     private int resourceShown = -1;
     private int displayedView = NORMAL_VIEW;
@@ -138,13 +144,14 @@ public class PlanetMap extends JPanel {
 
         ActionListener viewActionListener = (e) -> {
             //Get button pressed..
+            showResourceMenu.setEnabled(true);
             if (e.getSource().equals(normalViewButton)) {
                 displayedView = NORMAL_VIEW;
             } else if (e.getSource().equals(showResourceButton)) {
                 displayedView = RESOURCE_VIEW;
+                showResourceMenu.setEnabled(false);
             } else if (e.getSource().equals(buildMenuButton)) {
                 displayedView = BUILDING_VIEW;
-                //Show building menu
             }
 
             map.repaint();
@@ -265,6 +272,16 @@ public class PlanetMap extends JPanel {
                     g2d.setColor(Building.getColor());
                     g2d.fill(rect);
                 }
+                
+                if (isActive) {
+                    //Draw it
+                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
+                    g2d.setColor(Color.RED);
+                    g2d.fill(buildingPointOutside);
+                    Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
+                    g2d.setColor(Color.BLUE);
+                    g2d.fill(buildingPointInside);
+                }
             } else if (displayedView == RESOURCE_VIEW) {
                 //Show resources
                 if (resourceImage == null || needRefresh) {
@@ -292,15 +309,6 @@ public class PlanetMap extends JPanel {
                 Rectangle2D.Double mouseBox = new Rectangle2D.Double(mouseX * tileSize, mouseY * tileSize, tileSize, tileSize);
                 g2d.setColor(Color.PINK);
                 g2d.fill(mouseBox);
-                if (currentlyBuildingPoint != null) {
-                    //Draw it
-                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
-                    g2d.setColor(Color.RED);
-                    g2d.fill(buildingPointOutside);
-                    Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
-                    g2d.setColor(Color.BLUE);
-                    g2d.fill(buildingPointInside);
-                }
             }
         }
 
@@ -353,6 +361,16 @@ public class PlanetMap extends JPanel {
                     ConstructionPanel construction = new ConstructionPanel(c, p, u, pt, PlanetMap.this);
                     ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(construction);
                     construction.toFront();
+
+                    try {
+                        construction.setSelected(true);
+                    } catch (PropertyVetoException ex) {
+                        //Ignore, because it doesn't need to show anyway.
+                        LOGGER.trace("Property veto exception for showing construction window", ex);
+                    }
+
+                    //Switch to normal view
+                    displayedView = NORMAL_VIEW;
                 }
             }
         }

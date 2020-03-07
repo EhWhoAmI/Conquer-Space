@@ -22,11 +22,38 @@ package ConquerSpace.game.universe.goods;
  * @author EhWhoAmI
  */
 public class ResourceDistribution {
+    /**
+     * How maximum size of the vein.
+     */
     public int distributionHigh;
+    
+    /**
+     * Minimum size of the vein.
+     */
     public int distributionLow;
+    
+    /**
+     * How deep the vein is, how the lower limit to depth. I know, it's confusing, because low means high on the crust.
+     */
     public int depthLow;
+    
+    /**
+     * How deep the vein is, maximum depth.
+     */
     public int depthHigh;
+    
+    /**
+     * How many planets out of a percentage.
+     */
     public double rarity;
+    
+    /**
+     * How much resources in a reserve.
+     */
     public int abundance;
+    
+    /**
+     * How the resource is stuffed with other resources. 
+     */
     public double density;
 }

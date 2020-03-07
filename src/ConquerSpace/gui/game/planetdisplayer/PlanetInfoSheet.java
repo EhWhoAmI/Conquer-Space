@@ -44,6 +44,7 @@ public class PlanetInfoSheet extends JPanel {
     LocalLifeMenu localLifeMenu;
     PlanetMap planetMap;
     PlanetEconomy planetEconomy;
+    PlanetGeology planetGeology;
 
     private Civilization c;
     private Planet p;
@@ -60,6 +61,7 @@ public class PlanetInfoSheet extends JPanel {
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetPopulation(u, p, 0);
         spacePort = new SpacePortMenuSheet(p, c);
+        planetGeology = new PlanetGeology(p);
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
@@ -68,6 +70,7 @@ public class PlanetInfoSheet extends JPanel {
 
         tpane.add("Overview", overview);
         tpane.add("Map", planetMap);
+        tpane.add("Geography", planetGeology);
         tpane.add("Cities", population);
         tpane.add("Space Port", spacePort);
         tpane.add("Atmosphere", atmosphere);

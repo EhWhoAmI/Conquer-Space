@@ -38,6 +38,8 @@ import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -45,12 +47,14 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ConstructionPanel extends JInternalFrame {
+public class ConstructionPanel extends JInternalFrame implements InternalFrameListener {
 
     private JComboBox<String> buildingType;
     private DefaultComboBoxModel<String> buildingModel;
@@ -80,8 +84,12 @@ public class ConstructionPanel extends JInternalFrame {
 
     private JButton buildButton;
 
+    PlanetMap parent;
+
     public ConstructionPanel(Civilization c, Planet p, Universe u, GeographicPoint point, PlanetMap parent) {
         setLayout(new VerticalFlowLayout());
+
+        this.parent = parent;
 
         buildingModel = new DefaultComboBoxModel<>();
         buildingModel.addElement(RESIDENTIAL);
@@ -255,9 +263,41 @@ public class ConstructionPanel extends JInternalFrame {
         add(buildButton);
         pack();
 
+        addInternalFrameListener(this);
         setVisible(true);
         setClosable(true);
         setResizable(true);
+    }
+
+    @Override
+    public void internalFrameOpened(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameClosing(InternalFrameEvent e) {
+        //Deactivate point
+        parent.resetBuildingIndicator();
+        dispose();
+    }
+
+    @Override
+    public void internalFrameClosed(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameIconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameDeiconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameActivated(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameDeactivated(InternalFrameEvent e) {
     }
 
 }

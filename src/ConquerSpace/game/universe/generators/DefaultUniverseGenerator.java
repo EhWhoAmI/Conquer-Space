@@ -18,6 +18,7 @@
 package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -30,6 +31,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.goods.Ore;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
@@ -42,6 +44,7 @@ import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +54,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DefaultUniverseGenerator extends UniverseGenerator {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(ConquerSpace.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(DefaultUniverseGenerator.class.getName());
 
     public static final double G = 6.674 * Math.pow(10, -11);          //Gravitational constant, same for everything
     /**
@@ -425,43 +428,37 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
     public void generateResourceVeins(Planet p, Random rand) {
         int planetSize = p.getPlanetSize();
-        //Add resource veins
 
+        //Find the amount of resources to add...
+        //Sort through resources, and find suitable
+        ArrayList<Ore> toAdd = new ArrayList<>();
+        for (Ore o : GameController.ores) {
+            double rarity = o.dist.rarity;
+            if (rand.nextDouble() < rarity) {
+                toAdd.add(o);
+            }
+        }
+
+        //Add resource veins
         int idCount = randint(rand, 5, 10);
+
         //Add the veins
         for (int i = 0; i < idCount; i++) {
             //Create strata
             Stratum stratum = new Stratum();
 
+            //Add resources
+            for(Ore o : toAdd) {
+                stratum.minerals.put(o, randint(rand, 10000, 500_000));
+            }
+            
             //Select the things
             stratum.setRadius(randint(rand, 5, 15));
             stratum.setX(rand.nextInt(planetSize * 2));
             stratum.setY(rand.nextInt(planetSize));
+            stratum.setDepth(rand.nextInt(planetSize / 2) + 1);
             p.strata.add(stratum);
         }
-        /*for (Good res : GameController.ores) {
-            //Process... 
-            //Determines the resource 'richness' of a planet
-            int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
-            float rarity = 0;//res.getRarity();
-            float probality = rand.nextFloat();
-            //Then count
-            if (true) {
-                //Then add a certain amount
-                int amount = (int) (rarity * resourceCount * probality) * 2;
-                //Add that amount
-                for (int resCount = 0; resCount < amount; resCount++) {
-                    //Add the resource
-                    //int resourceVolume = (int) (randint(rand, 50000, 100000) * res.getDensity());
-                    ResourceVein vein = new ResourceVein(res, 1);
-                    vein.setId(idCount++);
-                    //vein.setRadius(randint(rand, res.getDistributionLow(), res.getDistributionHigh()));
-                    vein.setX(rand.nextInt(planetSize * 2));
-                    vein.setY(rand.nextInt(planetSize));
-                    p.resourceVeins.add(vein);
-                }
-            }
-        }*/
     }
 
     private void generateLocalLife(Random rand, Planet p) {
