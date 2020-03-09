@@ -45,6 +45,7 @@ public class PlanetInfoSheet extends JPanel {
     PlanetMap planetMap;
     PlanetEconomy planetEconomy;
     PlanetGeology planetGeology;
+    PlanetResources planetResources;
 
     private Civilization c;
     private Planet p;
@@ -67,6 +68,7 @@ public class PlanetInfoSheet extends JPanel {
         localLifeMenu = new LocalLifeMenu(p, c);
         planetMap = new PlanetMap(p, c, u, this);
         planetEconomy = new PlanetEconomy();
+        planetResources = new PlanetResources(p);
 
         tpane.add("Overview", overview);
         tpane.add("Map", planetMap);
@@ -76,6 +78,7 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add("Atmosphere", atmosphere);
         tpane.add("Industry", industry);
         tpane.add("Local Life", localLifeMenu);
+        tpane.add("Resources", planetResources);
 
         tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port

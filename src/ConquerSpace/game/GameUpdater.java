@@ -235,6 +235,7 @@ public class GameUpdater {
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
+            
             if (rs.canStore(resourceType)) {
                 rs.addResource(resourceType, amount);
                 break;
@@ -295,7 +296,7 @@ public class GameUpdater {
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-            for (Map.Entry<Resource, Integer> entry : c.resourceList.entrySet()) {
+            for (Map.Entry<Good, Integer> entry : c.resourceList.entrySet()) {
                 c.resourceList.put(entry.getKey(), 0);
             }
             //Process resources
@@ -305,7 +306,7 @@ public class GameUpdater {
                 for (Good type : s.storedTypes()) {
                     //add to index
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
-                    //c.resourceList.put(type, amountToAdd);
+                    c.resourceList.put(type, amountToAdd);
                 }
             }
         }
@@ -539,7 +540,7 @@ public class GameUpdater {
                 //Process...
                 ResourceStockpile stockpile = (ResourceStockpile) building;
             } else if (building instanceof ResourceMinerDistrict) {
-
+                
             } else if (building instanceof FarmBuilding) {
                 //Get the resources
                 FarmBuilding farmBuilding = (FarmBuilding) building;
@@ -602,6 +603,7 @@ public class GameUpdater {
                     //Process job
                     for (Good r : unit.getJob().resources.keySet()) {
                         storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
+                        LOGGER.trace("Stored resource " + r.getName() + " " + unit.getJob().resources.get(r));
                     }
                 }
             }

@@ -55,6 +55,7 @@ import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.resources.farm.Crop;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
@@ -152,7 +153,7 @@ public class GameInitializer {
                 c.habitatedPlanets.add(starting);
 
                 //Add resources
-                for (Resource res : GameController.resources) {
+                for (Good res : GameController.ores) {
                     c.resourceList.put(res, 0);
                 }
 
@@ -180,19 +181,44 @@ public class GameInitializer {
         City city = new City(p.getUniversePath());
         city.setName("Mines");
         //Find if vein exists on the planet
-        int i = 0;
-        for (ResourceVein v : p.resourceVeins) {
-            //Get the resource vein and stuff
-            //Then place it in the center
-            ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
-            //System.out.println
+        int minerCount = (int) (Math.random() * p.getPlanetSize());
+
+        for (int i = 0; i < minerCount; i++) {
+            //Select random vein
+            int id = (int) (p.strata.size() * Math.random());
+            Stratum strata = p.strata.get(id);
+            ResourceMinerDistrict miner = new ResourceMinerDistrict(strata, 10);
+
+            //Set the type of resource to mine
+            ArrayList<Good> a = new ArrayList<>(strata.minerals.keySet());
+            Good g = a.get((int) (a.size() * Math.random()));
+
+            miner.setResourceMining(g);
             miner.setOwner(c);
             miner.setScale(1);
 
+            int randR = (int) (Math.random() * Math.sqrt(strata.getRadius()));
+            double theta = (Math.random() * Math.PI);
+
+            int x = (int) (Math.cos(theta) * randR);
+            int y = (int) (Math.sin(theta) * randR);
+
             miner.population.add(new PopulationUnit(founding));
-            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
+            p.buildings.put(new GeographicPoint(x + strata.getX(), y + strata.getY()), miner);
             city.addDistrict(miner);
         }
+//        for (ResourceVein v : p.resourceVeins) {
+//            //Get the resource vein and stuff
+//            //Then place it in the center
+//            ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
+//            //System.out.println
+//            miner.setOwner(c);
+//            miner.setScale(1);
+//
+//            miner.population.add(new PopulationUnit(founding));
+//            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
+//            city.addDistrict(miner);
+//        }
         p.cities.add(city);
     }
 
@@ -535,7 +561,7 @@ public class GameInitializer {
         crownPrincePosition.setName("Crown Prince");
         leader.nextInLine = crownPrincePosition;
         crownPrince.position = crownPrincePosition;
-        
+
         PeopleProcessor.placePerson(c.getCapitalCity(), crownPrince);
         c.employ(crownPrince);
     }

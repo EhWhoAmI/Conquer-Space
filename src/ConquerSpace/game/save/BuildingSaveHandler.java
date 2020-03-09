@@ -25,7 +25,6 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -95,7 +94,7 @@ public class BuildingSaveHandler {
             ResourceMinerDistrict gatherer = (ResourceMinerDistrict) what;
             //Get the stuff
             buildingObject.put("type", "gatherer");
-            buildingObject.put("resource", gatherer.getVeinMining().getId());
+            //buildingObject.put("resource", gatherer.getVeinMining().getId());
             buildingObject.put("amount", gatherer.getAmountMined());
             buildingObject.put("resource-type", gatherer.getResourceMining().getId());
         }

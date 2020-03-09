@@ -19,10 +19,12 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.goods.Good;
+import ConquerSpace.game.universe.goods.StorageNeeds;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -35,7 +37,7 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     private int upkeep;
 
     private HashMap<Good, Integer> resources;
-
+    public ArrayList<StorageNeeds> needs;
     private int system;
     private int planet;
 
@@ -62,6 +64,9 @@ public class ResourceStorage extends Building implements ResourceStockpile {
 
     @Override
     public void addResource(Good type, int amount) {
+        if(!resources.containsKey(type)) {
+            resources.put(type, 0);
+        }
         resources.put(type, resources.get(type) + amount);
     }
 
@@ -80,7 +85,7 @@ public class ResourceStorage extends Building implements ResourceStockpile {
 
     @Override
     public boolean canStore(Good type) {
-        return (resources.containsKey(type));
+        return true;//(resources.containsKey(type));
     }
 
     @Override

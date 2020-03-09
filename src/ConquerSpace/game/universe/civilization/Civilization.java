@@ -37,6 +37,7 @@ import ConquerSpace.game.universe.civilization.government.Government;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.Ship;
@@ -114,7 +115,7 @@ public class Civilization implements Employer{
     public ArrayList<EngineTechnology> engineTechs;
     public ArrayList<LaunchVehicle> launchVehicles;
 
-    public HashMap<Resource, Integer> resourceList;
+    public HashMap<Good, Integer> resourceList;
 
     public ArrayList<Planet> habitatedPlanets;
 

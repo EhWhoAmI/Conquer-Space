@@ -22,6 +22,8 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.ResourceMinerDistrict;
+import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -431,6 +433,8 @@ public class PlanetMap extends JDesktopPane {
                     topText = ((CityDistrict) b).getCity().getName();
                 } else if (b instanceof BuildingBuilding) {
                     topText = "Building " + ((BuildingBuilding) b).getToBuild().getType() + ", with " + ((BuildingBuilding) b).getLength() + " left";
+                } else if(b instanceof ResourceMinerDistrict) {
+                    topText = "Mine, mining " + ((ResourceMinerDistrict) b).getResourceMining().getName();
                 }
 
                 toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + topText + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));
@@ -458,6 +462,8 @@ public class PlanetMap extends JDesktopPane {
                 //parent.spacePort;
                 //Switch tabs
                 parent.tpane.setSelectedComponent(parent.spacePort);
+            } else if (building instanceof ResourceStorage) {
+                
             }
         }
 

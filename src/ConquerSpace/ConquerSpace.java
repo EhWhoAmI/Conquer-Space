@@ -25,7 +25,6 @@ import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Checksum;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
-import ConquerSpace.util.logging.SwingMessageAppender;
 import java.awt.AWTEvent;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -98,7 +97,7 @@ public class ConquerSpace {
     public static String assetChecksum = null;
 
     public static final boolean DEBUG = true;
-    
+
     /**
      * Main class.
      *
@@ -111,10 +110,10 @@ public class ConquerSpace {
 
         //Generate hash to verify the version
         //For error messages
-        if(!DEBUG) {
+        if (!DEBUG) {
             generateChecksum();
         }
-        
+
         configureSettings();
 
         //Set catch all exceptions

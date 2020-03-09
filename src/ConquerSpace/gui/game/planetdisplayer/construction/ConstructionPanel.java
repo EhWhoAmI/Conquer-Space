@@ -244,7 +244,7 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                     Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
                     for (ResourceVein v : p.resourceVeins) {
                         if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
-                            miner.setVeinMining(v);
+                            //miner.setVeinMining(v);
                             break;
                         }
                     }
