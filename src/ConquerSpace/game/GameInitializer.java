@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game;
 
-import static ConquerSpace.game.AssetReader.*;
 import ConquerSpace.game.buildings.AdministrativeCenter;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
@@ -30,12 +29,12 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.buildings.area.industrial.ForgeArea;
+import ConquerSpace.game.buildings.area.industrial.OreProcessor;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
-import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
@@ -54,10 +53,8 @@ import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.Resource;
-import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.resources.farm.Crop;
-import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import ConquerSpace.game.universe.spaceObjects.StarSystem;
@@ -69,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -319,13 +315,33 @@ public class GameInitializer {
     }
 
     private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
+        City cit = new City(starting.getUniversePath());
         for (int i = 0; i < 10; i++) {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
             district.areas.add(new ForgeArea());
+            for (Good ore : GameController.ores) {
+                OreProcessor process1 = new OreProcessor();
+                process1.setIntake(ore);
+                //Get iron thingy
+                Element e = GameController.elements.get(0);
+                process1.setOutput(e);
+
+                district.areas.add(process1);
+            }
+            for (int k = 0; k < 5; k++) {
+                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
+                u.setSpecies(c.getFoundingSpecies());
+                c.population.add(u);
+                district.getPopulationArrayList().add(u);
+            }
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
             starting.buildings.put(pt, district);
+
+            //Add to city
+            cit.buildings.add(district);
         }
+        starting.cities.add(cit);
     }
 
     private void createPopulationStorages(Planet starting, Civilization c, Random selector) {

@@ -72,8 +72,8 @@ public class GameLoader {
                 EngineTechnology.class, AssetReader::processEngineTech);
 
         //Read elements
-        /*GameController.elements = readHjsonFromDirInArray("dirs.elements",
-                Element.class, AssetReader::processElement);*/
+        GameController.elements = readHjsonFromDirInArray("dirs.elements",
+                Element.class, AssetReader::processElement);
         
         GameController.ores = readHjsonFromDirInArray("dirs.ores", Ore.class, AssetReader::processOre);
         //Get list of distrubutions

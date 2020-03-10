@@ -31,6 +31,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.industrial.OreProcessor;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
@@ -305,6 +306,9 @@ public class GameUpdater {
                 //c.resourceList.
                 for (Good type : s.storedTypes()) {
                     //add to index
+                    if(!c.resourceList.containsKey(type)) {
+                        c.resourceList.put(type, 0);
+                    }
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
                     c.resourceList.put(type, amountToAdd);
                 }
@@ -465,6 +469,14 @@ public class GameUpdater {
             Job job = new Job(JobType.PowerPlantTechnician);
 
             //job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
+            c.jobs.add(job);
+        }
+        else if(a instanceof OreProcessor) {
+            Job job = new Job(JobType.FactoryWorker);
+
+            job.resources.put(((OreProcessor) a).getIntake(), -10);
+            job.resources.put(((OreProcessor) a).getOutput(), 10);
+
             c.jobs.add(job);
         }
     }

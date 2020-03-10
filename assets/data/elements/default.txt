@@ -19,7 +19,5 @@
         id: 10
         name: Iron
         density:  7.874
-    },
-    {
     }
 ]

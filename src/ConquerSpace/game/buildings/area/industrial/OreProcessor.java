@@ -15,41 +15,39 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.buildings.area.industrial;
 
-import ConquerSpace.game.jobs.Job;
-import ConquerSpace.game.population.PopulationUnit;
-import java.awt.Color;
-import java.util.ArrayList;
+import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.universe.goods.Good;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class IndustrialDistrict extends Building implements PopulationStorage {
-
+public class OreProcessor extends Area{
+    private Good intake;
+    private Good output;
+    
     @Override
-    public Color getColor() {
-        return new Color(201, 144, 0);
+    public String toString() {
+        return "Ore Processor";
     }
 
-    public ArrayList<PopulationUnit> population;
-
-    public IndustrialDistrict() {
-        population = new ArrayList<>();
+    public Good getOutput() {
+        return output;
     }
 
-    @Override
-    public ArrayList<PopulationUnit> getPopulationArrayList() {
-        return population;
+    public Good getIntake() {
+        return intake;
     }
 
-    @Override
-    public void processJob(Job j) {
+    public void setIntake(Good intake) {
+        this.intake = intake;
     }
 
-    @Override
-    public int getMaxStorage() {
-        return population.size();
+    public void setOutput(Good output) {
+        this.output = output;
     }
+    
+    
 }
