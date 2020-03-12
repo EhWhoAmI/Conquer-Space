@@ -31,6 +31,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.buildings.area.industrial.OreProcessor;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.events.Event;
@@ -52,6 +53,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.goods.Good;
+import ConquerSpace.game.universe.goods.ProductionProcess;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.resources.farm.Crop;
@@ -208,9 +210,7 @@ public class GameUpdater {
         processCities(p, date);
 
         //createPlanetJobs(p, date);
-
         //assignJobs(p, date);
-
         processBuildings(p, date);
 
         processPopulation(p, date);
@@ -236,7 +236,7 @@ public class GameUpdater {
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
-            
+
             if (rs.canStore(resourceType)) {
                 rs.addResource(resourceType, amount);
                 break;
@@ -254,7 +254,7 @@ public class GameUpdater {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
             //if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
-                //return true;
+            //return true;
             //}
         }
         return false;
@@ -306,7 +306,7 @@ public class GameUpdater {
                 //c.resourceList.
                 for (Good type : s.storedTypes()) {
                     //add to index
-                    if(!c.resourceList.containsKey(type)) {
+                    if (!c.resourceList.containsKey(type)) {
                         c.resourceList.put(type, 0);
                     }
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
@@ -470,12 +470,31 @@ public class GameUpdater {
 
             //job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
             c.jobs.add(job);
-        }
-        else if(a instanceof OreProcessor) {
+        } else if (a instanceof OreProcessor) {
             Job job = new Job(JobType.FactoryWorker);
 
             job.resources.put(((OreProcessor) a).getIntake(), -10);
             job.resources.put(((OreProcessor) a).getOutput(), 10);
+
+            c.jobs.add(job);
+        } else if (a instanceof Factory) {
+            Job job = new Job(JobType.FactoryWorker);
+
+            //Process resources used
+            ProductionProcess process = ((Factory) a).getProcess();
+            for (Map.Entry<Good, Integer> entry : process.input.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+
+                job.resources.putIfAbsent(key, -val);
+            }
+
+            for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+
+                job.resources.putIfAbsent(key, val);
+            }
 
             c.jobs.add(job);
         }
@@ -552,7 +571,7 @@ public class GameUpdater {
                 //Process...
                 ResourceStockpile stockpile = (ResourceStockpile) building;
             } else if (building instanceof ResourceMinerDistrict) {
-                
+
             } else if (building instanceof FarmBuilding) {
                 //Get the resources
                 FarmBuilding farmBuilding = (FarmBuilding) building;

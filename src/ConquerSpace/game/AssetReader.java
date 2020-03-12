@@ -425,7 +425,6 @@ public class AssetReader {
             //Find good
             for (int k = 0; k < GameController.allGoods.size(); k++) {
                 Good g = GameController.allGoods.get(k);
-                System.out.println(content[0]);
                 if (g.getName().equals(content[0])) {
                     toFind = g;
                     break;
