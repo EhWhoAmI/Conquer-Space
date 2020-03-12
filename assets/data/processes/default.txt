@@ -1,0 +1,20 @@
+[
+    {
+        //Will add: Maintainence
+        //Add 1 for each process thing
+        //Components needed to create factory
+        //Other stuff I can't remember
+        //Maybe even procedually generated processes with some parameters
+        name: Magnetite Smelting
+        input: [
+            "Magnetite:1"
+        ]
+        output: [
+            "Iron:1"
+            "Oxygen:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+]

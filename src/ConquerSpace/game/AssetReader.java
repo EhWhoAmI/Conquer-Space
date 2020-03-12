@@ -21,8 +21,10 @@ import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.goods.Element;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.goods.NonElement;
 import ConquerSpace.game.universe.goods.Ore;
+import ConquerSpace.game.universe.goods.ProductionProcess;
 import ConquerSpace.game.universe.goods.ResourceDistribution;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
@@ -34,8 +36,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+import jdk.internal.net.http.common.Pair;
 import org.apache.logging.log4j.Logger;
 import org.hjson.JsonValue;
 import org.json.JSONArray;
@@ -79,6 +83,8 @@ public class AssetReader {
                         LOGGER.error("CCE!", e);
                     } catch (JSONException exception) {
                         LOGGER.error("JSONException!", exception);
+                    } catch (IllegalArgumentException ile) {
+                        LOGGER.error("IllegalArgumentException!", ile);
                     }
                 }
             } catch (FileNotFoundException ex) {
@@ -355,7 +361,7 @@ public class AssetReader {
         Ore element = new Ore(name, 0, 1, density);
         //Process formula
         obj.getJSONArray("formula");
-        
+
         //Process distribution
         JSONArray dist = obj.getJSONArray("distribution");
         int distributionLow = dist.getInt(0);
@@ -366,7 +372,7 @@ public class AssetReader {
         double rarity = obj.getDouble("rarity");
         int abundance = obj.getInt("abundance");
         int resourceDistDensity = obj.getInt("dist-density");
-        
+
         element.dist.distributionLow = distributionLow;
         element.dist.distributionHigh = distributionHigh;
         element.dist.depthLow = depthLow;
@@ -374,8 +380,74 @@ public class AssetReader {
         element.dist.rarity = rarity;
         element.dist.abundance = abundance;
         element.dist.density = resourceDistDensity;
-        
+
         return (element);
+    }
+
+    //Lol the name
+    public static Object processProcess(JSONObject obj) {
+        String name = obj.getString("name");
+
+        HashMap<Good, Integer> input = new HashMap<>();
+
+        JSONArray inputArray = obj.getJSONArray("input");
+
+        for (int i = 0; i < inputArray.length(); i++) {
+            String s = inputArray.getString(i);
+            String[] content = s.split(":");
+
+            Good toFind = null;
+            //Find good
+            for (int k = 0; k < GameController.allGoods.size(); k++) {
+                Good g = GameController.allGoods.get(k);
+                if (g.getName().equals(content[0])) {
+                    toFind = g;
+                    break;
+                }
+            }
+
+            if (toFind != null) {
+                //Parse things
+                int value = Integer.parseInt(content[1]);
+                input.put(toFind, value);
+            }
+        }
+
+        HashMap<Good, Integer> output = new HashMap<>();
+
+        JSONArray outputArray = obj.getJSONArray("output");
+
+        for (int i = 0; i < outputArray.length(); i++) {
+            String s = outputArray.getString(i);
+            String[] content = s.split(":");
+
+            Good toFind = null;
+            //Find good
+            for (int k = 0; k < GameController.allGoods.size(); k++) {
+                Good g = GameController.allGoods.get(k);
+                System.out.println(content[0]);
+                if (g.getName().equals(content[0])) {
+                    toFind = g;
+                    break;
+                }
+            }
+
+            if (toFind != null) {
+                //Parse things
+                int value = Integer.parseInt(content[1]);
+                output.put(toFind, value);
+            }
+        }
+
+        int diff = obj.getInt("diff");
+
+        ProductionProcess process = new ProductionProcess();
+        process.name = name;
+        process.input = input;
+        process.output = output;
+        process.diff = diff;
+
+        return process;
     }
 }
 

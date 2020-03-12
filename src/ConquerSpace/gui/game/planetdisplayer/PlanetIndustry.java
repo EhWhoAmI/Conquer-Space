@@ -20,9 +20,11 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.resources.farm.Crop;
 import ConquerSpace.game.universe.spaceObjects.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
@@ -53,6 +55,8 @@ public class PlanetIndustry extends JPanel {
     private JPanel areaContainer;
     private DefaultListModel<Area> areaDefaultListModel;
     private JList<Area> areaList;
+    
+    private JPanel areaInfoPanel;
 
     //Sorts out all the buildings and places
     private JPanel jobSortingOutPanel;
@@ -62,7 +66,7 @@ public class PlanetIndustry extends JPanel {
     private JPanel industryInfoContainer;
     private CardLayout industryInfoCardLayout;
     private FarmingInfoPanel farmingInfoPanel;
-    
+
     private JPanel availableJobs;
     private JobListModel availableJobListModel;
     private JList<Job> availableJobList;
@@ -87,8 +91,22 @@ public class PlanetIndustry extends JPanel {
             }
         }
         areaList = new JList<>(areaDefaultListModel);
+        
+        areaList.addListSelectionListener(l -> {
+            areaInfoPanel.removeAll();
+            if(areaList.getSelectedValue() instanceof Factory) {
+                Factory factory = (Factory) areaList.getSelectedValue();
+                FactoryAreaInfo info = new FactoryAreaInfo(factory);
+                areaInfoPanel.add(info);
+            }
+        });
+        
         JScrollPane scrollPane = new JScrollPane(areaList);
+        
+        areaInfoPanel = new JPanel();
+        
         areaContainer.add(scrollPane, BorderLayout.WEST);
+        areaContainer.add(areaInfoPanel, BorderLayout.CENTER);
         tabs.add(areaContainer, "Areas");
 
         jobSortingOutPanel = new JPanel(new HorizontalFlowLayout());
@@ -114,13 +132,12 @@ public class PlanetIndustry extends JPanel {
 
         industryInfoContainer.add("Farm", farmingInfoPanel);
         tabs.add(jobSortingOutPanel, "Industries");
-        
+
         //availableJobs = new JPanel();
         //availableJobListModel = new JobListModel(p.planetJobs);
         //availableJobList = new JList<>(availableJobListModel);
         //availableJobs.add(new JScrollPane(availableJobList));
         //tabs.add(availableJobs, "Available jobs");
-        
         add(tabs);
     }
 
@@ -139,7 +156,7 @@ public class PlanetIndustry extends JPanel {
 
         private JTable farmTable;
         private FarmTableTableModel farmTableTableModel;
-        
+
         private JPanel farmInfoPanel;
         private DefaultListModel<Crop> localLifeInFarmListModel;
         private JList<Crop> localLifeInFarmList;
@@ -149,28 +166,28 @@ public class PlanetIndustry extends JPanel {
             farmTableTableModel = new FarmTableTableModel();
 
             farmTable = new JTable(farmTableTableModel);
-            
+
             farmInfoPanel = new JPanel();
             farmInfoPanel.setLayout(new VerticalFlowLayout());
             localLifeInFarmListModel = new DefaultListModel<>();
             localLifeInFarmList = new JList<>(localLifeInFarmListModel);
-            
+
             farmInfoPanel.add(new JLabel("Crops"));
             farmInfoPanel.add(new JScrollPane(localLifeInFarmList));
             ListSelectionModel farmTableSelectionModel = farmTable.getSelectionModel();
             farmTableSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             farmTableSelectionModel.addListSelectionListener(l -> {
-                if(farmTable.getSelectedRow() > -1) {
+                if (farmTable.getSelectedRow() > -1) {
                     FarmBuilding fb = farmTableTableModel.getFarmBuilding(farmTable.getSelectedRow());
                     //Populate the list...
                     localLifeInFarmListModel.clear();
                     //Add the crops
-                    for(Crop crop : fb.crops) {
+                    for (Crop crop : fb.crops) {
                         localLifeInFarmListModel.addElement(crop);
                     }
                 }
             });
-            
+
             add(new JScrollPane(farmTable));
             add(farmInfoPanel);
             update();
@@ -183,15 +200,15 @@ public class PlanetIndustry extends JPanel {
                 if (value instanceof FarmBuilding) {
                     farmTableTableModel.addFarmBuilding((FarmBuilding) value);
                 }
-            } 
-       }
+            }
+        }
 
     }
-    
+
     private class MiningInfoPanel extends JPanel {
-        
+
     }
-    
+
     private class FarmTableTableModel extends AbstractTableModel {
 
         private String[] colunms = {"Farm Type", "Productivity"};
@@ -233,20 +250,20 @@ public class PlanetIndustry extends JPanel {
         public String getColumnName(int column) {
             return colunms[column];
         }
-        
+
         public FarmBuilding getFarmBuilding(int index) {
             return farmBuildingArrayList.get(index);
         }
     }
-    
-    private class JobListModel extends AbstractListModel<Job>{
+
+    private class JobListModel extends AbstractListModel<Job> {
 
         ArrayList<Job> jobs;
 
         public JobListModel(ArrayList<Job> jobs) {
             this.jobs = jobs;
         }
-        
+
         @Override
         public int getSize() {
             return jobs.size();
@@ -256,6 +273,43 @@ public class PlanetIndustry extends JPanel {
         public Job getElementAt(int index) {
             return jobs.get(index);
         }
-        
+    }
+
+    private class FactoryAreaInfo extends JPanel {
+
+        public FactoryAreaInfo(Factory factory) {
+            JLabel info = new JLabel("Factory " + factory.getProcess().name);
+
+            String inputString = "Input: ";
+
+            for (Map.Entry<Good, Integer> entry : factory.getProcess().input.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+                inputString = inputString + key.getName();
+                inputString = inputString + " amount " + val;
+                inputString = inputString + ", ";
+            }
+
+            JLabel input = new JLabel(inputString);
+
+            String outputString = "Output: ";
+            for (Map.Entry<Good, Integer> entry : factory.getProcess().output.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+                outputString = outputString + key.getName();
+                outputString = outputString + " amount " + val;
+                outputString = outputString + ", ";
+            }
+            
+            JLabel output = new JLabel(outputString);
+
+
+            add(info);
+            add(input);
+            add(output);
+            
+            setLayout(new VerticalFlowLayout());
+        }
+
     }
 }

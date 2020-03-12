@@ -22,8 +22,10 @@ import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.goods.Element;
+import ConquerSpace.game.universe.goods.Good;
 import ConquerSpace.game.universe.goods.NonElement;
 import ConquerSpace.game.universe.goods.Ore;
+import ConquerSpace.game.universe.goods.ProductionProcess;
 import ConquerSpace.game.universe.goods.ResourceDistribution;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
@@ -69,11 +71,14 @@ public class GameController {
     public static GameInitializer initer;
     public static PeopleProcessor peopleProcessor;
     public static MusicPlayer musicPlayer;
-    
+
     public static ArrayList<Element> elements;
     public static ArrayList<NonElement> rawMaterials;
     public static ArrayList<Ore> ores;
-    
+    public static ArrayList<Good> allGoods;
+
+    public static ArrayList<ProductionProcess> prodProcesses;
+
     public static final int AU_IN_LTYR = 63241;
 
     /**

@@ -28,6 +28,7 @@ import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.NonElement;
 import ConquerSpace.game.universe.goods.Ore;
+import ConquerSpace.game.universe.goods.ProductionProcess;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -74,10 +75,15 @@ public class GameLoader {
         //Read elements
         GameController.elements = readHjsonFromDirInArray("dirs.elements",
                 Element.class, AssetReader::processElement);
-        
-        GameController.ores = readHjsonFromDirInArray("dirs.ores", Ore.class, AssetReader::processOre);
-        //Get list of distrubutions
 
+        GameController.ores = readHjsonFromDirInArray("dirs.ores", Ore.class, AssetReader::processOre);
+
+        //Fill all goods
+        GameController.allGoods = new ArrayList<>();
+        GameController.allGoods.addAll(GameController.elements);
+        GameController.allGoods.addAll(GameController.ores);
+        
+        GameController.prodProcesses = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
         readBuildingCosts();
 
         //Events

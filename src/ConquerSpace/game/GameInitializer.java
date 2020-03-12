@@ -28,6 +28,7 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.buildings.area.industrial.ForgeArea;
 import ConquerSpace.game.buildings.area.industrial.OreProcessor;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
@@ -52,6 +53,7 @@ import ConquerSpace.game.universe.civilization.government.PoliticalPowerTransiti
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.goods.Element;
 import ConquerSpace.game.universe.goods.Good;
+import ConquerSpace.game.universe.goods.ProductionProcess;
 import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.resources.farm.Crop;
@@ -103,6 +105,12 @@ public class GameInitializer {
         } catch (IOException ex) {
             //Ignore
         }
+
+        //Memory saving tricks
+        universe.civs.trimToSize();
+        universe.species.trimToSize();
+        universe.spaceShips.trimToSize();
+        universe.starSystems.trimToSize();
 
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
@@ -320,15 +328,12 @@ public class GameInitializer {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
             district.areas.add(new ForgeArea());
-            for (Good ore : GameController.ores) {
-                OreProcessor process1 = new OreProcessor();
-                process1.setIntake(ore);
-                //Get iron thingy
-                Element e = GameController.elements.get(0);
-                process1.setOutput(e);
-
-                district.areas.add(process1);
+            for (ProductionProcess proc : GameController.prodProcesses) {
+                //Add new factory
+                Factory factory = new Factory(proc);
+                district.areas.add(factory);
             }
+            
             for (int k = 0; k < 5; k++) {
                 PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
                 u.setSpecies(c.getFoundingSpecies());

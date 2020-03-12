@@ -35,13 +35,11 @@ public class Universe extends SpaceObject {
 
     private final long seed;
 
-    private ArrayList<Civilization> civs;
+    public ArrayList<Civilization> civs;
 
-    private ArrayList<StarSystem> starSystems;
+    public ArrayList<StarSystem> starSystems;
 
     public HashMap<UniversePath, Integer> control;
-
-    private ArrayList<Resource> resources;
 
     public ArrayList<SpaceShip> spaceShips;
     

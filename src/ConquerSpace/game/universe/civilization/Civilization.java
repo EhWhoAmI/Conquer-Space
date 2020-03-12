@@ -21,7 +21,6 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.population.Race;
-import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
@@ -38,7 +37,7 @@ import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.civilization.stats.Population;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.goods.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.ShipClass;
@@ -48,7 +47,6 @@ import ConquerSpace.game.universe.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.launch.LaunchVehicle;
 import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
 import ConquerSpace.game.universe.spaceObjects.Universe;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -122,6 +120,8 @@ public class Civilization implements Employer{
     public ArrayList<PopulationUnit> population;
 
     public ArrayList<Event> events;
+    
+    public ArrayList<ProductionProcess> productionProcesses;
 
     private Race foundingSpecies;
 
@@ -186,6 +186,8 @@ public class Civilization implements Employer{
         events = new ArrayList<>();
         
         contacts = new ArrayList<>();
+        
+        productionProcesses = new ArrayList<>();
         
         government = new Government();
     }
