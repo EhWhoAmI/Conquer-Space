@@ -95,16 +95,19 @@ public class PlanetResources extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+        jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         planetResourceTable.setModel(planetModel);
+        planetResourceTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(planetResourceTable);
 
         jTabbedPane1.addTab("Planet Resources", jScrollPane1);
 
+        jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         storageJList.setModel(storageList);
+        storageJList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane5.setViewportView(storageJList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -114,6 +117,7 @@ public class PlanetResources extends javax.swing.JPanel {
         jPanel3.add(jScrollPane5, gridBagConstraints);
 
         storageResources.setModel(storageModel);
+        storageResources.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane6.setViewportView(storageResources);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

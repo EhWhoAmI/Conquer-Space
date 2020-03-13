@@ -18,11 +18,8 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
-import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.BuildingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
-import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -31,6 +28,7 @@ import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
+import ConquerSpace.util.Utilities;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -52,16 +50,14 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
 import java.util.Map;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolTip;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
@@ -102,17 +98,20 @@ public class PlanetMap extends JDesktopPane {
 
     private JMenu viewMenu;
 
-    private ButtonGroup viewMenuButtonGroup;
-    private JCheckBoxMenuItem normalViewButton;
+    private JCheckBoxMenuItem buildingViewButton;
     private JCheckBoxMenuItem buildMenuButton;
     private JCheckBoxMenuItem showResourceButton;
+    private JMenuItem showOnlyResources;
+    private JMenuItem showOnlyBuildings;
 
     private JMenuItem resetViewButton;
     private JMenuItem hideTerrainButton;
 
     private final int NORMAL_VIEW = 0;
     private final int RESOURCE_VIEW = 1;
-    private final int BUILDING_VIEW = 2;
+    private final int BOTH_VIEW = 2;
+    private final int CONSTRUCTION_VIEW = 3;
+    private final int NONE_VIEW = -1;
 
     //if -1, then all resources
     private int resourceShown = -1;
@@ -139,38 +138,63 @@ public class PlanetMap extends JDesktopPane {
 
         menuBar = new JMenuBar();
 
-        viewMenuButtonGroup = new ButtonGroup();
         viewMenu = new JMenu("View");
 
         ActionListener viewActionListener = (e) -> {
             //Get button pressed..
             setCursor(Cursor.getDefaultCursor());
-            if (e.getSource().equals(normalViewButton)) {
-                displayedView = NORMAL_VIEW;
-                buildMenuButton.setSelected(false);
-            } else if (e.getSource().equals(showResourceButton)) {
-                displayedView = RESOURCE_VIEW;
+            buildMenuButton.isSelected();
+            if (e.getSource().equals(buildingViewButton) || e.getSource().equals(showResourceButton)) {
                 buildMenuButton.setSelected(false);
             } else if (e.getSource().equals(buildMenuButton)) {
-                displayedView = BUILDING_VIEW;
+                displayedView = CONSTRUCTION_VIEW;
                 setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
                 //Deselect everything else
-                normalViewButton.setSelected(false);
+                buildingViewButton.setSelected(false);
                 showResourceButton.setSelected(false);
+            } else if (e.getSource().equals(showOnlyResources)) {
+                buildingViewButton.setSelected(false);
+                showResourceButton.setSelected(true);
+                displayedView = RESOURCE_VIEW;
+            } else if (e.getSource().equals(showOnlyBuildings)) {
+                buildingViewButton.setSelected(true);
+                showResourceButton.setSelected(false);
+                displayedView = NORMAL_VIEW;
+            }
+
+            if (buildingViewButton.isSelected() && showResourceButton.isSelected()) {
+                displayedView = BOTH_VIEW;
+            } else if (buildingViewButton.isSelected()) {
+                displayedView = NORMAL_VIEW;
+            } else if (showResourceButton.isSelected()) {
+                displayedView = RESOURCE_VIEW;
+            } else if (!buildMenuButton.isSelected()) {
+                //Just show nothing
+                displayedView = NONE_VIEW;
             }
 
             map.repaint();
         };
 
-        normalViewButton = new JCheckBoxMenuItem("Normal View", true);
-        normalViewButton.addActionListener(viewActionListener);
+        buildingViewButton = new JCheckBoxMenuItem("Building View", true);
+        buildingViewButton.addActionListener(viewActionListener);
         //viewMenuButtonGroup.add(normalViewButton);
-        viewMenu.add(normalViewButton);
+        viewMenu.add(buildingViewButton);
 
         showResourceButton = new JCheckBoxMenuItem("Resource View");
         //viewMenuButtonGroup.add(showResourceButton);
         showResourceButton.addActionListener(viewActionListener);
         viewMenu.add(showResourceButton);
+
+        viewMenu.addSeparator();
+
+        showOnlyBuildings = new JMenuItem("Only show buildings");
+        showOnlyBuildings.addActionListener(viewActionListener);
+        viewMenu.add(showOnlyBuildings);
+
+        showOnlyResources = new JMenuItem("Only show resources");
+        showOnlyResources.addActionListener(viewActionListener);
+        viewMenu.add(showOnlyResources);
 
         viewMenu.addSeparator();
 
@@ -241,28 +265,7 @@ public class PlanetMap extends JDesktopPane {
                 g2d.drawImage(mapImage, 0, 0, null);
             }
 
-            //Normal view 
-            if (displayedView == NORMAL_VIEW || displayedView == BUILDING_VIEW) {
-                //Draw buildings
-                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
-                    GeographicPoint p = en.getKey();
-                    Building Building = en.getValue();
-                    //Draw
-                    Rectangle2D.Double rect = new Rectangle2D.Double(p.getX() * tileSize, p.getY() * tileSize, tileSize, tileSize);
-                    g2d.setColor(Building.getColor());
-                    g2d.fill(rect);
-                }
-
-                if (isActive) {
-                    //Draw it
-                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
-                    g2d.setColor(Color.RED);
-                    g2d.fill(buildingPointOutside);
-                    Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
-                    g2d.setColor(Color.BLUE);
-                    g2d.fill(buildingPointInside);
-                }
-            } else if (displayedView == RESOURCE_VIEW) {
+            if (displayedView == RESOURCE_VIEW || displayedView == BOTH_VIEW) {
                 //Show resources
                 if (resourceImage == null || needRefresh) {
                     resourceImage = new BufferedImage((int) (p.getPlanetSize() * 2 * tileSize), (int) (p.getPlanetSize() * tileSize), BufferedImage.TYPE_INT_ARGB);
@@ -283,8 +286,30 @@ public class PlanetMap extends JDesktopPane {
 
                 g2d.drawImage(resourceImage, 0, 0, null);
             }
+            //Normal view 
+            if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
+                //Draw buildings
+                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                    GeographicPoint p = en.getKey();
+                    Building Building = en.getValue();
+                    //Draw
+                    Rectangle2D.Double rect = new Rectangle2D.Double(p.getX() * tileSize, p.getY() * tileSize, tileSize, tileSize);
+                    g2d.setColor(Building.getColor());
+                    g2d.fill(rect);
+                }
 
-            if (displayedView == BUILDING_VIEW) {
+                if (isActive) {
+                    //Draw it
+                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
+                    g2d.setColor(Color.RED);
+                    g2d.fill(buildingPointOutside);
+                    Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
+                    g2d.setColor(Color.BLUE);
+                    g2d.fill(buildingPointInside);
+                }
+            }
+
+            if (displayedView == CONSTRUCTION_VIEW) {
                 //Building UI
                 Rectangle2D.Double mouseBox = new Rectangle2D.Double(mouseX * tileSize, mouseY * tileSize, tileSize, tileSize);
                 g2d.setColor(Color.PINK);
@@ -330,7 +355,7 @@ public class PlanetMap extends JDesktopPane {
                 if (b != null) {
                     showBuildingInfo(b);
                 }
-            } else if (SwingUtilities.isRightMouseButton(e) && displayedView == BUILDING_VIEW) {
+            } else if (SwingUtilities.isRightMouseButton(e) && displayedView == CONSTRUCTION_VIEW) {
                 //Make the things
                 //Create construction panel
                 //Check if point is within bounds
@@ -403,22 +428,33 @@ public class PlanetMap extends JDesktopPane {
             int mapX = pt.x;
             int mapY = pt.y;
 
-            Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
-            if (b != null) {
-//                String topText = "";
-//                if (b instanceof CityDistrict) {
-//                    topText = ((CityDistrict) b).getCity().getName();
-//                } else if (b instanceof BuildingBuilding) {
-//                    topText = "Building " + ((BuildingBuilding) b).getToBuild().getType() + ", with " + ((BuildingBuilding) b).getLength() + " left";
-//                } else if (b instanceof ResourceMinerDistrict) {
-//                    topText = "Mine, mining " + ((ResourceMinerDistrict) b).getResourceMining().getName();
-//                }
+            if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
+                Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
+                if (b != null) {
+                    toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));
 
-                toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));
+                    popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
+                    popup.show();
+                }
+            } else if (displayedView == RESOURCE_VIEW) {
+                //Check if lying on strata
+                ArrayList<Stratum> strataToShow = new ArrayList<>();
+                for (Stratum stratum : p.strata) {
+                    if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), mapX, mapY)) {
+                        strataToShow.add(stratum);
+                    }
+                }
 
-                popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
-                popup.show();
+                if (!strataToShow.isEmpty()) {
+                    toolTip.setTipText("<html>&nbsp;Layers: " + strataToShow.toString());
+                    popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
+                    popup.show();
+                }
             }
+        }
+
+        private boolean inCircle(int xC, int yC, int r, int x, int y) {
+            return (Utilities.distanceBetweenPoints(xC, yC, x, y) <= r);
         }
 
         private void hideToolTip() {

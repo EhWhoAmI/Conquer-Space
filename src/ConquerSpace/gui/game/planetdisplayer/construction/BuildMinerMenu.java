@@ -34,14 +34,14 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author EhWhoAmI
  */
-public class BuildResourceGenerationMenu extends JPanel {
+public class BuildMinerMenu extends JPanel {
 
         JComboBox<Good> resourceToMine;
         JLabel resourceToMineLabel;
         JLabel miningSpeed;
         JSpinner miningSpeedSpinner;
 
-        public BuildResourceGenerationMenu(Planet p, Civilization c) {
+        public BuildMinerMenu(Planet p, Civilization c) {
             resourceToMineLabel = new JLabel("Mining resource: ");
 
             DefaultComboBoxModel<Good> resourceComboBoxModel = new DefaultComboBoxModel<>();

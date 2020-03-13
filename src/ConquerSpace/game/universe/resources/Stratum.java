@@ -30,6 +30,7 @@ public class Stratum {
     private int x;
     private int y;
     private int radius;
+    private String name = "layer";
     
     public HashMap<Good, Integer> minerals;
 
@@ -67,5 +68,18 @@ public class Stratum {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

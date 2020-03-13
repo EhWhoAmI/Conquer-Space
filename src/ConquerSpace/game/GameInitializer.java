@@ -143,6 +143,8 @@ public class GameInitializer {
 
                 //Add infrastructure
                 createInfrastructure(starting, selector);
+                
+                nameStratumOnPlanet(starting);
 
                 //Set ownership
                 starting.setOwnerID(c.getID());
@@ -635,5 +637,17 @@ public class GameInitializer {
     
     private PowerPlantArea createPowerPlant() {
         return null;
+    }
+    
+    private void nameStratumOnPlanet(Planet p) {
+        NameGenerator gen = null;
+        try {
+            gen = NameGenerator.getNameGenerator("strata.names");
+        } catch (IOException ex) {
+            //Ignore
+        }
+        for(Stratum strata: p.strata) {
+            strata.setName(gen.getName(0));
+        }
     }
 }

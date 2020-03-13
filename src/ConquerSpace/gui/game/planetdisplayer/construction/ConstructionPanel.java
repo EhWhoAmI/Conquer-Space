@@ -65,7 +65,7 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
 
     private BuildResourceStorageMenu buildResourceStorageMenu;
 
-    private BuildResourceGenerationMenu buildMiningStorageMenu;
+    private BuildMinerMenu buildMiningStorageMenu;
 
     private BuildIndustrialAreaMenu buildIndustrialAreaMenu;
 
@@ -157,7 +157,7 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
 
         buildResourceStorageMenu = new BuildResourceStorageMenu();
 
-        buildMiningStorageMenu = new BuildResourceGenerationMenu(p, c);
+        buildMiningStorageMenu = new BuildMinerMenu(p, c);
 
         buildIndustrialAreaMenu = new BuildIndustrialAreaMenu();
 
