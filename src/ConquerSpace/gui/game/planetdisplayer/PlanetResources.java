@@ -18,18 +18,16 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.goods.Good;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.bodies.Planet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractListModel;
 import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *

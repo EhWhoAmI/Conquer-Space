@@ -15,17 +15,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects.terrain;
+package ConquerSpace.game.universe.resources;
 
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class TerrainTile {
-    public Color color;
-    public int height;
-    //Resources
-    //Etc...
+public class ProductionProcess {
+
+    public String name;
+    public HashMap<Good, Integer> input;
+    public HashMap<Good, Integer> output;
+    public ArrayList<Good> catalyst;
+    //How difficult it is to extract. Will replace with the parts for the factory in the futute.
+    public int diff;
+
+    public ProductionProcess() {
+        input = new HashMap<>();
+        output = new HashMap<>();
+        catalyst = new ArrayList<>();
+    }
 }

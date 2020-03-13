@@ -18,7 +18,7 @@
 package ConquerSpace.game.buildings.area.industrial;
 
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.universe.goods.ProductionProcess;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
  *

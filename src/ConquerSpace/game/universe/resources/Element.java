@@ -15,39 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area.industrial;
-
-import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.universe.goods.Good;
+package ConquerSpace.game.universe.resources;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class OreProcessor extends Area{
-    private Good intake;
-    private Good output;
+public class Element extends Good{
     
-    @Override
-    public String toString() {
-        return "Ore Processor";
+    public Element(String name, int id, double volume, double mass) {
+        super(name, id, volume, mass);
     }
-
-    public Good getOutput() {
-        return output;
-    }
-
-    public Good getIntake() {
-        return intake;
-    }
-
-    public void setIntake(Good intake) {
-        this.intake = intake;
-    }
-
-    public void setOutput(Good output) {
-        this.output = output;
-    }
-    
-    
 }

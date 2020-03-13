@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects;
+package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Resource;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import java.util.ArrayList;
 import java.util.HashMap;

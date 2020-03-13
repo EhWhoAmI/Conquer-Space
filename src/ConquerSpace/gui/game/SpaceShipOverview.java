@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 

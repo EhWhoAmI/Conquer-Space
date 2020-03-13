@@ -20,13 +20,11 @@ package ConquerSpace.game;
 import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
-import ConquerSpace.game.universe.goods.Element;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.goods.NonElement;
-import ConquerSpace.game.universe.goods.Ore;
-import ConquerSpace.game.universe.goods.ProductionProcess;
-import ConquerSpace.game.universe.goods.ResourceDistribution;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Element;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.NonElement;
+import ConquerSpace.game.universe.resources.Ore;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -39,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
-import jdk.internal.net.http.common.Pair;
 import org.apache.logging.log4j.Logger;
 import org.hjson.JsonValue;
 import org.json.JSONArray;
@@ -286,59 +283,6 @@ public class AssetReader {
         }
     }
 
-    public static Object processResource(JSONObject obj) {
-        String name = obj.getString("name");
-
-        //The tech id will be the second value.
-        int id = obj.getInt("id");
-
-        float rarity = obj.getFloat("rarity");
-
-        int value = obj.getInt("value");
-
-        float density = obj.getFloat("density");
-
-        int difficulty = obj.getInt("difficulty");
-
-        JSONArray distribution = obj.getJSONArray("distribution");
-
-        JSONArray color = obj.getJSONArray("color");
-
-        boolean mineable = obj.getBoolean("mineable");
-
-        JSONArray tags = obj.getJSONArray("tags");
-
-        JSONObject attributes = obj.getJSONObject("attributes");
-
-        Resource res = new Resource(name, value, rarity, id);
-        res.setDensity(density);
-        res.setDifficulty(difficulty);
-        res.setMineable(mineable);
-        res.setDistributionLow(distribution.getInt(0));
-        res.setDistributionHigh(distribution.getInt(1));
-        res.setColor(color.getInt(0), color.getInt(1), color.getInt(2));
-        //res.setTags(tags.);
-        String[] list = new String[tags.length()];
-        for (int n = 0; n < tags.length(); n++) {
-            list[n] = tags.getString(n);
-        }
-        res.setTags(list);
-
-        //Attributes
-        Iterator it = attributes.keys();
-        while (it.hasNext()) {
-            //Process it
-            String label = (String) it.next();
-            Integer number = (Integer) attributes.get(label);
-            res.getAttributes().put(label, number);
-        }
-
-        if (name.equals("food")) {
-            GameController.foodResource = res;
-        }
-        return res;
-    }
-
     public static Object processSatellite(JSONObject obj) {
         //Literally the easiest.
         return obj;
@@ -452,6 +396,5 @@ public class AssetReader {
 
 //Something to pass the parameters
 interface PassThingy {
-
     public Object thingy(JSONObject obj);
 }

@@ -17,8 +17,7 @@
  */
 package ConquerSpace.game.universe.resources;
 
-import ConquerSpace.game.universe.goods.Good;
-import java.util.ArrayList;
+import ConquerSpace.game.universe.resources.Good;
 import java.util.HashMap;
 
 /**

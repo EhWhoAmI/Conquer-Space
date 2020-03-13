@@ -19,12 +19,12 @@ package ConquerSpace.game.save;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
 import java.util.ArrayList;
 import java.util.Map;
 import org.json.JSONObject;
@@ -76,15 +76,15 @@ public class StarSystemSaveHandler {
 
             //Resource veins
             ArrayList<JSONObject> veins = new ArrayList<>();
-            for (ResourceVein v : planet.resourceVeins) {
+            for (Stratum v : planet.strata) {
                 JSONObject veinObject = new JSONObject();
-                veinObject.put("id", v.getId());
-                veinObject.put("diff", v.getDifficulty());
-                veinObject.put("radius", v.getRadius());
-                veinObject.put("x", v.getX());
-                veinObject.put("y", v.getY());
-                veinObject.put("res", v.getResourceType().getId());
-                veinObject.put("amt", v.getResourceAmount());
+//                veinObject.put("id", v.getId());
+//                veinObject.put("diff", v.getDifficulty());
+//                veinObject.put("radius", v.getRadius());
+//                veinObject.put("x", v.getX());
+//                veinObject.put("y", v.getY());
+//                veinObject.put("res", v.getResourceType().getId());
+//                veinObject.put("amt", v.getResourceAmount());
                 veins.add(veinObject);
             }
             object.put("veins", veins);

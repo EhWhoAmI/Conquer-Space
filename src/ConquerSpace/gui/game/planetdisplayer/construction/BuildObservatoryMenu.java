@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
+import ConquerSpace.game.Calculators;
 import ConquerSpace.game.GameUpdater;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -50,7 +51,7 @@ public class BuildObservatoryMenu extends JPanel {
 
         lensSizeSpinner.addChangeListener(a -> {
             //Calculate
-            telescopeRangeValueLabel.setText(GameUpdater.Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()) + " light years");
+            telescopeRangeValueLabel.setText(Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()) + " light years");
 
         });
 

@@ -22,7 +22,7 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
-import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.gui.game.LaunchSpaceShipMenu;
 import com.alee.extended.layout.HorizontalFlowLayout;

@@ -20,7 +20,7 @@ package ConquerSpace.game.tech;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.goods.ProductionProcess;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;

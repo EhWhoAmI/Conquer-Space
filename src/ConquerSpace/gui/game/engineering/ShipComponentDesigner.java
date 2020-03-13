@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.engineering;
 
+import ConquerSpace.game.Calculators;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.components.ShipComponentTypes;
@@ -30,8 +31,6 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -137,7 +136,7 @@ public class ShipComponentDesigner extends JPanel {
                         rating = ((int) thrustRatingSpinner.getValue());
                         EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
 
-                        mass = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                        mass = Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
                         break;
                 }
                 obj.put("type", type);
@@ -192,7 +191,7 @@ public class ShipComponentDesigner extends JPanel {
                     if (engineTechBox.getSelectedItem() != null) {
                         EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
                         //Set mass
-                        int i = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                        int i = Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
                         massText.setText("" + i);
                     }
                     cardLayout.show(lowerPanel, ENGINE_COMPONENT);
@@ -274,7 +273,7 @@ public class ShipComponentDesigner extends JPanel {
                 if (engineTechBox.getSelectedItem() != null) {
                     EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
                     //Set mass
-                    int i = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                    int i = Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
                     massText.setText("" + i);
                 }
             });
@@ -325,7 +324,7 @@ public class ShipComponentDesigner extends JPanel {
                         if (engineTechBox.getSelectedItem() != null) {
                             EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
                             //Set mass
-                            int i = GameUpdater.Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+                            int i = Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
                             massText.setText("" + i);
                         }
                         cardLayout.show(lowerPanel, ENGINE_COMPONENT);

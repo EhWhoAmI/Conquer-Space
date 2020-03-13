@@ -15,45 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.goods;
+package ConquerSpace.game.universe.resources;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ResourceDistribution {
-    /**
-     * How maximum size of the vein.
-     */
-    public int distributionHigh;
+public class Ore extends NonElement{
+    public ResourceDistribution dist;
     
-    /**
-     * Minimum size of the vein.
-     */
-    public int distributionLow;
+    public Ore(String name, int id, double volume, double mass) {
+        super(name, id, volume, mass);
+        dist = new ResourceDistribution();
+    }
     
-    /**
-     * How deep the vein is, how the lower limit to depth. I know, it's confusing, because low means high on the crust.
-     */
-    public int depthLow;
-    
-    /**
-     * How deep the vein is, maximum depth.
-     */
-    public int depthHigh;
-    
-    /**
-     * How many planets out of a percentage.
-     */
-    public double rarity;
-    
-    /**
-     * How much resources in a reserve.
-     */
-    public int abundance;
-    
-    /**
-     * How the resource is stuffed with other resources. 
-     */
-    public double density;
 }

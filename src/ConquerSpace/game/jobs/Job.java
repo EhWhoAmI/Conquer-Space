@@ -18,8 +18,7 @@
 package ConquerSpace.game.jobs;
 
 import ConquerSpace.game.economy.Currency;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
 import java.util.HashMap;
 
 /**

@@ -18,11 +18,10 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.goods.StorageNeeds;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.StorageNeeds;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.bodies.Planet;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +34,7 @@ import java.util.Iterator;
 public class ResourceStorage extends Building implements ResourceStockpile {
 
     private int upkeep;
+    private int maximumStorage;
 
     private HashMap<Good, Integer> resources;
     public ArrayList<StorageNeeds> needs;
@@ -46,6 +46,7 @@ public class ResourceStorage extends Building implements ResourceStockpile {
         upkeep = 0;
         planet = parent.getId();
         system = parent.getParentStarSystem();
+        maximumStorage = 0;
     }
 
     @Override
@@ -116,8 +117,16 @@ public class ResourceStorage extends Building implements ResourceStockpile {
         resources.put(type, currentlyStored-amount);
         return true;
     }
+
+    public int getMaximumStorage() {
+        return maximumStorage;
+    }
+
+    public void setMaximumStorage(int maximumStorage) {
+        this.maximumStorage = maximumStorage;
+    }
     
-     @Override
+    @Override
     public String getType() {
         return "Resource Storage";
     }

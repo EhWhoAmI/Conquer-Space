@@ -15,32 +15,43 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects.terrain;
+package ConquerSpace.game.universe.resources;
 
 /**
- *
+ * Type of good that can be transported
  * @author EhWhoAmI
  */
-public class Terrain {
+public abstract class Good {
+    String name;
+    int id;
+    double volume; // volume, m^3
+    double mass; //mass, kg
 
-    public TerrainTile[][] terrainColor;
-    private int height;
-    private int width;
-
-    public Terrain() {
+    public Good(String name, int id, double volume, double mass) {
+        this.name = name;
+        this.id = id;
+        this.volume = volume;
+        this.mass = mass;
     }
 
-    public Terrain(int width, int height, int layers) {
-        terrainColor = new TerrainTile[width][height];
-        this.height = height;
-        this.width = width;
+    public String getName() {
+        return name;
     }
 
-    public int getHeight() {
-        return height;
+    public int getId() {
+        return id;
     }
 
-    public int getWidth() {
-        return width;
+    public double getMass() {
+        return mass;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -38,9 +38,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.logging.log4j.Logger;
@@ -126,14 +124,15 @@ public class ConquerSpace {
             GameController.musicPlayer.setToPlay(false);
             GameController.musicPlayer.stopMusic();
         }
-        // Load all the files.
-        loadFiles();
 
         //New Game Menu
         MainMenu menu = new MainMenu();
         menu.setVisible(true);
     }
 
+    /**
+     * Kept for purely historical reasons.
+     */
     public static void loadFiles() {
         long startTime = System.currentTimeMillis();
         try {

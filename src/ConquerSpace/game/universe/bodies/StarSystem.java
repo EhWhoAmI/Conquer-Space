@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects;
+package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.universe.GalacticLocation;
 import ConquerSpace.game.universe.UniversePath;

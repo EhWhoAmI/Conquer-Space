@@ -38,7 +38,6 @@ public class SpacePort extends Building{
         }
     }
     
-    
     @Override
     public Color getColor() {
         return Color.MAGENTA;

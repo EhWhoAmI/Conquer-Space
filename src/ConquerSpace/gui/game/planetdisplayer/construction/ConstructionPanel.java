@@ -17,9 +17,9 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
+import ConquerSpace.game.Calculators;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
@@ -28,23 +28,19 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Resource;
-import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.InternalFrameEvent;
@@ -161,7 +157,7 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
 
         buildResourceStorageMenu = new BuildResourceStorageMenu();
 
-        buildMiningStorageMenu = new BuildResourceGenerationMenu();
+        buildMiningStorageMenu = new BuildResourceGenerationMenu(p, c);
 
         buildIndustrialAreaMenu = new BuildIndustrialAreaMenu();
 
@@ -216,7 +212,7 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                 } else if (item.equals(OBSERVATORY)) {
                     StarSystem sys = u.getStarSystem(p.getParentStarSystem());
                     Observatory observatory = new Observatory(
-                            GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
+                            Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
                             (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
                             c.getID(), new ConquerSpace.game.universe.Point((long) sys.getX(), (long) sys.getY()));
                     //Add visionpoint to civ
@@ -225,13 +221,10 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                     toReset = true;
                 } else if (item.equals(RESOURCE_STOCKPILE)) {
                     ResourceStorage stor = new ResourceStorage(p);
-                    //Add the stuff...
-
-                    for (int i = 0; i < buildResourceStorageMenu.resourceToPut.getModel().getSize(); i++) {
-                        Resource next = buildResourceStorageMenu.resourceToPut.getModel().getElementAt(i);
-
-                        //stor.addResourceTypeStore(next);
-                    }
+                    
+                    stor.setMaximumStorage((int) buildResourceStorageMenu.resourceStorageSizeSpinner.getValue());
+                    
+                    //Add to planet...
                     c.resourceStorages.add(stor);
                     Actions.buildBuilding(p, buildingPos, stor, c, 1);
                     toReset = true;
@@ -241,9 +234,10 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                     //Get the map of things, and calculate the stuff
                     int x = buildingPos.getX();
                     int y = buildingPos.getY();
-                    Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
-                    for (ResourceVein v : p.resourceVeins) {
-                        if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
+                    //TODO make it read resources
+                    //Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
+                    for (Stratum v : p.strata) {
+                        if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius()) {
                             //miner.setVeinMining(v);
                             break;
                         }

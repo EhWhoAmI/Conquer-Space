@@ -29,8 +29,6 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.buildings.area.industrial.Factory;
-import ConquerSpace.game.buildings.area.industrial.ForgeArea;
-import ConquerSpace.game.buildings.area.industrial.OreProcessor;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -51,16 +49,14 @@ import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPos
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerSource;
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.goods.Element;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.goods.ProductionProcess;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.universe.resources.farm.Crop;
+import ConquerSpace.game.universe.farm.Crop;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -275,7 +271,8 @@ public class GameInitializer {
 
         PowerPlantArea powerPlant = new PowerPlantArea();
         //Get the resources needed for powering plant
-        Resource resource = null;
+        //TODO sort out resources needed for powerplants
+        /*Resource resource = null;
         for (Resource res : GameController.resources) {
             for (String tag : res.getTags()) {
                 if (tag.equals("energy")) {
@@ -283,9 +280,8 @@ public class GameInitializer {
                     break;
                 }
             }
-        }
+        }*/
 
-        powerPlant.setUsedResource(resource);
         powerPlant.setMaxVolume(1000);
         infrastructureBuilding.areas.add(powerPlant);
         //Connect it to many buildings
@@ -311,10 +307,6 @@ public class GameInitializer {
         ResourceStorage storage = new ResourceStorage(starting);
         storage.setOwner(c);
         //Add all possible resources
-        //Get starting resources...
-        /*for (Good res : GameController.rawMaterials) {
-            storage.addResourceTypeStore(res);
-        }*/
 
         GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
@@ -327,13 +319,12 @@ public class GameInitializer {
         for (int i = 0; i < 10; i++) {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
-            district.areas.add(new ForgeArea());
             for (ProductionProcess proc : GameController.prodProcesses) {
                 //Add new factory
                 Factory factory = new Factory(proc);
                 district.areas.add(factory);
             }
-            
+
             for (int k = 0; k < 5; k++) {
                 PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
                 u.setSpecies(c.getFoundingSpecies());
@@ -618,7 +609,8 @@ public class GameInitializer {
             //Add areas
             PowerPlantArea powerPlant = new PowerPlantArea();
             //Get the resources needed for powering plant
-            Resource resource = null;
+            //TODO: choose energy resource
+            /*Resource resource = null;
             for (Resource res : GameController.resources) {
                 for (String tag : res.getTags()) {
                     if (tag.equals("energy")) {
@@ -626,7 +618,7 @@ public class GameInitializer {
                         break;
                     }
                 }
-            }
+            }*/
 
             //Add the districts
             for (int i = 0; i < 5; i++) {
@@ -634,11 +626,14 @@ public class GameInitializer {
                 building.addBuilding(b);
             }
 
-            powerPlant.setUsedResource(resource);
             powerPlant.setMaxVolume(1000);
             building.areas.add(powerPlant);
             //Add infrastructure
             p.buildings.put(getRandomEmptyPoint(p, selector), building);
         }
+    }
+    
+    private PowerPlantArea createPowerPlant() {
+        return null;
     }
 }

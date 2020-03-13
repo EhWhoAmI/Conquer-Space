@@ -15,19 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.goods;
-
-import java.util.HashMap;
+package ConquerSpace.game.universe.resources;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class NonElement extends Good{
-    public HashMap<Good, Integer> recipie;
-
-    public NonElement(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
-        recipie = new HashMap<>();
-    }
+public class GoodTag {
+    
 }

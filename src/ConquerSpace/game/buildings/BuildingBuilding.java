@@ -21,7 +21,7 @@ import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
 import java.awt.Color;
 import java.util.HashMap;
 
@@ -36,7 +36,7 @@ public class BuildingBuilding extends Building implements Workable{
     private int length;
     private int scale = 1;
     //Set the resources needed to build over time
-    public HashMap<Resource, Integer> resourcesNeeded;
+    public HashMap<Good, Integer> resourcesNeeded;
     public Civilization builder;
     private int cost;
 

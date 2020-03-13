@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import javax.swing.JInternalFrame;
 
 /**

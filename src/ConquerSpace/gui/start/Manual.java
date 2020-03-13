@@ -19,7 +19,6 @@ package ConquerSpace.gui.start;
 
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
-import ConquerSpace.util.Singleton;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -44,7 +43,6 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-@Singleton
 public class Manual extends JFrame implements ListSelectionListener {
 
     private static final long serialVersionUID = -2589166556749207075L;

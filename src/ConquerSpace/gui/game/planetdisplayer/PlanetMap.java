@@ -28,13 +28,14 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -53,12 +54,14 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 import java.util.Map;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolTip;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
@@ -97,16 +100,12 @@ public class PlanetMap extends JDesktopPane {
 
     private JMenuBar menuBar;
 
-    private ButtonGroup resourceButtonGroup;
-    private JMenu showResourceMenu;
-    private JRadioButton[] resourceList;
-
     private JMenu viewMenu;
 
     private ButtonGroup viewMenuButtonGroup;
-    private JRadioButton normalViewButton;
-    private JRadioButton buildMenuButton;
-    private JRadioButton showResourceButton;
+    private JCheckBoxMenuItem normalViewButton;
+    private JCheckBoxMenuItem buildMenuButton;
+    private JCheckBoxMenuItem showResourceButton;
 
     private JMenuItem resetViewButton;
     private JMenuItem hideTerrainButton;
@@ -114,8 +113,7 @@ public class PlanetMap extends JDesktopPane {
     private final int NORMAL_VIEW = 0;
     private final int RESOURCE_VIEW = 1;
     private final int BUILDING_VIEW = 2;
-    private final int GEOLOGY_VIEW = 3;
-    
+
     //if -1, then all resources
     private int resourceShown = -1;
     private int displayedView = NORMAL_VIEW;
@@ -146,31 +144,38 @@ public class PlanetMap extends JDesktopPane {
 
         ActionListener viewActionListener = (e) -> {
             //Get button pressed..
-            showResourceMenu.setEnabled(true);
+            setCursor(Cursor.getDefaultCursor());
             if (e.getSource().equals(normalViewButton)) {
                 displayedView = NORMAL_VIEW;
+                buildMenuButton.setSelected(false);
             } else if (e.getSource().equals(showResourceButton)) {
                 displayedView = RESOURCE_VIEW;
-                showResourceMenu.setEnabled(false);
+                buildMenuButton.setSelected(false);
             } else if (e.getSource().equals(buildMenuButton)) {
                 displayedView = BUILDING_VIEW;
+                setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+                //Deselect everything else
+                normalViewButton.setSelected(false);
+                showResourceButton.setSelected(false);
             }
 
             map.repaint();
         };
 
-        normalViewButton = new JRadioButton("Normal View", true);
+        normalViewButton = new JCheckBoxMenuItem("Normal View", true);
         normalViewButton.addActionListener(viewActionListener);
-        viewMenuButtonGroup.add(normalViewButton);
+        //viewMenuButtonGroup.add(normalViewButton);
         viewMenu.add(normalViewButton);
 
-        showResourceButton = new JRadioButton("Resource View");
-        viewMenuButtonGroup.add(showResourceButton);
+        showResourceButton = new JCheckBoxMenuItem("Resource View");
+        //viewMenuButtonGroup.add(showResourceButton);
         showResourceButton.addActionListener(viewActionListener);
         viewMenu.add(showResourceButton);
 
-        buildMenuButton = new JRadioButton("Construction View");
-        viewMenuButtonGroup.add(buildMenuButton);
+        viewMenu.addSeparator();
+
+        buildMenuButton = new JCheckBoxMenuItem("Construction View");
+        //viewMenuButtonGroup.add(buildMenuButton);
         buildMenuButton.addActionListener(viewActionListener);
         viewMenu.add(buildMenuButton);
 
@@ -191,34 +196,7 @@ public class PlanetMap extends JDesktopPane {
         });
         viewMenu.add(hideTerrainButton);
 
-        showResourceMenu = new JMenu("Resources");
-
-        resourceButtonGroup = new ButtonGroup();
-        //Add the list
-        resourceList = new JRadioButton[GameController.resources.size() + 1];
-        resourceList[0] = new JRadioButton("All resources", true);
-        resourceList[0].addActionListener(l -> {
-            resourceShown = -1;
-            map.needRefresh = true;
-        });
-
-        resourceButtonGroup.add(resourceList[0]);
-        showResourceMenu.add(resourceList[0]);
-
-        for (int i = 1; i < GameController.resources.size() + 1; i++) {
-            resourceList[i] = new JRadioButton(GameController.resources.get(i - 1).getName());
-
-            int val = i - 1;
-            resourceList[i].addActionListener(l -> {
-                resourceShown = val;
-                map.needRefresh = true;
-            });
-            resourceButtonGroup.add(resourceList[i]);
-            showResourceMenu.add(resourceList[i]);
-        }
-
         menuBar.add(viewMenu);
-        menuBar.add(showResourceMenu);
 
         map = new MapPanel();
 
@@ -274,7 +252,7 @@ public class PlanetMap extends JDesktopPane {
                     g2d.setColor(Building.getColor());
                     g2d.fill(rect);
                 }
-                
+
                 if (isActive) {
                     //Draw it
                     Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
@@ -298,7 +276,7 @@ public class PlanetMap extends JDesktopPane {
                                 (v.getY() - v.getRadius()) * tileSize,
                                 v.getRadius() * 2 * tileSize,
                                 v.getRadius() * 2 * tileSize);
-                        resourceGraphics.setColor(Color.GRAY);
+                        resourceGraphics.setColor(Color.ORANGE);
                         resourceGraphics.fill(circe);
                     }
                 }
@@ -418,7 +396,6 @@ public class PlanetMap extends JDesktopPane {
         }
 
         private void showToolTip(MouseEvent e) {
-
             int x = e.getX();
             int y = e.getY();
 
@@ -428,16 +405,16 @@ public class PlanetMap extends JDesktopPane {
 
             Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
             if (b != null) {
-                String topText = "";
-                if (b instanceof CityDistrict) {
-                    topText = ((CityDistrict) b).getCity().getName();
-                } else if (b instanceof BuildingBuilding) {
-                    topText = "Building " + ((BuildingBuilding) b).getToBuild().getType() + ", with " + ((BuildingBuilding) b).getLength() + " left";
-                } else if(b instanceof ResourceMinerDistrict) {
-                    topText = "Mine, mining " + ((ResourceMinerDistrict) b).getResourceMining().getName();
-                }
+//                String topText = "";
+//                if (b instanceof CityDistrict) {
+//                    topText = ((CityDistrict) b).getCity().getName();
+//                } else if (b instanceof BuildingBuilding) {
+//                    topText = "Building " + ((BuildingBuilding) b).getToBuild().getType() + ", with " + ((BuildingBuilding) b).getLength() + " left";
+//                } else if (b instanceof ResourceMinerDistrict) {
+//                    topText = "Mine, mining " + ((ResourceMinerDistrict) b).getResourceMining().getName();
+//                }
 
-                toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + topText + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));
+                toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));
 
                 popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
                 popup.show();
@@ -463,7 +440,7 @@ public class PlanetMap extends JDesktopPane {
                 //Switch tabs
                 parent.tpane.setSelectedComponent(parent.spacePort);
             } else if (building instanceof ResourceStorage) {
-                
+
             }
         }
 

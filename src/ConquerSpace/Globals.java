@@ -18,7 +18,7 @@
 package ConquerSpace;
 
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import java.util.Properties;
 
 /**

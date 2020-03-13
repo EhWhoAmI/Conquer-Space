@@ -20,7 +20,7 @@ package ConquerSpace.game.buildings.area.infrastructure;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.jobs.Workable;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
 
 /**
  *
@@ -28,7 +28,7 @@ import ConquerSpace.game.universe.resources.Resource;
  */
 public class PowerPlantArea extends Area implements Workable{
     //Needs the attribute 'energy'
-    private Resource usesResource;
+    private Good usesResource;
     //Amount of units needed to get each time
     private int maxVolume;
     
@@ -42,11 +42,11 @@ public class PowerPlantArea extends Area implements Workable{
         return "Power Plant";
     }
 
-    public Resource getUsedResource() {
+    public Good getUsedResource() {
         return usesResource;
     }
 
-    public void setUsedResource(Resource usesResource) {
+    public void setUsedResource(Good usesResource) {
         this.usesResource = usesResource;
     }
 

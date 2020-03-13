@@ -20,7 +20,7 @@ package ConquerSpace.game.buildings;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
-import ConquerSpace.game.universe.goods.Good;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.Stratum;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -122,5 +122,10 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     
     public void setCity(City city) {
         this.city = city;
+    }
+
+    @Override
+    public String getTooltipText() {
+        return String.format(getBuildingTooltipString("mine"), resourceMining.getName());
     }
 }

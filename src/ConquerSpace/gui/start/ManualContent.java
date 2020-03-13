@@ -19,7 +19,6 @@ package ConquerSpace.gui.start;
 
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
-import ConquerSpace.util.Singleton;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -40,7 +39,6 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-@Singleton
 public class ManualContent extends JFrame {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(ManualContent.class.getName());

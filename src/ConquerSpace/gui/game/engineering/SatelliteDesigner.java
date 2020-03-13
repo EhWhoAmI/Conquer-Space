@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.engineering;
 
+import ConquerSpace.game.Calculators;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
@@ -125,7 +126,7 @@ public class SatelliteDesigner extends JPanel {
                     case SatelliteTypes.TELESCOPE:
                         type = "telescope";
                         //Add Info
-                        obj.put("range", GameUpdater.Calculators.Optics.getRange(c.values.get("optics.quality"), (int) telescopeSatelliteSizeSpinner.getValue()));
+                        obj.put("range", Calculators.Optics.getRange(c.values.get("optics.quality"), (int) telescopeSatelliteSizeSpinner.getValue()));
                         break;
                     case SatelliteTypes.MILITARY:
                         type = "military";
@@ -210,17 +211,17 @@ public class SatelliteDesigner extends JPanel {
 
             telescopeSatelliteSizeSpinner.addChangeListener(a -> {
                 //Set all values
-                mass = GameUpdater.Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue());
+                mass = Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue());
                 satelliteMassValueLabel.setText(mass + "");
-                telescopeSatelliteRangeValueLabel.setText(GameUpdater.Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
-                telescopeSatelliteMassValueLabel.setText(GameUpdater.Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + "kg");
+                telescopeSatelliteRangeValueLabel.setText(Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
+                telescopeSatelliteMassValueLabel.setText(Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + "kg");
             });
 
             telescopeSatelliteRangeLabel = new JLabel("Range: ");
-            telescopeSatelliteRangeValueLabel = new JLabel(GameUpdater.Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
+            telescopeSatelliteRangeValueLabel = new JLabel(Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
 
             telescopeSatelliteMassLabel = new JLabel("Lens Mass: ");
-            telescopeSatelliteMassValueLabel = new JLabel(GameUpdater.Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " kg");
+            telescopeSatelliteMassValueLabel = new JLabel(Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " kg");
 
             telescopeSatellitePlanner.add(telescopeSatelliteSizeLabel);
             telescopeSatellitePlanner.add(telescopeSatelliteSizeSpinner);
@@ -285,7 +286,7 @@ public class SatelliteDesigner extends JPanel {
                     case "telescope":
                         //Add Info
                         //System.out.println(obj.getInt("range"));
-                        telescopeSatelliteSizeSpinner.setValue(GameUpdater.Calculators.Optics.getLensSize(0, obj.getInt("range")));
+                        telescopeSatelliteSizeSpinner.setValue(Calculators.Optics.getLensSize(0, obj.getInt("range")));
                         telescopeSatelliteRangeValueLabel.setText(obj.getInt("range") + " light years");
                         break;
                     case "military":

@@ -18,7 +18,7 @@
 package ConquerSpace.game.universe.resources;
 
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.goods.Good;
+import ConquerSpace.game.universe.resources.Good;
 
 /**
  *

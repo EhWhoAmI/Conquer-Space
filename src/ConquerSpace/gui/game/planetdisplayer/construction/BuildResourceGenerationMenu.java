@@ -18,7 +18,9 @@
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.bodies.Planet;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -34,17 +36,17 @@ import javax.swing.SpinnerNumberModel;
  */
 public class BuildResourceGenerationMenu extends JPanel {
 
-        JComboBox<Resource> resourceToMine;
+        JComboBox<Good> resourceToMine;
         JLabel resourceToMineLabel;
         JLabel miningSpeed;
         JSpinner miningSpeedSpinner;
 
-        public BuildResourceGenerationMenu() {
+        public BuildResourceGenerationMenu(Planet p, Civilization c) {
             resourceToMineLabel = new JLabel("Mining resource: ");
 
-            DefaultComboBoxModel<Resource> resourceComboBoxModel = new DefaultComboBoxModel<>();
+            DefaultComboBoxModel<Good> resourceComboBoxModel = new DefaultComboBoxModel<>();
             //Add the resources
-            for (Resource res : GameController.resources) {
+            for (Good res : GameController.allGoods) {
                 resourceComboBoxModel.addElement(res);
             }
             resourceToMine = new JComboBox<>(resourceComboBoxModel);

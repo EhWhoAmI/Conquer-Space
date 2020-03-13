@@ -20,8 +20,8 @@ package ConquerSpace.game.actions;
 import ConquerSpace.Globals;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
 
 /**
  *

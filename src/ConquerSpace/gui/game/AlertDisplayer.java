@@ -19,7 +19,6 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.gui.GUI;
-import ConquerSpace.util.Singleton;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
@@ -30,7 +29,6 @@ import javax.swing.JScrollPane;
  *
  * @author Zyun
  */
-@Singleton
 public class AlertDisplayer extends JInternalFrame implements GUI {
 
     private JList<Alert> alertList;

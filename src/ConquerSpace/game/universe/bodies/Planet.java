@@ -15,19 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects;
+package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
-import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
-import ConquerSpace.game.universe.resources.ResourceVein;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -53,7 +50,6 @@ public class Planet extends SpaceObject {
     public double xpos;
     public double ypos;
 
-    public ArrayList<ResourceVein> resourceVeins;
     public ArrayList<Stratum> strata;
 
     int id;
@@ -114,7 +110,6 @@ public class Planet extends SpaceObject {
         //planetSectors = new PlanetSector[surfaceArea];
         economy = new Economy();
         satellites = new ArrayList<>();
-        resourceVeins = new ArrayList<>();
         strata = new ArrayList<>();
         buildings = new HashMap<>();
 

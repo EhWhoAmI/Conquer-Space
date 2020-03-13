@@ -15,12 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.util;
+package ConquerSpace.game.universe.bodies;
 
 /**
- * Marker interface to show that a class is a singleton class.
+ * Types of planet.
  * @author Zyun
  */
-public @interface Singleton {
-    
+public class PlanetTypes {
+    public static final int ROCK = 0;
+    public static final int GAS = 1;
 }

@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.universe.generators;
 
-import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
@@ -31,14 +30,14 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.goods.Ore;
+import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
-import ConquerSpace.game.universe.spaceObjects.Star;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.StarTypes;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.PlanetTypes;
+import ConquerSpace.game.universe.bodies.Star;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.StarTypes;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
@@ -193,7 +192,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         nationCurrency.setController(playerCiv);
 
         playerCiv.setFoundingSpecies(playerSpecies);
+        
         universe.addCivilization(playerCiv);
+        GameController.playerCiv = playerCiv;
 
         //Calculate number of civs
         int civCount = starSystemCount / 50;
@@ -448,10 +449,10 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Stratum stratum = new Stratum();
 
             //Add resources
-            for(Ore o : toAdd) {
+            for (Ore o : toAdd) {
                 stratum.minerals.put(o, randint(rand, 10000, 500_000));
             }
-            
+
             //Select the things
             stratum.setRadius(randint(rand, 5, 15));
             stratum.setX(rand.nextInt(planetSize * 2));

@@ -15,12 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects.terrain;
+package ConquerSpace.game.universe.resources;
 
 /**
- *
+ * The needs to store the item. Nothing means you can just leave it in the sun.
  * @author EhWhoAmI
  */
-public class ResourceTile {
-    
+public enum StorageNeeds {
+    LowPressure,
+    HighPressure,
+    LowTemperature,
+    HighTemperature,
+    LowHumidity,
+    HighHumidity,
+    LowDust,
+    LowOxygen;
 }

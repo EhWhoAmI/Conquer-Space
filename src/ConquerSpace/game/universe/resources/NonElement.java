@@ -15,16 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.spaceObjects;
+package ConquerSpace.game.universe.resources;
+
+import java.util.HashMap;
 
 /**
- * Types of planet.
- * @author Zyun
+ *
+ * @author EhWhoAmI
  */
-public class PlanetTypes {
-    //Everything needs to be int because of python.
+public class NonElement extends Good{
+    public HashMap<Good, Integer> recipie;
 
-    public static final int ROCK = 0;
-
-    public static final int GAS = 1;
+    public NonElement(String name, int id, double volume, double mass) {
+        super(name, id, volume, mass);
+        recipie = new HashMap<>();
+    }
 }

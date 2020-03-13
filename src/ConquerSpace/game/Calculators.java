@@ -17,11 +17,32 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class GameIndexer {
-    public void takeCensus() {
+public class Calculators {
+    public static class Optics {
+
+        public static int getRange(int quality, int size) {
+            return (int) (Math.log(Math.PI * (size) * (size) + 1) * 2);
+        }
+
+        public static int getLensMass(int quality, int size) {
+            return (int) (((double) quality / 100d) * size * size * Math.PI);
+        }
+
+        public static int getLensSize(int quality, int range) {
+            return (int) (Math.sqrt((Math.pow(Math.E, range / 2) - 1) / Math.PI));
+        }
+    }
+
+    public static class Engine {
+
+        public static int getEngineMass(int thrust, EngineTechnology tech) {
+            return (int) (tech.getThrustMultiplier() * thrust);
+        }
     }
 }

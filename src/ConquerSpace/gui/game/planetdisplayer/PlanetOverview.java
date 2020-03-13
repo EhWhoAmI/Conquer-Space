@@ -23,9 +23,9 @@ import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.ResourceVein;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
@@ -261,9 +261,9 @@ public class PlanetOverview extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (ResourceVein v : p.resourceVeins) {
+                for (Stratum v : p.strata) {
                     //Draw...
-                    if (resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) {
+                    if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * 2,
                                 (v.getY() - v.getRadius()) * 2,
                                 v.getRadius() * 2 * 2,
