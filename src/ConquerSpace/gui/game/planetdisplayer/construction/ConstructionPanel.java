@@ -18,7 +18,6 @@
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.Calculators;
-import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.Observatory;
@@ -33,6 +32,7 @@ import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -157,7 +157,7 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
 
         buildResourceStorageMenu = new BuildResourceStorageMenu();
 
-        buildMiningStorageMenu = new BuildMinerMenu(p, c);
+        buildMiningStorageMenu = new BuildMinerMenu(p, c, point);
 
         buildIndustrialAreaMenu = new BuildIndustrialAreaMenu();
 
@@ -230,19 +230,16 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                     toReset = true;
                 } else if (item.equals(RESOURCE_MINER)) {
                     ResourceMinerDistrict miner = new ResourceMinerDistrict(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
-                    //Add the stuff...
-                    //Get the map of things, and calculate the stuff
-                    int x = buildingPos.getX();
-                    int y = buildingPos.getY();
-                    //TODO make it read resources
-                    //Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
-                    for (Stratum v : p.strata) {
-                        if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius()) {
-                            //miner.setVeinMining(v);
-                            break;
-                        }
-                    }
-                    //Add miners
+                    
+                    //Set stratum
+                    Stratum strat = (Stratum) buildMiningStorageMenu.strataComboBox.getSelectedItem();
+                    miner.setVeinMining(strat);
+                    
+                    //Get resource mined
+                    Good mining = (Good) buildMiningStorageMenu.stratumResourceTable.getValueAt(buildMiningStorageMenu.stratumResourceTable.getSelectedRow(), 0);
+                    miner.setResourceMining(mining);
+                    
+                    //Add miner population
                     miner.population.add(new PopulationUnit(c.getFoundingSpecies()));
                     Actions.buildBuilding(p, buildingPos, miner, c, 1);
                     toReset = true;
@@ -254,9 +251,12 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                 }
             }
         });
+        
+        setTitle("Construction");
+        
         add(buildButton);
         pack();
-
+        
         addInternalFrameListener(this);
         setVisible(true);
         setClosable(true);

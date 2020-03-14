@@ -68,7 +68,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class PlanetMap extends JDesktopPane {
+public class PlanetMap extends JPanel {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(PlanetMap.class.getName());
 
@@ -232,6 +232,11 @@ public class PlanetMap extends JDesktopPane {
     public void resetBuildingIndicator() {
         map.currentlyBuildingPoint = null;
         map.isActive = false;
+        displayedView = NORMAL_VIEW;
+        buildingViewButton.setSelected(true);
+        showResourceButton.setSelected(false);
+        buildMenuButton.setSelected(false);
+        setCursor(Cursor.getDefaultCursor());
     }
 
     private class MapPanel extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
@@ -265,7 +270,7 @@ public class PlanetMap extends JDesktopPane {
                 g2d.drawImage(mapImage, 0, 0, null);
             }
 
-            if (displayedView == RESOURCE_VIEW || displayedView == BOTH_VIEW) {
+            if (displayedView == RESOURCE_VIEW || displayedView == BOTH_VIEW || displayedView == CONSTRUCTION_VIEW) {
                 //Show resources
                 if (resourceImage == null || needRefresh) {
                     resourceImage = new BufferedImage((int) (p.getPlanetSize() * 2 * tileSize), (int) (p.getPlanetSize() * tileSize), BufferedImage.TYPE_INT_ARGB);
@@ -365,6 +370,7 @@ public class PlanetMap extends JDesktopPane {
                     isActive = true;
                     ConstructionPanel construction = new ConstructionPanel(c, p, u, pt, PlanetMap.this);
                     ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(construction);
+
                     construction.toFront();
 
                     try {
@@ -436,7 +442,7 @@ public class PlanetMap extends JDesktopPane {
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
                     popup.show();
                 }
-            } else if (displayedView == RESOURCE_VIEW) {
+            } else if (displayedView == RESOURCE_VIEW || displayedView == CONSTRUCTION_VIEW) {
                 //Check if lying on strata
                 ArrayList<Stratum> strataToShow = new ArrayList<>();
                 for (Stratum stratum : p.strata) {
@@ -464,7 +470,7 @@ public class PlanetMap extends JDesktopPane {
         }
 
         public void showBuildingInfo(Building building) {
-            //Get building type, determine what to show...
+            //Get building type, determine what menu to show...
             if (building instanceof CityDistrict) {
                 parent.population.showCity(((CityDistrict) building).getCity());
                 hideToolTip();

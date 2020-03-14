@@ -494,13 +494,13 @@ public class GameUpdater {
                                         .entrySet()
                                         .stream()
                                         .filter(ent -> stor.equals(ent.getValue()))
-                                        .map(Map.Entry::getKey).findFirst().get();
+                                        .map(Map.Entry::getKey).findFirst().orElse(null);
                                 if (storagePoint != null) {
                                     //Check if next to city point
-                                    if (storagePoint.getX() + 1 == key.getX()
-                                            || storagePoint.getX() - 1 == key.getX()
-                                            || storagePoint.getY() + 1 == key.getY()
-                                            || storagePoint.getY() - 1 == key.getY()) {
+                                    if ((storagePoint.getX() + 1 == key.getX()
+                                            || storagePoint.getX() - 1 == key.getX())
+                                            && (storagePoint.getY() + 1 == key.getY()
+                                            || storagePoint.getY() - 1 == key.getY())) {
                                         //Add to city
                                         c.buildings.add(build.getToBuild());
                                         created = true;
@@ -513,6 +513,9 @@ public class GameUpdater {
                         if (!created) {
                             City city = new City(p.getUniversePath());
                             city.setName("Another City");
+                            //Set city
+                            LOGGER.trace("City created");
+                            build.getToBuild().setCity(city);
                         }
                     }
                     //Alert builder
@@ -596,7 +599,6 @@ public class GameUpdater {
                     //Process job
                     for (Good r : unit.getJob().resources.keySet()) {
                         storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
-                        LOGGER.trace("Stored resource " + r.getName() + " " + unit.getJob().resources.get(r));
                     }
                 }
             }
