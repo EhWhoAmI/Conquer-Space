@@ -228,7 +228,7 @@ public class PlanetOverview extends JPanel {
             addMouseWheelListener(this);
             addMouseMotionListener(this);
             renderer = new TerrainRenderer(p);
-            setToolTipText("Use the right mouse button to move");
+            setToolTipText("Use the left mouse button to move");
         }
 
         @Override
@@ -313,7 +313,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
                 //Start dragging
                 startPoint = e.getPoint();
                 isDragging = true;
@@ -322,7 +322,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
                 //End Dragging
                 isDragging = false;
             }
@@ -378,7 +378,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
                 //Move it
                 //Check if still in view
                 translateX -= ((startPoint.x - e.getX()) / (scale));

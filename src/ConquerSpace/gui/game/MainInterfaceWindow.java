@@ -100,6 +100,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         Dimension d = getToolkit().getScreenSize();
         setSize(d.width - 100, d.height - 100);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setTitle("Main Window");
     }
 
     public void init() {

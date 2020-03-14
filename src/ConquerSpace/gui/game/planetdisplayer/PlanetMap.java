@@ -226,7 +226,8 @@ public class PlanetMap extends JPanel {
 
         add(menuBar, BorderLayout.NORTH);
         add(map, BorderLayout.CENTER);
-
+        
+        scale = 3;
     }
 
     public void resetBuildingIndicator() {

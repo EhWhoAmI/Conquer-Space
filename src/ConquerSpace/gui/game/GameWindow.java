@@ -108,6 +108,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         //A window to greet the user
         JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
                 + "May we live and prosper in these exciting new times.");
+        
+        setTitle("Conquer Space");
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -276,7 +278,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         gameTickTimer.setRepeats(true);
         gameTickTimer.start();
 
-        desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+        desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
 
         //desktopPane.setBackground(Color.cyan);
         setJMenuBar(menuBar);

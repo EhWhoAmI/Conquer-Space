@@ -37,9 +37,11 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,7 +52,7 @@ import org.json.JSONObject;
  */
 public class SatelliteDesigner extends JPanel {
 
-    private JMenuBar menuBar;
+    private JToolBar menuBar;
 
     private JList satelliteList;
     private JPanel satelliteDesignerPanel;
@@ -103,10 +105,11 @@ public class SatelliteDesigner extends JPanel {
         } catch (IOException ex) {
         }
 
-        menuBar = new JMenuBar();
+        menuBar = new JToolBar();
+        JToolBar toolBar = new JToolBar();
         JMenu satelliteMenu = new JMenu("Satellites");
-        JMenuItem saveSatelliteMenu = new JMenuItem("Save Satellite");
-        JMenuItem newMenu = new JMenuItem("New Satellite");
+        JButton saveSatelliteMenu = new JButton("Save Satellite");
+        JButton newMenu = new JButton("New Satellite");
 
         saveSatelliteMenu.addActionListener(a -> {
             //Create the satellite
@@ -138,6 +141,9 @@ public class SatelliteDesigner extends JPanel {
                 obj.put("id", c.satelliteTemplates.size());
                 c.satelliteTemplates.add(obj);
                 satelliteListModel.addElement(new SatelliteWrapper(obj));
+            } else {
+                //Show alert
+                JOptionPane.showInternalMessageDialog(this, "You need a name for the satellite!");
             }
         });
 
@@ -147,9 +153,8 @@ public class SatelliteDesigner extends JPanel {
             satelliteNameField.setText("");
         });
 
-        satelliteMenu.add(saveSatelliteMenu);
-        satelliteMenu.add(newMenu);
-        menuBar.add(satelliteMenu);
+        menuBar.add(saveSatelliteMenu);
+        menuBar.add(newMenu);
 
         add(menuBar, BorderLayout.NORTH);
         JPanel container = new JPanel();
