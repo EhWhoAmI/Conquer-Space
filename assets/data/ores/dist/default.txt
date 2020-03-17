@@ -1,0 +1,53 @@
+[
+    {
+        name: Hematite
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: Magnetite
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: Graphite
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+]

@@ -26,8 +26,10 @@ import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.resources.Element;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -74,16 +76,37 @@ public class GameLoader {
         GameController.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",
                 EngineTechnology.class, AssetReader::processEngineTech);
 
+        GameController.allGoods = new ArrayList<>();
+
         //Read elements
         GameController.elements = readHjsonFromDirInArray("dirs.elements",
                 Element.class, AssetReader::processElement);
 
+        /*
         GameController.ores = readHjsonFromDirInArray("dirs.ores", Ore.class, AssetReader::processOre);
 
         //Fill all goods
-        GameController.allGoods = new ArrayList<>();
-        GameController.allGoods.addAll(GameController.elements);
         GameController.allGoods.addAll(GameController.ores);
+         */
+        GameController.goods = processGoods();
+
+        GameController.allGoods.addAll(GameController.elements);
+        GameController.allGoods.addAll(GameController.goods);
+
+        ArrayList<ResourceDistribution> res = readHjsonFromDirInArray("dirs.distributions", ResourceDistribution.class, AssetReader::processDistributions);
+
+        HashMap<Good, ResourceDistribution> ores = new HashMap<>();
+        //Sort through the list
+        for (ResourceDistribution dist : res) {
+            //Find in allgoods
+            for (Good g : GameController.allGoods) {
+                if (g.getName().equals(dist.resourceName)) {
+                    ores.put(g, dist);
+                    break;
+                }
+            }
+        }
+        GameController.ores = ores;
 
         GameController.prodProcesses = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
         readBuildingCosts();

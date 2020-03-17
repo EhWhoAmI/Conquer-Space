@@ -1,0 +1,52 @@
+[
+    {
+        name: Hematite
+        volume: 1
+        mass: 5.3
+        // Iron ore
+        formula: [
+            "Iron:2"
+            "Oxygen:3"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Magnetite
+        volume: 1
+        mass: 5.15
+        // Iron ore
+        formula: [
+            "Iron:3"
+            "Oxygen:4"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Graphite
+        volume: 1
+        mass: 2.26
+        formula: [
+            "Carbon:1"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Low Grade Steel
+        volume: 10
+        mass: 72.66600
+        //10 percent thingy
+        formula: [
+            "Iron:9"
+            "Carbon:1"
+        ]
+        tags: [
+
+        ]
+    }
+]

@@ -22,6 +22,7 @@ package ConquerSpace.game.universe.resources;
  * @author EhWhoAmI
  */
 public class ResourceDistribution {
+    public String resourceName;
     /**
      * How maximum size of the vein.
      */
@@ -56,4 +57,11 @@ public class ResourceDistribution {
      * How the resource is stuffed with other resources. 
      */
     public double density;
+
+    @Override
+    public String toString() {
+        return resourceName;
+    }
+    
+    
 }

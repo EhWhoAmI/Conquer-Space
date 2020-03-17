@@ -27,6 +27,7 @@ import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.NonElement;
 import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -72,9 +73,10 @@ public class GameController {
 
     public static ArrayList<Element> elements;
     public static ArrayList<NonElement> rawMaterials;
-    public static ArrayList<Ore> ores;
+    public static HashMap<Good, ResourceDistribution> ores = new HashMap<>();
     public static ArrayList<Good> allGoods;
-
+    public static ArrayList<Good> goods;
+    
     public static ArrayList<ProductionProcess> prodProcesses;
     
     public static Civilization playerCiv = null;

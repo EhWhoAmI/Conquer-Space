@@ -54,4 +54,14 @@ public abstract class Good {
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Good && ((Good) obj).name.equals(this.name));
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

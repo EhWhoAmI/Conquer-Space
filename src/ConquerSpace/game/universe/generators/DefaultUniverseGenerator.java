@@ -38,12 +38,15 @@ import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.StarTypes;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -192,7 +195,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         nationCurrency.setController(playerCiv);
 
         playerCiv.setFoundingSpecies(playerSpecies);
-        
+
         universe.addCivilization(playerCiv);
         GameController.playerCiv = playerCiv;
 
@@ -432,11 +435,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Find the amount of resources to add...
         //Sort through resources, and find suitable
-        ArrayList<Ore> toAdd = new ArrayList<>();
-        for (Ore o : GameController.ores) {
-            double rarity = o.dist.rarity;
+        ArrayList<Good> toAdd = new ArrayList<>();
+        for (Map.Entry<Good, ResourceDistribution> entry : GameController.ores.entrySet()) {
+            Good key = entry.getKey();
+            ResourceDistribution val = entry.getValue();
+            double rarity = val.rarity;
             if (rand.nextDouble() < rarity) {
-                toAdd.add(o);
+                toAdd.add(key);
             }
         }
 
@@ -449,7 +454,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Stratum stratum = new Stratum();
 
             //Add resources
-            for (Ore o : toAdd) {
+            for (Good o : toAdd) {
                 stratum.minerals.put(o, randint(rand, 10000, 500_000));
             }
 

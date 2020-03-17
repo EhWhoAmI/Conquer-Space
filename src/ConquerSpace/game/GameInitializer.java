@@ -155,9 +155,9 @@ public class GameInitializer {
                 c.habitatedPlanets.add(starting);
 
                 //Add resources
-                for (Good res : GameController.ores) {
-                    c.resourceList.put(res, 0);
-                }
+//                for (Good res : GameController.ores) {
+//                    c.resourceList.put(res, 0);
+//                }
 
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
 

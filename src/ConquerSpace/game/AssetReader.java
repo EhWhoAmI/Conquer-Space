@@ -25,6 +25,9 @@ import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.NonElement;
 import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
+import ConquerSpace.game.universe.resources.TempNonElement;
+import ConquerSpace.game.universe.resources.TempOre;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -36,6 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
 import org.hjson.JsonValue;
@@ -56,8 +60,8 @@ public class AssetReader {
     public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, PassThingy thing) {
         ArrayList<T> elements = new ArrayList<>();
         //Get the launch systems folder
-        File launchSystemsFolder = ResourceLoader.getResourceByFile(dir);
-        File[] files = launchSystemsFolder.listFiles();
+        File resourceFolder = ResourceLoader.getResourceByFile(dir);
+        File[] files = resourceFolder.listFiles();
         for (File f : files) {
             FileInputStream fis = null;
             try {
@@ -304,7 +308,15 @@ public class AssetReader {
         double density = obj.getDouble("density");
         Ore element = new Ore(name, 0, 1, density);
         //Process formula
-        obj.getJSONArray("formula");
+        JSONArray arr = obj.getJSONArray("formula");
+        //Sort through things
+        for (int i = 0; i < arr.length(); i++) {
+            String s = arr.getString(i);
+            String[] content = s.split(":");
+            //Find the resources
+            //content[0]
+            //element.recipie.put(, Integer.parseInt(content[1]));
+        }
 
         //Process distribution
         JSONArray dist = obj.getJSONArray("distribution");
@@ -326,6 +338,10 @@ public class AssetReader {
         element.dist.density = resourceDistDensity;
 
         return (element);
+    }
+
+    public static Object processUncompleteGood(JSONObject obj) {
+        return null;
     }
 
     //Lol the name
@@ -392,9 +408,140 @@ public class AssetReader {
 
         return process;
     }
+    
+    public static Object processDistributions(JSONObject obj) {
+        ResourceDistribution distribution = new ResourceDistribution();
+        //Process distribution
+        String name = obj.getString("name");
+        JSONArray dist = obj.getJSONArray("distribution");
+        int distributionLow = dist.getInt(0);
+        int distributionHigh = dist.getInt(1);
+        JSONArray depth = obj.getJSONArray("depth");
+        int depthLow = depth.getInt(0);
+        int depthHigh = depth.getInt(1);
+        double rarity = obj.getDouble("rarity");
+        int abundance = obj.getInt("abundance");
+        int resourceDistDensity = obj.getInt("dist-density");
+
+        distribution.resourceName = name;
+        distribution.distributionLow = distributionLow;
+        distribution.distributionHigh = distributionHigh;
+        distribution.depthLow = depthLow;
+        distribution.depthHigh = depthHigh;
+        distribution.rarity = rarity;
+        distribution.abundance = abundance;
+        distribution.density = resourceDistDensity;
+        return distribution;
+    }
+
+    /**
+     * We need a separate function for reading elements.
+     */
+    public static ArrayList<Good> processGoods() {
+        HashMap<String, Good> resourcea = new HashMap<>();
+        HashMap<TempNonElement, NonElement> nonElementHashMap = new HashMap<>();
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.goods");
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (f.getName().endsWith("readme.txt")) {
+                    continue;
+                }
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                text = JsonValue.readHjson(text).toString();
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    try {
+                        JSONObject obj = root.getJSONObject(i);
+
+                        //Process both...
+                        String name = obj.getString("name");
+                        double volume = obj.getDouble("volume");
+                        double mass = obj.getDouble("mass");
+
+                        TempNonElement tempNonElement = new TempNonElement(name, i, volume, mass);
+                        NonElement nonElement = new NonElement(name, i, volume, mass);
+
+                        //Process formula
+                        JSONArray arr = obj.getJSONArray("formula");
+                        //Sort through things
+                        for (int k = 0; k < arr.length(); k++) {
+                            String s = arr.getString(k);
+                            String[] content = s.split(":");
+                            //Find the resources
+                            String resourceName = content[0];
+                            int amount = Integer.parseInt(content[1]);
+                            tempNonElement.recipie.put(resourceName, amount);
+                        }
+
+                        resourcea.put(name, nonElement);
+                        nonElementHashMap.put(tempNonElement, nonElement);
+                    } catch (ClassCastException e) {
+                        LOGGER.error("CCE!", e);
+                    } catch (JSONException exception) {
+                        LOGGER.error("JSONException!", exception);
+                    } catch (IllegalArgumentException ile) {
+                        LOGGER.error("IllegalArgumentException!", ile);
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        ArrayList<Good> goods = new ArrayList<>();
+        //Sort through another time...
+        for (Map.Entry<TempNonElement, NonElement> entry : nonElementHashMap.entrySet()) {
+            TempNonElement key = entry.getKey();
+            NonElement val = entry.getValue();
+
+            for (Map.Entry<String, Integer> entry1 : key.recipie.entrySet()) {
+                String name = entry1.getKey();
+                Integer amount = entry1.getValue();
+
+                //Find
+                Good g = resourcea.get(name);
+                //Put in thing
+                if (g == null) {
+                    //Find in elements
+                    for (Element e : GameController.elements) {
+                        if (e.getName().equals(name)) {
+                            //insert the stuff
+                            val.recipie.put(e, amount);
+                            break;
+                        }
+                    }
+
+                } else {
+                    val.recipie.put(g, amount);
+                }
+            }
+            goods.add(val);
+        }
+        //Wrap up
+        return goods;
+    }
 }
 
 //Something to pass the parameters
 interface PassThingy {
+
     public Object thingy(JSONObject obj);
 }
