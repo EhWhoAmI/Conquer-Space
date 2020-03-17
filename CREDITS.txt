@@ -44,6 +44,7 @@ The FFF Team
 The link above is broken (as of 8 april 2019), it connects to a server, but the server has not been set up. 
 I got the font from here: https://www.1001fonts.com/fff-forward-font.html
 
-
 ////
-https://github.com/ChristopherWMM/Terra-Old
+Periodic table in json (literally saved me hours of work. I'm as happy as when I found jlibnoise)
+https://github.com/Bowserinator/Periodic-Table-JSON
+Creative Commons Attribution-ShareAlike 3.0 Unported
