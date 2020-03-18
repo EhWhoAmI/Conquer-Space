@@ -81,19 +81,19 @@ public class AssetReader {
                         JSONObject obj = root.getJSONObject(i);
                         elements.add((T) thing.thingy(obj));
                     } catch (ClassCastException e) {
-                        LOGGER.error("CCE!", e);
+                        LOGGER.error("CCE while reading file" + f.getAbsolutePath(), e);
                     } catch (JSONException exception) {
-                        LOGGER.error("JSONException!", exception);
+                        LOGGER.error("JSONException while reading file" + f.getAbsolutePath(), exception);
                     } catch (IllegalArgumentException ile) {
-                        LOGGER.error("IllegalArgumentException!", ile);
+                        LOGGER.error("IllegalArgumentException while reading file" + f.getAbsolutePath(), ile);
                     }
                 }
             } catch (FileNotFoundException ex) {
-                LOGGER.error("File not found!", ex);
+                LOGGER.error("File not found while reading file" + f.getAbsolutePath(), ex);
             } catch (IOException ex) {
-                LOGGER.error("IO exception!", ex);
+                LOGGER.error("IO exception while reading file "  + f.getAbsolutePath(), ex);
             } catch (JSONException ex) {
-                LOGGER.warn("JSON EXCEPTION!", ex);
+                LOGGER.warn("JSON EXCEPTION while reading file " + f.getAbsolutePath(), ex);
             } finally {
                 try {
                     //Because continue stat
@@ -238,9 +238,15 @@ public class AssetReader {
     }
 
     public static Object processElement(JSONObject obj) {
-        int id = obj.getInt("id");
+        //Because periodic table number is the id
+        int id = obj.getInt("number");
         String name = obj.getString("name");
-        double density = obj.getDouble("density");
+        Object densityT = obj.get("density");
+        //if null, put 0
+        double density = 0;
+        if(densityT instanceof Double) {
+            density = (Double) densityT;
+        }
         Element e = new Element(name, id, 1d, density);
         return e;
     }

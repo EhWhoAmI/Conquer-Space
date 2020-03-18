@@ -472,19 +472,27 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Then the planet has life
         //Stages it has life, and how evolved it is
         int lifeLength = rand.nextInt(10);
+
+        //Get random name
+        NameGenerator speciesNameGenerator = null;
+        try {
+            speciesNameGenerator = NameGenerator.getNameGenerator("species.names");
+        } catch (IOException ex) {
+        }
+
         //Initialize life
-        Species micro = new Species();
+        Species micro = new Species(speciesNameGenerator.getName(0));
         //Set name
         //Add random trait
         LifeTrait randomLifeTrait = LifeTrait.values()[rand.nextInt(LifeTrait.values().length)];
         micro.lifeTraits.add(randomLifeTrait);
-        micro.setName(randomLifeTrait.name());
         LocalLife life = new LocalLife();
         life.setSpecies(micro);
 
         p.localLife.add(life);
 
         for (int i = 0; i < lifeLength; i++) {
+            //Evolve
         }
     }
 }

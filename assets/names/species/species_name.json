@@ -1,0 +1,8 @@
+{
+    "name": "Species",
+    "rules": ["first\\space\\second"],
+    "counters": [],
+    "first": ["Magnum", "Parvus", "Brevis", "Longus", "Crassus", "Teneus", "Massa", "Rubrum", "Viridi", "Caeruleum", "Lux", "Kenebris", "Bellus"],
+    "space": [" "],
+    "second": ["Troglodytarum", "Virga", "Petram", "Abax", "Arbor", "Lepus", "Luter", "Chungus", "Cithara", "Vestiesque", "Apud", "Navis"]
+}

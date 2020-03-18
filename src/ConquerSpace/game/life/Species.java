@@ -17,6 +17,9 @@
  */
 package ConquerSpace.game.life;
 
+import ConquerSpace.game.universe.resources.FoodGood;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.LiveGood;
 import java.util.ArrayList;
 
 /**
@@ -26,13 +29,19 @@ import java.util.ArrayList;
 public class Species {
     public ArrayList<LifeTrait> lifeTraits;
 
+    public LiveGood speciesGood;
+    public FoodGood foodGood;
     //Breeding rate
     private float baseBreedingRate = 0;
     //Breeding method
     //Etc...
     private String name;
-    public Species() {
+    
+    public Species(String name) {
         lifeTraits = new ArrayList<>();
+        this.name = name;
+        foodGood = new FoodGood(this, 0, 0, 0);
+        speciesGood = new LiveGood(this, 0, 0, 0);
     }
 
     public void setName(String name) {

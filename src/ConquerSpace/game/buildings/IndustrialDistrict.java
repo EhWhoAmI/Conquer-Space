@@ -30,7 +30,7 @@ public class IndustrialDistrict extends Building implements PopulationStorage {
 
     @Override
     public Color getColor() {
-        return new Color(201, 144, 0);
+        return new Color(192, 52, 235); 
     }
 
     public ArrayList<PopulationUnit> population;
@@ -52,4 +52,11 @@ public class IndustrialDistrict extends Building implements PopulationStorage {
     public int getMaxStorage() {
         return population.size();
     }
+
+    @Override
+    public String getType() {
+        return "Industrial district";
+    }
+    
+    
 }

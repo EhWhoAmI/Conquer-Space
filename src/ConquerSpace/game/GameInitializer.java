@@ -230,8 +230,7 @@ public class GameInitializer {
         //Create a test crop so that you can grow stuff
         City farmCity = new City(starting.getUniversePath());
         farmCity.setName("Farms");
-        Species potato = new Species();
-        potato.setName("Potato");
+        Species potato = new Species("Potato");
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
