@@ -1,0 +1,44 @@
+[
+    {
+        name: Gibbsite
+        //Aluminium ore #1
+        volume: 1
+        mass: 2.42
+        formula: [
+            "Aluminium:1"
+            "Oxygen:3"
+            "Hydrogen:3"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Boehmite
+        //Aluminium ore #2
+        volume: 1
+        mass: 3.03
+        formula: [
+            "Aluminium:1"
+            "Oxygen:2"
+            "Hydrogen:1"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Diaspore
+        //Aluminium ore #3
+        volume: 1
+        mass: 3.4
+        formula: [
+            "Aluminium:1"
+            "Oxygen:2"
+            "Hydrogen:1"
+        ]
+        tags: [
+
+        ]
+    }
+]

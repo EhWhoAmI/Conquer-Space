@@ -27,7 +27,6 @@ import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.resources.TempNonElement;
-import ConquerSpace.game.universe.resources.TempOre;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -37,8 +36,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
@@ -485,7 +484,12 @@ public class AssetReader {
                             int amount = Integer.parseInt(content[1]);
                             tempNonElement.recipie.put(resourceName, amount);
                         }
-
+                        
+                        //Sort through elements
+                        JSONArray tags = obj.getJSONArray("tags");
+                        String[] tagArray = Arrays.copyOf(tags.toList().toArray(), tags.toList().toArray().length, String[].class);
+                        nonElement.tags = tagArray;
+                        
                         resourcea.put(name, nonElement);
                         nonElementHashMap.put(tempNonElement, nonElement);
                     } catch (ClassCastException e) {

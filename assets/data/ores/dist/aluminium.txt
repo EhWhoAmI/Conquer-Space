@@ -1,12 +1,7 @@
 [
+    //As Gibbsite, Bohemitem and Diaspore are often found together as bauxite, they have similar stats
     {
-        name: Hematite
-        density: 5.3
-        // Iron ore
-        formula: [
-            "Iron:2"
-            "Oxygen:3"
-        ]
+        name: Gibbsite
         distribution: [
             30
             60
@@ -16,20 +11,14 @@
             30
         ]
         rarity: 1
-        abundance: 50000
+        abundance: 60000
         dist-density: 32
         tags: [
 
         ]
-    },
+    }
     {
-        name: Magnetite
-        density: 5.15
-        // Iron ore
-        formula: [
-            "Iron:3"
-            "Oxygen:4"
-        ]
+        name: Bohemite
         distribution: [
             30
             60
@@ -39,18 +28,14 @@
             30
         ]
         rarity: 1
-        abundance: 50000
+        abundance: 60000
         dist-density: 32
         tags: [
 
         ]
-    },
+    }
     {
-        name: Graphite
-        density: 2.26
-        formula: [
-            "Carbon:1"
-        ]
+        name: Diaspore
         distribution: [
             30
             60
@@ -60,7 +45,7 @@
             30
         ]
         rarity: 1
-        abundance: 50000
+        abundance: 60000
         dist-density: 32
         tags: [
 

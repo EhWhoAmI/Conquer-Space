@@ -1,6 +1,6 @@
 [
     {
-        name: Graphite
+        name: Hematite
         distribution: [
             30
             60
@@ -17,17 +17,17 @@
         ]
     }
     {
-        name: Sweet Crude Oil
+        name: Magnetite
         distribution: [
-            25
-            45
+            30
+            60
         ]
         depth: [
-            5
+            1
             30
         ]
         rarity: 1
-        abundance: 7000
+        abundance: 50000
         dist-density: 32
         tags: [
 

@@ -570,9 +570,9 @@
     ]
     floor: 15
     id: 26
-  },
+  }
   {
-    name: Magnetite Smelting
+    name: Basic Iron Smelting
     deps:
     [
       Knowledge
@@ -583,6 +583,7 @@
     difficulty: 1
     action: [
         process:Magnetite Smelting
+        process:Hematite Smelting
     ]
     fields:
     [
@@ -594,5 +595,106 @@
     ]
     floor: 15
     id: 27
+  }
+  {
+    name: Iron Mining
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        mine:Magnetite
+        mine:Hematite
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 28
+  }
+  {
+    name: Aluminium Mining
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        mine:Boehmite
+        mine:Diaspore
+        mine:Gibbsite
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 28
+  }
+  {
+    name: Aluminium Smelting
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        process:Bayer process gibbsite
+        process:Bayer process diaspore
+        process:Bayer process boehmite
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 29
+  }
+  {
+    name: Steel Making
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+      process:Low Grade Steel Making
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 30
   }
 ]

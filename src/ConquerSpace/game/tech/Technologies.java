@@ -20,6 +20,7 @@ package ConquerSpace.game.tech;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
@@ -247,18 +248,34 @@ public class Technologies {
         } else if (action.startsWith("process")) {
             String[] text = action.split(":");
             String content = text[1].strip();
-            
+
             ProductionProcess process = null;
             //Find the process name
-            for(int i = 0; i < GameController.prodProcesses.size(); i++) {
+            for (int i = 0; i < GameController.prodProcesses.size(); i++) {
                 ProductionProcess proc = GameController.prodProcesses.get(i);
 
-                if(proc.name.equals(content)) {
+                if (proc.name.equals(content)) {
                     process = proc;
+                    //So that it's not null
+                    c.productionProcesses.add(process);
                     break;
                 }
             }
-            c.productionProcesses.add(process);
+            if (process == null) {
+                LOGGER.trace("Could not find process " + content);
+            }
+        } else if (action.startsWith("mine")) {
+            String[] text = action.split(":");
+            String content = text[1].strip();
+
+            //Find the resource
+            for (int i = 0; i < GameController.allGoods.size(); i++) {
+                Good proc = GameController.allGoods.get(i);
+                if (proc.getName().equals(content)) {
+                    c.mineableGoods.add(proc);
+                    break;
+                }
+            }
         }
     }
 

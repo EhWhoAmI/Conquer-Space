@@ -38,7 +38,7 @@ public class Factory extends Area {
 
     @Override
     public String toString() {
-        return "Factory";
+        return process.name + " Factory";
     }
 
     //And other upkeep stuff

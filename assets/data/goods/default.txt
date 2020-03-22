@@ -1,31 +1,5 @@
 [
     {
-        name: Hematite
-        volume: 1
-        mass: 5.3
-        // Iron ore
-        formula: [
-            "Iron:2"
-            "Oxygen:3"
-        ]
-        tags: [
-
-        ]
-    }
-    {
-        name: Magnetite
-        volume: 1
-        mass: 5.15
-        // Iron ore
-        formula: [
-            "Iron:3"
-            "Oxygen:4"
-        ]
-        tags: [
-
-        ]
-    }
-    {
         name: Graphite
         volume: 1
         mass: 2.26
@@ -44,6 +18,30 @@
         formula: [
             "Iron:9"
             "Carbon:1"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Water
+        volume: 1
+        mass: 1
+        formula: [
+            "Oxygen:1"
+            "Hydrogen:2"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Aluminium Oxide
+        volume: 1
+        mass: 3.987
+        formula: [
+            "Oxygen:3"
+            "Aluminium:2"
         ]
         tags: [
 

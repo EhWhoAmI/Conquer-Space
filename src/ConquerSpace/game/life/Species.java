@@ -40,8 +40,9 @@ public class Species {
     public Species(String name) {
         lifeTraits = new ArrayList<>();
         this.name = name;
-        foodGood = new FoodGood(this, 0, 0, 0);
-        speciesGood = new LiveGood(this, 0, 0, 0);
+        //Nice
+        foodGood = new FoodGood(this, 0, 1, 120);
+        speciesGood = new LiveGood(this, 0, 1, 120);
     }
 
     public void setName(String name) {

@@ -122,6 +122,8 @@ public class Civilization implements Employer{
     public ArrayList<Event> events;
     
     public ArrayList<ProductionProcess> productionProcesses;
+    
+    public ArrayList<Good> mineableGoods;
 
     private Race foundingSpecies;
 
@@ -188,6 +190,8 @@ public class Civilization implements Employer{
         contacts = new ArrayList<>();
         
         productionProcesses = new ArrayList<>();
+        
+        mineableGoods = new ArrayList<>();
         
         government = new Government();
     }

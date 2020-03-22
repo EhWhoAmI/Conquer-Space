@@ -49,7 +49,7 @@ public class PlanetInfoSheet extends JPanel {
     private Civilization c;
     private Planet p;
     
-    private final int spacePortIndex = 3;
+    private final int spacePortIndex = 4;
 
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
         this.c = c;

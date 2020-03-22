@@ -26,6 +26,7 @@ public abstract class Good {
     int id;
     double volume; // volume, m^3
     double mass; //mass, kg
+    public String[] tags;
 
     public Good(String name, int id, double volume, double mass) {
         this.name = name;

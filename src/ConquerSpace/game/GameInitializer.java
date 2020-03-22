@@ -184,7 +184,7 @@ public class GameInitializer {
         city.setName("Mines");
         //Find if vein exists on the planet
         int minerCount = (int) (Math.random() * p.getPlanetSize());
-
+        minerCount += 5;
         for (int i = 0; i < minerCount; i++) {
             //Select random vein
             int id = (int) (p.strata.size() * Math.random());
@@ -320,7 +320,7 @@ public class GameInitializer {
         for (int i = 0; i < 10; i++) {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
-            for (ProductionProcess proc : GameController.prodProcesses) {
+            for (ProductionProcess proc : c.productionProcesses) {
                 //Add new factory
                 Factory factory = new Factory(proc);
                 district.areas.add(factory);
