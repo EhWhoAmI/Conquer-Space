@@ -1,13 +1,23 @@
 Changelog:
 
 0.0.2:
+Total Overhauls:
+Resources are changed into goods, that can be processed into different resources
+Mining is changed into strata, that are similar to veins, just that they have multiple resources
+Factories now generate goods
+
 Jobs:
 Now, resources are gonna be generated using population and jobs. 
 For now, jobs generate resources, and all that you need, but when we get to government types and the like, we'll allow for taxes, and remove the ability to generate your own resources, depending on your government type. You can then use the taxes you levy to buy all kinds of stuff.
 
+Graphics:
+Add shadows to planets, and a star map
+Add 2 new display images
 
-
-Add shadows to planets.
+Debugging:
+Add console to see logs without the need to open files up
+Bug Fixes:
+Pressing the console button twice will not lead to an exception
 
 
 0.0.1:

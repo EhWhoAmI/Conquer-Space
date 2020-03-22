@@ -1,4 +1,4 @@
-Much of our icon font is FFF Foward. Here is it's license agreement:
+Our icon font is FFF Foward. Here is it's license agreement:
 
 
 This disclaimer and license agreement is a legal agreement between you and FFF Web Media Inc.,
@@ -48,3 +48,15 @@ I got the font from here: https://www.1001fonts.com/fff-forward-font.html
 Periodic table in json (literally saved me hours of work. I'm as happy as when I found jlibnoise)
 https://github.com/Bowserinator/Periodic-Table-JSON
 Creative Commons Attribution-ShareAlike 3.0 Unported
+
+//Libraries used:
+Apache Log4j
+Weblaf
+XOM
+jLibNoise
+Apache Commons Lang
+JUnitTest
+Json
+java hjson
+
+Proguard for compression (saves about 1/3 of the space)
