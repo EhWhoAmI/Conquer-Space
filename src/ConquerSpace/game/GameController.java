@@ -20,12 +20,14 @@ package ConquerSpace.game;
 import ConquerSpace.Globals;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
+import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.goods.Element;
-import ConquerSpace.game.universe.goods.NonElement;
-import ConquerSpace.game.universe.goods.Ore;
-import ConquerSpace.game.universe.goods.ResourceDistribution;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Element;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.NonElement;
+import ConquerSpace.game.universe.resources.Ore;
+import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
@@ -56,8 +58,7 @@ public class GameController {
     public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
     public static ArrayList<JSONObject> shipComponentTemplates;
-    public static ArrayList<Resource> resources;
-    public static Resource foodResource = null;
+    //public static Resource foodResource = null;
     public static ArrayList<EngineTechnology> engineTechnologys;
     public static ArrayList<JSONObject> events;
     public static ArrayList<PersonalityTrait> personalityTraits;
@@ -69,11 +70,17 @@ public class GameController {
     public static GameInitializer initer;
     public static PeopleProcessor peopleProcessor;
     public static MusicPlayer musicPlayer;
-    
+
     public static ArrayList<Element> elements;
     public static ArrayList<NonElement> rawMaterials;
-    public static ArrayList<Ore> ores;
+    public static HashMap<Good, ResourceDistribution> ores = new HashMap<>();
+    public static ArrayList<Good> allGoods;
+    public static ArrayList<Good> goods;
     
+    public static ArrayList<ProductionProcess> prodProcesses;
+    
+    public static Civilization playerCiv = null;
+
     public static final int AU_IN_LTYR = 63241;
 
     /**
@@ -105,7 +112,7 @@ public class GameController {
                 ticker.setWait(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
                 updater.calculateVision();
 
-                if (!((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.isPaused()) {
+                if (!((PlayerController) playerCiv.controller).tsWindow.isPaused()) {
                     tick();
                 }
             }
@@ -113,10 +120,9 @@ public class GameController {
         ticker.setAction(action);
 
         ticker.setWait(tickerSpeed);
-        ticker.start();
 
         //Start ticker
-        //ticker.start();
+        ticker.start();
     }
 
     //Process ingame tick.
@@ -144,8 +150,6 @@ public class GameController {
 
             //Increment resources
             updater.processResources();
-
-            peopleProcessor.createPeople();
 
             peopleProcessor.processPeople();
 

@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;

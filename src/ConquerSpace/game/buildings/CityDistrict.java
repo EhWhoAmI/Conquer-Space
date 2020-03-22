@@ -64,4 +64,10 @@ public class CityDistrict extends Building implements PopulationStorage, Workabl
     public String getType() {
         return "City District";
     }
+
+    @Override
+    public String getTooltipText() {
+        String txt = String.format(getBuildingTooltipString("citydistrict"), getCity().getName());
+        return txt;
+    }
 }

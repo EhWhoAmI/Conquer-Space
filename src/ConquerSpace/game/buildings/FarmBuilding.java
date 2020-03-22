@@ -17,11 +17,10 @@
  */
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.GameController;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
-import ConquerSpace.game.universe.resources.farm.Crop;
+import ConquerSpace.game.universe.farm.Crop;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -125,7 +124,7 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
         //Check if harvest season...
         if (!harvestable.isEmpty()) {
             Crop c = harvestable.remove(0);
-            //j.resources.put(GameController.foodResource, c.getYield());
+            j.resources.put(c.getSpecies().foodGood, c.getYield());
             //Regrow
             c.setTimeLeft(25);
         }
@@ -162,5 +161,10 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
 
     public int getHarvestersNeeded() {
         return harvestersNeeded;
+    }
+
+    @Override
+    public String getTooltipText() {
+        return getBuildingTooltipString("farmbuilding");
     }
 }

@@ -23,8 +23,8 @@ import ConquerSpace.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.engineering.LaunchSystemDesigner;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -100,6 +100,7 @@ public class MainInterfaceWindow extends JInternalFrame {
         Dimension d = getToolkit().getScreenSize();
         setSize(d.width - 100, d.height - 100);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setTitle("Main Window");
     }
 
     public void init() {

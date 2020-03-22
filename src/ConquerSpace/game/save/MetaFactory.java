@@ -19,7 +19,7 @@ package ConquerSpace.game.save;
 
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

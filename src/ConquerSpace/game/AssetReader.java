@@ -20,11 +20,13 @@ package ConquerSpace.game;
 import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.tech.Technologies;
-import ConquerSpace.game.universe.goods.Element;
-import ConquerSpace.game.universe.goods.NonElement;
-import ConquerSpace.game.universe.goods.Ore;
-import ConquerSpace.game.universe.goods.ResourceDistribution;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Element;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.NonElement;
+import ConquerSpace.game.universe.resources.Ore;
+import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
+import ConquerSpace.game.universe.resources.TempNonElement;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -34,7 +36,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
 import org.hjson.JsonValue;
@@ -55,8 +59,8 @@ public class AssetReader {
     public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, PassThingy thing) {
         ArrayList<T> elements = new ArrayList<>();
         //Get the launch systems folder
-        File launchSystemsFolder = ResourceLoader.getResourceByFile(dir);
-        File[] files = launchSystemsFolder.listFiles();
+        File resourceFolder = ResourceLoader.getResourceByFile(dir);
+        File[] files = resourceFolder.listFiles();
         for (File f : files) {
             FileInputStream fis = null;
             try {
@@ -76,17 +80,19 @@ public class AssetReader {
                         JSONObject obj = root.getJSONObject(i);
                         elements.add((T) thing.thingy(obj));
                     } catch (ClassCastException e) {
-                        LOGGER.error("CCE!", e);
+                        LOGGER.error("CCE while reading file" + f.getAbsolutePath(), e);
                     } catch (JSONException exception) {
-                        LOGGER.error("JSONException!", exception);
+                        LOGGER.error("JSONException while reading file" + f.getAbsolutePath(), exception);
+                    } catch (IllegalArgumentException ile) {
+                        LOGGER.error("IllegalArgumentException while reading file" + f.getAbsolutePath(), ile);
                     }
                 }
             } catch (FileNotFoundException ex) {
-                LOGGER.error("File not found!", ex);
+                LOGGER.error("File not found while reading file" + f.getAbsolutePath(), ex);
             } catch (IOException ex) {
-                LOGGER.error("IO exception!", ex);
+                LOGGER.error("IO exception while reading file "  + f.getAbsolutePath(), ex);
             } catch (JSONException ex) {
-                LOGGER.warn("JSON EXCEPTION!", ex);
+                LOGGER.warn("JSON EXCEPTION while reading file " + f.getAbsolutePath(), ex);
             } finally {
                 try {
                     //Because continue stat
@@ -231,9 +237,15 @@ public class AssetReader {
     }
 
     public static Object processElement(JSONObject obj) {
-        int id = obj.getInt("id");
+        //Because periodic table number is the id
+        int id = obj.getInt("number");
         String name = obj.getString("name");
-        double density = obj.getDouble("density");
+        Object densityT = obj.get("density");
+        //if null, put 0
+        double density = 0;
+        if(densityT instanceof Double) {
+            density = (Double) densityT;
+        }
         Element e = new Element(name, id, 1d, density);
         return e;
     }
@@ -280,59 +292,6 @@ public class AssetReader {
         }
     }
 
-    public static Object processResource(JSONObject obj) {
-        String name = obj.getString("name");
-
-        //The tech id will be the second value.
-        int id = obj.getInt("id");
-
-        float rarity = obj.getFloat("rarity");
-
-        int value = obj.getInt("value");
-
-        float density = obj.getFloat("density");
-
-        int difficulty = obj.getInt("difficulty");
-
-        JSONArray distribution = obj.getJSONArray("distribution");
-
-        JSONArray color = obj.getJSONArray("color");
-
-        boolean mineable = obj.getBoolean("mineable");
-
-        JSONArray tags = obj.getJSONArray("tags");
-
-        JSONObject attributes = obj.getJSONObject("attributes");
-
-        Resource res = new Resource(name, value, rarity, id);
-        res.setDensity(density);
-        res.setDifficulty(difficulty);
-        res.setMineable(mineable);
-        res.setDistributionLow(distribution.getInt(0));
-        res.setDistributionHigh(distribution.getInt(1));
-        res.setColor(color.getInt(0), color.getInt(1), color.getInt(2));
-        //res.setTags(tags.);
-        String[] list = new String[tags.length()];
-        for (int n = 0; n < tags.length(); n++) {
-            list[n] = tags.getString(n);
-        }
-        res.setTags(list);
-
-        //Attributes
-        Iterator it = attributes.keys();
-        while (it.hasNext()) {
-            //Process it
-            String label = (String) it.next();
-            Integer number = (Integer) attributes.get(label);
-            res.getAttributes().put(label, number);
-        }
-
-        if (name.equals("food")) {
-            GameController.foodResource = res;
-        }
-        return res;
-    }
-
     public static Object processSatellite(JSONObject obj) {
         //Literally the easiest.
         return obj;
@@ -354,8 +313,16 @@ public class AssetReader {
         double density = obj.getDouble("density");
         Ore element = new Ore(name, 0, 1, density);
         //Process formula
-        obj.getJSONArray("formula");
-        
+        JSONArray arr = obj.getJSONArray("formula");
+        //Sort through things
+        for (int i = 0; i < arr.length(); i++) {
+            String s = arr.getString(i);
+            String[] content = s.split(":");
+            //Find the resources
+            //content[0]
+            //element.recipie.put(, Integer.parseInt(content[1]));
+        }
+
         //Process distribution
         JSONArray dist = obj.getJSONArray("distribution");
         int distributionLow = dist.getInt(0);
@@ -366,7 +333,7 @@ public class AssetReader {
         double rarity = obj.getDouble("rarity");
         int abundance = obj.getInt("abundance");
         int resourceDistDensity = obj.getInt("dist-density");
-        
+
         element.dist.distributionLow = distributionLow;
         element.dist.distributionHigh = distributionHigh;
         element.dist.depthLow = depthLow;
@@ -374,8 +341,212 @@ public class AssetReader {
         element.dist.rarity = rarity;
         element.dist.abundance = abundance;
         element.dist.density = resourceDistDensity;
-        
+
         return (element);
+    }
+
+    public static Object processUncompleteGood(JSONObject obj) {
+        return null;
+    }
+
+    //Lol the name
+    public static Object processProcess(JSONObject obj) {
+        String name = obj.getString("name");
+
+        HashMap<Good, Integer> input = new HashMap<>();
+
+        JSONArray inputArray = obj.getJSONArray("input");
+
+        for (int i = 0; i < inputArray.length(); i++) {
+            String s = inputArray.getString(i);
+            String[] content = s.split(":");
+
+            Good toFind = null;
+            //Find good
+            for (int k = 0; k < GameController.allGoods.size(); k++) {
+                Good g = GameController.allGoods.get(k);
+                if (g.getName().equals(content[0])) {
+                    toFind = g;
+                    break;
+                }
+            }
+
+            if (toFind != null) {
+                //Parse things
+                int value = Integer.parseInt(content[1]);
+                input.put(toFind, value);
+            }
+        }
+
+        HashMap<Good, Integer> output = new HashMap<>();
+
+        JSONArray outputArray = obj.getJSONArray("output");
+
+        for (int i = 0; i < outputArray.length(); i++) {
+            String s = outputArray.getString(i);
+            String[] content = s.split(":");
+
+            Good toFind = null;
+            //Find good
+            for (int k = 0; k < GameController.allGoods.size(); k++) {
+                Good g = GameController.allGoods.get(k);
+                if (g.getName().equals(content[0])) {
+                    toFind = g;
+                    break;
+                }
+            }
+
+            if (toFind != null) {
+                //Parse things
+                int value = Integer.parseInt(content[1]);
+                output.put(toFind, value);
+            }
+        }
+
+        int diff = obj.getInt("diff");
+
+        ProductionProcess process = new ProductionProcess();
+        process.name = name;
+        process.input = input;
+        process.output = output;
+        process.diff = diff;
+
+        return process;
+    }
+    
+    public static Object processDistributions(JSONObject obj) {
+        ResourceDistribution distribution = new ResourceDistribution();
+        //Process distribution
+        String name = obj.getString("name");
+        JSONArray dist = obj.getJSONArray("distribution");
+        int distributionLow = dist.getInt(0);
+        int distributionHigh = dist.getInt(1);
+        JSONArray depth = obj.getJSONArray("depth");
+        int depthLow = depth.getInt(0);
+        int depthHigh = depth.getInt(1);
+        double rarity = obj.getDouble("rarity");
+        int abundance = obj.getInt("abundance");
+        int resourceDistDensity = obj.getInt("dist-density");
+
+        distribution.resourceName = name;
+        distribution.distributionLow = distributionLow;
+        distribution.distributionHigh = distributionHigh;
+        distribution.depthLow = depthLow;
+        distribution.depthHigh = depthHigh;
+        distribution.rarity = rarity;
+        distribution.abundance = abundance;
+        distribution.density = resourceDistDensity;
+        return distribution;
+    }
+
+    /**
+     * We need a separate function for reading elements.
+     */
+    public static ArrayList<Good> processGoods() {
+        HashMap<String, Good> resourcea = new HashMap<>();
+        HashMap<TempNonElement, NonElement> nonElementHashMap = new HashMap<>();
+        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.goods");
+        File[] files = launchSystemsFolder.listFiles();
+        for (File f : files) {
+            FileInputStream fis = null;
+            try {
+                //If it is readme, continue
+                if (f.getName().endsWith("readme.txt")) {
+                    continue;
+                }
+                fis = new FileInputStream(f);
+                byte[] data = new byte[(int) f.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data);
+                text = JsonValue.readHjson(text).toString();
+                JSONArray root = new JSONArray(text);
+                for (int i = 0; i < root.length(); i++) {
+                    try {
+                        JSONObject obj = root.getJSONObject(i);
+
+                        //Process both...
+                        String name = obj.getString("name");
+                        double volume = obj.getDouble("volume");
+                        double mass = obj.getDouble("mass");
+
+                        TempNonElement tempNonElement = new TempNonElement(name, i, volume, mass);
+                        NonElement nonElement = new NonElement(name, i, volume, mass);
+
+                        //Process formula
+                        JSONArray arr = obj.getJSONArray("formula");
+                        //Sort through things
+                        for (int k = 0; k < arr.length(); k++) {
+                            String s = arr.getString(k);
+                            String[] content = s.split(":");
+                            //Find the resources
+                            String resourceName = content[0];
+                            int amount = Integer.parseInt(content[1]);
+                            tempNonElement.recipie.put(resourceName, amount);
+                        }
+                        
+                        //Sort through elements
+                        JSONArray tags = obj.getJSONArray("tags");
+                        String[] tagArray = Arrays.copyOf(tags.toList().toArray(), tags.toList().toArray().length, String[].class);
+                        nonElement.tags = tagArray;
+                        
+                        resourcea.put(name, nonElement);
+                        nonElementHashMap.put(tempNonElement, nonElement);
+                    } catch (ClassCastException e) {
+                        LOGGER.error("CCE!", e);
+                    } catch (JSONException exception) {
+                        LOGGER.error("JSONException!", exception);
+                    } catch (IllegalArgumentException ile) {
+                        LOGGER.error("IllegalArgumentException!", ile);
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                LOGGER.error("File not found!", ex);
+            } catch (IOException ex) {
+                LOGGER.error("IO exception!", ex);
+            } catch (JSONException ex) {
+                LOGGER.warn("JSON EXCEPTION!", ex);
+            } finally {
+                try {
+                    //Because continue stat
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        ArrayList<Good> goods = new ArrayList<>();
+        //Sort through another time...
+        for (Map.Entry<TempNonElement, NonElement> entry : nonElementHashMap.entrySet()) {
+            TempNonElement key = entry.getKey();
+            NonElement val = entry.getValue();
+
+            for (Map.Entry<String, Integer> entry1 : key.recipie.entrySet()) {
+                String name = entry1.getKey();
+                Integer amount = entry1.getValue();
+
+                //Find
+                Good g = resourcea.get(name);
+                //Put in thing
+                if (g == null) {
+                    //Find in elements
+                    for (Element e : GameController.elements) {
+                        if (e.getName().equals(name)) {
+                            //insert the stuff
+                            val.recipie.put(e, amount);
+                            break;
+                        }
+                    }
+
+                } else {
+                    val.recipie.put(g, amount);
+                }
+            }
+            goods.add(val);
+        }
+        //Wrap up
+        return goods;
     }
 }
 

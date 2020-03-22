@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.science;
 
-import ConquerSpace.game.AssetReader;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;
 import java.io.FileNotFoundException;

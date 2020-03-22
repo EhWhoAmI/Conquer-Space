@@ -21,7 +21,7 @@ import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,13 +67,13 @@ public class CQSPConsole extends JInternalFrame {
                     }
                 } catch (FileNotFoundException ex) {
                 }
-            } else if (command[0].toLowerCase().replaceAll(" ","").equals("research") || command[0].toLowerCase().replaceAll(" ","").equals("resh")) {
+            } else if (command[0].toLowerCase().replaceAll(" ", "").equals("research") || command[0].toLowerCase().replaceAll(" ", "").equals("resh")) {
                 //Research tech
                 //Get tech
                 if (command.length != 2) {
                     model.addElement("You need the id of the tech");
                 } else if (StringUtils.isNumeric(command[1])) {
-                    
+
                     Technology t = Technologies.getTechByID(Integer.parseInt(command[1]));
                     c.researchTech(t);
                     model.addElement("Researched " + t.getName() + " for " + c.getName());

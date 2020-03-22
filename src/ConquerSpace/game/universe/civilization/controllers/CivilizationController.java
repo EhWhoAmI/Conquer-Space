@@ -22,7 +22,7 @@ import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import java.util.ArrayList;
 
 /**

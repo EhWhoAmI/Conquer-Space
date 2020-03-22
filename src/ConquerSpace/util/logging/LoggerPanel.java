@@ -20,8 +20,6 @@ package ConquerSpace.util.logging;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import org.apache.logging.log4j.Level;
 
 /**
  *
@@ -34,8 +32,9 @@ public class LoggerPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form LoggerPanel
+     * @param arrayList the log messages
      */
-    public LoggerPanel(ArrayList arrayList) {
+    public LoggerPanel(ArrayList<LogMessage> arrayList) {
         this.arrayList = arrayList;
         logTableModel = new LogTableModel();
         initComponents();

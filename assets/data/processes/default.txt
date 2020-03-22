@@ -1,0 +1,92 @@
+[
+    {
+        //Will add: Maintainence
+        //Add 1 for each process thing
+        //Components needed to create factory
+        //Other stuff I can't remember
+        //Maybe even procedually generated processes with some parameters
+        name: Magnetite Smelting
+        input: [
+            "Magnetite:1"
+        ]
+        output: [
+            "Iron:1"
+            "Oxygen:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name: Hematite Smelting
+        input: [
+            "Hematite:1"
+        ]
+        output: [
+            "Iron:3"
+            "Oxygen:4"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name: Low Grade Steel Making
+        input: [
+            "Iron:9"
+            "Carbon:1"
+        ]
+        output: [
+            "Low Grade Steel:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    //https://en.wikipedia.org/wiki/Bayer_process
+    {
+        name: Bayer process gibbsite
+        //It produces Aluminium oxide 
+        input: [
+            "Gibbsite:1"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "Aluminium:1"
+            "Water:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name: Bayer process diaspore
+        //It produces Aluminium oxide 
+        input: [
+            "Diaspore:1"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "Aluminium:1"
+            "Water:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name: Bayer process boehmite
+        //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
+        input: [
+            "Boehmite:1"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "Aluminium:1"
+            "Water:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+]

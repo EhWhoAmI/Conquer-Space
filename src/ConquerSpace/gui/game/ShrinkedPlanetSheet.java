@@ -20,10 +20,10 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.ResourceVein;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.PlanetTypes;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -199,9 +199,9 @@ public class ShrinkedPlanetSheet extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (ResourceVein v : p.resourceVeins) {
+                for (Stratum v : p.strata) {
                     //Draw...
-                    if (resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) {
+                    if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);
                         g2d.setColor(Color.LIGHT_GRAY);
                         g2d.fill(circe);

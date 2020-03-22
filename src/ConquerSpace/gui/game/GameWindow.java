@@ -31,9 +31,9 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.GUI;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
@@ -48,7 +48,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -109,6 +108,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         //A window to greet the user
         JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
                 + "May we live and prosper in these exciting new times.");
+        
+        setTitle("Conquer Space");
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -277,7 +278,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         gameTickTimer.setRepeats(true);
         gameTickTimer.start();
 
-        desktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+        desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
 
         //desktopPane.setBackground(Color.cyan);
         setJMenuBar(menuBar);

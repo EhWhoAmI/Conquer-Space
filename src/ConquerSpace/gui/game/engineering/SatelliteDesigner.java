@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.engineering;
 
+import ConquerSpace.game.Calculators;
 import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
@@ -36,9 +37,11 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,7 +52,7 @@ import org.json.JSONObject;
  */
 public class SatelliteDesigner extends JPanel {
 
-    private JMenuBar menuBar;
+    private JToolBar menuBar;
 
     private JList satelliteList;
     private JPanel satelliteDesignerPanel;
@@ -102,10 +105,11 @@ public class SatelliteDesigner extends JPanel {
         } catch (IOException ex) {
         }
 
-        menuBar = new JMenuBar();
+        menuBar = new JToolBar();
+        JToolBar toolBar = new JToolBar();
         JMenu satelliteMenu = new JMenu("Satellites");
-        JMenuItem saveSatelliteMenu = new JMenuItem("Save Satellite");
-        JMenuItem newMenu = new JMenuItem("New Satellite");
+        JButton saveSatelliteMenu = new JButton("Save Satellite");
+        JButton newMenu = new JButton("New Satellite");
 
         saveSatelliteMenu.addActionListener(a -> {
             //Create the satellite
@@ -125,7 +129,7 @@ public class SatelliteDesigner extends JPanel {
                     case SatelliteTypes.TELESCOPE:
                         type = "telescope";
                         //Add Info
-                        obj.put("range", GameUpdater.Calculators.Optics.getRange(c.values.get("optics.quality"), (int) telescopeSatelliteSizeSpinner.getValue()));
+                        obj.put("range", Calculators.Optics.getRange(c.values.get("optics.quality"), (int) telescopeSatelliteSizeSpinner.getValue()));
                         break;
                     case SatelliteTypes.MILITARY:
                         type = "military";
@@ -137,6 +141,9 @@ public class SatelliteDesigner extends JPanel {
                 obj.put("id", c.satelliteTemplates.size());
                 c.satelliteTemplates.add(obj);
                 satelliteListModel.addElement(new SatelliteWrapper(obj));
+            } else {
+                //Show alert
+                JOptionPane.showInternalMessageDialog(this, "You need a name for the satellite!");
             }
         });
 
@@ -146,9 +153,8 @@ public class SatelliteDesigner extends JPanel {
             satelliteNameField.setText("");
         });
 
-        satelliteMenu.add(saveSatelliteMenu);
-        satelliteMenu.add(newMenu);
-        menuBar.add(satelliteMenu);
+        menuBar.add(saveSatelliteMenu);
+        menuBar.add(newMenu);
 
         add(menuBar, BorderLayout.NORTH);
         JPanel container = new JPanel();
@@ -210,17 +216,17 @@ public class SatelliteDesigner extends JPanel {
 
             telescopeSatelliteSizeSpinner.addChangeListener(a -> {
                 //Set all values
-                mass = GameUpdater.Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue());
+                mass = Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue());
                 satelliteMassValueLabel.setText(mass + "");
-                telescopeSatelliteRangeValueLabel.setText(GameUpdater.Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
-                telescopeSatelliteMassValueLabel.setText(GameUpdater.Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + "kg");
+                telescopeSatelliteRangeValueLabel.setText(Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
+                telescopeSatelliteMassValueLabel.setText(Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + "kg");
             });
 
             telescopeSatelliteRangeLabel = new JLabel("Range: ");
-            telescopeSatelliteRangeValueLabel = new JLabel(GameUpdater.Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
+            telescopeSatelliteRangeValueLabel = new JLabel(Calculators.Optics.getRange(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " light years");
 
             telescopeSatelliteMassLabel = new JLabel("Lens Mass: ");
-            telescopeSatelliteMassValueLabel = new JLabel(GameUpdater.Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " kg");
+            telescopeSatelliteMassValueLabel = new JLabel(Calculators.Optics.getLensMass(quality, (int) telescopeSatelliteRangespinnerModel.getValue()) + " kg");
 
             telescopeSatellitePlanner.add(telescopeSatelliteSizeLabel);
             telescopeSatellitePlanner.add(telescopeSatelliteSizeSpinner);
@@ -285,7 +291,7 @@ public class SatelliteDesigner extends JPanel {
                     case "telescope":
                         //Add Info
                         //System.out.println(obj.getInt("range"));
-                        telescopeSatelliteSizeSpinner.setValue(GameUpdater.Calculators.Optics.getLensSize(0, obj.getInt("range")));
+                        telescopeSatelliteSizeSpinner.setValue(Calculators.Optics.getLensSize(0, obj.getInt("range")));
                         telescopeSatelliteRangeValueLabel.setText(obj.getInt("range") + " light years");
                         break;
                     case "military":

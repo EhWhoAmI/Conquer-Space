@@ -27,12 +27,10 @@ public class ResearchArea extends Area implements Workable{
 
     @Override
     public Job[] jobsNeeded() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public void processJob(Job j) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

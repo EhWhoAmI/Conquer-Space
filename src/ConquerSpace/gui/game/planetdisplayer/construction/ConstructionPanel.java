@@ -17,9 +17,8 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
-import ConquerSpace.game.GameUpdater;
+import ConquerSpace.game.Calculators;
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
@@ -28,12 +27,12 @@ import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Resource;
-import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -42,15 +41,16 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ConstructionPanel extends JInternalFrame {
+public class ConstructionPanel extends JInternalFrame implements InternalFrameListener {
 
     private JComboBox<String> buildingType;
     private DefaultComboBoxModel<String> buildingModel;
@@ -65,7 +65,7 @@ public class ConstructionPanel extends JInternalFrame {
 
     private BuildResourceStorageMenu buildResourceStorageMenu;
 
-    private BuildResourceGenerationMenu buildMiningStorageMenu;
+    private BuildMinerMenu buildMiningStorageMenu;
 
     private BuildIndustrialAreaMenu buildIndustrialAreaMenu;
 
@@ -80,8 +80,12 @@ public class ConstructionPanel extends JInternalFrame {
 
     private JButton buildButton;
 
+    PlanetMap parent;
+
     public ConstructionPanel(Civilization c, Planet p, Universe u, GeographicPoint point, PlanetMap parent) {
         setLayout(new VerticalFlowLayout());
+
+        this.parent = parent;
 
         buildingModel = new DefaultComboBoxModel<>();
         buildingModel.addElement(RESIDENTIAL);
@@ -153,7 +157,7 @@ public class ConstructionPanel extends JInternalFrame {
 
         buildResourceStorageMenu = new BuildResourceStorageMenu();
 
-        buildMiningStorageMenu = new BuildResourceGenerationMenu();
+        buildMiningStorageMenu = new BuildMinerMenu(p, c, point);
 
         buildIndustrialAreaMenu = new BuildIndustrialAreaMenu();
 
@@ -208,7 +212,7 @@ public class ConstructionPanel extends JInternalFrame {
                 } else if (item.equals(OBSERVATORY)) {
                     StarSystem sys = u.getStarSystem(p.getParentStarSystem());
                     Observatory observatory = new Observatory(
-                            GameUpdater.Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
+                            Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
                             (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
                             c.getID(), new ConquerSpace.game.universe.Point((long) sys.getX(), (long) sys.getY()));
                     //Add visionpoint to civ
@@ -217,30 +221,25 @@ public class ConstructionPanel extends JInternalFrame {
                     toReset = true;
                 } else if (item.equals(RESOURCE_STOCKPILE)) {
                     ResourceStorage stor = new ResourceStorage(p);
-                    //Add the stuff...
-
-                    for (int i = 0; i < buildResourceStorageMenu.resourceToPut.getModel().getSize(); i++) {
-                        Resource next = buildResourceStorageMenu.resourceToPut.getModel().getElementAt(i);
-
-                        //stor.addResourceTypeStore(next);
-                    }
+                    
+                    stor.setMaximumStorage((int) buildResourceStorageMenu.resourceStorageSizeSpinner.getValue());
+                    
+                    //Add to planet...
                     c.resourceStorages.add(stor);
                     Actions.buildBuilding(p, buildingPos, stor, c, 1);
                     toReset = true;
                 } else if (item.equals(RESOURCE_MINER)) {
                     ResourceMinerDistrict miner = new ResourceMinerDistrict(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
-                    //Add the stuff...
-                    //Get the map of things, and calculate the stuff
-                    int x = buildingPos.getX();
-                    int y = buildingPos.getY();
-                    Resource res = (Resource) buildMiningStorageMenu.resourceToMine.getSelectedItem();
-                    for (ResourceVein v : p.resourceVeins) {
-                        if (Math.hypot(x - v.getX(), y - v.getY()) < v.getRadius() && res.equals(v.getResourceType())) {
-                            miner.setVeinMining(v);
-                            break;
-                        }
-                    }
-                    //Add miners
+                    
+                    //Set stratum
+                    Stratum strat = (Stratum) buildMiningStorageMenu.strataComboBox.getSelectedItem();
+                    miner.setVeinMining(strat);
+                    
+                    //Get resource mined
+                    Good mining = (Good) buildMiningStorageMenu.stratumResourceTable.getValueAt(buildMiningStorageMenu.stratumResourceTable.getSelectedRow(), 0);
+                    miner.setResourceMining(mining);
+                    
+                    //Add miner population
                     miner.population.add(new PopulationUnit(c.getFoundingSpecies()));
                     Actions.buildBuilding(p, buildingPos, miner, c, 1);
                     toReset = true;
@@ -252,12 +251,47 @@ public class ConstructionPanel extends JInternalFrame {
                 }
             }
         });
+        
+        setTitle("Construction");
+        
         add(buildButton);
         pack();
-
+        
+        addInternalFrameListener(this);
         setVisible(true);
         setClosable(true);
         setResizable(true);
+    }
+
+    @Override
+    public void internalFrameOpened(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameClosing(InternalFrameEvent e) {
+        //Deactivate point
+        parent.resetBuildingIndicator();
+        dispose();
+    }
+
+    @Override
+    public void internalFrameClosed(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameIconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameDeiconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameActivated(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameDeactivated(InternalFrameEvent e) {
     }
 
 }

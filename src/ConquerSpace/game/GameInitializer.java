@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game;
 
-import static ConquerSpace.game.AssetReader.*;
 import ConquerSpace.game.buildings.AdministrativeCenter;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
@@ -29,13 +28,12 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
-import ConquerSpace.game.buildings.area.industrial.ForgeArea;
+import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
-import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
@@ -51,16 +49,14 @@ import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPos
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerSource;
 import ConquerSpace.game.universe.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.goods.Element;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.resources.Resource;
-import ConquerSpace.game.universe.resources.ResourceVein;
-import ConquerSpace.game.universe.resources.farm.Crop;
-import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.universe.farm.Crop;
 import ConquerSpace.game.universe.ships.hull.HullMaterial;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -68,7 +64,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -107,6 +102,12 @@ public class GameInitializer {
             //Ignore
         }
 
+        //Memory saving tricks
+        universe.civs.trimToSize();
+        universe.species.trimToSize();
+        universe.spaceShips.trimToSize();
+        universe.starSystems.trimToSize();
+
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
             Civilization c = universe.getCivilization(i);
             //Add templates
@@ -142,6 +143,8 @@ public class GameInitializer {
 
                 //Add infrastructure
                 createInfrastructure(starting, selector);
+                
+                nameStratumOnPlanet(starting);
 
                 //Set ownership
                 starting.setOwnerID(c.getID());
@@ -152,9 +155,9 @@ public class GameInitializer {
                 c.habitatedPlanets.add(starting);
 
                 //Add resources
-                for (Resource res : GameController.resources) {
-                    c.resourceList.put(res, 0);
-                }
+//                for (Good res : GameController.ores) {
+//                    c.resourceList.put(res, 0);
+//                }
 
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
 
@@ -180,19 +183,44 @@ public class GameInitializer {
         City city = new City(p.getUniversePath());
         city.setName("Mines");
         //Find if vein exists on the planet
-        int i = 0;
-        for (ResourceVein v : p.resourceVeins) {
-            //Get the resource vein and stuff
-            //Then place it in the center
-            ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
-            //System.out.println
+        int minerCount = (int) (Math.random() * p.getPlanetSize());
+        minerCount += 5;
+        for (int i = 0; i < minerCount; i++) {
+            //Select random vein
+            int id = (int) (p.strata.size() * Math.random());
+            Stratum strata = p.strata.get(id);
+            ResourceMinerDistrict miner = new ResourceMinerDistrict(strata, 10);
+
+            //Set the type of resource to mine
+            ArrayList<Good> a = new ArrayList<>(strata.minerals.keySet());
+            Good g = a.get((int) (a.size() * Math.random()));
+
+            miner.setResourceMining(g);
             miner.setOwner(c);
             miner.setScale(1);
 
+            int randR = (int) (Math.random() * Math.sqrt(strata.getRadius()));
+            double theta = (Math.random() * Math.PI);
+
+            int x = (int) (Math.cos(theta) * randR);
+            int y = (int) (Math.sin(theta) * randR);
+
             miner.population.add(new PopulationUnit(founding));
-            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
+            p.buildings.put(new GeographicPoint(x + strata.getX(), y + strata.getY()), miner);
             city.addDistrict(miner);
         }
+//        for (ResourceVein v : p.resourceVeins) {
+//            //Get the resource vein and stuff
+//            //Then place it in the center
+//            ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
+//            //System.out.println
+//            miner.setOwner(c);
+//            miner.setScale(1);
+//
+//            miner.population.add(new PopulationUnit(founding));
+//            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
+//            city.addDistrict(miner);
+//        }
         p.cities.add(city);
     }
 
@@ -202,8 +230,7 @@ public class GameInitializer {
         //Create a test crop so that you can grow stuff
         City farmCity = new City(starting.getUniversePath());
         farmCity.setName("Farms");
-        Species potato = new Species();
-        potato.setName("Potato");
+        Species potato = new Species("Potato");
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
@@ -245,7 +272,8 @@ public class GameInitializer {
 
         PowerPlantArea powerPlant = new PowerPlantArea();
         //Get the resources needed for powering plant
-        Resource resource = null;
+        //TODO sort out resources needed for powerplants
+        /*Resource resource = null;
         for (Resource res : GameController.resources) {
             for (String tag : res.getTags()) {
                 if (tag.equals("energy")) {
@@ -253,9 +281,8 @@ public class GameInitializer {
                     break;
                 }
             }
-        }
+        }*/
 
-        powerPlant.setUsedResource(resource);
         powerPlant.setMaxVolume(1000);
         infrastructureBuilding.areas.add(powerPlant);
         //Connect it to many buildings
@@ -281,10 +308,6 @@ public class GameInitializer {
         ResourceStorage storage = new ResourceStorage(starting);
         storage.setOwner(c);
         //Add all possible resources
-        //Get starting resources...
-        /*for (Good res : GameController.rawMaterials) {
-            storage.addResourceTypeStore(res);
-        }*/
 
         GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
@@ -293,13 +316,29 @@ public class GameInitializer {
     }
 
     private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
+        City cit = new City(starting.getUniversePath());
         for (int i = 0; i < 10; i++) {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
-            district.areas.add(new ForgeArea());
+            for (ProductionProcess proc : c.productionProcesses) {
+                //Add new factory
+                Factory factory = new Factory(proc);
+                district.areas.add(factory);
+            }
+
+            for (int k = 0; k < 5; k++) {
+                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
+                u.setSpecies(c.getFoundingSpecies());
+                c.population.add(u);
+                district.getPopulationArrayList().add(u);
+            }
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
             starting.buildings.put(pt, district);
+
+            //Add to city
+            cit.buildings.add(district);
         }
+        starting.cities.add(cit);
     }
 
     private void createPopulationStorages(Planet starting, Civilization c, Random selector) {
@@ -535,7 +574,7 @@ public class GameInitializer {
         crownPrincePosition.setName("Crown Prince");
         leader.nextInLine = crownPrincePosition;
         crownPrince.position = crownPrincePosition;
-        
+
         PeopleProcessor.placePerson(c.getCapitalCity(), crownPrince);
         c.employ(crownPrince);
     }
@@ -571,7 +610,8 @@ public class GameInitializer {
             //Add areas
             PowerPlantArea powerPlant = new PowerPlantArea();
             //Get the resources needed for powering plant
-            Resource resource = null;
+            //TODO: choose energy resource
+            /*Resource resource = null;
             for (Resource res : GameController.resources) {
                 for (String tag : res.getTags()) {
                     if (tag.equals("energy")) {
@@ -579,7 +619,7 @@ public class GameInitializer {
                         break;
                     }
                 }
-            }
+            }*/
 
             //Add the districts
             for (int i = 0; i < 5; i++) {
@@ -587,11 +627,26 @@ public class GameInitializer {
                 building.addBuilding(b);
             }
 
-            powerPlant.setUsedResource(resource);
             powerPlant.setMaxVolume(1000);
             building.areas.add(powerPlant);
             //Add infrastructure
             p.buildings.put(getRandomEmptyPoint(p, selector), building);
+        }
+    }
+    
+    private PowerPlantArea createPowerPlant() {
+        return null;
+    }
+    
+    private void nameStratumOnPlanet(Planet p) {
+        NameGenerator gen = null;
+        try {
+            gen = NameGenerator.getNameGenerator("strata.names");
+        } catch (IOException ex) {
+            //Ignore
+        }
+        for(Stratum strata: p.strata) {
+            strata.setName(gen.getName(0));
         }
     }
 }

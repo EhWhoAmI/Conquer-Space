@@ -31,6 +31,7 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
@@ -50,19 +51,18 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.universe.resources.farm.Crop;
+import ConquerSpace.game.universe.farm.Crop;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
-import ConquerSpace.game.universe.spaceObjects.ControlTypes;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.SpaceObject;
-import ConquerSpace.game.universe.spaceObjects.Star;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.ControlTypes;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.SpaceObject;
+import ConquerSpace.game.universe.bodies.Star;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.DistributedRandomNumberGenerator;
@@ -128,13 +128,11 @@ public class GameUpdater {
             //Get the vision, do it...
             int civIndex = universe.control.get(p);
             if (civIndex > -1) {
-                //System.out.println("Putting vision for civ " + civIndex + " at " + p);
-                //System.out.println("Planet size: " + ((Planet)universe.getSpaceObject(p)).planetSectors.length);
                 universe.getCivilization(civIndex).vision.put(p, VisionTypes.KNOWS_ALL);
             }
         }
-        //Loop through all the vision points in the universe
 
+        //Loop through all the vision points in the universe
         for (int civ = 0; civ < universe.getCivilizationCount(); civ++) {
             Civilization civil = universe.getCivilization(civ);
             for (VisionPoint pt : civil.visionPoints) {
@@ -153,32 +151,6 @@ public class GameUpdater {
                                 (amount > 100) ? 100 : (amount));
                     }
                 }
-            }
-        }
-    }
-
-    //Here is where a lot of the math is gonna be held.
-    public static class Calculators {
-
-        public static class Optics {
-
-            public static int getRange(int quality, int size) {
-                return (int) (Math.log(Math.PI * (size) * (size) + 1) * 2);
-            }
-
-            public static int getLensMass(int quality, int size) {
-                return (int) (((double) quality / 100d) * size * size * Math.PI);
-            }
-
-            public static int getLensSize(int quality, int range) {
-                return (int) (Math.sqrt((Math.pow(Math.E, range / 2) - 1) / Math.PI));
-            }
-        }
-
-        public static class Engine {
-
-            public static int getEngineMass(int thrust, EngineTechnology tech) {
-                return (int) (tech.getThrustMultiplier() * thrust);
             }
         }
     }
@@ -207,9 +179,7 @@ public class GameUpdater {
         processCities(p, date);
 
         //createPlanetJobs(p, date);
-
         //assignJobs(p, date);
-
         processBuildings(p, date);
 
         processPopulation(p, date);
@@ -235,6 +205,7 @@ public class GameUpdater {
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
+
             if (rs.canStore(resourceType)) {
                 rs.addResource(resourceType, amount);
                 break;
@@ -242,7 +213,7 @@ public class GameUpdater {
         }
     }
 
-    public boolean removeResource(Resource resourceType, int amount, int owner, UniversePath from) {
+    public boolean removeResource(Good resourceType, int amount, int owner, UniversePath from) {
         //Process
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
@@ -251,9 +222,9 @@ public class GameUpdater {
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
-            //if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
-                //return true;
-            //}
+            if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
+                return true;
+            }
         }
         return false;
     }
@@ -295,7 +266,7 @@ public class GameUpdater {
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-            for (Map.Entry<Resource, Integer> entry : c.resourceList.entrySet()) {
+            for (Map.Entry<Good, Integer> entry : c.resourceList.entrySet()) {
                 c.resourceList.put(entry.getKey(), 0);
             }
             //Process resources
@@ -304,8 +275,11 @@ public class GameUpdater {
                 //c.resourceList.
                 for (Good type : s.storedTypes()) {
                     //add to index
+                    if (!c.resourceList.containsKey(type)) {
+                        c.resourceList.put(type, 0);
+                    }
                     int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
-                    //c.resourceList.put(type, amountToAdd);
+                    c.resourceList.put(type, amountToAdd);
                 }
             }
         }
@@ -379,11 +353,11 @@ public class GameUpdater {
                     constructionJob.setEmployer(constructionWork.getOwner());
                     constructionJob.setWorkingFor(constructionWork);
                     //Set them to use resources for the construction
-                    for (Map.Entry<Resource, Integer> set : constructionWork.resourcesNeeded.entrySet()) {
-                        Resource resource = set.getKey();
+                    for (Map.Entry<Good, Integer> set : constructionWork.resourcesNeeded.entrySet()) {
+                        Good resource = set.getKey();
                         Integer amount = set.getValue();
                         //Add to the job
-                        //constructionJob.resources.put(resource, -amount);
+                        constructionJob.resources.put(resource, -amount);
                     }
                     //Add job to building
                     p.jobs.add(constructionJob);
@@ -465,6 +439,26 @@ public class GameUpdater {
 
             //job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
             c.jobs.add(job);
+        } else if (a instanceof Factory) {
+            Job job = new Job(JobType.FactoryWorker);
+
+            //Process resources used
+            ProductionProcess process = ((Factory) a).getProcess();
+            for (Map.Entry<Good, Integer> entry : process.input.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+
+                job.resources.putIfAbsent(key, -val);
+            }
+
+            for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+
+                job.resources.putIfAbsent(key, val);
+            }
+
+            c.jobs.add(job);
         }
     }
 
@@ -500,13 +494,13 @@ public class GameUpdater {
                                         .entrySet()
                                         .stream()
                                         .filter(ent -> stor.equals(ent.getValue()))
-                                        .map(Map.Entry::getKey).findFirst().get();
+                                        .map(Map.Entry::getKey).findFirst().orElse(null);
                                 if (storagePoint != null) {
                                     //Check if next to city point
-                                    if (storagePoint.getX() + 1 == key.getX()
-                                            || storagePoint.getX() - 1 == key.getX()
-                                            || storagePoint.getY() + 1 == key.getY()
-                                            || storagePoint.getY() - 1 == key.getY()) {
+                                    if ((storagePoint.getX() + 1 == key.getX()
+                                            || storagePoint.getX() - 1 == key.getX())
+                                            && (storagePoint.getY() + 1 == key.getY()
+                                            || storagePoint.getY() - 1 == key.getY())) {
                                         //Add to city
                                         c.buildings.add(build.getToBuild());
                                         created = true;
@@ -519,6 +513,9 @@ public class GameUpdater {
                         if (!created) {
                             City city = new City(p.getUniversePath());
                             city.setName("Another City");
+                            //Set city
+                            LOGGER.trace("City created");
+                            build.getToBuild().setCity(city);
                         }
                     }
                     //Alert builder
@@ -631,12 +628,7 @@ public class GameUpdater {
     public void processPopUnit(PopulationUnit unit) {
         Job popJob = unit.getJob();
         popJob.setPay(100);
-        if (!popJob.resources.containsKey(GameController.foodResource)) {
-            //Add the resource
-            //popJob.resources.put(GameController.foodResource, 0);
-        }
-        //Then subtract it
-        //int food = popJob.resources.get(GameController.foodResource);
+        //TODO do food consumption
 
         Employer employer = popJob.getEmployer();
         if (employer != null) {

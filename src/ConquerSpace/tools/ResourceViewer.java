@@ -17,11 +17,8 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.game.AssetReader;
-import static ConquerSpace.game.AssetReader.readHjsonFromDirInArray;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.universe.resources.Resource;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -41,11 +38,11 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 /**
- *
+ * Temporary construction...
  * @author EhWhoAmI
  */
 public class ResourceViewer extends JFrame {
-
+/*
     public static void main(String[] args) {
         new ResourceViewer();
     }
@@ -195,4 +192,5 @@ public class ResourceViewer extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
+    */
 }

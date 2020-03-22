@@ -46,6 +46,7 @@ public class Timer {
                 }
             }
         });
+        runningThread.setName("Timer Thread");
     }
 
     public void start() {

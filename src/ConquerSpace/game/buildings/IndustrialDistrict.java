@@ -18,17 +18,45 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.population.PopulationUnit;
 import java.awt.Color;
+import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class IndustrialDistrict extends Building{
+public class IndustrialDistrict extends Building implements PopulationStorage {
 
     @Override
     public Color getColor() {
-        return new Color(201, 144, 0);
+        return new Color(192, 52, 235); 
     }
+
+    public ArrayList<PopulationUnit> population;
+
+    public IndustrialDistrict() {
+        population = new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<PopulationUnit> getPopulationArrayList() {
+        return population;
+    }
+
+    @Override
+    public void processJob(Job j) {
+    }
+
+    @Override
+    public int getMaxStorage() {
+        return population.size();
+    }
+
+    @Override
+    public String getType() {
+        return "Industrial district";
+    }
+    
     
 }

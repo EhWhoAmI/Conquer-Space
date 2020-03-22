@@ -19,17 +19,15 @@ package ConquerSpace.game;
 
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.PopulationStorage;
-import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.civilization.government.GovernmentPosition;
 import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPosition;
-import ConquerSpace.game.universe.civilization.stats.Population;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.Universe;
 
 /**
  *

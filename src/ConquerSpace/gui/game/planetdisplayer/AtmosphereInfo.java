@@ -20,7 +20,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.spaceObjects.Planet;
+import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.ShipInformationMenu;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

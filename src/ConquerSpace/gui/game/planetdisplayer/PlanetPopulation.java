@@ -27,8 +27,8 @@ import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -156,10 +156,11 @@ public class PlanetPopulation extends JPanel {
                                     if (a instanceof PowerPlantArea) {
                                         //Get the resource produced
 
-                                        Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
-                                        if (energy != null) {
-                                            energyProvided += (((PowerPlantArea) a).getMaxVolume() * energy);
-                                        }
+                                        //TODO
+                                        //Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
+//                                        if (energy != null) {
+//                                            energyProvided += (((PowerPlantArea) a).getMaxVolume() * energy);
+//                                        }
                                     }
                                 }
                             }

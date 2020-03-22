@@ -20,6 +20,8 @@ package ConquerSpace.game.tech;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -148,12 +150,12 @@ public class Technologies {
     public static void parseAction(String action, Civilization c) {
         if (action.startsWith("tech")) {
             //Is boosting chance for tech
-            action = action.replace("tech(", "");
-            action = action.replace(")", "");
+            //action = action.replace("tech(", "");
+            //action = action.replace(")", "");
             String[] splitAction = action.split(":");
             //Get tech to boost
-            String techtoboost = splitAction[0];
-            int amount = Integer.parseInt(splitAction[1]);
+            String techtoboost = splitAction[1];
+            int amount = Integer.parseInt(splitAction[2]);
             Technology tech = getTechByName(techtoboost);
             if (c.civTechs.containsKey(tech)) {
                 if (!(c.civTechs.get(tech) > 100)) {
@@ -170,36 +172,29 @@ public class Technologies {
         } else if (action.startsWith("boost")) {
             //Boosts a certain multiplier
             //Get civ multiplier
-            action = action.replace("boost(", "");
-            action = action.replace(")", "");
             String[] splitAction = action.split(":");
-            if (c.multipliers.containsKey(splitAction[0])) {
+            if (c.multipliers.containsKey(splitAction[1])) {
                 //Then add
-                c.multipliers.put(splitAction[0], c.multipliers.get(splitAction[0]) + Double.parseDouble(splitAction[1]));
+                c.multipliers.put(splitAction[1], c.multipliers.get(splitAction[0]) + Double.parseDouble(splitAction[1]));
             } else {
-                c.multipliers.put(splitAction[0], Double.parseDouble(splitAction[1]));
+                c.multipliers.put(splitAction[1], Double.parseDouble(splitAction[1]));
             }
         } else if (action.startsWith("field")) {
-            action = action.replace("field(", "");
-            action = action.replace(")", "");
             //Add the field that is mentioned
             action = action.toLowerCase();
             String[] text = action.split(":");
             //Loop through the things
             //Use recursion
-            c.upgradeField(text[0], Integer.parseInt(text[1]));
-
-            //Skip fields for now TODO.
+            c.upgradeField(text[1], Integer.parseInt(text[2]));
         } else if (action.startsWith("launch")) {
             //Set civ has launchpads
             c.values.put("haslaunch", 1);
             //unlocks a launch system
             //Get the launch system
-            char[] dst = new char[50];
-            action.getChars(7, action.length() - 1, dst, 0);
+            String[] text = action.split(":");
 
             //Remove trailing white space.
-            String launchName = (new String(dst).trim());
+            String launchName = (text[1].trim());
 
             LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
             if (sys != null) {
@@ -249,6 +244,37 @@ public class Technologies {
             EngineTechnology t = GameController.engineTechnologys.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
             if (t != null) {
                 c.engineTechs.add(t);
+            }
+        } else if (action.startsWith("process")) {
+            String[] text = action.split(":");
+            String content = text[1].strip();
+
+            ProductionProcess process = null;
+            //Find the process name
+            for (int i = 0; i < GameController.prodProcesses.size(); i++) {
+                ProductionProcess proc = GameController.prodProcesses.get(i);
+
+                if (proc.name.equals(content)) {
+                    process = proc;
+                    //So that it's not null
+                    c.productionProcesses.add(process);
+                    break;
+                }
+            }
+            if (process == null) {
+                LOGGER.trace("Could not find process " + content);
+            }
+        } else if (action.startsWith("mine")) {
+            String[] text = action.split(":");
+            String content = text[1].strip();
+
+            //Find the resource
+            for (int i = 0; i < GameController.allGoods.size(); i++) {
+                Good proc = GameController.allGoods.get(i);
+                if (proc.getName().equals(content)) {
+                    c.mineableGoods.add(proc);
+                    break;
+                }
             }
         }
     }

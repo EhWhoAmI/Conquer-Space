@@ -23,6 +23,5 @@ package ConquerSpace.game;
  */
 public class GameIndexer {
     public void takeCensus() {
-        
     }
 }

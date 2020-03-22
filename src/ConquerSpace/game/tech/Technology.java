@@ -79,16 +79,18 @@ public class Technology {
     public void setTags(String[] tags) {
         this.tags = tags;
     }
+
     /**
-     * A technology if only the floor, level, name, and type are equal. Not the 
+     * A technology if only the floor, level, name, and type are equal. Not the
      * dependencies and the tags.
+     *
      * @param obj The object to compare
      * @return is Equal
      */
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Technology && 
-                this.floor == ((Technology) obj).floor
+        return (obj instanceof Technology
+                && this.floor == ((Technology) obj).floor
                 && this.level == ((Technology) obj).level
                 && this.name.equals(((Technology) obj).name)
                 && this.type == ((Technology) obj).type);

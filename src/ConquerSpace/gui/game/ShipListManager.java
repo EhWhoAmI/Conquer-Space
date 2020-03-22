@@ -19,7 +19,7 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JDesktopPane;

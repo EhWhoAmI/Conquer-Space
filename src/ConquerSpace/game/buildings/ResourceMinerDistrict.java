@@ -20,9 +20,8 @@ package ConquerSpace.game.buildings;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
-import ConquerSpace.game.universe.goods.Good;
-import ConquerSpace.game.universe.resources.Resource;
-import ConquerSpace.game.universe.resources.ResourceVein;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.Stratum;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
      * Maximum jobs in this district.
      */
     private int scale;
-    private ResourceVein veinMining;
+    private Stratum veinMining;
     private double amount;
     private Good resourceMining;
     private int maxStorage;
@@ -47,24 +46,25 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
      */
     public ArrayList<PopulationUnit> population;
 
-    public ResourceMinerDistrict(ResourceVein vein, double amount) {
+    public ResourceMinerDistrict(Stratum vein, double amount) {
         this.veinMining = vein;
         if (vein != null) {
-            resourceMining = vein.getResourceType();
+            //resourceMining = vein.getResourceType();
         }
         this.amount = amount;
         population = new ArrayList<>();
     }
 
-    public ResourceVein getVeinMining() {
+    public Stratum getVeinMining() {
         return veinMining;
     }
 
-    public void setVeinMining(ResourceVein veinMining) {
-        if (veinMining != null) {
-            resourceMining = veinMining.getResourceType();
-        }
+    public void setVeinMining(Stratum veinMining) {
         this.veinMining = veinMining;
+    }
+
+    public void setResourceMining(Good resourceMining) {
+        this.resourceMining = resourceMining;
     }
 
     public double getAmountMined() {
@@ -106,7 +106,7 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     public void processJob(Job j) {
         //Is mining job, now subtract the stuff..
         //subtract from resource vein
-        veinMining.removeResources((int)miningPerMonth());
+        //veinMining.removeResources((int)miningPerMonth());
         j.resources.put(resourceMining, (int)miningPerMonth());
     }
 
@@ -122,5 +122,10 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     
     public void setCity(City city) {
         this.city = city;
+    }
+
+    @Override
+    public String getTooltipText() {
+        return String.format(getBuildingTooltipString("mine"), resourceMining.getName());
     }
 }

@@ -21,22 +21,32 @@ import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.jobs.Employer;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.jobs.Workable;
+import ConquerSpace.util.ResourceLoader;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A building is defined as a series of points
  *
  * @author EhWhoAmI
  */
-public abstract class Building implements Workable{
+public abstract class Building implements Workable {
+
+    private static final Logger LOGGER = CQSPLogger.getLogger(Building.class.getName());
+
     private Color color;
     public ArrayList<Area> areas;
     private Employer owner;
     private String type;
     private City city;
-    
+
     //In Megawatts
     private int energyUsage;
     public ArrayList<InfrastructureBuilding> infrastructure;
@@ -86,10 +96,10 @@ public abstract class Building implements Workable{
     @SuppressWarnings("unchecked")
     public Job[] jobsNeeded() {
         ArrayList<Job> jobsNeeded = new ArrayList();
-        for(Area a : areas) {
-            if(a instanceof Workable) {
+        for (Area a : areas) {
+            if (a instanceof Workable) {
                 Job[] jobs = ((Workable) a).jobsNeeded();
-                for(Job j : jobs) {
+                for (Job j : jobs) {
                     jobsNeeded.add(j);
                 }
             }
@@ -100,6 +110,32 @@ public abstract class Building implements Workable{
 
     @Override
     public void processJob(Job j) {
-        
+
+    }
+
+    public String getTooltipText() {
+        return "";
+    }
+
+    private static Properties tooltipStrings;
+
+    static {
+        tooltipStrings = new Properties();
+        try {
+            FileInputStream stream = new FileInputStream(ResourceLoader.getResourceByFile("config.buildings.tooltip"));
+            tooltipStrings.load(stream);
+        } catch (FileNotFoundException ex) {
+            LOGGER.info("error", ex);
+        } catch (IOException ex) {
+            LOGGER.info("error", ex);
+        }
+    }
+
+    protected final static String getBuildingTooltipString(String code) {
+        String text = tooltipStrings.getProperty(code);
+        if (text != null) {
+            return text;
+        }
+        return "";
     }
 }

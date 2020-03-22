@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.universe.generators;
 
-import ConquerSpace.ConquerSpace;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -30,18 +30,23 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.PlanetTypes;
-import ConquerSpace.game.universe.spaceObjects.Star;
-import ConquerSpace.game.universe.spaceObjects.StarSystem;
-import ConquerSpace.game.universe.spaceObjects.StarTypes;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.PlanetTypes;
+import ConquerSpace.game.universe.bodies.Star;
+import ConquerSpace.game.universe.bodies.StarSystem;
+import ConquerSpace.game.universe.bodies.StarTypes;
+import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +56,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DefaultUniverseGenerator extends UniverseGenerator {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(ConquerSpace.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(DefaultUniverseGenerator.class.getName());
 
     public static final double G = 6.674 * Math.pow(10, -11);          //Gravitational constant, same for everything
     /**
@@ -190,7 +195,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         nationCurrency.setController(playerCiv);
 
         playerCiv.setFoundingSpecies(playerSpecies);
+
         universe.addCivilization(playerCiv);
+        GameController.playerCiv = playerCiv;
 
         //Calculate number of civs
         int civCount = starSystemCount / 50;
@@ -425,43 +432,39 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
     public void generateResourceVeins(Planet p, Random rand) {
         int planetSize = p.getPlanetSize();
-        //Add resource veins
 
+        //Find the amount of resources to add...
+        //Sort through resources, and find suitable
+        ArrayList<Good> toAdd = new ArrayList<>();
+        for (Map.Entry<Good, ResourceDistribution> entry : GameController.ores.entrySet()) {
+            Good key = entry.getKey();
+            ResourceDistribution val = entry.getValue();
+            double rarity = val.rarity;
+            if (rand.nextDouble() < rarity) {
+                toAdd.add(key);
+            }
+        }
+
+        //Add resource veins
         int idCount = randint(rand, 5, 10);
+
         //Add the veins
         for (int i = 0; i < idCount; i++) {
             //Create strata
             Stratum stratum = new Stratum();
 
+            //Add resources
+            for (Good o : toAdd) {
+                stratum.minerals.put(o, randint(rand, 10000, 500_000));
+            }
+
             //Select the things
-            stratum.setRadius(randint(rand, 5, 15));
+            stratum.setRadius(randint(rand, 1, planetSize));
             stratum.setX(rand.nextInt(planetSize * 2));
             stratum.setY(rand.nextInt(planetSize));
+            stratum.setDepth(rand.nextInt(planetSize / 2) + 1);
             p.strata.add(stratum);
         }
-        /*for (Good res : GameController.ores) {
-            //Process... 
-            //Determines the resource 'richness' of a planet
-            int resourceCount = randint(rand, planetSize / 2, planetSize * 2);
-            float rarity = 0;//res.getRarity();
-            float probality = rand.nextFloat();
-            //Then count
-            if (true) {
-                //Then add a certain amount
-                int amount = (int) (rarity * resourceCount * probality) * 2;
-                //Add that amount
-                for (int resCount = 0; resCount < amount; resCount++) {
-                    //Add the resource
-                    //int resourceVolume = (int) (randint(rand, 50000, 100000) * res.getDensity());
-                    ResourceVein vein = new ResourceVein(res, 1);
-                    vein.setId(idCount++);
-                    //vein.setRadius(randint(rand, res.getDistributionLow(), res.getDistributionHigh()));
-                    vein.setX(rand.nextInt(planetSize * 2));
-                    vein.setY(rand.nextInt(planetSize));
-                    p.resourceVeins.add(vein);
-                }
-            }
-        }*/
     }
 
     private void generateLocalLife(Random rand, Planet p) {
@@ -469,19 +472,27 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Then the planet has life
         //Stages it has life, and how evolved it is
         int lifeLength = rand.nextInt(10);
+
+        //Get random name
+        NameGenerator speciesNameGenerator = null;
+        try {
+            speciesNameGenerator = NameGenerator.getNameGenerator("species.names");
+        } catch (IOException ex) {
+        }
+
         //Initialize life
-        Species micro = new Species();
+        Species micro = new Species(speciesNameGenerator.getName(0));
         //Set name
         //Add random trait
         LifeTrait randomLifeTrait = LifeTrait.values()[rand.nextInt(LifeTrait.values().length)];
         micro.lifeTraits.add(randomLifeTrait);
-        micro.setName(randomLifeTrait.name());
         LocalLife life = new LocalLife();
         life.setSpecies(micro);
 
         p.localLife.add(life);
 
         for (int i = 0; i < lifeLength; i++) {
+            //Evolve
         }
     }
 }

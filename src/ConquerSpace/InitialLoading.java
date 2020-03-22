@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Initial loading screen. Loads everything. This only checks that the files exist.
+ * Kept for purely historical reasons. Brings back memories
  * @author Zyun
  */
 public class InitialLoading extends JFrame {

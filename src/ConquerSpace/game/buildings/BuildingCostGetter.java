@@ -19,7 +19,7 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,7 +68,7 @@ public class BuildingCostGetter {
                         //Find resources
                         String resourceName = resourceNames.next();
                         //Search for resource
-                        for (Resource res : GameController.resources) {
+                        for (Good res : GameController.allGoods) {
                             if (res.getName().toLowerCase().equals(resourceName.toLowerCase())) {
                                 //Set the value
 
@@ -79,9 +79,7 @@ public class BuildingCostGetter {
                     buildingCosts.put(next, buildingCost);
                 }
             } catch (FileNotFoundException ex) {
-
             } catch (IOException ex) {
-
             }
         }
     }
@@ -98,8 +96,8 @@ public class BuildingCostGetter {
         //Compute the things
         if (theoreticalCost != null) {
             //Loop through theoretical cost
-            for (Map.Entry<Resource, Integer> entry : theoreticalCost.cost.entrySet()) {
-                Resource key = entry.getKey();
+            for (Map.Entry<Good, Integer> entry : theoreticalCost.cost.entrySet()) {
+                Good key = entry.getKey();
                 Integer value = entry.getValue();
 
                 String resName = name + "." + key.getName();

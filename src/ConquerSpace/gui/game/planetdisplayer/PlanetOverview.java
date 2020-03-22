@@ -17,21 +17,16 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.GameController;
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.PopulationStorage;
-import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.resources.ResourceVein;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
-import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -52,25 +47,20 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Display sectors and stuff.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetOverview extends JPanel {
 
@@ -238,7 +228,7 @@ public class PlanetOverview extends JPanel {
             addMouseWheelListener(this);
             addMouseMotionListener(this);
             renderer = new TerrainRenderer(p);
-            setToolTipText("Use the right mouse button to move");
+            setToolTipText("Use the left mouse button to move");
         }
 
         @Override
@@ -271,9 +261,9 @@ public class PlanetOverview extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (ResourceVein v : p.resourceVeins) {
+                for (Stratum v : p.strata) {
                     //Draw...
-                    if (resourceToShow == SHOW_ALL || resourceToShow == v.getResourceType().getId()) {
+                    if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * 2,
                                 (v.getY() - v.getRadius()) * 2,
                                 v.getRadius() * 2 * 2,
@@ -323,7 +313,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
                 //Start dragging
                 startPoint = e.getPoint();
                 isDragging = true;
@@ -332,7 +322,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
                 //End Dragging
                 isDragging = false;
             }
@@ -388,7 +378,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
                 //Move it
                 //Check if still in view
                 translateX -= ((startPoint.x - e.getX()) / (scale));

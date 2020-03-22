@@ -88,7 +88,7 @@ public class FieldNode {
     public String toString() {
         return name;
     }
-    
+
     public FieldNode findNode(FieldNode node) {
         for (FieldNode f : fieldNodes) {
             if (f.name.equals(node.name)) {
@@ -96,9 +96,10 @@ public class FieldNode {
             } else {
                 //Search children
                 FieldNode field = f.findNode(node);
-                if(field != null)
+                if (field != null) {
                     return field;
-                
+                }
+
             }
         }
         return null;

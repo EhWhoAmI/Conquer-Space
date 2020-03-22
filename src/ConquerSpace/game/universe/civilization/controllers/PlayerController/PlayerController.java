@@ -24,7 +24,7 @@ import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.CivilizationController;
 import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.AlertDisplayer;
 import ConquerSpace.gui.game.AlertNotification;
 import ConquerSpace.gui.game.GameWindow;

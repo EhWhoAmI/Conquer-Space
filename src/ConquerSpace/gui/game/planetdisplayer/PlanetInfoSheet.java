@@ -20,10 +20,9 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.spaceObjects.Planet;
-import ConquerSpace.game.universe.spaceObjects.Universe;
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
 import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -44,11 +43,13 @@ public class PlanetInfoSheet extends JPanel {
     LocalLifeMenu localLifeMenu;
     PlanetMap planetMap;
     PlanetEconomy planetEconomy;
+    PlanetGeology planetGeology;
+    PlanetResources planetResources;
 
     private Civilization c;
     private Planet p;
     
-    private final int spacePortIndex = 3;
+    private final int spacePortIndex = 4;
 
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
         this.c = c;
@@ -60,19 +61,23 @@ public class PlanetInfoSheet extends JPanel {
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetPopulation(u, p, 0);
         spacePort = new SpacePortMenuSheet(p, c);
+        planetGeology = new PlanetGeology(p);
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
         planetMap = new PlanetMap(p, c, u, this);
         planetEconomy = new PlanetEconomy();
+        planetResources = new PlanetResources(p);
 
         tpane.add("Overview", overview);
         tpane.add("Map", planetMap);
+        tpane.add("Geography", planetGeology);
         tpane.add("Cities", population);
         tpane.add("Space Port", spacePort);
         tpane.add("Atmosphere", atmosphere);
         tpane.add("Industry", industry);
         tpane.add("Local Life", localLifeMenu);
+        tpane.add("Resources", planetResources);
 
         tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port

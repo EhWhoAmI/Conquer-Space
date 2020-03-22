@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.universe.resources.Resource;
+import ConquerSpace.game.universe.resources.Good;
 import java.util.HashMap;
 
 /**
@@ -25,7 +25,7 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class BuildingCost {
-    public HashMap<Resource, Integer> cost;
+    public HashMap<Good, Integer> cost;
     public BuildingCost() {
         cost = new HashMap<>();
     }

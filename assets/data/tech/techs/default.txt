@@ -8,7 +8,7 @@
     difficulty: 0
     action:
     [
-      field(knowledge:10)
+      field:knowledge:10
     ]
     fields:
     [
@@ -166,11 +166,11 @@
     difficulty: 0
     action:
     [
-      field(science:10)
-      field(biology:10)
-      field(chemistry:10)
-      tech(flight):20
-      tech(rocket science):20
+      field:science:10
+      field:biology:10
+      field:chemistry:10
+      tech:flight:20
+      tech:rocket science:20
     ]
     fields:
     [
@@ -195,7 +195,7 @@
     difficulty: 2
     action:
     [
-      thrust(1)
+      thrust:1
     ]
     fields:
     [
@@ -220,7 +220,7 @@
     difficulty: 3
     action:
     [
-      thrust(2)
+      thrust:2
     ]
     fields:
     [
@@ -245,7 +245,7 @@
     difficulty: 3
     action:
     [
-      thrust(0)
+      thrust:0
     ]
     fields:
     [
@@ -270,7 +270,7 @@
     difficulty: 3
     action:
     [
-      thrust(3)
+      thrust:3
     ]
     fields:
     [
@@ -295,7 +295,7 @@
     difficulty: 2
     action:
     [
-      thrust(4)
+      thrust:4
     ]
     fields:
     [
@@ -320,7 +320,7 @@
     difficulty: 2
     action:
     [
-      tech(space planes):100
+      tech:space planes:100
     ]
     fields:
     [
@@ -345,7 +345,7 @@
     difficulty: 5
     action:
     [
-      launch(Space Plane)
+      launch:Space Plane
     ]
     fields:
     [
@@ -370,7 +370,7 @@
     difficulty: 2
     action:
     [
-      tech(rocketery):100
+      tech:rocketery:100
     ]
     fields:
     [
@@ -420,7 +420,7 @@
     difficulty: 0
     action:
     [
-      tech(optics):100
+      tech:optics:100
     ]
     fields:
     [
@@ -446,9 +446,9 @@
     difficulty: 1
     action:
     [
-      tech(telescopes):100
-      tech(radio telescopes):100
-      tech(x-ray telescopes):100
+      tech:telescopes:100
+      tech:radio telescopes:100
+      tech:x-ray telescopes:100
     ]
     fields:
     [
@@ -548,5 +548,153 @@
     ]
     floor: 15
     id: 25
+  },
+  {
+    name: Metallurgy
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: []
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 26
+  }
+  {
+    name: Basic Iron Smelting
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        process:Magnetite Smelting
+        process:Hematite Smelting
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 27
+  }
+  {
+    name: Iron Mining
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        mine:Magnetite
+        mine:Hematite
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 28
+  }
+  {
+    name: Aluminium Mining
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        mine:Boehmite
+        mine:Diaspore
+        mine:Gibbsite
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 28
+  }
+  {
+    name: Aluminium Smelting
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+        process:Bayer process gibbsite
+        process:Bayer process diaspore
+        process:Bayer process boehmite
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 29
+  }
+  {
+    name: Steel Making
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+      process:Low Grade Steel Making
+    ]
+    fields:
+    [
+      Metallurgy
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 15
+    id: 30
   }
 ]
