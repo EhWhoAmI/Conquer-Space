@@ -18,7 +18,10 @@
 package ConquerSpace;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameLoader;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.music.MusicPlayer;
+import ConquerSpace.gui.start.Loading;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -134,8 +137,12 @@ public class ConquerSpace {
             Thread.sleep(100);
         }
 
-        //Start game
-        new GameController();
+        //Show loading screen
+        Loading load = new Loading();
+        loadUniverse();
+        load.setVisible(false);
+
+        runGame();
     }
 
     /**
@@ -218,6 +225,21 @@ public class ConquerSpace {
         } catch (UnsupportedLookAndFeelException ex) {
             LOGGER.warn("", ex);
         }
+    }
+
+    public static void loadUniverse() {
+        //Load universe
+        long loadingStart = System.currentTimeMillis();
+        GameLoader.load();
+        Universe universe = Globals.generator.generate();
+        Globals.universe = universe;
+        long loadingEnd = System.currentTimeMillis();
+        LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
+    }
+
+    public static void runGame() {
+        //Start game
+        new GameController();
     }
 
     public static void configureSettings() {

@@ -106,6 +106,8 @@ public class SystemRenderer {
                             int centerX = temp.getWidth() / 2;
 
                             int centerY = temp.getHeight() / 2;
+                            
+                            //Limit within circle
                             if (Math.sqrt((centerY - y) * (centerY - y) + (centerX - x) * (centerX - x)) <= temp.getWidth() / 2) {
                                 systemTerrain[i].setRGB(x, y, temp.getRGB(x, y));
                             }
@@ -114,7 +116,7 @@ public class SystemRenderer {
                 }
 
                 long end = System.currentTimeMillis();
-                LOGGER.info("Time to render system: " + (end - beginning));
+                LOGGER.info("Time to render system: " + (end - beginning) + " ms");
             }
         };
 
@@ -204,7 +206,6 @@ public class SystemRenderer {
         for (int i = 0; i < sys.getPlanetCount(); i++) {
             Planet p = sys.getPlanet(i);
             //Draw orbit circle
-            //Do math...
             Ellipse2D.Double orbitCitcle = new Ellipse2D.Double(
                     (translateX + bounds.width / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000d) / scale,
                     (translateY + bounds.height / 2 - p.getOrbitalDistance() * sizeofAU / 10_000_000d) / scale,
@@ -283,7 +284,7 @@ public class SystemRenderer {
             double previousY = ship.getY();
             for (ShipAction act : ship.commands) {
                 if (act instanceof ShipMoveAction) {
-                    //Draw line
+                    //Draw movement line
                     ShipMoveAction move = (ShipMoveAction) act;
                     Line2D.Double line = new Line2D.Double(
                             (translateX + previousX * sizeofAU / 10_000_000 + bounds.width / 2) / scale,

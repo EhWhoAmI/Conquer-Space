@@ -73,16 +73,16 @@
     <property name="log4j2.configurationFile" value="${user.dir}/assets/log4j2.xml"/>
     <property name="log4j2.debug" value="${user.dir}/assets/log4j2.xml"/>
     
-    <target name="-post-compile">
+    <target name="-post-jar">
         <copy todir="${dist.dir}/assets" >  
             <fileset dir="assets" includes="**"/>  
         </copy>
         <copy todir="${dist.dir}" >  
             <fileset file="runCQSP.bat"/>  
         </copy> 
-    </target>
-    <target name="-post-clean">
+        <echo message="Done copying files"/>    
+        
         <buildnumber file="assets/BUILDNO"/>
-        <echo message="Changing build number"/>
+        <echo message="Changing build number"/>    
     </target>
 </project>

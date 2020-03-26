@@ -65,8 +65,18 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
      */
     public static final double LIFE_OCCURANCE = 1;
 
+    UniverseConfig u;
+    CivilizationConfig c;
+    long seed;
+    
+    public DefaultUniverseGenerator(UniverseConfig u, CivilizationConfig c, long seed) {
+        this.u = u;
+        this.c = c;
+        this.seed = seed;
+    }
+
     @Override
-    public Universe generate(UniverseConfig u, CivilizationConfig c, long seed) {
+    public Universe generate() {
         Universe universe = new Universe(seed);
         //Create random 
         Random rand = new Random(seed);
@@ -104,8 +114,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             int planetCount = rand.nextInt(11);
             long lastDistance = 10000000;
             for (int k = 0; k < planetCount; k++) {
-                LOGGER.trace("Starting planet generation");
-
                 //Add planets
                 //Set stuff
                 int planetType = Math.round(rand.nextFloat());
@@ -114,11 +122,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 lastDistance = orbitalDistance;
                 int planetSize;
                 if (planetType == PlanetTypes.GAS) {
-                    LOGGER.trace("Planet is gas");
                     planetSize = randint(rand, 100, 1000);
                 } else {
                     //Rock
-                    LOGGER.trace("Planet is rock");
                     planetSize = randint(rand, 30, 200);
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
@@ -145,20 +151,14 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 p.setDegreesPerTurn((float) degs);
                 //System.err.println(p.terrain.terrainColor[0][0]);
                 p.modDegrees(rand.nextInt(360));
-
-                //Seed life
-                if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
-                    LOGGER.trace("Planet has life");
-                    generateLocalLife(rand, p);
-                }
-                sys.addPlanet(p);
-                LOGGER.trace("Created planet " + p.getUniversePath() + " " + p.getName());
             }
             //Set name
             //Add planets
             universe.addStarSystem(sys);
             LOGGER.trace("Created star system " + sys.getId() + " with " + sys.getPlanetCount());
         }
+        LOGGER.info("Done with universe generation");
+        
         //Do civs
         //Player civ
         Civilization playerCiv = new Civilization(0, universe);
@@ -179,8 +179,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 civPreferredClimate = 2;
         }
         playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
-        UniversePath up = getRandomSuitablePlanet(rand, universe);
-        up = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+        LOGGER.info("Creating suitable planet");
+        UniversePath up = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+        LOGGER.info("Done creating suitable planet");
         starSystemCount++;
         playerCiv.setStartingPlanet(up);
         //Generate Species
@@ -197,6 +198,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setFoundingSpecies(playerSpecies);
 
         universe.addCivilization(playerCiv);
+        LOGGER.info("Done with player civ " + playerCiv.getName());
+        
         GameController.playerCiv = playerCiv;
 
         //Calculate number of civs
@@ -212,8 +215,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setSpeciesName("");
             int civPreferredClimate1 = rand.nextInt(3);
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
-            UniversePath up1 = getRandomSuitablePlanet(rand, universe);
-            up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+            UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
             starSystemCount++;
             civ.setStartingPlanet(up1);
             Race civSpecies = new Race(1, 1, "");
@@ -226,9 +228,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setNationalCurrency(nationCurrency);
             nationCurrency.setController(civ);
 
+            LOGGER.info("Done with civ " + civ.getName());
             //universe.
             universe.addCivilization(civ);
         }
+        LOGGER.info("Done generating!");
         return universe;
     }
 

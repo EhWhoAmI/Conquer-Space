@@ -26,5 +26,5 @@ import ConquerSpace.game.universe.bodies.Universe;
  * @author User
  */
 public abstract class UniverseGenerator {  
-    public abstract Universe generate(UniverseConfig u, CivilizationConfig c, long seed);
+    public abstract Universe generate();
 }

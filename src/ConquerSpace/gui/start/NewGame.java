@@ -100,8 +100,6 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitButton) {
             setVisible(false);
-            //Show loading screen
-            Loading load = new Loading();
             UniverseConfig config = new UniverseConfig();
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
@@ -136,21 +134,9 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             civilizationConfig.setCivCurrencySymbol(universeConfigPanel.currencySymbolTextField.getText());
             config.setCivilizationConfig(civilizationConfig);
 
-            // Start time of logging
-            long loadingStart = System.currentTimeMillis();
-            GameLoader.load();
-            DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
-            Universe universe = gen.generate(config, civilizationConfig, seed);
-            //Logger end time
-            long loadingEnd = System.currentTimeMillis();
-            LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
-
-            // Log info
-            //LOGGER.info("Universe:" + universe.toReadableString());
-            //Insert universe into globals
-            Globals.universe = universe;
-            System.gc();
-            load.setVisible(false);
+            //Create generator
+            DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, seed);
+            Globals.generator = gen;
             
             //Tell main thread that game works
             menu.setLoadedUniverse(true);

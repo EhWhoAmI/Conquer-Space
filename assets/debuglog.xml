@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This log configuration file is for debug
+It has cumulative logs that are useful for checking changes and other things
+-->
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+        <File name="log" fileName="logs/all.html" append="false">    
+            <HTMLLayout/>
+        </File> 
+        <File name="error" fileName="logs/error.html" append="false">    
+            <HTMLLayout/>
+        </File>
+        <!--Append logs-->
+        <File name="logCumulative" fileName="logs/system.log" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+        </File>
+        <File name="errorCumulative" fileName="logs/error.log" append="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+        </File>
+        <!--For in game gui-->
+        <SwingAppender name="swing">
+        </SwingAppender>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="Console" level="info"/>
+            <AppenderRef ref="log"/>
+            <AppenderRef ref="error" level="error"/>
+            <AppenderRef ref="logCumulative" level="info"/>
+            <AppenderRef ref="errorCumulative" level="error"/>
+            <AppenderRef ref="swing"/>
+        </Root>
+    </Loggers>
+</Configuration>
