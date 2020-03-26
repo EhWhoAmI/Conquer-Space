@@ -17,22 +17,34 @@
  */
 package ConquerSpace.gui.start;
 
+import static ConquerSpace.ConquerSpace.VERSION;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
+import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
+import java.awt.Frame;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
+import java.util.logging.Level;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import org.apache.logging.log4j.Logger;
 
@@ -54,6 +66,12 @@ public class OptionsWindow extends JFrame {
     private JButton deleteLogsButton;
     private JPanel musicPanel;
     private JCheckBox musicOnButton;
+
+    private JPanel lafPanel;
+    private JLabel lookAndFeelLabel;
+    private JComboBox<String> lookAndFeelComboBox;
+
+    Properties lafProperties = new Properties();
 
     private OptionsWindow() {
         setTitle("Options");
@@ -118,17 +136,80 @@ public class OptionsWindow extends JFrame {
             musicOnButton.setSelected(false);
         }
 
+        DefaultComboBoxModel<String> lafComboBoxModel = new DefaultComboBoxModel<>();
+
+        lafPanel = new JPanel();
+        lookAndFeelLabel = new JLabel("Look and feel: ");
+        lookAndFeelComboBox = new JComboBox<>(lafComboBoxModel);
+
+        //Fill with text
+        File lafPropertyFile = ResourceLoader.getResourceByFile("laf.properties");
+        FileInputStream fis;
+        try {
+            fis = new FileInputStream(lafPropertyFile);
+            lafProperties.load(fis);
+            lafComboBoxModel.addAll(lafProperties.stringPropertyNames());
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
+        }
+        lafComboBoxModel.setSelectedItem(Globals.settings.getProperty("laf"));
+
+        lookAndFeelComboBox.addActionListener(l -> {
+            //Set the laf
+            try {
+                //Set look and feel
+                String lafText = (String) lookAndFeelComboBox.getSelectedItem();
+                if (lafText.equals("default")) {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } else {
+                    UIManager.setLookAndFeel(lafProperties.getProperty(lafText));
+                }
+
+                //Update all the UI to follow the new look and feel
+                for (Frame f : JFrame.getFrames()) {
+                    SwingUtilities.updateComponentTreeUI(f);
+                    f.pack();
+                }
+
+                Globals.settings.setProperty("laf", lafText);
+
+                File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
+                //Store the new settings
+                Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+            } catch (ClassNotFoundException ex) {
+                LOGGER.warn("", ex);
+            } catch (InstantiationException ex) {
+                LOGGER.warn("", ex);
+            } catch (IllegalAccessException ex) {
+                LOGGER.warn("", ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                LOGGER.warn("", ex);
+            } catch (FileNotFoundException ex) {
+                LOGGER.warn("", ex);
+            } catch (IOException ex) {
+                LOGGER.warn("", ex);
+            }
+        });
+
+        lafPanel.setLayout(new HorizontalFlowLayout());
+
+        lafPanel.add(lookAndFeelLabel);
+        lafPanel.add(lookAndFeelComboBox);
+
         musicPanel.add(musicOnButton);
         add(logsPanel);
         add(musicPanel);
+        add(lafPanel);
         pack();
-        setVisible(true);
     }
 
     public static OptionsWindow getInstance() {
         if (instance == null) {
             instance = new OptionsWindow();
         }
+
+        instance.setVisible(true);
+
         return (instance);
     }
 }

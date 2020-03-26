@@ -215,7 +215,21 @@ public class ConquerSpace {
     public static void initLookAndFeel() {
         try {
             //Set look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //Get from settings...
+            if (Globals.settings.getProperty("laf").equals("default")) {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } else {
+                Properties lafProperties = new Properties();
+                File lafPropertyFile = new File(System.getProperty("user.dir") + "/assets/lookandfeels.properties");
+                FileInputStream fis;
+                try {
+                    fis = new FileInputStream(lafPropertyFile);
+                    lafProperties.load(fis);
+                } catch (FileNotFoundException ex) {
+                } catch (IOException ex) {
+                }
+                UIManager.setLookAndFeel(lafProperties.getProperty(Globals.settings.getProperty("laf")));
+            }
         } catch (ClassNotFoundException ex) {
             LOGGER.warn("", ex);
         } catch (InstantiationException ex) {
@@ -234,7 +248,7 @@ public class ConquerSpace {
         Universe universe = Globals.generator.generate();
         Globals.universe = universe;
         long loadingEnd = System.currentTimeMillis();
-        LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 60000) + " minutes");
+        LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
     }
 
     public static void runGame() {
@@ -284,6 +298,8 @@ public class ConquerSpace {
                 Globals.settings.setProperty("debug", "no");
 
                 Globals.settings.setProperty("music", "yes");
+
+                Globals.settings.setProperty("laf", "default");
 
                 Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
             } catch (IOException ex) {
