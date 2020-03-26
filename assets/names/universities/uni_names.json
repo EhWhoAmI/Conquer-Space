@@ -1,0 +1,31 @@
+{
+    "name": "Unis",
+    "rules": ["names\\space\\institution"],
+    "counters": [],
+    "names": [
+        "Hardvard",
+        "Yaleru",
+        "Decent",
+        "Good",
+        "Research",
+        "Profit",
+        "Screwing-people-over",
+        "0% acceptance rate",
+        "Stemford",
+        "Geek",
+        "Nerd",
+        "Dead",
+        "Technology",
+        "Caveman",
+        "Sixty Nine",
+        "Partying",
+        "Drunkard",
+        "No Student"
+    ],
+    "space": [" "],
+    "institution": [
+       "College",
+       "University",
+       "Institute"
+    ]
+}

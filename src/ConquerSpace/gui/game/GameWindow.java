@@ -108,7 +108,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         //A window to greet the user
         JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
                 + "May we live and prosper in these exciting new times.");
-        
+
         setTitle("Conquer Space");
     }
 
@@ -168,7 +168,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
         JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
+            desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -295,7 +295,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         setVisible(true);
 
         //See home planet
-        desktopPane.see(u.getCivilization(0).getStartingPlanet().getSystemID());
+        desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
     }
 
     @Override
@@ -394,9 +394,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
                     universeRenderer.drawUniverse(g, translateX, translateY, scale);
                     break;
                 case DRAW_STAR_SYSTEM:
-                    assert systemRenderer == null;
-                    setBackground(Color.BLACK);
-                    systemRenderer.drawStarSystem(g, translateX, translateY, scale);
+                    if (systemRenderer != null) {
+                        setBackground(Color.BLACK);
+                        systemRenderer.drawStarSystem(g, translateX, translateY, scale);
+                    }
                     break;
                 default:
                     break;

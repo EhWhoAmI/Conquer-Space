@@ -20,8 +20,10 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.science.Field;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Good;
@@ -55,7 +57,7 @@ public class PlanetIndustry extends JPanel {
     private JPanel areaContainer;
     private DefaultListModel<Area> areaDefaultListModel;
     private JList<Area> areaList;
-    
+
     private JPanel areaInfoPanel;
 
     //Sorts out all the buildings and places
@@ -91,20 +93,25 @@ public class PlanetIndustry extends JPanel {
             }
         }
         areaList = new JList<>(areaDefaultListModel);
-        
+
         areaList.addListSelectionListener(l -> {
             areaInfoPanel.removeAll();
-            if(areaList.getSelectedValue() instanceof Factory) {
+            if (areaList.getSelectedValue() instanceof Factory) {
                 Factory factory = (Factory) areaList.getSelectedValue();
                 FactoryAreaInfo info = new FactoryAreaInfo(factory);
                 areaInfoPanel.add(info);
+            } else if (areaList.getSelectedValue() instanceof ResearchArea) {
+                ResearchArea area = (ResearchArea) areaList.getSelectedValue();
+                ResearchInstutitionInfo info = new ResearchInstutitionInfo(area);
+                areaInfoPanel.add(info);
+
             }
         });
-        
+
         JScrollPane scrollPane = new JScrollPane(areaList);
-        
+
         areaInfoPanel = new JPanel();
-        
+
         areaContainer.add(scrollPane, BorderLayout.WEST);
         areaContainer.add(areaInfoPanel, BorderLayout.CENTER);
         tabs.add(areaContainer, "Areas");
@@ -300,16 +307,28 @@ public class PlanetIndustry extends JPanel {
                 outputString = outputString + " amount " + val;
                 outputString = outputString + ", ";
             }
-            
-            JLabel output = new JLabel(outputString);
 
+            JLabel output = new JLabel(outputString);
 
             add(info);
             add(input);
             add(output);
-            
+
             setLayout(new VerticalFlowLayout());
         }
+    }
 
+    private class ResearchInstutitionInfo extends JPanel {
+
+        public ResearchInstutitionInfo(ResearchArea researchArea) {
+            //Do the things
+            JLabel text = new JLabel("Fields");
+
+            setLayout(new VerticalFlowLayout());
+            for (Field field : researchArea.focusFields.keySet()) {
+                JLabel l = new JLabel(field.getName());
+                add(l);
+            }
+        }
     }
 }

@@ -36,7 +36,7 @@ public class Fields {
 
     public static FieldNode fieldNodeRoot;
 
-    public Fields() {
+    private Fields() {
 
     }
 

@@ -101,7 +101,7 @@ public class ConquerSpace {
      *
      * @param args Command line arguments. Does nothing so far.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         CQSPLogger.initLoggers();
         LOGGER.info("Run started: " + new Date().toString());
         LOGGER.info("Version " + VERSION.toString());
@@ -128,6 +128,14 @@ public class ConquerSpace {
         //New Game Menu
         MainMenu menu = new MainMenu();
         menu.setVisible(true);
+
+        //While the menu not loaded...
+        while (!menu.isLoadedUniverse()) {
+            Thread.sleep(100);
+        }
+
+        //Start game
+        new GameController();
     }
 
     /**

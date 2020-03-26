@@ -56,10 +56,15 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
     private Universe universe = null;
     private Color civColor = Color.CYAN;
 
+    private MainMenu menu;
+
     /**
      *
      */
-    public NewGame() {
+    public NewGame(MainMenu menu) {
+        //For referencing when done loading
+        this.menu = menu;
+
         setSize(500, 400);
         setTitle("New Game");
         setLayout(new VerticalFlowLayout(10, 10));
@@ -80,12 +85,12 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
         add(bottomContainer);
 
         addWindowListener(this);
-        
+
         try {
             setIconImage(ImageIO.read(new File("assets/img/icon.png")));
         } catch (IOException ioe) {
         }
-        
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         LOGGER.trace("Loaded new game UI.");
@@ -146,7 +151,9 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             Globals.universe = universe;
             System.gc();
             load.setVisible(false);
-            new GameController();
+            
+            //Tell main thread that game works
+            menu.setLoadedUniverse(true);
         }
     }
 

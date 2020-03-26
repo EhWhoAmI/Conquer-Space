@@ -58,12 +58,13 @@ public class MainMenu extends JFrame implements WindowListener {
     //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
 
+    private boolean loadedUniverse = false;
+    
     /**
      * Constructor, show main menu.
      */
     public MainMenu() {
         setTitle(localeMessages.getMessage("GameName"));
-        //setLayout(new GridLayout(2, 1, 10, 10));
         setLayout(new BorderLayout());
 
         TopBanner topBanner = new TopBanner();
@@ -188,7 +189,7 @@ public class MainMenu extends JFrame implements WindowListener {
             //Action Listeners
             startGame.addActionListener(e -> {
                 dispose();
-                NewGame game = new NewGame();
+                NewGame game = new NewGame(MainMenu.this);
                 game.setVisible(true);
             });
 
@@ -269,5 +270,13 @@ public class MainMenu extends JFrame implements WindowListener {
             add(credits);
             add(options);
         }
+    }
+
+    public boolean isLoadedUniverse() {
+        return loadedUniverse;
+    }
+
+    void setLoadedUniverse(boolean loadedUniverse) {
+        this.loadedUniverse = loadedUniverse;
     }
 }

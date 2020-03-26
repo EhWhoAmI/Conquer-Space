@@ -28,6 +28,7 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
 import ConquerSpace.game.life.LifeTrait;
@@ -37,6 +38,7 @@ import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
+import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
@@ -131,11 +133,11 @@ public class GameInitializer {
                 //Add resource miners
                 createResourceMiners(starting, c, c.getFoundingSpecies());
 
-                createResourceStorages(c, selector, starting);
+                createResourceStorages(c, starting, selector);
 
                 createPopulationStorages(starting, c, selector);
 
-                createFarms(starting, selector, c);
+                createFarms(starting, c, selector);
 
                 createIndustrialZones(c, selector, starting);
 
@@ -143,7 +145,9 @@ public class GameInitializer {
 
                 //Add infrastructure
                 createInfrastructure(starting, selector);
-                
+
+                addResearchInstitutions(starting, c, selector);
+
                 nameStratumOnPlanet(starting);
 
                 //Set ownership
@@ -158,7 +162,6 @@ public class GameInitializer {
 //                for (Good res : GameController.ores) {
 //                    c.resourceList.put(res, 0);
 //                }
-
                 LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
 
                 //Deal with people
@@ -224,7 +227,7 @@ public class GameInitializer {
         p.cities.add(city);
     }
 
-    private void createFarms(Planet starting, Random selector, Civilization c) {
+    private void createFarms(Planet starting, Civilization c, Random selector) {
         //Based on population
         //Add livestock
         //Create a test crop so that you can grow stuff
@@ -303,7 +306,7 @@ public class GameInitializer {
         starting.buildings.put(pt, observatory);
     }
 
-    private void createResourceStorages(Civilization c, Random selector, Planet starting) {
+    private void createResourceStorages(Civilization c, Planet starting, Random selector) {
         //Add storage
         ResourceStorage storage = new ResourceStorage(starting);
         storage.setOwner(c);
@@ -633,11 +636,11 @@ public class GameInitializer {
             p.buildings.put(getRandomEmptyPoint(p, selector), building);
         }
     }
-    
+
     private PowerPlantArea createPowerPlant() {
         return null;
     }
-    
+
     private void nameStratumOnPlanet(Planet p) {
         NameGenerator gen = null;
         try {
@@ -645,8 +648,39 @@ public class GameInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-        for(Stratum strata: p.strata) {
+        for (Stratum strata : p.strata) {
             strata.setName(gen.getName(0));
+        }
+    }
+
+    private void addResearchInstitutions(Planet p, Civilization c, Random selector) {
+        NameGenerator gen = null;
+        try {
+            gen = NameGenerator.getNameGenerator("uni.names");
+        } catch (IOException ex) {
+            //Ignore
+        }
+
+        int count = p.cities.size();
+        for (int i = 0; i < count; i++) {
+            //Add to city
+            String name = gen.getName(0);
+            ResearchArea research = new ResearchArea();
+            research.setName(name);
+
+            //Add fields
+            ArrayList<Field> fields = new ArrayList<>();
+            //Remove the first one
+            Field toFind = c.fields.getNode(0); //Because everyone does science for now, not magic when we add it...
+            toFind.getFieldsExclusivse(fields);
+
+            //Choose random field
+            Field toAdd = fields.get(selector.nextInt(fields.size()));
+            research.focusFields.put(toAdd, 0);
+            
+
+            //Choose random fields
+            p.cities.get(i).buildings.get(0).areas.add(research);
         }
     }
 }

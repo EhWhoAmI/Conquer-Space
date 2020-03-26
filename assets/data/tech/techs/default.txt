@@ -154,7 +154,7 @@
     id: 8
   }
   {
-    name: basic science
+    name: Basic science
     deps:
     [
       life
@@ -166,9 +166,15 @@
     difficulty: 0
     action:
     [
-      field:science:10
+      field:science:50
       field:biology:10
       field:chemistry:10
+      field:biology:10
+      field:medicine:10
+      field:mathematics:10
+      field:algebra:5
+      field:geometry:5
+      field:engineering:5
       tech:flight:20
       tech:rocket science:20
     ]
@@ -320,6 +326,7 @@
     difficulty: 2
     action:
     [
+      field:aeronautics:1
       tech:space planes:100
     ]
     fields:
@@ -345,6 +352,7 @@
     difficulty: 5
     action:
     [
+      field:aeronautics:1
       launch:Space Plane
     ]
     fields:
@@ -370,6 +378,7 @@
     difficulty: 2
     action:
     [
+      field:aeronautics:1
       tech:rocketery:100
     ]
     fields:
@@ -395,7 +404,8 @@
     difficulty: 5
     action:
     [
-      launch(Rocket)
+      field:aeronautics:1
+      launch:Rocket
     ]
     fields:
     [

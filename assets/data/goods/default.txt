@@ -47,4 +47,17 @@
 
         ]
     }
+    {
+        name: Plastic
+        volume: 1
+        mass: 0.95
+        formula: [
+            "Carbon:3"
+            "Oxygen:5"
+            "Chlorine:1"
+        ]
+        tags: [
+
+        ]
+    }
 ]

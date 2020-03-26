@@ -121,4 +121,29 @@ public class Field {
     public Field getNode(int i) {
         return (nodes.get(i));
     }
+
+    /**
+     * Does include current field
+     * @param f 
+     */
+    public void getFields(ArrayList<Field> f) {
+        f.add(this);
+        for (int i = 0; i < this.getChildCount(); i++) {
+            //Sort through children
+            Field child = this.getNode(i);
+            child.getFields(f);
+        }
+    }
+    
+    /**
+     * Does not include this field
+     * @param f 
+     */
+    public void getFieldsExclusivse(ArrayList<Field> f) {
+        for (int i = 0; i < this.getChildCount(); i++) {
+            //Sort through children
+            Field child = this.getNode(i);
+            child.getFields(f);
+        }
+    }
 }

@@ -20,7 +20,7 @@ package ConquerSpace.game.science;
 import java.util.ArrayList;
 
 /**
- *
+ * Temp thing for the general game.
  * @author Zyun
  */
 public class FieldNode {
