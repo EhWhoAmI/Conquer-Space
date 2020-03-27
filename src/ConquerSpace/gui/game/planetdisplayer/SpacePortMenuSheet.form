@@ -43,15 +43,12 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="jPanel3">
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel2"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Spaceports:"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="spaceportCount">
             </Component>
           </SubComponents>
           <LayoutCode>
@@ -83,11 +80,11 @@
                 <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
               </StatementProvider>
               <Parameters>
-                <CodeExpression id="3_jLabel2">
-                  <CodeVariable name="jLabel2" type="8194" declaredType="javax.swing.JLabel"/>
+                <CodeExpression id="3_jLabel1">
+                  <CodeVariable name="jLabel1" type="8194" declaredType="javax.swing.JLabel"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
-                      <ComponentRef name="jLabel2"/>
+                      <ComponentRef name="jLabel1"/>
                     </ExpressionProvider>
                   </ExpressionOrigin>
                 </CodeExpression>
@@ -99,11 +96,11 @@
                 <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
               </StatementProvider>
               <Parameters>
-                <CodeExpression id="4_jLabel1">
-                  <CodeVariable name="jLabel1" type="8194" declaredType="javax.swing.JLabel"/>
+                <CodeExpression id="4_spaceportCount">
+                  <CodeVariable name="spaceportCount" type="8194" declaredType="javax.swing.JLabel"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
-                      <ComponentRef name="jLabel1"/>
+                      <ComponentRef name="spaceportCount"/>
                     </ExpressionProvider>
                   </ExpressionOrigin>
                 </CodeExpression>

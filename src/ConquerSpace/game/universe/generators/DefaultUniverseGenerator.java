@@ -40,7 +40,7 @@ import ConquerSpace.game.universe.bodies.StarTypes;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
-import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
+import ConquerSpace.game.universe.terrain.TerrainColoring;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.awt.Color;

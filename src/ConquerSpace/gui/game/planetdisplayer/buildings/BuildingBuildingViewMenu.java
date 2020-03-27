@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.buildings;
 
-import ConquerSpace.game.buildings.BuildingBuilding;
+import ConquerSpace.game.buildings.ConstructingBuilding;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 public class BuildingBuildingViewMenu extends JPanel{
     private JLabel timeLeft;
     private JLabel peopleWorking;
-    public BuildingBuildingViewMenu(BuildingBuilding building) {
+    public BuildingBuildingViewMenu(ConstructingBuilding building) {
         setLayout(new VerticalFlowLayout());
         //Get the building
         add(new JLabel("Constructing a " + building.getToBuild().toString()));

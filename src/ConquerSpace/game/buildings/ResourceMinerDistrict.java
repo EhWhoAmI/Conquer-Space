@@ -18,12 +18,17 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.Stratum;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * More like a miner. Desc: A district dedicated to the mining of a resource.
@@ -107,7 +112,7 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
         //Is mining job, now subtract the stuff..
         //subtract from resource vein
         //veinMining.removeResources((int)miningPerMonth());
-        j.resources.put(resourceMining, (int)miningPerMonth());
+        j.resources.put(resourceMining, (int) miningPerMonth());
     }
 
     @Override
@@ -119,7 +124,7 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     public City getCity() {
         return city;
     }
-    
+
     public void setCity(City city) {
         this.city = city;
     }
@@ -127,5 +132,21 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
     @Override
     public String getTooltipText() {
         return String.format(getBuildingTooltipString("mine"), resourceMining.getName());
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        ArrayList<Job> jobsNeeded = new ArrayList<>();
+        //Add jobs
+        for (int i = 0; i < getScale(); i++) {
+            Job job = new Job(JobType.Miner);
+            job.setJobRank(JobRank.Low);
+            job.setWorkingFor(this);
+            job.setEmployer(getOwner());
+            jobsNeeded.add(job);
+        }
+
+        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+        return jobArray;
     }
 }

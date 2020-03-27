@@ -19,7 +19,7 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.BuildingBuilding;
+import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
@@ -63,7 +63,7 @@ public class Actions {
      */
     public static int buildBuilding(Planet p, GeographicPoint pt, Building what, Civilization owner, int turns) {
         if (p.getOwnerID() == owner.getID()) {
-            BuildingBuilding buildings = new BuildingBuilding(what, pt, turns, owner);
+            ConstructingBuilding buildings = new ConstructingBuilding(what, pt, turns, owner);
             buildings.setScale(1);
             //Determine cost...
             

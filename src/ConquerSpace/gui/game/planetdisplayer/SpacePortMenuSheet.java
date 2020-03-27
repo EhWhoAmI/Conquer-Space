@@ -18,6 +18,8 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.ships.Ship;
@@ -65,8 +67,8 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        spaceportCount = new javax.swing.JLabel();
         parentTabs = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -113,11 +115,9 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
         jPanel3.setLayout(new com.alee.extended.layout.HorizontalFlowLayout());
 
-        jLabel2.setText("jLabel2");
-        jPanel3.add(jLabel2);
-
         jLabel1.setText("Spaceports:");
         jPanel3.add(jLabel1);
+        jPanel3.add(spaceportCount);
 
         jPanel1.add(jPanel3);
 
@@ -402,12 +402,21 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
     private void updateComponent() {
         satelliteListModel.fireEvent();
+        
+        //Get the amount of launch pads
+        int launchPadCount = 0;
+        for(Building b : p.buildings.values()) {
+            if(b instanceof SpacePort) {
+                SpacePort port = (SpacePort) b;
+                launchPadCount += port.launchPads.size();
+            }
+        }
+        spaceportCount.setText("" + launchPadCount);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -432,5 +441,6 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
     private javax.swing.JLabel qlSpaceshipMass;
     private javax.swing.JLabel qlSpaceshipNameLabel;
     private javax.swing.JList<String> qlsatelliteList;
+    private javax.swing.JLabel spaceportCount;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.StorageNeeds;
@@ -129,5 +130,10 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     @Override
     public String getType() {
         return "Resource Storage";
+    }
+    
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
     }
 }

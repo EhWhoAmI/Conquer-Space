@@ -19,7 +19,7 @@ package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.PlanetTypes;
-import ConquerSpace.game.universe.spaceObjects.terrain.TerrainColoring;
+import ConquerSpace.game.universe.terrain.TerrainColoring;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;

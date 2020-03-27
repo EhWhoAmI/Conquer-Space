@@ -18,7 +18,7 @@
 package ConquerSpace.game.save;
 
 import ConquerSpace.game.buildings.Building;
-import ConquerSpace.game.buildings.BuildingBuilding;
+import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
@@ -47,9 +47,9 @@ public class BuildingSaveHandler {
         buildingObject.put("y", key.getY());
 
         //Get type...
-        if (what instanceof BuildingBuilding) {
+        if (what instanceof ConstructingBuilding) {
             //Get type of building
-            Building b = ((BuildingBuilding) what).getToBuild();
+            Building b = ((ConstructingBuilding) what).getToBuild();
             BuildingSaveHandler handler = new BuildingSaveHandler(key, what);
             JSONObject toBuild = handler.getJSONObject();
             buildingObject.put("building", toBuild);

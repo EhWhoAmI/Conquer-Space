@@ -96,9 +96,8 @@ public class GameController {
         peopleProcessor = new PeopleProcessor(Globals.universe, Globals.date);
 
         //Process the 0th turn and initalize the universe.
-        updater.updateUniverse(Globals.universe, Globals.date);
+        updater.updateUniverse(Globals.universe, Globals.date, 0);
 
-        //Globals.universe.processTurn(GameRefreshRate, Globals.date);
         //Load the player
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Globals.universe.getCivilization(i).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
@@ -139,7 +138,7 @@ public class GameController {
         if (Globals.date.bigint % GameRefreshRate == 0) {
             long start = System.currentTimeMillis();
 
-            updater.updateUniverse(Globals.universe, Globals.date);
+            updater.updateUniverse(Globals.universe, Globals.date, GameRefreshRate);
 
             for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
                 Globals.universe.getCivilization(i).calculateTechLevel();

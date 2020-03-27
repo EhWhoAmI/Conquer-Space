@@ -30,6 +30,7 @@ import ConquerSpace.game.universe.ships.Orbitable;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Planet class.
@@ -79,8 +80,6 @@ public class Planet extends SpaceObject {
 
     public ArrayList<City> cities;
 
-    public ArrayList<PopulationUnit> population;
-
     private Person governor;
 
     /**
@@ -117,7 +116,6 @@ public class Planet extends SpaceObject {
         cities = new ArrayList<>();
 
         //planetJobs = new ArrayList<>();
-        population = new ArrayList<>();
 
         localLife = new ArrayList<>();
     }
@@ -317,5 +315,51 @@ public class Planet extends SpaceObject {
 
     public void setRotation(double rotation) {
         this.rotation = rotation;
+    }
+
+    /**
+     * Checks if it's near a city, and adds it to the city.If not, creates one.
+     *
+     * @param position
+     * @param b
+     * @return The city it is added to.
+     */
+    public City addBuilding(GeographicPoint position, Building b) {
+        City city = null;
+        boolean created = false;
+        cityloop:
+        for (City c : cities) {
+            //Check for locations
+            for (Building stor : c.buildings) {
+                //Find the storage
+                GeographicPoint storagePoint = buildings
+                        .entrySet()
+                        .stream()
+                        .filter(ent -> stor.equals(ent.getValue()))
+                        .map(Map.Entry::getKey).findFirst().orElse(null);
+                if (storagePoint != null) {
+                    //Check if next to city point
+                    if ((storagePoint.getX() + 1 == position.getX()
+                            || storagePoint.getX() - 1 == position.getX())
+                            && (storagePoint.getY() + 1 == position.getY()
+                            || storagePoint.getY() - 1 == position.getY())) {
+                        //Add to city
+                        c.buildings.add(b);
+                        created = true;
+                        city = c;
+                        break cityloop;
+                    }
+                }
+            }
+        }
+        
+        //Create city
+        if (!created) {
+            City createdCity = new City(this.getUniversePath());
+            createdCity.setName("Another City");
+            city = createdCity;
+            b.setCity(city);
+        }
+        return city;
     }
 }

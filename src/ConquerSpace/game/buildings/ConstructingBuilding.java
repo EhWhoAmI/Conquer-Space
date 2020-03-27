@@ -18,18 +18,24 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Good;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class BuildingBuilding extends Building implements Workable{
+public class ConstructingBuilding extends Building implements Workable {
 
     private Building toBuild;
     private GeographicPoint pt;
@@ -40,7 +46,7 @@ public class BuildingBuilding extends Building implements Workable{
     public Civilization builder;
     private int cost;
 
-    public BuildingBuilding(Building toBuild, GeographicPoint pt, int length, Civilization builder) {
+    public ConstructingBuilding(Building toBuild, GeographicPoint pt, int length, Civilization builder) {
         this.toBuild = toBuild;
         this.pt = pt;
         this.length = length;
@@ -104,6 +110,27 @@ public class BuildingBuilding extends Building implements Workable{
 
     @Override
     public Job[] jobsNeeded() {
-        return new Job[0];
+        ArrayList<Job> jobsNeeded = new ArrayList<>();
+
+        //Add construction jobs
+        int scale = getScale();
+        for (int i = 0; i < scale; i++) {
+            Job constructionJob = new Job(JobType.Construction);
+            constructionJob.setJobRank(JobRank.Low);
+            constructionJob.setEmployer(getOwner());
+            constructionJob.setWorkingFor(this);
+            //Set them to use resources for the construction
+            for (Map.Entry<Good, Integer> set : resourcesNeeded.entrySet()) {
+                Good resource = set.getKey();
+                Integer amount = set.getValue();
+                //Add to the job
+                constructionJob.resources.put(resource, -amount);
+            }
+            //Add job to building
+            jobsNeeded.add(constructionJob);
+        }
+
+        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+        return jobArray;
     }
 }

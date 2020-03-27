@@ -17,16 +17,24 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.GameController;
+import ConquerSpace.game.StarDate;
+import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class SpacePort extends Building{
+public class SpacePort extends Building {
+
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
     private LaunchSystem system;
 
@@ -37,14 +45,36 @@ public class SpacePort extends Building{
             launchPads.add(new SpacePortLaunchPad(system));
         }
     }
-    
+
     @Override
     public Color getColor() {
         return Color.MAGENTA;
     }
-    
-     @Override
+
+    @Override
     public String getType() {
         return "Space Port";
     }
+
+    @Override
+    public void tick(StarDate date, long delta) {
+        //Iterate through launchpads and process
+        for (SpacePortLaunchPad splp : launchPads) {
+            splp.ticks += GameController.GameRefreshRate;
+        }
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        ArrayList<Job> jobsNeeded = new ArrayList<>();
+
+        Job job = new Job(JobType.SpacePortEngineer);
+        job.setEmployer(getOwner());
+        job.setJobRank(JobRank.Medium);
+        jobsNeeded.add(job);
+
+        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+        return jobArray;
+    }
+
 }

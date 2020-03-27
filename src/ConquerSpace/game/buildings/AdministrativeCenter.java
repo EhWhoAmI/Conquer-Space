@@ -18,8 +18,13 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.jobs.Workable;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Admin center. Is a center for admin stuff, and also stores peeps. because it
@@ -28,7 +33,7 @@ import java.awt.Color;
  *
  * @author
  */
-public class AdministrativeCenter extends CityDistrict implements Workable{
+public class AdministrativeCenter extends CityDistrict implements Workable {
 
     @Override
     public Color getColor() {
@@ -42,5 +47,19 @@ public class AdministrativeCenter extends CityDistrict implements Workable{
     @Override
     public String getType() {
         return "Administrative Center";
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        ArrayList<Job> jobsNeeded = new ArrayList<>();
+
+        Job job = new Job(JobType.Administrator);
+        job.setJobRank(JobRank.High);
+        job.setWorkingFor(this);
+        job.setEmployer(getOwner());
+        jobsNeeded.add(job);
+
+        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+        return jobArray;
     }
 }

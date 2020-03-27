@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.jobs.Job;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -45,5 +46,10 @@ public class InfrastructureBuilding extends Building{
     public void addBuilding(Building b) {
         b.infrastructure.add(this);
         connectedTo.add(b);
+    }
+
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
     }
 }

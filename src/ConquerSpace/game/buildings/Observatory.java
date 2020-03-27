@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
 import java.awt.Color;
@@ -77,5 +78,8 @@ public class Observatory extends Building implements VisionPoint {
         return String.format(getBuildingTooltipString("observatory"), range);
     }
     
-    
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
+    }
 }

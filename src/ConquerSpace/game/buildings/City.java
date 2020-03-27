@@ -17,16 +17,20 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.jobs.JobProcessor;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.jobs.Workable;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.util.DistributedRandomNumberGenerator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -134,7 +138,7 @@ public class City implements PersonEnterable, Workable {
     public void doneResettingJobs() {
         resetJobs = false;
     }
-    
+
     public int getPopulationSize() {
         int i = 0;
         for (Building b : buildings) {
@@ -148,5 +152,67 @@ public class City implements PersonEnterable, Workable {
     @Override
     public ArrayList<Person> getPeopleArrayList() {
         return peopleAtCity;
+    }
+
+    public void incrementPopulation(StarDate date, long delta) {
+        float increment = 0;
+        increment += getPopulationUnitPercentage();
+
+        HashMap<Race, Integer> species = new HashMap<>();
+        ArrayList<PopulationStorage> storages = new ArrayList<>();
+        int population = 0;
+        for (Building building : buildings) {
+            if (building instanceof PopulationStorage) {
+                PopulationStorage storage = (PopulationStorage) building;
+                storages.add(storage);
+                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+                    //Population increment
+                    //Fraction it so it does not accelerate at a crazy rate
+                    //Do subtractions here in the future, like happiness, and etc.
+                    increment += (unit.getSpecies().getBreedingRate() / 50);
+                    //Add to hashmap
+                    if (species.containsKey(unit.getSpecies())) {
+                        //Add to it...
+                        Integer count = species.get(unit.getSpecies());
+                        count++;
+                        species.put(unit.getSpecies(), count);
+                    } else {
+                        species.put(unit.getSpecies(), 1);
+                    }
+                    population++;
+                }
+            }
+        }
+
+        //Increment the value...
+        setPopulationUnitPercentage(increment);
+        if (increment > 100) {
+            //Add population to city and stuff.
+            //Get the species in the city...
+
+            //Add to storage
+            //Sum everything together for random numbers
+            DistributedRandomNumberGenerator generator = new DistributedRandomNumberGenerator();
+            int i = 0;
+            HashMap<Integer, Race> races = new HashMap<>();
+            for (Map.Entry<Race, Integer> entry : species.entrySet()) {
+                Race key = entry.getKey();
+                Integer value = entry.getValue();
+                generator.addNumber(i, ((double) value / (double) population));
+                races.put(i, key);
+                i++;
+            }
+
+            //Get the race
+            int speciesID = generator.getDistributedRandomNumber();
+            Race r = races.get(speciesID);
+            PopulationUnit unit = new PopulationUnit(r);
+
+            //Increment population
+            int storageID = (int) (Math.random() * storages.size());
+            storages.get(storageID).getPopulationArrayList().add(unit);
+
+            setPopulationUnitPercentage(0);
+        }
     }
 }

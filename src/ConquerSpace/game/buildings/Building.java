@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.jobs.Employer;
 import ConquerSpace.game.jobs.Job;
@@ -28,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 import org.apache.logging.log4j.Logger;
 
@@ -93,22 +93,6 @@ public abstract class Building implements Workable {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Job[] jobsNeeded() {
-        ArrayList<Job> jobsNeeded = new ArrayList();
-        for (Area a : areas) {
-            if (a instanceof Workable) {
-                Job[] jobs = ((Workable) a).jobsNeeded();
-                for (Job j : jobs) {
-                    jobsNeeded.add(j);
-                }
-            }
-        }
-        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-        return jobArray;
-    }
-
-    @Override
     public void processJob(Job j) {
 
     }
@@ -137,5 +121,9 @@ public abstract class Building implements Workable {
             return text;
         }
         return "";
+    }
+    
+    public void tick(StarDate date, long delta) {
+        
     }
 }

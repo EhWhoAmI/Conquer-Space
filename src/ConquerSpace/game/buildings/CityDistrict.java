@@ -18,16 +18,21 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class CityDistrict extends Building implements PopulationStorage, Workable{
+public class CityDistrict extends Building implements PopulationStorage, Workable {
+
     private int maxStorage;
     public ArrayList<PopulationUnit> population;
 
@@ -70,4 +75,30 @@ public class CityDistrict extends Building implements PopulationStorage, Workabl
         String txt = String.format(getBuildingTooltipString("citydistrict"), getCity().getName());
         return txt;
     }
+
+    @Override
+    public Job[] jobsNeeded() {
+        ArrayList<Job> jobsNeeded = new ArrayList<>();
+        //Infrastructure jobs
+        Job job = new Job(JobType.Infrastructure);
+        job.setJobRank(JobRank.Low);
+        job.setWorkingFor(this);
+        job.setEmployer(getOwner());
+        jobsNeeded.add(job);
+        
+        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+        return jobArray;
+    }
+    /**
+     * CityDistrict city = (CityDistrict) building; if (building instanceof
+     * AdministrativeCenter) { //An admin center deals with the planet, maybe
+     * the galaxy if necessary //Add jobs that deal with admin
+     * AdministrativeCenter center = (AdministrativeCenter) building; Job job =
+     * new Job(JobType.Administrator); job.setJobRank(JobRank.High);
+     * job.setWorkingFor(center); job.setEmployer(center.getOwner());
+     * p.jobs.add(job); } Job job = new Job(JobType.Infrastructure);
+     * job.setJobRank(JobRank.Low); job.setWorkingFor(city);
+     * job.setEmployer(building.getOwner()); p.jobs.add(job);
+     */
+
 }

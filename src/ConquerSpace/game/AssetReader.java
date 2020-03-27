@@ -552,6 +552,5 @@ public class AssetReader {
 
 //Something to pass the parameters
 interface PassThingy {
-
     public Object thingy(JSONObject obj);
 }

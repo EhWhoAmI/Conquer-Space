@@ -17,12 +17,19 @@
  */
 package ConquerSpace.game.buildings;
 
+import ConquerSpace.game.StarDate;
 import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.JobRank;
+import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.farm.Crop;
+import ConquerSpace.game.universe.resources.Good;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Farms have 2 types, a crop one and a livestock one, maybe a combined one.
@@ -65,15 +72,27 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     public City getCity() {
         return city;
     }
-    
+
     public void setCity(City city) {
         this.city = city;
     }
 
     @Override
     public Job[] jobsNeeded() {
-        //Create jobs
-        return null;
+        ArrayList<Job> jobsNeeded = new ArrayList<>();
+
+        for (int i = 0; i < getManpower(); i++) {
+            Job job = new Job(JobType.Farmer);
+            job.setJobRank(JobRank.Low);
+            job.setWorkingFor(this);
+            //Set pay
+            job.setPay(1);
+            job.setEmployer(getOwner());
+            jobsNeeded.add(job);
+        }
+
+        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+        return jobArray;
     }
 
     public static enum FarmType {
@@ -166,5 +185,25 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
     @Override
     public String getTooltipText() {
         return getBuildingTooltipString("farmbuilding");
+    }
+
+    @Override
+    public void tick(StarDate date, long delta) {
+        //Get the resources
+        //Calculate productivity
+        setHarvestersNeeded(0);
+
+        int yield = 0;
+        for (Crop c : crops) {
+            c.subtractTime();
+            if (c.getTimeLeft() <= 0) {
+                //Prepare crop for harvesting
+                harvestable.add(c);
+
+                //Check for harvesters
+                setHarvestersNeeded(getHarvestersNeeded() + 1);
+            }
+        }
+        setAmountFarmed(yield);
     }
 }

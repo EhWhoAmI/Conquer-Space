@@ -58,5 +58,8 @@ public class IndustrialDistrict extends Building implements PopulationStorage {
         return "Industrial district";
     }
     
-    
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
+    }
 }

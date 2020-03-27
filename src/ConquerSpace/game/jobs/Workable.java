@@ -26,4 +26,5 @@ import ConquerSpace.game.jobs.Job;
 public interface Workable {
     public Job[] jobsNeeded();
     public void processJob(Job j);
+    //method to check if jobs need to be rewrited
 }
