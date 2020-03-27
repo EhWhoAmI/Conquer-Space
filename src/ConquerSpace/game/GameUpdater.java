@@ -218,10 +218,16 @@ public class GameUpdater {
         }
     }
 
-    private void processArea(City c, Building b, Area a, StarDate date) {
+    private void processAreaJobs(City c, Building b, Area a, StarDate date) {
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
+            
+            job.setJobRank(JobRank.Low);
+            job.setWorkingFor(a);
+            //Set pay
+            job.setPay(1);
+            job.setEmployer(b.getOwner());
 
             job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
             c.jobs.add(job);
@@ -244,10 +250,30 @@ public class GameUpdater {
                 job.resources.putIfAbsent(key, val);
             }
 
+            job.setJobRank(JobRank.Low);
+            job.setWorkingFor(a);
+            //Set pay
+            job.setPay(1);
+            job.setEmployer(b.getOwner());
+
             c.jobs.add(job);
         } else if (a instanceof ResearchArea) {
             Job researchJob = new Job(JobType.Researcher);
+
+            researchJob.setJobRank(JobRank.Medium);
+            researchJob.setWorkingFor(a);
+            //Set pay
+            researchJob.setPay(1);
+            researchJob.setEmployer(b.getOwner());
+            c.jobs.add(researchJob);
+
             Job educationJob = new Job(JobType.Educator); //Improves education, and in the long run, improves science gain
+            educationJob.setJobRank(JobRank.Medium);
+            educationJob.setWorkingFor(a);
+            //Set pay
+            educationJob.setPay(1);
+            educationJob.setEmployer(b.getOwner());
+            c.jobs.add(educationJob);
         }
     }
 
@@ -394,16 +420,15 @@ public class GameUpdater {
         //System.out.println((end - start));
     }
 
-    public void createCityJobs(City p, StarDate date) {
+    public void createCityJobs(City c, StarDate date) {
         //Add the jobs...
         //Assign everyone an empty job...
-        //for(p.)
         float upkeepAmount = 0;
-        p.jobs.clear();
-        for (Building building : p.buildings) {
+        c.jobs.clear();
+        for (Building building : c.buildings) {
             //Get the building type
             Job[] jobs = building.jobsNeeded();
-            Collections.addAll(p.jobs, jobs);
+            Collections.addAll(c.jobs, jobs);
 
             //Get number of people and add support jobs
             if (building instanceof PopulationStorage) {
@@ -416,7 +441,7 @@ public class GameUpdater {
 
             //Sort through areas
             for (Area a : building.areas) {
-                processArea(p, building, a, date);
+                processAreaJobs(c, building, a, date);
             }
         }
         //Set the upkeep
@@ -424,7 +449,7 @@ public class GameUpdater {
         for (int i = 0; i < amount; i++) {
             Job job = new Job(JobType.PopUpkeepWorker);
             job.setJobRank(JobRank.Medium);
-            p.jobs.add(job);
+            c.jobs.add(job);
         }
     }
 
@@ -439,13 +464,12 @@ public class GameUpdater {
                     processPopUnit(unit);
 
                     //Do subtractions here in the future, like happiness, and etc.
-                    
                     //Process affect on building that it is working for
                     Workable workingFor = unit.getJob().getWorkingFor();
                     if (workingFor != null) {
                         workingFor.processJob(unit.getJob());
                     }
-                    
+
                     //Process job resources
                     for (Good r : unit.getJob().resources.keySet()) {
                         storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
@@ -487,7 +511,6 @@ public class GameUpdater {
         //food -= unit.getSpecies().getFoodPerMonth();
         //popJob.resources.put(GameController.foodResource, food);
     }
-
 
     public void createPeople() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {

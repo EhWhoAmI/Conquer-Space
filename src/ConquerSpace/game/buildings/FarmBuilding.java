@@ -24,12 +24,9 @@ import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
 import ConquerSpace.game.universe.farm.Crop;
-import ConquerSpace.game.universe.resources.Good;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * Farms have 2 types, a crop one and a livestock one, maybe a combined one.

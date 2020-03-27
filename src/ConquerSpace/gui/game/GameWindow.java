@@ -48,6 +48,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -76,9 +78,11 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class GameWindow extends JFrame implements GUI, WindowListener {
+public class GameWindow extends JFrame implements GUI, WindowListener, ComponentListener {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(GameWindow.class.getName());
+
+    public TurnSaveWindow tsWindow;
 
     private CQSPDesktop desktopPane;
     private JMenuBar menuBar;
@@ -129,6 +133,16 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         mainInterfaceWindow = new MainInterfaceWindow(c, u);
         newsWindow = new NewsWindow(c);
         addFrame(mainInterfaceWindow);
+
+        tsWindow = new TurnSaveWindow(d, u);
+
+        //Remove mouse listeners for the turnsave window.
+        for (MouseListener listener : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().getMouseListeners()) {
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().removeMouseListener(listener);
+        }
+
+        addFrame(tsWindow);
+
         //addFrame(newsWindow);
         JMenu windows = new JMenu("Windows");
         JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
@@ -147,13 +161,13 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
         JMenu game = new JMenu("Game");
         JMenuItem pauseplayButton = new JMenuItem("Paused");
         pauseplayButton.addActionListener(a -> {
-            if (controller.tsWindow.isPaused()) {
+            if (tsWindow.isPaused()) {
                 pauseplayButton.setText("Pause");
             } else {
                 pauseplayButton.setText("Paused");
             }
             a = new ActionEvent(pauseplayButton, 0, "pauseplay");
-            controller.tsWindow.actionPerformed(a);
+            tsWindow.actionPerformed(a);
         });
         pauseplayButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         game.add(pauseplayButton);
@@ -211,9 +225,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
             //addFrame(viewer);
         });
 
-        //techResearcher.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
-        //techonology.add(techResearcher);
-        //techonology.add(seetechs);
         JMenu ships = new JMenu("Ships");
 
         JMenuItem allShips = new JMenuItem("All Ships");
@@ -280,13 +291,17 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
         desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
 
+        //Listeners
+        addComponentListener(this);
+
         //desktopPane.setBackground(Color.cyan);
         setJMenuBar(menuBar);
         setContentPane(desktopPane);
-        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
 
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
         setSize(rect.width, rect.height);
 
+        //Set Icon6
         try {
             setIconImage(ImageIO.read(new File("assets/img/icon.png")));
         } catch (IOException ioe) {
@@ -294,6 +309,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
         setVisible(true);
 
+        changeTurnSaveWindowPosition();
         //See home planet
         desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
     }
@@ -335,6 +351,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             GameController.musicPlayer.clean();
             System.exit(0);
+        } else {
+            System.exit(0);
         }
     }
 
@@ -357,6 +375,35 @@ public class GameWindow extends JFrame implements GUI, WindowListener {
 
     @Override
     public void windowDeactivated(WindowEvent arg0) {
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        changeTurnSaveWindowPosition();
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+    }
+
+    public boolean allowTick() {
+        return tsWindow.isPaused();
+    }
+    
+    public int getTickCount() {
+        return tsWindow.getTickCount();
+    }
+
+    private void changeTurnSaveWindowPosition() {
+        tsWindow.setLocation(getWidth() - tsWindow.getWidth(), 0);
     }
 
     /**

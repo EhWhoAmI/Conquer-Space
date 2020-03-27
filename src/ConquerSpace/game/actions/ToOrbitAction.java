@@ -20,6 +20,7 @@ package ConquerSpace.game.actions;
 import ConquerSpace.Globals;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.SpaceObject;
 
 /**
  *
@@ -76,8 +77,9 @@ public class ToOrbitAction extends ShipAction {
     public void initAction() {
         if (ship.isOrbiting()) {
             //Exit orbit
-            if (Globals.universe.getSpaceObject(ship.getOrbiting()) instanceof Planet) {
-                Planet p = (Planet) Globals.universe.getSpaceObject(ship.getOrbiting());
+            SpaceObject object = Globals.universe.getSpaceObject(ship.getOrbiting());
+            if (object instanceof Planet) {
+                Planet p = (Planet) object;
                 //Remove from orbit
                 p.getSatellites().remove(ship);
 

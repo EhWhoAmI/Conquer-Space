@@ -175,7 +175,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         pan.setLayout(new GridLayout(9, 1, 5, 5));
         add(pan);
         pack();
-        setResizable(true);
+        setResizable(false);
         setVisible(true);
     }
 

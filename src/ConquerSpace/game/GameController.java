@@ -82,7 +82,7 @@ public class GameController {
     public static Civilization playerCiv = null;
 
     public static final int AU_IN_LTYR = 63241;
-
+    
     /**
      * Constructor. Inits all components.
      */
@@ -108,10 +108,10 @@ public class GameController {
         ticker = new Timer();
         Runnable action = new Runnable() {
             public void run() {
-                ticker.setWait(((PlayerController) Globals.universe.getCivilization(0).controller).tsWindow.getTickCount());
+                ticker.setWait(((PlayerController) playerCiv.controller).getTickCount());
                 updater.calculateVision();
 
-                if (!((PlayerController) playerCiv.controller).tsWindow.isPaused()) {
+                if (!((PlayerController) playerCiv.controller).allowTick()) {
                     tick();
                 }
             }

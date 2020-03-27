@@ -155,7 +155,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             //Set name
             //Add planets
             universe.addStarSystem(sys);
-            LOGGER.trace("Created star system " + sys.getId() + " with " + sys.getPlanetCount());
         }
         LOGGER.info("Done with universe generation");
         

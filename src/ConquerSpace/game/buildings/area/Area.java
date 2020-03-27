@@ -17,9 +17,21 @@
  */
 package ConquerSpace.game.buildings.area;
 
+import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.jobs.Workable;
+
 /**
  *
  */
-public class Area {
+public class Area implements Workable{
+
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
+    }
+
+    @Override
+    public void processJob(Job j) {
+    }
     
 }

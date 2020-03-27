@@ -40,15 +40,14 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class PlayerController implements CivilizationController {
+
     private Civilization c;
     private Universe u;
     private StarDate d;
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
     public GameWindow mainwindow;
-    public TurnSaveWindow tsWindow;
     public AlertDisplayer alertDisplayer;
     public ArrayList<Ship> selectedShips = new ArrayList<>();
-    //public TimeIncrementWindow timeIncrementWindow;
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
@@ -59,7 +58,7 @@ public class PlayerController implements CivilizationController {
     public void alert(Alert a) {
         alertDisplayer.addAlert(a);
         AlertNotification notification = new AlertNotification(a.toString(), a.getDesc());
-        notification.setLocation(mainwindow.getWidth()/2 - notification.getWidth()/2, 0);
+        notification.setLocation(mainwindow.getWidth() / 2 - notification.getWidth() / 2, 0);
         mainwindow.addFrame(notification);
         notification.setVisible(true);
     }
@@ -67,31 +66,28 @@ public class PlayerController implements CivilizationController {
     @Override
     public void init(Universe u, StarDate d, Civilization c) {
         mainwindow = new GameWindow(u, this, c, d);
-
-        tsWindow = new TurnSaveWindow(d, u);
         alertDisplayer = AlertDisplayer.getInstance();
-        //timeIncrementWindow = new TimeIncrementWindow();
-        tsWindow.setLocation(mainwindow.getWidth() - tsWindow.getWidth(), 0);
-        //Remove mouse listeners for the turnsave window.
-        for (MouseListener listener : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().getMouseListeners()) {
-            ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().removeMouseListener(listener);
-        }
-
-        mainwindow.add(tsWindow);
-        //mainwindow.add(timeIncrementWindow);
     }
 
     @Override
     public void refreshUI() {
         //Reload all windows
         mainwindow.dispose();
+
         //Then reload
-        
         init(u, d, c);
-    }    
+    }
 
     @Override
     public void passEvent(Event e) {
         mainwindow.passEvent(e);
+    }
+
+    public boolean allowTick() {
+        return mainwindow.allowTick();
+    }
+
+    public int getTickCount() {
+        return mainwindow.getTickCount();
     }
 }
