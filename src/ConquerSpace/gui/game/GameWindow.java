@@ -35,10 +35,12 @@ import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.GUI;
+import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -69,7 +71,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
@@ -109,6 +114,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         //Edit menu bar
         addWindowListener(this);
         init();
+
+        //Debug stuff
+        //addFrame(new DegreeSetter());
         //A window to greet the user
         JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
                 + "May we live and prosper in these exciting new times.");
@@ -397,7 +405,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     public boolean allowTick() {
         return tsWindow.isPaused();
     }
-    
+
     public int getTickCount() {
         return tsWindow.getTickCount();
     }
@@ -468,6 +476,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         @Override
         public void mouseMoved(MouseEvent e) {
+            //Get location
+//            if (drawing == DRAW_STAR_SYSTEM && systemRenderer != null) {
+//                systemRenderer.setMousePosition(e.getPoint());
+//            }
         }
 
         @Override
@@ -758,16 +770,14 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             double scrollBefore = scale;
             double newScale = (Math.exp(scroll * 0.01) * scale);
             //Limit scale
-            if (newScale > 0.05) {
-                if (newScale > 0) {
-                    scale = newScale;
-                    double msX = ((e.getX() * scale));
-                    double msY = ((e.getY() * scale));
-                    double scaleChanged = scale - scrollBefore;
+            if (newScale > 0.000001) {
+                scale = newScale;
+                double msX = ((e.getX() * scale));
+                double msY = ((e.getY() * scale));
+                double scaleChanged = scale - scrollBefore;
 
-                    translateX += ((msX * scaleChanged)) / scale;
-                    translateY += ((msY * scaleChanged)) / scale;
-                }
+                translateX += ((msX * scaleChanged)) / scale;
+                translateY += ((msY * scaleChanged)) / scale;
             }
             //Now repaint
             repaint();
@@ -777,6 +787,62 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             translateX = -1500 / 2 + getSize().width / 2;
             translateY = -1500 / 2 + getSize().height / 2;
             scale = 1f;
+        }
+    }
+
+    private class DegreeSetter extends JInternalFrame {
+
+        private JSlider slider;
+        private JSpinner degreeSpinner;
+
+        private double degree = 0;
+
+        public DegreeSetter() {
+            setLayout(new VerticalFlowLayout());
+            slider = new JSlider(0, 360);
+            degreeSpinner = new JSpinner(new SpinnerNumberModel(degree, 0, 360, 1));
+
+            slider.addChangeListener(l -> {
+                degreeSpinner.setValue(slider.getValue());
+                degree = slider.getValue();
+                setAngle();
+            });
+            slider.setPaintLabels(true);
+            slider.setPaintTrack(true);
+            slider.setValue((int) degree);
+
+            degreeSpinner.addChangeListener(l -> {
+                int d = ((Number) degreeSpinner.getValue()).intValue();
+                slider.setValue(d);
+                degree = d;
+
+                setAngle();
+            });
+
+            add(slider);
+            add(degreeSpinner);
+            pack();
+            setVisible(true);
+        }
+
+        private void setAngle() {
+            StarSystem sys = u.getStarSystem(desktopPane.drawingStarSystem);
+            for (int i = 0; i < sys.getPlanetCount(); i++) {
+                Planet planet = sys.getPlanet(i);
+                planet.setDegrees(degree);
+                //planet.modDegrees(1f);
+                double theta = Math.toRadians(planet.getPlanetDegrees());
+                double a = planet.getSemiMajorAxis();
+                //Eccentrcity
+                double e = planet.getEccentricity();
+                double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - planet.getRotation()));
+                RendererMath.Point ppt
+                        = RendererMath.polarCoordToCartesianCoord((long) r,
+                                planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
+
+                planet.setX(ppt.x);
+                planet.setY(ppt.y);
+            }
         }
     }
 }

@@ -27,7 +27,6 @@ import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.universe.resources.Element;
 import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;

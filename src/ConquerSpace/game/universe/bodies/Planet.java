@@ -169,6 +169,10 @@ public class Planet extends SpaceObject {
         degrees %= 360;
     }
 
+    public void setDegrees(double degrees) {
+        this.degrees = degrees;
+    }
+
     public int getOwnerID() {
         return ownerID;
     }

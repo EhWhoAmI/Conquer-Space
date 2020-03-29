@@ -289,7 +289,6 @@ public class GameUpdater {
         for (ResourceStockpile rs : c.resourceStorages) {
             //Get by positon...
             //For now, we process only if it is on the planet or not.
-
             if (rs.canStore(resourceType)) {
                 rs.addResource(resourceType, amount);
                 break;
