@@ -760,6 +760,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             //Get Star position and position it like that...
             translateX = -1500 / 2 + getSize().width / 2;
             translateY = -1500 / 2 + getSize().height / 2;
+            //Set the window size
+            systemRenderer.setWindowSize(new Dimension(getWidth(), getHeight()));
+            
             repaint();
         }
 
