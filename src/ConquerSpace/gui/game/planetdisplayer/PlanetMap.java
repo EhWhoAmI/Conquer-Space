@@ -226,7 +226,7 @@ public class PlanetMap extends JPanel {
 
         add(menuBar, BorderLayout.NORTH);
         add(map, BorderLayout.CENTER);
-        
+
         scale = 3;
     }
 
@@ -274,7 +274,7 @@ public class PlanetMap extends JPanel {
             if (displayedView == RESOURCE_VIEW || displayedView == BOTH_VIEW || displayedView == CONSTRUCTION_VIEW) {
                 //Show resources
                 if (resourceImage == null || needRefresh) {
-                    resourceImage = new BufferedImage((int) (p.getPlanetSize() * 2 * tileSize), (int) (p.getPlanetSize() * tileSize), BufferedImage.TYPE_INT_ARGB);
+                    resourceImage = new BufferedImage((int) (p.getPlanetWidth() * tileSize), (int) (p.getPlanetHeight() * tileSize), BufferedImage.TYPE_INT_ARGB);
 
                     Graphics2D resourceGraphics = resourceImage.createGraphics();
                     resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));

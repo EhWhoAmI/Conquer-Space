@@ -202,8 +202,8 @@ public class GameInitializer {
             miner.setOwner(c);
             miner.setScale(1);
 
-            int randR = (int) (Math.random() * Math.sqrt(strata.getRadius()));
-            double theta = (Math.random() * Math.PI);
+            double randR = (strata.getRadius() * Math.sqrt(Math.random()));
+            double theta = (Math.random() * 2 * Math.PI);
 
             int x = (int) (Math.cos(theta) * randR);
             int y = (int) (Math.sin(theta) * randR);
@@ -527,14 +527,14 @@ public class GameInitializer {
         c.putValue("haslaunch", 0);
     }
 
-    private GeographicPoint getRandomEmptyPoint(Planet starting, Random selector) {
+    private GeographicPoint getRandomEmptyPoint(Planet planet, Random selector) {
         GeographicPoint pt;
 
         do {
-            int x = (selector.nextInt(starting.getPlanetSize() * 2 - 2) + 1);
-            int y = (selector.nextInt(starting.getPlanetSize() - 2) + 1);
+            int x = (selector.nextInt(planet.getPlanetWidth() - 2) + 1);
+            int y = (selector.nextInt(planet.getPlanetHeight()- 2) + 1);
             pt = new GeographicPoint(x, y);
-        } while (starting.buildings.containsKey(pt));
+        } while (planet.buildings.containsKey(pt));
         return pt;
     }
 

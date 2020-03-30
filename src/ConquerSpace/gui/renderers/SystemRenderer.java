@@ -76,7 +76,7 @@ public class SystemRenderer {
     private Point mousePosition;
 
     private Dimension windowSize = new Dimension(1000, 1000);
-    
+
     private double distanceRatio = 1;
 
     public SystemRenderer(StarSystem sys, Universe u, Dimension bounds) {
@@ -101,7 +101,7 @@ public class SystemRenderer {
                     }
                     //render terrain
                     TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
-                    systemTerrain[i] = toBufferedImage(tr.getImage(0.15));
+                    systemTerrain[i] = toBufferedImage(tr.getSquareImage(0.15));
 
                     //Create copy
                     BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
@@ -223,7 +223,6 @@ public class SystemRenderer {
 
             //Do the same thing that we do for calculating position
             //    private RendererMath.Point calculatePoint(double smajor, double theta, double e, double rot) {
-
             RendererMath.Point ppt = calculatePoint(planet.getSemiMajorAxis(), 0, planet.getEccentricity(), planet.getRotation());
 
             double cx = (ppt.x * distanceRatio);
@@ -259,8 +258,8 @@ public class SystemRenderer {
             if ((planetX > -20 && planetX < (windowSize.getWidth() + 20)) && (planetY < (windowSize.getHeight() + 20) && planetY > -20)) {
                 if (systemTerrain[i] != null) {
                     g2d.drawImage(systemTerrain[i],
-                            planetX - (p.getPlanetSize() / PLANET_DIVISOR / 2),
-                            planetY - (p.getPlanetSize() / PLANET_DIVISOR / 2), null);
+                            planetX - (p.getPlanetHeight() / PLANET_DIVISOR / 2),
+                            planetY - (p.getPlanetHeight() / PLANET_DIVISOR / 2), null);
                 }
 
 //            g2d.drawString(String.format("Planet position: %.5f, %.5f", p.getX(), p.getY()),
@@ -269,10 +268,10 @@ public class SystemRenderer {
                 //Draw shadow
                 g2d.setColor(Color.BLACK);
                 Arc2D.Float shadowArc = new Arc2D.Float(Arc2D.CHORD);
-                shadowArc.height = ((p.getPlanetSize() * 1.1f) / PLANET_DIVISOR);
-                shadowArc.width = ((p.getPlanetSize() * 1.1f) / PLANET_DIVISOR);
-                shadowArc.x = (int) ((translateX + (p.getX()) * distanceRatio + bounds.width / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
-                shadowArc.y = (int) ((translateY + (p.getY()) * distanceRatio + bounds.height / 2) / scale - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+                shadowArc.height = ((p.getPlanetHeight() * 1.1f) / PLANET_DIVISOR);
+                shadowArc.width = ((p.getPlanetHeight() * 1.1f) / PLANET_DIVISOR);
+                shadowArc.x = (int) ((translateX + (p.getX()) * distanceRatio + bounds.width / 2) / scale - (p.getPlanetHeight() / PLANET_DIVISOR / 2));
+                shadowArc.y = (int) ((translateY + (p.getY()) * distanceRatio + bounds.height / 2) / scale - (p.getPlanetHeight() / PLANET_DIVISOR / 2));
                 shadowArc.start = (int) (p.getPlanetDegrees() - 100);
                 shadowArc.extent = (200);
                 g2d.fill(shadowArc);

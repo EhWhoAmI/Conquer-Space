@@ -510,7 +510,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
                             if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
-                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR) {
+                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetHeight()*1.1 / SystemRenderer.PLANET_DIVISOR) {
                                 //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                 //add(d);
                                 //Check if scanned

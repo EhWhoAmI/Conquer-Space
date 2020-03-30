@@ -42,6 +42,8 @@ public class Planet extends SpaceObject {
     private int planetType;
     private long orbitalDistance;
     private double degrees;
+
+    //Radius in hundreds of kilometers
     private int planetSize;
 
     private double semiMajorAxis;
@@ -116,7 +118,6 @@ public class Planet extends SpaceObject {
         cities = new ArrayList<>();
 
         //planetJobs = new ArrayList<>();
-
         localLife = new ArrayList<>();
     }
 
@@ -356,7 +357,7 @@ public class Planet extends SpaceObject {
                 }
             }
         }
-        
+
         //Create city
         if (!created) {
             City createdCity = new City(this.getUniversePath());
@@ -365,5 +366,13 @@ public class Planet extends SpaceObject {
             b.setCity(city);
         }
         return city;
+    }
+
+    public int getPlanetHeight() {
+        return (2 * planetSize);
+    }
+
+    public int getPlanetWidth() {
+        return (int) (2 * planetSize * Math.PI);
     }
 }

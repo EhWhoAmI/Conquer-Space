@@ -125,7 +125,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                     planetSize = randint(rand, 100, 1000);
                 } else {
                     //Rock
-                    planetSize = randint(rand, 30, 200);
+                    planetSize = randint(rand, 20, 150);
                 }
                 Planet p = new Planet(planetType, orbitalDistance, planetSize, k, i);
 
@@ -463,8 +463,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
             //Select the things
             stratum.setRadius(randint(rand, 1, planetSize));
-            stratum.setX(rand.nextInt(planetSize * 2));
-            stratum.setY(rand.nextInt(planetSize));
+            stratum.setX(rand.nextInt(p.getPlanetWidth()));
+            stratum.setY(rand.nextInt(p.getPlanetHeight()));
             stratum.setDepth(rand.nextInt(planetSize / 2) + 1);
             p.strata.add(stratum);
         }
