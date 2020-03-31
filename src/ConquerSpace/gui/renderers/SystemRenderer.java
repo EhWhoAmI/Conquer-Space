@@ -55,7 +55,7 @@ public class SystemRenderer {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(SystemRenderer.class.getName());
 
-    public static final int PLANET_DIVISOR = 7;
+    public static final int PLANET_DIVISOR = 27;
     private Dimension bounds;
 
     private Universe universe;
@@ -101,11 +101,11 @@ public class SystemRenderer {
                     }
                     //render terrain
                     TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
-                    systemTerrain[i] = toBufferedImage(tr.getSquareImage(0.15));
+                    systemTerrain[i] = toBufferedImage(tr.getSquareImage(1));
 
                     //Create copy
-                    BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight(), systemTerrain[i].getHeight());
-                    systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight(), systemTerrain[i].getWidth(), BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight()/PLANET_DIVISOR, systemTerrain[i].getHeight()/PLANET_DIVISOR);
+                    systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight()/PLANET_DIVISOR, systemTerrain[i].getWidth()/PLANET_DIVISOR, BufferedImage.TYPE_INT_ARGB);
 
                     for (int x = 0; x < temp.getWidth(); x++) {
                         for (int y = 0; y < temp.getHeight(); y++) {

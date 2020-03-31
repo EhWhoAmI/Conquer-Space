@@ -108,6 +108,24 @@ public class Field {
         }
         return null;
     }
+    
+    public Field findNode(String node) {
+        if (this.name.toLowerCase().equals(node.toLowerCase())) {
+            return this;
+        }
+        for (Field f : nodes) {
+            if (f.name.toLowerCase().equals(node.toLowerCase())) {
+                return f;
+            } else {
+                //Search children
+                Field field = f.findNode(node);
+                if (field != null) {
+                    return field;
+                }
+            }
+        }
+        return null;
+    }
 
     public int getChildCount() {
         return (nodes.size());

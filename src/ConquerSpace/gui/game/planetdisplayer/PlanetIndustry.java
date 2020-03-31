@@ -96,16 +96,7 @@ public class PlanetIndustry extends JPanel {
 
         areaList.addListSelectionListener(l -> {
             areaInfoPanel.removeAll();
-            if (areaList.getSelectedValue() instanceof Factory) {
-                Factory factory = (Factory) areaList.getSelectedValue();
-                FactoryAreaInfo info = new FactoryAreaInfo(factory);
-                areaInfoPanel.add(info);
-            } else if (areaList.getSelectedValue() instanceof ResearchArea) {
-                ResearchArea area = (ResearchArea) areaList.getSelectedValue();
-                ResearchInstutitionInfo info = new ResearchInstutitionInfo(area);
-                areaInfoPanel.add(info);
-
-            }
+            areaInfoPanel.add(new AreaInformationPanel(areaList.getSelectedValue()));
         });
 
         JScrollPane scrollPane = new JScrollPane(areaList);
@@ -325,8 +316,8 @@ public class PlanetIndustry extends JPanel {
             JLabel text = new JLabel("Fields");
 
             setLayout(new VerticalFlowLayout());
-            for (Field field : researchArea.focusFields.keySet()) {
-                JLabel l = new JLabel(field.getName());
+            for (String field : researchArea.focusFields.keySet()) {
+                JLabel l = new JLabel(field);
                 add(l);
             }
         }

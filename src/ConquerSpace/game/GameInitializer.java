@@ -320,6 +320,7 @@ public class GameInitializer {
 
     private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
         City cit = new City(starting.getUniversePath());
+        cit.setName("Industrial");
         for (int i = 0; i < 10; i++) {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
@@ -676,7 +677,7 @@ public class GameInitializer {
 
             //Choose random field
             Field toAdd = fields.get(selector.nextInt(fields.size()));
-            research.focusFields.put(toAdd, 0);
+            research.focusFields.put(toAdd.getName(), 0);
             
 
             //Choose random fields

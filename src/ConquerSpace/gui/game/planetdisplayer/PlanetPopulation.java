@@ -29,6 +29,7 @@ import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -75,6 +76,9 @@ public class PlanetPopulation extends JPanel {
     private int population = 1;
 
     private City currentlySelectedCity;
+
+    private DefaultListModel<Area> areaListModel;
+    private JList<Area> areaList;
 
     public PlanetPopulation(Universe u, Planet p, int turn) {
         this.p = p;
@@ -201,20 +205,38 @@ public class PlanetPopulation extends JPanel {
                 JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
                 cityData.add(governorLabel);
             }
+
+            JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
+
             //Areas
-            //areaListModel = new DefaultListModel<>();
-            //for(Area a : cityList.getSelectedValue().areas) {
-            //AreaWrapper wrap = new AreaWrapper(a);
-            //areaListModel.addElement(wrap);
-            //}
-            //areaList = new JList<>(areaListModel);
-            //JScrollPane areascrollPane = new JScrollPane(areaList);
-            //cityData.add(areascrollPane);
-            cityData.add(new JLabel("Jobs"));
+            areaListModel = new DefaultListModel<>();
+            for (Building building1 : cityList.getSelectedValue().buildings) {
+                for (Area area : building1.areas) {
+                    areaListModel.addElement(area);
+                }
+            }
+            areaList = new JList<>(areaListModel);
+            JScrollPane areascrollPane = new JScrollPane(areaList);
+
+            JPanel areaInfoContainerPanel = new JPanel();
+
+            areaList.addListSelectionListener(o -> {
+                areaInfoContainerPanel.removeAll();
+                areaInfoContainerPanel.add(new AreaInformationPanel(areaList.getSelectedValue()));
+            });
+
+            areaInfoPanel.add(areascrollPane);
+            areaInfoPanel.add(areaInfoContainerPanel);
+            
             currentlySelectedCity = cityList.getSelectedValue();
             jobTableModel = new JobTableModel();
             jobTable = new JTable(jobTableModel);
-            cityData.add(new JScrollPane(jobTable));
+            
+            
+            JTabbedPane cityInfoTabs = new JTabbedPane();
+            cityInfoTabs.add("Areas", areaInfoPanel);
+            cityInfoTabs.add("Jobs", new JScrollPane(jobTable));
+            cityData.add(cityInfoTabs);
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);
@@ -346,5 +368,4 @@ public class PlanetPopulation extends JPanel {
             }
         }
     }
-
 }

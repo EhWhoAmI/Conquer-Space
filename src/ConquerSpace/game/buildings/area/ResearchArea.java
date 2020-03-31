@@ -19,17 +19,17 @@ package ConquerSpace.game.buildings.area;
 
 import ConquerSpace.game.jobs.Job;
 import ConquerSpace.game.jobs.Workable;
-import ConquerSpace.game.science.Field;
+import ConquerSpace.game.science.ScienceLab;
 import java.util.HashMap;
 
 /**
  * For science labs and stuff
  */
-public class ResearchArea extends Area implements Workable{
+public class ResearchArea extends Area implements Workable, ScienceLab{
 
     private String name;
     
-    public HashMap<Field, Integer> focusFields;
+    public HashMap<String, Integer> focusFields;
     
     public ResearchArea() {
         focusFields = new HashMap<>();
@@ -51,5 +51,10 @@ public class ResearchArea extends Area implements Workable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public HashMap<String, Integer> scienceProvided() {
+        return focusFields; 
     }
 }
