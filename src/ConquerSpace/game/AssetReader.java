@@ -90,7 +90,7 @@ public class AssetReader {
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found while reading file" + f.getAbsolutePath(), ex);
             } catch (IOException ex) {
-                LOGGER.error("IO exception while reading file "  + f.getAbsolutePath(), ex);
+                LOGGER.error("IO exception while reading file " + f.getAbsolutePath(), ex);
             } catch (JSONException ex) {
                 LOGGER.warn("JSON EXCEPTION while reading file " + f.getAbsolutePath(), ex);
             } finally {
@@ -243,10 +243,13 @@ public class AssetReader {
         Object densityT = obj.get("density");
         //if null, put 0
         double density = 0;
-        if(densityT instanceof Double) {
+        if (densityT instanceof Double) {
             density = (Double) densityT;
         }
         Element e = new Element(name, id, 1d, density);
+        
+        //Set tags
+        e.tags = new String[0];
         return e;
     }
 
@@ -413,7 +416,7 @@ public class AssetReader {
 
         return process;
     }
-    
+
     public static Object processDistributions(JSONObject obj) {
         ResourceDistribution distribution = new ResourceDistribution();
         //Process distribution
@@ -440,7 +443,8 @@ public class AssetReader {
     }
 
     /**
-     * We need a separate function for reading elements.
+     * We need a separate function for reading goods, because you need to
+     * iterate through it twice.
      */
     public static ArrayList<Good> processGoods() {
         HashMap<String, Good> resourcea = new HashMap<>();
@@ -484,12 +488,12 @@ public class AssetReader {
                             int amount = Integer.parseInt(content[1]);
                             tempNonElement.recipie.put(resourceName, amount);
                         }
-                        
+
                         //Sort through elements
                         JSONArray tags = obj.getJSONArray("tags");
                         String[] tagArray = Arrays.copyOf(tags.toList().toArray(), tags.toList().toArray().length, String[].class);
                         nonElement.tags = tagArray;
-                        
+
                         resourcea.put(name, nonElement);
                         nonElementHashMap.put(tempNonElement, nonElement);
                     } catch (ClassCastException e) {

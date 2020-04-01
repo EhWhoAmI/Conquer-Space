@@ -21,12 +21,12 @@ package ConquerSpace.game.universe.resources;
  * Type of good that can be transported
  * @author EhWhoAmI
  */
-public abstract class Good {
+public abstract class Good implements Comparable<Good>{
     String name;
     int id;
     double volume; // volume, m^3
     double mass; //mass, kg
-    public String[] tags;
+    public String[] tags = new String[0];
 
     public Good(String name, int id, double volume, double mass) {
         this.name = name;
@@ -65,4 +65,11 @@ public abstract class Good {
     public int hashCode() {
         return name.hashCode();
     }
+
+    @Override
+    public int compareTo(Good o) {
+        return (o.name.compareTo(name));
+    }
+    
+    
 }
