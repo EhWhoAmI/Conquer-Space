@@ -25,7 +25,6 @@ import ConquerSpace.game.universe.civilization.controllers.PlayerController.Play
 import ConquerSpace.game.universe.resources.Element;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.NonElement;
-import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;

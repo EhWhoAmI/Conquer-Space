@@ -39,6 +39,8 @@ import ConquerSpace.game.jobs.JobRank;
 import ConquerSpace.game.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.jobs.Workable;
+import ConquerSpace.game.science.Field;
+import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -63,6 +65,7 @@ import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
@@ -342,6 +345,18 @@ public class GameUpdater {
                 } else {
                     //Increment by number of ticks
                     c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill() * GameRefreshRate);
+                }
+            }
+            
+            //Process science labs
+            for(ScienceLab scienceLab : c.scienceLabs) {
+                HashMap<String, Integer> science = scienceLab.scienceProvided();
+                for (Map.Entry<String, Integer> entry : science.entrySet()) {
+                    String key = entry.getKey();
+                    Integer val = entry.getValue(); 
+                    
+                    Field f = c.fields.findNode(key);
+                    f.incrementLevel(val);
                 }
             }
         }

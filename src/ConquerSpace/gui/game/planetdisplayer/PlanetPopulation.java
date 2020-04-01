@@ -227,7 +227,7 @@ public class PlanetPopulation extends JPanel {
 
             areaInfoPanel.add(areascrollPane);
             areaInfoPanel.add(areaInfoContainerPanel);
-            
+             
             currentlySelectedCity = cityList.getSelectedValue();
             jobTableModel = new JobTableModel();
             jobTable = new JTable(jobTableModel);

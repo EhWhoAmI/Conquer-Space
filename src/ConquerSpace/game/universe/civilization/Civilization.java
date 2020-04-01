@@ -28,6 +28,7 @@ import ConquerSpace.game.jobs.Employer;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
+import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.civilization.controllers.AIController.AIController;
@@ -124,6 +125,8 @@ public class Civilization implements Employer{
     public ArrayList<ProductionProcess> productionProcesses;
     
     public ArrayList<Good> mineableGoods;
+    
+    public ArrayList<ScienceLab> scienceLabs;
 
     private Race foundingSpecies;
 
@@ -194,6 +197,8 @@ public class Civilization implements Employer{
         mineableGoods = new ArrayList<>();
         
         government = new Government();
+        
+        scienceLabs = new ArrayList<>();
     }
 
     public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {

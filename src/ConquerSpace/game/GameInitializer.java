@@ -677,9 +677,10 @@ public class GameInitializer {
 
             //Choose random field
             Field toAdd = fields.get(selector.nextInt(fields.size()));
-            research.focusFields.put(toAdd.getName(), 0);
+            research.focusFields.put(toAdd.getName(), 1);
             
-
+            c.scienceLabs.add(research);
+            
             //Choose random fields
             p.cities.get(i).buildings.get(0).areas.add(research);
         }
