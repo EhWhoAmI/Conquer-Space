@@ -24,6 +24,7 @@ import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.gui.start.Loading;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
+import ConquerSpace.tools.ToolsSelectionMenu;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Checksum;
 import ConquerSpace.util.ExceptionHandling;
@@ -105,44 +106,48 @@ public class ConquerSpace {
      * @param args Command line arguments. Does nothing so far.
      */
     public static void main(String[] args) throws InterruptedException {
-        CQSPLogger.initLoggers();
-        LOGGER.info("Run started: " + new Date().toString());
-        LOGGER.info("Version " + VERSION.toString());
+        if (args.length >= 1 && args[0].equals("-t")) {
+            new ToolsSelectionMenu();
+        } else {
+            CQSPLogger.initLoggers();
+            LOGGER.info("Run started: " + new Date().toString());
+            LOGGER.info("Version " + VERSION.toString());
 
-        //Generate hash to verify the version
-        //For error messages
-        if (!DEBUG) {
-            generateChecksum();
+            //Generate hash to verify the version
+            //For error messages
+            if (!DEBUG) {
+                generateChecksum();
+            }
+
+            configureSettings();
+
+            //Set catch all exceptions
+            Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
+
+            initLookAndFeel();
+
+            GameController.musicPlayer = new MusicPlayer();
+            if (Globals.settings.getProperty("music").equals("no")) {
+                GameController.musicPlayer.setToPlay(false);
+                GameController.musicPlayer.stopMusic();
+            }
+
+            //New Game Menu
+            MainMenu menu = new MainMenu();
+            menu.setVisible(true);
+
+            //While the menu not loaded...
+            while (!menu.isLoadedUniverse()) {
+                Thread.sleep(100);
+            }
+
+            //Show loading screen
+            Loading load = new Loading();
+            loadUniverse();
+            load.setVisible(false);
+
+            runGame();
         }
-
-        configureSettings();
-
-        //Set catch all exceptions
-        Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
-
-        initLookAndFeel();
-
-        GameController.musicPlayer = new MusicPlayer();
-        if (Globals.settings.getProperty("music").equals("no")) {
-            GameController.musicPlayer.setToPlay(false);
-            GameController.musicPlayer.stopMusic();
-        }
-
-        //New Game Menu
-        MainMenu menu = new MainMenu();
-        menu.setVisible(true);
-
-        //While the menu not loaded...
-        while (!menu.isLoadedUniverse()) {
-            Thread.sleep(100);
-        }
-
-        //Show loading screen
-        Loading load = new Loading();
-        loadUniverse();
-        load.setVisible(false);
-
-        runGame();
     }
 
     /**

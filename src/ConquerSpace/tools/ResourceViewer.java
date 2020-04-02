@@ -49,6 +49,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import org.hjson.JsonValue;
@@ -303,6 +304,9 @@ public class ResourceViewer extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem saveCurrentElement = new JMenuItem("Save current good");
+        KeyStroke keyStrokeToOpen
+                = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
+        saveCurrentElement.setAccelerator(keyStrokeToOpen);
         saveCurrentElement.addActionListener(l -> {
             if (!everythingLoaded) {
                 //Find the name...
