@@ -296,10 +296,10 @@ public class PlanetMap extends JPanel {
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
                 for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
-                    GeographicPoint p = en.getKey();
+                    GeographicPoint point = en.getKey();
                     Building Building = en.getValue();
                     //Draw
-                    Rectangle2D.Double rect = new Rectangle2D.Double(p.getX() * tileSize, p.getY() * tileSize, tileSize, tileSize);
+                    Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
                     g2d.setColor(Building.getColor());
                     g2d.fill(rect);
                 }
@@ -438,8 +438,9 @@ public class PlanetMap extends JPanel {
             if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
                 Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
-                    toolTip.setTipText(("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>"));
+                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>");
 
+                    toolTip.setTipText(text);
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
                     popup.show();
                 }

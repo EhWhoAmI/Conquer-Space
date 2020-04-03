@@ -373,6 +373,7 @@ public class Planet extends SpaceObject {
     }
 
     public int getPlanetWidth() {
-        return (int) (2 * planetSize * Math.PI);
+        int value = (int) (2 * planetSize * Math.PI);
+        return value;
     }
 }

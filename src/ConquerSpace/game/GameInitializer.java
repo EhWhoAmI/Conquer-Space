@@ -187,7 +187,8 @@ public class GameInitializer {
         city.setName("Mines");
         //Find if vein exists on the planet
         int minerCount = (int) (Math.random() * p.getPlanetSize());
-        minerCount += 5;
+        minerCount += 45;
+
         for (int i = 0; i < minerCount; i++) {
             //Select random vein
             int id = (int) (p.strata.size() * Math.random());
@@ -205,11 +206,24 @@ public class GameInitializer {
             double randR = (strata.getRadius() * Math.sqrt(Math.random()));
             double theta = (Math.random() * 2 * Math.PI);
 
-            int x = (int) (Math.cos(theta) * randR);
-            int y = (int) (Math.sin(theta) * randR);
+            int x = (int) (Math.cos(theta) * randR) + strata.getX();
+            int y = (int) (Math.sin(theta) * randR) + strata.getY();
+            int xbefore = x;
+            int ybefore = y;
+            if (x < 0) {
+                x = 0;
+            } else if (x >= p.getPlanetWidth()) {
+                x = (p.getPlanetWidth() - 1);
+            }
+
+            if (y < 0) {
+                y = 0;
+            } else if (y >= p.getPlanetHeight()) {
+                y = (p.getPlanetHeight() - 1);
+            }
 
             miner.population.add(new PopulationUnit(founding));
-            p.buildings.put(new GeographicPoint(x + strata.getX(), y + strata.getY()), miner);
+            p.buildings.put(new GeographicPoint(x, y), miner);
             city.addDistrict(miner);
         }
 //        for (ResourceVein v : p.resourceVeins) {
@@ -533,7 +547,7 @@ public class GameInitializer {
 
         do {
             int x = (selector.nextInt(planet.getPlanetWidth() - 2) + 1);
-            int y = (selector.nextInt(planet.getPlanetHeight()- 2) + 1);
+            int y = (selector.nextInt(planet.getPlanetHeight() - 2) + 1);
             pt = new GeographicPoint(x, y);
         } while (planet.buildings.containsKey(pt));
         return pt;
@@ -678,9 +692,9 @@ public class GameInitializer {
             //Choose random field
             Field toAdd = fields.get(selector.nextInt(fields.size()));
             research.focusFields.put(toAdd.getName(), 1);
-            
+
             c.scienceLabs.add(research);
-            
+
             //Choose random fields
             p.cities.get(i).buildings.get(0).areas.add(research);
         }
