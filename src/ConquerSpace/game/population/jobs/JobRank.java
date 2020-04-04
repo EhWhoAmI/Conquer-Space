@@ -15,16 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.jobs;
-
-import ConquerSpace.game.jobs.Job;
+package ConquerSpace.game.population.jobs;
 
 /**
  *
  * @author EhWhoAmI
  */
-public interface Workable {
-    public Job[] jobsNeeded();
-    public void processJob(Job j);
-    //method to check if jobs need to be rewrited
+public enum JobRank {
+    Low,
+    Medium,
+    High
 }

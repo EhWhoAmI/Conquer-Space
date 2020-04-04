@@ -19,9 +19,9 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.jobs.Job;
-import ConquerSpace.game.jobs.JobRank;
-import ConquerSpace.game.jobs.JobType;
+import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.JobRank;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
 import java.awt.Color;

@@ -19,9 +19,9 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.jobs.Employer;
-import ConquerSpace.game.jobs.Job;
-import ConquerSpace.game.jobs.Workable;
+import ConquerSpace.game.population.jobs.Employer;
+import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.Color;

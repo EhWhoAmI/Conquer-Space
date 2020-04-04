@@ -19,7 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.PopulationStorage;
-import ConquerSpace.game.jobs.JobType;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;

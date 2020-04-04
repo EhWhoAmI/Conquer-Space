@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.people;
 
-import ConquerSpace.game.jobs.Employer;
+import ConquerSpace.game.population.jobs.Employer;
 import java.util.ArrayList;
 
 /**

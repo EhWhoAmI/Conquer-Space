@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.StorageNeeds;

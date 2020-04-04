@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.jobs.Job;
+import ConquerSpace.game.population.jobs.Job;
 import java.awt.Color;
 import java.util.ArrayList;
 

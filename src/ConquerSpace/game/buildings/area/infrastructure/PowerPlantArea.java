@@ -18,8 +18,8 @@
 package ConquerSpace.game.buildings.area.infrastructure;
 
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.jobs.Job;
-import ConquerSpace.game.jobs.Workable;
+import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.resources.Good;
 
 /**

@@ -17,11 +17,11 @@
  */
 package ConquerSpace.game.buildings;
 
-import ConquerSpace.game.jobs.Job;
-import ConquerSpace.game.jobs.JobRank;
-import ConquerSpace.game.jobs.JobType;
+import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.JobRank;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
-import ConquerSpace.game.jobs.Workable;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.Stratum;
 import java.awt.Color;

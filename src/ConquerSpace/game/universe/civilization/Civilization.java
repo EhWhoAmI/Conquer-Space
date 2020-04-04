@@ -24,7 +24,7 @@ import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.jobs.Employer;
+import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;

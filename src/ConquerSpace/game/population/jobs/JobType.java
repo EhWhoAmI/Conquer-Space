@@ -15,14 +15,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.jobs;
+package ConquerSpace.game.population.jobs;
 
 /**
  *
  * @author EhWhoAmI
  */
-public enum JobRank {
-    Low,
-    Medium,
-    High
+public enum JobType {
+    Miner("Miner"), 
+    Jobless("Jobless"), 
+    Administrator("Administrator"), 
+    Farmer("Farmer"), 
+    Construction("Construction"),
+    Infrastructure("Infrastructure"),
+    Research("Research"),
+    AeronauticalEngineer("Aeronautical Engineer"),
+    PopUpkeepWorker("Population Upkeep Worker"),
+    SpacePortEngineer("Space Port Engineer"),
+    PowerPlantTechnician("Power Plant Technician"),
+    FactoryWorker("Factory Worker"),
+    Researcher("Researcher"),
+    Educator("Teacher");
+    
+    
+    private final String name;
+
+    JobType(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
 }

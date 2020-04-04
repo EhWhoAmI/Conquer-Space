@@ -24,7 +24,8 @@ import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
-import ConquerSpace.game.jobs.JobType;
+import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -46,6 +47,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -68,6 +70,10 @@ public class PlanetPopulation extends JPanel {
     private JTable jobTable;
     private JobTableModel jobTableModel;
     private final String[] jobListTableColunmNames = {"Job Name", "Count", "Percentage"};
+
+    private JTable availableJobTable;
+    private DefaultTableModel availableJobModel;
+    private final String[] availableJobColunmNames = {"Job name", "Count"};
 
     private JPanel cityData;
 
@@ -227,15 +233,37 @@ public class PlanetPopulation extends JPanel {
 
             areaInfoPanel.add(areascrollPane);
             areaInfoPanel.add(areaInfoContainerPanel);
-             
+
             currentlySelectedCity = cityList.getSelectedValue();
             jobTableModel = new JobTableModel();
             jobTable = new JTable(jobTableModel);
-            
-            
+
+            availableJobModel = new DefaultTableModel(availableJobColunmNames, 0);
+            //Fill up
+            HashMap<JobType, Integer> jobs = new HashMap<>();
+            for (Job j : currentlySelectedCity.jobs) {
+                JobType jt = j.getJobType();
+                if (jobs.containsKey(jt)) {
+                    //Add to it
+                    int i = (jobs.get(jt) + 1);
+                    jobs.put(jt, i);
+                } else {
+                    jobs.put(jt, 1);
+                }
+            }
+
+            for (Map.Entry<JobType, Integer> entry : jobs.entrySet()) {
+                JobType key = entry.getKey();
+                Integer val = entry.getValue();
+
+                availableJobModel.addRow(new Object[]{key, val});
+            }
+            availableJobTable = new JTable(availableJobModel);
+
             JTabbedPane cityInfoTabs = new JTabbedPane();
             cityInfoTabs.add("Areas", areaInfoPanel);
-            cityInfoTabs.add("Jobs", new JScrollPane(jobTable));
+            cityInfoTabs.add("Employment", new JScrollPane(jobTable));
+            cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
             cityData.add(cityInfoTabs);
         });
 
