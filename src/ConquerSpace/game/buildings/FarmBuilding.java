@@ -140,7 +140,7 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
         //Check if harvest season...
         if (!harvestable.isEmpty()) {
             Crop c = harvestable.remove(0);
-            j.resources.put(c.getSpecies().foodGood, c.getYield());
+            j.resources.put(c.getSpecies().foodGood, Double.valueOf(c.getYield()));
             //Regrow
             c.setTimeLeft(25);
         }

@@ -42,7 +42,7 @@ public class ConstructingBuilding extends Building implements Workable {
     private int length;
     private int scale = 1;
     //Set the resources needed to build over time
-    public HashMap<Good, Integer> resourcesNeeded;
+    public HashMap<Good, Double> resourcesNeeded;
     public Civilization builder;
     private int cost;
 
@@ -120,9 +120,9 @@ public class ConstructingBuilding extends Building implements Workable {
             constructionJob.setEmployer(getOwner());
             constructionJob.setWorkingFor(this);
             //Set them to use resources for the construction
-            for (Map.Entry<Good, Integer> set : resourcesNeeded.entrySet()) {
+            for (Map.Entry<Good, Double> set : resourcesNeeded.entrySet()) {
                 Good resource = set.getKey();
-                Integer amount = set.getValue();
+                Double amount = set.getValue();
                 //Add to the job
                 constructionJob.resources.put(resource, -amount);
             }

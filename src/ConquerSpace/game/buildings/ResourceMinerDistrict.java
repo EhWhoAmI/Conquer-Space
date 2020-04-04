@@ -112,7 +112,7 @@ public class ResourceMinerDistrict extends Building implements PopulationStorage
         //Is mining job, now subtract the stuff..
         //subtract from resource vein
         //veinMining.removeResources((int)miningPerMonth());
-        j.resources.put(resourceMining, (int) miningPerMonth());
+        j.resources.put(resourceMining, miningPerMonth());
     }
 
     @Override

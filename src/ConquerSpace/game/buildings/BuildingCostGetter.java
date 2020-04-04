@@ -72,7 +72,7 @@ public class BuildingCostGetter {
                             if (res.getName().toLowerCase().equals(resourceName.toLowerCase())) {
                                 //Set the value
 
-                                buildingCost.cost.put(res, resources.getInt(resourceName));
+                                buildingCost.cost.put(res, resources.getDouble(resourceName));
                             }
                         }
                     }
@@ -96,15 +96,15 @@ public class BuildingCostGetter {
         //Compute the things
         if (theoreticalCost != null) {
             //Loop through theoretical cost
-            for (Map.Entry<Good, Integer> entry : theoreticalCost.cost.entrySet()) {
+            for (Map.Entry<Good, Double> entry : theoreticalCost.cost.entrySet()) {
                 Good key = entry.getKey();
-                Integer value = entry.getValue();
+                Double value = entry.getValue();
 
                 String resName = name + "." + key.getName();
                 Double multiplier = c.multipliers.get(resName);
                 if (multiplier != null) {
                     //Then multiply it
-                    value = (int) (value * multiplier);
+                    value = (value * multiplier);
                 }
                 actualCost.cost.put(key, value);
             }

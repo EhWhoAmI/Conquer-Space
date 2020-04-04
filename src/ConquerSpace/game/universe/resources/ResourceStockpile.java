@@ -26,13 +26,13 @@ import ConquerSpace.game.universe.resources.Good;
  */
 public interface ResourceStockpile {
     public void addResourceTypeStore(Good type);
-    public int getResourceAmount(Good type);
-    public void addResource(Good type, int amount);
+    public Double getResourceAmount(Good type);
+    public void addResource(Good type, Double amount);
     //Describe position
     public UniversePath getUniversePath();
     public boolean canStore(Good type);
     
     public Good[] storedTypes();
     
-    public boolean removeResource(Good type, int amount);
+    public boolean removeResource(Good type, Double amount);
 }

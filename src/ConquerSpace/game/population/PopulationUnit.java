@@ -26,7 +26,7 @@ import ConquerSpace.game.population.jobs.JobType;
  * @author EhWhoAmI
  */
 public class PopulationUnit {
-
+    
     public byte happiness;
     public Race species;
     public Job job;

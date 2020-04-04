@@ -27,12 +27,14 @@ public abstract class Good implements Comparable<Good>{
     double volume; // volume, m^3
     double mass; //mass, kg
     public String[] tags = new String[0];
+    private boolean fractionable;
 
     public Good(String name, int id, double volume, double mass) {
         this.name = name;
         this.id = id;
         this.volume = volume;
         this.mass = mass;
+        fractionable = false;
     }
 
     public String getName() {
@@ -70,6 +72,12 @@ public abstract class Good implements Comparable<Good>{
     public int compareTo(Good o) {
         return (o.name.compareTo(name));
     }
-    
-    
+
+    public boolean isFractionable() {
+        return fractionable;
+    }
+
+    public void setFractionable(boolean fractionable) {
+        this.fractionable = fractionable;
+    }
 }

@@ -25,7 +25,7 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class BuildingCost {
-    public HashMap<Good, Integer> cost;
+    public HashMap<Good, Double> cost;
     public BuildingCost() {
         cost = new HashMap<>();
     }

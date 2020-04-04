@@ -36,7 +36,7 @@ import javax.swing.table.AbstractTableModel;
 public class PlanetResources extends javax.swing.JPanel {
 
     private Planet p;
-    private HashMap<Good, Integer> planetResource;
+    private HashMap<Good, Double> planetResource;
     private ArrayList<ResourceStockpile> stockpiles;
 
     private StockpileStorageModel storageModel;
@@ -228,10 +228,10 @@ public class PlanetResources extends javax.swing.JPanel {
                 for (Good g : goods) {
                     if (!planetResource.containsKey(g)) {
                         //Add key
-                        planetResource.put(g, 0);
+                        planetResource.put(g, 0d);
                     }
-                    int amount = planetResource.get(g);
-                    int toAdd = ((ResourceStockpile) val).getResourceAmount(g) + amount;
+                    Double amount = planetResource.get(g);
+                    Double toAdd = ((ResourceStockpile) val).getResourceAmount(g) + amount;
 
                     planetResource.put(g, toAdd);
                 }

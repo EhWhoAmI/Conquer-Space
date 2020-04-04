@@ -37,7 +37,7 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     private int upkeep;
     private int maximumStorage;
 
-    private HashMap<Good, Integer> resources;
+    private HashMap<Good, Double> resources;
     public ArrayList<StorageNeeds> needs;
     private int system;
     private int planet;
@@ -52,7 +52,7 @@ public class ResourceStorage extends Building implements ResourceStockpile {
 
     @Override
     public void addResourceTypeStore(Good type) {
-        resources.put(type, 0);
+        resources.put(type, 0d);
     }
 
     public boolean getHasResource(int type) {
@@ -60,14 +60,14 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     }
 
     @Override
-    public int getResourceAmount(Good type) {
+    public Double getResourceAmount(Good type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(Good type, int amount) {
+    public void addResource(Good type, Double amount) {
         if(!resources.containsKey(type)) {
-            resources.put(type, 0);
+            resources.put(type, 0d);
         }
         resources.put(type, resources.get(type) + amount);
     }
@@ -109,9 +109,9 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     }
 
     @Override
-    public boolean removeResource(Good type, int amount) {
+    public boolean removeResource(Good type, Double amount) {
         //Get the amount in the place
-        int currentlyStored = resources.get(type);
+        Double currentlyStored = resources.get(type);
         if(amount > currentlyStored)
             return false;
         

@@ -232,7 +232,7 @@ public class GameUpdater {
             job.setPay(1);
             job.setEmployer(b.getOwner());
 
-            job.resources.put(powerPlant.getUsedResource(), -powerPlant.getMaxVolume());
+            job.resources.put(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()));
             c.jobs.add(job);
         } else if (a instanceof Factory) {
             Job job = new Job(JobType.FactoryWorker);
@@ -243,14 +243,14 @@ public class GameUpdater {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
 
-                job.resources.putIfAbsent(key, -val);
+                job.resources.putIfAbsent(key, Double.valueOf(-val));
             }
 
             for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
 
-                job.resources.putIfAbsent(key, val);
+                job.resources.putIfAbsent(key, Double.valueOf(val));
             }
 
             job.setJobRank(JobRank.Low);
@@ -284,7 +284,7 @@ public class GameUpdater {
 
     }
 
-    public void storeResource(Good resourceType, int amount, int owner, UniversePath from) {
+    public void storeResource(Good resourceType, Double amount, int owner, UniversePath from) {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.
@@ -299,7 +299,7 @@ public class GameUpdater {
         }
     }
 
-    public boolean removeResource(Good resourceType, int amount, int owner, UniversePath from) {
+    public boolean removeResource(Good resourceType, Double amount, int owner, UniversePath from) {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.
@@ -366,8 +366,8 @@ public class GameUpdater {
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-            for (Map.Entry<Good, Integer> entry : c.resourceList.entrySet()) {
-                c.resourceList.put(entry.getKey(), 0);
+            for (Map.Entry<Good, Double> entry : c.resourceList.entrySet()) {
+                c.resourceList.put(entry.getKey(), 0d);
             }
             //Process resources
             for (ResourceStockpile s : c.resourceStorages) {
@@ -376,9 +376,9 @@ public class GameUpdater {
                 for (Good type : s.storedTypes()) {
                     //add to index
                     if (!c.resourceList.containsKey(type)) {
-                        c.resourceList.put(type, 0);
+                        c.resourceList.put(type, 0d);
                     }
-                    int amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
+                    Double amountToAdd = (c.resourceList.get(type) + s.getResourceAmount(type));
                     c.resourceList.put(type, amountToAdd);
                 }
             }

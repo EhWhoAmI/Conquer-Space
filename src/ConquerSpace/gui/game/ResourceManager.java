@@ -52,7 +52,7 @@ public class ResourceManager extends JPanel {
         resourceTable = new JTable(resourceTableModel);
 
         //Initalize with default values
-        for (Map.Entry<Good, Integer> entry : c.resourceList.entrySet()) {
+        for (Map.Entry<Good, Double> entry : c.resourceList.entrySet()) {
             Good key = entry.getKey();
             resourceTableModel.addRow(new String[]{key.toString(), "0"});
         }
@@ -64,9 +64,9 @@ public class ResourceManager extends JPanel {
         //fill table
         int x = 0;
         resourceTableModel.setRowCount(0);
-        for (Map.Entry<Good, Integer> entry : c.resourceList.entrySet()) {
+        for (Map.Entry<Good, Double> entry : c.resourceList.entrySet()) {
             Good key = entry.getKey();
-            Integer val = entry.getValue();
+            Double val = entry.getValue();
             resourceTableModel.addRow(new String[]{key.toString(), val + ""});
             x++;
         }

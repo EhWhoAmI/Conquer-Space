@@ -114,7 +114,7 @@ public class Civilization implements Employer{
     public ArrayList<EngineTechnology> engineTechs;
     public ArrayList<LaunchVehicle> launchVehicles;
 
-    public HashMap<Good, Integer> resourceList;
+    public HashMap<Good, Double> resourceList;
 
     public ArrayList<Planet> habitatedPlanets;
 

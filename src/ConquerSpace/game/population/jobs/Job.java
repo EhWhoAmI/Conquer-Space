@@ -31,7 +31,7 @@ public class Job {
     /**
      * The resources to add...
      */
-    public HashMap<Good, Integer> resources;
+    public HashMap<Good, Double> resources;
 
     private JobType jobType;
     private JobRank jobRank = JobRank.Low;
