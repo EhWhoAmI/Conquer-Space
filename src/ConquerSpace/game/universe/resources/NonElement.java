@@ -24,7 +24,7 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class NonElement extends Good{
-    public HashMap<Good, Integer> recipie;
+    public HashMap<Good, Double> recipie;
 
     public NonElement(String name, int id, double volume, double mass) {
         super(name, id, volume, mass);

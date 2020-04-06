@@ -485,7 +485,7 @@ public class AssetReader {
                             String[] content = s.split(":");
                             //Find the resources
                             String resourceName = content[0];
-                            int amount = Integer.parseInt(content[1]);
+                            double amount = Double.parseDouble(content[1]);
                             tempNonElement.recipie.put(resourceName, amount);
                         }
 
@@ -526,9 +526,9 @@ public class AssetReader {
             TempNonElement key = entry.getKey();
             NonElement val = entry.getValue();
 
-            for (Map.Entry<String, Integer> entry1 : key.recipie.entrySet()) {
+            for (Map.Entry<String, Double> entry1 : key.recipie.entrySet()) {
                 String name = entry1.getKey();
-                Integer amount = entry1.getValue();
+                Double amount = entry1.getValue();
 
                 //Find
                 Good g = resourcea.get(name);

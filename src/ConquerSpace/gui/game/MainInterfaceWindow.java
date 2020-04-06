@@ -85,6 +85,8 @@ public class MainInterfaceWindow extends JInternalFrame {
 
     private boolean toShowResources = true;
 
+    private final int planetinfotab = 1;
+
     public MainInterfaceWindow(Civilization c, Universe u) {
         this.c = c;
         this.u = u;
@@ -120,7 +122,6 @@ public class MainInterfaceWindow extends JInternalFrame {
                     Planet p = (Planet) selectedNode.getUserObject();
                     //Selected planet
                     setSelectedPlanet(p, p.scanned.contains(c.getID()));
-                    setSelectedTab(1);
                 }
                 //process
             }
@@ -267,7 +268,7 @@ public class MainInterfaceWindow extends JInternalFrame {
             shrinkedPlanetSheet = new ShrinkedPlanetSheet(u, p, c);
             planetInfoSheetContainer.add(shrinkedPlanetSheet, BorderLayout.CENTER);
         }
-        setSelectedTab(1);
+        setSelectedTab(planetinfotab);
         setVisible(true);
     }
 

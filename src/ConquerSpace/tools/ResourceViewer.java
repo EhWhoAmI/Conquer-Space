@@ -149,9 +149,9 @@ public class ResourceViewer extends JFrame {
                 forumlaTableModel.setRowCount(0);
                 if (selected instanceof TempNonElement) {
                     TempNonElement nonElement = (TempNonElement) selected;
-                    for (Map.Entry<String, Integer> map : nonElement.recipie.entrySet()) {
+                    for (Map.Entry<String, Double> map : nonElement.recipie.entrySet()) {
                         String key = map.getKey();
-                        Integer val = map.getValue();
+                        Double val = map.getValue();
 
                         forumlaTableModel.addRow(new Object[]{key, val});
                     }
@@ -418,7 +418,7 @@ public class ResourceViewer extends JFrame {
                         String[] content = s.split(":");
                         //Find the resources
                         String resourceName = content[0];
-                        int amount = Integer.parseInt(content[1]);
+                        double amount = Double.parseDouble(content[1]);
                         tempNonElement.recipie.put(resourceName, amount);
                     }
 

@@ -19,6 +19,8 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.logistics.SupplyChain;
+import ConquerSpace.game.logistics.SupplyNode;
 import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.Workable;
@@ -37,7 +39,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public abstract class Building implements Workable {
+public abstract class Building implements Workable, SupplyNode{
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Building.class.getName());
 
@@ -46,6 +48,8 @@ public abstract class Building implements Workable {
     private Employer owner;
     private String type;
     private City city;
+    
+    public ArrayList<SupplyChain> supplyChains;
 
     //In Megawatts
     private int energyUsage;
@@ -54,6 +58,7 @@ public abstract class Building implements Workable {
     public Building() {
         areas = new ArrayList<>();
         infrastructure = new ArrayList<>();
+        supplyChains = new ArrayList<>();
     }
 
     public Color getColor() {
@@ -125,5 +130,10 @@ public abstract class Building implements Workable {
     
     public void tick(StarDate date, long delta) {
         
+    }
+
+    @Override
+    public ArrayList<SupplyChain> getSupplyChains() {
+        return supplyChains;
     }
 }

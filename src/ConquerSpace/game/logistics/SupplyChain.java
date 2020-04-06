@@ -15,20 +15,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.resources;
+package ConquerSpace.game.logistics;
 
-import java.util.HashMap;
+import ConquerSpace.game.universe.resources.Good;
+import java.util.ArrayList;
 
 /**
- *
+ * Supply chain for one good.
  * @author EhWhoAmI
  */
-public class TempNonElement extends Good{
-
-    public HashMap<String, Double> recipie;
-
-    public TempNonElement(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
-        recipie = new HashMap<>();
+public class SupplyChain {
+    public SupplyNode start;
+    public SupplyNode end;
+    public ArrayList<SupplyNode> nodes;
+    int time;
+    int distance;
+    Good good;
+    //In units
+    double currentAmount;
+    //In units
+    double maximumCapacity;
+    ArrayList<TransportOrder> orders;
+    
+    public SupplyChain() {
+        nodes = new ArrayList<>();
+        orders = new ArrayList<>();
     }
 }

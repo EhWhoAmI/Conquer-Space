@@ -60,4 +60,16 @@
 
         ]
     }
+    {
+        name: Generic Consumer Good
+        volume: 1
+        mass: 2.3
+        formula: [
+            "Plastic:1"
+            "Low Grade Steel:1"
+        ]
+        tags: [
+
+        ]
+    }
 ]

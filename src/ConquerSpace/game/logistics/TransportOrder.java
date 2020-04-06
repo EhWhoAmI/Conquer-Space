@@ -15,20 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.resources;
-
-import java.util.HashMap;
+package ConquerSpace.game.logistics;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class TempNonElement extends Good{
-
-    public HashMap<String, Double> recipie;
-
-    public TempNonElement(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
-        recipie = new HashMap<>();
-    }
+public class TransportOrder {
+    float completion;
 }

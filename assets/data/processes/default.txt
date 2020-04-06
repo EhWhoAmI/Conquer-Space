@@ -89,4 +89,19 @@
         catalysts: [
         ]
     }
+    {
+        name:Consumer Good Making
+         //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
+        input: [
+            "Plastic:1"
+            "Low Grade Steel:1"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "Generic Consumer Good:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
 ]

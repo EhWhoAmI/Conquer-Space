@@ -707,4 +707,28 @@
     floor: 15
     id: 30
   }
+  {
+    name:Making Consumer Goods
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+      process:Consumer Good Making
+    ]
+    fields:
+    [
+      
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 16
+    id: 31
+  }
 ]
