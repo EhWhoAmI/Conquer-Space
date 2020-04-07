@@ -33,6 +33,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -192,7 +193,6 @@ public class MainInterfaceWindow extends JInternalFrame {
         economyWindow = new EconomyWindow(c, u);
 
         eventViewer = new EventViewer();
-
         tabs.add("Research and Science", researchViewer);
         tabs.add("Planet", planetInfoSheetContainer);
         tabs.add("Ships", spaceShipOverview);
@@ -202,6 +202,26 @@ public class MainInterfaceWindow extends JInternalFrame {
         tabs.add("Resources", resourceManager);
         tabs.add("Economy", economyWindow);
         tabs.add("Events", eventViewer);
+
+        ImageIcon tab1Icon = new ImageIcon("assets/img/icons/scienceicon.png");
+        ImageIcon econ = new ImageIcon("assets/img/icons/stonks.png");
+        ImageIcon engineering = new ImageIcon("assets/img/icons/engineering.png");
+        ImageIcon spaceshps = new ImageIcon("assets/img/icons/spaceships.png");
+        ImageIcon planet = new ImageIcon("assets/img/icons/eclipse.png");
+        ImageIcon person = new ImageIcon("assets/img/icons/person.png");
+        ImageIcon civ = new ImageIcon("assets/img/icons/people.png");
+        ImageIcon goods = new ImageIcon("assets/img/icons/goods.png");
+        ImageIcon events = new ImageIcon("assets/img/icons/alert.png");
+
+        tabs.setIconAt(0, tab1Icon);
+        tabs.setIconAt(1, planet);
+        tabs.setIconAt(2, spaceshps);
+        tabs.setIconAt(3, engineering);
+        tabs.setIconAt(4, person);
+        tabs.setIconAt(5, civ);
+        tabs.setIconAt(6, goods);
+        tabs.setIconAt(7, econ);
+        tabs.setIconAt(8, events);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);

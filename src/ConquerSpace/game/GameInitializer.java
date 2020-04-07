@@ -699,4 +699,8 @@ public class GameInitializer {
             p.cities.get(i).buildings.get(0).areas.add(research);
         }
     }
+    
+    private void addSupplyLines(Planet p) {
+        //Consolidate all resource miners
+    }
 }

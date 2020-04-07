@@ -148,7 +148,10 @@ public class OptionsWindow extends JFrame {
         try {
             fis = new FileInputStream(lafPropertyFile);
             lafProperties.load(fis);
-            lafComboBoxModel.addAll(lafProperties.stringPropertyNames());
+            for(String s :lafProperties.stringPropertyNames()) {
+                lafComboBoxModel.addElement(s);
+            }
+            //lafComboBoxModel.(lafProperties.stringPropertyNames());
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }

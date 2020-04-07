@@ -247,7 +247,7 @@ public class Technologies {
             }
         } else if (action.startsWith("process")) {
             String[] text = action.split(":");
-            String content = text[1].strip();
+            String content = text[1].trim();
 
             ProductionProcess process = null;
             //Find the process name
@@ -266,7 +266,7 @@ public class Technologies {
             }
         } else if (action.startsWith("mine")) {
             String[] text = action.split(":");
-            String content = text[1].strip();
+            String content = text[1].trim();
 
             //Find the resource
             for (int i = 0; i < GameController.allGoods.size(); i++) {

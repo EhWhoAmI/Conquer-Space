@@ -18,6 +18,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.universe.civilization.Civilization;
@@ -75,6 +76,8 @@ public class GameController {
     public static HashMap<Good, ResourceDistribution> ores = new HashMap<>();
     public static ArrayList<Good> allGoods;
     public static ArrayList<Good> goods;
+    
+    public static ArrayList<SupplyChain> supplyChains = new ArrayList<>();
     
     public static ArrayList<ProductionProcess> prodProcesses;
     

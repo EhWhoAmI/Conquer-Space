@@ -566,4 +566,8 @@ public class GameUpdater {
             }
         }
     }
+    
+    private void supplyLineWalker() {
+        
+    }
 }
