@@ -26,6 +26,7 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.engineering.LaunchSystemDesigner;
+import ConquerSpace.util.ResourceLoader;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -92,6 +93,11 @@ public class MainInterfaceWindow extends JInternalFrame {
         this.c = c;
         this.u = u;
         init();
+
+        //Set selected planet
+        setSelectedPlanet(c.getCapitalPlanet(), true);
+        setSelectedTab(0);
+        
         update();
         expandAllNodes(universeBreakdown, 0, universeBreakdown.getRowCount());
 
@@ -144,7 +150,9 @@ public class MainInterfaceWindow extends JInternalFrame {
 
         satelliteDesigner = new SatelliteDesigner(c);
         shipsComponentsOverviewPanel.add("Design Satellite", satelliteDesigner);
+        ImageIcon map = new ImageIcon("assets/img/icons/satellite.png");
 
+        shipsComponentsOverviewPanel.setIconAt(1, map);
         launchSystemDesigner = new LaunchSystemDesigner(c);
         JPanel launchWrapper = new JPanel();
         launchWrapper.setLayout(new VerticalFlowLayout());
@@ -203,15 +211,15 @@ public class MainInterfaceWindow extends JInternalFrame {
         tabs.add("Economy", economyWindow);
         tabs.add("Events", eventViewer);
 
-        ImageIcon tab1Icon = new ImageIcon("assets/img/icons/scienceicon.png");
-        ImageIcon econ = new ImageIcon("assets/img/icons/stonks.png");
-        ImageIcon engineering = new ImageIcon("assets/img/icons/engineering.png");
-        ImageIcon spaceshps = new ImageIcon("assets/img/icons/spaceships.png");
-        ImageIcon planet = new ImageIcon("assets/img/icons/eclipse.png");
-        ImageIcon person = new ImageIcon("assets/img/icons/person.png");
-        ImageIcon civ = new ImageIcon("assets/img/icons/people.png");
-        ImageIcon goods = new ImageIcon("assets/img/icons/goods.png");
-        ImageIcon events = new ImageIcon("assets/img/icons/alert.png");
+        ImageIcon tab1Icon = ResourceLoader.getIcon("science.icon");
+        ImageIcon econ = ResourceLoader.getIcon("economy.icon");
+        ImageIcon engineering = ResourceLoader.getIcon("engineering.icon");
+        ImageIcon spaceshps = ResourceLoader.getIcon("spaceships.icon");
+        ImageIcon planet = ResourceLoader.getIcon("eclipse.icon");
+        ImageIcon person = ResourceLoader.getIcon("person.icon");
+        ImageIcon civ = ResourceLoader.getIcon("people.icon");
+        ImageIcon goods = ResourceLoader.getIcon("goods.icon");
+        ImageIcon events = ResourceLoader.getIcon("alert.icon");
 
         tabs.setIconAt(0, tab1Icon);
         tabs.setIconAt(1, planet);
@@ -226,12 +234,13 @@ public class MainInterfaceWindow extends JInternalFrame {
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
 
-        // Updating code
-        Timer t = new Timer(500, a -> {
-            update();
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                update();
+            }
+
         });
-        t.setRepeats(true);
-        t.start();
     }
 
     public void update() {

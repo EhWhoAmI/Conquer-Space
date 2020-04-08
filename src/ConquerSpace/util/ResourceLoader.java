@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -38,19 +39,23 @@ public class ResourceLoader {
         }
     }
     
-    public static String loadResource(String key) {
+    public static String loadResourceString(String key) {
         return (System.getProperty("user.dir") + "/assets/" + prop.getProperty(key));
     }
     
     public static FileReader silentLoadResourceReader(String key) {
         try {
-            return (new FileReader(loadResource(key)));
+            return (new FileReader(loadResourceString(key)));
         } catch (Exception e) {
         }
         return null;
     }
     
+    public static ImageIcon getIcon(String key) {
+        return new ImageIcon(loadResourceString(key));
+    }
+    
     public static File getResourceByFile(String key) {
-        return (new File(loadResource(key)));
+        return (new File(loadResourceString(key)));
     }
 }

@@ -23,8 +23,10 @@ import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.util.ResourceLoader;
 import java.awt.BorderLayout;
 import java.util.Map;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -48,7 +50,7 @@ public class PlanetInfoSheet extends JPanel {
 
     private Civilization c;
     private Planet p;
-    
+
     private final int spacePortIndex = 4;
 
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
@@ -56,7 +58,7 @@ public class PlanetInfoSheet extends JPanel {
         this.p = p;
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
-        
+
         overview = new PlanetOverview(u, p, c);
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetPopulation(u, p, 0);
@@ -71,13 +73,34 @@ public class PlanetInfoSheet extends JPanel {
 
         tpane.add("Overview", overview);
         tpane.add("Map", planetMap);
-        tpane.add("Geography", planetGeology);
+        tpane.add("Geology", planetGeology);
         tpane.add("Cities", population);
         tpane.add("Space Port", spacePort);
         tpane.add("Atmosphere", atmosphere);
+        //Add satellite tabs
         tpane.add("Industry", industry);
         tpane.add("Local Life", localLifeMenu);
         tpane.add("Resources", planetResources);
+
+        ImageIcon overview = ResourceLoader.getIcon("overview.icon");
+        ImageIcon map = ResourceLoader.getIcon("globe.icon");
+        ImageIcon geo = ResourceLoader.getIcon("rock.icon");
+        ImageIcon indus = ResourceLoader.getIcon("factory.icon");
+        ImageIcon city = ResourceLoader.getIcon("city.icon");
+        ImageIcon life = ResourceLoader.getIcon("life.icon");
+        ImageIcon spaceport = ResourceLoader.getIcon("spaceport.icon");
+        ImageIcon atmosphereIco = ResourceLoader.getIcon("atmosphere.icon");
+        ImageIcon goods = ResourceLoader.getIcon("goods.icon");
+        
+        tpane.setIconAt(0, overview);
+        tpane.setIconAt(1, map);
+        tpane.setIconAt(2, geo);
+        tpane.setIconAt(3, city);
+        tpane.setIconAt(4, spaceport);
+        tpane.setIconAt(5, atmosphereIco);
+        tpane.setIconAt(6, indus);
+        tpane.setIconAt(7, life);
+        tpane.setIconAt(8, goods);
 
         tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port
