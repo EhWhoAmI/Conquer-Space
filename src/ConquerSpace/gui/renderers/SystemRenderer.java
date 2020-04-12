@@ -459,8 +459,7 @@ public class SystemRenderer {
     }
 
     private RendererMath.Point calculatePoint(double smajor, double theta, double e, double rot) {
-        //Eccentrcity
-        double r = (smajor * (1 - e * e)) / (1 - e * Math.cos(theta - rot));
+        double r = (smajor * (1 - e * e)) / (1 - e * Math.cos(Math.toRadians(theta - rot)));
         return RendererMath.polarCoordToCartesianCoord((long) r,
                 theta, new RendererMath.Point(0, 0), 1);
     }

@@ -225,7 +225,7 @@ public class GameUpdater {
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
-            
+
             job.setJobRank(JobRank.Low);
             job.setWorkingFor(a);
             //Set pay
@@ -347,14 +347,14 @@ public class GameUpdater {
                     c.civResearch.put(t, c.civResearch.get(t) + c.currentlyResearchingTechonologys.get(t).getSkill() * GameRefreshRate);
                 }
             }
-            
+
             //Process science labs
-            for(ScienceLab scienceLab : c.scienceLabs) {
+            for (ScienceLab scienceLab : c.scienceLabs) {
                 HashMap<String, Integer> science = scienceLab.scienceProvided();
                 for (Map.Entry<String, Integer> entry : science.entrySet()) {
                     String key = entry.getKey();
-                    Integer val = entry.getValue(); 
-                    
+                    Integer val = entry.getValue();
+
                     Field f = c.fields.findNode(key);
                     f.incrementLevel(val);
                 }
@@ -421,7 +421,8 @@ public class GameUpdater {
                 double a = planet.getSemiMajorAxis();
                 //Eccentrcity
                 double e = planet.getEccentricity();
-                double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - planet.getRotation()));
+                double rotation = Math.toRadians(planet.getRotation());
+                double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - rotation));
                 RendererMath.Point ppt
                         = RendererMath.polarCoordToCartesianCoord((long) r,
                                 planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
@@ -566,8 +567,8 @@ public class GameUpdater {
             }
         }
     }
-    
+
     private void supplyLineWalker() {
-        
+
     }
 }

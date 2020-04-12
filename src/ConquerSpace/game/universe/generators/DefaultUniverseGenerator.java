@@ -68,7 +68,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     UniverseConfig u;
     CivilizationConfig c;
     long seed;
-    
+
     public DefaultUniverseGenerator(UniverseConfig u, CivilizationConfig c, long seed) {
         this.u = u;
         this.c = c;
@@ -157,7 +157,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             universe.addStarSystem(sys);
         }
         LOGGER.info("Done with universe generation");
-        
+
         //Do civs
         //Player civ
         Civilization playerCiv = new Civilization(0, universe);
@@ -198,7 +198,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         universe.addCivilization(playerCiv);
         LOGGER.info("Done with player civ " + playerCiv.getName());
-        
+
         GameController.playerCiv = playerCiv;
 
         //Calculate number of civs
@@ -310,7 +310,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Planet p = new Planet(planetType, orbitalDistance, planetSize, k, lastPlanet);
             p.setSemiMajorAxis((double) orbitalDistance);
             //So a circle...
-            p.setEccentricity(0);
 
             p.setRotation(rand.nextDouble() * 2 * Math.PI);
             generateResourceVeins(p, rand);

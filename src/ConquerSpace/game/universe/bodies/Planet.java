@@ -105,6 +105,7 @@ public class Planet extends SpaceObject {
         this.id = id;
         this.parentStarSystem = parentStarSystem;
         this.degrees = 0;
+        semiMajorAxis = orbitalDistance;
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
