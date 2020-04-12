@@ -17,16 +17,20 @@
  */
 package ConquerSpace.util;
 
+import java.util.StringTokenizer;
+
 /**
  * Version for easy parts.
+ *
  * @author Zyun
  */
-public class Version {
+public class Version implements Comparable<Version> {
 
     private int major;
     private int minor;
     private int patch;
-    private String extras;
+    private int build = -1;
+    private String prerelease = "";
 
     /**
      *
@@ -35,31 +39,76 @@ public class Version {
      * @param patch Patch number.
      * @param extras Extras, e.g.:"-dev", "-alpha"
      */
-    public Version(int major, int minor, int patch, String extras) {
+    public Version(int major, int minor, int patch, String extras, int build) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
-        this.extras = extras;
+        this.prerelease = extras;
+        this.build = build;
     }
-    
+
+    public Version(int major, int minor, int patch) {
+        this.major = major;
+        this.minor = minor;
+        this.patch = patch;
+    }
+
+    public Version(String text) {
+        String parts[] = text.split("\\.");
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Version format is wrong");
+        }
+        //Parse the stuff
+        major = Integer.parseInt(parts[0]);
+        minor = Integer.parseInt(parts[1]);
+        //Split the next thing
+        String otherParts[] = parts[2].split("\\+|\\-");
+        patch = Integer.parseInt(otherParts[0]);
+        if (otherParts.length == 2 && parts[2].contains("-")) {
+            prerelease = otherParts[1];
+        }
+        if (otherParts.length == 2 && parts[2].contains("+")) {
+            build = Integer.parseInt(otherParts[1]);
+        }
+        if (otherParts.length == 3) {
+            prerelease = otherParts[1];
+            build = Integer.parseInt(otherParts[2]);
+        }
+    }
+
     @Override
     public String toString() {
-        return ("" + major + "." + minor + "." + patch + "-" + extras);
+        StringBuilder builder = new StringBuilder();
+        builder.append(major);
+        builder.append(".");
+        builder.append(minor);
+        builder.append(".");
+        builder.append(patch);
+        if (!prerelease.isEmpty()) {
+            builder.append("-");
+            builder.append(prerelease);
+        }
+        if (build > 0) {
+            builder.append("+");
+            builder.append(build);
+        }
+        return builder.toString();
     }
-    
+
     static boolean isGreater(Version v1, Version v2) {
-        if (v1.major > v2.major && v1.minor > v2.minor && v1.patch > v2.patch)
+        if (v1.major > v2.major && v1.minor > v2.minor && v1.patch > v2.patch) {
             return true;
+        }
         return false;
     }
-    
+
     //Ultra lazy with this one
     static boolean isLess(Version v1, Version v2) {
         return (!isGreater(v1, v2));
     }
 
     public String getExtras() {
-        return extras;
+        return prerelease;
     }
 
     public int getMajor() {
@@ -72,5 +121,10 @@ public class Version {
 
     public int getPatch() {
         return patch;
+    }
+
+    @Override
+    public int compareTo(Version o) {
+        return 0;
     }
 }
