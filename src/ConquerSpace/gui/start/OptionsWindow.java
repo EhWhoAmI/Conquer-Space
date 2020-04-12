@@ -101,17 +101,17 @@ public class OptionsWindow extends JFrame {
         if (Globals.settings.get("music").equals("yes")) {
             musicOnButton.setSelected(true);
         }
-        musicOnButton.addChangeListener(a -> {
+        musicOnButton.addActionListener(a -> {
             if (Globals.settings.get("music").equals("no")) {
-                musicOnButton.setSelected(true);
                 Globals.settings.setProperty("music", "yes");
-                GameController.musicPlayer.setToPlay(true);
-            }
-            if (Globals.settings.get("music").equals("yes")) {
-                musicOnButton.setSelected(false);
+                if (!GameController.musicPlayer.isPlaying()) {
+                    GameController.musicPlayer.playMusic();
+                }
+            } else if (Globals.settings.get("music").equals("yes")) {
                 Globals.settings.setProperty("music", "no");
-                GameController.musicPlayer.setToPlay(false);
+                GameController.musicPlayer.stopMusic();
             }
+
             //Write
             File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
             if (settingsFile.exists()) {
@@ -120,9 +120,10 @@ public class OptionsWindow extends JFrame {
                     //Read from file.
                     fis = new FileOutputStream(settingsFile);
                     PrintWriter pw = new PrintWriter(fis);
-                    Globals.settings.list(pw);
+                    Globals.settings.store(pw, "Created by Conquer Space version " + VERSION.toString());
                     pw.close();
                 } catch (FileNotFoundException ex) {
+                } catch (IOException ex) {
                 } finally {
                     try {
                         fis.close();
@@ -148,7 +149,7 @@ public class OptionsWindow extends JFrame {
         try {
             fis = new FileInputStream(lafPropertyFile);
             lafProperties.load(fis);
-            for(String s :lafProperties.stringPropertyNames()) {
+            for (String s : lafProperties.stringPropertyNames()) {
                 lafComboBoxModel.addElement(s);
             }
             //lafComboBoxModel.(lafProperties.stringPropertyNames());

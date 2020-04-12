@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ import org.newdawn.easyogg.OggClip;
  *
  * @author EhWhoAmI
  */
-public class MusicPlayer {
+public class MusicPlayer implements Runnable {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(MusicPlayer.class.getName());
 
@@ -44,6 +45,7 @@ public class MusicPlayer {
     boolean toStop = false;
 
     public MusicPlayer() {
+        toPlay = false;
         FileInputStream fis = null;
         try {
             //Load music
@@ -54,43 +56,7 @@ public class MusicPlayer {
             fis.close();
             String text = new String(data);
             musicArray = new JSONArray(text);
-            musicThread = new Thread(() -> {
-                for (;;) {
-                    if (toPlay) {
-                        try {
-                            int i = (int) (Math.random() * musicArray.length());
-                            JSONObject obj = musicArray.getJSONObject(i);
-                            clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
-                            //if (toPlay) {
-                            clip.play();
-                            //}
-                            //Thread.sleep(500);
-
-                            int length = obj.getInt("length");
-                            for (int index = 0; index < length; index++) {
-                                if (!toPlay) {
-                                    break;
-                                }
-                                Thread.sleep(1000);
-                            }
-                            //if (toPlay) {
-                            clip.stop();
-                            clip.close();
-                            //}
-                        } catch (IOException ex) {
-                            LOGGER.error(ex);
-                        } catch (InterruptedException ex) {
-                            LOGGER.error(ex);
-                        } catch (NullPointerException npe) {
-                            //Ignore...
-                        }
-                    }
-                    if (toStop) {
-                        break;
-                    }
-                }
-            }
-            );
+            musicThread = new Thread(this);
             musicThread.setName("musicplayer");
         } catch (FileNotFoundException ex) {
             LOGGER.warn("No Music!", ex);
@@ -106,10 +72,12 @@ public class MusicPlayer {
     }
 
     public void stopMusic() {
-        if (clip != null) {
+        toStop = true;
+        this.toPlay = false;
+        if (clip != null && !clip.stopped()) {
             clip.stop();
         }
-        toStop = true;
+        //And the thread ends
     }
 
     public void clean() {
@@ -119,16 +87,60 @@ public class MusicPlayer {
         }
     }
 
-    public void setToPlay(boolean toPlay) {
-        this.toPlay = toPlay;
-    }
-
     public void playMusic() {
         this.toPlay = true;
+        toStop = false;
+
+        //Reset thread
+        if (musicThread.isAlive()) {
+            musicThread.interrupt();
+        }
+        if (Thread.State.NEW != musicThread.getState()) {
+            //New thread
+            musicThread = new Thread(this);
+            musicThread.setName("musicplayer");
+        }
+        this.toPlay = true;
+        toStop = false;
         musicThread.start();
     }
 
     public boolean isPlaying() {
         return toPlay;
+    }
+
+    public void run() {
+        for (;;) {
+            if (toPlay) {
+                try {
+                    int i = (int) (Math.random() * musicArray.length());
+                    JSONObject obj = musicArray.getJSONObject(i);
+                    clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
+                    //if (toPlay) {
+                    clip.play();
+                    //}
+                    //Thread.sleep(500);
+
+                    int length = obj.getInt("length");
+                    for (int index = 0; index < length; index++) {
+                        if (!toPlay) {
+                            break;
+                        }
+                        Thread.sleep(1000);
+                    }
+                    clip.stop();
+                    clip.close();
+                } catch (IOException ex) {
+                    LOGGER.error(ex);
+                } catch (InterruptedException ex) {
+                    LOGGER.error(ex);
+                } catch (NullPointerException npe) {
+                    //Ignore...
+                }
+            }
+            if (toStop) {
+                break;
+            }
+        }
     }
 }

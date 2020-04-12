@@ -128,8 +128,9 @@ public class ConquerSpace {
 
             GameController.musicPlayer = new MusicPlayer();
             if (Globals.settings.getProperty("music").equals("no")) {
-                GameController.musicPlayer.setToPlay(false);
                 GameController.musicPlayer.stopMusic();
+            } else {
+                GameController.musicPlayer.playMusic();
             }
 
             //New Game Menu
