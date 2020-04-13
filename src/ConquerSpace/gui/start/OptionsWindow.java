@@ -84,22 +84,6 @@ public class OptionsWindow extends JFrame implements WindowListener {
         logsPanel = new JPanel();
         logsPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Logs"));
 
-        deleteLogsLabel = new JLabel("Delete Logs");
-        deleteLogsButton = new JButton("Delete");
-        deleteLogsButton.addActionListener((e) -> {
-            //Get Log files
-            File logDir = new File(System.getProperty("user.dir") + "/logs");
-            for (File f : logDir.listFiles()) {
-                try {
-                    f.delete();
-                } catch (Exception ex) {
-
-                }
-            }
-        });
-        logsPanel.add(deleteLogsLabel);
-        logsPanel.add(deleteLogsButton);
-
         musicPanel = new JPanel();
         musicPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Music"));
         musicOnButton = new JCheckBox("Music");
@@ -199,7 +183,7 @@ public class OptionsWindow extends JFrame implements WindowListener {
         musicPanel.add(new JLabel("Volume"));
         musicPanel.add(musicVolumeSlider);
         addWindowListener(this);
-        add(logsPanel);
+
         add(musicPanel);
         add(lafPanel);
         pack();

@@ -76,15 +76,15 @@ public class GameController {
     public static HashMap<Good, ResourceDistribution> ores = new HashMap<>();
     public static ArrayList<Good> allGoods;
     public static ArrayList<Good> goods;
-    
+
     public static ArrayList<SupplyChain> supplyChains = new ArrayList<>();
-    
+
     public static ArrayList<ProductionProcess> prodProcesses;
-    
+
     public static Civilization playerCiv = null;
 
     public static final int AU_IN_LTYR = 63241;
-    
+
     /**
      * Constructor. Inits all components.
      */
@@ -102,7 +102,7 @@ public class GameController {
 
         //Load the player
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Globals.universe.getCivilization(i).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(0));
+            Globals.universe.getCivilization(i).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(i));
         }
 
         int tickerSpeed = 10;
@@ -111,8 +111,6 @@ public class GameController {
         Runnable action = new Runnable() {
             public void run() {
                 ticker.setWait(((PlayerController) playerCiv.controller).getTickCount());
-                updater.calculateVision();
-
                 if (!((PlayerController) playerCiv.controller).allowTick()) {
                     tick();
                 }
@@ -130,11 +128,11 @@ public class GameController {
     public synchronized void tick() {
         //DO ticks
         Globals.date.increment(1);
+        updater.calculateVision();
+        updater.updateObjectPositions();
 
         //Move ships
         updater.moveShips();
-
-        updater.updateObjectPositions();
 
         //Check for month increase
         if (Globals.date.bigint % GameRefreshRate == 0) {

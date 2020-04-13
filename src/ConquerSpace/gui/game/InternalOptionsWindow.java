@@ -81,24 +81,6 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
     private InternalOptionsWindow() {
         setTitle("Options");
         setLayout(new VerticalFlowLayout());
-        logsPanel = new JPanel();
-        logsPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Logs"));
-
-        deleteLogsLabel = new JLabel("Delete Logs");
-        deleteLogsButton = new JButton("Delete");
-        deleteLogsButton.addActionListener((e) -> {
-            //Get Log files
-            File logDir = new File(System.getProperty("user.dir") + "/logs");
-            for (File f : logDir.listFiles()) {
-                try {
-                    f.delete();
-                } catch (Exception ex) {
-
-                }
-            }
-        });
-        logsPanel.add(deleteLogsLabel);
-        logsPanel.add(deleteLogsButton);
 
         musicPanel = new JPanel();
         musicPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Music"));
@@ -199,7 +181,6 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
         musicPanel.add(new JLabel("Volume"));
         musicPanel.add(musicVolumeSlider);
         addInternalFrameListener(this);
-        add(logsPanel);
         add(musicPanel);
         add(lafPanel);
         setClosable(true);

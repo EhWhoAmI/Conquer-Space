@@ -42,7 +42,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;

@@ -120,7 +120,6 @@ public class MusicPlayer implements Runnable {
 
     public void setVolume(float volume) {
         this.volume = volume;
-        System.out.println(volume);
         if (clip != null) {
             clip.setGain(volume);
         }
