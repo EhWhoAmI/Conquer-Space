@@ -24,6 +24,7 @@ import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GridLayout;
@@ -60,6 +61,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     private JButton manualButton;
     private JButton runningstatsButton;
     private JProgressBar statusProgressBar;
+    private JButton optionsWindowButton;
 
     private String[] speeds = {
         "Slowest",
@@ -90,6 +92,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         exitGameButton = new JButton("Exit Game");
         //Copy youtube's
         runningstatsButton = new JButton("Stats for Nerds");
+        optionsWindowButton = new JButton("Options");
 
         turnLabel.setText("Year " + date.getYears() + " Month " + date.getMonthNumber() + " Day " + date.getDays());
 
@@ -148,6 +151,14 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             }
         });
 
+        optionsWindowButton.setFocusable(false);
+        optionsWindowButton.addActionListener((e) -> {
+            InternalOptionsWindow win = InternalOptionsWindow.getInstance();
+            if (!win.isShowing()) {
+                getDesktopPane().add(win);
+            }
+        });
+
         pan.add(turnLabel);
         pan.add(statusProgressBar);
         pan.add(pausePlayButton);
@@ -155,8 +166,9 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         pan.add(alertsButton);
         pan.add(manualButton);
         pan.add(saveGameButton);
-        pan.add(exitGameButton);
+        pan.add(optionsWindowButton);
         pan.add(runningstatsButton);
+        pan.add(exitGameButton);
 
         //Set the keybindings
         getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("SPACE"), "pauseplay");
@@ -172,7 +184,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         updater.start();
 
         //Pls increment the first parameter when you add more stuff.
-        pan.setLayout(new GridLayout(9, 1, 5, 5));
+        pan.setLayout(new VerticalFlowLayout());
         add(pan);
         pack();
         setResizable(false);
