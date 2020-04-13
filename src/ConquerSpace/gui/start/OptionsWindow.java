@@ -26,12 +26,15 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
@@ -42,6 +45,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -53,7 +57,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Zyun
  */
-public class OptionsWindow extends JFrame {
+public class OptionsWindow extends JFrame implements WindowListener {
 
     //Logger
     private static final Logger LOGGER = CQSPLogger.getLogger(OptionsWindow.class.getName());
@@ -66,6 +70,7 @@ public class OptionsWindow extends JFrame {
     private JButton deleteLogsButton;
     private JPanel musicPanel;
     private JCheckBox musicOnButton;
+    private JSlider musicVolumeSlider;
 
     private JPanel lafPanel;
     private JLabel lookAndFeelLabel;
@@ -111,31 +116,20 @@ public class OptionsWindow extends JFrame {
                 Globals.settings.setProperty("music", "no");
                 GameController.musicPlayer.stopMusic();
             }
-
-            //Write
-            File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
-            if (settingsFile.exists()) {
-                FileOutputStream fis = null;
-                try {
-                    //Read from file.
-                    fis = new FileOutputStream(settingsFile);
-                    PrintWriter pw = new PrintWriter(fis);
-                    Globals.settings.store(pw, "Created by Conquer Space version " + VERSION.toString());
-                    pw.close();
-                } catch (FileNotFoundException ex) {
-                } catch (IOException ex) {
-                } finally {
-                    try {
-                        fis.close();
-                    } catch (IOException ex) {
-                    }
-                }
-            }
         });
 
         if (Globals.settings.get("music").equals("no")) {
             musicOnButton.setSelected(false);
         }
+
+        musicVolumeSlider = new JSlider(0, 100);
+        musicVolumeSlider.setValue((int) (Double.parseDouble(Globals.settings.getProperty("music.volume")) * 100));
+        musicVolumeSlider.setPaintLabels(true);
+        musicVolumeSlider.setPaintTicks(true);
+        musicVolumeSlider.addChangeListener(l -> {
+            GameController.musicPlayer.setVolume(((float) musicVolumeSlider.getValue()) / 100f);
+            Globals.settings.put("music.volume", "" + ((float) musicVolumeSlider.getValue()) / 100f);
+        });
 
         DefaultComboBoxModel<String> lafComboBoxModel = new DefaultComboBoxModel<>();
 
@@ -200,7 +194,11 @@ public class OptionsWindow extends JFrame {
         lafPanel.add(lookAndFeelLabel);
         lafPanel.add(lookAndFeelComboBox);
 
+        musicPanel.setLayout(new VerticalFlowLayout());
         musicPanel.add(musicOnButton);
+        musicPanel.add(new JLabel("Volume"));
+        musicPanel.add(musicVolumeSlider);
+        addWindowListener(this);
         add(logsPanel);
         add(musicPanel);
         add(lafPanel);
@@ -215,5 +213,53 @@ public class OptionsWindow extends JFrame {
         instance.setVisible(true);
 
         return (instance);
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        //Write
+        //Write
+        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
+        if (settingsFile.exists()) {
+            FileOutputStream fis = null;
+            try {
+                //Read from file.
+                fis = new FileOutputStream(settingsFile);
+                PrintWriter pw = new PrintWriter(fis);
+                Globals.settings.store(pw, "Created by Conquer Space version " + VERSION.toString());
+                pw.close();
+            } catch (FileNotFoundException ex) {
+            } catch (IOException ex) {
+            } finally {
+                try {
+                    fis.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
     }
 }

@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -100,6 +101,8 @@ public class ConquerSpace {
 
     public static final boolean DEBUG = true;
 
+    public static final Properties defaultProperties = new Properties();
+
     /**
      * Main class.
      *
@@ -119,6 +122,7 @@ public class ConquerSpace {
                 generateChecksum();
             }
 
+            setDefaultOptions();
             configureSettings();
 
             //Set catch all exceptions
@@ -132,6 +136,7 @@ public class ConquerSpace {
             } else {
                 GameController.musicPlayer.playMusic();
             }
+            GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
 
             //New Game Menu
             MainMenu menu = new MainMenu();
@@ -269,54 +274,70 @@ public class ConquerSpace {
         File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
         if (settingsFile.exists()) {
             try {
-                //Read from file.
+
                 FileInputStream fis = new FileInputStream(settingsFile);
                 Globals.settings.load(fis);
-
-                //Get settings
-                String locale = Globals.settings.getProperty("locale");
-                String[] locales = locale.split("-");
-                localeMessages = new Messages(new Locale(locales[0], locales[1]));
-
-                //get version
-                String version = Globals.settings.getProperty("version");
-                if (!(((version.split("-"))[0]).equals(VERSION.toString().split("-")[0]))) {
-                    //Then different version, update. How, idk.
-                }
-
             } catch (IOException ex) {
                 LOGGER.warn("Cannot load settings. Using default", ex);
+                createNewSettings(settingsFile);
             }
         } else {
-            try {
-                if (!settingsFile.getParentFile().exists()) {
-                    settingsFile.getParentFile().mkdir();
-                }
-                settingsFile.createNewFile();
-                //Add default settings
-
-                //Default settings
-                Globals.settings.setProperty("locale", "en-US");
-                localeMessages = new Messages(new Locale("en", "US"));
-
-                //Version
-                Globals.settings.setProperty("version", VERSION.toString());
-                Globals.settings.setProperty("debug", "no");
-
-                Globals.settings.setProperty("music", "yes");
-
-                Globals.settings.setProperty("laf", "default");
-
-                Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
-            } catch (IOException ex) {
-                LOGGER.warn("Unable to create settings file!", ex);
-            }
+            createNewSettings(settingsFile);
         }
+        //do settings
+        configureGame();
+        
+        try {
+            //Write
+            Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+        } catch (IOException ex) {
+        }
+    }
+
+    public static void createNewSettings(File settingsFile) {
+        for (String key : defaultProperties.stringPropertyNames()) {
+            Globals.settings.put(key, defaultProperties.get(key));
+        }
+
+        try {
+            if (!settingsFile.getParentFile().exists()) {
+                settingsFile.getParentFile().mkdir();
+            }
+            settingsFile.createNewFile();
+            //Add default settings
+
+            //Default settings
+            //Write
+            Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+        } catch (IOException ex) {
+            LOGGER.warn("Unable to create settings file!", ex);
+        }
+    }
+
+    public static void configureGame() {
+        //Check if all settings exist
+        for (String key : defaultProperties.stringPropertyNames()) {
+            Globals.settings.putIfAbsent(key, defaultProperties.getProperty(key));
+        }
+
+        //Get settings
+        String locale = Globals.settings.getProperty("locale");
+        String[] locales = locale.split("-");
+        localeMessages = new Messages(new Locale(locales[0], locales[1]));
+
+        //get version
+        String version = Globals.settings.getProperty("version");
+        //Do something
+        Version v = new Version(version);
+        //Check if not equal
+        //if(v.)
+        //Music
     }
 
     public static void generateChecksum() {
         //Get current file
-        File codeFile = new File(ConquerSpace.class.getProtectionDomain().getCodeSource()
+        File codeFile = new File(ConquerSpace.class
+                .getProtectionDomain().getCodeSource()
                 .getLocation().getPath());
         File assetFolder = new File(System.getProperty("user.dir") + "/assets/data");
         Runnable runnable = new Runnable() {
@@ -345,6 +366,22 @@ public class ConquerSpace {
     }
 
     public static void initalizeCommandLineArgs() {
+
+    }
+
+    static void setDefaultOptions() {
+        //The default and required options that exist for backward compatability
+        //Default settings
+        defaultProperties.setProperty("locale", "en-US");
+
+        //Version
+        defaultProperties.setProperty("version", VERSION.toString());
+        defaultProperties.setProperty("debug", "no");
+
+        defaultProperties.setProperty("music", "yes");
+        defaultProperties.setProperty("music.volume", "1");
+
+        defaultProperties.setProperty("laf", "default");
 
     }
 

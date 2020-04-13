@@ -44,6 +44,13 @@ public class MusicPlayer implements Runnable {
     Thread musicThread;
     boolean toStop = false;
 
+    float volume = 1;
+    
+    long songStart = 0;
+    long songPause = 0;
+    //How far into the song it is
+    long songPlayLength = 0;
+
     public MusicPlayer() {
         toPlay = false;
         FileInputStream fis = null;
@@ -77,6 +84,9 @@ public class MusicPlayer implements Runnable {
         if (clip != null && !clip.stopped()) {
             clip.stop();
         }
+        if (musicThread.isAlive()) {
+            musicThread.interrupt();
+        }
         //And the thread ends
     }
 
@@ -88,25 +98,32 @@ public class MusicPlayer implements Runnable {
     }
 
     public void playMusic() {
-        this.toPlay = true;
-        toStop = false;
+        stopMusic();
 
-        //Reset thread
-        if (musicThread.isAlive()) {
-            musicThread.interrupt();
-        }
         if (Thread.State.NEW != musicThread.getState()) {
             //New thread
             musicThread = new Thread(this);
             musicThread.setName("musicplayer");
+            this.toPlay = true;
+            toStop = false;
+            musicThread.start();
+        } else {
+            this.toPlay = true;
+            toStop = false;
+            musicThread.start();
         }
-        this.toPlay = true;
-        toStop = false;
-        musicThread.start();
     }
 
     public boolean isPlaying() {
         return toPlay;
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
+        System.out.println(volume);
+        if (clip != null) {
+            clip.setGain(volume);
+        }
     }
 
     public void run() {
@@ -118,16 +135,12 @@ public class MusicPlayer implements Runnable {
                     clip = new OggClip(new FileInputStream("assets/music/" + obj.getString("file")));
                     //if (toPlay) {
                     clip.play();
+                    clip.setGain(volume);
                     //}
                     //Thread.sleep(500);
 
                     int length = obj.getInt("length");
-                    for (int index = 0; index < length; index++) {
-                        if (!toPlay) {
-                            break;
-                        }
-                        Thread.sleep(1000);
-                    }
+                    Thread.sleep(1000 * length);
                     clip.stop();
                     clip.close();
                 } catch (IOException ex) {
