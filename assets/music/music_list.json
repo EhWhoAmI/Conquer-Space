@@ -52,5 +52,11 @@
         "composer": "Nirekin Inc.",
         "file": "SolemnAnomaly.ogg",
         "length": 144
+    },
+    {
+        "name": "Stars 2",
+        "composer": "EhWhoAmI",
+        "file": "star.ogg",
+        "length": 37
     }
 ]

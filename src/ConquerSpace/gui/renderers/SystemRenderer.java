@@ -147,7 +147,7 @@ public class SystemRenderer {
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
         if (skybox != null) {
-            g2d.drawImage(skybox, (int) ((translateX / scale) * 0.025) - 30, (int) ((translateY / scale) * 0.025) - 30, null);
+            g2d.drawImage(skybox, (int) ((translateX / scale) * 0.020) - 30, (int) ((translateY / scale) * 0.020) - 30, null);
         }
         //Render bg image
         //g2d.fill(bg);
