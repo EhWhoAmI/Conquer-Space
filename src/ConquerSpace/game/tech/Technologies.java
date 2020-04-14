@@ -234,11 +234,9 @@ public class Technologies {
             }
         } else if (action.startsWith("thrust")) {
             //Do component
-            char[] dst = new char[50];
+            String[] content = action.split(":");
 
-            action.getChars("thrust".length() + 1, action.length() - 1, dst, 0);
-
-            String compName = (new String(dst).trim());
+            String compName = (content[1].trim());
             int id = Integer.parseInt(compName);
 
             EngineTechnology t = GameController.engineTechnologys.stream().filter(a -> a.getId() == id).findFirst().orElse(null);

@@ -54,6 +54,7 @@ public class UniverseRenderer {
         this.c = c;
         long universeRadius = 0;
         //LOGGER.info("Displaying universe " + universe.toReadableString());
+        //Check for size of universe
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem s = universe.getStarSystem(i);
             if (s.getGalaticLocation().getDistance() > universeRadius) {

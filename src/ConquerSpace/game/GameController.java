@@ -32,6 +32,7 @@ import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.universe.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.ships.satellites.Satellite;
 import ConquerSpace.gui.music.MusicPlayer;
+import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Timer;
 import java.util.ArrayList;
@@ -110,9 +111,15 @@ public class GameController {
         ticker = new Timer();
         Runnable action = new Runnable() {
             public void run() {
-                ticker.setWait(((PlayerController) playerCiv.controller).getTickCount());
-                if (!((PlayerController) playerCiv.controller).allowTick()) {
-                    tick();
+                //Ensure that the game does not stop on a crash
+                try {
+                    ticker.setWait(((PlayerController) playerCiv.controller).getTickCount());
+                    if (!((PlayerController) playerCiv.controller).allowTick()) {
+                        tick();
+                    }
+                } catch (Exception e) {
+                    ExceptionHandling.ExceptionMessageBox("Exception!", e);
+                    LOGGER.error("Exception!", e);
                 }
             }
         };

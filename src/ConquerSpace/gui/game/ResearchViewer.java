@@ -26,6 +26,8 @@ import ConquerSpace.game.universe.civilization.Civilization;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -44,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Zyun
  */
-public class ResearchViewer extends JPanel implements ListSelectionListener {
+public class ResearchViewer extends JPanel implements ListSelectionListener, PropertyChangeListener {
 
     private JTabbedPane pane;
 
@@ -225,6 +227,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
         pane.addTab("Researched Techs", techonologyViewer);
         pane.addTab("Fields", fieldViewer);
 
+        addPropertyChangeListener(this);
+
         pane.addChangeListener(a -> {
             update();
             techonologyViewer.update();
@@ -267,7 +271,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
             techTableModel.addRow(new String[]{t.getName(), c.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
         }
 
-        if (selectedTech > -1) {
+        if (selectedTech > -1 && techTable.getRowCount() < selectedTech) {
             techTable.setRowSelectionInterval(selectedTech, selectedTech);
         }
 
@@ -309,5 +313,10 @@ public class ResearchViewer extends JPanel implements ListSelectionListener {
             }
             techInfoPanel.setVisible(true);
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        update();
     }
 }

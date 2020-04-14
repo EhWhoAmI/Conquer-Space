@@ -62,6 +62,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -76,6 +78,7 @@ import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 
@@ -137,14 +140,44 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     public void init() {
         desktopPane = new CQSPDesktop(u);
         menuBar = new JMenuBar();
+        SwingWorker<MainInterfaceWindow, Void> interfaceWorker = new SwingWorker<MainInterfaceWindow, Void>() {
+            @Override
+            protected MainInterfaceWindow doInBackground() {
+                return new MainInterfaceWindow(c, u);
 
-        mainInterfaceWindow = new MainInterfaceWindow(c, u);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    mainInterfaceWindow = get();
+                    addFrame(mainInterfaceWindow);
+                } catch (InterruptedException ex) {
+                    LOGGER.warn("oops couldn't create window concurrently, making it conventionally.", ex);
+                    createFrame();
+                } catch (ExecutionException ex) {
+                    LOGGER.warn("oops couldn't create window concurrently, making it conventionally.", ex);
+                    createFrame();
+                }
+                LOGGER.info("Done with making interface.");
+            }
+
+            /**
+             * When concurrency doesn't work.
+             */
+            private void createFrame() {
+                mainInterfaceWindow = new MainInterfaceWindow(c, u);
+                addFrame(mainInterfaceWindow);
+            }
+        };
+
+        interfaceWorker.execute();
+
         newsWindow = new NewsWindow(c);
-        addFrame(mainInterfaceWindow);
 
         tsWindow = new TurnSaveWindow(d, u);
 
-        //Remove mouse listeners for the turnsave window.
+        //Remove mouse listeners for the turnsave window so that it can't be moved
         for (MouseListener listener : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().getMouseListeners()) {
             ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI()).getNorthPane().removeMouseListener(listener);
         }
@@ -155,7 +188,14 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         JMenu windows = new JMenu("Windows");
         JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
         timeIncrementwindow.addActionListener(a -> {
-            mainInterfaceWindow.setVisible(true);
+            if (mainInterfaceWindow != null) {
+                mainInterfaceWindow.setVisible(true);
+            } else {
+                //Create it, ah well.
+                mainInterfaceWindow = new MainInterfaceWindow(c, u);
+                addFrame(mainInterfaceWindow);
+                mainInterfaceWindow.setVisible(true);
+            }
         });
 
         JMenuItem reloadWindows = new JMenuItem("Reload Windows");
@@ -286,7 +326,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         //Set timer
         gameTickTimer = new Timer(40, a -> {
             try {
-                mainInterfaceWindow.update();
+                //Only update when visible, and mouse is moving into it, saves performance
+                if (mainInterfaceWindow != null && mainInterfaceWindow.isVisible()) {
+                    mainInterfaceWindow.update();
+                }
                 newsWindow.update();
                 desktopPane.repaint();
             } catch (Exception e) {
@@ -295,7 +338,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         });
 
         gameTickTimer.setRepeats(true);
-        gameTickTimer.start();
 
         desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
 
@@ -317,6 +359,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         setVisible(true);
 
+        gameTickTimer.start();
         changeTurnSaveWindowPosition();
         //See home planet
         desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
@@ -441,6 +484,14 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
          */
         private double scale = 1.0f;
 
+        public CQSPDesktop(Universe u) {
+            universe = u;
+            universeRenderer = new UniverseRenderer(new Dimension(1500, 1500), u, c);
+            addMouseListener(this);
+            addMouseMotionListener(this);
+            addMouseWheelListener(this);
+        }
+
         @Override
         protected void paintComponent(Graphics g) {
             switch (drawing) {
@@ -510,7 +561,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
                             Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
                             if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
-                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetHeight()*1.1 / SystemRenderer.PLANET_DIVISOR) {
+                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetHeight() * 1.1 / SystemRenderer.PLANET_DIVISOR) {
                                 //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                 //add(d);
                                 //Check if scanned
@@ -743,14 +794,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         public void mouseExited(MouseEvent e) {
         }
 
-        public CQSPDesktop(Universe u) {
-            universe = u;
-            universeRenderer = new UniverseRenderer(new Dimension(1500, 1500), u, c);
-            addMouseListener(this);
-            addMouseMotionListener(this);
-            addMouseWheelListener(this);
-        }
-
         void see(int system) {
             drawingStarSystem = system;
             drawing = DRAW_STAR_SYSTEM;
@@ -762,7 +805,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             translateY = -1500 / 2 + getSize().height / 2;
             //Set the window size
             systemRenderer.setWindowSize(new Dimension(getWidth(), getHeight()));
-            
+
             repaint();
         }
 

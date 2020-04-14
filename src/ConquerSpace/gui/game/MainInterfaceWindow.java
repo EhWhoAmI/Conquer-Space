@@ -34,12 +34,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
-import javax.swing.Timer;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -48,7 +50,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author EhwhoAmI
  */
-public class MainInterfaceWindow extends JInternalFrame {
+public class MainInterfaceWindow extends JInternalFrame implements MouseListener, InternalFrameListener {
 
     //Hold all the panels
     private JTabbedPane tabs;
@@ -97,14 +99,15 @@ public class MainInterfaceWindow extends JInternalFrame {
         //Set selected planet
         setSelectedPlanet(c.getCapitalPlanet(), true);
         setSelectedTab(0);
-        
+
         update();
         expandAllNodes(universeBreakdown, 0, universeBreakdown.getRowCount());
 
         setClosable(true);
         setMaximizable(true);
         setResizable(true);
-        //setVisible(true);
+        setVisible(false);
+
         pack();
         Dimension d = getToolkit().getScreenSize();
         setSize(d.width - 100, d.height - 100);
@@ -255,12 +258,24 @@ public class MainInterfaceWindow extends JInternalFrame {
             universeBreakdownTreeModel.add(system);
         }
 
-        spaceShipOverview.update();
-        recruitingPerson.update();
-        personWindow.update();
-        researchViewer.update();
-        resourceManager.update();
-        economyWindow.update();
+        if (spaceShipOverview.isVisible()) {
+            spaceShipOverview.update();
+        }
+        if (recruitingPerson.isVisible()) {
+            recruitingPerson.update();
+        }
+        if (personWindow.isVisible()) {
+            personWindow.update();
+        }
+        if (researchViewer.isVisible()) {
+            researchViewer.update();
+        }
+        if (resourceManager.isVisible()) {
+            resourceManager.update();
+        }
+        if (economyWindow.isVisible()) {
+            economyWindow.update();
+        }
 
         if (planetInfoSheet != null) {
             planetInfoSheet.update();
@@ -313,5 +328,56 @@ public class MainInterfaceWindow extends JInternalFrame {
             shipsComponentsOverviewPanel.setEnabledAt(2, true);
             shipsComponentsOverviewPanel.setToolTipText("");
         }
+    }
+
+    @Override
+    public void internalFrameOpened(InternalFrameEvent e) {
+        update();
+    }
+
+    @Override
+    public void internalFrameClosing(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameClosed(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameIconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameDeiconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameActivated(InternalFrameEvent e) {
+        update();
+    }
+
+    @Override
+    public void internalFrameDeactivated(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        update();
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }
