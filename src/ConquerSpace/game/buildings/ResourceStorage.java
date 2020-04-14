@@ -50,26 +50,8 @@ public class ResourceStorage extends Building implements ResourceStockpile {
         maximumStorage = 0;
     }
 
-    @Override
-    public void addResourceTypeStore(Good type) {
-        resources.put(type, 0d);
-    }
-
     public boolean getHasResource(int type) {
         return resources.containsKey(type);
-    }
-
-    @Override
-    public Double getResourceAmount(Good type) {
-        return resources.get(type);
-    }
-
-    @Override
-    public void addResource(Good type, Double amount) {
-        if(!resources.containsKey(type)) {
-            resources.put(type, 0d);
-        }
-        resources.put(type, resources.get(type) + amount);
     }
 
     public void setUpkeep(int upkeep) {
@@ -80,60 +62,11 @@ public class ResourceStorage extends Building implements ResourceStockpile {
         return upkeep;
     }
 
-    @Override
-    public UniversePath getUniversePath() {
-        return new UniversePath(system, planet);
-    }
-
-    @Override
-    public boolean canStore(Good type) {
-        return true;//(resources.containsKey(type));
-    }
-
-    @Override
-    public Good[] storedTypes() {
-        Iterator<Good> res = resources.keySet().iterator();
-        Good[] arr = new Good[resources.size()];
-        int i = 0;
-        while (res.hasNext()) {
-            Good next = res.next();
-            arr[i] = next;
-            i++;
-        }
-        return arr;
-    }
-
-    @Override
-    public Color getColor() {
-        return Color.CYAN;
-    }
-
-    @Override
-    public boolean removeResource(Good type, Double amount) {
-        //Get the amount in the place
-        Double currentlyStored = resources.get(type);
-        if(amount > currentlyStored)
-            return false;
-        
-        resources.put(type, currentlyStored-amount);
-        return true;
-    }
-
     public int getMaximumStorage() {
         return maximumStorage;
     }
 
     public void setMaximumStorage(int maximumStorage) {
         this.maximumStorage = maximumStorage;
-    }
-    
-    @Override
-    public String getType() {
-        return "Resource Storage";
-    }
-    
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
     }
 }

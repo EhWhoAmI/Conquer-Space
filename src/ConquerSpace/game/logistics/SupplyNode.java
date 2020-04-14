@@ -17,13 +17,14 @@
  */
 package ConquerSpace.game.logistics;
 
+import ConquerSpace.game.universe.resources.ResourceStockpile;
 import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
-public interface SupplyNode {
+public interface SupplyNode extends ResourceStockpile{
     //Supply chains connected
     ArrayList<SupplyChain> getSupplyChains();
 }

@@ -24,6 +24,9 @@ import ConquerSpace.game.logistics.SupplyNode;
 import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.Workable;
+import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.StorageNeeds;
 import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.Color;
@@ -31,6 +34,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +44,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public abstract class Building implements Workable, SupplyNode{
+public abstract class Building implements Workable, SupplyNode {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Building.class.getName());
 
@@ -48,7 +53,9 @@ public abstract class Building implements Workable, SupplyNode{
     private Employer owner;
     private String type;
     private City city;
-    
+    private HashMap<Good, Double> resources;
+    public ArrayList<StorageNeeds> needs;
+
     public ArrayList<SupplyChain> supplyChains;
 
     //In Megawatts
@@ -59,6 +66,7 @@ public abstract class Building implements Workable, SupplyNode{
         areas = new ArrayList<>();
         infrastructure = new ArrayList<>();
         supplyChains = new ArrayList<>();
+        resources = new HashMap<>();
     }
 
     public Color getColor() {
@@ -127,13 +135,73 @@ public abstract class Building implements Workable, SupplyNode{
         }
         return "";
     }
-    
+
     public void tick(StarDate date, long delta) {
-        
+
     }
 
     @Override
     public ArrayList<SupplyChain> getSupplyChains() {
         return supplyChains;
     }
+
+    //Describe position
+    public UniversePath getUniversePath() {
+        return city.getUniversePath();
+    }
+
+    @Override
+    public void addResourceTypeStore(Good type) {
+        resources.put(type, 0d);
+    }
+
+    @Override
+    public Double getResourceAmount(Good type) {
+        return resources.get(type);
+    }
+
+    @Override
+    public void addResource(Good type, Double amount) {
+        if(!resources.containsKey(type)) {
+            resources.put(type, 0d);
+        }
+        resources.put(type, resources.get(type) + amount);
+    }
+
+
+    @Override
+    public boolean canStore(Good type) {
+        return true;//(resources.containsKey(type));
+    }
+
+    @Override
+    public Good[] storedTypes() {
+        Iterator<Good> res = resources.keySet().iterator();
+        Good[] arr = new Good[resources.size()];
+        int i = 0;
+        while (res.hasNext()) {
+            Good next = res.next();
+            arr[i] = next;
+            i++;
+        }
+        return arr;
+    }
+
+
+    @Override
+    public boolean removeResource(Good type, Double amount) {
+        //Get the amount in the place
+        Double currentlyStored = resources.get(type);
+        if(amount > currentlyStored)
+            return false;
+        
+        resources.put(type, currentlyStored-amount);
+        return true;
+    }
+    
+    @Override
+    public Job[] jobsNeeded() {
+        return new Job[0];
+    }
+
 }
