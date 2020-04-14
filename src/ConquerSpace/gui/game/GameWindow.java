@@ -173,8 +173,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         interfaceWorker.execute();
 
-        newsWindow = new NewsWindow(c);
-
         tsWindow = new TurnSaveWindow(d, u);
 
         //Remove mouse listeners for the turnsave window so that it can't be moved
@@ -325,15 +323,18 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         //Set timer
         gameTickTimer = new Timer(40, a -> {
-            try {
-                //Only update when visible, and mouse is moving into it, saves performance
-                if (mainInterfaceWindow != null && mainInterfaceWindow.isVisible()) {
-                    mainInterfaceWindow.update();
+            if (this.isActive()) {
+                try {
+                    //Only update when visible, and mouse is moving into it, saves performance
+                    if (mainInterfaceWindow != null && mainInterfaceWindow.isVisible()) {
+                        mainInterfaceWindow.update();
+                    }
+                    if (allowTick()) {
+                        desktopPane.repaint();
+                    }
+                } catch (Exception e) {
+                    LOGGER.warn("Exception!", e);
                 }
-                newsWindow.update();
-                desktopPane.repaint();
-            } catch (Exception e) {
-                LOGGER.warn("Exception!", e);
             }
         });
 

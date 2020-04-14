@@ -63,6 +63,8 @@ public class SystemRenderer {
     public int sizeofAU;
 
     private BufferedImage[] systemTerrain;
+
+    double previousScale;
 //Background skybox
     private BufferedImage skybox;
     private Thread rendererThread;
@@ -96,16 +98,17 @@ public class SystemRenderer {
 
                 long size = 0;
                 for (int i = 0; i < sys.getPlanetCount(); i++) {
-                    if (sys.getPlanet(i).getOrbitalDistance() > size) {
-                        size = sys.getPlanet(i).getOrbitalDistance();
+                    Planet planet = sys.getPlanet(i);
+                    if (planet.getOrbitalDistance() > size) {
+                        size = planet.getOrbitalDistance();
                     }
                     //render terrain
-                    TerrainRenderer tr = new TerrainRenderer(sys.getPlanet(i));
+                    TerrainRenderer tr = new TerrainRenderer(planet);
                     systemTerrain[i] = toBufferedImage(tr.getSquareImage(1));
 
                     //Create copy
-                    BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight()/PLANET_DIVISOR, systemTerrain[i].getHeight()/PLANET_DIVISOR);
-                    systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight()/PLANET_DIVISOR, systemTerrain[i].getWidth()/PLANET_DIVISOR, BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage temp = resize(systemTerrain[i], systemTerrain[i].getHeight() / PLANET_DIVISOR, systemTerrain[i].getHeight() / PLANET_DIVISOR);
+                    systemTerrain[i] = new BufferedImage(systemTerrain[i].getHeight() / PLANET_DIVISOR, systemTerrain[i].getWidth() / PLANET_DIVISOR, BufferedImage.TYPE_INT_ARGB);
 
                     for (int x = 0; x < temp.getWidth(); x++) {
                         for (int y = 0; y < temp.getHeight(); y++) {
@@ -122,6 +125,7 @@ public class SystemRenderer {
                     }
                 }
 
+                System.gc();
                 long end = System.currentTimeMillis();
                 LOGGER.info("Time to render system: " + (end - beginning) + " ms");
             }
@@ -219,31 +223,18 @@ public class SystemRenderer {
                     (translateY + bounds.height / 2 - (p.getOrbitalDistance() * distanceRatio)) / scale,
                     (p.getOrbitalDistance()) * distanceRatio * 2 / scale,
                     (p.getOrbitalDistance()) * distanceRatio * 2 / scale);*/
-            GeneralPath circle = new GeneralPath();
-
-            //Do the same thing that we do for calculating position
-            //    private RendererMath.Point calculatePoint(double smajor, double theta, double e, double rot) {
-            RendererMath.Point ppt = calculatePoint(planet.getSemiMajorAxis(), 0, planet.getEccentricity(), planet.getRotation());
-
-            double cx = (ppt.x * distanceRatio);
-            double cy = (ppt.y * distanceRatio);
-            circle.moveTo((translateX + bounds.width / 2 + cx) / scale, (translateY + bounds.width / 2 + cy) / scale);
-
-            //So far, the accuracy does not make a large difference in terms of performance.
-            //So, we do not even have to care about limiting drawing this shape lol
-            double accuracy = 0.1;
-
-            //Circle loop
-            for (double k = 0; k <= 360; k += accuracy) {
-                ppt = calculatePoint(planet.getSemiMajorAxis(), k, planet.getEccentricity(), planet.getRotation());
-                cx = (ppt.x * distanceRatio);
-                cy = (ppt.y * distanceRatio);
-                circle.lineTo((translateX + bounds.width / 2 + cx) / scale, (translateY + bounds.width / 2 + cy) / scale);
+            //Change accuracy based on scale
+            double accuracy = scale;
+            if(accuracy < 0.1) {
+                accuracy = 0.1;
             }
-            circle.closePath();
-
+            if(accuracy > 15) {
+                accuracy = 15;
+            }
+            GeneralPath circle = createGeneralPath(planet, scale, translateX, translateY, accuracy);
             g2d.setColor(Color.WHITE);
             g2d.draw(circle);
+
             //g2d.draw(orbitCitcle);
         }
 
@@ -395,6 +386,9 @@ public class SystemRenderer {
         //FPS
         long current = System.currentTimeMillis();
 
+        if(fpsCounter == 0) {
+            fpsCounter = 1;
+        }
         g2d.drawString(String.format("%d", 1000 / (current - fpsCounter)) + " fps", 10, 40);
         fpsCounter = current;
 
@@ -462,5 +456,31 @@ public class SystemRenderer {
         double r = (smajor * (1 - e * e)) / (1 - e * Math.cos(Math.toRadians(theta - rot)));
         return RendererMath.polarCoordToCartesianCoord((long) r,
                 theta, new RendererMath.Point(0, 0), 1);
+    }
+
+    private GeneralPath createGeneralPath(Planet planet, double scale, double translateX, double translateY, double accuracy) {
+        GeneralPath circle = new GeneralPath();
+
+        //Do the same thing that we do for calculating position
+        //    private RendererMath.Point calculatePoint(double smajor, double theta, double e, double rot) {
+        RendererMath.Point ppt = calculatePoint(planet.getSemiMajorAxis(), 0, planet.getEccentricity(), planet.getRotation());
+
+        double cx = (ppt.x * distanceRatio);
+        double cy = (ppt.y * distanceRatio);
+        circle.moveTo((translateX + bounds.width / 2 + cx) / scale, (translateY + bounds.width / 2 + cy) / scale);
+
+        //So far, the accuracy does not make a large difference in terms of performance.
+        //So, we do not even have to care about limiting drawing this shape lol
+
+        //Circle loop
+        for (double k = 0; k <= 360; k += accuracy) {
+            ppt = calculatePoint(planet.getSemiMajorAxis(), k, planet.getEccentricity(), planet.getRotation());
+            cx = (ppt.x * distanceRatio);
+            cy = (ppt.y * distanceRatio);
+            circle.lineTo((translateX + bounds.width / 2 + cx) / scale, (translateY + bounds.width / 2 + cy) / scale);
+        }
+        circle.closePath();
+
+        return circle;
     }
 }
