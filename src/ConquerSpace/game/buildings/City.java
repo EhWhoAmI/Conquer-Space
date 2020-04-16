@@ -37,7 +37,7 @@ import java.util.Map;
  * @author EhWhoAmI
  */
 public class City implements PersonEnterable, Workable {
-
+    public static final String CITY_DEFAULT = " ";
     private Person governor;
     private String name;
     public ArrayList<Building> buildings;

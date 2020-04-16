@@ -130,24 +130,8 @@ public class GameInitializer {
                 Planet starting = (Planet) universe.getSpaceObject(p);
                 c.setCapitalPlanet(starting);
 
-                //Add resource miners
-                createResourceMiners(starting, c, c.getFoundingSpecies());
-
-                createResourceStorages(c, starting, selector);
-
-                createPopulationStorages(starting, c, selector);
-
-                createFarms(starting, c, selector);
-
-                createIndustrialZones(c, selector, starting);
-
-                createObservatory(starting, c, selector);
-
-                //Add infrastructure
-                createInfrastructure(starting, selector);
-
-                addResearchInstitutions(starting, c, selector);
-
+                initializeBuildings(starting, c, selector);
+                
                 nameStratumOnPlanet(starting);
 
                 //Set ownership
@@ -170,7 +154,6 @@ public class GameInitializer {
                 //Add unrecruited people
                 createUnrecruitedPeople(c, starting, gen);
 
-                //
                 initializeGovernment(c, gen);
 
             }
@@ -178,13 +161,40 @@ public class GameInitializer {
         }
 
         updater.calculateControl();
-
         updater.calculateVision();
     }
 
+    private void initializeBuildings(Planet starting, Civilization c, Random selector) {
+        //Add resource miners
+        createResourceMiners(starting, c, c.getFoundingSpecies());
+
+        //createResourceStorages(c, starting, selector);
+
+        createPopulationStorages(starting, c, selector);
+
+        createFarms(starting, c, selector);
+
+        createIndustrialZones(c, selector, starting);
+
+        //createObservatory(starting, c, selector);
+        //Add infrastructure
+        createInfrastructure(starting, selector);
+
+        addResearchInstitutions(starting, c, selector);
+    }
+
     private void createResourceMiners(Planet p, Civilization c, Race founding) {
-        City city = new City(p.getUniversePath());
-        city.setName("Mines");
+        NameGenerator townGen = null;
+
+        try {
+            townGen = NameGenerator.getNameGenerator("town.names");
+        } catch (IOException ex) {
+            //Ignore, assume all ok
+        }
+
+        City mineCity = new City(p.getUniversePath());
+        mineCity.setName(townGen.getName(0) + " Mines");
+
         //Find if vein exists on the planet
         int minerCount = (int) (Math.random() * p.getPlanetSize());
         minerCount += 45;
@@ -208,8 +218,7 @@ public class GameInitializer {
 
             int x = (int) (Math.cos(theta) * randR) + strata.getX();
             int y = (int) (Math.sin(theta) * randR) + strata.getY();
-            int xbefore = x;
-            int ybefore = y;
+
             if (x < 0) {
                 x = 0;
             } else if (x >= p.getPlanetWidth()) {
@@ -222,9 +231,12 @@ public class GameInitializer {
                 y = (p.getPlanetHeight() - 1);
             }
 
+            GeographicPoint pt = new GeographicPoint(x, y);
             miner.population.add(new PopulationUnit(founding));
-            p.buildings.put(new GeographicPoint(x, y), miner);
-            city.addDistrict(miner);
+
+            p.placeBuilding(pt, miner);
+
+            mineCity.addDistrict(miner);
         }
 //        for (ResourceVein v : p.resourceVeins) {
 //            //Get the resource vein and stuff
@@ -238,7 +250,7 @@ public class GameInitializer {
 //            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
 //            city.addDistrict(miner);
 //        }
-        p.cities.add(city);
+        p.cities.add(mineCity);
     }
 
     private void createFarms(Planet starting, Civilization c, Random selector) {
@@ -333,8 +345,13 @@ public class GameInitializer {
     }
 
     private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
-        City cit = new City(starting.getUniversePath());
-        cit.setName("Industrial");
+        NameGenerator townGen = null;
+
+        try {
+            townGen = NameGenerator.getNameGenerator("town.names");
+        } catch (IOException ex) {
+            //Ignore, assume all ok
+        }
         for (int i = 0; i < 10; i++) {
             IndustrialDistrict district = new IndustrialDistrict();
             //Add areas
@@ -351,12 +368,12 @@ public class GameInitializer {
                 district.getPopulationArrayList().add(u);
             }
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-            starting.buildings.put(pt, district);
 
-            //Add to city
-            cit.buildings.add(district);
+            City city = starting.addBuildingToPlanet(pt, district);
+            if (city.getName().equals(City.CITY_DEFAULT)) {
+                city.setName(townGen.getName(0) + " Industial Complex");
+            }
         }
-        starting.cities.add(cit);
     }
 
     private void createPopulationStorages(Planet starting, Civilization c, Random selector) {
@@ -377,16 +394,13 @@ public class GameInitializer {
         AdministrativeCenter administrativeCenter = new AdministrativeCenter();
 
         for (int count = 0; count < popStorMas; count++) {
-            City city = new City(starting.getUniversePath());
-            city.setName(townGen.getName(0));
             CityDistrict district;
-            district = new CityDistrict();
-
+            String townName = townGen.getName(0);
             if (count == 0) {
                 district = administrativeCenter;
-                c.setCapitalCity(city);
-                //Add the capitol areas
-                district.areas.add(new CapitolArea());
+                district.addArea(starting, new CapitolArea());
+            } else {
+                district = new CityDistrict();
             }
 
             district.setMaxStorage(selector.nextInt(30) + 1);
@@ -403,34 +417,14 @@ public class GameInitializer {
                 c.population.add(u);
                 district.population.add(u);
             }
-            city.addDistrict(district);
-
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
-            starting.buildings.put(pt, district);
+            starting.addBuildingToPlanet(pt, district);
 
             //Expand sector
             //Choose a direction, and expand...
             CityDistrict district2 = new CityDistrict();
-            int dir = selector.nextInt(4) + 1;
-            GeographicPoint pt2;
-            switch (dir) {
-                case 0:
-                    pt2 = new GeographicPoint(pt.getX(), pt.getY() + 1);
-                    break;
-                case 1:
-                    pt2 = new GeographicPoint(pt.getX(), pt.getY() - 1);
-                    break;
-                case 2:
-                    pt2 = new GeographicPoint(pt.getX() + 1, pt.getY());
-                    break;
-                case 3:
-                    pt2 = new GeographicPoint(pt.getX() - 1, pt.getY());
-                    break;
-                default:
-                    pt2 = new GeographicPoint(pt.getX(), pt.getY() + 1);
-            }
-            starting.buildings.put(pt2, district2);
+
             int popCount2 = (selector.nextInt(25) + 1);
             district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
             district2.setOwner(c);
@@ -441,8 +435,31 @@ public class GameInitializer {
                 c.population.add(u);
                 district2.population.add(u);
             }
+
             //test2.setCity(city);
-            city.addDistrict(district2);
+            int dir = selector.nextInt(4) + 1;
+            GeographicPoint pt2 = pt.getNorth();
+            switch (dir) {
+                case 0:
+                    pt2 = pt.getNorth();
+                    break;
+                case 1:
+                    pt2 = pt.getSouth();
+                    break;
+                case 2:
+                    pt2 = pt.getEast();
+                    break;
+                case 3:
+                    pt2 = pt.getWest();
+            }
+            City city = starting.addBuildingToPlanet(pt2, district2);
+
+            if (count == 0) {
+                c.setCapitalCity(city);
+            }
+            if (city.getName().equals(City.CITY_DEFAULT)) {
+                city.setName(townName);
+            }
 
             //Add leader to city
             Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
@@ -452,7 +469,7 @@ public class GameInitializer {
             PeopleProcessor.placePerson(city, gov);
             //Set growth
             //Add city
-            starting.cities.add(city);
+            //starting.cities.add(city);
         }
     }
 
@@ -699,7 +716,7 @@ public class GameInitializer {
             p.cities.get(i).buildings.get(0).areas.add(research);
         }
     }
-    
+
     private void addSupplyLines(Planet p) {
         //Consolidate all resource miners
     }

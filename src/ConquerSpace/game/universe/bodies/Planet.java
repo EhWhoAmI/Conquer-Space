@@ -21,7 +21,7 @@ import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
-import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
@@ -83,6 +83,8 @@ public class Planet extends SpaceObject {
     public ArrayList<City> cities;
 
     private Person governor;
+    
+    public ArrayList<Workable> jobProviders;
 
     /**
      * If this is empty, the planet does not have life.
@@ -117,6 +119,8 @@ public class Planet extends SpaceObject {
 
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
+        
+        jobProviders = new ArrayList<>();
 
         //planetJobs = new ArrayList<>();
         localLife = new ArrayList<>();
@@ -324,49 +328,57 @@ public class Planet extends SpaceObject {
     }
 
     /**
-     * Checks if it's near a city, and adds it to the city.If not, creates one.
+     * Checks if it's near a city, and adds it to the city. If not, creates one.
      *
      * @param position
      * @param b
      * @return The city it is added to.
      */
-    public City addBuilding(GeographicPoint position, Building b) {
+    public City addBuildingToPlanet(GeographicPoint pt, Building b) {
         City city = null;
-        boolean created = false;
-        cityloop:
-        for (City c : cities) {
-            //Check for locations
-            for (Building stor : c.buildings) {
-                //Find the storage
-                GeographicPoint storagePoint = buildings
-                        .entrySet()
-                        .stream()
-                        .filter(ent -> stor.equals(ent.getValue()))
-                        .map(Map.Entry::getKey).findFirst().orElse(null);
-                if (storagePoint != null) {
-                    //Check if next to city point
-                    if ((storagePoint.getX() + 1 == position.getX()
-                            || storagePoint.getX() - 1 == position.getX())
-                            && (storagePoint.getY() + 1 == position.getY()
-                            || storagePoint.getY() - 1 == position.getY())) {
-                        //Add to city
-                        c.buildings.add(b);
-                        created = true;
-                        city = c;
-                        break cityloop;
-                    }
-                }
+
+        if (buildings.containsKey(pt.getNorth())) {
+            city = buildings.get(pt.getNorth()).getCity();
+            city.addDistrict(b);
+        } else if (buildings.containsKey(pt.getSouth())) {
+            city = buildings.get(pt.getSouth()).getCity();
+            city.addDistrict(b);
+        } else if (buildings.containsKey(pt.getEast())) {
+            city = buildings.get(pt.getEast()).getCity();
+            city.addDistrict(b);
+        } else if (buildings.containsKey(pt.getWest())) {
+            city = buildings.get(pt.getWest()).getCity();
+            city.addDistrict(b);
+        }
+        
+        //Create city
+        if (city == null) {
+            City createdCity = new City(this.getUniversePath());
+
+            createdCity.setName(City.CITY_DEFAULT);
+            city = createdCity;
+            city.addDistrict(b);
+            b.setCity(city);
+            cities.add(city);
+        }
+        
+        placeBuilding(pt, b);
+        return city;
+    }
+    
+    public void placeBuilding(GeographicPoint pt, Building b) {
+        //Check if exists already
+        if(buildings.containsKey(pt)) {
+            Building existed = buildings.get(pt);
+            if(existed != null) {
+                existed.getCity().buildings.remove(existed);
             }
         }
-
-        //Create city
-        if (!created) {
-            City createdCity = new City(this.getUniversePath());
-            createdCity.setName("Another City");
-            city = createdCity;
-            b.setCity(city);
+        
+        buildings.put(pt, b);
+        if (b instanceof Workable) {
+            jobProviders.add(b);
         }
-        return city;
     }
 
     public int getPlanetHeight() {

@@ -145,7 +145,7 @@ public class ConquerSpace {
             while (!menu.isLoadedUniverse()) {
                 Thread.sleep(100);
             }
-
+            menu = null;
             //Show loading screen
             Loading load = new Loading();
             loadUniverse();

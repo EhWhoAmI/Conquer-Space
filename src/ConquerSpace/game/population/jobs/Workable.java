@@ -24,7 +24,17 @@ import ConquerSpace.game.population.jobs.Job;
  * @author EhWhoAmI
  */
 public interface Workable {
+
     public Job[] jobsNeeded();
+
     public void processJob(Job j);
-    //method to check if jobs need to be rewrited
+
+//    public long getNeededJobs();
+//
+//    /**
+//     * Number of non-required jobs.
+//     *
+//     * @return
+//     */
+//    public long getJobs();
 }

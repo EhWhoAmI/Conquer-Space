@@ -204,11 +204,15 @@ public class GameUpdater {
                 } else {
                     //Done construction!
                     //Check for cities near it
-                    p.addBuilding(key, building);
+                    if (build.getToBuild() == null) {
+                        p.buildings.remove(key);
+                    } else {
+                        p.addBuildingToPlanet(key, building);
 
-                    //Alert builder
-                    build.builder.passEvent(new Event("Building " + build.getToBuild().getType() + " finished"));
-                    p.buildings.put(key, build.getToBuild());
+                        //Alert builder
+                        build.builder.passEvent(new Event("Building " + build.getToBuild().getType() + " finished"));
+                        p.buildings.put(key, build.getToBuild());
+                    }
                 }
             } else {
                 building.tick(date, delta);

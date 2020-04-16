@@ -38,7 +38,7 @@ public class PlanetInfoSheet extends JPanel {
 
     JTabbedPane tpane;
     PlanetOverview overview;
-    PlanetPopulation population;
+    PlanetCities population;
     SpacePortMenuSheet spacePort;
     AtmosphereInfo atmosphere;
     PlanetIndustry industry;
@@ -61,7 +61,7 @@ public class PlanetInfoSheet extends JPanel {
 
         overview = new PlanetOverview(u, p, c);
         atmosphere = new AtmosphereInfo(p, c);
-        population = new PlanetPopulation(u, p, 0);
+        population = new PlanetCities(u, p, 0);
         spacePort = new SpacePortMenuSheet(p, c);
         planetGeology = new PlanetGeology(p);
         //building = new ConstructionMenu(u, p, c);

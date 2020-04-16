@@ -53,7 +53,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Zyun
  */
-public class PlanetPopulation extends JPanel {
+public class PlanetCities extends JPanel {
 
     private JTabbedPane tabs;
 
@@ -86,7 +86,7 @@ public class PlanetPopulation extends JPanel {
     private DefaultListModel<Area> areaListModel;
     private JList<Area> areaList;
 
-    public PlanetPopulation(Universe u, Planet p, int turn) {
+    public PlanetCities(Universe u, Planet p, int turn) {
         this.p = p;
         tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
@@ -205,6 +205,9 @@ public class PlanetPopulation extends JPanel {
             //Max population
             JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
             cityData.add(maxPopulation);
+            
+            JLabel districtCount = new JLabel("Districts: " + selected.buildings.size());
+            cityData.add(districtCount);
 
             //Check for govenor
             if (cityList.getSelectedValue().getGovernor() != null) {

@@ -22,6 +22,7 @@ package ConquerSpace.game.universe;
  * @author EhWhoAmI
  */
 public class GeographicPoint {
+
     private int X;
     private int Y;
 
@@ -50,18 +51,34 @@ public class GeographicPoint {
     public void setY(int Y) {
         this.Y = Y;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof GeographicPoint) {
+        if (obj instanceof GeographicPoint) {
             GeographicPoint ither = (GeographicPoint) obj;
             return ((ither.X == X) && (ither.Y == Y));
         }
         return false;
-    }  
+    }
 
     @Override
     public int hashCode() {
         return (X + "" + Y).hashCode();
+    }
+
+    public GeographicPoint getNorth() {
+        return (new GeographicPoint(X, Y - 1));
+    }
+
+    public GeographicPoint getSouth() {
+        return (new GeographicPoint(X, Y + 1));
+    }
+
+    public GeographicPoint getEast() {
+        return (new GeographicPoint(X + 1, Y));
+    }
+
+    public GeographicPoint getWest() {
+        return (new GeographicPoint(X - 1, Y));
     }
 }

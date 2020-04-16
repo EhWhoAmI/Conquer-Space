@@ -19,7 +19,10 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.ConstructingBuilding;
+import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
@@ -66,12 +69,75 @@ public class Actions {
             ConstructingBuilding buildings = new ConstructingBuilding(what, pt, turns, owner);
             buildings.setScale(1);
             //Determine cost...
-            
+
             p.buildings.put(pt, buildings);
             return BUILD_BUILDING_SUCCESS;
         } else {
             return BUILD_BUILDING_FAIL_NOT_OWNER;
         }
+    }
+
+    /**
+     * Places building for free
+     *
+     * @param p
+     * @param ptx
+     * @param what
+     * @param owner
+     * @return
+     */
+    public static void forcePlaceBuilding(Planet p, GeographicPoint pt, Building what) {
+        p.buildings.put(pt, what);
+        //Check for working for
+        if (what instanceof Workable) {
+            p.jobProviders.add(what);
+        }
+    }
+
+    /**
+     * Demolishes the building at point
+     *
+     * @param p
+     * @param pt
+     * @param turns
+     */
+    public static int demolishBuilding(Planet p, GeographicPoint pt, Civilization owner, int turns) {
+        if (p.getOwnerID() == owner.getID()) {
+            ConstructingBuilding buildings = new ConstructingBuilding(null, pt, turns, owner);
+            buildings.setScale(1);
+            //Determine cost...
+
+            p.buildings.put(pt, buildings);
+            return BUILD_BUILDING_SUCCESS;
+        } else {
+            return BUILD_BUILDING_FAIL_NOT_OWNER;
+        }
+    }
+
+    public static void addArea(Planet on, Building building, Area a) {
+        building.areas.add(a);
+        if (a instanceof Workable) {
+            on.jobProviders.add(a);
+        }
+    }
+
+    public static City addBuildingToCity(Planet p, GeographicPoint pt, Building what) {
+        //Check surroundings, and add to city if it's around it
+        City c = null;
+        if (p.buildings.containsKey(pt.getNorth())) {
+            c = p.buildings.get(pt.getNorth()).getCity();
+            c.addDistrict(what);
+        } else if (p.buildings.containsKey(pt.getSouth())) {
+            c = p.buildings.get(pt.getSouth()).getCity();
+            c.addDistrict(what);
+        } else if (p.buildings.containsKey(pt.getEast())) {
+            c = p.buildings.get(pt.getEast()).getCity();
+            c.addDistrict(what);
+        } else if (p.buildings.containsKey(pt.getWest())) {
+            c = p.buildings.get(pt.getWest()).getCity();
+            c.addDistrict(what);
+        }
+        return c;
     }
 
     public static void researchTech(Civilization c, Technology t) {
@@ -82,7 +148,7 @@ public class Actions {
         if (what instanceof VisionPoint) {
             SpaceTelescope obs = ((SpaceTelescope) what);
             StarSystem sys = Globals.universe.getStarSystem(whichPlanet.getParentStarSystem());
-            obs.setPosition(new Point((long)sys.getX(), (long)sys.getY()));
+            obs.setPosition(new Point((long) sys.getX(), (long) sys.getY()));
             c.visionPoints.add((VisionPoint) what);
 
         }

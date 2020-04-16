@@ -25,6 +25,7 @@ import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.StorageNeeds;
 import ConquerSpace.util.ResourceLoader;
@@ -203,5 +204,11 @@ public abstract class Building implements Workable, SupplyNode {
     public Job[] jobsNeeded() {
         return new Job[0];
     }
-
+    
+    public void addArea(Planet p, Area a) {
+        areas.add(a);
+        if(a instanceof Workable) {
+            p.jobProviders.add(a);
+        }
+    }
 }
