@@ -30,6 +30,12 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 /**
  * Show debug stats, like memory used.
@@ -61,6 +67,13 @@ public class DebugStatsWindow extends JInternalFrame {
     private JButton deviceInfo;
 
     private JButton logger;
+
+    private TimeSeriesCollection memoryInfoStats;
+    private TimeSeries usedMemorySeries;
+    private TimeSeries availableMemorySeries;
+
+    private JFreeChart chart;
+
     /**
      * Universe
      */
@@ -139,11 +152,28 @@ public class DebugStatsWindow extends JInternalFrame {
             frame.setResizable(true);
             frame.setClosable(true);
             frame.setVisible(true);
-            
+
             getDesktopPane().add(frame);
         });
 
+        memoryInfoStats = new TimeSeriesCollection();
+
+        usedMemorySeries = new TimeSeries("Used Memory");
+        availableMemorySeries = new TimeSeries("Available Memory");
+        usedMemorySeries.setMaximumItemAge(1000 * 120);
+        availableMemorySeries.setMaximumItemAge(1000 * 120);
+
+        memoryInfoStats.addSeries(usedMemorySeries);
+        memoryInfoStats.addSeries(availableMemorySeries);
+
+        chart = ChartFactory.createTimeSeriesChart("Memory Usage over time", "", "MB", memoryInfoStats, true, true, false);
+        ChartPanel panel = new ChartPanel(chart);
+        panel.setDomainZoomable(false);
+        panel.setPopupMenu(null);
+        panel.setRangeZoomable(false);
+
         add(memoryusedLabel);
+        add(panel);
         add(threadCountLabel);
         add(dumpUniverseButton);
         add(runTrashCompactor);
@@ -156,6 +186,13 @@ public class DebugStatsWindow extends JInternalFrame {
         Timer ticker = new Timer(0, (e) -> {
             Runtime r = Runtime.getRuntime();
             memoryusedLabel.setText("Memory used: " + byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) + "/" + byteCountToDisplaySize(r.totalMemory()) + ". Something like " + (((((float) r.totalMemory()) - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
+            Millisecond time = new Millisecond();
+            usedMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory() - r.freeMemory())));
+            availableMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory())));
+
+            usedMemorySeries.removeAgedItems(true);
+            availableMemorySeries.removeAgedItems(true);
+            chart.fireChartChanged();
             threadCountLabel.setText("Threads currently running: " + Thread.getAllStackTraces().size());
             repaint();
         });
@@ -284,6 +321,27 @@ public class DebugStatsWindow extends JInternalFrame {
             displaySize = String.valueOf(size.divide(ONE_KB_BI)) + " KB";
         } else {
             displaySize = String.valueOf(size) + " bytes";
+        }
+        return displaySize;
+    }
+
+    public static double byteCountToDisplaySizeNumber(final BigInteger size) {
+        double displaySize;
+
+        if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_EB_BI).doubleValue();
+        } else if (size.divide(ONE_PB_BI).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_PB_BI).doubleValue();
+        } else if (size.divide(ONE_TB_BI).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_TB_BI).doubleValue();
+        } else if (size.divide(ONE_GB_BI).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_GB_BI).doubleValue();
+        } else if (size.divide(ONE_MB_BI).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_MB_BI).doubleValue();
+        } else if (size.divide(ONE_KB_BI).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_KB_BI).doubleValue();
+        } else {
+            displaySize = size.doubleValue();
         }
         return displaySize;
     }

@@ -667,6 +667,10 @@ public class GameInitializer {
             //Add infrastructure
             p.buildings.put(getRandomEmptyPoint(p, selector), building);
         }
+        
+        for(City c : p.cities) {
+            c.buildings.size();
+        }
     }
 
     private PowerPlantArea createPowerPlant() {
