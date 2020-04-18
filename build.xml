@@ -69,7 +69,7 @@
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
 
-    -->
+    -->    
     <property name="log4j2.configurationFile" value="${user.dir}/assets/log4j2.xml"/>
     <property name="log4j2.debug" value="${user.dir}/assets/log4j2.xml"/>
     
@@ -77,14 +77,19 @@
         <copy todir="${dist.dir}/assets" >  
             <fileset dir="assets" includes="**"/>  
         </copy>
+        <delete file="${dist.dir}/README.TXT"/>
         <copy todir="${dist.dir}" >  
-            <fileset file="runCQSP.bat"/>  
-            <fileset file="CHANGELOG.txt"/>  
-            <fileset file="LICENSE.txt"/>  
+            <fileset file="runCQSP.bat"/>
+            <fileset file="CHANGELOG.txt"/>
+            <fileset file="LICENSE.txt"/>
+            <fileset file="README.txt"/>
         </copy>
         <echo message="Done copying files"/>    
         
         <buildnumber file="assets/BUILDNO"/>
-        <echo message="Changing build number"/>    
+        <echo message="Changing build number"/>
+        <taskdef resource="proguard/ant/task.properties"
+                 classpath="tools/proguard/lib/proguard.jar"/>
+        <proguard configuration="proguard.conf"/>
     </target>
 </project>
