@@ -131,7 +131,7 @@ public class GameInitializer {
                 c.setCapitalPlanet(starting);
 
                 initializeBuildings(starting, c, selector);
-                
+
                 nameStratumOnPlanet(starting);
 
                 //Set ownership
@@ -169,7 +169,6 @@ public class GameInitializer {
         createResourceMiners(starting, c, c.getFoundingSpecies());
 
         //createResourceStorages(c, starting, selector);
-
         createPopulationStorages(starting, c, selector);
 
         createFarms(starting, c, selector);
@@ -629,47 +628,25 @@ public class GameInitializer {
     }
 
     private void createInfrastructure(Planet p, Random selector) {
-        //Adds the infrastructure to the planet...
-        //Get building count
-        int buildingCount = p.buildings.size();
-        //Process them
-        Collection<Building> buildings = new ArrayList<>(p.buildings.values());
-        Iterator<Building> buildingIterator = buildings.iterator();
-        int infrastructureCount = (buildingCount / 5);
-        for (int k = 0; k < infrastructureCount; k++) {
-            //Create infrastructure building for multiple things
-            InfrastructureBuilding building = new InfrastructureBuilding();
-
-            //Ensure point is near the thing
-            //pt2 = getRandomEmptyPoint(starting, selector);
-            //Add areas
-            PowerPlantArea powerPlant = new PowerPlantArea();
-            //Get the resources needed for powering plant
-            //TODO: choose energy resource
-            /*Resource resource = null;
-            for (Resource res : GameController.resources) {
-                for (String tag : res.getTags()) {
-                    if (tag.equals("energy")) {
-                        resource = res;
-                        break;
+        //Adds the infrastructure to the planet...        
+        for (City c : p.cities) {
+            int citySize = c.buildings.size();
+            if (citySize > 0) {
+                Building b = c.buildings.get(selector.nextInt(citySize));
+                PowerPlantArea powerPlant = new PowerPlantArea();
+                //TODO: choose energy resource
+                /*
+                Resource resource = null;
+                for (Resource res : GameController.resources) {
+                    for (String tag : res.getTags()) {
+                        if (tag.equals("energy")) {
+                            resource = res;
+                            break;
+                        }
                     }
-                }
-            }*/
-
-            //Add the districts
-            for (int i = 0; i < 5; i++) {
-                Building b = buildingIterator.next();
-                building.addBuilding(b);
+                }*/
+                b.addArea(p, powerPlant);
             }
-
-            powerPlant.setMaxVolume(1000);
-            building.areas.add(powerPlant);
-            //Add infrastructure
-            p.buildings.put(getRandomEmptyPoint(p, selector), building);
-        }
-        
-        for(City c : p.cities) {
-            c.buildings.size();
         }
     }
 

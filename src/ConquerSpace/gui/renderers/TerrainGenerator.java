@@ -61,6 +61,10 @@ public class TerrainGenerator {
             Color value = entry.getValue();
             renderer.addGradientPoint(key, new ConquerSpace.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
         }
+        renderer.enableLight();
+        renderer.setLightContrast(1);
+        renderer.setLightBrightness(2.0);
+        renderer.setDestImage(image);
         renderer.render();
 
         Color[][] array = new Color[sizeX][sizeY];
@@ -125,7 +129,7 @@ public class TerrainGenerator {
 
         return image.toIntArray();
     }
-    
+
     public Image generateImage(int seed, int octaves, float frequency, float lacunarity, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2, HashMap<Float, Color> colors) {
         Perlin myModule = new Perlin();
         myModule.setOctaveCount(octaves);
@@ -147,16 +151,19 @@ public class TerrainGenerator {
 
         Image image = new Image();
         renderer.setSourceNoiseMap(heightMap);
-        renderer.setDestImage(image);
         renderer.clearGradient();
         for (Map.Entry<Float, Color> entry : colors.entrySet()) {
             Float key = entry.getKey();
             Color value = entry.getValue();
-            
+
             renderer.addGradientPoint(key, new ConquerSpace.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
         }
+        renderer.enableLight();
+        renderer.setLightContrast(2.5);
+        renderer.setLightBrightness(2);
+        renderer.setDestImage(image);
         renderer.render();
-
+        
         return image;
     }
 }

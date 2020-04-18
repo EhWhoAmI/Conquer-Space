@@ -77,6 +77,7 @@ public class PlanetOverview extends JPanel {
     private JLabel planetName;
     private JLabel planetPath;
     private JLabel planetType;
+    private JLabel planetSize;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
 
@@ -107,6 +108,7 @@ public class PlanetOverview extends JPanel {
         planetName = new JLabel();
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
+        planetSize = new JLabel("Planet radius: " + p.getPlanetSize());
         ownerLabel = new JLabel();
         orbitDistance = new JLabel("Distance: " + numberFormatter.format(p.getOrbitalDistance()) + " km, " + numberFormatter.format((double) p.getOrbitalDistance() / 149598000d) + " AU");
 
@@ -175,6 +177,7 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
         planetOverview.add(planetType);
+        planetOverview.add(planetSize);
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
 

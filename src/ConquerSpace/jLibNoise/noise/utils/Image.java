@@ -25,6 +25,7 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 import ConquerSpace.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory;
+import java.awt.image.BufferedImage;
 
 /**
  * Implements an image, a 2-dimensional array of color values.
@@ -524,5 +525,25 @@ public class Image {
             }
         }
         return i;
+    }
+
+    public BufferedImage toBufferedImage() {
+        int width = getWidth();
+        int height = getHeight();
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        int index = 0;
+        int[] pixels = new int[width * height];
+        for (int y = height - 1; y >= 0; y--) {
+            for (int x = 0; x < width; x++) {
+                int pos = x + (y * width);
+                ConquerSpace.jLibNoise.noise.utils.Color clr = image[pos];
+                pixels[index] = new java.awt.Color(clr.red, clr.green, clr.blue, clr.alpha).getRGB();
+                index++;
+            }
+        }
+
+        img.setRGB(0, 0, width, height, pixels, 0, width);
+        return img;
     }
 }

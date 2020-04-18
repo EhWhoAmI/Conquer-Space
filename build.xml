@@ -79,7 +79,9 @@
         </copy>
         <copy todir="${dist.dir}" >  
             <fileset file="runCQSP.bat"/>  
-        </copy> 
+            <fileset file="CHANGELOG.txt"/>  
+            <fileset file="LICENSE.txt"/>  
+        </copy>
         <echo message="Done copying files"/>    
         
         <buildnumber file="assets/BUILDNO"/>
