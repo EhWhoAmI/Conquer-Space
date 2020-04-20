@@ -39,11 +39,6 @@ import javax.swing.SpinnerNumberModel;
  * @author Zyun
  */
 public class TechFormatter extends JFrame {
-
-    public static void main(String[] args) {
-        new TechFormatter();
-    }
-
     private DefaultListModel<Technology> technologyListModel;
     private JList<Technology> technologyList;
 

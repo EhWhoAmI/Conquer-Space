@@ -64,11 +64,6 @@ import org.json.JSONObject;
  * @author EhWhoAmI
  */
 public class ResourceViewer extends JFrame {
-
-    public static void main(String[] args) {
-        new ResourceViewer();
-    }
-
     private JPanel resourceListPanel;
     private JList<Good> resourceList;
     private DefaultListModel<Good> resourceListModel;
