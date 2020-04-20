@@ -23,6 +23,7 @@ import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Race;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.civilization.government.GovernmentPosition;
 import ConquerSpace.game.universe.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -44,24 +45,26 @@ public class PeopleProcessor {
         for (int starSystemCount = 0; starSystemCount < u.getStarSystemCount(); starSystemCount++) {
             StarSystem starSystem = u.getStarSystem(starSystemCount);
             //Check for ships or whatever
-            for (int planetCount = 0; planetCount < starSystem.getPlanetCount(); planetCount++) {
-                Planet planet = starSystem.getPlanet(planetCount);
-
-                //If city is populated
-                if (planet.isHabitated()) {
-                    for (City c : planet.cities) {
-                        //Process cities
-                        //Depending on the population size, add things
-                        int populationSize = c.getPopulationSize();
-                        //Calculate the percentage chance to create someone
-                        int peopleCount = (int) ((double) populationSize * 0.05d);
-                        //Dew it
-                        for (int k = 0; k < peopleCount; k++) {
-                            //Get first thing
-                            if (c.buildings.get(0) instanceof PopulationStorage) {
-                                Race s = ((PopulationStorage) c.buildings.get(0)).getPopulationArrayList().get(0).species;
-                                Person people = createPerson(s);
-                                //c.peopleAtCity.add(people);
+            for (int i = 0; i < starSystem.bodies.size(); i++) {
+                Body body = starSystem.bodies.get(i);
+                if (body instanceof Planet) {
+                    Planet planet = (Planet) body;
+                    //If city is populated
+                    if (planet.isHabitated()) {
+                        for (City c : planet.cities) {
+                            //Process cities
+                            //Depending on the population size, add things
+                            int populationSize = c.getPopulationSize();
+                            //Calculate the percentage chance to create someone
+                            int peopleCount = (int) ((double) populationSize * 0.05d);
+                            //Dew it
+                            for (int k = 0; k < peopleCount; k++) {
+                                //Get first thing
+                                if (c.buildings.get(0) instanceof PopulationStorage) {
+                                    Race s = ((PopulationStorage) c.buildings.get(0)).getPopulationArrayList().get(0).species;
+                                    Person people = createPerson(s);
+                                    //c.peopleAtCity.add(people);
+                                }
                             }
                         }
                     }
@@ -82,12 +85,14 @@ public class PeopleProcessor {
         for (int starSystemCount = 0; starSystemCount < u.getStarSystemCount(); starSystemCount++) {
             StarSystem starSystem = u.getStarSystem(starSystemCount);
             //Check for ships or whatever
-            for (int planetCount = 0; planetCount < starSystem.getPlanetCount(); planetCount++) {
-                Planet planet = starSystem.getPlanet(planetCount);
-
-                //If city is populated
-                if (planet.isHabitated()) {
-                    processPlanet(planet);
+            for (int planetCount = 0; planetCount < starSystem.bodies.size(); planetCount++) {
+                Body body = starSystem.bodies.get(planetCount);
+                if (body instanceof Planet) {
+                    Planet planet = (Planet) body;
+                    //If city is populated
+                    if (planet.isHabitated()) {
+                        processPlanet(planet);
+                    }
                 }
             }
         }

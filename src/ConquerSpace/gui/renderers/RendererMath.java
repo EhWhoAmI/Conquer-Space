@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.renderers;
 
-import ConquerSpace.game.universe.GalacticLocation;
+import ConquerSpace.game.universe.PolarCoordinate;
 
 /**
  * Does all the math for rendering.
@@ -31,7 +31,7 @@ public class RendererMath {
      * Cartesian coordinate pane(or a swing panel pane), so that you can plot it
      * on a swing jpanel.
      *
-     * @see GalacticLocation
+     * @see PolarCoordinate
      * @param g galatic location/polar coordinate.
      * @param center center of the plot of polar coordinate.
      * @param unitSize the size of the individual unit(as in the distance of

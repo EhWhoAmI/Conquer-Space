@@ -44,6 +44,7 @@ import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.government.Government;
 import ConquerSpace.game.universe.civilization.government.GovernmentPosition;
@@ -617,12 +618,10 @@ public class GameInitializer {
         for (int i = 0; i < u.getStarSystemCount(); i++) {
             StarSystem s = u.getStarSystem(i);
             c.vision.put(new UniversePath(i), VisionTypes.UNDISCOVERED);
-            for (int h = 0; h < s.getPlanetCount(); h++) {
+            for (int h = 0; h < s.bodies.size(); h++) {
+                Body b = s.bodies.get(h);
                 //Add planets
-                c.vision.put(new UniversePath(i, h), VisionTypes.UNDISCOVERED);
-            }
-            for (int h2 = 0; h2 < s.getStarCount(); h2++) {
-                c.vision.put(new UniversePath(i, h2, true), VisionTypes.UNDISCOVERED);
+                c.vision.put(new UniversePath(i, b.getID()), VisionTypes.UNDISCOVERED);
             }
         }
     }

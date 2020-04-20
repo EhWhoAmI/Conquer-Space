@@ -23,6 +23,8 @@ import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.Orbit;
+import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.stats.Economy;
 import ConquerSpace.game.universe.resources.Stratum;
@@ -37,25 +39,14 @@ import java.util.Map;
  *
  * @author Zyun
  */
-public class Planet extends SpaceObject {
+public class Planet extends Body {
 
     private int planetType;
-    private long orbitalDistance;
-    private double degrees;
 
     //Radius in hundreds of kilometers
     private int planetSize;
 
-    private double semiMajorAxis;
-    private double eccentricity;
-    private double rotation;
-
-    public double xpos;
-    public double ypos;
-
     public ArrayList<Stratum> strata;
-
-    int id;
 
     private int ownerID = ControlTypes.NONE_CONTROLLED;
     //Empty as default -- undiscovered
@@ -83,7 +74,7 @@ public class Planet extends SpaceObject {
     public ArrayList<City> cities;
 
     private Person governor;
-    
+
     public ArrayList<Workable> jobProviders;
 
     /**
@@ -100,14 +91,11 @@ public class Planet extends SpaceObject {
      * @param id planet id
      * @param parentStarSystem parent star system
      */
-    public Planet(int planetType, long orbitalDistance, int planetSize, int id, int parentStarSystem) {
+    public Planet(int planetType, int planetSize, int id, int parentStarSystem) {
         this.planetType = planetType;
-        this.orbitalDistance = orbitalDistance;
         this.planetSize = planetSize;
-        this.id = id;
+        super.ID = id;
         this.parentStarSystem = parentStarSystem;
-        this.degrees = 0;
-        semiMajorAxis = orbitalDistance;
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
@@ -119,7 +107,7 @@ public class Planet extends SpaceObject {
 
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
-        
+
         jobProviders = new ArrayList<>();
 
         //planetJobs = new ArrayList<>();
@@ -134,7 +122,7 @@ public class Planet extends SpaceObject {
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
         //Parse planet type.
-        builder.append("Planet " + id + ": (Type=");
+        builder.append("Planet " + ID + ": (Type=");
         switch (planetType) {
             case PlanetTypes.ROCK:
                 builder.append("rock");
@@ -142,19 +130,16 @@ public class Planet extends SpaceObject {
             case PlanetTypes.GAS:
                 builder.append("gas");
         }
-        builder.append(", Orbital Distance=" + orbitalDistance + ", Planet size: " + planetSize
-                + "Rectangular Position: " + xpos + ", " + ypos + ":\n");
+        builder.append(", Orbital Distance=");
+        builder.append(orbit.toPolarCoordinate());
+        builder.append(", Planet size: ");
+        builder.append(planetSize);
+        builder.append("Rectangular Position: ");
+        builder.append(point);
+        builder.append(":\n");
 
         builder.append(")\n");
         return (builder.toString());
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public long getOrbitalDistance() {
-        return orbitalDistance;
     }
 
     public int getPlanetSize() {
@@ -163,20 +148,6 @@ public class Planet extends SpaceObject {
 
     public int getPlanetType() {
         return planetType;
-    }
-
-    /**
-     * Change the degrees by <code>degs</code> degrees.
-     *
-     * @param degs degrees
-     */
-    public void modDegrees(float degs) {
-        degrees += degs;
-        degrees %= 360;
-    }
-
-    public void setDegrees(double degrees) {
-        this.degrees = degrees;
     }
 
     public int getOwnerID() {
@@ -211,12 +182,8 @@ public class Planet extends SpaceObject {
         this.parentStarSystem = parentStarSystem;
     }
 
-    public double getPlanetDegrees() {
-        return (degrees);
-    }
-
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, id));
+        return (new UniversePath(parentStarSystem, ID));
     }
 
     public int getSatelliteCount() {
@@ -239,26 +206,10 @@ public class Planet extends SpaceObject {
         satellites.add(orb);
     }
 
-    public double getX() {
-        return xpos;
-    }
-
-    public double getY() {
-        return ypos;
-    }
-
-    public void setX(double x) {
-        xpos = x;
-    }
-
-    public void setY(double y) {
-        ypos = y;
-    }
-
     @Override
     public String toString() {
         if (name.isEmpty()) {
-            return (id + "");
+            return (ID + "");
         }
         return name;
     }
@@ -303,30 +254,6 @@ public class Planet extends SpaceObject {
         this.governor = governor;
     }
 
-    public void setSemiMajorAxis(double semiMajorAxis) {
-        this.semiMajorAxis = semiMajorAxis;
-    }
-
-    public double getSemiMajorAxis() {
-        return semiMajorAxis;
-    }
-
-    public void setEccentricity(double eccentricity) {
-        this.eccentricity = eccentricity;
-    }
-
-    public double getEccentricity() {
-        return eccentricity;
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
-
     /**
      * Checks if it's near a city, and adds it to the city. If not, creates one.
      *
@@ -350,7 +277,7 @@ public class Planet extends SpaceObject {
             city = buildings.get(pt.getWest()).getCity();
             city.addDistrict(b);
         }
-        
+
         //Create city
         if (city == null) {
             City createdCity = new City(this.getUniversePath());
@@ -361,20 +288,20 @@ public class Planet extends SpaceObject {
             b.setCity(city);
             cities.add(city);
         }
-        
+
         placeBuilding(pt, b);
         return city;
     }
-    
+
     public void placeBuilding(GeographicPoint pt, Building b) {
         //Check if exists already
-        if(buildings.containsKey(pt)) {
+        if (buildings.containsKey(pt)) {
             Building existed = buildings.get(pt);
-            if(existed != null) {
+            if (existed != null) {
                 existed.getCity().buildings.remove(existed);
             }
         }
-        
+
         buildings.put(pt, b);
         if (b instanceof Workable) {
             jobProviders.add(b);

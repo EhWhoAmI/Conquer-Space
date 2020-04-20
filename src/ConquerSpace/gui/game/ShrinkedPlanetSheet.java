@@ -19,6 +19,7 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -88,7 +89,9 @@ public class ShrinkedPlanetSheet extends JPanel {
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
         ownerLabel = new JLabel();
-        orbitDistance = new JLabel("Distance: " + p.getOrbitalDistance() + " km");
+        PolarCoordinate pos = p.orbit.toPolarCoordinate();
+        orbitDistance = new JLabel("Distance: " + (pos.getDistance()) + " km, " + ((double) pos.getDistance() / 149598000d) + " AU");
+
 
         //Init planetname
         if (p.getName().equals("")) {
@@ -101,7 +104,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
         name.append("" + p.getParentStarSystem());
-        name.append(" Planet id " + p.getId());
+        name.append(" Planet id " + p.getID());
         planetPath.setText(name.toString());
 
         //Init owner

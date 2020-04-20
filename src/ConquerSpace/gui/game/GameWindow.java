@@ -27,6 +27,7 @@ import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.civilization.vision.VisionTypes;
@@ -559,17 +560,21 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
-                            Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
-                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
-                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetHeight() * 1.1 / SystemRenderer.PLANET_DIVISOR) {
-                                //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
-                                //add(d);
-                                //Check if scanned
-                                mainInterfaceWindow.setSelectedPlanet(planet, planet.scanned.contains(c.getID()));
-                                mainInterfaceWindow.setSelectedTab(1);
+                        StarSystem selected = universe.getStarSystem(drawingStarSystem);
+                        for (int i = 0; i < selected.bodies.size(); i++) {
+                            Body body = selected.bodies.get(i);
+                            if (body instanceof Planet) {
+                                Planet planet = (Planet) body;
+                                if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
+                                        (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < planet.getPlanetHeight() * 1.1 / SystemRenderer.PLANET_DIVISOR) {
+                                    //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
+                                    //add(d);
+                                    //Check if scanned
+                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.scanned.contains(c.getID()));
+                                    mainInterfaceWindow.setSelectedTab(1);
 
-                                break;
+                                    break;
+                                }
                             }
                         }
                         break;
@@ -622,28 +627,32 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        for (int i = 0; i < universe.getStarSystem(drawingStarSystem).getPlanetCount(); i++) {
-                            Planet planet = universe.getStarSystem(drawingStarSystem).getPlanet(i);
-                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
-                                    (translateY + (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
-                                if (planet.scanned.contains(c.getID())) {
-                                    JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
-                                    planetName.addActionListener(a -> {
-                                        mainInterfaceWindow.setSelectedPlanet(planet, true);
-                                        mainInterfaceWindow.setSelectedTab(1);
-                                    });
-                                    popupMenu.add(planetName);
-                                } else {
-                                    JMenuItem text = new JMenuItem("Planet Unexplored");
-                                    text.addActionListener(a -> {
-                                        mainInterfaceWindow.setSelectedPlanet(planet, false);
-                                        mainInterfaceWindow.setSelectedTab(1);
-                                    });
-                                    popupMenu.add(text);
+                        StarSystem selected = universe.getStarSystem(drawingStarSystem);
+                        for (int i = 0; i < selected.bodies.size(); i++) {
+                            Body body = selected.bodies.get(i);
+                            if (body instanceof Planet) {
+                                Planet planet = (Planet) body;
+                                if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
+                                        (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
+                                    if (planet.scanned.contains(c.getID())) {
+                                        JMenuItem planetName = new JMenuItem("Planet " + planet.getID());
+                                        planetName.addActionListener(a -> {
+                                            mainInterfaceWindow.setSelectedPlanet(planet, true);
+                                            mainInterfaceWindow.setSelectedTab(1);
+                                        });
+                                        popupMenu.add(planetName);
+                                    } else {
+                                        JMenuItem text = new JMenuItem("Planet Unexplored");
+                                        text.addActionListener(a -> {
+                                            mainInterfaceWindow.setSelectedPlanet(planet, false);
+                                            mainInterfaceWindow.setSelectedTab(1);
+                                        });
+                                        popupMenu.add(text);
+                                    }
+                                    overPlanet = true;
+                                    overWhat = planet;
+                                    break;
                                 }
-                                overPlanet = true;
-                                overWhat = planet;
-                                break;
                             }
                         }
                         break;
@@ -706,10 +715,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
                             //Add an extra action to move...
                             StarSystem sys = universe.getStarSystem(drawingStarSystem);
-                            if (Math.hypot(gotoX, gotoY) > (sys.getPlanet(sys.getPlanetCount() - 1).getOrbitalDistance() + 10 * 10_000_000)) {
-                                ExitStarSystemAction act = new ExitStarSystemAction(s);
-                                s.addAction(act);
-                            }
+                            //if (Math.hypot(gotoX, gotoY) > (sys.getPlanet(sys.getPlanetCount() - 1).getOrbitalDistance() + 10 * 10_000_000)) {
+                            // ExitStarSystemAction act = new ExitStarSystemAction(s);
+                            //s.addAction(act);
+                            //}
                         }
                     });
                     men.add(gohereMenu);
@@ -874,21 +883,10 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         private void setAngle() {
             StarSystem sys = u.getStarSystem(desktopPane.drawingStarSystem);
-            for (int i = 0; i < sys.getPlanetCount(); i++) {
-                Planet planet = sys.getPlanet(i);
-                planet.setDegrees(degree);
-                //planet.modDegrees(1f);
-                double theta = Math.toRadians(planet.getPlanetDegrees());
-                double a = planet.getSemiMajorAxis();
-                //Eccentrcity
-                double e = planet.getEccentricity();
-                double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - planet.getRotation()));
-                RendererMath.Point ppt
-                        = RendererMath.polarCoordToCartesianCoord((long) r,
-                                planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
-
-                planet.setX(ppt.x);
-                planet.setY(ppt.y);
+            for (int i = 0; i < sys.bodies.size(); i++) {
+                Body planet = sys.bodies.get(i);
+                planet.orbit.setDegrees(degree);
+                planet.setPoint(planet.orbit.toSpacePoint());
             }
         }
     }

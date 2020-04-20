@@ -44,6 +44,8 @@ import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.PolarCoordinate;
+import ConquerSpace.game.universe.SpacePoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
@@ -54,7 +56,7 @@ import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.ships.Ship;
 import ConquerSpace.game.universe.bodies.ControlTypes;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.bodies.SpaceObject;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -90,7 +92,7 @@ public class GameUpdater {
 
     public void calculateControl() {
         for (UniversePath p : universe.control.keySet()) {
-            SpaceObject spaceObject = universe.getSpaceObject(p);
+            Body spaceObject = universe.getSpaceObject(p);
 
             //Do a run through of all planets.
             if (spaceObject instanceof Planet) {
@@ -104,13 +106,14 @@ public class GameUpdater {
             } else if (spaceObject instanceof StarSystem) {
                 StarSystem starsystem = (StarSystem) spaceObject;
                 int owner = -1;
-                for (int i = 0; i < starsystem.getPlanetCount(); i++) {
-                    Planet planet = starsystem.getPlanet(i);
-                    if (owner == -1 && planet.getOwnerID() > -1) {
-                        owner = planet.getOwnerID();
-                    } else if (owner != planet.getOwnerID() && planet.getOwnerID() != -1) {
-                        owner = ControlTypes.DISPUTED;
-                    }
+                for (int i = 0; i < starsystem.bodies.size(); i++) {
+                    Body body = starsystem.bodies.get(i);
+//                    if(body instanceof Planet)
+//                    if (owner == -1 && planet.getOwnerID() > -1) {
+//                        owner = planet.getOwnerID();
+//                    } else if (owner != planet.getOwnerID() && planet.getOwnerID() != -1) {
+//                        owner = ControlTypes.DISPUTED;
+//                    }
                 }
                 universe.control.put(p, owner);
 
@@ -120,7 +123,7 @@ public class GameUpdater {
 
     public void calculateVision() {
         for (UniversePath p : universe.control.keySet()) {
-            //Get the vision, do it...
+            //Vision is always visible when you control it
             int civIndex = universe.control.get(p);
             if (civIndex > -1) {
                 universe.getCivilization(civIndex).vision.put(p, VisionTypes.KNOWS_ALL);
@@ -159,12 +162,13 @@ public class GameUpdater {
 
     public void updateStarSystem(StarSystem sys, StarDate date, long delta) {
         //Maybe later the objects in space.
-        for (int i = 0; i < sys.getPlanetCount(); i++) {
-            processPlanet(sys.getPlanet(i), date, delta);
-        }
-
-        for (int i = 0; i < sys.getStarCount(); i++) {
-            processStar(sys.getStar(i), date);
+        for (int i = 0; i < sys.bodies.size(); i++) {
+            Body body = sys.bodies.get(i);
+            if (body instanceof Planet) {
+                processPlanet((Planet) body, date, delta);
+            } else if (body instanceof Star) {
+                processStar((Star) body, date);
+            }
         }
     }
 
@@ -418,21 +422,9 @@ public class GameUpdater {
 
             system.setX(pt.x);
             system.setY(pt.y);
-            for (int k = 0; k < system.getPlanetCount(); k++) {
-                Planet planet = system.getPlanet(k);
-                //planet.modDegrees(1f);
-                double theta = Math.toRadians(planet.getPlanetDegrees());
-                double a = planet.getSemiMajorAxis();
-                //Eccentrcity
-                double e = planet.getEccentricity();
-                double rotation = Math.toRadians(planet.getRotation());
-                double r = (a * (1 - e * e)) / (1 - e * Math.cos(theta - rotation));
-                RendererMath.Point ppt
-                        = RendererMath.polarCoordToCartesianCoord((long) r,
-                                planet.getPlanetDegrees(), new RendererMath.Point(0, 0), 1);
-
-                planet.setX(ppt.x);
-                planet.setY(ppt.y);
+            for (int k = 0; k < system.bodies.size(); k++) {
+                Body body = system.bodies.get(k);
+                body.setPoint(body.getOrbit().toSpacePoint());
             }
         }
         long end = System.currentTimeMillis();

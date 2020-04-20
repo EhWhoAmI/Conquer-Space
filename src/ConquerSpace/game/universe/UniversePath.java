@@ -30,19 +30,12 @@ public class UniversePath {
      * ID of system
      */
     private int systemID = -1;
-    /**
-     * ID of planet
-     */
-    private int planetID = -1;
-    /**
-     * ID of star
-     */
-    private int starID = -1;
-    /**
-     * ID of object in orbit
-     */
-    private int orbitID = -1;
 
+    /**
+     * The ID of the body.
+     */
+    private int bodyID = -1;
+    
     /**
      * Empty constructor.
      */
@@ -53,52 +46,10 @@ public class UniversePath {
      * Creates a new UniversePath object
      *
      * @param systemID ID of system
-     * @param planetID ID of planet
      */
-    public UniversePath(int systemID, int planetID) {
+    public UniversePath(int systemID, int bodyId) {
         this.systemID = systemID;
-        this.planetID = planetID;
-    }
-
-    /**
-     * Creates a new UniversePath object
-     *
-     * @param systemID id of star system
-     * @param starID id of star
-     * @param isstar ignore this. Put anything that is a bool. Just for
-     * reconition of this method.
-     */
-    public UniversePath(int systemID, int starID, boolean isstar) {
-        this.systemID = systemID;
-        this.starID = planetID;
-    }
-
-    /**
-     * Creates a new UniversePath object
-     *
-     * @param systemID id of star system
-     * @param planetID id of planet
-     * @param orbitID id of object in orbit
-     */
-    public UniversePath(int systemID, int planetID, int orbitID) {
-        this.systemID = systemID;
-        this.planetID = planetID;
-        this.orbitID = orbitID;
-    }
-
-    /**
-     * Creates a new UniversePath object
-     *
-     * @param systemID ID of system
-     * @param starID ID of star
-     * @param orbitID ID of object in oject
-     * @param isstar ignore this. Put anything that is a bool. Just for
-     * reconition of this Constructor.
-     */
-    public UniversePath(int systemID, int starID, int orbitID, boolean isstar) {
-        this.systemID = systemID;
-        this.starID = starID;
-        this.orbitID = orbitID;
+        this.bodyID = bodyId;
     }
 
     /**
@@ -108,15 +59,6 @@ public class UniversePath {
      */
     public UniversePath(int systemID) {
         this.systemID = systemID;
-    }
-
-    /**
-     * Get the id of the planet selected
-     *
-     * @return Planet ID
-     */
-    public int getPlanetID() {
-        return planetID;
     }
 
 
@@ -129,6 +71,10 @@ public class UniversePath {
         return systemID;
     }
 
+    public int getBodyID() {
+        return bodyID;
+    }
+
     /**
      * To string
      *
@@ -138,42 +84,24 @@ public class UniversePath {
     public String toString() {
         StringBuilder b = new StringBuilder();
             b.append(systemID);
-        if (planetID >= 0) {
+        if (bodyID >= 0) {
             b.append(":");
-            b.append(planetID);
+            b.append(bodyID);
         }
         return b.toString();
-    }
-
-    /**
-     * Get id of the object in orbit
-     *
-     * @return Orbit ID
-     */
-    public int getOrbitID() {
-        return orbitID;
-    }
-
-    /**
-     * Get id of star
-     *
-     * @return Star ID
-     */
-    public int getStarID() {
-        return starID;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof UniversePath) {
             UniversePath other = (UniversePath) obj;
-            return ((this.starID == other.starID) && (this.planetID == other.planetID) && (this.orbitID == other.orbitID) && (this.systemID == other.systemID));
+            return ((this.bodyID == other.bodyID) && (this.systemID == other.systemID));
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return(("" + systemID + starID + planetID + orbitID).hashCode());
+        return(("" + systemID + bodyID).hashCode());
     }
 }

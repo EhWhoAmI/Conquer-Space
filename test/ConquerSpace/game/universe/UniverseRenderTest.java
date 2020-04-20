@@ -1,11 +1,19 @@
 package ConquerSpace.game.universe;
 
+import static ConquerSpace.ConquerSpace.loadUniverse;
+import ConquerSpace.Globals;
+import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.universe.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
+import ConquerSpace.game.universe.generators.UniverseGenerator;
+import ConquerSpace.gui.renderers.UniverseRenderer;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -211,20 +219,12 @@ public final class UniverseRenderTest {
             civilizationConfig.setSpeciesName(speciesNameField.getText());
             config.setCivilizationConfig(civilizationConfig);
 
-            //Init script engine
-            ScriptEngineManager manager = new ScriptEngineManager();
-            ScriptEngine engine = manager.getEngineByName("python");
+            UniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, seed);
+            GameLoader.load();
+            Universe main = gen.generate();
+            Globals.universe = main;
+            long loadingEnd = System.currentTimeMillis();
 
-            engine.put("universeConfig", config);
-            engine.put("LOGGER", CQSPLogger.getLogger("Script.universeGen/main.py"));
-            reader = new FileReader(System.getProperty("user.dir") + "/assets/scripts/universeGen/main.py");
-            engine.eval(reader);
-            universe = (Universe) engine.get("universeObject");
-
-        } catch (FileNotFoundException ex) {
-            System.exit(1);
-        } catch (ScriptException ex) {
-            System.exit(1);
         } finally {
             try {
                 if (reader != null) {
@@ -240,9 +240,14 @@ public final class UniverseRenderTest {
         frame.setTitle("Conquer Space");
         frame.setLayout(new BorderLayout());
         //Create universe renderer
-        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), universe);
-        JPanel panel = new JPanel();
-        //panel.add(renderer);
+        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), Globals.universe, new Civilization(0, universe));
+        
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                renderer.drawUniverse(g, 0, 0, 1);
+            }
+        };
 
         //Place renderer into a scroll pane.
         JScrollPane scrollPane = new JScrollPane(panel);

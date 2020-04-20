@@ -58,7 +58,7 @@ public class UniverseRenderer {
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem s = universe.getStarSystem(i);
             if (s.getGalaticLocation().getDistance() > universeRadius) {
-                universeRadius = s.getGalaticLocation().getDistance();
+                universeRadius = (long) s.getGalaticLocation().getDistance();
             }
         }
 
@@ -133,7 +133,7 @@ public class UniverseRenderer {
                 }
                 //End of control
                 Color c;
-                switch (sys.getStar(0).type) {
+                switch (StarTypes.TYPE_G) {
                     case StarTypes.TYPE_A:
                         c = Color.decode("#D5E0FF");
                         break;
@@ -158,6 +158,7 @@ public class UniverseRenderer {
                     default:
                         c = Color.BLACK;
                 }
+
                 g2d.setColor(c);
 
                 Ellipse2D.Double system = new Ellipse2D.Double(

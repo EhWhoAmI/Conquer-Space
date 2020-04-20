@@ -45,7 +45,7 @@ public class ResourceStorage extends Building implements ResourceStockpile {
     public ResourceStorage(Planet parent) {
         resources = new HashMap<>();
         upkeep = 0;
-        planet = parent.getId();
+        planet = parent.getID();
         system = parent.getParentStarSystem();
         maximumStorage = 0;
     }

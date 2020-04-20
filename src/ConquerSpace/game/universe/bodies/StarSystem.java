@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
-import ConquerSpace.game.universe.GalacticLocation;
+import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.ships.SpaceShip;
 import java.util.ArrayList;
@@ -28,18 +28,12 @@ import java.util.stream.Stream;
  *
  * @author Zyun
  */
-public class StarSystem extends SpaceObject {
+public class StarSystem extends Body {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * All planets in this star system.
-     */
-    private ArrayList<Planet> planets;
-
-    /**
-     * All stars in this star system.
-     */
-    private ArrayList<Star> stars;
+    
+    public int planetCount = 0;
+    
+    public ArrayList<Body> bodies;
 
     /**
      * ID of this star system.
@@ -49,7 +43,7 @@ public class StarSystem extends SpaceObject {
     /**
      * Galactic location.
      */
-    private GalacticLocation location;
+    private PolarCoordinate location;
 
     public ArrayList<SpaceShip> spaceShips;
 
@@ -64,78 +58,17 @@ public class StarSystem extends SpaceObject {
      * @param id ID of this star system
      * @param location Galatic location.
      */
-    public StarSystem(int id, GalacticLocation location) {
+    public StarSystem(int id, PolarCoordinate location) {
         this.id = id;
         this.location = location;
-        planets = new ArrayList<>();
-        stars = new ArrayList<>();
         spaceShips = new ArrayList<>();
+        bodies = new ArrayList<>();
     }
 
-    /**
-     * Add star.
-     *
-     * @param star Star
-     */
-    public void addStar(Star star) {
-        star.setParentStarSystem(id);
-        star.id = stars.size();
-
-        stars.add(star);
-        stars.trimToSize();
-    }
-
-    /**
-     * Add planet to this star system
-     *
-     * @param planet Planet
-     */
-    public void addPlanet(Planet planet) {
-        planet.setParentStarSystem(id);
-        planet.id = planets.size();
-
-        planets.add(planet);
-        planets.trimToSize();
-    }
-
-    /**
-     * Get planet
-     *
-     * @param i Get the planet <code>i</code>
-     * @return The planet on i
-     */
-    public Planet getPlanet(int i) {
-        return (planets.get(i));
-    }
-
-    /**
-     * Get number of planets.
-     *
-     * @return number of planets
-     */
     public int getPlanetCount() {
-        return (planets.size());
+        return planetCount;
     }
-
-    /**
-     * Get the star.
-     *
-     * @param i star id
-     * @return star id as <code>i</code> puts it.
-     */
-    public Star getStar(int i) {
-        return (stars.get(i));
-    }
-
-    /**
-     * Get number of stars
-     *
-     * @return Number of stars
-     */
-    public int getStarCount() {
-        return (stars.size());
-    }
-
+    
     /**
      * Get this star system's id
      *
@@ -150,7 +83,7 @@ public class StarSystem extends SpaceObject {
      *
      * @return Galatic location of this star system
      */
-    public GalacticLocation getGalaticLocation() {
+    public PolarCoordinate getGalaticLocation() {
         return location;
     }
 
@@ -163,18 +96,6 @@ public class StarSystem extends SpaceObject {
         StringBuilder builder = new StringBuilder();
         builder.append("Star system " + this.id + " Location-" + location.toString() + " Rectangular pos"
                 + xpos + ", " + ypos + ": [\n");
-        //Display stars
-        builder.append("Stars: <");
-        for (Star s : stars) {
-            builder.append(s.toReadableString());
-        }
-        builder.append(">\n");
-
-        //Display planets
-        builder.append("Planets: <");
-        for (Planet p : planets) {
-            builder.append(p.toReadableString());
-        }
         builder.append(">\n");
         return (builder.toString());
     }
@@ -221,5 +142,13 @@ public class StarSystem extends SpaceObject {
 
     public String getName() {
         return name;
+    }
+    
+    public void addBody(Body b){ 
+        b.setID(bodies.size());
+        if(b instanceof Planet) {
+            planetCount++;
+        }
+        bodies.add(b);
     }
 }

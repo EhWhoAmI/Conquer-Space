@@ -30,7 +30,7 @@ import java.util.Iterator;
  *
  * @author Zyun
  */
-public class Universe extends SpaceObject {
+public class Universe extends Body {
 
     private final long seed;
 
@@ -41,9 +41,9 @@ public class Universe extends SpaceObject {
     public HashMap<UniversePath, Integer> control;
 
     public ArrayList<SpaceShip> spaceShips;
-    
+
     public ArrayList<Race> species;
-    
+
     public Universe(long seed) {
         this.seed = seed;
         civs = new ArrayList<>();
@@ -109,13 +109,10 @@ public class Universe extends SpaceObject {
      * @param p Path
      * @return Space object
      */
-    public SpaceObject getSpaceObject(UniversePath p) {
-
+    public Body getSpaceObject(UniversePath p) {
         StarSystem system = getStarSystem(p.getSystemID());
-        if (p.getPlanetID() != -1) {
-            return system.getPlanet(p.getPlanetID());
-        } else if (p.getStarID() != -1) {
-            return system.getStar(p.getStarID());
+        if (p.getBodyID() != -1) {
+            return system.bodies.get(p.getBodyID());
         } else {
             return system;
         }

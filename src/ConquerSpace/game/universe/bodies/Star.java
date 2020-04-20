@@ -24,7 +24,7 @@ import ConquerSpace.game.universe.UniversePath;
  *
  * @author Zyun
  */
-public class Star extends SpaceObject {
+public class Star extends Body {
 
     public int type;
     /**
@@ -34,8 +34,6 @@ public class Star extends SpaceObject {
      */
     public int starSize;
     private int parentStarSystem;
-
-    int id;
     
     private int ownerID = -1;
 
@@ -45,10 +43,9 @@ public class Star extends SpaceObject {
      * @param starSize size of star
      * @param id id
      */
-    public Star(int type, int starSize, int id) {
+    public Star(int type, int starSize) {
         this.type = type;
         this.starSize = starSize;
-        this.id = id;
     }
 
     /**
@@ -57,7 +54,7 @@ public class Star extends SpaceObject {
      */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Star: " + id + "(type=");
+        builder.append("Star: " + ID + "(type=");
         switch (type) {
             case StarTypes.RED:
                 builder.append("red");
@@ -91,12 +88,9 @@ public class Star extends SpaceObject {
         return parentStarSystem;
     }
 
-    public int getId() {
-        return id;
-    }
     
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, id, true));
+        return (new UniversePath(parentStarSystem, ID));
     }
     
     public int getOwnerID(){

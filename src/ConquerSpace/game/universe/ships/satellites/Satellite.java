@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.universe.ships.satellites;
 
-import ConquerSpace.game.universe.GalacticLocation;
+import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.ships.Launchable;
 import ConquerSpace.game.universe.ships.Orbitable;
@@ -28,7 +28,7 @@ import ConquerSpace.game.universe.ships.Orbitable;
  */
 public class Satellite implements Launchable, Orbitable{
     
-    protected GalacticLocation location;
+    protected PolarCoordinate location;
     protected int mass;
     protected String name = "";
     protected int id;
@@ -37,7 +37,7 @@ public class Satellite implements Launchable, Orbitable{
         
     public Satellite(int distance, int mass) {
         this.mass = mass;
-        location = new GalacticLocation(0, distance);
+        location = new PolarCoordinate(0, distance);
     }
 
     public int getMass() {
@@ -48,7 +48,7 @@ public class Satellite implements Launchable, Orbitable{
      * Get orbit distance, in km. A distance of 0 means that the satellite can orbit in any orbit.
      * @return 
      */
-    public long getDistance() {
+    public double getDistance() {
         return location.getDistance();
     }
 
