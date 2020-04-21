@@ -50,8 +50,13 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import javax.imageio.ImageIO;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
@@ -73,7 +78,7 @@ public class PlanetMap extends JPanel {
     private static final Logger LOGGER = CQSPLogger.getLogger(PlanetMap.class.getName());
 
     private PlanetInfoSheet parent;
-    private Image mapImage;
+    private Image mapImage = null;
 
     private Planet p;
     private Civilization c;
@@ -129,9 +134,7 @@ public class PlanetMap extends JPanel {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         TerrainRenderer renderer = new TerrainRenderer(p);
-        //Base on height
-        //Get window size...
-        mapImage = renderer.getImage(tileSize);
+        mapImage = renderer.getImage(2d);
 
         mapWidth = mapImage.getWidth(null);
         mapHeight = mapImage.getHeight(null);
@@ -267,7 +270,7 @@ public class PlanetMap extends JPanel {
             g2d.scale(scale, scale);
 
             //Terrain
-            if (showTerrain) {
+            if (showTerrain && mapImage != null) {
                 g2d.drawImage(mapImage, 0, 0, null);
             }
 

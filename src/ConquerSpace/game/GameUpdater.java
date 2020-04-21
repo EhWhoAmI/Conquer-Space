@@ -44,8 +44,6 @@ import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.tech.Technologies;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.PolarCoordinate;
-import ConquerSpace.game.universe.SpacePoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.civilization.Civilization;
 import ConquerSpace.game.universe.civilization.vision.VisionPoint;
@@ -108,15 +106,16 @@ public class GameUpdater {
                 int owner = -1;
                 for (int i = 0; i < starsystem.bodies.size(); i++) {
                     Body body = starsystem.bodies.get(i);
-//                    if(body instanceof Planet)
-//                    if (owner == -1 && planet.getOwnerID() > -1) {
-//                        owner = planet.getOwnerID();
-//                    } else if (owner != planet.getOwnerID() && planet.getOwnerID() != -1) {
-//                        owner = ControlTypes.DISPUTED;
-//                    }
+                    if (body instanceof Planet) {
+                        Planet planet = (Planet) body;
+                        if (owner == -1 && planet.getOwnerID() > -1) {
+                            owner = planet.getOwnerID();
+                        } else if (owner != planet.getOwnerID() && planet.getOwnerID() != -1) {
+                            owner = ControlTypes.DISPUTED;
+                        }
+                    }
                 }
                 universe.control.put(p, owner);
-
             }
         }
     }
@@ -296,13 +295,15 @@ public class GameUpdater {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.
-        Civilization c = universe.getCivilization(owner);
-        for (ResourceStockpile rs : c.resourceStorages) {
-            //Get by positon...
-            //For now, we process only if it is on the planet or not.
-            if (rs.canStore(resourceType)) {
-                rs.addResource(resourceType, amount);
-                break;
+        Body body = universe.getSpaceObject(from);
+        if (body instanceof Planet) {
+            Planet planet = (Planet) body;
+            for (Map.Entry<GeographicPoint, Building> entry : planet.buildings.entrySet()) {
+                Building val = entry.getValue();
+                if (val.canStore(resourceType)) {
+                    val.addResource(resourceType, amount);
+                    break;
+                }
             }
         }
     }
@@ -311,12 +312,16 @@ public class GameUpdater {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.
-        Civilization c = universe.getCivilization(owner);
-        for (ResourceStockpile rs : c.resourceStorages) {
-            //Get by positon...
-            //For now, we process only if it is on the planet or not.
-            if (rs.canStore(resourceType) && rs.removeResource(resourceType, amount)) {
-                return true;
+        Body body = universe.getSpaceObject(from);
+        if (body instanceof Planet) {
+            Planet planet = (Planet) body;
+            for (Map.Entry<GeographicPoint, Building> entry : planet.buildings.entrySet()) {
+                Building val = entry.getValue();
+                //Get by positon...
+                //For now, we process only if it is on the planet or not.
+                if (val.canStore(resourceType) && val.removeResource(resourceType, amount)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -483,7 +488,9 @@ public class GameUpdater {
 
                     //Process job resources
                     for (Good r : unit.getJob().resources.keySet()) {
-                        storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
+                        if (r != null) {
+                            storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
+                        }
                     }
                 }
             }

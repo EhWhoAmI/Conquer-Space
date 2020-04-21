@@ -68,11 +68,11 @@ public class DebugStatsWindow extends JInternalFrame {
 
     private JButton logger;
 
-    private TimeSeriesCollection memoryInfoStats;
-    private TimeSeries usedMemorySeries;
-    private TimeSeries availableMemorySeries;
+//    private TimeSeriesCollection memoryInfoStats;
+//    private TimeSeries usedMemorySeries;
+//    private TimeSeries availableMemorySeries;
 
-    private JFreeChart chart;
+//    private JFreeChart chart;
 
     /**
      * Universe
@@ -156,24 +156,23 @@ public class DebugStatsWindow extends JInternalFrame {
             getDesktopPane().add(frame);
         });
 
-        memoryInfoStats = new TimeSeriesCollection();
-
-        usedMemorySeries = new TimeSeries("Used Memory");
-        availableMemorySeries = new TimeSeries("Available Memory");
-        usedMemorySeries.setMaximumItemAge(1000 * 120);
-        availableMemorySeries.setMaximumItemAge(1000 * 120);
-
-        memoryInfoStats.addSeries(usedMemorySeries);
-        memoryInfoStats.addSeries(availableMemorySeries);
-
-        chart = ChartFactory.createTimeSeriesChart("Memory Usage over time", "", "MB", memoryInfoStats, true, true, false);
-        ChartPanel panel = new ChartPanel(chart);
-        panel.setDomainZoomable(false);
-        panel.setPopupMenu(null);
-        panel.setRangeZoomable(false);
+//        memoryInfoStats = new TimeSeriesCollection();
+//
+//        usedMemorySeries = new TimeSeries("Used Memory");
+//        availableMemorySeries = new TimeSeries("Available Memory");
+//        usedMemorySeries.setMaximumItemAge(1000 * 120);
+//        availableMemorySeries.setMaximumItemAge(1000 * 120);
+//
+//        memoryInfoStats.addSeries(usedMemorySeries);
+//        memoryInfoStats.addSeries(availableMemorySeries);
+//
+//        chart = ChartFactory.createTimeSeriesChart("Memory Usage over time", "", "MB", memoryInfoStats, true, true, false);
+//        ChartPanel panel = new ChartPanel(chart);
+//        panel.setDomainZoomable(false);
+//        panel.setPopupMenu(null);
+//        panel.setRangeZoomable(false);
 
         add(memoryusedLabel);
-        add(panel);
         add(threadCountLabel);
         add(dumpUniverseButton);
         add(runTrashCompactor);
@@ -186,13 +185,13 @@ public class DebugStatsWindow extends JInternalFrame {
         Timer ticker = new Timer(0, (e) -> {
             Runtime r = Runtime.getRuntime();
             memoryusedLabel.setText("Memory used: " + byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) + "/" + byteCountToDisplaySize(r.totalMemory()) + ". Something like " + (((((float) r.totalMemory()) - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
-            Millisecond time = new Millisecond();
-            usedMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory() - r.freeMemory())));
-            availableMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory())));
-
-            usedMemorySeries.removeAgedItems(true);
-            availableMemorySeries.removeAgedItems(true);
-            chart.fireChartChanged();
+//            Millisecond time = new Millisecond();
+//            usedMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory() - r.freeMemory())));
+//            availableMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory())));
+//
+//            usedMemorySeries.removeAgedItems(true);
+//            availableMemorySeries.removeAgedItems(true);
+//            chart.fireChartChanged();
             threadCountLabel.setText("Threads currently running: " + Thread.getAllStackTraces().size());
             repaint();
         });

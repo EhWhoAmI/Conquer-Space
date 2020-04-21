@@ -39,7 +39,7 @@ public class TerrainRenderer {
     }
 
     public Image getImage(double scale) {
-        BufferedImage planetDisplaying = new BufferedImage(p.getPlanetWidth(), p.getPlanetHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage planetDisplaying;
         //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors;// = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
@@ -48,7 +48,7 @@ public class TerrainRenderer {
         if (p.getPlanetType() == PlanetTypes.ROCK) {
             colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
             terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
-                    6, 0.5f, 2f, 0.5f, p.getPlanetWidth() * 4, p.getPlanetHeight() * 4,
+                    6, 0.5f, 2f, 0.5f, p.getPlanetWidth() * 2, p.getPlanetHeight() * 2,
                     0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 6, colors);
         } else if (p.getPlanetType() == PlanetTypes.GAS) {
             colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
