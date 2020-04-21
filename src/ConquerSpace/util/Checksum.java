@@ -17,9 +17,12 @@
  */
 package ConquerSpace.util;
 
+import ConquerSpace.game.universe.Vector;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.SequenceInputStream;
+import java.nio.file.Files;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
 public class Checksum {
 
     public static String hash(File file) throws NoSuchAlgorithmException, IOException {
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         DigestInputStream digestInputStream
                 = new DigestInputStream(new FileInputStream(file), messageDigest);
         while (digestInputStream.read() >= 0) ;
@@ -43,18 +46,43 @@ public class Checksum {
         return sb.toString();
     }
 
+    public static void hash(File file, MessageDigest digest) throws NoSuchAlgorithmException, IOException {
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        digest.update(fileContent);
+    }
+
     public static String hashFolder(File file) throws NoSuchAlgorithmException, IOException {
-        String text = "";
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
-                text += hashFolder(f);
+                hashFolder(f, messageDigest);
             }
         } else {
-            text += hash(file);
-            return text;
+            hash(file, messageDigest);
         }
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        byte[] byteArray = messageDigest.digest(text.getBytes());
+        byte[] byteArray = messageDigest.digest();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteArray.length; ++i) {
+            sb.append(Integer.toHexString((byteArray[i] & 0xFF) | 0x100).substring(1, 3));
+        }
+        return sb.toString();
+    }
+
+    public static void hashFolder(File file, MessageDigest digest) throws NoSuchAlgorithmException, IOException {
+        //Add folder name
+        digest.update(file.toPath().toString().getBytes());
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                hashFolder(f, digest);
+            }
+        } else {
+            hash(file, digest);
+        }
+    }
+
+    public static String hashToString(MessageDigest digest) {
+        byte[] byteArray = digest.digest();
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < byteArray.length; ++i) {
             sb.append(Integer.toHexString((byteArray[i] & 0xFF) | 0x100).substring(1, 3));

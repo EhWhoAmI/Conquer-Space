@@ -118,8 +118,8 @@ public class ConquerSpace {
             //Generate hash to verify the version
             //For error messages
             if (!DEBUG) {
-                generateChecksum();
-            }
+                
+            }generateChecksum();
 
             setDefaultOptions();
             configureSettings();
@@ -285,7 +285,7 @@ public class ConquerSpace {
         }
         //do settings
         configureGame();
-        
+
         try {
             //Write
             Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
@@ -338,7 +338,7 @@ public class ConquerSpace {
         File codeFile = new File(ConquerSpace.class
                 .getProtectionDomain().getCodeSource()
                 .getLocation().getPath());
-        File assetFolder = new File(System.getProperty("user.dir") + "/assets/data");
+        File assetFolder = new File("assets/data");
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

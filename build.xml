@@ -79,7 +79,7 @@
         </copy>
         <delete file="${dist.dir}/README.TXT"/>
         <copy todir="${dist.dir}" >  
-            <fileset file="runCQSP.bat"/>
+            <fileset file="run_CQSP.bat"/>
             <fileset file="CHANGELOG.txt"/>
             <fileset file="LICENSE.txt"/>
             <fileset file="README.txt"/>
