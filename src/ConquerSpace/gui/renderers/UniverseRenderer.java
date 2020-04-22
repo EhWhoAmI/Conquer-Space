@@ -37,7 +37,7 @@ import java.awt.geom.Rectangle2D;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class UniverseRenderer {
 

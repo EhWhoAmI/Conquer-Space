@@ -51,7 +51,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Main menu.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class MainMenu extends JFrame implements WindowListener {
 

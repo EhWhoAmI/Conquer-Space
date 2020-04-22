@@ -35,7 +35,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class LaunchSatelliteMenu extends JPanel {
 

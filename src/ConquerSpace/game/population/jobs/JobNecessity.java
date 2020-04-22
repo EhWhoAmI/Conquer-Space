@@ -19,7 +19,7 @@ package ConquerSpace.game.population.jobs;
 
 /**
  *
- * @author zyunl
+ * @author EhWhoAmIl
  */
 public enum JobNecessity {
     Necessary,

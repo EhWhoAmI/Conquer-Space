@@ -23,7 +23,7 @@ import ConquerSpace.game.universe.SpacePoint;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Body {
     int ID = 0;

@@ -28,7 +28,7 @@ import java.util.Iterator;
 /**
  * Universe Object.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Universe extends Body {
 

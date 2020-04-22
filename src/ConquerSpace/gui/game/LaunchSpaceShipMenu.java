@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class LaunchSpaceShipMenu extends JPanel {
 

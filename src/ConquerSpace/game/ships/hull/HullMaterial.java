@@ -19,7 +19,7 @@ package ConquerSpace.game.ships.hull;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class HullMaterial {
     private String name;

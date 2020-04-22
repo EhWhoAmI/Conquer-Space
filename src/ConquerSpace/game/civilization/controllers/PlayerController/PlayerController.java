@@ -37,7 +37,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Controller for player.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlayerController implements CivilizationController {
 

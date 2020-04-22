@@ -37,7 +37,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * The content of the manuals.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ManualContent extends JFrame {
 

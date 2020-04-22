@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 /**
  * The one class I hope no one sees.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ExceptionHandling {
 

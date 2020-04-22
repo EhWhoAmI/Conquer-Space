@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Division extends SpaceShip{
     private int id;

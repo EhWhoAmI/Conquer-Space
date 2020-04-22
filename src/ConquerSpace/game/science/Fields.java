@@ -30,7 +30,7 @@ import nu.xom.ParsingException;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Fields {
 

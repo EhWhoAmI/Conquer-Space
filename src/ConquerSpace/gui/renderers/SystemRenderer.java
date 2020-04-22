@@ -50,7 +50,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class SystemRenderer {
 

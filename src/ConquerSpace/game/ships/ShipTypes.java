@@ -20,7 +20,7 @@ package ConquerSpace.game.ships;
 /**
  * Anything that starts with a M is military.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ShipTypes {
 

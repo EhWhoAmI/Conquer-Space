@@ -22,7 +22,7 @@ import ConquerSpace.game.universe.UniversePath;
 /**
  * A star.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Star extends Body {
 

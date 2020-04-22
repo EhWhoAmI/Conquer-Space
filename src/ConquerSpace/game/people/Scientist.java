@@ -19,7 +19,7 @@ package ConquerSpace.game.people;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Scientist extends Person{
     //Skill increments per tick.

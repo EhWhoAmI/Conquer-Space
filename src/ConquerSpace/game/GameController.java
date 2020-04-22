@@ -43,7 +43,7 @@ import org.json.JSONObject;
 /**
  * The controller of the game, says when to tick, initializes everything.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class GameController {
 

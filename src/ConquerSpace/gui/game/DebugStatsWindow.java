@@ -40,7 +40,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 /**
  * Show debug stats, like memory used.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class DebugStatsWindow extends JInternalFrame {
 

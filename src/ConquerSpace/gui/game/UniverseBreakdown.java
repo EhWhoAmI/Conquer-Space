@@ -22,7 +22,7 @@ import javax.swing.JInternalFrame;
 
 /**
  * Breakdown of the universe.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class UniverseBreakdown extends JInternalFrame {
 

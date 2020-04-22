@@ -24,7 +24,7 @@ import static ConquerSpace.game.GameController.shipTypeClasses;
 import static ConquerSpace.game.GameController.shipTypes;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.science.Fields;
-import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.universe.resources.Element;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;

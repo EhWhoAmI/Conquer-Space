@@ -27,7 +27,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class AlertNotification extends JInternalFrame implements Runnable {
 

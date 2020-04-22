@@ -19,7 +19,7 @@ package ConquerSpace.game.civilization;
 
 /**
  * Class of the civ preferred climate.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class CivilizationPreferredClimateTypes {
     public static final int VARIED = 0;

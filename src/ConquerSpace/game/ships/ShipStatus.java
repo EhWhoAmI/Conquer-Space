@@ -19,7 +19,7 @@ package ConquerSpace.game.ships;
 
 /**
  * List of ship status
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ShipStatus {
     public static final int IN_ORBIT = 100;

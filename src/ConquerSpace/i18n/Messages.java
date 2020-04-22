@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Messages {
 

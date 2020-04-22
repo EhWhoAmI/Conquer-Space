@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 /**
  * This is the interface of the civilization controller.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public interface CivilizationController{
     public ArrayList<Action> doTurn(Civilization c);

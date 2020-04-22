@@ -21,7 +21,7 @@ import ConquerSpace.game.universe.UniversePath;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public interface Orbitable {
     public UniversePath getOrbiting();

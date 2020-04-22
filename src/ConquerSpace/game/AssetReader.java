@@ -19,7 +19,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.game.buildings.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
-import ConquerSpace.game.tech.Technologies;
+import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.universe.resources.Element;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.NonElement;

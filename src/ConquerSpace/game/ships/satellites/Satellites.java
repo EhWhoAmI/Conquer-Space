@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Satellites {
     public static Satellite parseSatellite(JSONObject object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {

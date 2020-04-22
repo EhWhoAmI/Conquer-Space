@@ -32,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Loading extends JFrame {
     private static final Logger LOGGER = CQSPLogger.getLogger(Loading.class.getName());

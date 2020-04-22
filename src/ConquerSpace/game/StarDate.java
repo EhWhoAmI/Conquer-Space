@@ -21,7 +21,7 @@ import java.util.Calendar;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class StarDate {
     /**

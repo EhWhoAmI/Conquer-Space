@@ -29,8 +29,8 @@ import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
-import ConquerSpace.game.tech.Technologies;
-import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.science.tech.Technologies;
+import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.civilization.controllers.CivilizationController;
 import ConquerSpace.game.civilization.government.Government;
@@ -58,7 +58,7 @@ import org.json.JSONObject;
 /**
  * Civilization
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Civilization implements Employer{
 

@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.bodies;
 
 /**
  * The types of control a star system or planet has.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ControlTypes {
     //All are negative because positive will be for civilizations

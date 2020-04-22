@@ -21,7 +21,7 @@ import ConquerSpace.game.ships.components.engine.EngineTechnology;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class EngineComponent extends ShipComponent{
 

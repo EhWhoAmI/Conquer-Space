@@ -22,7 +22,7 @@ import ConquerSpace.game.universe.Point;
 /**
  * A point where vision comes from, where you can start vision.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public interface VisionPoint {
 

@@ -40,8 +40,8 @@ import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
-import ConquerSpace.game.tech.Technologies;
-import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.science.tech.Technologies;
+import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.civilization.Civilization;
@@ -72,7 +72,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * This controls the game.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class GameUpdater {
 

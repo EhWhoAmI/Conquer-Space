@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * for use of civs and stuff like that.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Field {
 

@@ -19,7 +19,7 @@ package ConquerSpace.game.ships.components;
 
 /**
  * A component used for testing ships.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class TestComponent extends ShipComponent{
     public TestComponent() {

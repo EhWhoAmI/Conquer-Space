@@ -28,7 +28,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- *
+ * Creates a checksum
  * @author EhWhoAmI
  */
 public class Checksum {
@@ -53,7 +53,6 @@ public class Checksum {
 
     public static String hashFolder(File file) throws NoSuchAlgorithmException, IOException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
                 hashFolder(f, messageDigest);
@@ -70,8 +69,6 @@ public class Checksum {
     }
 
     public static void hashFolder(File file, MessageDigest digest) throws NoSuchAlgorithmException, IOException {
-        //Add folder name
-        digest.update(file.toPath().toString().getBytes());
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
                 hashFolder(f, digest);

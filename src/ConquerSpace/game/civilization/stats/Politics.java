@@ -19,7 +19,7 @@ package ConquerSpace.game.civilization.stats;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Politics extends Stats{
     

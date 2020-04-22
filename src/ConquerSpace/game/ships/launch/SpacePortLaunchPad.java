@@ -22,7 +22,7 @@ import ConquerSpace.game.ships.Launchable;
 /**
  * Used for building a rocket and launching it. It will remain full throughout
  * the duration.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class SpacePortLaunchPad {
     public int ticks;

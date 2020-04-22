@@ -19,7 +19,7 @@ package ConquerSpace.game.actions;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Alert {
     private int type;

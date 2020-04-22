@@ -17,11 +17,11 @@
  */
 package ConquerSpace.game.ships.launch;
 
-import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.science.tech.Technology;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class LaunchSystem {
 

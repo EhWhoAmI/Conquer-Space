@@ -23,7 +23,7 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.population.jobs.Workable;
-import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.civilization.Civilization;
@@ -38,7 +38,7 @@ import ConquerSpace.game.universe.bodies.Universe;
 /**
  * This is like a driver to do all the actions. All methods must be static.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Actions {
 

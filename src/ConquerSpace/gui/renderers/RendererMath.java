@@ -22,7 +22,7 @@ import ConquerSpace.game.universe.PolarCoordinate;
 /**
  * Does all the math for rendering.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class RendererMath {
 

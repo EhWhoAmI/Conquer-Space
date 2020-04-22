@@ -23,7 +23,7 @@ package ConquerSpace.game.universe;
  * systemid" for a star system "whateverpath:[r, d]" for an object in space, eg
  * a spaceship or satellite.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class UniversePath {
     /**

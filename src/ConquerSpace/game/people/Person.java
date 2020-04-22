@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Person {
     private String name;

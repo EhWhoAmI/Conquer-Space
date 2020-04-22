@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * A space travelling object.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public abstract class SpaceShip implements Orbitable{
 

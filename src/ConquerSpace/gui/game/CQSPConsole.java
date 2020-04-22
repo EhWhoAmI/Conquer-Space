@@ -18,8 +18,8 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Alert;
-import ConquerSpace.game.tech.Technologies;
-import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.science.tech.Technologies;
+import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class CQSPConsole extends JInternalFrame {
 

@@ -27,7 +27,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ResourceLoader {
     static Properties prop = new Properties();

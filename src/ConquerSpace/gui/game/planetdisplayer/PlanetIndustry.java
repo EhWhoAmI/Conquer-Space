@@ -48,7 +48,7 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetIndustry extends JPanel {
 

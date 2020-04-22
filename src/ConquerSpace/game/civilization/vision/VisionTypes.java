@@ -19,7 +19,7 @@ package ConquerSpace.game.civilization.vision;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class VisionTypes {
     /**

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Economy for a planet or something like that. Everything is in arraylists so that
  * we can refrence them later.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Economy extends Stats{
     //Search wikipedia for those things

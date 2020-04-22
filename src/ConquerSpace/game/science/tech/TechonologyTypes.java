@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.tech;
+package ConquerSpace.game.science.tech;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class TechonologyTypes {
     public static final int UNLOCK = 0;

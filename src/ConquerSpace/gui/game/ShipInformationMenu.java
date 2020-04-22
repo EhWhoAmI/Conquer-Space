@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ShipInformationMenu extends JPanel {
 

@@ -21,7 +21,7 @@ import ConquerSpace.game.universe.UniversePath;
 
 /**
  * Action of a turn.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public abstract class Action {
     /**

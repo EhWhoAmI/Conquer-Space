@@ -19,7 +19,7 @@ package ConquerSpace.game.ships;
 
 /**
  * Marker interface to show that the thing is launchable from the ground.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public interface Launchable {
     

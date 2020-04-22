@@ -19,7 +19,7 @@ package ConquerSpace.game.universe;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Vector {
     public int degrees;

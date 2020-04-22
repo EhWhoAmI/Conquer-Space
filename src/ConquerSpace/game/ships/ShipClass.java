@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ShipClass implements Serializable {
 

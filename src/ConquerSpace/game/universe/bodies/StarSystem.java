@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 /**
  * A star system.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class StarSystem extends Body {
     private static final long serialVersionUID = 1L;

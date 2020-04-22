@@ -40,7 +40,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Shows the selection of manuals.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class InternalManual extends JInternalFrame implements ListSelectionListener {
 

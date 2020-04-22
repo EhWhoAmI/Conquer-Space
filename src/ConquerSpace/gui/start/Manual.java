@@ -41,7 +41,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Shows the selection of manuals.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Manual extends JFrame implements ListSelectionListener {
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.tech;
+package ConquerSpace.game.science.tech;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
@@ -40,7 +40,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Technologies {
 

@@ -59,7 +59,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Conquer Space main class. Where everything starts.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ConquerSpace {
 
@@ -79,9 +79,9 @@ public class ConquerSpace {
             buildno.load(new FileInputStream(System.getProperty("user.dir") + "/assets/BUILDNO"));
             BUILD_NUMBER = Integer.parseInt(buildno.getProperty("build.number"));
         } catch (FileNotFoundException ex) {
-            LOGGER.info("Asset file not found. No Problem.", ex);
+            LOGGER.info("Asset file not found, no build number.", ex);
         } catch (IOException ex) {
-            LOGGER.info("Io exception. No Problem.", ex);
+            LOGGER.info("IO exception, no build number.", ex);
         }
     }
 
@@ -118,8 +118,8 @@ public class ConquerSpace {
             //Generate hash to verify the version
             //For error messages
             if (!DEBUG) {
-                
-            }generateChecksum();
+                generateChecksum();
+            }
 
             setDefaultOptions();
             configureSettings();
@@ -138,20 +138,26 @@ public class ConquerSpace {
             GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
 
             //New Game Menu
-            MainMenu menu = new MainMenu();
-            menu.setVisible(true);
+            try {
+                MainMenu menu = new MainMenu();
+                menu.setVisible(true);
 
-            //While the menu not loaded...
-            while (!menu.isLoadedUniverse()) {
-                Thread.sleep(100);
+                //While the menu not loaded...
+                while (!menu.isLoadedUniverse()) {
+                    Thread.sleep(100);
+                }
+                menu = null;
+                //Show loading screen
+                Loading load = new Loading();
+                loadUniverse();
+                load.setVisible(false);
+
+                runGame();
+            } catch (Exception e) {
+                //Catch exceptions...
+                LOGGER.error("Exception: ", e);
+                ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
             }
-            menu = null;
-            //Show loading screen
-            Loading load = new Loading();
-            loadUniverse();
-            load.setVisible(false);
-
-            runGame();
         }
     }
 

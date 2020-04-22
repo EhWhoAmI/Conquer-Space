@@ -27,7 +27,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class AlertDisplayer extends JInternalFrame implements GUI {
 

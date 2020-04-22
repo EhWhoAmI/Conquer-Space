@@ -21,7 +21,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetEconomy extends JFrame{
     

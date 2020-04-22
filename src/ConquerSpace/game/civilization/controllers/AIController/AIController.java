@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Controller of the AI. Will need to link to scripts.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class AIController implements CivilizationController {
 

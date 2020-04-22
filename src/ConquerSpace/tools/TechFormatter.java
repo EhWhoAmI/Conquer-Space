@@ -17,8 +17,8 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.game.tech.Technologies;
-import ConquerSpace.game.tech.Technology;
+import ConquerSpace.game.science.tech.Technologies;
+import ConquerSpace.game.science.tech.Technology;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridBagConstraints;
@@ -36,7 +36,7 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class TechFormatter extends JFrame {
     private DefaultListModel<Technology> technologyListModel;

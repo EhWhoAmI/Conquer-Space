@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Fleet extends SpaceShip{
     private ArrayList<Division> divisions;

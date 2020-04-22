@@ -48,7 +48,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class SatelliteDesigner extends JPanel {
 

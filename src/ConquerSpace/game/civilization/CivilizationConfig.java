@@ -21,7 +21,7 @@ import java.awt.Color;
 
 /**
  * Configuration of the civilization.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class CivilizationConfig {
     public Color civColor;

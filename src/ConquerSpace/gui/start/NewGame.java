@@ -43,7 +43,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class NewGame extends JFrame implements ActionListener, WindowListener {
 

@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class MultiplierProcessor {
 

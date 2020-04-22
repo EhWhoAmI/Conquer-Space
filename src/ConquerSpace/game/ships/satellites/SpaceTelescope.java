@@ -22,7 +22,7 @@ import ConquerSpace.game.civilization.vision.VisionPoint;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class SpaceTelescope extends Satellite implements VisionPoint{
 

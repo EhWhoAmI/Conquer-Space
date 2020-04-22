@@ -33,7 +33,7 @@ import javax.swing.JTabbedPane;
 /**
  * All the info and charts and stuff of the civ.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class CivInfoOverview extends JPanel {
 

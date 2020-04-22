@@ -19,7 +19,7 @@ package ConquerSpace.game.ships.components;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ScienceComponent extends ShipComponent{
     private int scienceContribution = 0;

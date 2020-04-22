@@ -52,7 +52,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ShipDesigner extends JPanel {
 

@@ -53,7 +53,7 @@ import javax.swing.text.NumberFormatter;
 /**
  * Design and create a file
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class HullCreator extends JPanel {
 

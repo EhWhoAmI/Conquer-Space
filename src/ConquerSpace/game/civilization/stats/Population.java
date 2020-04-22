@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Population stats. Everything is in arraylists because we want graphs later.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Population extends Stats{
     /**

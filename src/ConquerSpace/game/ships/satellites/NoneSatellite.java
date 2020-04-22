@@ -19,7 +19,7 @@ package ConquerSpace.game.ships.satellites;
 
 /**
  * A satellite that poses no purpose
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class NoneSatellite extends Satellite{
     

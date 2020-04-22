@@ -51,7 +51,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetCities extends JPanel {
 

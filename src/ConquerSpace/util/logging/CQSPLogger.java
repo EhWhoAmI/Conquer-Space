@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Logger for CQSP.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class CQSPLogger {
     /**

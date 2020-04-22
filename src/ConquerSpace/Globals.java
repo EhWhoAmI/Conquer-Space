@@ -25,7 +25,7 @@ import java.util.Properties;
 /**
  * Global variables of the game.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Globals {
 

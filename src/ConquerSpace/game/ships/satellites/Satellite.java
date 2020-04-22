@@ -24,7 +24,7 @@ import ConquerSpace.game.ships.Orbitable;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Satellite implements Launchable, Orbitable{
     

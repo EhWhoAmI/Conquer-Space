@@ -19,7 +19,7 @@ package ConquerSpace.game.buildings;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public interface Buildable {
     

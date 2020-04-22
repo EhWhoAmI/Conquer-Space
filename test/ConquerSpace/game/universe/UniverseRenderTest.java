@@ -38,7 +38,7 @@ import javax.swing.border.LineBorder;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public final class UniverseRenderTest {
 

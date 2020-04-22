@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * Planet class.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Planet extends Body {
 

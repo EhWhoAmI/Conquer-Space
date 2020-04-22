@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.bodies;
 
 /**
  * Class of star types.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class StarTypes {
     //Needs to be an int because of python.

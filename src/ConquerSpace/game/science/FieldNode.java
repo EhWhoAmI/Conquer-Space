@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Temp thing for the general game.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class FieldNode {
 

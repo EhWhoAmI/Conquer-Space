@@ -55,7 +55,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Window of options.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class OptionsWindow extends JFrame implements WindowListener {
 

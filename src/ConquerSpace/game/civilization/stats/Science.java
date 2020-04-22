@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Science extends Stats{
     ArrayList<Integer> research;

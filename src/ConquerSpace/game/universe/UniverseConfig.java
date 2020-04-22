@@ -21,7 +21,7 @@ import ConquerSpace.game.civilization.CivilizationConfig;
 /**
  * Config of the Universe to be passed on to the scripts.
  * @see ConquerSpace.start.gui.NewGame
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class UniverseConfig{
     //Everything is in string because python is a jerk and there are no enums.

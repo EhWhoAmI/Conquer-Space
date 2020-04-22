@@ -32,7 +32,7 @@ import javax.swing.JTabbedPane;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetInfoSheet extends JPanel {
 

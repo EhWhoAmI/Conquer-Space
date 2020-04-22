@@ -31,7 +31,7 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class ShipListManager extends JPanel {
 

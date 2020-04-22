@@ -19,7 +19,7 @@ package ConquerSpace.game.ships.components;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class FuelTankComponent extends ShipComponent{
 

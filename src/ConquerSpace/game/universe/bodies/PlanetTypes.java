@@ -19,7 +19,7 @@ package ConquerSpace.game.universe.bodies;
 
 /**
  * Types of planet.
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetTypes {
     public static final int ROCK = 0;

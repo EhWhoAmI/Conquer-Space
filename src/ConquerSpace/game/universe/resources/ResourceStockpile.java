@@ -22,7 +22,7 @@ import ConquerSpace.game.universe.resources.Good;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public interface ResourceStockpile {
     public void addResourceTypeStore(Good type);

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Ship extends SpaceShip {
     private static int ticker = 0;

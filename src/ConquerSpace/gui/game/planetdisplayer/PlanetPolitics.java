@@ -19,7 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class PlanetPolitics {
     

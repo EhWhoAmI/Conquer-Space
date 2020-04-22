@@ -19,7 +19,7 @@ package ConquerSpace.game.ships.satellites;
 
 /**
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class SatelliteTypes {
     public static final int NONE = 0;

@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 /**
  * Version for easy parts.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
 public class Version implements Comparable<Version> {
 
