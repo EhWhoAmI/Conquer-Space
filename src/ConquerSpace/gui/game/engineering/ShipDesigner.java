@@ -17,11 +17,11 @@
  */
 package ConquerSpace.gui.game.engineering;
 
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.ShipClass;
-import ConquerSpace.game.universe.ships.components.EngineComponent;
-import ConquerSpace.game.universe.ships.components.ShipComponent;
-import ConquerSpace.game.universe.ships.hull.Hull;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.ShipClass;
+import ConquerSpace.game.ships.components.EngineComponent;
+import ConquerSpace.game.ships.components.ShipComponent;
+import ConquerSpace.game.ships.hull.Hull;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;

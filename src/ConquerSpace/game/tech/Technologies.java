@@ -19,11 +19,11 @@ package ConquerSpace.game.tech;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.science.FieldNode;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
-import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;

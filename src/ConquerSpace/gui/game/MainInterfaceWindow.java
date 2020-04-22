@@ -22,7 +22,7 @@ import ConquerSpace.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.engineering.LaunchSystemDesigner;

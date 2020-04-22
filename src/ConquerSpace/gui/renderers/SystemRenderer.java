@@ -21,7 +21,7 @@ import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.universe.bodies.Body;
-import ConquerSpace.game.universe.ships.SpaceShip;
+import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;

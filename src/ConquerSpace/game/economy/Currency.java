@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.economy;
 
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 
 /**
  * A nations currency

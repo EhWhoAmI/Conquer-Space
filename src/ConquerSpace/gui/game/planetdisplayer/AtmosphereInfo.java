@@ -17,9 +17,9 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.Orbitable;
-import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.Orbitable;
+import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.ShipInformationMenu;
 import java.awt.BorderLayout;

@@ -30,7 +30,7 @@ import ConquerSpace.jLibNoise.noise.utils.NotImplementedException;
 /**
  * Abstract base class for noise modules.
  *
- * @source 'module/modulebase.h/cpp'
+ * source 'module/modulebase.h/cpp'
  */
 public abstract class Module {
 
@@ -47,7 +47,7 @@ public abstract class Module {
 
     /**
      * Returns a reference to a source module connected to this noise module.
-     * <p/>
+     * 
      * Each noise module requires the attachment of a certain number of
      * source modules before an application can call the GetValue()
      * method.
@@ -55,9 +55,9 @@ public abstract class Module {
      * @param index The index value assigned to the source module.
      * @return A reference to the source module.
      * @throws ExceptionNoModule See the preconditions for more information.
-     * @pre The index value ranges from 0 to one less than the number of
+     *  The index value ranges from 0 to one less than the number of
      * source modules required by this noise module.
-     * @pre A source module with the specified index value has been added
+     *  A source module with the specified index value has been added
      * to this noise module via a call to SetSourceModule().
      */
     public Module getSourceModule(int index) {
@@ -86,12 +86,12 @@ public abstract class Module {
     /**
      * Generates an output value given the coordinates of the specified
      * input value.
-     * <p/>
+     * 
      * Before an application can call this method, it must first connect
      * all required source modules via the SetSourceModule() method.  If
      * these source modules are not connected to this noise module, this
      * method raises a debug assertion.
-     * <p/>
+     * 
      * To determine the number of source modules required by this noise
      * module, call the GetSourceModuleCount() method.
      *
@@ -99,7 +99,7 @@ public abstract class Module {
      * @param y The @a y coordinate of the input value.
      * @param z The @a z coordinate of the input value.
      * @return The output value.
-     * @pre All source modules required by this noise module have been
+     *  All source modules required by this noise module have been
      * passed to the SetSourceModule() method.
      */
     public abstract double getValue(double x, double y, double z);
@@ -130,7 +130,7 @@ public abstract class Module {
      * @param sourceModule The source module to attach.
      * @throws ExceptionInvalidParam An invalid parameter was
      * specified; see the preconditions for more information.
-     * @pre The index value ranges from 0 to one less than the number of
+     *  The index value ranges from 0 to one less than the number of
      * source modules required by this noise module.
      */
     public void setSourceModule(int index, Module sourceModule) {

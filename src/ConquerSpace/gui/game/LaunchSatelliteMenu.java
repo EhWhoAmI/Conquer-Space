@@ -18,11 +18,11 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.ships.satellites.Satellites;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.satellites.Satellite;
+import ConquerSpace.game.ships.satellites.Satellites;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
+import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;

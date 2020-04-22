@@ -19,8 +19,8 @@ package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.Calculators;
 import ConquerSpace.game.GameUpdater;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.satellites.SatelliteTypes;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.satellites.SatelliteTypes;
 import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;

@@ -89,13 +89,13 @@ public class WriterBMP {
     /**
      * Writes the contents of the image object to the file.
      *
-     * @pre SetDestFilename() has been previously called.
-     * @pre SetSourceImage() has been previously called.
+     *  SetDestFilename() has been previously called.
+     *  SetSourceImage() has been previously called.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the preconditions.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory Out of memory.
      * @throws Exception An unknown exception occurred. Possibly the file could
      * not be written.
-     * <p/>
+     * 
      * This method encodes the contents of the image and writes it to a file.
      * Before calling this method, call the SetSourceImage() method to specify
      * the image, then call the SetDestFilename() method to specify the name of

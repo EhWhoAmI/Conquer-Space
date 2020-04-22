@@ -19,7 +19,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 
 /**
  *

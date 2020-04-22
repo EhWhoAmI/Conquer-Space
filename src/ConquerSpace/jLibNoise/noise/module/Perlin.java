@@ -82,7 +82,7 @@ public class Perlin extends Module {
 
     /**
      * Returns the lacunarity of the Perlin noise.
-     * <p/>
+     * 
      * The lacunarity is the frequency multiplier between successive
      * octaves.
      *
@@ -105,7 +105,7 @@ public class Perlin extends Module {
 
     /**
      * Returns the number of octaves that generate the Perlin noise.
-     * <p/>
+     * 
      * The number of octaves controls the amount of detail in the Perlin
      * noise.
      *
@@ -117,7 +117,7 @@ public class Perlin extends Module {
 
     /**
      * Returns the persistence value of the Perlin noise.
-     * <p/>
+     * 
      * The persistence value controls the roughness of the Perlin noise.
      *
      * @return The persistence value of the Perlin noise.
@@ -185,9 +185,9 @@ public class Perlin extends Module {
 
     /**
      * Sets the lacunarity of the Perlin noise.
-     * <p/>
+     * 
      * The lacunarity is the frequency multiplier between successive octaves.
-     * <p/>
+     * 
      * For best results, set the lacunarity to a number between 1.5 and
      * 3.5
      *
@@ -210,16 +210,16 @@ public class Perlin extends Module {
 
     /**
      * Sets the number of octaves that generate the Perlin noise.
-     * <p/>
+     * 
      * The number of octaves controls the amount of detail in the Perlin noise.
-     * <p/>
+     * 
      * The larger the number of octaves, the more time required to
      * calculate the Perlin-noise value.
      *
      * @param octaveCount The number of octaves that generate the Perlin noise.
      * @throws ExceptionInvalidParam An invalid parameter was
      *                               specified; see the preconditions for more information.
-     * @pre The number of octaves ranges from 1 to PERLIN_MAX_OCTAVE.
+     *  The number of octaves ranges from 1 to PERLIN_MAX_OCTAVE.
      */
     public void setOctaveCount(int octaveCount) {
         if (octaveCount < 1 || octaveCount > PERLIN_MAX_OCTAVE) {
@@ -230,9 +230,9 @@ public class Perlin extends Module {
 
     /**
      * Sets the persistence value of the Perlin noise.
-     * <p/>
+     * 
      * The persistence value controls the roughness of the Perlin noise.
-     * <p/>
+     * 
      * For best results, set the persistence to a number between 0.0 and 1.0.
      *
      * @param persistence The persistence value of the Perlin noise.

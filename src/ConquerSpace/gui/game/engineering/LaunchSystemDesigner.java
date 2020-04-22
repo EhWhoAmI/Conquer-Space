@@ -17,9 +17,9 @@
  */
 package ConquerSpace.gui.game.engineering;
 
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.ships.launch.LaunchVehicle;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.launch.LaunchSystem;
+import ConquerSpace.game.ships.launch.LaunchVehicle;
 import javax.swing.DefaultListModel;
 
 /**

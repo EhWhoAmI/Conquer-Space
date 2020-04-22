@@ -25,7 +25,7 @@
 package ConquerSpace.jLibNoise.noise;
 
 /**
- * @source 'latlon.h/cpp'
+ * source 'latlon.h/cpp'
  */
 public abstract class LatLon {
 
@@ -37,8 +37,8 @@ public abstract class LatLon {
      * @param lon lon The longitude, in degrees.
      * @return Returns the x,y,z coordinates.
      *
-     * @pre lat must range from @b -90 to @b +90.
-     * @pre lon must range from @b -180 to @b +180.
+     *  lat must range from @b -90 to @b +90.
+     *  lon must range from @b -180 to @b +180.
      */
     public static double[] latLonToXYZ(double lat, double lon) {
         double r = Math.cos(MathConst.DEG_TO_RAD * lat);

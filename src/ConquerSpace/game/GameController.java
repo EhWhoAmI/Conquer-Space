@@ -21,16 +21,16 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.universe.resources.Element;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.NonElement;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
-import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
-import ConquerSpace.game.universe.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
+import ConquerSpace.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.game.ships.launch.LaunchSystem;
+import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -41,7 +41,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 /**
- * The controller of the game UI.
+ * The controller of the game, says when to tick, initializes everything.
  *
  * @author Zyun
  */
@@ -54,6 +54,7 @@ public class GameController {
     //Set to 5 days
     public static int GameRefreshRate = (5 * 24);
 
+    //All variables...
     public static ArrayList<LaunchSystem> launchSystems;
     private Timer ticker;
     public static ArrayList<Satellite> satellites;
@@ -84,7 +85,8 @@ public class GameController {
     public static Civilization playerCiv = null;
 
     public static final int AU_IN_LTYR = 63241;
-
+    
+    private PlayerController playerController;
     /**
      * Constructor. Inits all components.
      */
@@ -98,7 +100,7 @@ public class GameController {
         //Process the 0th turn and initalize the universe.
         updater.updateUniverse(Globals.universe, Globals.date, 0);
 
-        //Load the player
+        //Load the players
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Globals.universe.getCivilization(i).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(i));
         }
@@ -106,12 +108,14 @@ public class GameController {
         int tickerSpeed = 10;
 
         ticker = new Timer();
+        playerController = (PlayerController) playerCiv.controller;
+                
         Runnable action = new Runnable() {
             public void run() {
                 //Ensure that the game does not stop on a crash
                 try {
-                    ticker.setWait(((PlayerController) playerCiv.controller).getTickCount());
-                    if (!((PlayerController) playerCiv.controller).allowTick()) {
+                    ticker.setWait(playerController.getTickCount());
+                    if (!playerController.allowTick()) {
                         updater.tick();
                     }
                 } catch (Exception e) {

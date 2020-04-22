@@ -28,21 +28,21 @@ import ConquerSpace.jLibNoise.noise.model.Sphere;
 
 /**
  * Builds a spherical noise map.
- * <p/>
+ * 
  * This class builds a noise map by filling it with coherent-noise values
  * generated from the surface of a sphere.
- * <p/>
+ * 
  * This class describes these input values using a (latitude, longitude)
  * coordinate system.  After generating the coherent-noise value from the
  * input value, it then "flattens" these coordinates onto a plane so that
  * it can write the values into a two-dimensional noise map.
- * <p/>
+ * 
  * The sphere model has a radius of 1.0 unit.  Its center is at the
  * origin.
- * <p/>
+ * 
  * The x coordinate in the noise map represents the longitude.  The y
  * coordinate in the noise map represents the latitude.
- * <p/>
+ * 
  * The application must provide the southern, northern, western, and
  * eastern bounds of the noise map, in degrees.
  */
@@ -152,8 +152,8 @@ public class NoiseMapBuilderSphere extends NoiseMapBuilder {
      * @param northLatBound The northern boundary of the noise map, in degrees.
      * @param westLonBound The western boundary of the noise map, in degrees.
      * @param eastLonBound The eastern boundary of the noise map, in degrees.
-     * @pre The southern boundary is less than the northern boundary.
-     * @pre The western boundary is less than the eastern boundary.
+     *  The southern boundary is less than the northern boundary.
+     *  The western boundary is less than the eastern boundary.
      * @throws ExceptionInvalidParam See the preconditions.
      */
     public void setBounds(double southLatBound, double northLatBound, double westLonBound, double eastLonBound) {

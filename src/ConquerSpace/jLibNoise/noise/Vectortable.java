@@ -24,7 +24,7 @@
 package ConquerSpace.jLibNoise.noise;
 
 /**
- * @source 'Vectortable.h'
+ * source 'Vectortable.h'
  */
 public class Vectortable {
 

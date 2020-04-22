@@ -32,7 +32,6 @@ public class RendererMath {
      * on a swing jpanel.
      *
      * @see PolarCoordinate
-     * @param g galatic location/polar coordinate.
      * @param center center of the plot of polar coordinate.
      * @param unitSize the size of the individual unit(as in the distance of
      * <code>GalaticLocation</code>.

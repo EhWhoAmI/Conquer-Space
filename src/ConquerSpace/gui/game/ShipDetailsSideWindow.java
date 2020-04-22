@@ -17,8 +17,8 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.Ship;
 import javax.swing.JInternalFrame;
 
 /**

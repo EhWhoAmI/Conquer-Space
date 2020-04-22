@@ -18,9 +18,9 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.hull.Hull;
-import ConquerSpace.game.universe.ships.hull.HullMaterial;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.hull.Hull;
+import ConquerSpace.game.ships.hull.HullMaterial;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;

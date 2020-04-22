@@ -26,11 +26,11 @@ package ConquerSpace.jLibNoise.noise;
 
 /**
  * No module exception
- * <p/>
+ * 
  * Could not retrieve a source module from a noise module.
  *
- * @source 'exception.h'
- * @note If one or more required source modules were not connected to a
+ * source 'exception.h'
+ * note: If one or more required source modules were not connected to a
  * specific noise module, and its GetValue() method was called, that
  * method will raise a debug assertion instead of this exception.  This
  * is done for performance reasons.

@@ -25,7 +25,7 @@
 package ConquerSpace.jLibNoise.noise;
 
 /**
- * @source 'mathconsts.h'
+ * source 'mathconsts.h'
  */
 public abstract class MathConst {
 

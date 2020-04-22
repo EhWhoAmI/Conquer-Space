@@ -28,7 +28,7 @@ import ConquerSpace.jLibNoise.noise.Interp;
 import ConquerSpace.jLibNoise.noise.model.Plane;
 
 /**
- * @source 'noiseutils.h/cpp'
+ * source 'noiseutils.h/cpp'
  */
 public class NoiseMapBuilderPlane extends NoiseMapBuilder {
 
@@ -100,7 +100,7 @@ public class NoiseMapBuilderPlane extends NoiseMapBuilder {
 
     /**
      * Enables or disables seamless tiling.
-     * <p/>
+     * 
      * Enabling seamless tiling builds a noise map with no seams at the
      * edges.  This allows the noise map to be tileable.
      *
@@ -152,7 +152,7 @@ public class NoiseMapBuilderPlane extends NoiseMapBuilder {
 
     /**
      * Determines if seamless tiling is enabled.
-     * <p/>
+     * 
      * Enabling seamless tiling builds a noise map with no seams at the
      * edges.  This allows the noise map to be tileable.
      *
@@ -170,8 +170,8 @@ public class NoiseMapBuilderPlane extends NoiseMapBuilder {
      * @param lowerZBound The lower z boundary of the noise map, in units.
      * @param upperZBound The upper z boundary of the noise map, in units.
      * @throws ExceptionInvalidParam See the preconditions.
-     * @pre The lower x boundary is less than the upper x boundary.
-     * @pre The lower z boundary is less than the upper z boundary.
+     *  The lower x boundary is less than the upper x boundary.
+     *  The lower z boundary is less than the upper z boundary.
      */
     public void setBounds(double lowerXBound, double upperXBound, double lowerZBound, double upperZBound) {
         if (lowerXBound >= upperXBound || lowerZBound >= upperZBound) {

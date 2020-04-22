@@ -26,10 +26,10 @@ import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Orbit;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.civilization.stats.Economy;
+import ConquerSpace.game.civilization.stats.Economy;
 import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.universe.ships.Orbitable;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
+import ConquerSpace.game.ships.Orbitable;
+import ConquerSpace.game.ships.satellites.Satellite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,7 +86,6 @@ public class Planet extends Body {
      * Creates planet
      *
      * @param planetType Type of planet. See <code>PlanetTypes</code>
-     * @param orbitalDistance orbit of planet in km
      * @param planetSize size of planet
      * @param id planet id
      * @param parentStarSystem parent star system
@@ -257,8 +256,8 @@ public class Planet extends Body {
     /**
      * Checks if it's near a city, and adds it to the city. If not, creates one.
      *
-     * @param position
-     * @param b
+     * @param pt position
+     * @param b building to add
      * @return The city it is added to.
      */
     public City addBuildingToPlanet(GeographicPoint pt, Building b) {

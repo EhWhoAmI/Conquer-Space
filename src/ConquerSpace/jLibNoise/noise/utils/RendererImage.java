@@ -30,37 +30,37 @@ import ConquerSpace.jLibNoise.noise.Misc;
 
 /**
  * Renders an image from a noise map.
- * <p/>
+ * 
  * This class renders an image given the contents of a noise-map object.
- * <p/>
+ * 
  * An application can configure the output of the image in three ways: - Specify
  * the color gradient. - Specify the light source parameters. - Specify the
  * background image.
- * <p/>
+ * 
  * <b>Specify the color gradient</b>
- * <p/>
+ * 
  * This class uses a color gradient to calculate the color for each pixel in the
  * destination image according to the value from the corresponding position in
  * the noise map.
- * <p/>
+ * 
  * A color gradient is a list of gradually-changing colors. A color gradient is
  * defined by a list of <i>gradient points</i>. Each gradient point has a
  * position and a color. In a color gradient, the colors between two adjacent
  * gradient points are linearly interpolated.
- * <p/>
+ * 
  * For example, suppose this class contains the following color gradient:
- * <p/>
+ * 
  * - -1.0 maps to dark blue. - -0.2 maps to light blue. - -0.1 maps to tan. -
  * 0.0 maps to green. - 1.0 maps to white.
- * <p/>
+ * 
  * The value 0.5 maps to a greenish-white color because 0.5 is halfway between
  * 0.0 (mapped to green) and 1.0 (mapped to white).
- * <p/>
+ * 
  * The value -0.6 maps to a medium blue color because -0.6 is halfway between
  * -1.0 (mapped to dark blue) and -0.2 (mapped to light blue).
- * <p/>
+ * 
  * The color gradient requires a minimum of two gradient points.
- * <p/>
+ * 
  * This class contains two pre-made gradients: a grayscale gradient and a color
  * gradient suitable for terrain. To use these pre-made gradients, call the
  * BuildGrayscaleGradient() or BuildTerrainGradient() methods, respectively.
@@ -71,47 +71,47 @@ import ConquerSpace.jLibNoise.noise.Misc;
  * weighs the blend towards the calculated color, and if the alpha value is low,
  * this class weighs the blend towards the color from the corresponding pixel in
  * the background image.
- * <p/>
+ * 
  * <b>Specify the light source parameters</b>
- * <p/>
+ * 
  * This class contains a parallel light source that lights the image. It
  * interprets the noise map as a bump map.
- * <p/>
+ * 
  * To enable or disable lighting, pass a Boolean value to the EnableLight()
  * method.
- * <p/>
+ * 
  * To set the position of the light source in the "sky", call the
  * SetLightAzimuth() and SetLightElev() methods.
- * <p/>
+ * 
  * To set the color of the light source, call the SetLightColor() method.
- * <p/>
+ * 
  * To set the intensity of the light source, call the SetLightIntensity()
  * method. A good intensity value is 2.0, although that value tends to "wash
  * out" very light colors from the image.
- * <p/>
+ * 
  * To set the contrast amount between areas in light and areas in shadow, call
  * the SetLightContrast() method. Determining the correct contrast amount
  * requires some trial and error, but if your application interprets the noise
  * map as a height map that has its elevation values measured in meters and has
  * a horizontal resolution of @a h meters, a good contrast amount to use is (
  * 1.0 / @a h ).
- * <p/>
+ * 
  * <b>Specify the background image</b>
- * <p/>
+ * 
  * To specify a background image, pass an Image object to the
  * SetBackgroundImage() method.
- * <p/>
+ * 
  * This class determines the color of a pixel in the destination image by
  * blending the calculated color with the color of the corresponding pixel from
  * the background image.
- * <p/>
+ * 
  * The blend amount is determined by the alpha of the calculated color. If the
  * alpha value is high, this class weighs the blend towards the calculated
  * color, and if the alpha value is low, this class weighs the blend towards the
  * color from the corresponding pixel in the background image.
- * <p/>
+ * 
  * <b>Rendering the image</b>
- * <p/>
+ * 
  * To render the image, perform the following steps: - Pass a NoiseMap object to
  * the SetSourceNoiseMap() method. - Pass an Image object to the SetDestImage()
  * method. - Pass an Image object to the SetBackgroundImage() method (optional)
@@ -152,7 +152,7 @@ public class RendererImage {
     /**
      * Used by the CalcLightIntensity() method to recalculate the light values
      * only if the light parameters change.
-     * <p/>
+     * 
      * When the light parameters change, this value is set to True. When the
      * CalcLightIntensity() method is called, this value is set to false.
      */
@@ -179,13 +179,13 @@ public class RendererImage {
 
     /**
      * Adds a gradient point to this gradient object.
-     * <p/>
+     * 
      * This object uses a color gradient to calculate the color for each pixel
      * in the destination image according to the value from the corresponding
      * position in the noise map.
-     * <p/>
+     * 
      * The gradient requires a minimum of two gradient points.
-     * <p/>
+     * 
      * The specified color value passed to this method has an alpha channel.
      * This alpha channel specifies how a pixel in the background image (if
      * specified) is blended with the calculated color. If the alpha value is
@@ -197,7 +197,7 @@ public class RendererImage {
      * @param gradientColor The color of this gradient point.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the
      * preconditions.
-     * @pre No two gradient points have the same position.
+     *  No two gradient points have the same position.
      */
     public void addGradientPoint(double gradientPos, Color gradientColor) {
         gradient.addGradientPoint(gradientPos, gradientColor);
@@ -205,7 +205,7 @@ public class RendererImage {
 
     /**
      * Builds a gray-scale gradient.
-     * <p/>
+     * 
      * This color gradient contains the following gradient points: - -1.0 maps
      * to black - 1.0 maps to white
      *
@@ -220,7 +220,7 @@ public class RendererImage {
 
     /**
      * Builds a color gradient suitable for terrain.
-     * <p/>
+     * 
      * This gradient color at position 0.0 is the "sea level". Above that value,
      * the gradient contains greens, browns, and whites. Below that value, the
      * gradient contains various shades of blue.
@@ -242,7 +242,7 @@ public class RendererImage {
 
     /**
      * Clears the color gradient.
-     * <p/>
+     * 
      * Before calling the Render() method, the application must specify a new
      * color gradient with at least two gradient points.
      */
@@ -252,7 +252,7 @@ public class RendererImage {
 
     /**
      * Enables or disables the light source.
-     * <p/>
+     * 
      * If the light source is enabled, this object will interpret the noise map
      * as a bump map.
      *
@@ -268,14 +268,14 @@ public class RendererImage {
 
     /**
      * Enables or disables noise-map wrapping.
-     * <p/>
+     * 
      * This object requires five points (the initial point and its four
      * neighbors) to calculate light shading. If wrapping is enabled, and the
      * initial point is on the edge of the noise map, the appropriate neighbors
      * that lie outside of the noise map will "wrap" to the opposite side(s) of
      * the noise map. Otherwise, the appropriate neighbors are cropped to the
      * edge of the noise map.
-     * <p/>
+     * 
      * Enabling wrapping is useful when creating spherical renderings and
      * tileable textures.
      *
@@ -320,10 +320,10 @@ public class RendererImage {
 
     /**
      * Returns the contrast of the light source.
-     * <p/>
+     * 
      * The contrast specifies how sharp the boundary is between the light-facing
      * areas and the shadowed areas.
-     * <p/>
+     * 
      * The contrast determines the difference between areas in light and areas
      * in shadow. Determining the correct contrast amount requires some trial
      * and error, but if your application interprets the noise map as a height
@@ -338,7 +338,7 @@ public class RendererImage {
 
     /**
      * Returns the elevation of the light source, in degrees.
-     * <p/>
+     * 
      * The elevation is the angle above the horizon: - 0 degrees is on the
      * horizon. - 90 degrees is straight up.
      *
@@ -368,14 +368,14 @@ public class RendererImage {
 
     /**
      * Determines if noise-map wrapping is enabled.
-     * <p/>
+     * 
      * This object requires five points (the initial point and its four
      * neighbors) to calculate light shading. If wrapping is enabled, and the
      * initial point is on the edge of the noise map, the appropriate neighbors
      * that lie outside of the noise map will "wrap" to the opposite side(s) of
      * the noise map. Otherwise, the appropriate neighbors are cropped to the
      * edge of the noise map.
-     * <p/>
+     * 
      * Enabling wrapping is useful when creating spherical renderings and
      * tileable textures
      *
@@ -388,18 +388,18 @@ public class RendererImage {
     /**
      * Renders the destination image using the contents of the source noise map
      * and an optional background image.
-     * <p/>
+     * 
      * The background image and the destination image can safely refer to the
      * same image, although in this case, the destination image is irretrievably
      * blended into the background image.
      *
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the
      * preconditions.
-     * @pre SetSourceNoiseMap() has been previously called.
-     * @pre SetDestImage() has been previously called.
-     * @pre There are at least two gradient points in the color gradient.
-     * @pre No two gradient points have the same position.
-     * @pre If a background image was specified, it has the exact same size as
+     *  SetSourceNoiseMap() has been previously called.
+     *  SetDestImage() has been previously called.
+     *  There are at least two gradient points in the color gradient.
+     *  No two gradient points have the same position.
+     *  If a background image was specified, it has the exact same size as
      * the source height map.
      * @post The original contents of the destination image is destroyed.
      */
@@ -530,12 +530,12 @@ public class RendererImage {
 
     /**
      * Sets the background image.
-     * <p/>
+     * 
      * If a background image has been specified, the Render() method blends the
      * pixels from the background image onto the corresponding pixels in the
      * destination image. The blending weights are determined by the alpha
      * channel in the pixels in the destination image.
-     * <p/>
+     * 
      * The destination image must exist throughout the lifetime of this object
      * unless another image replaces that image.
      *
@@ -547,10 +547,10 @@ public class RendererImage {
 
     /**
      * Sets the destination image.
-     * <p/>
+     * 
      * The destination image will contain the rendered image after a successful
      * call to the Render() method.
-     * <p/>
+     * 
      * The destination image must exist throughout the lifetime of this object
      * unless another image replaces that image
      *
@@ -562,11 +562,11 @@ public class RendererImage {
 
     /**
      * Sets the azimuth of the light source, in degrees.
-     * <p/>
+     * 
      * The azimuth is the location of the light source around the horizon: - 0.0
      * degrees is east. - 90.0 degrees is north. - 180.0 degrees is west. -
      * 270.0 degrees is south.
-     * <p/>
+     * 
      * Make sure the light source is enabled via a call to the EnableLight()
      * method before calling the Render() method.
      *
@@ -579,7 +579,7 @@ public class RendererImage {
 
     /**
      * Sets the brightness of the light source.
-     * <p/>
+     * 
      * Make sure the light source is enabled via a call to the EnableLight()
      * method before calling the Render() method.
      *
@@ -592,7 +592,7 @@ public class RendererImage {
 
     /**
      * Sets the color of the light source.
-     * <p/>
+     * 
      * Make sure the light source is enabled via a call to the EnableLight()
      * method before calling the Render() method.
      *
@@ -604,22 +604,22 @@ public class RendererImage {
 
     /**
      * Sets the contrast of the light source.
-     * <p/>
+     * 
      * light-facing areas and the shadowed areas.
-     * <p/>
+     * 
      * The contrast determines the difference between areas in light and areas
      * in shadow. Determining the correct contrast amount requires some trial
      * and error, but if your application interprets the noise map as a height
      * map that has a spatial resolution of @a h meters and an elevation
      * resolution of 1 meter, a good contrast amount to use is ( 1.0 / @a h ).
-     * <p/>
+     * 
      * Make sure the light source is enabled via a call to the EnableLight()
      * method before calling the Render() method.
      *
      * @param lightContrast The contrast of the light source.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the
      * preconditions.
-     * @pre The specified light contrast is positive.
+     *  The specified light contrast is positive.
      */
     public void setLightContrast(double lightContrast) {
         if (lightContrast <= 0.0) {
@@ -632,10 +632,10 @@ public class RendererImage {
 
     /**
      * Sets the elevation of the light source, in degrees.
-     * <p/>
+     * 
      * The elevation is the angle above the horizon: - 0 degrees is on the
      * horizon. - 90 degrees is straight up.
-     * <p/>
+     * 
      * Make sure the light source is enabled via a call to the EnableLight()
      * method before calling the Render() method.
      *
@@ -648,9 +648,9 @@ public class RendererImage {
 
     /**
      * Returns the intensity of the light source.
-     * <p/>
+     * 
      * A good value for intensity is 2.0.
-     * <p/>
+     * 
      * Make sure the light source is enabled via a call to the EnableLight()
      * method before calling the Render() method.
      *
@@ -667,7 +667,7 @@ public class RendererImage {
 
     /**
      * Sets the source noise map.
-     * <p/>
+     * 
      * The destination image must exist throughout the lifetime of this object
      * unless another image replaces that image.
      *
@@ -733,7 +733,7 @@ public class RendererImage {
 
     /**
      * Calculates the intensity of the light given some elevation values.
-     * <p/>
+     * 
      * These values come directly from the noise map.
      *
      * @param center Elevation of the center point.

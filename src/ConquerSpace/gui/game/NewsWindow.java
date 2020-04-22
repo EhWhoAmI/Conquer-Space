@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.events.Event;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;

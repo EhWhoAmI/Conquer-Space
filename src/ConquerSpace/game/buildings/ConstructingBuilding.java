@@ -22,7 +22,7 @@ import ConquerSpace.game.population.jobs.JobRank;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Good;
 import java.awt.Color;
 import java.util.ArrayList;

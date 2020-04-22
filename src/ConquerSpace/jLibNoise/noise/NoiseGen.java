@@ -25,7 +25,7 @@
 package ConquerSpace.jLibNoise.noise;
 
 /**
- * @source 'noisegen.h/cpp'
+ * source 'noisegen.h/cpp'
  */
 public class NoiseGen {
 
@@ -39,9 +39,9 @@ public class NoiseGen {
     /**
      * Generates a gradient-coherent-noise value from the coordinates of a
      * three-dimensional input value.
-     * <p/>
+     * 
      * The return value ranges from -1.0 to +1.0.
-     * <p/>
+     * 
      * For an explanation of the difference between <i>gradient</i> noise and
      * <i>value</i> noise, see the comments for the GradientNoise3D() function.
      *
@@ -118,13 +118,13 @@ public class NoiseGen {
      * Generates a gradient-noise value from the coordinates of a
      * three-dimensional input value and the integer coordinates of a
      * nearby three-dimensional value.
-     * <p/>
+     * 
      * A <i>gradient</i>-noise function generates better-quality noise than a
      * <i>value</i>-noise function.  Most noise modules use gradient noise for
      * this reason, although it takes much longer to calculate.
-     * <p/>
+     * 
      * The return value ranges from -1.0 to +1.0.
-     * <p/>
+     * 
      * This function generates a gradient-noise value by performing the
      * following steps:
      * - It first calculates a random normalized vector based on the
@@ -133,7 +133,7 @@ public class NoiseGen {
      * nearby integer value passed to this function.
      * - It then calculates the dot product of the above-generated value
      * and the floating-point input value passed to this function.
-     * <p/>
+     * 
      * A noise function differs from a random-number generator because it
      * always returns the same output value if the same input value is passed to it.
      *
@@ -145,9 +145,9 @@ public class NoiseGen {
      * @param iz   The integer @a z coordinate of a nearby value.
      * @param seed The random number seed.
      * @return The generated gradient-noise value.
-     * @pre The difference between @a fx and @a ix must be less than or equal to one.
-     * @pre The difference between @a fy and @a iy must be less than or equal to one.
-     * @pre The difference between @a fz and @a iz must be less than or equal to one.
+     *  The difference between @a fx and @a ix must be less than or equal to one.
+     *  The difference between @a fy and @a iy must be less than or equal to one.
+     *  The difference between @a fz and @a iz must be less than or equal to one.
      */
     public static double gradientNoise3D(double fx, double fy, double fz, int ix, int iy, int iz, int seed) {
         // Randomly generate a gradient vector given the integer coordinates of the
@@ -187,9 +187,9 @@ public class NoiseGen {
     /**
      * Generates an integer-noise value from the coordinates of a
      * three-dimensional input value.
-     * <p/>
+     * 
      * The return value ranges from 0 to 2147483647.
-     * <p/>
+     * 
      * A noise function differs from a random-number generator because it
      * always returns the same output value if the same input value is passed
      * to it.
@@ -220,14 +220,14 @@ public class NoiseGen {
     /**
      * Modifies a floating-point value so that it can be stored in a
      * noise::int32 variable.
-     * <p/>
+     * 
      * This function does not modify @a n.
-     * <p/>
+     * 
      * In libnoise, the noise-generating algorithms are all integer-based;
      * they use variables of type noise::int32.  Before calling a noise
      * function, pass the @a x, @a y, and @a z coordinates to this function to
      * ensure that these coordinates can be cast to a noise::int32 value.
-     * <p/>
+     * 
      * Although you could do a straight cast from double to noise::int32, the
      * resulting value may differ between platforms.  By using this function,
      * you ensure that the resulting value is identical between platforms.
@@ -324,9 +324,9 @@ public class NoiseGen {
 
     /**
      * Generates a value-noise value from the coordinates of a three-dimensional input value.
-     * <p/>
+     * 
      * The return value ranges from -1.0 to +1.0.
-     * <p/>
+     * 
      * A noise function differs from a random-number generator because it
      * always returns the same output value if the same input value is passed
      * to it.

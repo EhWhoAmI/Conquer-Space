@@ -25,7 +25,7 @@
 package ConquerSpace.jLibNoise.noise;
 
 /**
- * @source 'misc/h'
+ * source 'misc/h'
  */
 public abstract class Misc {
 

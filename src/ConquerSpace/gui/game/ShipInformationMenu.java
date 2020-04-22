@@ -17,9 +17,9 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.controllers.PlayerController.PlayerController;
-import ConquerSpace.game.universe.ships.Ship;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.ships.Ship;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;

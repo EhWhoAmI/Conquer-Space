@@ -19,8 +19,8 @@ package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.SpaceShip;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.SpaceShip;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

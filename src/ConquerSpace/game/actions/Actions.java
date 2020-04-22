@@ -26,11 +26,11 @@ import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.Point;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.civilization.vision.VisionPoint;
-import ConquerSpace.game.universe.ships.Ship;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.ships.satellites.SpaceTelescope;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.civilization.vision.VisionPoint;
+import ConquerSpace.game.ships.Ship;
+import ConquerSpace.game.ships.satellites.Satellite;
+import ConquerSpace.game.ships.satellites.SpaceTelescope;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -81,10 +81,7 @@ public class Actions {
      * Places building for free
      *
      * @param p
-     * @param ptx
      * @param what
-     * @param owner
-     * @return
      */
     public static void forcePlaceBuilding(Planet p, GeographicPoint pt, Building what) {
         p.buildings.put(pt, what);

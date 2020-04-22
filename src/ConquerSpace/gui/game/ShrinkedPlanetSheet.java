@@ -20,7 +20,7 @@ package ConquerSpace.gui.game;
 import ConquerSpace.game.buildings.Building;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.PolarCoordinate;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.PlanetTypes;

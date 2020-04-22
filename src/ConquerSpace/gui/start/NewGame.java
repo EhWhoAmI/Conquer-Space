@@ -21,7 +21,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.universe.UniverseConfig;
-import ConquerSpace.game.universe.civilization.CivilizationConfig;
+import ConquerSpace.game.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;

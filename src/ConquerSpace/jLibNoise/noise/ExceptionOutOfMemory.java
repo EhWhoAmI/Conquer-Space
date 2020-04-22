@@ -26,10 +26,10 @@ package ConquerSpace.jLibNoise.noise;
 
 /**
  * Out of memory exception
- * <p/>
+ * 
  * There was not enough memory to perform an action.
  *
- * @source 'exception.h'
+ * source 'exception.h'
  */
 public class ExceptionOutOfMemory extends RuntimeException {
 }

@@ -25,15 +25,15 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 /**
  * Defines a color.
- * <p/>
+ * 
  * A color object contains four 8-bit channels: red, green, blue, and an
  * alpha (transparency) channel.  Channel values range from 0 to 255.
- * <p/>
+ * 
  * The alpha channel defines the transparency of the color.  If the alpha
  * channel has a value of 0, the color is completely transparent. If the
  * alpha channel has a value of 255, the color is completely opaque.
  *
- * @source 'noiseutils.h'
+ * source 'noiseutils.h'
  */
 public class Color {
     // Value of the alpha (transparency) channel.

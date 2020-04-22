@@ -17,9 +17,9 @@
  */
 package ConquerSpace.game.save;
 
-import ConquerSpace.game.universe.ships.satellites.NoneSatellite;
-import ConquerSpace.game.universe.ships.satellites.Satellite;
-import ConquerSpace.game.universe.ships.satellites.SpaceTelescope;
+import ConquerSpace.game.ships.satellites.NoneSatellite;
+import ConquerSpace.game.ships.satellites.Satellite;
+import ConquerSpace.game.ships.satellites.SpaceTelescope;
 import org.json.JSONObject;
 
 /**

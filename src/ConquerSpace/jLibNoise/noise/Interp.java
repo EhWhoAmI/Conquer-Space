@@ -25,14 +25,14 @@
 package ConquerSpace.jLibNoise.noise;
 
 /**
- * @source 'interp.h'
+ * source 'interp.h'
  */
 public abstract class Interp {
 
     /**
      * Performs cubic interpolation between two values bound between two other
      * values.
-     * <p/>
+     * 
      * The alpha value should range from 0.0 to 1.0.  If the alpha value is
      * 0.0, this function returns @a n1.  If the alpha value is 1.0, this
      * function returns @a n2.
@@ -54,7 +54,7 @@ public abstract class Interp {
 
     /**
      * Performs linear interpolation between two values.
-     * <p/>
+     * 
      * The alpha value should range from 0.0 to 1.0.  If the alpha value is
      * 0.0, this function returns @a n0.  If the alpha value is 1.0, this
      * function returns @a n1.
@@ -70,7 +70,7 @@ public abstract class Interp {
 
     /**
      * Maps a value onto a cubic S-curve.
-     * <p/>
+     * 
      * The derivitive of a cubic S-curve is zero at @a a = 0.0 and @a a = 1.0
      *
      * @param a The value to map onto a cubic S-curve. (should range from 0.0 to 1.0)
@@ -82,9 +82,9 @@ public abstract class Interp {
 
     /**
      * Maps a value onto a quintic S-curve.
-     * <p/>
+     * 
      * The first derivitive of a quintic S-curve is zero at @a a = 0.0 and @a a = 1.0
-     * <p/>
+     * 
      * The second derivitive of a quintic S-curve is zero at @a a = 0.0 and @a a = 1.0
      *
      * @param a The value to map onto a quintic S-curve. (should range from 0.0 to 1.0)

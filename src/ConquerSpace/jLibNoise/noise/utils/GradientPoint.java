@@ -25,16 +25,16 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 /**
  * Defines a point used to build a color gradient.
- * <p/>
+ * 
  * A color gradient is a list of gradually-changing colors.  A color
  * gradient is defined by a list of <i>gradient points</i>.  Each
  * gradient point has a position and a color.  In a color gradient, the
  * colors between two adjacent gradient points are linearly interpolated.
- * <p/>
+ * 
  * The ColorGradient class defines a color gradient by a list of these
  * objects.
  *
- * @source 'noiseutils.h'
+ * source 'noiseutils.h'
  */
 public class GradientPoint {
 

@@ -19,7 +19,7 @@ package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.universe.Point;
-import ConquerSpace.game.universe.civilization.vision.VisionPoint;
+import ConquerSpace.game.civilization.vision.VisionPoint;
 import java.awt.Color;
 
 /**

@@ -26,10 +26,10 @@ package ConquerSpace.jLibNoise.noise;
 
 /**
  * Invalid parameter exception
- * <p/>
+ * 
  * An invalid parameter was passed to a libnoise function or method.
  *
- * @source 'exception.h'
+ * source 'exception.h'
  */
 public class ExceptionInvalidParam extends RuntimeException {
 

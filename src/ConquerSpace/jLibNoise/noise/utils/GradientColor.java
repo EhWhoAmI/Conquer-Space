@@ -28,34 +28,34 @@ import ConquerSpace.jLibNoise.noise.Misc;
 
 /**
  * Defines a color gradient.
- * <p/>
+ * 
  * A color gradient is a list of gradually-changing colors. A color gradient is
  * defined by a list of <i>gradient points</i>. Each gradient point has a
  * position and a color. In a color gradient, the colors between two adjacent
  * gradient points are linearly interpolated.
- * <p/>
+ * 
  * To add a gradient point to the color gradient, pass its position and color to
  * the AddGradientPoint() method.
- * <p/>
+ * 
  * To retrieve a color from a specific position in the color gradient, pass that
  * position to the GetColor() method.
- * <p/>
+ * 
  * This class is a useful tool for coloring height maps based on elevation.
- * <p/>
+ * 
  * <b>Gradient example</b>
- * <p/>
+ * 
  * Suppose a gradient object contains the following gradient points:
- * <p/>
+ * 
  * - -1.0 maps to black. - 0.0 maps to white. - 1.0 maps to red.
- * <p/>
+ * 
  * If an application passes -0.5 to the GetColor() method, this method will
  * return a gray color that is halfway between black and white.
- * <p/>
+ * 
  * If an application passes 0.25 to the GetColor() method, this method will
  * return a very light pink color that is one quarter of the way between white
  * and red.
  *
- * @source 'noiseutils.h/cpp'
+ * source 'noiseutils.h/cpp'
  */
 public class GradientColor {
 
@@ -75,13 +75,13 @@ public class GradientColor {
 
     /**
      * Adds a gradient point to this gradient object.
-     * <p/>
+     * 
      * It does not matter which order these gradient points are added.
      *
      * @param gradientPos The position of this gradient point.
      * @param gradientColor The color of this gradient point.
-     * @throws :ExceptionInvalidParam See the precondition.
-     * @pre No two gradient points have the same position.
+     * throws :ExceptionInvalidParam See the precondition.
+     *  No two gradient points have the same position.
      */
     public void addGradientPoint(double gradientPos, Color gradientColor) {
         // Find the insertion point for the new gradient point and insert the new
@@ -148,10 +148,10 @@ public class GradientColor {
 
     /**
      * Returns a pointer to the array of gradient points in this object.
-     * <p/>
+     * 
      * Before calling this method, call GetGradientPointCount() to determine the
      * number of gradient points in this array.
-     * <p/>
+     * 
      * It is recommended that an application does not store this pointer for
      * later use since the pointer to the array may change if the application
      * calls another method of this object.
@@ -174,7 +174,7 @@ public class GradientColor {
     /**
      * Determines the array index in which to insert the gradient point into the
      * internal gradient-point array.
-     * <p/>
+     * 
      * By inserting the gradient point at the returned array index, this object
      * ensures that the gradient-point array is sorted by input value. The code
      * that maps a value to a color requires a sorted gradient-point array.
@@ -183,7 +183,7 @@ public class GradientColor {
      * @return The array index in which to insert the gradient point.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the
      * precondition.
-     * @pre No two gradient points have the same input value.
+     *  No two gradient points have the same input value.
      */
     private int findInsertionPos(double gradientPos) {
         int insertionPos;
@@ -203,11 +203,11 @@ public class GradientColor {
     /**
      * Inserts the gradient point at the specified position in the internal
      * gradient-point array.
-     * <p/>
+     * 
      * To make room for this new gradient point, this method reallocates the
      * gradient-point array and shifts all gradient points occurring after the
      * insertion position up by one.
-     * <p/>
+     * 
      * Because this object requires that all gradient points in the array must
      * be sorted by the position, the new gradient point should be inserted at
      * the position in which the order is still preserved.

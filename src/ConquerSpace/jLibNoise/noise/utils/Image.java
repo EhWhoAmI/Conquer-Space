@@ -29,49 +29,49 @@ import java.awt.image.BufferedImage;
 
 /**
  * Implements an image, a 2-dimensional array of color values.
- * <p/>
+ * 
  * An image can be used to store a color texture.
- * <p/>
+ * 
  * These color values are of type Color.
- * <p/>
+ * 
  * The size (width and height) of the image can be specified during object
  * construction or at any other time.
- * <p/>
+ * 
  * The GetValue() and SetValue() methods can be used to access individual color
  * values stored in the image.
- * <p/>
+ * 
  * This class manages its own memory. If you copy an image object into another
  * image object, the original contents of the image object will be freed.
- * <p/>
+ * 
  * If you specify a new size for the image and the new size is smaller than the
  * current size, the allocated memory will not be reallocated. Call ReclaimMem()
  * to reclaim the wasted memory.
- * <p/>
+ * 
  * <b>Border Values</b>
- * <p/>
+ * 
  * All of the color values outside of the image are assumed to have a common
  * color value known as the <i>border value</i>.
- * <p/>
+ * 
  * To set the border value, call the SetBorderValue() method.
- * <p/>
+ * 
  * The GetValue() method returns the border value if the specified position lies
  * outside of the image.
- * <p/>
+ * 
  * <b>Internal Image Structure</b>
- * <p/>
+ * 
  * Internally, the color values are organized into horizontal rows called
  *
- * @a slabs. Slabs are ordered from bottom to top.
- * <p/>
+ * slabs. Slabs are ordered from bottom to top.
+ * 
  * Each slab contains a contiguous row of color values in memory. The color
  * values in a slab are organized left to right. These values are of type Color.
- * <p/>
+ * 
  * The offset between the starting points of any two adjacent slabs is called
  * the <i>stride amount</i>. The stride amount is measured by the number of
  * Color objects between these two starting points, not by the number of bytes.
  * For efficiency reasons, the stride is often a multiple of the machine word
  * size.
- * <p/>
+ * 
  * The GetSlabPtr() methods allow you to retrieve pointers to the slabs
  * themselves.
  */
@@ -108,7 +108,7 @@ public class Image {
 
     /**
      * Constructor.
-     * <p/>
+     * 
      * Creates an image with uninitialized color values. It is considered an
      * error if the specified dimensions are not positive.
      *
@@ -117,8 +117,8 @@ public class Image {
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the
      * preconditions.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory Out of memory.
-     * @pre The width and height values are positive.
-     * @pre The width and height values do not exceed the maximum possible width
+     *  The width and height values are positive.
+     *  The width and height values do not exceed the maximum possible width
      * and height for the image.
      */
     public Image(int width, int height) {
@@ -151,7 +151,7 @@ public class Image {
 
     /**
      * Returns the color value used for all positions outside of the image.
-     * <p/>
+     * 
      * All positions outside of the image are assumed to have a common color
      * value known as the <i>border value</i>.
      *
@@ -173,7 +173,7 @@ public class Image {
 
     /**
      * Returns a const pointer to a slab at the specified row.
-     * <p/>
+     * 
      * This method does not perform bounds checking so be careful when calling
      * it.
      *
@@ -181,7 +181,7 @@ public class Image {
      * @param row The row, or @a y coordinate.
      * @return A const pointer to a slab at the position ( 0, @a row ), or @a
      * NULL if the image is empty.
-     * @pre The coordinates must exist within the bounds of the image.
+     *  The coordinates must exist within the bounds of the image.
      */
     public ArrayPointer<Color> getConstSlabPtr(int row) {
         return getConstSlabPtr(0, row);
@@ -189,7 +189,7 @@ public class Image {
 
     /**
      * Returns a const pointer to a slab at the specified position.
-     * <p/>
+     * 
      * This method does not perform bounds checking so be careful when calling
      * it.
      *
@@ -198,7 +198,7 @@ public class Image {
      * @param y The y coordinate of the position.
      * @return A const pointer to a slab at the position ( @a x, @a y ), or @a
      * NULL if the image is empty.
-     * @pre The coordinates must exist within the bounds of the image.
+     *  The coordinates must exist within the bounds of the image.
      */
     public ArrayPointer<Color> getConstSlabPtr(int x, int y) {
         return getSlabPtr(x, y);
@@ -215,7 +215,7 @@ public class Image {
 
     /**
      * Returns the amount of memory allocated for this image.
-     * <p/>
+     * 
      * This method returns the number of Color objects allocated.
      *
      * @return Returns the amount of memory allocated for this image.
@@ -236,14 +236,14 @@ public class Image {
 
     /**
      * Returns a pointer to a slab at the specified row.
-     * <p/>
+     * 
      * This method does not perform bounds checking so be careful when calling
      * it.
      *
      * @param row The row, or @a y coordinate.
      * @return A pointer to a slab at the position ( 0, @a row ), or @a NULL if
      * the image is empty.
-     * @pre The coordinates must exist within the bounds of the image.
+     *  The coordinates must exist within the bounds of the image.
      */
     public ArrayPointer<Color> getSlabPtr(int row) {
         return getSlabPtr(0, row);
@@ -251,7 +251,7 @@ public class Image {
 
     /**
      * Returns a pointer to a slab at the specified position.
-     * <p/>
+     * 
      * This method does not perform bounds checking so be careful when calling
      * it.
      *
@@ -260,7 +260,7 @@ public class Image {
      * @param y The y coordinate of the position.
      * @return A pointer to a slab at the position ( @a x, @a y ), or @a NULL if
      * the image is empty.
-     * @pre The coordinates must exist within the bounds of the image.
+     *  The coordinates must exist within the bounds of the image.
      */
     public ArrayPointer<Color> getSlabPtr(int x, int y) {
         return new ArrayPointer<Color>(image, x + (y * width));
@@ -268,7 +268,7 @@ public class Image {
 
     /**
      * Returns the stride amount of the image.
-     * <p/>
+     * 
      * - The <i>stride amount</i> is the offset between the starting points of
      * any two adjacent slabs in an image. - The stride amount is measured by
      * the number of Color objects between these two points, not by the number
@@ -282,7 +282,7 @@ public class Image {
 
     /**
      * Returns a color value from the specified position in the image.
-     * <p/>
+     * 
      * This method returns the border value if the coordinates exist outside of
      * the image.
      *
@@ -311,7 +311,7 @@ public class Image {
 
     /**
      * Reallocates the image to recover wasted memory.
-     * <p/>
+     * 
      * The contents of the image is unaffected.
      *
      * @throws ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory Out of memory.
@@ -339,7 +339,7 @@ public class Image {
 
     /**
      * Sets the color value to use for all positions outside of the image.
-     * <p/>
+     * 
      * All positions outside of the image are assumed to have a common color
      * value known as the <i>border value</i>.
      *
@@ -352,7 +352,7 @@ public class Image {
 
     /**
      * Sets the new size for the image.
-     * <p/>
+     * 
      * On exit, the contents of the image are undefined. If the @a OUT_OF_MEMORY
      * exception occurs, this image becomes empty. If the @a INVALID_PARAM
      * exception occurs, the image is unmodified.
@@ -362,8 +362,8 @@ public class Image {
      * @throws ConquerSpace.jLibNoise.noise.ExceptionInvalidParam See the
      * preconditions.
      * @throws ConquerSpace.jLibNoise.noise.ExceptionOutOfMemory Out of memory.
-     * @pre The width and height values are positive.
-     * @pre The width and height values do not exceed the maximum possible width
+     *  The width and height values are positive.
+     *  The width and height values do not exceed the maximum possible width
      * and height for the image.
      */
     public void setSize(int width, int height) {
@@ -397,7 +397,7 @@ public class Image {
 
     /**
      * Sets a color value at a specified position in the image.
-     * <p/>
+     * 
      * This method does nothing if the image is empty or the position is outside
      * the bounds of the image.
      *
@@ -415,9 +415,9 @@ public class Image {
 
     /**
      * Takes ownership of the buffer within the source image.
-     * <p/>
+     * 
      * On exit, the source image object becomes empty.
-     * <p/>
+     * 
      * This method only moves the buffer pointer so this method is very quick.
      *
      * @param source The source image.
@@ -441,7 +441,7 @@ public class Image {
     /**
      * Returns the minimum amount of memory required to store an image of the
      * specified size.
-     * <p/>
+     * 
      * The returned color value is measured by the number of Color objects
      * required to store the image, not by the number of bytes.
      *
@@ -455,7 +455,7 @@ public class Image {
 
     /**
      * Calculates the stride amount for an image.
-     * <p/>
+     * 
      * - The <i>stride amount</i> is the offset between the starting points of
      * any two adjacent slabs in an image. - The stride amount is measured by
      * the number of Color objects between these two points, not by the number
@@ -470,7 +470,7 @@ public class Image {
 
     /**
      * Copies the contents of the buffer in the source image into this image.
-     * <p/>
+     * 
      * This method reallocates the buffer in this image object if necessary.
      *
      * @param source The source image.
@@ -492,7 +492,7 @@ public class Image {
 
     /**
      * Resets the image object.
-     * <p/>
+     * 
      * This method is similar to the InitObj() method, except this method
      * deletes the memory allocated to the image.
      */
@@ -503,8 +503,8 @@ public class Image {
     /**
      * Initializes the image object.
      *
-     * @pre Must be called during object construction.
-     * @pre The image buffer must not exist.
+     *  Must be called during object construction.
+     *  The image buffer must not exist.
      */
     void initObj() {
         image = null;

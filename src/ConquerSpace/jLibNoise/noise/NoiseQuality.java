@@ -26,7 +26,7 @@ package ConquerSpace.jLibNoise.noise;
 /**
  * Enumerates the noise quality.
  *
- * @source 'noisegen.h'
+ * source 'noisegen.h'
  */
 public enum NoiseQuality {
 

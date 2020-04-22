@@ -24,7 +24,7 @@
 package ConquerSpace.jLibNoise.noise.utils;
 
 /**
- * @source 'noiseutils.h'
+ * source 'noiseutils.h'
  */
 public abstract class Utils {
 

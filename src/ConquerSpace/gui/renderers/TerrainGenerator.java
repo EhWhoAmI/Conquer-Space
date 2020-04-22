@@ -21,6 +21,7 @@ import ConquerSpace.jLibNoise.noise.module.Perlin;
 import ConquerSpace.jLibNoise.noise.utils.Image;
 import ConquerSpace.jLibNoise.noise.utils.NoiseMap;
 import ConquerSpace.jLibNoise.noise.utils.NoiseMapBuilderPlane;
+import ConquerSpace.jLibNoise.noise.utils.NoiseMapBuilderSphere;
 import ConquerSpace.jLibNoise.noise.utils.RendererImage;
 import java.awt.Color;
 import java.util.HashMap;
@@ -78,20 +79,20 @@ public class TerrainGenerator {
     }
 
     public int[][] generate(int seed, int octaves, float frequency, float lacunarity, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2) {
-        Perlin myModule = new Perlin();
-        myModule.setOctaveCount(octaves);
-        myModule.setSeed(seed);
-        myModule.setFrequency(frequency);
-        myModule.setLacunarity(lacunarity);
-        myModule.setPersistence(persistence);
+        Perlin perlin = new Perlin();
+        perlin.setOctaveCount(octaves);
+        perlin.setSeed(seed);
+        perlin.setFrequency(frequency);
+        perlin.setLacunarity(lacunarity);
+        perlin.setPersistence(persistence);
         NoiseMap heightMap = new NoiseMap();
         NoiseMapBuilderPlane heightMapBuilder = new NoiseMapBuilderPlane();
-        heightMapBuilder.setSourceModule(myModule);
+        heightMapBuilder.setSourceModule(perlin);
         heightMapBuilder.setDestNoiseMap(heightMap);
         heightMapBuilder.setDestSize(sizeX, sizeY);
         heightMapBuilder.setBounds(boundsX1, boundsX2, boundsY1, boundsY2);
         heightMapBuilder.build();
-        heightMapBuilder.setSourceModule(myModule);
+        heightMapBuilder.setSourceModule(perlin);
         heightMapBuilder.setDestNoiseMap(heightMap);
 
         RendererImage renderer = new RendererImage();
@@ -105,19 +106,19 @@ public class TerrainGenerator {
     }
 
     public int[][] generate(int seed, int octaves, float frequency, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2) {
-        Perlin myModule = new Perlin();
-        myModule.setOctaveCount(octaves);
-        myModule.setSeed(seed);
-        myModule.setFrequency(frequency);
-        myModule.setPersistence(persistence);
+        Perlin perlin = new Perlin();
+        perlin.setOctaveCount(octaves);
+        perlin.setSeed(seed);
+        perlin.setFrequency(frequency);
+        perlin.setPersistence(persistence);
         NoiseMap heightMap = new NoiseMap();
         NoiseMapBuilderPlane heightMapBuilder = new NoiseMapBuilderPlane();
-        heightMapBuilder.setSourceModule(myModule);
+        heightMapBuilder.setSourceModule(perlin);
         heightMapBuilder.setDestNoiseMap(heightMap);
         heightMapBuilder.setDestSize(sizeX, sizeY);
         heightMapBuilder.setBounds(boundsX1, boundsX2, boundsY1, boundsY2);
         heightMapBuilder.build();
-        heightMapBuilder.setSourceModule(myModule);
+        heightMapBuilder.setSourceModule(perlin);
         heightMapBuilder.setDestNoiseMap(heightMap);
 
         RendererImage renderer = new RendererImage();
@@ -131,20 +132,20 @@ public class TerrainGenerator {
     }
 
     public Image generateImage(int seed, int octaves, float frequency, float lacunarity, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2, HashMap<Float, Color> colors) {
-        Perlin myModule = new Perlin();
-        myModule.setOctaveCount(octaves);
-        myModule.setSeed(seed);
-        myModule.setFrequency(frequency);
-        myModule.setLacunarity(lacunarity);
-        myModule.setPersistence(persistence);
+        Perlin perlin = new Perlin();
+        perlin.setOctaveCount(octaves);
+        perlin.setSeed(seed);
+        perlin.setFrequency(frequency);
+        perlin.setLacunarity(lacunarity);
+        perlin.setPersistence(persistence);
         NoiseMap heightMap = new NoiseMap();
         NoiseMapBuilderPlane heightMapBuilder = new NoiseMapBuilderPlane();
-        heightMapBuilder.setSourceModule(myModule);
+        heightMapBuilder.setSourceModule(perlin);
         heightMapBuilder.setDestNoiseMap(heightMap);
         heightMapBuilder.setDestSize(sizeX, sizeY);
         heightMapBuilder.setBounds(boundsX1, boundsX2, boundsY1, boundsY2);
         heightMapBuilder.build();
-        heightMapBuilder.setSourceModule(myModule);
+        heightMapBuilder.setSourceModule(perlin);
         heightMapBuilder.setDestNoiseMap(heightMap);
 
         RendererImage renderer = new RendererImage();

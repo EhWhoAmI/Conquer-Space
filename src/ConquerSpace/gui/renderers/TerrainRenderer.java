@@ -19,7 +19,7 @@ package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.PlanetTypes;
-import ConquerSpace.game.universe.terrain.TerrainColoring;
+import ConquerSpace.game.universe.bodies.terrain.TerrainColoring;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -49,12 +49,12 @@ public class TerrainRenderer {
             colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
             terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
                     6, 0.5f, 2f, 0.5f, p.getPlanetWidth() * 2, p.getPlanetHeight() * 2,
-                    0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 6, colors);
+                    -p.getPlanetWidth()/32, p.getPlanetWidth()/32, -p.getPlanetHeight()/32, p.getPlanetHeight()/32, colors);
         } else if (p.getPlanetType() == PlanetTypes.GAS) {
             colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
             terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
                     6, 0.5f, 2f, 0.5f, p.getPlanetWidth(), p.getPlanetHeight(),
-                    0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 6, colors);
+                    0, p.getPlanetWidth()/16, 0, p.getPlanetHeight()/4, colors);
         }
 
         planetDisplaying = terrainColorses.toBufferedImage();

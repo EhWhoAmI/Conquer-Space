@@ -18,11 +18,11 @@
 package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.ShipClass;
-import ConquerSpace.game.universe.ships.components.engine.EngineTechnology;
-import ConquerSpace.game.universe.ships.hull.Hull;
-import ConquerSpace.game.universe.ships.hull.HullMaterial;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.ShipClass;
+import ConquerSpace.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.game.ships.hull.Hull;
+import ConquerSpace.game.ships.hull.HullMaterial;
 import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;

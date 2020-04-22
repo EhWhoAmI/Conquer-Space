@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.actions;
 
-import ConquerSpace.game.universe.ships.SpaceShip;
+import ConquerSpace.game.ships.SpaceShip;
 
 /**
  *

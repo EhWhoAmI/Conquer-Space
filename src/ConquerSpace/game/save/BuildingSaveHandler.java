@@ -25,7 +25,7 @@ import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.ships.launch.SpacePortLaunchPad;
+import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

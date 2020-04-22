@@ -18,7 +18,7 @@
 package ConquerSpace.game.buildings;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.civilization.Civilization;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;

@@ -17,8 +17,8 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
-import ConquerSpace.game.universe.civilization.Civilization;
-import ConquerSpace.game.universe.ships.launch.LaunchSystem;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.ships.launch.LaunchSystem;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

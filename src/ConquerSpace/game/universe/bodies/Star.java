@@ -41,7 +41,6 @@ public class Star extends Body {
      * @see StarTypes
      * @param type type of star
      * @param starSize size of star
-     * @param id id
      */
     public Star(int type, int starSize) {
         this.type = type;
