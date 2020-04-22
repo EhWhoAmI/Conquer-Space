@@ -18,7 +18,6 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
-import static ConquerSpace.game.GameController.GameRefreshRate;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.buildings.Building;
@@ -76,18 +75,72 @@ import org.apache.logging.log4j.Logger;
  * @author Zyun
  */
 public class GameUpdater {
-
+    
     private static final Logger LOGGER = CQSPLogger.getLogger(GameUpdater.class.getName());
-
+    
     private Universe universe;
-
+    
     private StarDate starDate;
-
-    public GameUpdater(Universe u, StarDate s) {
+    
+    private final int GameRefreshRate;
+    
+    private long updateTime;
+    
+    private GameIndexer indexer;
+    private PeopleProcessor peopleProcessor;
+    
+    public GameUpdater(Universe u, StarDate s, int GameRefreshRate) {
         universe = u;
         starDate = s;
+        indexer = new GameIndexer(u);
+        peopleProcessor = new PeopleProcessor(Globals.universe, Globals.date);
+        this.GameRefreshRate = GameRefreshRate;
     }
 
+    //Process ingame tick.
+    public synchronized void tick() {
+        //DO ticks
+        starDate.increment(1);
+        calculateVision();
+        updateObjectPositions();
+
+        //Move ships
+        moveShips();
+
+        //Check for month increase
+        if (Globals.date.bigint % GameRefreshRate == 0) {
+            updateGame();
+            for (int i = 0; i < universe.getCivilizationCount(); i++) {
+                indexer.index(universe.getCivilization(i));
+            }
+        }
+        //Process people and generate every 1000 ticks, which is about every 41 days
+        if (Globals.date.bigint % (GameRefreshRate * 2) == 0) {
+            createPeople();
+        }
+    }
+    
+    public synchronized void updateGame() {
+        long start = System.currentTimeMillis();
+        updateUniverse(Globals.universe, Globals.date, GameRefreshRate);
+        
+        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
+            Globals.universe.getCivilization(i).calculateTechLevel();
+        }
+        //Do tech...
+        //Increment tech
+        processResearch();
+
+        //Increment resources
+        processResources();
+        
+        peopleProcessor.processPeople();
+        
+        long end = System.currentTimeMillis();
+        
+        updateTime = (end - start);
+    }
+    
     public void calculateControl() {
         for (UniversePath p : universe.control.keySet()) {
             Body spaceObject = universe.getSpaceObject(p);
@@ -119,7 +172,7 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void calculateVision() {
         for (UniversePath p : universe.control.keySet()) {
             //Vision is always visible when you control it
@@ -151,14 +204,14 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void updateUniverse(Universe u, StarDate date, long delta) {
         //Loop through star systems
         for (int i = 0; i < u.getStarSystemCount(); i++) {
             updateStarSystem(u.getStarSystem(i), date, delta);
         }
     }
-
+    
     public void updateStarSystem(StarSystem sys, StarDate date, long delta) {
         //Maybe later the objects in space.
         for (int i = 0; i < sys.bodies.size(); i++) {
@@ -170,13 +223,13 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void processPlanet(Planet p, StarDate date, long delta) {
         if (p.isHabitated()) {
             processCities(p, date, delta);
-
+            
             processBuildings(p, date, delta);
-
+            
             processPopulation(p, date);
         }
         //Process locallife
@@ -220,25 +273,25 @@ public class GameUpdater {
             } else {
                 building.tick(date, delta);
             }
-
+            
             if (building instanceof PopulationStorage) {
                 int energy = ((PopulationStorage) building).getPopulationArrayList().size() * 20;
                 building.setEnergyUsage(energy);
             }
         }
     }
-
+    
     private void processAreaJobs(City c, Building b, Area a, StarDate date) {
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
-
+            
             job.setJobRank(JobRank.Low);
             job.setWorkingFor(a);
             //Set pay
             job.setPay(1);
             job.setEmployer(b.getOwner());
-
+            
             job.resources.put(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()));
             c.jobs.add(job);
         } else if (a instanceof Factory) {
@@ -249,34 +302,34 @@ public class GameUpdater {
             for (Map.Entry<Good, Integer> entry : process.input.entrySet()) {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
-
+                
                 job.resources.putIfAbsent(key, Double.valueOf(-val));
             }
-
+            
             for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
-
+                
                 job.resources.putIfAbsent(key, Double.valueOf(val));
             }
-
+            
             job.setJobRank(JobRank.Low);
             job.setWorkingFor(a);
             //Set pay
             job.setPay(1);
             job.setEmployer(b.getOwner());
-
+            
             c.jobs.add(job);
         } else if (a instanceof ResearchArea) {
             Job researchJob = new Job(JobType.Researcher);
-
+            
             researchJob.setJobRank(JobRank.Medium);
             researchJob.setWorkingFor(a);
             //Set pay
             researchJob.setPay(1);
             researchJob.setEmployer(b.getOwner());
             c.jobs.add(researchJob);
-
+            
             Job educationJob = new Job(JobType.Educator); //Improves education, and in the long run, improves science gain
             educationJob.setJobRank(JobRank.Medium);
             educationJob.setWorkingFor(a);
@@ -286,11 +339,11 @@ public class GameUpdater {
             c.jobs.add(educationJob);
         }
     }
-
+    
     public void processStar(Star s, StarDate date) {
-
+        
     }
-
+    
     public void storeResource(Good resourceType, Double amount, int owner, UniversePath from) {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
@@ -307,7 +360,7 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public boolean removeResource(Good resourceType, Double amount, int owner, UniversePath from) {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
@@ -326,27 +379,27 @@ public class GameUpdater {
         }
         return false;
     }
-
+    
     public void processCities(Planet p, StarDate date, long delta) {
         for (City c : p.cities) {
             //Population growth
             c.incrementPopulation(date, delta);
-
+            
             createCityJobs(c, date);
             //Assign jobs
             assignJobs(c, date);
         }
     }
-
+    
     public void processResearch() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-
+            
             Iterator<Technology> tech = c.currentlyResearchingTechonologys.keySet().iterator();
-
+            
             while (tech.hasNext()) {
                 Technology t = tech.next();
-
+                
                 if ((Technologies.estFinishTime(t) - c.civResearch.get(t)) <= 0) {
                     //Then tech is finished
                     c.researchTech(t);
@@ -367,14 +420,14 @@ public class GameUpdater {
                 for (Map.Entry<String, Integer> entry : science.entrySet()) {
                     String key = entry.getKey();
                     Integer val = entry.getValue();
-
+                    
                     Field f = c.fields.findNode(key);
                     f.incrementLevel(val);
                 }
             }
         }
     }
-
+    
     @Warning("Warn")
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
@@ -397,14 +450,14 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void moveShips() {
         for (int sys = 0; sys < Globals.universe.getCivilizationCount(); sys++) {
             Civilization c = Globals.universe.getCivilization(sys);
             //Process ship actions
             for (Ship ship : c.spaceships) {
                 ShipAction sa = ship.getActionAndPopIfDone();
-
+                
                 if (!sa.checkIfDone()) {
                     //System.out.println(sa.getClass());
                     sa.doAction();
@@ -415,7 +468,7 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void updateObjectPositions() {
         long start = System.currentTimeMillis();
         //Loop through star systems
@@ -424,7 +477,7 @@ public class GameUpdater {
             RendererMath.Point pt
                     = RendererMath.polarCoordToCartesianCoord((double) system.getGalaticLocation().getDistance(),
                             system.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
-
+            
             system.setX(pt.x);
             system.setY(pt.y);
             for (int k = 0; k < system.bodies.size(); k++) {
@@ -435,7 +488,7 @@ public class GameUpdater {
         long end = System.currentTimeMillis();
         //System.out.println((end - start));
     }
-
+    
     public void createCityJobs(City c, StarDate date) {
         //Add the jobs...
         //Assign everyone an empty job...
@@ -468,7 +521,7 @@ public class GameUpdater {
             c.jobs.add(job);
         }
     }
-
+    
     public void processPopulation(Planet p, StarDate date) {
         for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
             Building value = entry.getValue();
@@ -496,7 +549,7 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void assignJobs(City c, StarDate date) {
         //Process through all the population units
         int i = 0;
@@ -516,7 +569,7 @@ public class GameUpdater {
             }
         }
     }
-
+    
     public void processPopUnit(PopulationUnit unit) {
         Job popJob = unit.getJob();
         popJob.setPay(100);
@@ -529,7 +582,7 @@ public class GameUpdater {
         //food -= unit.getSpecies().getFoodPerMonth();
         //popJob.resources.put(GameController.foodResource, food);
     }
-
+    
     public void createPeople() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
@@ -550,13 +603,13 @@ public class GameUpdater {
                 nerd.setSkill((int) (Math.random() * 5) + 1);
                 nerd.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
                 nerd.setPosition(c.getCapitalCity());
-
+                
                 c.unrecruitedPeople.add(nerd);
                 //Generate personality
             }
             //Admins
             peopleCount = (int) (Math.random() * 5) + 5;
-
+            
             for (int peep = 0; peep < peopleCount; peep++) {
                 int age = (int) (Math.random() * 40) + 20;
                 String person = "name";
@@ -570,8 +623,8 @@ public class GameUpdater {
             }
         }
     }
-
+    
     private void supplyLineWalker() {
-
+        
     }
 }

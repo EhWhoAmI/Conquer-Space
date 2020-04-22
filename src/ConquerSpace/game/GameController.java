@@ -69,7 +69,6 @@ public class GameController {
     public static HashMap<String, Integer> shipTypeClasses;
     public static GameUpdater updater;
     public static GameInitializer initer;
-    public static PeopleProcessor peopleProcessor;
     public static MusicPlayer musicPlayer;
 
     public static ArrayList<Element> elements;
@@ -91,12 +90,10 @@ public class GameController {
      */
     public GameController() {
         //Init universe
-        updater = new GameUpdater(Globals.universe, Globals.date);
+        updater = new GameUpdater(Globals.universe, Globals.date, GameRefreshRate);
         initer = new GameInitializer(Globals.universe, Globals.date, updater);
 
         initer.initGame();
-
-        peopleProcessor = new PeopleProcessor(Globals.universe, Globals.date);
 
         //Process the 0th turn and initalize the universe.
         updater.updateUniverse(Globals.universe, Globals.date, 0);
@@ -115,7 +112,7 @@ public class GameController {
                 try {
                     ticker.setWait(((PlayerController) playerCiv.controller).getTickCount());
                     if (!((PlayerController) playerCiv.controller).allowTick()) {
-                        tick();
+                        updater.tick();
                     }
                 } catch (Exception e) {
                     ExceptionHandling.ExceptionMessageBox("Exception!", e);
@@ -129,43 +126,5 @@ public class GameController {
 
         //Start ticker
         ticker.start();
-    }
-
-    //Process ingame tick.
-    public synchronized void tick() {
-        //DO ticks
-        Globals.date.increment(1);
-        updater.calculateVision();
-        updater.updateObjectPositions();
-
-        //Move ships
-        updater.moveShips();
-
-        //Check for month increase
-        if (Globals.date.bigint % GameRefreshRate == 0) {
-            long start = System.currentTimeMillis();
-
-            updater.updateUniverse(Globals.universe, Globals.date, GameRefreshRate);
-
-            for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-                Globals.universe.getCivilization(i).calculateTechLevel();
-            }
-            //Do tech...
-            //Increment tech
-            updater.processResearch();
-
-            //Increment resources
-            updater.processResources();
-
-            peopleProcessor.processPeople();
-
-            long end = System.currentTimeMillis();
-
-            LOGGER.trace("Took " + (end - start) + " ms");
-        }
-        //Process people and generate every 1000 ticks, which is about every 41 days
-        if (Globals.date.bigint % 1000 == 0) {
-            updater.createPeople();
-        }
     }
 }

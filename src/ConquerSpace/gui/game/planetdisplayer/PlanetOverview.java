@@ -167,7 +167,7 @@ public class PlanetOverview extends JPanel {
 
         //Map
         planetSectors = new JPanel(new VerticalFlowLayout());
-        PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p, c);
+        PlanetMinimap sectorDisplayer = new PlanetMinimap(p, c);
 
         JPanel wrapper = new JPanel(new VerticalFlowLayout());
         wrapper.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map"));
@@ -200,7 +200,7 @@ public class PlanetOverview extends JPanel {
         add(overviewPanel2);
     }
 
-    private class PlanetSectorDisplayer extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
+    private class PlanetMinimap extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
 
         private final int SHOW_ALL = -1;
         int resourceToShow = SHOW_ALL;
@@ -224,7 +224,7 @@ public class PlanetOverview extends JPanel {
         private Point startPoint = new Point();
         private boolean isDragging = false;
 
-        public PlanetSectorDisplayer(Planet p, Civilization c) {
+        public PlanetMinimap(Planet p, Civilization c) {
             this.c = c;
             setPreferredSize(
                     new Dimension(p.getPlanetSize() * 4, p.getPlanetSize() * 2));

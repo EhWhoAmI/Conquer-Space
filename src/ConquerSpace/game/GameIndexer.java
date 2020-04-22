@@ -17,11 +17,37 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.universe.bodies.Planet;
+import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.civilization.Civilization;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class GameIndexer {
-    public void takeCensus() {
+    Universe u;
+
+    public GameIndexer(Universe u) {
+        this.u = u;
+    }
+    
+    public void index(Civilization c) {
+        compileResourceStorages(c);
+    }
+    
+    public void compileResourceStorages(Civilization c) {
+        c.resourceStorages.clear();
+        for(Planet p : c.habitatedPlanets) {
+            p.buildings.forEach((a, b) -> c.resourceStorages.add(b));
+        }
+    }
+    
+    /**
+     * Get people in civ.
+     * @param c 
+     */
+    public void takeCensus(Civilization c) {
+        
     }
 }
