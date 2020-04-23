@@ -85,8 +85,9 @@ public class GameController {
     public static Civilization playerCiv = null;
 
     public static final int AU_IN_LTYR = 63241;
-    
+
     private PlayerController playerController;
+
     /**
      * Constructor. Inits all components.
      */
@@ -109,7 +110,7 @@ public class GameController {
 
         ticker = new Timer();
         playerController = (PlayerController) playerCiv.controller;
-                
+
         Runnable action = new Runnable() {
             public void run() {
                 //Ensure that the game does not stop on a crash
@@ -119,8 +120,7 @@ public class GameController {
                         updater.tick();
                     }
                 } catch (Exception e) {
-                    ExceptionHandling.ExceptionMessageBox("Exception!", e);
-                    LOGGER.error("Exception!", e);
+                    ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
                 }
             }
         };

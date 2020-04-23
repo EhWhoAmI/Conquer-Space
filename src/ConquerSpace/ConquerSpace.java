@@ -155,7 +155,6 @@ public class ConquerSpace {
                 runGame();
             } catch (Exception e) {
                 //Catch exceptions...
-                LOGGER.error("Exception: ", e);
                 ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
             }
         }
