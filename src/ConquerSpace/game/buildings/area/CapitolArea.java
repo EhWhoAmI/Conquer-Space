@@ -18,10 +18,10 @@
 package ConquerSpace.game.buildings.area;
 
 /**
- * Capital building thingy
+ * Capital of city
  * @author EhWhoAmI
  */
-public class CapitolArea extends Area{
+public class CapitolArea extends ConsumerArea{
     
     @Override
     public String toString() {

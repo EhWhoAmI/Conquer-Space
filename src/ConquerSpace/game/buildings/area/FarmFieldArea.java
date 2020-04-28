@@ -17,30 +17,27 @@
  */
 package ConquerSpace.game.buildings.area;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.Workable;
+import ConquerSpace.game.life.Species;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
- *
+ * A farm field
+ * @author EhWhoAmI
  */
-public class Area implements Workable{
+public class FarmFieldArea extends TimedManufacturerArea{
     
-    private int powerUsage;
+    private Species grown;
     
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
+    public FarmFieldArea(Species grownSpecies) {
+        super(new ProductionProcess(grownSpecies.getFoodGood()));
+        grown = grownSpecies;
     }
 
-    @Override
-    public void processJob(Job j) {
+    public Species getGrown() {
+        return grown;
     }
 
-    public int getPowerUsage() {
-        return powerUsage;
-    }
-
-    public void setPowerUsage(int powerUsage) {
-        this.powerUsage = powerUsage;
+    public void setGrown(Species grown) {
+        this.grown = grown;
     }
 }

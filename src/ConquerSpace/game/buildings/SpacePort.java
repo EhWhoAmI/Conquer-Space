@@ -33,7 +33,7 @@ import java.util.Collections;
  *
  * @author EhWhoAmI
  */
-public class SpacePort extends Building {
+public class SpacePort extends District {
 
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
     private LaunchSystem system;

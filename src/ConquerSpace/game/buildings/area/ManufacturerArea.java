@@ -17,30 +17,32 @@
  */
 package ConquerSpace.game.buildings.area;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.Workable;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
+ * Resources in and out, quickly.
  *
+ * @author EhWhoAmI
  */
-public class Area implements Workable{
-    
-    private int powerUsage;
-    
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
+public class ManufacturerArea extends Area {
+    private ProductionProcess process;
+    //How much of that production process per round...
+    float productivity;
+
+    public ManufacturerArea(ProductionProcess process, float productivity) {
+        this.process = process;
+        this.productivity = productivity;
     }
 
-    @Override
-    public void processJob(Job j) {
+    public ProductionProcess getProcess() {
+        return process;
     }
 
-    public int getPowerUsage() {
-        return powerUsage;
+    public float getProductivity() {
+        return productivity;
     }
 
-    public void setPowerUsage(int powerUsage) {
-        this.powerUsage = powerUsage;
+    public void setProductivity(float productivity) {
+        this.productivity = productivity;
     }
 }

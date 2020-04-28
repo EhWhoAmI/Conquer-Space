@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author EhWhoAmI
  */
-public class ResourceMinerDistrict extends Building implements PopulationStorage, Workable {
+public class ResourceMinerDistrict extends District implements PopulationStorage, Workable {
 
     /**
      * Maximum jobs in this district.

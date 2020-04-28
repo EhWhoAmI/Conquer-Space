@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.PopulationUnit;
@@ -142,8 +142,8 @@ public class PlanetOverview extends JPanel {
         population = 0;
         //Get average growth
         float averageGrowthSum = 0;
-        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
-            Building value = entry.getValue();
+        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
+            District value = entry.getValue();
             float increment = 0;
             if (value instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) value;
@@ -288,9 +288,9 @@ public class PlanetOverview extends JPanel {
                 }
 
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
                     GeographicPoint p = en.getKey();
-                    Building Building = en.getValue();
+                    District Building = en.getValue();
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);
                     g2d.setColor(Building.getColor());
@@ -405,8 +405,8 @@ public class PlanetOverview extends JPanel {
         public JobTableModel() {
             populationCount = new HashMap<>();
             //Process the things
-            for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
-                Building value = entry.getValue();
+            for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
+                District value = entry.getValue();
                 if (value instanceof PopulationStorage) {
                     PopulationStorage coldStorage = (PopulationStorage) value;
                     for (PopulationUnit unit : coldStorage.getPopulationArrayList()) {

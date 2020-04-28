@@ -29,8 +29,8 @@ import java.util.ArrayList;
 public class Species {
     public ArrayList<LifeTrait> lifeTraits;
 
-    public LiveGood speciesGood;
-    public FoodGood foodGood;
+    private LiveGood speciesGood;
+    private FoodGood foodGood;
     //Breeding rate
     private float baseBreedingRate = 0;
     //Breeding method
@@ -60,6 +60,12 @@ public class Species {
     public void setBaseBreedingRate(float baseBreedingRate) {
         this.baseBreedingRate = baseBreedingRate;
     }
-    
-    
+
+    public FoodGood getFoodGood() {
+        return foodGood;
+    }
+
+    public LiveGood getLiveSpeciesGood() {
+        return speciesGood;
+    }
 }

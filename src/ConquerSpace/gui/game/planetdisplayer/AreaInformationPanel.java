@@ -21,8 +21,8 @@ import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.buildings.area.FinancialArea;
 import ConquerSpace.game.buildings.area.InfrastructureArea;
+import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.industrial.Factory;
 import ConquerSpace.game.universe.resources.Good;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Dimension;
@@ -73,11 +73,11 @@ public class AreaInformationPanel extends JPanel {
         } else if (a instanceof InfrastructureArea) {
             JLabel title = new JLabel("Infrastructure Area");
             add(title);
-        } else if (a instanceof Factory) {
+        } else if (a instanceof ManufacturerArea) {
             JLabel title = new JLabel("Factory Area");
             add(title);
 
-            Factory factory = (Factory) a;
+            ManufacturerArea factory = (ManufacturerArea) a;
 
             JLabel processName = new JLabel(factory.getProcess().name);
             String inputString = "Input: ";

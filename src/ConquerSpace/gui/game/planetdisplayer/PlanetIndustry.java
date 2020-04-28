@@ -17,11 +17,11 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.industrial.Factory;
+import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -87,7 +87,7 @@ public class PlanetIndustry extends JPanel {
         areaContainer = new JPanel();
         areaContainer.setLayout(new BorderLayout());
         areaDefaultListModel = new DefaultListModel<>();
-        for (Building city : p.buildings.values()) {
+        for (District city : p.buildings.values()) {
             for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }
@@ -142,7 +142,7 @@ public class PlanetIndustry extends JPanel {
     public void update() {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
-        for (Building city : p.buildings.values()) {
+        for (District city : p.buildings.values()) {
             for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }
@@ -192,9 +192,9 @@ public class PlanetIndustry extends JPanel {
         }
 
         public void update() {
-            for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+            for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
                 GeographicPoint key = en.getKey();
-                Building value = en.getValue();
+                District value = en.getValue();
                 if (value instanceof FarmBuilding) {
                     farmTableTableModel.addFarmBuilding((FarmBuilding) value);
                 }
@@ -275,7 +275,7 @@ public class PlanetIndustry extends JPanel {
 
     private class FactoryAreaInfo extends JPanel {
 
-        public FactoryAreaInfo(Factory factory) {
+        public FactoryAreaInfo(ManufacturerArea factory) {
             JLabel info = new JLabel("Factory " + factory.getProcess().name);
 
             String inputString = "Input: ";

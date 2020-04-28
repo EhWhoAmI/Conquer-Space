@@ -25,8 +25,8 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class InfrastructureBuilding extends Building{
-    public ArrayList<Building> connectedTo;
+public class InfrastructureBuilding extends District{
+    public ArrayList<District> connectedTo;
     //private int 
 
     public InfrastructureBuilding() {
@@ -43,7 +43,7 @@ public class InfrastructureBuilding extends Building{
         return "Infrastructure Hub";
     }
     
-    public void addBuilding(Building b) {
+    public void addBuilding(District b) {
         b.infrastructure.add(this);
         connectedTo.add(b);
     }

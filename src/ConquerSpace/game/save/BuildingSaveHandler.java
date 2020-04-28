@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.save;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.Observatory;
@@ -35,8 +35,8 @@ import org.json.JSONObject;
  */
 public class BuildingSaveHandler {
     GeographicPoint key;
-    Building what;
-    public BuildingSaveHandler(GeographicPoint key, Building what) {
+    District what;
+    public BuildingSaveHandler(GeographicPoint key, District what) {
         this.key = key;
         this.what = what;
     }
@@ -49,7 +49,7 @@ public class BuildingSaveHandler {
         //Get type...
         if (what instanceof ConstructingBuilding) {
             //Get type of building
-            Building b = ((ConstructingBuilding) what).getToBuild();
+            District b = ((ConstructingBuilding) what).getToBuild();
             BuildingSaveHandler handler = new BuildingSaveHandler(key, what);
             JSONObject toBuild = handler.getJSONObject();
             buildingObject.put("building", toBuild);

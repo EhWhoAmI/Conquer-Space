@@ -34,7 +34,7 @@ import java.util.Arrays;
  *
  * @author EhWhoAmI
  */
-public class FarmBuilding extends Building implements PopulationStorage, Workable {
+public class FarmBuilding extends District implements PopulationStorage, Workable {
 
     private FarmType farmType;
     public ArrayList<Crop> crops;
@@ -140,7 +140,7 @@ public class FarmBuilding extends Building implements PopulationStorage, Workabl
         //Check if harvest season...
         if (!harvestable.isEmpty()) {
             Crop c = harvestable.remove(0);
-            j.resources.put(c.getSpecies().foodGood, Double.valueOf(c.getYield()));
+            j.resources.put(c.getSpecies().getFoodGood(), Double.valueOf(c.getYield()));
             //Regrow
             c.setTimeLeft(25);
         }

@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * For science labs and stuff
  */
-public class ResearchArea extends Area implements Workable, ScienceLab{
+public class ResearchArea extends ConsumerArea implements Workable, ScienceLab{
 
     private String name;
     

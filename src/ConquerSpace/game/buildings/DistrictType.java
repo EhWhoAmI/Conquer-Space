@@ -15,31 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area.industrial;
-
-import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.universe.resources.ProductionProcess;
+package ConquerSpace.game.buildings;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Factory extends Area {
-
-    ProductionProcess process;
-
-    public Factory(ProductionProcess what) {
-        this.process = what;
-    }
-
-    public ProductionProcess getProcess() {
-        return process;
-    }
-
-    @Override
-    public String toString() {
-        return process.name + " Factory";
-    }
-
-    //And other upkeep stuff
+public enum DistrictType {
+    Generic,
+    Housing,
+    Farm,
+    Mine,
+    Research,
+    SpacePort
 }

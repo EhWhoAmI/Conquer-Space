@@ -21,6 +21,7 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.logistics.SupplyNode;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.Workable;
@@ -45,9 +46,9 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public abstract class Building implements Workable, SupplyNode {
+public abstract class District implements Workable, SupplyNode, PopulationStorage {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(Building.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(District.class.getName());
 
     private Color color;
     public ArrayList<Area> areas;
@@ -56,18 +57,30 @@ public abstract class Building implements Workable, SupplyNode {
     private City city;
     private HashMap<Good, Double> resources;
     public ArrayList<StorageNeeds> needs;
-
+    public ArrayList<PopulationUnit> population;
     public ArrayList<SupplyChain> supplyChains;
 
     //In Megawatts
     private int energyUsage;
     public ArrayList<InfrastructureBuilding> infrastructure;
 
-    public Building() {
+    private DistrictType districtType;
+    
+    public District() {
         areas = new ArrayList<>();
         infrastructure = new ArrayList<>();
         supplyChains = new ArrayList<>();
         resources = new HashMap<>();
+        population = new ArrayList<>();
+        districtType = DistrictType.Generic;
+    }
+
+    public DistrictType getDistrictType() {
+        return districtType;
+    }
+
+    public void setDistrictType(DistrictType districtType) {
+        this.districtType = districtType;
     }
 
     public Color getColor() {
@@ -210,5 +223,17 @@ public abstract class Building implements Workable, SupplyNode {
         if(a instanceof Workable) {
             p.jobProviders.add(a);
         }
+    }
+    
+    public int getMaxStorage() {
+        return 0;
+    }
+
+    public void setMaxStorage(int maxStorage) {
+    }
+
+    @Override
+    public ArrayList<PopulationUnit> getPopulationArrayList() {
+        return population;
     }
 }

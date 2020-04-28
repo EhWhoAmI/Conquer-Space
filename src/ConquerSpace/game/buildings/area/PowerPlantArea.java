@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area.infrastructure;
+package ConquerSpace.game.buildings.area;
 
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.population.jobs.Job;
@@ -26,7 +26,7 @@ import ConquerSpace.game.universe.resources.Good;
  *
  * @author EhWhoAmI
  */
-public class PowerPlantArea extends Area implements Workable{
+public class PowerPlantArea extends ConsumerArea implements Workable{
     //Needs the attribute 'energy'
     private Good usesResource;
     //Amount of units needed to get each time

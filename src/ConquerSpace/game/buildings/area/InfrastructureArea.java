@@ -21,7 +21,7 @@ package ConquerSpace.game.buildings.area;
  *
  * @author EhWhoAmI
  */
-public class InfrastructureArea extends Area{
+public class InfrastructureArea extends ConsumerArea{
     //The jobs provided
     private int jobsProvided;
     private int effectiveness;

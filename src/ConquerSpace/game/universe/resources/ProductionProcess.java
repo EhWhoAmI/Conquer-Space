@@ -38,4 +38,12 @@ public class ProductionProcess {
         output = new HashMap<>();
         catalyst = new ArrayList<>();
     }
+    
+    
+    public ProductionProcess(Good outputGood) {
+        input = new HashMap<>();
+        output = new HashMap<>();
+        output.put(outputGood, 1);
+        catalyst = new ArrayList<>();
+    }
 }

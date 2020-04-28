@@ -17,30 +17,20 @@
  */
 package ConquerSpace.game.buildings.area;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.Workable;
+import ConquerSpace.game.universe.resources.Good;
+import java.util.HashMap;
 
 /**
- *
+ * An area that does not generate resources, and only has resource intake.
+ * @author EhWhoAmI
  */
-public class Area implements Workable{
+public class ConsumerArea extends Area{
+    /**
+     * Consumed per tick
+     */
+    public HashMap<Good, Double> consumed;
     
-    private int powerUsage;
-    
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
-
-    @Override
-    public void processJob(Job j) {
-    }
-
-    public int getPowerUsage() {
-        return powerUsage;
-    }
-
-    public void setPowerUsage(int powerUsage) {
-        this.powerUsage = powerUsage;
+    public ConsumerArea() {
+        consumed = new HashMap<>();
     }
 }

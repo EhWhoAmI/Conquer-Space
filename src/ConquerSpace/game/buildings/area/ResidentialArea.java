@@ -17,30 +17,11 @@
  */
 package ConquerSpace.game.buildings.area;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.Workable;
-
 /**
  *
+ * @author EhWhoAmI
  */
-public class Area implements Workable{
-    
-    private int powerUsage;
-    
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
-
-    @Override
-    public void processJob(Job j) {
-    }
-
-    public int getPowerUsage() {
-        return powerUsage;
-    }
-
-    public void setPowerUsage(int powerUsage) {
-        this.powerUsage = powerUsage;
-    }
+public class ResidentialArea extends ConsumerArea{
+    int maxPopulation;
+            
 }

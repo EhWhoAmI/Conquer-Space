@@ -84,7 +84,7 @@ public class BuildingCostGetter {
         }
     }
 
-    public static BuildingCost getCost(Building building, Civilization c) {
+    public static BuildingCost getCost(District building, Civilization c) {
         return getCost(building.getType(), c);
     }
 

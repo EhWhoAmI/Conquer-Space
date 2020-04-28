@@ -20,14 +20,15 @@ package ConquerSpace.game;
 import ConquerSpace.Globals;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.buildings.DistrictType;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.industrial.Factory;
-import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
+import ConquerSpace.game.buildings.area.PowerPlantArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
@@ -253,9 +254,9 @@ public class GameUpdater {
      */
     public void processBuildings(Planet p, StarDate date, long delta) {
         //Process buildings, and jobs
-        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
-            Building building = entry.getValue();
+            District building = entry.getValue();
             //Process
             if (building instanceof ConstructingBuilding) {
                 ConstructingBuilding build = (ConstructingBuilding) building;
@@ -291,7 +292,7 @@ public class GameUpdater {
     /**
      * Creates the jobs for an area.
      */
-    private void processAreaJobs(City c, Building b, Area a, StarDate date) {
+    private void processAreaJobs(City c, District b, Area a, StarDate date) {
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
@@ -304,11 +305,11 @@ public class GameUpdater {
 
             job.resources.put(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()));
             c.jobs.add(job);
-        } else if (a instanceof Factory) {
+        } else if (a instanceof ManufacturerArea) {
             Job job = new Job(JobType.FactoryWorker);
 
             //Process resources used
-            ProductionProcess process = ((Factory) a).getProcess();
+            ProductionProcess process = ((ManufacturerArea) a).getProcess();
             for (Map.Entry<Good, Integer> entry : process.input.entrySet()) {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
@@ -383,7 +384,7 @@ public class GameUpdater {
         //Assign everyone an empty job...
         float upkeepAmount = 0;
         c.jobs.clear();
-        for (Building building : c.buildings) {
+        for (District building : c.buildings) {
             //Get the building type
             Job[] jobs = building.jobsNeeded();
             Collections.addAll(c.jobs, jobs);
@@ -420,7 +421,7 @@ public class GameUpdater {
     public void assignJobs(City c, StarDate date) {
         //Process through all the population units
         int i = 0;
-        for (Building b : c.buildings) {
+        for (District b : c.buildings) {
             if (b instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) b;
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
@@ -536,8 +537,8 @@ public class GameUpdater {
     }
 
     public void processPopulation(Planet p, StarDate date) {
-        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
-            Building value = entry.getValue();
+        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
+            District value = entry.getValue();
             if (value instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) value;
                 for (PopulationUnit unit : storage.getPopulationArrayList()) {
@@ -624,6 +625,10 @@ public class GameUpdater {
     private void supplyLineWalker() {
 
     }
+    
+    private DistrictType districtDesignator(District dis) {
+        return DistrictType.Generic;
+    }
 
     /**
      * Stores goods in the closest resource storage from <code>from</code>
@@ -640,8 +645,8 @@ public class GameUpdater {
         Body body = universe.getSpaceObject(from);
         if (body instanceof Planet) {
             Planet planet = (Planet) body;
-            for (Map.Entry<GeographicPoint, Building> entry : planet.buildings.entrySet()) {
-                Building val = entry.getValue();
+            for (Map.Entry<GeographicPoint, District> entry : planet.buildings.entrySet()) {
+                District val = entry.getValue();
                 if (val.canStore(resourceType)) {
                     val.addResource(resourceType, amount);
                     break;
@@ -657,8 +662,8 @@ public class GameUpdater {
         Body body = universe.getSpaceObject(from);
         if (body instanceof Planet) {
             Planet planet = (Planet) body;
-            for (Map.Entry<GeographicPoint, Building> entry : planet.buildings.entrySet()) {
-                Building val = entry.getValue();
+            for (Map.Entry<GeographicPoint, District> entry : planet.buildings.entrySet()) {
+                District val = entry.getValue();
                 //Get by positon...
                 //For now, we process only if it is on the planet or not.
                 if (val.canStore(resourceType) && val.removeResource(resourceType, amount)) {

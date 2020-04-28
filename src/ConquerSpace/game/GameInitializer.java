@@ -18,7 +18,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.game.buildings.AdministrativeCenter;
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.FarmBuilding;
@@ -28,9 +28,9 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.industrial.Factory;
-import ConquerSpace.game.buildings.area.infrastructure.PowerPlantArea;
+import ConquerSpace.game.buildings.area.PowerPlantArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
@@ -64,8 +64,6 @@ import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -357,7 +355,7 @@ public class GameInitializer {
             //Add areas
             for (ProductionProcess proc : c.productionProcesses) {
                 //Add new factory
-                Factory factory = new Factory(proc);
+                ManufacturerArea factory = new ManufacturerArea(proc, 1);
                 district.areas.add(factory);
             }
 
@@ -474,7 +472,7 @@ public class GameInitializer {
     }
 
     private void createCityDistrict(Planet starting, Civilization c, ConquerSpace.game.universe.Point pt, City city) {
-
+        //Add
     }
 
     private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen) {
@@ -631,7 +629,7 @@ public class GameInitializer {
         for (City c : p.cities) {
             int citySize = c.buildings.size();
             if (citySize > 0) {
-                Building b = c.buildings.get(selector.nextInt(citySize));
+                District b = c.buildings.get(selector.nextInt(citySize));
                 PowerPlantArea powerPlant = new PowerPlantArea();
                 //TODO: choose energy resource
                 /*

@@ -21,6 +21,6 @@ package ConquerSpace.game.buildings.area;
  *
  * @author EhWhoAmI
  */
-public class FinancialArea extends Area{
+public class FinancialArea extends ConsumerArea{
     
 }

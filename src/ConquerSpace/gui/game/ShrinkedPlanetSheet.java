@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.civilization.Civilization;
@@ -213,9 +213,9 @@ public class ShrinkedPlanetSheet extends JPanel {
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
                     GeographicPoint p = en.getKey();
-                    Building Building = en.getValue();
+                    District Building = en.getValue();
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);
                     g2d.setColor(Building.getColor());
