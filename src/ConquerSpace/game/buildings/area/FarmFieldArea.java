@@ -22,15 +22,19 @@ import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
  * A farm field
+ *
  * @author EhWhoAmI
  */
-public class FarmFieldArea extends TimedManufacturerArea{
-    
+public class FarmFieldArea extends TimedManufacturerArea {
+
     private Species grown;
-    
+    private int time;
+
     public FarmFieldArea(Species grownSpecies) {
         super(new ProductionProcess(grownSpecies.getFoodGood()));
         grown = grownSpecies;
+        //Because you can only grow one.
+        setLimit(1);
     }
 
     public Species getGrown() {
@@ -39,5 +43,20 @@ public class FarmFieldArea extends TimedManufacturerArea{
 
     public void setGrown(Species grown) {
         this.grown = grown;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public void grow() {
+        if (queue.isEmpty()) {
+            addQueue(time);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Farm Area";
     }
 }

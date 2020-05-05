@@ -26,9 +26,11 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.DistrictType;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.buildings.area.FarmFieldArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.PowerPlantArea;
+import ConquerSpace.game.buildings.area.TimedManufacturerArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
@@ -292,7 +294,44 @@ public class GameUpdater {
     /**
      * Creates the jobs for an area.
      */
-    private void processAreaJobs(City c, District b, Area a, StarDate date) {
+    private void processAreaJobs(City c, District b, Area a, StarDate date, int delta) {
+        if (a instanceof FarmFieldArea) {
+            FarmFieldArea area = (FarmFieldArea) a;
+            int removed = area.tick(delta);
+            if (removed > 0) {
+                Job farmerJob = new Job(JobType.Farmer);
+
+                farmerJob.setJobRank(JobRank.Low);
+                farmerJob.setWorkingFor(a);
+                //Set pay
+                farmerJob.setPay(1);
+                farmerJob.setEmployer(b.getOwner());
+
+                farmerJob.resources.put(area.getGrown().getFoodGood(), 10d * removed);
+                c.jobs.add(farmerJob);
+                area.grow();
+            }
+        } else if (a instanceof TimedManufacturerArea) {
+            //Subtract time
+            TimedManufacturerArea area = (TimedManufacturerArea) a;
+            int removed = area.tick(delta);
+            //Store resources
+            Job job = new Job(JobType.FactoryWorker);
+
+            job.setJobRank(JobRank.Low);
+            job.setWorkingFor(a);
+            //Set pay
+            job.setPay(1);
+            job.setEmployer(b.getOwner());
+
+            for (Map.Entry<Good, Integer> entry : area.getProcess().output.entrySet()) {
+                Good key = entry.getKey();
+                Integer val = entry.getValue();
+
+                job.resources.putIfAbsent(key, Double.valueOf(val) * removed);
+            }
+            c.jobs.add(job);
+        }
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
@@ -314,14 +353,14 @@ public class GameUpdater {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
 
-                job.resources.putIfAbsent(key, Double.valueOf(-val));
+                job.resources.putIfAbsent(key, Double.valueOf(-val) * delta);
             }
 
             for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
 
-                job.resources.putIfAbsent(key, Double.valueOf(val));
+                job.resources.putIfAbsent(key, Double.valueOf(val) * delta);
             }
 
             job.setJobRank(JobRank.Low);
@@ -367,7 +406,7 @@ public class GameUpdater {
             //Population growth
             c.incrementPopulation(date, delta);
 
-            createCityJobs(c, date);
+            createCityJobs(c, date, (int) delta);
             //Assign jobs
             assignJobs(c, date);
         }
@@ -379,7 +418,7 @@ public class GameUpdater {
      * @param c
      * @param date
      */
-    public void createCityJobs(City c, StarDate date) {
+    public void createCityJobs(City c, StarDate date, int delta) {
         //Add the jobs...
         //Assign everyone an empty job...
         float upkeepAmount = 0;
@@ -400,7 +439,7 @@ public class GameUpdater {
 
             //Sort through areas
             for (Area a : building.areas) {
-                processAreaJobs(c, building, a, date);
+                processAreaJobs(c, building, a, date, delta);
             }
         }
         //Set the upkeep
@@ -566,7 +605,8 @@ public class GameUpdater {
 
     /**
      * Processes the upkeep and the amount of money needed to support a pop.
-     * @param unit 
+     *
+     * @param unit
      */
     public void processPopUnit(PopulationUnit unit) {
         Job popJob = unit.getJob();
@@ -625,7 +665,7 @@ public class GameUpdater {
     private void supplyLineWalker() {
 
     }
-    
+
     private DistrictType districtDesignator(District dis) {
         return DistrictType.Generic;
     }

@@ -28,6 +28,7 @@ import ConquerSpace.game.buildings.Observatory;
 import ConquerSpace.game.buildings.ResourceMinerDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
+import ConquerSpace.game.buildings.area.FarmFieldArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.PowerPlantArea;
@@ -284,6 +285,13 @@ public class GameInitializer {
             faceBook.setCapacity(1000);
             faceBook.setManpower(10);
             faceBook.setOwner(c);
+            //Add farm fields...
+            for (int k = 0; k < 30; k++) {
+                FarmFieldArea field = new FarmFieldArea(potato);
+                field.setTime(30);
+                field.grow();
+                faceBook.addArea(starting, field);
+            }
             //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
             //Add population

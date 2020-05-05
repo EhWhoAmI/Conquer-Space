@@ -25,7 +25,7 @@ import ConquerSpace.game.universe.resources.ProductionProcess;
  * @author EhWhoAmI
  */
 public class ManufacturerArea extends Area {
-    private ProductionProcess process;
+    protected ProductionProcess process;
     //How much of that production process per round...
     float productivity;
 
@@ -44,5 +44,10 @@ public class ManufacturerArea extends Area {
 
     public void setProductivity(float productivity) {
         this.productivity = productivity;
+    }
+
+    @Override
+    public String toString() {
+        return process.name + " Factory";
     }
 }

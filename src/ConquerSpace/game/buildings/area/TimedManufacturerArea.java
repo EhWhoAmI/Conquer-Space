@@ -31,7 +31,7 @@ public class TimedManufacturerArea extends Area {
      * Limit of number of processes.
      */
     private int limit = 0;
-    private ArrayList<ProductionTimer> queue;
+    protected ArrayList<ProductionTimer> queue;
     private ProductionProcess process;
     
     float productivity = 0;

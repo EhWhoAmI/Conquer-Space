@@ -68,4 +68,9 @@ public class Species {
     public LiveGood getLiveSpeciesGood() {
         return speciesGood;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
