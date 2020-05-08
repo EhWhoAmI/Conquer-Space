@@ -40,7 +40,7 @@ public class City implements PersonEnterable, Workable {
     public static final String CITY_DEFAULT = " ";
     private Person governor;
     private String name;
-    public ArrayList<Building> buildings;
+    public ArrayList<District> buildings;
     public ArrayList<Job> jobs;
     public ArrayList<Person> peopleAtCity;
 
@@ -91,7 +91,7 @@ public class City implements PersonEnterable, Workable {
         return location;
     }
 
-    public void addDistrict(Building stor) {
+    public void addDistrict(District stor) {
         buildings.add(stor);
         stor.setCity(this);
     }
@@ -111,7 +111,7 @@ public class City implements PersonEnterable, Workable {
         //Add city needed jobs
 
         //Add all children jobs
-        for (Building b : buildings) {
+        for (District b : buildings) {
             Job[] jobs = b.jobsNeeded();
             for (Job j : jobs) {
                 jobsNeeded.add(j);
@@ -141,7 +141,7 @@ public class City implements PersonEnterable, Workable {
 
     public int getPopulationSize() {
         int i = 0;
-        for (Building b : buildings) {
+        for (District b : buildings) {
             if (b instanceof PopulationStorage) {
                 i += ((PopulationStorage) b).getPopulationArrayList().size();
             }
@@ -161,7 +161,7 @@ public class City implements PersonEnterable, Workable {
         HashMap<Race, Integer> species = new HashMap<>();
         ArrayList<PopulationStorage> storages = new ArrayList<>();
         int population = 0;
-        for (Building building : buildings) {
+        for (District building : buildings) {
             if (building instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) building;
                 storages.add(storage);

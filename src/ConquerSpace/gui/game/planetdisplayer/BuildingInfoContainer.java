@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.gui.game.planetdisplayer.buildings.BuildingBuildingViewMenu;
@@ -31,7 +31,7 @@ import javax.swing.JPanel;
  */
 public class BuildingInfoContainer extends JPanel {
 
-    public BuildingInfoContainer(Building building) {
+    public BuildingInfoContainer(District building) {
         //Get the building and set the thingy
         if (building instanceof ConstructingBuilding) {
             BuildingBuildingViewMenu menu = new BuildingBuildingViewMenu((ConstructingBuilding) building);

@@ -21,6 +21,7 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.logistics.SupplyNode;
+import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.Workable;
@@ -45,38 +46,39 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public abstract class Building implements Workable, SupplyNode {
+public class District implements Workable, SupplyNode, PopulationStorage {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(Building.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(District.class.getName());
 
-    private Color color;
     public ArrayList<Area> areas;
     private Employer owner;
     private String type;
     private City city;
     private HashMap<Good, Double> resources;
     public ArrayList<StorageNeeds> needs;
+    public ArrayList<PopulationUnit> population;
+    private int maxStorage;
 
     public ArrayList<SupplyChain> supplyChains;
 
     //In Megawatts
     private int energyUsage;
     public ArrayList<InfrastructureBuilding> infrastructure;
+    private DistrictType districtType;
+    
 
-    public Building() {
+    public District() {
         areas = new ArrayList<>();
         infrastructure = new ArrayList<>();
         supplyChains = new ArrayList<>();
         resources = new HashMap<>();
+        population = new ArrayList<>();
     }
 
     public Color getColor() {
-        return color;
+        return new Color(0, 0, 255);
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
 
     public void setOwner(Employer owner) {
         this.owner = owner;
@@ -210,5 +212,27 @@ public abstract class Building implements Workable, SupplyNode {
         if(a instanceof Workable) {
             p.jobProviders.add(a);
         }
+    }
+    
+    @Override
+    public ArrayList<PopulationUnit> getPopulationArrayList() {
+        return population;
+    }
+
+    /**
+     * Literally doesn't even matter rn
+     * @return 
+     */
+    @Override
+    public int getMaxStorage() {
+        return maxStorage;
+    }
+
+    public void setDistrictType(DistrictType districtType) {
+        this.districtType = districtType;
+    }
+
+    public DistrictType getDistrictType() {
+        return DistrictType.City;
     }
 }

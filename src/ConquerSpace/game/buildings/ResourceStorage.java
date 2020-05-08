@@ -32,7 +32,7 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
-public class ResourceStorage extends Building implements ResourceStockpile {
+public class ResourceStorage extends District implements ResourceStockpile {
 
     private int upkeep;
     private int maximumStorage;

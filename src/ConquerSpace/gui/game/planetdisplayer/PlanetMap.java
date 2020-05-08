@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.CityDistrict;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
@@ -298,9 +298,9 @@ public class PlanetMap extends JPanel {
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, Building> en : p.buildings.entrySet()) {
+                for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
                     GeographicPoint point = en.getKey();
-                    Building Building = en.getValue();
+                    District Building = en.getValue();
                     //Draw
                     Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
                     g2d.setColor(Building.getColor());
@@ -360,7 +360,7 @@ public class PlanetMap extends JPanel {
                 int mapX = pt.x;
                 int mapY = pt.y;
 
-                Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
+                District b = p.buildings.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
                     showBuildingInfo(b);
                 }
@@ -439,9 +439,13 @@ public class PlanetMap extends JPanel {
             int mapY = pt.y;
 
             if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
-                Building b = p.buildings.get(new GeographicPoint(mapX, mapY));
+                District b = p.buildings.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
-                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>");
+                    String cityName = "No City";
+                    if(b.getCity() != null) {
+                        cityName = b.getCity().getName();
+                    }
+                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>Type: " + b.getDistrictType().name() + "<br/>City: " + cityName + "<br/>" + mapX + ", " + mapY + "<br/></html>");
 
                     toolTip.setTipText(text);
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
@@ -474,7 +478,7 @@ public class PlanetMap extends JPanel {
             }
         }
 
-        public void showBuildingInfo(Building building) {
+        public void showBuildingInfo(District building) {
             //Get building type, determine what menu to show...
             if (building instanceof CityDistrict) {
                 parent.population.showCity(((CityDistrict) building).getCity());

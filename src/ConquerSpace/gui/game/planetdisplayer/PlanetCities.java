@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.InfrastructureBuilding;
 import ConquerSpace.game.buildings.PopulationStorage;
@@ -99,9 +99,9 @@ public class PlanetCities extends JPanel {
         int pop = 0;
         //Get average growth
         float averageGrowthSum = 0;
-        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
-            Building value = entry.getValue();
+            District value = entry.getValue();
             float increment = 0;
             if (value instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) value;
@@ -143,7 +143,7 @@ public class PlanetCities extends JPanel {
             int energyProvided = 0;
             ArrayList<InfrastructureBuilding> building = new ArrayList<>();
 
-            for (Building build : selected.buildings) {
+            for (District build : selected.buildings) {
                 if (build instanceof PopulationStorage) {
                     PopulationStorage stor = (PopulationStorage) build;
 
@@ -154,10 +154,10 @@ public class PlanetCities extends JPanel {
                         increment += (unit.getSpecies().getBreedingRate() / 50);
                     }
                     maxPop += stor.getMaxStorage();
-                    if (stor instanceof Building) {
-                        energyUsage += ((Building) stor).getEnergyUsage();
+                    if (stor instanceof District) {
+                        energyUsage += ((District) stor).getEnergyUsage();
                         //Get the infrastructure connected to.
-                        for (InfrastructureBuilding infra : ((Building) stor).infrastructure) {
+                        for (InfrastructureBuilding infra : ((District) stor).infrastructure) {
 
                             if (!building.contains(infra)) {
                                 building.add(infra);
@@ -219,7 +219,7 @@ public class PlanetCities extends JPanel {
 
             //Areas
             areaListModel = new DefaultListModel<>();
-            for (Building building1 : cityList.getSelectedValue().buildings) {
+            for (District building1 : cityList.getSelectedValue().buildings) {
                 for (Area area : building1.areas) {
                     areaListModel.addElement(area);
                 }
@@ -322,7 +322,7 @@ public class PlanetCities extends JPanel {
             populationCount = new HashMap<>();
             population = 0;
             //Process the things
-            for (Building value : currentlySelectedCity.buildings) {
+            for (District value : currentlySelectedCity.buildings) {
                 if (value instanceof PopulationStorage) {
                     PopulationStorage stor = (PopulationStorage) value;
                     for (PopulationUnit unit : stor.getPopulationArrayList()) {
@@ -382,7 +382,7 @@ public class PlanetCities extends JPanel {
 
         public void setSelectedCity(City city) {
             populationCount.clear();
-            for (Building value : currentlySelectedCity.buildings) {
+            for (District value : currentlySelectedCity.buildings) {
                 if (value instanceof PopulationStorage) {
                     PopulationStorage stor = (PopulationStorage) value;
                     for (PopulationUnit unit : stor.getPopulationArrayList()) {

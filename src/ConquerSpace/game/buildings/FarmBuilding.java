@@ -34,7 +34,7 @@ import java.util.Arrays;
  *
  * @author EhWhoAmI
  */
-public class FarmBuilding extends Building implements PopulationStorage, Workable {
+public class FarmBuilding extends District implements PopulationStorage, Workable {
 
     private FarmType farmType;
     public ArrayList<Crop> crops;

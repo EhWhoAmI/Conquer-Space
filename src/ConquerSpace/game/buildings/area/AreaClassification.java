@@ -17,23 +17,16 @@
  */
 package ConquerSpace.game.buildings.area;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.Workable;
-
 /**
- * Works as a modifier to the district
+ *
+ * @author EhWhoAmI
  */
-public class Area implements Workable{    
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
-
-    @Override
-    public void processJob(Job j) {
-    }
-
-    public AreaClassification getAreaType() {
-        return AreaClassification.Generic;
-    }
+public enum AreaClassification {
+    Generic,
+    Residential,
+    Financial,
+    Infrastructure,
+    Research,
+    Manufacturing,
+    Farm
 }

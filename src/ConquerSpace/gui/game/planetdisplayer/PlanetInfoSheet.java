@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
@@ -104,9 +104,9 @@ public class PlanetInfoSheet extends JPanel {
 
         tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port
-        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
-            Building value = entry.getValue();
+            District value = entry.getValue();
 
             //Do stuff...
             if (value instanceof SpacePort) {
@@ -132,9 +132,9 @@ public class PlanetInfoSheet extends JPanel {
 
         tpane.setEnabledAt(spacePortIndex, false);
         //Check if planet contains space port
-        for (Map.Entry<GeographicPoint, Building> entry : p.buildings.entrySet()) {
+        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
-            Building value = entry.getValue();
+            District value = entry.getValue();
 
             //Enable space port tab
             if (value instanceof SpacePort) {

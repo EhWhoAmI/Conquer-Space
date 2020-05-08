@@ -17,11 +17,8 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.buildings.AdministrativeCenter;
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.CityDistrict;
-import ConquerSpace.game.buildings.FarmBuilding;
 import ConquerSpace.game.buildings.IndustrialDistrict;
 import ConquerSpace.game.buildings.InfrastructureBuilding;
 import ConquerSpace.game.buildings.Observatory;
@@ -64,8 +61,6 @@ import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -273,26 +268,25 @@ public class GameInitializer {
         InfrastructureBuilding infrastructureBuilding = new InfrastructureBuilding();
 
         for (int i = 0; i < 10; i++) {
-            FarmBuilding faceBook = new FarmBuilding(FarmBuilding.FarmType.Crop);
+            District faceBook = new District();
             //Add crops
             Crop crop = new Crop(potato);
             crop.setTimeLeft(25);
             crop.setYield(10000);
-            faceBook.crops.add(crop);
-            //faceBook.farmCreatures.add(faun);
-            faceBook.setProductivity(1000);
-            //The biomass capacity
-            faceBook.setMaxCapacity(5000);
-            faceBook.setCapacity(1000);
-            faceBook.setManpower(10);
             faceBook.setOwner(c);
+            
+            //Add farm areas
+            
+            
             //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
+            
             //Add population
             PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
             u.setSpecies(c.getFoundingSpecies());
             c.population.add(u);
             faceBook.getPopulationArrayList().add(u);
+            
             starting.buildings.put(pt, faceBook);
             farmCity.addDistrict(faceBook);
             infrastructureBuilding.connectedTo.add(faceBook);
@@ -390,25 +384,20 @@ public class GameInitializer {
         //Amount of pop storages
         int popStorMas = (selector.nextInt(7) + 5);
 
-        //Add admin center and capital city.
-        AdministrativeCenter administrativeCenter = new AdministrativeCenter();
-
         for (int count = 0; count < popStorMas; count++) {
-            CityDistrict district;
+            District district = new District();
             String townName = townGen.getName(0);
             if (count == 0) {
-                district = administrativeCenter;
+                //Admin center
                 district.addArea(starting, new CapitolArea());
-            } else {
-                district = new CityDistrict();
             }
 
-            district.setMaxStorage(selector.nextInt(30) + 1);
+            //district.setMaxStorage(selector.nextInt(30) + 1);
             district.setOwner(c);
             //Distribute
             //Add random positions
             int popCount = (selector.nextInt(25) + 1);
-            district.setMaxStorage(selector.nextInt(popCount + 5) + 1);
+            //district.setMaxStorage(selector.nextInt(popCount + 5) + 1);
 
             for (int k = 0; k < popCount; k++) {
                 //Add a couple of population to the mix...
@@ -423,10 +412,10 @@ public class GameInitializer {
 
             //Expand sector
             //Choose a direction, and expand...
-            CityDistrict district2 = new CityDistrict();
+            District district2 = new District();
 
             int popCount2 = (selector.nextInt(25) + 1);
-            district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
+            //district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
             district2.setOwner(c);
             for (int k = 0; k < popCount2; k++) {
                 //Add a couple of population to the mix...
@@ -631,7 +620,7 @@ public class GameInitializer {
         for (City c : p.cities) {
             int citySize = c.buildings.size();
             if (citySize > 0) {
-                Building b = c.buildings.get(selector.nextInt(citySize));
+                District b = c.buildings.get(selector.nextInt(citySize));
                 PowerPlantArea powerPlant = new PowerPlantArea();
                 //TODO: choose energy resource
                 /*

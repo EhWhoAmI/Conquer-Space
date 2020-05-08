@@ -26,7 +26,7 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class IndustrialDistrict extends Building implements PopulationStorage {
+public class IndustrialDistrict extends District implements PopulationStorage {
 
     @Override
     public Color getColor() {

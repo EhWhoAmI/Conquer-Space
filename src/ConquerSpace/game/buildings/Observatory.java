@@ -26,7 +26,7 @@ import java.awt.Color;
  *
  * @author EhWhoAmI
  */
-public class Observatory extends Building implements VisionPoint {
+public class Observatory extends District implements VisionPoint {
 
     private int range;
     private int lensSize;

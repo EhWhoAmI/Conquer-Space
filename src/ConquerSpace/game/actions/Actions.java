@@ -18,7 +18,7 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.ConstructingBuilding;
 import ConquerSpace.game.buildings.area.Area;
@@ -64,7 +64,7 @@ public class Actions {
      * @param turns number of months...
      * @return Success or not
      */
-    public static int buildBuilding(Planet p, GeographicPoint pt, Building what, Civilization owner, int turns) {
+    public static int buildBuilding(Planet p, GeographicPoint pt, District what, Civilization owner, int turns) {
         if (p.getOwnerID() == owner.getID()) {
             ConstructingBuilding buildings = new ConstructingBuilding(what, pt, turns, owner);
             buildings.setScale(1);
@@ -83,7 +83,7 @@ public class Actions {
      * @param p
      * @param what
      */
-    public static void forcePlaceBuilding(Planet p, GeographicPoint pt, Building what) {
+    public static void forcePlaceBuilding(Planet p, GeographicPoint pt, District what) {
         p.buildings.put(pt, what);
         //Check for working for
         if (what instanceof Workable) {
@@ -111,14 +111,14 @@ public class Actions {
         }
     }
 
-    public static void addArea(Planet on, Building building, Area a) {
+    public static void addArea(Planet on, District building, Area a) {
         building.areas.add(a);
         if (a instanceof Workable) {
             on.jobProviders.add(a);
         }
     }
 
-    public static City addBuildingToCity(Planet p, GeographicPoint pt, Building what) {
+    public static City addBuildingToCity(Planet p, GeographicPoint pt, District what) {
         //Check surroundings, and add to city if it's around it
         City c = null;
         if (p.buildings.containsKey(pt.getNorth())) {

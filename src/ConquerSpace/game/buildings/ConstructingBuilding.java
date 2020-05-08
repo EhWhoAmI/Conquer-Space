@@ -35,9 +35,9 @@ import java.util.Map;
  *
  * @author EhWhoAmI
  */
-public class ConstructingBuilding extends Building implements Workable {
+public class ConstructingBuilding extends District implements Workable {
 
-    private Building toBuild;
+    private District toBuild;
     private GeographicPoint pt;
     private int length;
     private int scale = 1;
@@ -46,7 +46,7 @@ public class ConstructingBuilding extends Building implements Workable {
     public Civilization builder;
     private int cost;
 
-    public ConstructingBuilding(Building toBuild, GeographicPoint pt, int length, Civilization builder) {
+    public ConstructingBuilding(District toBuild, GeographicPoint pt, int length, Civilization builder) {
         this.toBuild = toBuild;
         this.pt = pt;
         this.length = length;
@@ -54,7 +54,7 @@ public class ConstructingBuilding extends Building implements Workable {
         resourcesNeeded = new HashMap<>();
     }
 
-    public void setToBuild(Building toBuild) {
+    public void setToBuild(District toBuild) {
         this.toBuild = toBuild;
     }
 
@@ -62,7 +62,7 @@ public class ConstructingBuilding extends Building implements Workable {
         return pt;
     }
 
-    public Building getToBuild() {
+    public District getToBuild() {
         return toBuild;
     }
 

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
-import ConquerSpace.game.buildings.Building;
+import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
@@ -59,7 +59,7 @@ public class Planet extends Body {
 
     private ArrayList<Orbitable> satellites;
 
-    public HashMap<GeographicPoint, Building> buildings;
+    public HashMap<GeographicPoint, District> buildings;
 
     public ArrayList<Integer> scanned;
 
@@ -260,7 +260,7 @@ public class Planet extends Body {
      * @param b building to add
      * @return The city it is added to.
      */
-    public City addBuildingToPlanet(GeographicPoint pt, Building b) {
+    public City addBuildingToPlanet(GeographicPoint pt, District b) {
         City city = null;
 
         if (buildings.containsKey(pt.getNorth())) {
@@ -292,10 +292,10 @@ public class Planet extends Body {
         return city;
     }
 
-    public void placeBuilding(GeographicPoint pt, Building b) {
+    public void placeBuilding(GeographicPoint pt, District b) {
         //Check if exists already
         if (buildings.containsKey(pt)) {
-            Building existed = buildings.get(pt);
+            District existed = buildings.get(pt);
             if (existed != null) {
                 existed.getCity().buildings.remove(existed);
             }
