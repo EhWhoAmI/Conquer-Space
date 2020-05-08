@@ -441,7 +441,11 @@ public class PlanetMap extends JPanel {
             if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
                 District b = p.buildings.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
-                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>" + b.getType() + "<br/>" + mapX + ", " + mapY + "<br/></html>");
+                    String cityName = "No City";
+                    if(b.getCity() != null) {
+                        cityName = b.getCity().getName();
+                    }
+                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>Type: " + b.getDistrictType().name() + "<br/>City: " + cityName + "<br/>" + mapX + ", " + mapY + "<br/></html>");
 
                     toolTip.setTipText(text);
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());

@@ -23,7 +23,6 @@ import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
 import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.science.Field;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Good;

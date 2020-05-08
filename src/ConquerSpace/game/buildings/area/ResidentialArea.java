@@ -1,3 +1,26 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Conquer Space - Conquer Space!
  * Copyright (C) 2019 EhWhoAmI
@@ -24,4 +47,7 @@ package ConquerSpace.game.buildings.area;
 public class ResidentialArea extends ConsumerArea{
     int maxPopulation;
             
+public AreaClassification getAreaType() {
+        return AreaClassification.Residential;
+    }
 }

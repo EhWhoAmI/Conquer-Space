@@ -46,34 +46,32 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public abstract class District implements Workable, SupplyNode, PopulationStorage {
+public class District implements Workable, SupplyNode, PopulationStorage {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(District.class.getName());
 
-    private Color color;
+
     public ArrayList<Area> areas;
     private Employer owner;
     private String type;
     private City city;
     private HashMap<Good, Double> resources;
     public ArrayList<StorageNeeds> needs;
-    public ArrayList<PopulationUnit> population;
-    public ArrayList<SupplyChain> supplyChains;
+	public ArrayList<PopulationUnit> population;
+    private int maxStorage;    public ArrayList<SupplyChain> supplyChains;
 
     //In Megawatts
     private int energyUsage;
     public ArrayList<InfrastructureBuilding> infrastructure;
-
     private DistrictType districtType;
     
-    public District() {
-        areas = new ArrayList<>();
+
+		areas = new ArrayList<>();
         infrastructure = new ArrayList<>();
         supplyChains = new ArrayList<>();
         resources = new HashMap<>();
-        population = new ArrayList<>();
-        districtType = DistrictType.Generic;
-    }
+
+        population = new ArrayList<>();    }
 
     public DistrictType getDistrictType() {
         return districtType;
@@ -84,12 +82,9 @@ public abstract class District implements Workable, SupplyNode, PopulationStorag
     }
 
     public Color getColor() {
-        return color;
+        return new Color(0, 0, 255);
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
 
     public void setOwner(Employer owner) {
         this.owner = owner;
@@ -224,16 +219,24 @@ public abstract class District implements Workable, SupplyNode, PopulationStorag
             p.jobProviders.add(a);
         }
     }
-    
-    public int getMaxStorage() {
-        return 0;
-    }
-
-    public void setMaxStorage(int maxStorage) {
-    }
-
-    @Override
+ @Override
     public ArrayList<PopulationUnit> getPopulationArrayList() {
         return population;
     }
-}
+
+    /**
+     * Literally doesn't even matter rn
+     * @return 
+     */
+    @Override
+    public int getMaxStorage() {
+        return maxStorage;
+    }
+
+    public void setDistrictType(DistrictType districtType) {
+        this.districtType = districtType;
+    }
+
+    public DistrictType getDistrictType() {
+        return DistrictType.City;
+    }}}

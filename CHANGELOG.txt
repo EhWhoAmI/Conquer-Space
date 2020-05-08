@@ -3,9 +3,19 @@ Changelog:
 0.0.3
 Technical
 Change java version from 1.12 to 1.8 for compatability
+Game runs in the main thread
 
-Graphics
-Add lighting to planet surfaces
+Graphics and UI
+Add lighting to planet surfaces so it looks cooler
+More accurate orbit circles, now even eccentric orbit circles can be shown, such as an ellipse
+Better music
+ - Volume can now be changed
+ - Music can be toggled better
+Available job list
+
+Gameplay:
+All buildings are resource storages now
+Planet sizes and width changed
 
 0.0.2:
 Total Overhauls:

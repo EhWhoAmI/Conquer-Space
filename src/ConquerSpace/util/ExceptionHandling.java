@@ -97,7 +97,7 @@ public class ExceptionHandling {
 
             writer.println();
             writer.print(header.replace("\n", System.getProperty("line.separator")));
-            writer.print("\n\n Stack trace: \n\n".replace("\n", System.getProperty("line.separator")));
+            writer.print("\n\nStack trace: \n\n".replace("\n", System.getProperty("line.separator")));
             ex.printStackTrace(writer);
             writer.println();
             writer.close();

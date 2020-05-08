@@ -124,7 +124,7 @@ public class ConquerSpace {
             setDefaultOptions();
             configureSettings();
 
-            //Set catch all exceptions
+            //Set catch all exceptions in game thread
             Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
 
             initLookAndFeel();
@@ -135,7 +135,13 @@ public class ConquerSpace {
             } else {
                 GameController.musicPlayer.playMusic();
             }
-            GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
+            try {
+                GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
+            } catch (NumberFormatException nfe) {
+                GameController.musicPlayer.setVolume(1);
+            } catch (IllegalArgumentException iae) {
+                GameController.musicPlayer.setVolume(1);
+            }
 
             //New Game Menu
             try {
