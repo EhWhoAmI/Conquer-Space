@@ -20,6 +20,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
 import ConquerSpace.game.buildings.District;
 import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.buildings.DistrictType;
 import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
@@ -303,7 +304,8 @@ public class PlanetMap extends JPanel {
                     District Building = en.getValue();
                     //Draw
                     Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
-                    g2d.setColor(Building.getColor());
+                    
+                    g2d.setColor(DistrictType.getDistrictColor(Building.getDistrictType()));
                     g2d.fill(rect);
                 }
 

@@ -26,8 +26,10 @@ import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.DistrictType;
 import ConquerSpace.game.buildings.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.buildings.area.AreaClassification;import ConquerSpace.game.buildings.area.FarmFieldArea;
-import ConquerSpace.game.buildings.area.ManufacturerArea;import ConquerSpace.game.buildings.area.ResearchArea;
+import ConquerSpace.game.buildings.area.AreaClassification;
+import ConquerSpace.game.buildings.area.FarmFieldArea;
+import ConquerSpace.game.buildings.area.ManufacturerArea;
+import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.PowerPlantArea;
 import ConquerSpace.game.buildings.area.TimedManufacturerArea;
 import ConquerSpace.game.events.Event;
@@ -293,7 +295,7 @@ public class GameUpdater {
     /**
      * Creates the jobs for an area.
      */
-    private void processAreaJobs(City c, Building b, Area a, StarDate date, int delta) {
+    private void processAreaJobs(City c, District b, Area a, StarDate date, int delta) {
         if (a instanceof FarmFieldArea) {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
@@ -330,7 +332,8 @@ public class GameUpdater {
                 job.resources.putIfAbsent(key, Double.valueOf(val) * removed);
             }
             c.jobs.add(job);
-                if (a instanceof PowerPlantArea) {
+        }
+        if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             Job job = new Job(JobType.PowerPlantTechnician);
 
@@ -351,14 +354,12 @@ public class GameUpdater {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
 
-
                 job.resources.putIfAbsent(key, Double.valueOf(-val) * delta);
             }
 
             for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
                 Good key = entry.getKey();
                 Integer val = entry.getValue();
-
 
                 job.resources.putIfAbsent(key, Double.valueOf(val) * delta);
             }
@@ -406,7 +407,6 @@ public class GameUpdater {
             //Population growth
             c.incrementPopulation(date, delta);
 
-
             createCityJobs(c, date, (int) delta);
             //Assign jobs
             assignJobs(c, date);
@@ -419,7 +419,6 @@ public class GameUpdater {
      * @param c
      * @param date
      */
-
     public void createCityJobs(City c, StarDate date, int delta) {
         //Add the jobs...
         //Assign everyone an empty job...
@@ -672,7 +671,8 @@ public class GameUpdater {
     private void supplyLineWalker() {
 
     }
-private DistrictType classifyDistrict(District dis) {
+
+    private DistrictType classifyDistrict(District dis) {
         //Get the type of areas
         HashMap<AreaClassification, Integer> areaType = new HashMap<>();
         for (Area a : dis.areas) {
@@ -684,18 +684,20 @@ private DistrictType classifyDistrict(District dis) {
                 areaType.put(a.getAreaType(), 1);
             }
         }
+
         //Calulate stuff
         int highest = 0;
         AreaClassification highestArea = AreaClassification.Generic;
         for (Map.Entry<AreaClassification, Integer> entry : areaType.entrySet()) {
             AreaClassification key = entry.getKey();
             Integer val = entry.getValue();
-            if(val > highest) {
+            if (val > highest) {
                 highest = val;
                 highestArea = key;
             }
         }
-        switch(highestArea) {
+
+        switch (highestArea) {
             case Financial:
                 return DistrictType.City;
             case Generic:
@@ -710,9 +712,13 @@ private DistrictType classifyDistrict(District dis) {
                 return DistrictType.Manufacturing;
             case Farm:
                 return DistrictType.Farm;
+            case Mine:
+                return DistrictType.Mine;
         }
         return DistrictType.Generic;
-    }    /**
+    }
+
+    /**
      * Stores goods in the closest resource storage from <code>from</code>
      *
      * @param resourceType

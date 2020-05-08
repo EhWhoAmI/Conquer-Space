@@ -59,4 +59,8 @@ public class FarmFieldArea extends TimedManufacturerArea {
     public String toString() {
         return "Farm Area";
     }
+    
+    public AreaClassification getAreaType() {
+        return AreaClassification.Farm;
+    }
 }

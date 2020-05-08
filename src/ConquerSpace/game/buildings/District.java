@@ -50,28 +50,29 @@ public class District implements Workable, SupplyNode, PopulationStorage {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(District.class.getName());
 
-
     public ArrayList<Area> areas;
     private Employer owner;
     private String type;
     private City city;
     private HashMap<Good, Double> resources;
     public ArrayList<StorageNeeds> needs;
-	public ArrayList<PopulationUnit> population;
-    private int maxStorage;    public ArrayList<SupplyChain> supplyChains;
+    public ArrayList<PopulationUnit> population;
+    private int maxStorage;
+    public ArrayList<SupplyChain> supplyChains;
 
     //In Megawatts
     private int energyUsage;
     public ArrayList<InfrastructureBuilding> infrastructure;
-    private DistrictType districtType;
-    
+    private DistrictType districtType = DistrictType.Generic;
 
-		areas = new ArrayList<>();
+    public District() {
+        areas = new ArrayList<>();
         infrastructure = new ArrayList<>();
         supplyChains = new ArrayList<>();
         resources = new HashMap<>();
 
-        population = new ArrayList<>();    }
+        population = new ArrayList<>();
+    }
 
     public DistrictType getDistrictType() {
         return districtType;
@@ -84,7 +85,6 @@ public class District implements Workable, SupplyNode, PopulationStorage {
     public Color getColor() {
         return new Color(0, 0, 255);
     }
-
 
     public void setOwner(Employer owner) {
         this.owner = owner;
@@ -171,12 +171,11 @@ public class District implements Workable, SupplyNode, PopulationStorage {
 
     @Override
     public void addResource(Good type, Double amount) {
-        if(!resources.containsKey(type)) {
+        if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
         resources.put(type, resources.get(type) + amount);
     }
-
 
     @Override
     public boolean canStore(Good type) {
@@ -196,47 +195,42 @@ public class District implements Workable, SupplyNode, PopulationStorage {
         return arr;
     }
 
-
     @Override
     public boolean removeResource(Good type, Double amount) {
         //Get the amount in the place
         Double currentlyStored = resources.get(type);
-        if(amount > currentlyStored)
+        if (amount > currentlyStored) {
             return false;
-        
-        resources.put(type, currentlyStored-amount);
+        }
+
+        resources.put(type, currentlyStored - amount);
         return true;
     }
-    
+
     @Override
     public Job[] jobsNeeded() {
         return new Job[0];
     }
-    
+
     public void addArea(Planet p, Area a) {
         areas.add(a);
-        if(a instanceof Workable) {
+        if (a instanceof Workable) {
             p.jobProviders.add(a);
         }
     }
- @Override
+
+    @Override
     public ArrayList<PopulationUnit> getPopulationArrayList() {
         return population;
     }
 
     /**
      * Literally doesn't even matter rn
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getMaxStorage() {
         return maxStorage;
     }
-
-    public void setDistrictType(DistrictType districtType) {
-        this.districtType = districtType;
-    }
-
-    public DistrictType getDistrictType() {
-        return DistrictType.City;
-    }}}
+}

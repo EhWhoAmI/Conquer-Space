@@ -50,4 +50,9 @@ public class ManufacturerArea extends Area {
     public String toString() {
         return process.name + " Factory";
     }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Manufacturing;
+    }
 }

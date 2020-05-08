@@ -1,22 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * Conquer Space - Conquer Space!
  * Copyright (C) 2019 EhWhoAmI
@@ -55,7 +36,8 @@ public enum DistrictType {
     Farm,
     Infrastructure,
     Manufacturing,
-    Research;
+    Research,
+    Mine;
 
     private static final HashMap<DistrictType, Color> districtColors;
 
@@ -77,8 +59,8 @@ public enum DistrictType {
                             //Parse the numbers
                             try {
                                 int r = Integer.parseInt(colors[0]);
-                                int b = Integer.parseInt(colors[1]);
-                                int g = Integer.parseInt(colors[2]);
+                                int g = Integer.parseInt(colors[1]);
+                                int b = Integer.parseInt(colors[2]);
                                 Color color = new Color(r, g, b);
                                 districtColors.put(type, color);
                             } catch (NumberFormatException nfe) {

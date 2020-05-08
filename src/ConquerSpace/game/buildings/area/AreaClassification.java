@@ -28,5 +28,6 @@ public enum AreaClassification {
     Infrastructure,
     Research,
     Manufacturing,
-    Farm
+    Farm,
+    Mine;
 }

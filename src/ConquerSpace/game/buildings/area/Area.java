@@ -23,7 +23,11 @@ import ConquerSpace.game.population.jobs.Workable;
 /**
  * Works as a modifier to the district
  */
-private int powerUsage;    @Override
+public class Area implements Workable{
+
+    private int powerUsage;
+
+    @Override
     public Job[] jobsNeeded() {
         return new Job[0];
     }
@@ -31,12 +35,16 @@ private int powerUsage;    @Override
     @Override
     public void processJob(Job j) {
     }
- public AreaClassification getAreaType() {
+
+    public AreaClassification getAreaType() {
         return AreaClassification.Generic;
-    }public int getPowerUsage() {
+    }
+
+    public int getPowerUsage() {
         return powerUsage;
     }
 
     public void setPowerUsage(int powerUsage) {
         this.powerUsage = powerUsage;
-    }}
+    }
+}

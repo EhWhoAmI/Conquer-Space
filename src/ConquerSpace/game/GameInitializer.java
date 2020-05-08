@@ -17,7 +17,8 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.buildings.District;import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.buildings.District;
+import ConquerSpace.game.buildings.City;
 import ConquerSpace.game.buildings.IndustrialDistrict;
 import ConquerSpace.game.buildings.InfrastructureBuilding;
 import ConquerSpace.game.buildings.Observatory;
@@ -26,8 +27,10 @@ import ConquerSpace.game.buildings.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.buildings.area.FarmFieldArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
+import ConquerSpace.game.buildings.area.MineArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.PowerPlantArea;
+import ConquerSpace.game.buildings.area.ResidentialArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
@@ -198,15 +201,16 @@ public class GameInitializer {
             //Select random vein
             int id = (int) (p.strata.size() * Math.random());
             Stratum strata = p.strata.get(id);
-            ResourceMinerDistrict miner = new ResourceMinerDistrict(strata, 10);
+            District miner = new District();
 
             //Set the type of resource to mine
             ArrayList<Good> a = new ArrayList<>(strata.minerals.keySet());
             Good g = a.get((int) (a.size() * Math.random()));
 
-            miner.setResourceMining(g);
+            MineArea mineArea = new MineArea(strata, g, 10);
+            miner.addArea(p, mineArea);
+            
             miner.setOwner(c);
-            miner.setScale(1);
 
             double randR = (strata.getRadius() * Math.sqrt(Math.random()));
             double theta = (Math.random() * 2 * Math.PI);
@@ -274,7 +278,7 @@ public class GameInitializer {
             crop.setTimeLeft(25);
             crop.setYield(10000);
             faceBook.setOwner(c);
- 			//Add farm fields...
+            //Add farm fields...
             for (int k = 0; k < 30; k++) {
                 FarmFieldArea field = new FarmFieldArea(potato);
                 field.setTime(30);
@@ -282,13 +286,13 @@ public class GameInitializer {
                 faceBook.addArea(starting, field);
             }            //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-            
+
             //Add population
             PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
             u.setSpecies(c.getFoundingSpecies());
             c.population.add(u);
             faceBook.getPopulationArrayList().add(u);
-            
+
             starting.buildings.put(pt, faceBook);
             farmCity.addDistrict(faceBook);
             infrastructureBuilding.connectedTo.add(faceBook);
@@ -408,6 +412,13 @@ public class GameInitializer {
                 c.population.add(u);
                 district.population.add(u);
             }
+
+            //Add residential areas.
+            for (int k = 0; k < 5; k++) {
+                ResidentialArea residentialArea = new ResidentialArea();
+                district.addArea(starting, residentialArea);
+            }
+
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
             starting.addBuildingToPlanet(pt, district);
@@ -425,6 +436,12 @@ public class GameInitializer {
                 u.setSpecies(c.getFoundingSpecies());
                 c.population.add(u);
                 district2.population.add(u);
+            }
+
+            //Add residential areas.
+            for (int k = 0; k < 5; k++) {
+                ResidentialArea residentialArea = new ResidentialArea();
+                district2.addArea(starting, residentialArea);
             }
 
             //test2.setCity(city);

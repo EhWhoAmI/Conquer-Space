@@ -17,15 +17,44 @@
  */
 package ConquerSpace.game.buildings.area;
 
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.Stratum;
+import java.util.HashMap;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class ResidentialArea extends ConsumerArea {
+public class MineArea extends Area {
+    private Stratum mining;
+    private float productivity;
+    private HashMap<Good, Double> necessaryGoods;
+    private Good resourceMined;
+    
+    public MineArea(Stratum mining, Good resourceMined, float productivity) {
+        this.mining = mining;
+        this.productivity = productivity;
+        this.resourceMined = resourceMined;
+    }
 
-    int maxPopulation;
-
+    @Override
     public AreaClassification getAreaType() {
-        return AreaClassification.Residential;
+        return AreaClassification.Mine;
+    }
+
+    public float getProductivity() {
+        return productivity;
+    }
+
+    public Stratum getMining() {
+        return mining;
+    }
+
+    public HashMap<Good, Double> getNecessaryGoods() {
+        return necessaryGoods;
+    }
+
+    public Good getResourceMined() {
+        return resourceMined;
     }
 }
