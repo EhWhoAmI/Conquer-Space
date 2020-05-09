@@ -29,6 +29,7 @@ import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.AreaClassification;
 import ConquerSpace.game.buildings.area.FarmFieldArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
+import ConquerSpace.game.buildings.area.MineArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.PowerPlantArea;
 import ConquerSpace.game.buildings.area.TimedManufacturerArea;
@@ -325,11 +326,11 @@ public class GameUpdater {
             job.setPay(1);
             job.setEmployer(b.getOwner());
 
-            for (Map.Entry<Good, Integer> entry : area.getProcess().output.entrySet()) {
+            for (Map.Entry<Good, Double> entry : area.getProcess().output.entrySet()) {
                 Good key = entry.getKey();
-                Integer val = entry.getValue();
+                Double val = entry.getValue();
 
-                job.resources.putIfAbsent(key, Double.valueOf(val) * removed);
+                job.resources.putIfAbsent(key, val * removed);
             }
             c.jobs.add(job);
         }
@@ -350,18 +351,18 @@ public class GameUpdater {
 
             //Process resources used
             ProductionProcess process = ((ManufacturerArea) a).getProcess();
-            for (Map.Entry<Good, Integer> entry : process.input.entrySet()) {
+            for (Map.Entry<Good, Double> entry : process.input.entrySet()) {
                 Good key = entry.getKey();
-                Integer val = entry.getValue();
+                Double val = entry.getValue();
 
-                job.resources.putIfAbsent(key, Double.valueOf(-val) * delta);
+                job.resources.putIfAbsent(key, -val * delta);
             }
 
-            for (Map.Entry<Good, Integer> entry : process.output.entrySet()) {
+            for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
                 Good key = entry.getKey();
-                Integer val = entry.getValue();
+                Double val = entry.getValue();
 
-                job.resources.putIfAbsent(key, Double.valueOf(val) * delta);
+                job.resources.putIfAbsent(key, val * delta);
             }
 
             job.setJobRank(JobRank.Low);
@@ -388,6 +389,24 @@ public class GameUpdater {
             educationJob.setPay(1);
             educationJob.setEmployer(b.getOwner());
             c.jobs.add(educationJob);
+        } else if (a instanceof MineArea) {
+            MineArea area = (MineArea) a;
+            Job minerJob = new Job(JobType.Miner);
+
+            minerJob.setJobRank(JobRank.Low);
+            minerJob.setWorkingFor(a);
+            //Set pay
+            minerJob.setPay(1);
+            minerJob.setEmployer(b.getOwner());
+            for (Map.Entry<Good, Double> entry : area.getNecessaryGoods().entrySet()) {
+                Good key = entry.getKey();
+                Double val = entry.getValue();
+
+                minerJob.resources.putIfAbsent(key, -val * delta);
+            }
+            minerJob.resources.put(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta));
+
+            c.jobs.add(minerJob);
         }
     }
 

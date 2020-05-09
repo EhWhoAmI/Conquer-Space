@@ -353,7 +353,7 @@ public class GameInitializer {
             //Ignore, assume all ok
         }
         for (int i = 0; i < 10; i++) {
-            IndustrialDistrict district = new IndustrialDistrict();
+            District district = new District();
             //Add areas
             for (ProductionProcess proc : c.productionProcesses) {
                 //Add new factory

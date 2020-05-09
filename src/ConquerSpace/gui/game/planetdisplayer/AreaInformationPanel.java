@@ -83,9 +83,9 @@ public class AreaInformationPanel extends JPanel {
             JLabel processName = new JLabel(factory.getProcess().name);
             String inputString = "Input: ";
 
-            for (Map.Entry<Good, Integer> entry : factory.getProcess().input.entrySet()) {
+            for (Map.Entry<Good, Double> entry : factory.getProcess().input.entrySet()) {
                 Good key = entry.getKey();
-                Integer val = entry.getValue();
+                Double val = entry.getValue();
                 inputString = inputString + key.getName();
                 inputString = inputString + " amount " + val;
                 inputString = inputString + ", ";
@@ -94,9 +94,9 @@ public class AreaInformationPanel extends JPanel {
             JLabel input = new JLabel(inputString);
 
             String outputString = "Output: ";
-            for (Map.Entry<Good, Integer> entry : factory.getProcess().output.entrySet()) {
+            for (Map.Entry<Good, Double> entry : factory.getProcess().output.entrySet()) {
                 Good key = entry.getKey();
-                Integer val = entry.getValue();
+                Double val = entry.getValue();
                 outputString = outputString + key.getName();
                 outputString = outputString + " amount " + val;
                 outputString = outputString + ", ";

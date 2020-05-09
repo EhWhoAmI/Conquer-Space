@@ -35,6 +35,7 @@ public class MineArea extends Area {
         this.mining = mining;
         this.productivity = productivity;
         this.resourceMined = resourceMined;
+        necessaryGoods = new HashMap<>();
     }
 
     @Override

@@ -356,7 +356,7 @@ public class AssetReader {
     public static Object processProcess(JSONObject obj) {
         String name = obj.getString("name");
 
-        HashMap<Good, Integer> input = new HashMap<>();
+        HashMap<Good, Double> input = new HashMap<>();
 
         JSONArray inputArray = obj.getJSONArray("input");
 
@@ -376,12 +376,12 @@ public class AssetReader {
 
             if (toFind != null) {
                 //Parse things
-                int value = Integer.parseInt(content[1]);
+                Double value = Double.parseDouble(content[1]);
                 input.put(toFind, value);
             }
         }
 
-        HashMap<Good, Integer> output = new HashMap<>();
+        HashMap<Good, Double> output = new HashMap<>();
 
         JSONArray outputArray = obj.getJSONArray("output");
 
@@ -401,7 +401,7 @@ public class AssetReader {
 
             if (toFind != null) {
                 //Parse things
-                int value = Integer.parseInt(content[1]);
+                Double value = Double.parseDouble(content[1]);
                 output.put(toFind, value);
             }
         }

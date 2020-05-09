@@ -27,8 +27,8 @@ import java.util.HashMap;
 public class ProductionProcess {
 
     public String name;
-    public HashMap<Good, Integer> input;
-    public HashMap<Good, Integer> output;
+    public HashMap<Good, Double> input;
+    public HashMap<Good, Double> output;
     public ArrayList<Good> catalyst;
     //How difficult it is to extract. Will replace with the parts for the factory in the futute.
     public int diff;
@@ -43,7 +43,7 @@ public class ProductionProcess {
     public ProductionProcess(Good outputGood) {
         input = new HashMap<>();
         output = new HashMap<>();
-        output.put(outputGood, 1);
+        output.put(outputGood, 1d);
         catalyst = new ArrayList<>();
     }
 }
