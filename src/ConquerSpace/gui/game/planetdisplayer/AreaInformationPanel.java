@@ -23,6 +23,7 @@ import ConquerSpace.game.buildings.area.FarmFieldArea;
 import ConquerSpace.game.buildings.area.FinancialArea;
 import ConquerSpace.game.buildings.area.InfrastructureArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
+import ConquerSpace.game.buildings.area.MineArea;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.universe.resources.Good;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -113,10 +114,16 @@ public class AreaInformationPanel extends JPanel {
             FarmFieldArea field = (FarmFieldArea) a;
             JLabel fieldType = new JLabel("Growing: " + field.getGrown());
             add(fieldType);
-            if(field.getQueue().size() == 1) {
+            if (field.getQueue().size() == 1) {
                 JLabel timeLeft = new JLabel("Time Left: " + field.getQueue().get(0).getTimeLeft());
                 add(timeLeft);
             }
+        } else if (a instanceof MineArea) {
+            JLabel title = new JLabel("Mine Area");
+            add(title);
+            MineArea area = (MineArea) a;
+            JLabel resourceMined = new JLabel("Time Left: " + area.getResourceMined());
+            add(resourceMined);
         }
     }
 }

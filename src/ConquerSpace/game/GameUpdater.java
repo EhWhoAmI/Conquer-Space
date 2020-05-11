@@ -410,6 +410,62 @@ public class GameUpdater {
         }
     }
 
+    public void processArea(City c, District b, Area a, StarDate date, int delta) {
+        if (a instanceof FarmFieldArea) {
+            FarmFieldArea area = (FarmFieldArea) a;
+            int removed = area.tick(delta);
+            if (removed > 0) {
+
+                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c.getUniversePath());
+                area.grow();
+            }
+        } else if (a instanceof TimedManufacturerArea) {
+            //Subtract time
+            TimedManufacturerArea area = (TimedManufacturerArea) a;
+            int removed = area.tick(delta);
+
+            for (Map.Entry<Good, Double> entry : area.getProcess().output.entrySet()) {
+                Good key = entry.getKey();
+                Double val = entry.getValue();
+
+                storeResource(key, val * removed, 0, c.getUniversePath());
+            }
+        }
+        if (a instanceof PowerPlantArea) {
+            PowerPlantArea powerPlant = (PowerPlantArea) a;
+
+            storeResource(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()), 0, c.getUniversePath());
+        } else if (a instanceof ManufacturerArea) {
+            //Process resources used
+            ProductionProcess process = ((ManufacturerArea) a).getProcess();
+            for (Map.Entry<Good, Double> entry : process.input.entrySet()) {
+                Good key = entry.getKey();
+                Double val = entry.getValue();
+
+                storeResource(key, -val * delta, 0, c.getUniversePath());
+            }
+
+            for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
+                Good key = entry.getKey();
+                Double val = entry.getValue();
+
+                storeResource(key, val * delta, 0, c.getUniversePath());
+            }
+        } else if (a instanceof ResearchArea) {
+
+        } else if (a instanceof MineArea) {
+            MineArea area = (MineArea) a;
+            for (Map.Entry<Good, Double> entry : area.getNecessaryGoods().entrySet()) {
+                Good key = entry.getKey();
+                Double val = entry.getValue();
+
+                storeResource(key, -val * delta, 0, c.getUniversePath());
+            }
+            storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c.getUniversePath());
+
+        }
+    }
+
     public void processStar(Star s, StarDate date) {
 
     }
@@ -460,8 +516,8 @@ public class GameUpdater {
 
             //Sort through areas
             for (Area a : building.areas) {
-
-                processAreaJobs(c, building, a, date, delta);
+                //processAreaJobs(c, building, a, date, delta);
+                processArea(c, building, a, date, delta);
             }
             DistrictType type = classifyDistrict(building);
             building.setDistrictType(type);
