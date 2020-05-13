@@ -46,4 +46,9 @@ public class ProductionProcess {
         output.put(outputGood, 1d);
         catalyst = new ArrayList<>();
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

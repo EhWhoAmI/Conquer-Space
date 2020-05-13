@@ -98,4 +98,9 @@ public class TimedManufacturerArea extends Area {
             return Integer.toString(timeLeft);
         }
     }
+
+    @Override
+    public String toString() {
+        return process.name + " Factory";
+    }
 }

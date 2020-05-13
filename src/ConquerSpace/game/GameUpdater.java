@@ -805,14 +805,16 @@ public class GameUpdater {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.
-        Body body = universe.getSpaceObject(from);
-        if (body instanceof Planet) {
-            Planet planet = (Planet) body;
-            for (Map.Entry<GeographicPoint, District> entry : planet.buildings.entrySet()) {
-                District val = entry.getValue();
-                if (val.canStore(resourceType)) {
-                    val.addResource(resourceType, amount);
-                    break;
+        if (resourceType != null) {
+            Body body = universe.getSpaceObject(from);
+            if (body instanceof Planet) {
+                Planet planet = (Planet) body;
+                for (Map.Entry<GeographicPoint, District> entry : planet.buildings.entrySet()) {
+                    District val = entry.getValue();
+                    if (val.canStore(resourceType)) {
+                        val.addResource(resourceType, amount);
+                        break;
+                    }
                 }
             }
         }

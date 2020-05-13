@@ -28,4 +28,9 @@ public class ResidentialArea extends ConsumerArea {
     public AreaClassification getAreaType() {
         return AreaClassification.Residential;
     }
+
+    @Override
+    public String toString() {
+        return "Residential Area";
+    }
 }

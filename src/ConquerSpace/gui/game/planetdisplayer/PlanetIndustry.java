@@ -32,6 +32,8 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.AbstractListModel;
@@ -84,7 +86,7 @@ public class PlanetIndustry extends JPanel {
         //Get the cities of the planet...
 
         areaContainer = new JPanel();
-        areaContainer.setLayout(new BorderLayout());
+        areaContainer.setLayout(new GridBagLayout());
         areaDefaultListModel = new DefaultListModel<>();
         for (District city : p.buildings.values()) {
             for (Area a : city.areas) {
@@ -102,10 +104,19 @@ public class PlanetIndustry extends JPanel {
 
         areaInfoPanel = new JPanel();
 
-        areaContainer.add(scrollPane, BorderLayout.WEST);
-        areaContainer.add(areaInfoPanel, BorderLayout.CENTER);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.fill = GridBagConstraints.BOTH;
+        areaContainer.add(scrollPane, constraints);
+        constraints = new java.awt.GridBagConstraints();
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        areaContainer.add(areaInfoPanel, constraints);
         tabs.add(areaContainer, "Areas");
-
         jobSortingOutPanel = new JPanel(new HorizontalFlowLayout());
 
         industryListModel = new DefaultListModel<>();

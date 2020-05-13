@@ -58,4 +58,9 @@ public class MineArea extends Area {
     public Good getResourceMined() {
         return resourceMined;
     }
+
+    @Override
+    public String toString() {
+        return resourceMined.getName() + " Mine";
+    }
 }

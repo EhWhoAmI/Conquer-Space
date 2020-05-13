@@ -41,4 +41,9 @@ public class InfrastructureArea extends ConsumerArea{
     public void setJobsProvided(int jobsProvided) {
         this.jobsProvided = jobsProvided;
     }
+
+    @Override
+    public String toString() {
+        return "Infrastructure";
+    }
 }
