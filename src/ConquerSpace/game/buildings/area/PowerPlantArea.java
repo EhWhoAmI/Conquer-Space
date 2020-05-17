@@ -26,7 +26,7 @@ import ConquerSpace.game.universe.resources.Good;
  *
  * @author EhWhoAmI
  */
-public class PowerPlantArea extends ConsumerArea implements Workable{
+public class PowerPlantArea extends ConsumerArea {
     //Needs the attribute 'energy'
     private Good usesResource;
     //Amount of units needed to get each time

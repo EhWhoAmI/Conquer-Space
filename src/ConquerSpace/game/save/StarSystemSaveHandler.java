@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.save;
 
-import ConquerSpace.game.buildings.District;
+import ConquerSpace.game.districts.District;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.ships.Orbitable;

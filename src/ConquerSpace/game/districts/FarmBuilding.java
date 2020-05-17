@@ -15,13 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobRank;
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.buildings.farm.Crop;
 import java.awt.Color;
@@ -34,12 +33,11 @@ import java.util.Arrays;
  *
  * @author EhWhoAmI
  */
-public class FarmBuilding extends District implements PopulationStorage, Workable {
+public class FarmBuilding extends District implements PopulationStorage {
 
     private FarmType farmType;
     public ArrayList<Crop> crops;
     private int productivity = 0;
-    public ArrayList<PopulationUnit> population;
     private int capacity = 0;
     private int maxCapacity = 0;
     private int manPower = 0;
@@ -50,14 +48,8 @@ public class FarmBuilding extends District implements PopulationStorage, Workabl
 
     public FarmBuilding(FarmType ft) {
         farmType = ft;
-        population = new ArrayList<>();
         crops = new ArrayList<>();
         harvestable = new ArrayList<>();
-    }
-
-    @Override
-    public ArrayList<PopulationUnit> getPopulationArrayList() {
-        return population;
     }
 
     @Override
@@ -74,23 +66,23 @@ public class FarmBuilding extends District implements PopulationStorage, Workabl
         this.city = city;
     }
 
-    @Override
-    public Job[] jobsNeeded() {
-        ArrayList<Job> jobsNeeded = new ArrayList<>();
-
-        for (int i = 0; i < getManpower(); i++) {
-            Job job = new Job(JobType.Farmer);
-            job.setJobRank(JobRank.Low);
-            job.setWorkingFor(this);
-            //Set pay
-            job.setPay(1);
-            job.setEmployer(getOwner());
-            jobsNeeded.add(job);
-        }
-
-        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-        return jobArray;
-    }
+//    @Override
+//    public Job[] jobsNeeded() {
+//        ArrayList<Job> jobsNeeded = new ArrayList<>();
+//
+//        for (int i = 0; i < getManpower(); i++) {
+//            Job job = new Job(JobType.Farmer);
+//            job.setJobRank(JobRank.Low);
+//            job.setWorkingFor(this);
+//            //Set pay
+//            job.setPay(1);
+//            job.setEmployer(getOwner());
+//            jobsNeeded.add(job);
+//        }
+//
+//        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+//        return jobArray;
+//    }
 
     public static enum FarmType {
         Livestock,
@@ -133,18 +125,18 @@ public class FarmBuilding extends District implements PopulationStorage, Workabl
     public int getMaxCapacity() {
         return maxCapacity;
     }
-
-    @Override
-    public void processJob(Job j) {
-        //Harvest a little
-        //Check if harvest season...
-        if (!harvestable.isEmpty()) {
-            Crop c = harvestable.remove(0);
-            j.resources.put(c.getSpecies().getFoodGood(), Double.valueOf(c.getYield()));
-            //Regrow
-            c.setTimeLeft(25);
-        }
-    }
+//
+//    @Override
+//    public void processJob(Job j) {
+//        //Harvest a little
+//        //Check if harvest season...
+//        if (!harvestable.isEmpty()) {
+//            Crop c = harvestable.remove(0);
+//            j.resources.put(c.getSpecies().getFoodGood(), Double.valueOf(c.getYield()));
+//            //Regrow
+//            c.setTimeLeft(25);
+//        }
+//    }
 
     public int getManpower() {
         return manPower;

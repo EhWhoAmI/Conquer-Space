@@ -17,46 +17,20 @@
  */
 package ConquerSpace.game.population;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.JobType;
+import java.util.HashMap;
 
 /**
- * one pop unit is about 10 million-ish.
  *
  * @author EhWhoAmI
  */
-public class PopulationUnit {
-    
-    public byte happiness;
-    public Race species;
-    public Job job;
+public class Population {
+    public long amount;
+    public long workingAmount;
+    public Culture c;
+    public float populationIncrease;
+    public HashMap<Race, Float> demographics;
 
-    public PopulationUnit(Race species) {
-        job = new Job(JobType.Jobless);
-        this.species = species;
-    }
-    
-    public Race getSpecies() {
-        return species;
-    }
-
-    public void setSpecies(Race species) {
-        this.species = species;
-    }
-
-    public byte getHappiness() {
-        return happiness;
-    }
-
-    public void setHappiness(byte happiness) {
-        this.happiness = happiness;
-    }
-    
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
+    public Population() {
+        demographics = new HashMap<>();
     }
 }

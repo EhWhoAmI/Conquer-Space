@@ -69,8 +69,8 @@ public class CivInfoOverview extends JPanel {
 
         populationPanel = new JPanel();
         //Add population count and stuff
-        JLabel populationLabel = new JLabel("Population: " + (c.population.size() * 10) + " million");
-        populationPanel.add(populationLabel);
+//        JLabel populationLabel = new JLabel("Population: " + (c.population.size() * 10) + " million");
+//        populationPanel.add(populationLabel);
 
         governmentPanel = new JPanel(new VerticalFlowLayout());
 
@@ -91,7 +91,7 @@ public class CivInfoOverview extends JPanel {
                 //Update info...
                 Person p = c.government.officials.get(c.government.headofState);
 
-                populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
+                //populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
                 civLeader.setText(c.government.headofState.getName() + " " + p.getName());
             }
         });
@@ -102,7 +102,7 @@ public class CivInfoOverview extends JPanel {
                 //Update info...
                 Person p = c.government.officials.get(c.government.headofState);
 
-                populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
+                //populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
                 civLeader.setText(c.government.headofState.getName() + " " + p.getName());
             }
         });

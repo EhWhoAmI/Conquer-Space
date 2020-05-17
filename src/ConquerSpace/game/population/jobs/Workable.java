@@ -28,6 +28,9 @@ public interface Workable {
     public Job[] jobsNeeded();
 
     public void processJob(Job j);
+    
+    public int operatingJobsNeeded();
+    public int getMaxJobsProvided();
 
 //    public long getNeededJobs();
 //

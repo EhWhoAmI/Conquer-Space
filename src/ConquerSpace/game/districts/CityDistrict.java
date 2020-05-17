@@ -15,37 +15,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.JobRank;
-import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.PopulationUnit;
-import ConquerSpace.game.population.jobs.Workable;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class CityDistrict extends District implements PopulationStorage, Workable {
+public class CityDistrict extends District {
 
     private int maxStorage;
-    public ArrayList<PopulationUnit> population;
 
     public CityDistrict() {
-        population = new ArrayList<>();
     }
 
     public Color getColor() {
         return Color.BLUE;
-    }
-
-    public int getPopulations() {
-        return population.size();
     }
 
     public int getMaxStorage() {
@@ -54,15 +40,6 @@ public class CityDistrict extends District implements PopulationStorage, Workabl
 
     public void setMaxStorage(int maxStorage) {
         this.maxStorage = maxStorage;
-    }
-
-    @Override
-    public ArrayList<PopulationUnit> getPopulationArrayList() {
-        return population;
-    }
-
-    @Override
-    public void processJob(Job j) {
     }
 
     @Override
@@ -76,19 +53,19 @@ public class CityDistrict extends District implements PopulationStorage, Workabl
         return txt;
     }
 
-    @Override
-    public Job[] jobsNeeded() {
-        ArrayList<Job> jobsNeeded = new ArrayList<>();
-        //Infrastructure jobs
-        Job job = new Job(JobType.Infrastructure);
-        job.setJobRank(JobRank.Low);
-        job.setWorkingFor(this);
-        job.setEmployer(getOwner());
-        jobsNeeded.add(job);
-        
-        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-        return jobArray;
-    }
+//    @Override
+//    public Job[] jobsNeeded() {
+//        ArrayList<Job> jobsNeeded = new ArrayList<>();
+//        //Infrastructure jobs
+//        Job job = new Job(JobType.Infrastructure);
+//        job.setJobRank(JobRank.Low);
+//        job.setWorkingFor(this);
+//        job.setEmployer(getOwner());
+//        jobsNeeded.add(job);
+//        
+//        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+//        return jobArray;
+//    }
     /**
      * CityDistrict city = (CityDistrict) building; if (building instanceof
      * AdministrativeCenter) { //An admin center deals with the planet, maybe

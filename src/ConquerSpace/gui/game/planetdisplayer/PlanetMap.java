@@ -18,11 +18,11 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.CityDistrict;
-import ConquerSpace.game.buildings.DistrictType;
-import ConquerSpace.game.buildings.ResourceStorage;
-import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.CityDistrict;
+import ConquerSpace.game.districts.DistrictType;
+import ConquerSpace.game.districts.ResourceStorage;
+import ConquerSpace.game.districts.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Stratum;

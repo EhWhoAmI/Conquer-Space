@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobRank;
@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author EhWhoAmI
  */
-public class ConstructingBuilding extends District implements Workable {
+public class ConstructingBuilding extends District {
 
     private District toBuild;
     private GeographicPoint pt;
@@ -91,11 +91,6 @@ public class ConstructingBuilding extends District implements Workable {
         return scale;
     }
 
-    @Override
-    public void processJob(Job j) {
-        decrementLength(1);
-    }
-
     public int getCost() {
         return cost;
     }
@@ -108,29 +103,28 @@ public class ConstructingBuilding extends District implements Workable {
         return builder;
     }
 
-    @Override
-    public Job[] jobsNeeded() {
-        ArrayList<Job> jobsNeeded = new ArrayList<>();
-
-        //Add construction jobs
-        int scale = getScale();
-        for (int i = 0; i < scale; i++) {
-            Job constructionJob = new Job(JobType.Construction);
-            constructionJob.setJobRank(JobRank.Low);
-            constructionJob.setEmployer(getOwner());
-            constructionJob.setWorkingFor(this);
-            //Set them to use resources for the construction
-            for (Map.Entry<Good, Double> set : resourcesNeeded.entrySet()) {
-                Good resource = set.getKey();
-                Double amount = set.getValue();
-                //Add to the job
-                constructionJob.resources.put(resource, -amount);
-            }
-            //Add job to building
-            jobsNeeded.add(constructionJob);
-        }
-
-        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-        return jobArray;
-    }
+//    @Override
+//    public Job[] jobsNeeded() {
+//        ArrayList<Job> jobsNeeded = new ArrayList<>();
+//
+//        //Add construction jobs
+//        int scale = getScale();
+//        for (int i = 0; i < scale; i++) {
+//            Job constructionJob = new Job(JobType.Construction);
+//            constructionJob.setJobRank(JobRank.Low);
+//            constructionJob.setEmployer(getOwner());
+//            //Set them to use resources for the construction
+//            for (Map.Entry<Good, Double> set : resourcesNeeded.entrySet()) {
+//                Good resource = set.getKey();
+//                Double amount = set.getValue();
+//                //Add to the job
+//                constructionJob.resources.put(resource, -amount);
+//            }
+//            //Add job to building
+//            jobsNeeded.add(constructionJob);
+//        }
+//
+//        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+//        return jobArray;
+//    }
 }

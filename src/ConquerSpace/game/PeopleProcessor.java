@@ -17,8 +17,8 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.PopulationStorage;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
@@ -61,8 +61,8 @@ public class PeopleProcessor {
                             for (int k = 0; k < peopleCount; k++) {
                                 //Get first thing
                                 if (c.buildings.get(0) instanceof PopulationStorage) {
-                                    Race s = ((PopulationStorage) c.buildings.get(0)).getPopulationArrayList().get(0).species;
-                                    Person people = createPerson(s);
+                                    //Race s = ((PopulationStorage) c.buildings.get(0)).getPopulationArrayList().get(0).species;
+                                    //Person people = createPerson(s);
                                     //c.peopleAtCity.add(people);
                                 }
                             }

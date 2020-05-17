@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.buildings;
 
-import ConquerSpace.game.buildings.CityDistrict;
+import ConquerSpace.game.districts.CityDistrict;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 

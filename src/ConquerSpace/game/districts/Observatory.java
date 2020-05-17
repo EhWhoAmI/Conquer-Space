@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.universe.Point;
@@ -77,9 +77,9 @@ public class Observatory extends District implements VisionPoint {
     public String getTooltipText() {
         return String.format(getBuildingTooltipString("observatory"), range);
     }
-    
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
+//    
+//    @Override
+//    public Job[] jobsNeeded() {
+//        return new Job[0];
+//    }
 }

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.District;
+import ConquerSpace.game.districts.District;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceStockpile;

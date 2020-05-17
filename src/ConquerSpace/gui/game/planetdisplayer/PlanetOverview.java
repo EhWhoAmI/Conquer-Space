@@ -17,10 +17,8 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.districts.District;
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.civilization.Civilization;
@@ -28,6 +26,7 @@ import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.renderers.TerrainRenderer;
+import ConquerSpace.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -140,29 +139,12 @@ public class PlanetOverview extends JPanel {
         currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
 
         population = 0;
-        //Get average growth
-        float averageGrowthSum = 0;
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            District value = entry.getValue();
-            float increment = 0;
-            if (value instanceof PopulationStorage) {
-                PopulationStorage storage = (PopulationStorage) value;
-                population += storage.getPopulationArrayList().size();
-                //process pops
-                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-                    //Fraction it so it does not accelerate at a crazy rate
-                    //Do subtractions here in the future, like happiness, and etc.
-                    increment += (unit.getSpecies().getBreedingRate() / 50);
-                }
-            }
-            averageGrowthSum += increment;
-        }
 
-        populationCount = new JLabel("Population: " + (population * 10) + " million");
+
+        populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population.amount));
         currentStats.add(populationCount);
 
-        averageGrowthSum /= p.cities.size();
-        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + averageGrowthSum + "% every 40 days");
+        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + p.population.populationIncrease + "% every now and then");
         currentStats.add(averagePlanetPopGrowthLabel);
 
         //Map
@@ -405,22 +387,22 @@ public class PlanetOverview extends JPanel {
         public JobTableModel() {
             populationCount = new HashMap<>();
             //Process the things
-            for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-                District value = entry.getValue();
-                if (value instanceof PopulationStorage) {
-                    PopulationStorage coldStorage = (PopulationStorage) value;
-                    for (PopulationUnit unit : coldStorage.getPopulationArrayList()) {
-                        JobType job = unit.getJob().getJobType();
-                        if (populationCount.containsKey(job)) {
-                            //Add to it
-                            int i = (populationCount.get(job) + 1);
-                            populationCount.put(job, i);
-                        } else {
-                            populationCount.put(job, 1);
-                        }
-                    }
-                }
-            }
+//            for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
+//                District value = entry.getValue();
+//                if (value instanceof PopulationStorage) {
+//                    PopulationStorage coldStorage = (PopulationStorage) value;
+//                    for (PopulationUnit unit : coldStorage.getPopulationArrayList()) {
+//                        JobType job = unit.getJob().getJobType();
+//                        if (populationCount.containsKey(job)) {
+//                            //Add to it
+//                            int i = (populationCount.get(job) + 1);
+//                            populationCount.put(job, i);
+//                        } else {
+//                            populationCount.put(job, 1);
+//                        }
+//                    }
+//                }
+//            }
         }
 
         @Override

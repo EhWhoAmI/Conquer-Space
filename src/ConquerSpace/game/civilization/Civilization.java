@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.civilization;
 
-import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.districts.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.population.Race;
@@ -26,7 +26,6 @@ import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.people.Administrator;
-import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.science.tech.Technologies;
@@ -35,7 +34,7 @@ import ConquerSpace.game.civilization.controllers.AIController.AIController;
 import ConquerSpace.game.civilization.controllers.CivilizationController;
 import ConquerSpace.game.civilization.government.Government;
 import ConquerSpace.game.civilization.stats.Economy;
-import ConquerSpace.game.civilization.stats.Population;
+import ConquerSpace.game.civilization.stats.PopulationStats;
 import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
@@ -79,7 +78,7 @@ public class Civilization implements Employer{
      */
     public CivilizationController controller;
 
-    public Population pop;
+    public PopulationStats pop;
     public Economy economy;
 
     public HashMap<UniversePath, Integer> vision;
@@ -118,7 +117,6 @@ public class Civilization implements Employer{
 
     public ArrayList<Planet> habitatedPlanets;
 
-    public ArrayList<PopulationUnit> population;
 
     public ArrayList<Event> events;
     
@@ -151,7 +149,7 @@ public class Civilization implements Employer{
         //Set a temp starting point as in 0:0:0
         vision = new HashMap<>();
 
-        pop = new Population();
+        pop = new PopulationStats();
         economy = new Economy();
 
         civTechs = new HashMap<>();
@@ -185,8 +183,6 @@ public class Civilization implements Employer{
         habitatedPlanets = new ArrayList<>();
 
         resourceList = new HashMap<>();
-
-        population = new ArrayList<>();
 
         events = new ArrayList<>();
         

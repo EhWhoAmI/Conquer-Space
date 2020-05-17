@@ -17,8 +17,8 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;

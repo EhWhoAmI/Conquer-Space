@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
@@ -64,17 +64,17 @@ public class SpacePort extends District {
         }
     }
 
-    @Override
-    public Job[] jobsNeeded() {
-        ArrayList<Job> jobsNeeded = new ArrayList<>();
-
-        Job job = new Job(JobType.SpacePortEngineer);
-        job.setEmployer(getOwner());
-        job.setJobRank(JobRank.Medium);
-        jobsNeeded.add(job);
-
-        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-        return jobArray;
-    }
+//    @Override
+//    public Job[] jobsNeeded() {
+//        ArrayList<Job> jobsNeeded = new ArrayList<>();
+//
+//        Job job = new Job(JobType.SpacePortEngineer);
+//        job.setEmployer(getOwner());
+//        job.setJobRank(JobRank.Medium);
+//        jobsNeeded.add(job);
+//
+//        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+//        return jobArray;
+//    }
 
 }

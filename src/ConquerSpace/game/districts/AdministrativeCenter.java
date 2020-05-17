@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobRank;
@@ -33,33 +33,33 @@ import java.util.Collections;
  *
  * @author
  */
-public class AdministrativeCenter extends CityDistrict implements Workable {
+public class AdministrativeCenter extends CityDistrict {
 
     @Override
     public Color getColor() {
         return Color.red;
     }
 
-    @Override
-    public void processJob(Job j) {
-    }
+//    @Override
+//    public void processJob(Job j) {
+//    }
 
     @Override
     public String getType() {
         return "Administrative Center";
     }
 
-    @Override
-    public Job[] jobsNeeded() {
-        ArrayList<Job> jobsNeeded = new ArrayList<>();
-
-        Job job = new Job(JobType.Administrator);
-        job.setJobRank(JobRank.High);
-        job.setWorkingFor(this);
-        job.setEmployer(getOwner());
-        jobsNeeded.add(job);
-
-        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-        return jobArray;
-    }
+//    @Override
+//    public Job[] jobsNeeded() {
+//        ArrayList<Job> jobsNeeded = new ArrayList<>();
+//
+//        Job job = new Job(JobType.Administrator);
+//        job.setJobRank(JobRank.High);
+//        job.setWorkingFor(this);
+//        job.setEmployer(getOwner());
+//        jobsNeeded.add(job);
+//
+//        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
+//        return jobArray;
+//    }
 }

@@ -18,9 +18,9 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.ConstructingBuilding;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.ConstructingBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.tech.Technology;
@@ -87,7 +87,7 @@ public class Actions {
         p.buildings.put(pt, what);
         //Check for working for
         if (what instanceof Workable) {
-            p.jobProviders.add(what);
+            //p.jobProviders.add(what);
         }
     }
 

@@ -38,8 +38,29 @@ public class Utilities {
             }
         }
     }
-    
+
     public static double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
-        return (Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)));
+        return (Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
+
+    private static final String NUMBER_NAMES[] = new String[]{
+        "thousand",
+        "million",
+        "billion",
+        "trillion",
+        "quadrillion",
+        "quintillion"};
+
+    public static String longToHumanString(long number) {
+        if(number < 10000) {
+            return "" + number;
+        }
+        for (int i = NUMBER_NAMES.length; i > 0; i--) {
+            if (Math.pow(1000, i) < number) {
+                return (Math.round((number/Math.pow(1000, i))*100d)/100d) + " " + NUMBER_NAMES[i - 1];
+            }
+        }
+        return "";
+    }
+
 }

@@ -15,17 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
-import ConquerSpace.game.population.PopulationUnit;
-import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
 public interface PopulationStorage {
-    public ArrayList<PopulationUnit> getPopulationArrayList();
     public int getMaxStorage();
     public City getCity();
 }

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.population.jobs;
 
-import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.districts.City;
 import java.util.ArrayList;
 
 /**

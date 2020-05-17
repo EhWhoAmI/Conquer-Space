@@ -27,15 +27,6 @@ public class Area implements Workable{
 
     private int powerUsage;
 
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
-
-    @Override
-    public void processJob(Job j) {
-    }
-
     public AreaClassification getAreaType() {
         return AreaClassification.Generic;
     }
@@ -47,4 +38,26 @@ public class Area implements Workable{
     public void setPowerUsage(int powerUsage) {
         this.powerUsage = powerUsage;
     }
+
+    @Override
+    public Job[] jobsNeeded() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void processJob(Job j) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int operatingJobsNeeded() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getMaxJobsProvided() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

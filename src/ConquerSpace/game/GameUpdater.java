@@ -20,11 +20,11 @@ package ConquerSpace.game;
 import ConquerSpace.Globals;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.ConstructingBuilding;
-import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.DistrictType;
-import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.ConstructingBuilding;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.DistrictType;
+import ConquerSpace.game.districts.PopulationStorage;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.AreaClassification;
 import ConquerSpace.game.buildings.area.FarmFieldArea;
@@ -41,7 +41,6 @@ import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobRank;
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
@@ -287,8 +286,8 @@ public class GameUpdater {
             if (building instanceof PopulationStorage) {
                 //Change value later when we need population difference in standard of living.
                 int energyMultiplier = 20;
-                int energy = ((PopulationStorage) building).getPopulationArrayList().size() * energyMultiplier;
-                building.setEnergyUsage(energy);
+               // int energy = ((PopulationStorage) building).getPopulationArrayList().size() * energyMultiplier;
+                //building.setEnergyUsage(energy);
             }
         }
     }
@@ -502,25 +501,25 @@ public class GameUpdater {
 
         for (District building : c.buildings) {
             //Get the building type
-            Job[] jobs = building.jobsNeeded();
-            Collections.addAll(c.jobs, jobs);
-
-            //Get number of people and add support jobs
-            if (building instanceof PopulationStorage) {
-                PopulationStorage storage = (PopulationStorage) building;
-                ArrayList<PopulationUnit> population = storage.getPopulationArrayList();
-                for (PopulationUnit unit : population) {
-                    upkeepAmount += unit.getSpecies().getUpkeep();
-                }
-            }
-
-            //Sort through areas
-            for (Area a : building.areas) {
-                //processAreaJobs(c, building, a, date, delta);
-                processArea(c, building, a, date, delta);
-            }
-            DistrictType type = classifyDistrict(building);
-            building.setDistrictType(type);
+//            Job[] jobs = building.jobsNeeded();
+//            Collections.addAll(c.jobs, jobs);
+//
+//            //Get number of people and add support jobs
+//            if (building instanceof PopulationStorage) {
+//                PopulationStorage storage = (PopulationStorage) building;
+//                ArrayList<PopulationUnit> population = storage.getPopulationArrayList();
+//                for (PopulationUnit unit : population) {
+//                    upkeepAmount += unit.getSpecies().getUpkeep();
+//                }
+//            }
+//
+//            //Sort through areas
+//            for (Area a : building.areas) {
+//                //processAreaJobs(c, building, a, date, delta);
+//                processArea(c, building, a, date, delta);
+//            }
+//            DistrictType type = classifyDistrict(building);
+//            building.setDistrictType(type);
         }
         //Set the upkeep
         int amount = Math.round(upkeepAmount);
@@ -544,16 +543,16 @@ public class GameUpdater {
         for (District b : c.buildings) {
             if (b instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) b;
-                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-                    if (i < c.jobs.size()) {
-                        //Set pop job
-                        unit.setJob(c.jobs.get(i));
-                    } else {
-                        unit.getJob().setJobType(JobType.Jobless);
-                        unit.getJob().setJobRank(JobRank.Low);
-                    }
-                    i++;
-                }
+//                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+//                    if (i < c.jobs.size()) {
+//                        //Set pop job
+//                        unit.setJob(c.jobs.get(i));
+//                    } else {
+//                        unit.getJob().setJobType(JobType.Jobless);
+//                        unit.getJob().setJobRank(JobRank.Low);
+//                    }
+//                    i++;
+//                }
             }
         }
     }
@@ -657,49 +656,37 @@ public class GameUpdater {
     }
 
     public void processPopulation(Planet p, StarDate date) {
+        //Calculate total population
+        long total = 0;
+        for (City c : p.cities) {
+            total += c.population.amount;
+        }
+        p.population.amount = total;
         for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             District value = entry.getValue();
             if (value instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) value;
-                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-                    //Add normal pop upkeep
-                    //All people consume food
-                    processPopUnit(unit);
-
-                    //Do subtractions here in the future, like happiness, and etc.
-                    //Process affect on building that it is working for
-                    Workable workingFor = unit.getJob().getWorkingFor();
-                    if (workingFor != null) {
-                        workingFor.processJob(unit.getJob());
-                    }
-
-                    //Process job resources, add to stockpiles
-                    for (Good r : unit.getJob().resources.keySet()) {
-                        if (r != null) {
-                            storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
-                        }
-                    }
-                }
+//                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+//                    //Add normal pop upkeep
+//                    //All people consume food
+//                    processPopUnit(unit);
+//
+//                    //Do subtractions here in the future, like happiness, and etc.
+//                    //Process affect on building that it is working for
+//                    Workable workingFor = unit.getJob().getWorkingFor();
+//                    if (workingFor != null) {
+//                        workingFor.processJob(unit.getJob());
+//                    }
+//
+//                    //Process job resources, add to stockpiles
+//                    for (Good r : unit.getJob().resources.keySet()) {
+//                        if (r != null) {
+//                            storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
+//                        }
+//                    }
+//                }
             }
         }
-    }
-
-    /**
-     * Processes the upkeep and the amount of money needed to support a pop.
-     *
-     * @param unit
-     */
-    public void processPopUnit(PopulationUnit unit) {
-        Job popJob = unit.getJob();
-        popJob.setPay(100);
-        //TODO do food consumption
-
-        Employer employer = popJob.getEmployer();
-        if (employer != null) {
-            employer.changeMoney(-popJob.getPay());
-        }
-        //food -= unit.getSpecies().getFoodPerMonth();
-        //popJob.resources.put(GameController.foodResource, food);
     }
 
     public void createPeople() {

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.buildings.District;
+import ConquerSpace.game.districts.District;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.civilization.Civilization;

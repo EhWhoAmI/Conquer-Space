@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.PopulationUnit;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -26,40 +25,31 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class IndustrialDistrict extends District implements PopulationStorage {
+public class InfrastructureBuilding extends District{
+    public ArrayList<District> connectedTo;
+    //private int 
+
+    public InfrastructureBuilding() {
+        connectedTo = new ArrayList<>();
+    }
 
     @Override
     public Color getColor() {
-        return new Color(192, 52, 235); 
-    }
-
-    public ArrayList<PopulationUnit> population;
-
-    public IndustrialDistrict() {
-        population = new ArrayList<>();
-    }
-
-    @Override
-    public ArrayList<PopulationUnit> getPopulationArrayList() {
-        return population;
-    }
-
-    @Override
-    public void processJob(Job j) {
-    }
-
-    @Override
-    public int getMaxStorage() {
-        return population.size();
+        return Color.orange;
     }
 
     @Override
     public String getType() {
-        return "Industrial district";
+        return "Infrastructure Hub";
     }
     
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
+    public void addBuilding(District b) {
+        b.infrastructure.add(this);
+        connectedTo.add(b);
     }
+
+//    @Override
+//    public Job[] jobsNeeded() {
+//        return new Job[0];
+//    }
 }

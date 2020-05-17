@@ -15,18 +15,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
-import ConquerSpace.game.universe.resources.Good;
-import java.util.HashMap;
+import java.awt.Color;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class BuildingCost {
-    public HashMap<Good, Double> cost;
-    public BuildingCost() {
-        cost = new HashMap<>();
+public class IndustrialDistrict extends District {
+
+    @Override
+    public Color getColor() {
+        return new Color(192, 52, 235); 
+    }
+
+
+    public IndustrialDistrict() {
+    }
+
+    @Override
+    public String getType() {
+        return "Industrial district";
     }
 }

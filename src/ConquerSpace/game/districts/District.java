@@ -15,15 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings;
+package ConquerSpace.game.districts;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.logistics.SupplyNode;
-import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.jobs.Employer;
-import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -46,7 +44,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class District implements Workable, SupplyNode, PopulationStorage {
+public class District implements SupplyNode, PopulationStorage {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(District.class.getName());
 
@@ -56,7 +54,7 @@ public class District implements Workable, SupplyNode, PopulationStorage {
     private City city;
     private HashMap<Good, Double> resources;
     public ArrayList<StorageNeeds> needs;
-    public ArrayList<PopulationUnit> population;
+    //public ArrayList<PopulationUnit> population;
     private int maxStorage;
     public ArrayList<SupplyChain> supplyChains;
 
@@ -71,7 +69,6 @@ public class District implements Workable, SupplyNode, PopulationStorage {
         supplyChains = new ArrayList<>();
         resources = new HashMap<>();
 
-        population = new ArrayList<>();
     }
 
     public DistrictType getDistrictType() {
@@ -114,10 +111,6 @@ public class District implements Workable, SupplyNode, PopulationStorage {
         return city;
     }
 
-    @Override
-    public void processJob(Job j) {
-
-    }
 
     public String getTooltipText() {
         return "";
@@ -207,23 +200,13 @@ public class District implements Workable, SupplyNode, PopulationStorage {
         return true;
     }
 
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
-
     public void addArea(Planet p, Area a) {
         areas.add(a);
         if (a instanceof Workable) {
             p.jobProviders.add(a);
         }
     }
-
-    @Override
-    public ArrayList<PopulationUnit> getPopulationArrayList() {
-        return population;
-    }
-
+    
     /**
      * Literally doesn't even matter rn
      *

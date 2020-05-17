@@ -17,13 +17,11 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.IndustrialDistrict;
-import ConquerSpace.game.buildings.InfrastructureBuilding;
-import ConquerSpace.game.buildings.Observatory;
-import ConquerSpace.game.buildings.ResourceMinerDistrict;
-import ConquerSpace.game.buildings.ResourceStorage;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.InfrastructureBuilding;
+import ConquerSpace.game.districts.Observatory;
+import ConquerSpace.game.districts.ResourceStorage;
 import ConquerSpace.game.buildings.area.CapitolArea;
 import ConquerSpace.game.buildings.area.FarmFieldArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
@@ -36,7 +34,6 @@ import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.population.PopulationUnit;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.Fields;
@@ -231,7 +228,6 @@ public class GameInitializer {
             }
 
             GeographicPoint pt = new GeographicPoint(x, y);
-            miner.population.add(new PopulationUnit(founding));
 
             p.placeBuilding(pt, miner);
 
@@ -286,12 +282,6 @@ public class GameInitializer {
                 faceBook.addArea(starting, field);
             }            //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-
-            //Add population
-            PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
-            u.setSpecies(c.getFoundingSpecies());
-            c.population.add(u);
-            faceBook.getPopulationArrayList().add(u);
 
             starting.buildings.put(pt, faceBook);
             farmCity.addDistrict(faceBook);
@@ -361,12 +351,6 @@ public class GameInitializer {
                 district.areas.add(factory);
             }
 
-            for (int k = 0; k < 5; k++) {
-                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
-                u.setSpecies(c.getFoundingSpecies());
-                c.population.add(u);
-                district.getPopulationArrayList().add(u);
-            }
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
             City city = starting.addBuildingToPlanet(pt, district);
@@ -405,14 +389,6 @@ public class GameInitializer {
             int popCount = (selector.nextInt(25) + 1);
             //district.setMaxStorage(selector.nextInt(popCount + 5) + 1);
 
-            for (int k = 0; k < popCount; k++) {
-                //Add a couple of population to the mix...
-                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
-                u.setSpecies(c.getFoundingSpecies());
-                c.population.add(u);
-                district.population.add(u);
-            }
-
             //Add residential areas.
             for (int k = 0; k < 5; k++) {
                 ResidentialArea residentialArea = new ResidentialArea();
@@ -430,13 +406,6 @@ public class GameInitializer {
             int popCount2 = (selector.nextInt(25) + 1);
             //district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
             district2.setOwner(c);
-            for (int k = 0; k < popCount2; k++) {
-                //Add a couple of population to the mix...
-                PopulationUnit u = new PopulationUnit(c.getFoundingSpecies());
-                u.setSpecies(c.getFoundingSpecies());
-                c.population.add(u);
-                district2.population.add(u);
-            }
 
             //Add residential areas.
             for (int k = 0; k < 5; k++) {
@@ -654,6 +623,8 @@ public class GameInitializer {
                 }*/
                 b.addArea(p, powerPlant);
             }
+            c.population.amount = selector.nextInt(30000000) + 5000000;
+            c.population.populationIncrease = 0.01f;
         }
     }
 

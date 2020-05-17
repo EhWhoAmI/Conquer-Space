@@ -17,22 +17,20 @@
  */
 package ConquerSpace.game.universe.bodies;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.City;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Orbit;
-import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.civilization.stats.Economy;
+import ConquerSpace.game.population.Population;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.ships.Orbitable;
 import ConquerSpace.game.ships.satellites.Satellite;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Planet class.
@@ -81,6 +79,8 @@ public class Planet extends Body {
      * If this is empty, the planet does not have life.
      */
     public ArrayList<LocalLife> localLife;
+    
+    public Population population;
 
     /**
      * Creates planet
@@ -111,6 +111,8 @@ public class Planet extends Body {
 
         //planetJobs = new ArrayList<>();
         localLife = new ArrayList<>();
+        
+        population = new Population();
     }
 
     /**
@@ -303,7 +305,7 @@ public class Planet extends Body {
 
         buildings.put(pt, b);
         if (b instanceof Workable) {
-            jobProviders.add(b);
+            //jobProviders.add(b);
         }
     }
 

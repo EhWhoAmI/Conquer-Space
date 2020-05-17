@@ -17,13 +17,12 @@
  */
 package ConquerSpace.game.save;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.ConstructingBuilding;
-import ConquerSpace.game.buildings.CityDistrict;
-import ConquerSpace.game.buildings.Observatory;
-import ConquerSpace.game.buildings.ResourceMinerDistrict;
-import ConquerSpace.game.buildings.ResourceStorage;
-import ConquerSpace.game.buildings.SpacePort;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.ConstructingBuilding;
+import ConquerSpace.game.districts.CityDistrict;
+import ConquerSpace.game.districts.Observatory;
+import ConquerSpace.game.districts.ResourceStorage;
+import ConquerSpace.game.districts.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import org.json.JSONArray;
@@ -70,8 +69,8 @@ public class BuildingSaveHandler {
         } else if (what instanceof CityDistrict) {
             CityDistrict stor = (CityDistrict) what;
             buildingObject.put("type", "population");
-            int pop = stor.getPopulations();
-            buildingObject.put("population", pop);
+            //int pop = stor.getPopulations();
+            //buildingObject.put("population", pop);
         } else if (what instanceof Observatory) {
             Observatory obs = (Observatory) what;
             buildingObject.put("type", "observatory");
@@ -90,13 +89,6 @@ public class BuildingSaveHandler {
 //                arr.put(storedResource);
 //            }
             buildingObject.put("resources", arr);
-        } else if (what instanceof ResourceMinerDistrict) {
-            ResourceMinerDistrict gatherer = (ResourceMinerDistrict) what;
-            //Get the stuff
-            buildingObject.put("type", "gatherer");
-            //buildingObject.put("resource", gatherer.getVeinMining().getId());
-            buildingObject.put("amount", gatherer.getAmountMined());
-            buildingObject.put("resource-type", gatherer.getResourceMining().getId());
         }
         return buildingObject;
     }

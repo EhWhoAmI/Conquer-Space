@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * For science labs and stuff
  */
-public class ResearchArea extends ConsumerArea implements Workable, ScienceLab{
+public class ResearchArea extends ConsumerArea implements ScienceLab{
 
     private String name;
     
@@ -33,15 +33,6 @@ public class ResearchArea extends ConsumerArea implements Workable, ScienceLab{
     
     public ResearchArea() {
         focusFields = new HashMap<>();
-    }
-    
-    @Override
-    public Job[] jobsNeeded() {
-        return null;
-    }
-
-    @Override
-    public void processJob(Job j) {
     }
 
     @Override

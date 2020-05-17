@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.buildings;
 
-import ConquerSpace.game.buildings.ConstructingBuilding;
+import ConquerSpace.game.districts.ConstructingBuilding;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

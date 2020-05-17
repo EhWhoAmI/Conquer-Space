@@ -17,19 +17,16 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.City;
-import ConquerSpace.game.buildings.InfrastructureBuilding;
-import ConquerSpace.game.buildings.PopulationStorage;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.InfrastructureBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.PowerPlantArea;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.PopulationUnit;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -96,27 +93,30 @@ public class PlanetCities extends JPanel {
         currentStats = new JPanel(new VerticalFlowLayout());
 
         currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
-        int pop = 0;
+        long pop = 0;
         //Get average growth
         float averageGrowthSum = 0;
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            District value = entry.getValue();
-            float increment = 0;
-            if (value instanceof PopulationStorage) {
-                PopulationStorage storage = (PopulationStorage) value;
-                pop += storage.getPopulationArrayList().size();
-                //process pops
-                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-                    //Fraction it so it does not accelerate at a crazy rate
-                    //Do subtractions here in the future, like happiness, and etc.
-                    increment += (unit.getSpecies().getBreedingRate() / 50);
-                }
-            }
-            averageGrowthSum += increment;
+//        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
+//            GeographicPoint key = entry.getKey();
+//            District value = entry.getValue();
+//            float increment = 0;
+//            if (value instanceof PopulationStorage) {
+//                PopulationStorage storage = (PopulationStorage) value;
+//                pop += storage.getPopulationArrayList().size();
+//                //process pops
+//                for (PopulationUnit unit : storage.getPopulationArrayList()) {
+//                    //Fraction it so it does not accelerate at a crazy rate
+//                    //Do subtractions here in the future, like happiness, and etc.
+//                    increment += (unit.getSpecies().getBreedingRate() / 50);
+//                }
+//            }
+//            averageGrowthSum += increment;
+//        }
+        for(City city : p.cities) {
+            pop += city.population.amount;
         }
 
-        populationCount = new JLabel("Population: " + (pop * 10) + " million");
+        populationCount = new JLabel("Population: " + Utilities.longToHumanString(pop));
         currentStats.add(populationCount);
 
         averageGrowthSum /= p.cities.size();
@@ -143,41 +143,42 @@ public class PlanetCities extends JPanel {
             int energyProvided = 0;
             ArrayList<InfrastructureBuilding> building = new ArrayList<>();
 
-            for (District build : selected.buildings) {
-                if (build instanceof PopulationStorage) {
-                    PopulationStorage stor = (PopulationStorage) build;
-
-                    popcount += stor.getPopulationArrayList().size();
-                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
-                        //Fraction it so it does not accelerate at a crazy rate
-                        //Do subtractions here in the future, like happiness, and etc.
-                        increment += (unit.getSpecies().getBreedingRate() / 50);
-                    }
-                    maxPop += stor.getMaxStorage();
-                    if (stor instanceof District) {
-                        energyUsage += ((District) stor).getEnergyUsage();
-                        //Get the infrastructure connected to.
-                        for (InfrastructureBuilding infra : ((District) stor).infrastructure) {
-
-                            if (!building.contains(infra)) {
-                                building.add(infra);
-                                for (Area a : infra.areas) {
-                                    //energyProvided += infra
-                                    if (a instanceof PowerPlantArea) {
-                                        //Get the resource produced
-
-                                        //TODO
-                                        //Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
-//                                        if (energy != null) {
-//                                            energyProvided += (((PowerPlantArea) a).getMaxVolume() * energy);
-//                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //Get breeding rate and energy usage.
+//            for (District build : selected.buildings) {
+//                if (build instanceof PopulationStorage) {
+//                    PopulationStorage stor = (PopulationStorage) build;
+//
+//                    popcount += stor.getPopulationArrayList().size();
+//                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
+//                        //Fraction it so it does not accelerate at a crazy rate
+//                        //Do subtractions here in the future, like happiness, and etc.
+//                        increment += (unit.getSpecies().getBreedingRate() / 50);
+//                    }
+//                    maxPop += stor.getMaxStorage();
+//                    if (stor instanceof District) {
+//                        energyUsage += ((District) stor).getEnergyUsage();
+//                        //Get the infrastructure connected to.
+//                        for (InfrastructureBuilding infra : ((District) stor).infrastructure) {
+//
+//                            if (!building.contains(infra)) {
+//                                building.add(infra);
+//                                for (Area a : infra.areas) {
+//                                    //energyProvided += infra
+//                                    if (a instanceof PowerPlantArea) {
+//                                        //Get the resource produced
+//
+//                                        //TODO
+//                                        //Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
+////                                        if (energy != null) {
+////                                            energyProvided += (((PowerPlantArea) a).getMaxVolume() * energy);
+////                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
             //Check if capital city
             for (int i = 0; i < u.getCivilizationCount(); i++) {
@@ -189,7 +190,7 @@ public class PlanetCities extends JPanel {
             }
 
             //Population
-            JLabel popCount = new JLabel("Population: " + (popcount * 10) + " million people");
+            JLabel popCount = new JLabel("Population: " + Utilities.longToHumanString(selected.population.amount));
             cityData.add(popCount);
 
             //Get the number of powerplants leading to it
@@ -198,7 +199,7 @@ public class PlanetCities extends JPanel {
             cityData.add(energyUsageLabel);
 
             //Growth
-            JLabel growthAmount = new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
+            JLabel growthAmount = new JLabel("Growth: " + selected.population.populationIncrease + "%");//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
             cityData.add(growthAmount);
 
             //JLabel unemployment = new JLabel("Unemployment: " + );
@@ -271,6 +272,7 @@ public class PlanetCities extends JPanel {
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);
+        cityList.setVisibleRowCount(50);
 
         cityListPanel.add(scrollPane, BorderLayout.WEST);
         cityListPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Cities"));
@@ -321,23 +323,23 @@ public class PlanetCities extends JPanel {
         public JobTableModel() {
             populationCount = new HashMap<>();
             population = 0;
-            //Process the things
-            for (District value : currentlySelectedCity.buildings) {
-                if (value instanceof PopulationStorage) {
-                    PopulationStorage stor = (PopulationStorage) value;
-                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
-                        JobType job = unit.getJob().getJobType();
-                        if (populationCount.containsKey(job)) {
-                            //Add to it
-                            int i = (populationCount.get(job) + 1);
-                            populationCount.put(job, i);
-                        } else {
-                            populationCount.put(job, 1);
-                        }
-                        population++;
-                    }
-                }
-            }
+            //Get population job
+//            for (District value : currentlySelectedCity.buildings) {
+//                if (value instanceof PopulationStorage) {
+//                    PopulationStorage stor = (PopulationStorage) value;
+//                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
+//                        JobType job = unit.getJob().getJobType();
+//                        if (populationCount.containsKey(job)) {
+//                            //Add to it
+//                            int i = (populationCount.get(job) + 1);
+//                            populationCount.put(job, i);
+//                        } else {
+//                            populationCount.put(job, 1);
+//                        }
+//                        population++;
+//                    }
+//                }
+//            }
         }
 
         @Override
@@ -382,21 +384,21 @@ public class PlanetCities extends JPanel {
 
         public void setSelectedCity(City city) {
             populationCount.clear();
-            for (District value : currentlySelectedCity.buildings) {
-                if (value instanceof PopulationStorage) {
-                    PopulationStorage stor = (PopulationStorage) value;
-                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
-                        JobType job = unit.getJob().getJobType();
-                        if (populationCount.containsKey(job)) {
-                            //Add to it
-                            int i = (populationCount.get(job) + 1);
-                            populationCount.put(job, i);
-                        } else {
-                            populationCount.put(job, 1);
-                        }
-                    }
-                }
-            }
+//            for (District value : currentlySelectedCity.buildings) {
+//                if (value instanceof PopulationStorage) {
+//                    PopulationStorage stor = (PopulationStorage) value;
+//                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
+//                        JobType job = unit.getJob().getJobType();
+//                        if (populationCount.containsKey(job)) {
+//                            //Add to it
+//                            int i = (populationCount.get(job) + 1);
+//                            populationCount.put(job, i);
+//                        } else {
+//                            populationCount.put(job, 1);
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

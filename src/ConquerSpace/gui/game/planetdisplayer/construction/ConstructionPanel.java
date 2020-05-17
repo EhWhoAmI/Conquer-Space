@@ -19,12 +19,10 @@ package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.Calculators;
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.buildings.CityDistrict;
-import ConquerSpace.game.buildings.Observatory;
-import ConquerSpace.game.buildings.ResourceMinerDistrict;
-import ConquerSpace.game.buildings.ResourceStorage;
-import ConquerSpace.game.buildings.SpacePort;
-import ConquerSpace.game.population.PopulationUnit;
+import ConquerSpace.game.districts.CityDistrict;
+import ConquerSpace.game.districts.Observatory;
+import ConquerSpace.game.districts.ResourceStorage;
+import ConquerSpace.game.districts.SpacePort;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.resources.Stratum;
@@ -227,21 +225,6 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
                     //Add to planet...
                     c.resourceStorages.add(stor);
                     Actions.buildBuilding(p, buildingPos, stor, c, 1);
-                    toReset = true;
-                } else if (item.equals(RESOURCE_MINER)) {
-                    ResourceMinerDistrict miner = new ResourceMinerDistrict(null, (double) buildMiningStorageMenu.miningSpeedSpinner.getValue());
-                    
-                    //Set stratum
-                    Stratum strat = (Stratum) buildMiningStorageMenu.strataComboBox.getSelectedItem();
-                    miner.setVeinMining(strat);
-                    
-                    //Get resource mined
-                    Good mining = (Good) buildMiningStorageMenu.stratumResourceTable.getValueAt(buildMiningStorageMenu.stratumResourceTable.getSelectedRow(), 0);
-                    miner.setResourceMining(mining);
-                    
-                    //Add miner population
-                    miner.population.add(new PopulationUnit(c.getFoundingSpecies()));
-                    Actions.buildBuilding(p, buildingPos, miner, c, 1);
                     toReset = true;
                 }
                 //Close the current window

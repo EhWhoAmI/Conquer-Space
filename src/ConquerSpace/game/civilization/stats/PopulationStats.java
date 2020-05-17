@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Population stats. Everything is in arraylists because we want graphs later.
  * @author EhWhoAmI
  */
-public class Population extends Stats{
+public class PopulationStats extends Stats{
     /**
      * Population.
      */
@@ -45,7 +45,7 @@ public class Population extends Stats{
      */
     public ArrayList<Float> mortalityRate;
     
-    public Population() {
+    public PopulationStats() {
         population = new ArrayList<>();
         populationGrowth = new ArrayList<>();
         happiness = new ArrayList<>();

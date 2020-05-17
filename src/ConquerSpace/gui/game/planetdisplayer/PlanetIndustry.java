@@ -17,8 +17,8 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.buildings.District;
-import ConquerSpace.game.buildings.FarmBuilding;
+import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.FarmBuilding;
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.buildings.area.ManufacturerArea;
