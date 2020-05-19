@@ -141,10 +141,10 @@ public class PlanetOverview extends JPanel {
         population = 0;
 
 
-        populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population.amount));
+        populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population));
         currentStats.add(populationCount);
 
-        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + p.population.populationIncrease + "% every now and then");
+        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + p.population + "% every now and then");
         currentStats.add(averagePlanetPopGrowthLabel);
 
         //Map

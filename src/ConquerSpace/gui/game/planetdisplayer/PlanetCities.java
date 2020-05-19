@@ -112,15 +112,12 @@ public class PlanetCities extends JPanel {
 //            }
 //            averageGrowthSum += increment;
 //        }
-        for(City city : p.cities) {
-            pop += city.population.amount;
-        }
 
-        populationCount = new JLabel("Population: " + Utilities.longToHumanString(pop));
+        populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population));
         currentStats.add(populationCount);
 
         averageGrowthSum /= p.cities.size();
-        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + averageGrowthSum + "% every 40 days");
+        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + p.populationIncrease + "% every 40 days");
 
         cityListPanel = new JPanel();
         cityListPanel.setLayout(new BorderLayout());
@@ -190,7 +187,7 @@ public class PlanetCities extends JPanel {
             }
 
             //Population
-            JLabel popCount = new JLabel("Population: " + Utilities.longToHumanString(selected.population.amount));
+            JLabel popCount = new JLabel("Population: " + Utilities.longToHumanString(selected.population.getPopulationSize()));
             cityData.add(popCount);
 
             //Get the number of powerplants leading to it
@@ -199,7 +196,7 @@ public class PlanetCities extends JPanel {
             cityData.add(energyUsageLabel);
 
             //Growth
-            JLabel growthAmount = new JLabel("Growth: " + selected.population.populationIncrease + "%");//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
+            JLabel growthAmount = new JLabel("Growth: " + 0 + "%");//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
             cityData.add(growthAmount);
 
             //JLabel unemployment = new JLabel("Unemployment: " + );

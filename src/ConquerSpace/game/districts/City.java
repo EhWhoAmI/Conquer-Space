@@ -140,6 +140,6 @@ public class City implements PersonEnterable {
     }
 
     public void incrementPopulation(StarDate date, long delta) {
-        population.amount = (long)((double)population.amount * (1 + population.populationIncrease));
+        population.incrementPopulation();
     }
 }

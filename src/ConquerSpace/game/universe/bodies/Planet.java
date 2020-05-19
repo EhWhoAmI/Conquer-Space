@@ -79,8 +79,9 @@ public class Planet extends Body {
      * If this is empty, the planet does not have life.
      */
     public ArrayList<LocalLife> localLife;
-    
-    public Population population;
+
+    public long population = 0;
+    public float populationIncrease = 0;
 
     /**
      * Creates planet
@@ -111,8 +112,6 @@ public class Planet extends Body {
 
         //planetJobs = new ArrayList<>();
         localLife = new ArrayList<>();
-        
-        population = new Population();
     }
 
     /**

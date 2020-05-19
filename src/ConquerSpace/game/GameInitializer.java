@@ -53,6 +53,7 @@ import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.buildings.farm.Crop;
+import ConquerSpace.game.population.PopulationSegment;
 import ConquerSpace.game.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
@@ -386,9 +387,6 @@ public class GameInitializer {
             district.setOwner(c);
             //Distribute
             //Add random positions
-            int popCount = (selector.nextInt(25) + 1);
-            //district.setMaxStorage(selector.nextInt(popCount + 5) + 1);
-
             //Add residential areas.
             for (int k = 0; k < 5; k++) {
                 ResidentialArea residentialArea = new ResidentialArea();
@@ -403,7 +401,6 @@ public class GameInitializer {
             //Choose a direction, and expand...
             District district2 = new District();
 
-            int popCount2 = (selector.nextInt(25) + 1);
             //district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
             district2.setOwner(c);
 
@@ -623,8 +620,10 @@ public class GameInitializer {
                 }*/
                 b.addArea(p, powerPlant);
             }
-            c.population.amount = selector.nextInt(30000000) + 5000000;
-            c.population.populationIncrease = 0.01f;
+            //Add first population segment
+            PopulationSegment seg = new PopulationSegment(null, null);
+            seg.size = selector.nextInt(20_000_000) + 150_000;
+            c.population.addSegment(seg);
         }
     }
 

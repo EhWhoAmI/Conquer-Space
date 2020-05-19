@@ -17,43 +17,32 @@
  */
 package ConquerSpace.game.population;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 /**
  *
  * @author EhWhoAmI
  */
-public class Population {
-    public final ArrayList<PopulationSegment> populations;
+public class PopulationSegment {
+    public long size = 0;
+    public Race species;
+    public Culture culture;
+    //Placeholder value for now...
+    public int tier;
+    public float populationIncrease;
 
-    private long populationSize = 0;
-    
-    public Population() {
-        populations = new ArrayList<>();
+    public PopulationSegment(Race species, Culture culture) {
+        this.species = species;
+        this.culture = culture;
     }
-    
-    public PopulationSegment getSegment(int id) {
-        return populations.get(id);
+
+    public Culture getCulture() {
+        return culture;
     }
-    
-    public void addSegment(PopulationSegment seg) {
-        populations.add(seg);
+
+    public long getSize() {
+        return size;
     }
-    
-    public long getPopulationSize() {
-        populationSize = 0;
-        for(PopulationSegment seg : populations) {
-            populationSize += seg.size;
-        }
-        return populationSize;
-    }
-    
-    public Iterator<PopulationSegment> getIterator() {
-        return populations.iterator();
-    }
-    
-    public void incrementPopulation() {
-        
+
+    public Race getSpecies() {
+        return species;
     }
 }

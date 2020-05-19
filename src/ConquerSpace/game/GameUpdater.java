@@ -659,9 +659,9 @@ public class GameUpdater {
         //Calculate total population
         long total = 0;
         for (City c : p.cities) {
-            total += c.population.amount;
+            total += c.population.getPopulationSize();
         }
-        p.population.amount = total;
+        p.population = total;
         for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             District value = entry.getValue();
             if (value instanceof PopulationStorage) {

@@ -19,20 +19,27 @@ package ConquerSpace.game.population;
 
 /**
  * Species or race
+ *
  * @author EhWhoAmI
  */
 public class Race {
+
+    private static int idCounter = 0;
+
+    private int id;
     //Usage of food per month
     private int foodPerMonth;
     //Base increase in population per year. Will be incremented per every couple of ticks
     private float breedingRate;
 
     private String name;
-    
+
     //The amount of support a pop unit needs (as in pop)
     private float upkeep = 0;
 
     public Race(int foodPerMonth, float breedingRate, String name) {
+        //Set id
+        id = idCounter++;
         this.foodPerMonth = foodPerMonth;
         this.breedingRate = breedingRate;
         this.name = name;
@@ -69,5 +76,16 @@ public class Race {
     public void setUpkeep(float upkeep) {
         this.upkeep = upkeep;
     }
-}
 
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Race) {
+            return (((Race) obj).id == this.id);
+        }
+        return false;
+    }
+}

@@ -22,5 +22,13 @@ package ConquerSpace.game.population;
  * @author EhWhoAmI
  */
 public class Culture {
-    
+    private static int idCounter = 0;
+    private int id;
+    public Culture() {
+        this.id = idCounter++;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
