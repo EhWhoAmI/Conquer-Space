@@ -12,10 +12,13 @@ Better music
  - Volume can now be changed
  - Music can be toggled better
 Available job list
+Can now customize colors of districts
 
 Gameplay:
 All buildings are resource storages now
 Planet sizes and width changed
+Districts now do not generate resources, areas do
+Change from pop system to population segment system.
 
 0.0.2:
 Total Overhauls:

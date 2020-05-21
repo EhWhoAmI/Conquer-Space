@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.population;
 
+import ConquerSpace.game.StarDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,35 +26,38 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 public class Population {
+
     public final ArrayList<PopulationSegment> populations;
 
     private long populationSize = 0;
-    
+
     public Population() {
         populations = new ArrayList<>();
     }
-    
+
     public PopulationSegment getSegment(int id) {
         return populations.get(id);
     }
-    
+
     public void addSegment(PopulationSegment seg) {
         populations.add(seg);
     }
-    
+
     public long getPopulationSize() {
         populationSize = 0;
-        for(PopulationSegment seg : populations) {
+        for (PopulationSegment seg : populations) {
             populationSize += seg.size;
         }
         return populationSize;
     }
-    
+
     public Iterator<PopulationSegment> getIterator() {
         return populations.iterator();
     }
-    
-    public void incrementPopulation() {
-        
+
+    public void incrementPopulation(StarDate date, long delta) {
+        for (PopulationSegment seg : populations) {
+            seg.size = (long) ((double) seg.size * (1 + seg.populationIncrease));
+        }
     }
 }

@@ -286,7 +286,7 @@ public class GameUpdater {
             if (building instanceof PopulationStorage) {
                 //Change value later when we need population difference in standard of living.
                 int energyMultiplier = 20;
-               // int energy = ((PopulationStorage) building).getPopulationArrayList().size() * energyMultiplier;
+                // int energy = ((PopulationStorage) building).getPopulationArrayList().size() * energyMultiplier;
                 //building.setEnergyUsage(energy);
             }
         }
@@ -520,6 +520,8 @@ public class GameUpdater {
 //            }
 //            DistrictType type = classifyDistrict(building);
 //            building.setDistrictType(type);
+            DistrictType type = classifyDistrict(building);
+            building.setDistrictType(type);
         }
         //Set the upkeep
         int amount = Math.round(upkeepAmount);
@@ -753,7 +755,7 @@ public class GameUpdater {
         for (Map.Entry<AreaClassification, Integer> entry : areaType.entrySet()) {
             AreaClassification key = entry.getKey();
             Integer val = entry.getValue();
-            if (val > highest) {
+            if (val > highest && key != AreaClassification.Generic) {
                 highest = val;
                 highestArea = key;
             }

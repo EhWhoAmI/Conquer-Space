@@ -53,6 +53,7 @@ import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.buildings.farm.Crop;
+import ConquerSpace.game.population.Culture;
 import ConquerSpace.game.population.PopulationSegment;
 import ConquerSpace.game.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -128,7 +129,7 @@ public class GameInitializer {
                 c.setCapitalPlanet(starting);
 
                 initializeBuildings(starting, c, selector);
-
+                initializePopulation(c, starting, selector);
                 nameStratumOnPlanet(starting);
 
                 //Set ownership
@@ -188,9 +189,6 @@ public class GameInitializer {
             //Ignore, assume all ok
         }
 
-        City mineCity = new City(p.getUniversePath());
-        mineCity.setName(townGen.getName(0) + " Mines");
-
         //Find if vein exists on the planet
         int minerCount = (int) (Math.random() * p.getPlanetSize());
         minerCount += 45;
@@ -207,7 +205,7 @@ public class GameInitializer {
 
             MineArea mineArea = new MineArea(strata, g, 10);
             miner.addArea(p, mineArea);
-            
+
             miner.setOwner(c);
 
             double randR = (strata.getRadius() * Math.sqrt(Math.random()));
@@ -230,9 +228,12 @@ public class GameInitializer {
 
             GeographicPoint pt = new GeographicPoint(x, y);
 
-            p.placeBuilding(pt, miner);
+            City city = p.addBuildingToPlanet(pt, miner);
 
-            mineCity.addDistrict(miner);
+            if (city.getName().equals(City.CITY_DEFAULT)) {
+                city.setName(townGen.getName(0) + " Mines");
+            }
+            //mineCity.addDistrict(miner);
         }
 //        for (ResourceVein v : p.resourceVeins) {
 //            //Get the resource vein and stuff
@@ -246,7 +247,7 @@ public class GameInitializer {
 //            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
 //            city.addDistrict(miner);
 //        }
-        p.cities.add(mineCity);
+        //p.cities.add(mineCity);
     }
 
     private void createFarms(Planet starting, Civilization c, Random selector) {
@@ -620,10 +621,6 @@ public class GameInitializer {
                 }*/
                 b.addArea(p, powerPlant);
             }
-            //Add first population segment
-            PopulationSegment seg = new PopulationSegment(null, null);
-            seg.size = selector.nextInt(20_000_000) + 150_000;
-            c.population.addSegment(seg);
         }
     }
 
@@ -640,6 +637,16 @@ public class GameInitializer {
         }
         for (Stratum strata : p.strata) {
             strata.setName(gen.getName(0));
+        }
+    }
+
+    private void initializePopulation(Civilization civ, Planet p, Random selector) {
+        for (City c : p.cities) {
+            //Add first population segment
+            PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
+            seg.size = selector.nextInt(20_000_000) + 150_000;
+            seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
+            c.population.addSegment(seg);
         }
     }
 
@@ -671,7 +678,9 @@ public class GameInitializer {
             c.scienceLabs.add(research);
 
             //Choose random fields
-            p.cities.get(i).buildings.get(0).areas.add(research);
+            if (p.cities.get(i).buildings.size() > 0) {
+                p.cities.get(i).buildings.get(0).areas.add(research);
+            }
         }
     }
 

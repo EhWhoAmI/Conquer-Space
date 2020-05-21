@@ -46,7 +46,10 @@ import org.apache.logging.log4j.Logger;
  */
 public class District implements SupplyNode, PopulationStorage {
 
+    private static int idCounter = 0;
     private static final Logger LOGGER = CQSPLogger.getLogger(District.class.getName());
+
+    private int id;
 
     public ArrayList<Area> areas;
     private Employer owner;
@@ -68,7 +71,7 @@ public class District implements SupplyNode, PopulationStorage {
         infrastructure = new ArrayList<>();
         supplyChains = new ArrayList<>();
         resources = new HashMap<>();
-
+        id = idCounter++;
     }
 
     public DistrictType getDistrictType() {
@@ -110,7 +113,6 @@ public class District implements SupplyNode, PopulationStorage {
     public City getCity() {
         return city;
     }
-
 
     public String getTooltipText() {
         return "";
@@ -206,7 +208,7 @@ public class District implements SupplyNode, PopulationStorage {
             p.jobProviders.add(a);
         }
     }
-    
+
     /**
      * Literally doesn't even matter rn
      *
@@ -215,5 +217,18 @@ public class District implements SupplyNode, PopulationStorage {
     @Override
     public int getMaxStorage() {
         return maxStorage;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof District) {
+            return (((District) obj).id == this.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

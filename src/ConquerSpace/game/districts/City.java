@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class City implements PersonEnterable {
 
     public Population population;
-    public static final String CITY_DEFAULT = " ";
+    public static final String CITY_DEFAULT = "emp";
     private Person governor;
     private String name;
     public ArrayList<District> buildings;
@@ -140,6 +140,6 @@ public class City implements PersonEnterable {
     }
 
     public void incrementPopulation(StarDate date, long delta) {
-        population.incrementPopulation();
+        population.incrementPopulation(date, delta);
     }
 }

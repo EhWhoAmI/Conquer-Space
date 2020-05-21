@@ -298,7 +298,11 @@ public class Planet extends Body {
         if (buildings.containsKey(pt)) {
             District existed = buildings.get(pt);
             if (existed != null) {
-                existed.getCity().buildings.remove(existed);
+                City preexisting = existed.getCity();
+                preexisting.buildings.remove(existed);
+                if(preexisting.buildings.isEmpty()) {
+                    cities.remove(preexisting);
+                }
             }
         }
 
