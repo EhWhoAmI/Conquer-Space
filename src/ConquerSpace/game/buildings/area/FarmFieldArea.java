@@ -18,6 +18,7 @@
 package ConquerSpace.game.buildings.area;
 
 import ConquerSpace.game.life.Species;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
@@ -62,5 +63,10 @@ public class FarmFieldArea extends TimedManufacturerArea {
     
     public AreaClassification getAreaType() {
         return AreaClassification.Farm;
+    }
+    
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Farmer);
     }
 }

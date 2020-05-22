@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.buildings.area;
 
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.Stratum;
 import java.util.HashMap;
@@ -26,11 +27,12 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class MineArea extends Area {
+
     private Stratum mining;
     private float productivity;
     private HashMap<Good, Double> necessaryGoods;
     private Good resourceMined;
-    
+
     public MineArea(Stratum mining, Good resourceMined, float productivity) {
         this.mining = mining;
         this.productivity = productivity;
@@ -62,5 +64,10 @@ public class MineArea extends Area {
     @Override
     public String toString() {
         return resourceMined.getName() + " Mine";
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Miner);
     }
 }

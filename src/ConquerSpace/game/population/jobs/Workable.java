@@ -31,6 +31,7 @@ public interface Workable {
     
     public int operatingJobsNeeded();
     public int getMaxJobsProvided();
+    public JobType getJobClassification();
 
 //    public long getNeededJobs();
 //

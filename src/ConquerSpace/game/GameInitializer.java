@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.districts.District;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.InfrastructureBuilding;
@@ -153,7 +154,6 @@ public class GameInitializer {
                 createUnrecruitedPeople(c, starting, gen);
 
                 initializeGovernment(c, gen);
-
             }
             c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
         }
@@ -192,62 +192,45 @@ public class GameInitializer {
         //Find if vein exists on the planet
         int minerCount = (int) (Math.random() * p.getPlanetSize());
         minerCount += 45;
+        for (int k = 0; k < p.strata.size(); k++) {
+            Stratum stratum = p.strata.get(k);
+            for (int i = 0; i < 3; i++) {
+                District miner = new District();
+                for (Good g : stratum.minerals.keySet()) {
 
-        for (int i = 0; i < minerCount; i++) {
-            //Select random vein
-            int id = (int) (p.strata.size() * Math.random());
-            Stratum strata = p.strata.get(id);
-            District miner = new District();
+                    MineArea mineArea = new MineArea(stratum, g, 10);
+                    mineArea.setOperatingJobs(50_000);
+                    mineArea.setMaxJobs(100_000);
+                    miner.addArea(p, mineArea);
+                }
 
-            //Set the type of resource to mine
-            ArrayList<Good> a = new ArrayList<>(strata.minerals.keySet());
-            Good g = a.get((int) (a.size() * Math.random()));
+                double randR = (stratum.getRadius() * Math.sqrt(Math.random()));
+                double theta = (Math.random() * 2 * Math.PI);
 
-            MineArea mineArea = new MineArea(strata, g, 10);
-            miner.addArea(p, mineArea);
+                int x = (int) (Math.cos(theta) * randR) + stratum.getX();
+                int y = (int) (Math.sin(theta) * randR) + stratum.getY();
 
-            miner.setOwner(c);
+                if (x < 0) {
+                    x = 0;
+                } else if (x >= p.getPlanetWidth()) {
+                    x = (p.getPlanetWidth() - 1);
+                }
 
-            double randR = (strata.getRadius() * Math.sqrt(Math.random()));
-            double theta = (Math.random() * 2 * Math.PI);
+                if (y < 0) {
+                    y = 0;
+                } else if (y >= p.getPlanetHeight()) {
+                    y = (p.getPlanetHeight() - 1);
+                }
 
-            int x = (int) (Math.cos(theta) * randR) + strata.getX();
-            int y = (int) (Math.sin(theta) * randR) + strata.getY();
+                GeographicPoint pt = new GeographicPoint(x, y);
 
-            if (x < 0) {
-                x = 0;
-            } else if (x >= p.getPlanetWidth()) {
-                x = (p.getPlanetWidth() - 1);
+                City city = p.addBuildingToPlanet(pt, miner);
+
+                if (city.getName().equals(City.CITY_DEFAULT)) {
+                    city.setName(townGen.getName(0) + " Mines");
+                }
             }
-
-            if (y < 0) {
-                y = 0;
-            } else if (y >= p.getPlanetHeight()) {
-                y = (p.getPlanetHeight() - 1);
-            }
-
-            GeographicPoint pt = new GeographicPoint(x, y);
-
-            City city = p.addBuildingToPlanet(pt, miner);
-
-            if (city.getName().equals(City.CITY_DEFAULT)) {
-                city.setName(townGen.getName(0) + " Mines");
-            }
-            //mineCity.addDistrict(miner);
         }
-//        for (ResourceVein v : p.resourceVeins) {
-//            //Get the resource vein and stuff
-//            //Then place it in the center
-//            ResourceMinerDistrict miner = new ResourceMinerDistrict(v, 10);
-//            //System.out.println
-//            miner.setOwner(c);
-//            miner.setScale(1);
-//
-//            miner.population.add(new PopulationUnit(founding));
-//            p.buildings.put(new GeographicPoint(v.getX(), v.getY()), miner);
-//            city.addDistrict(miner);
-//        }
-        //p.cities.add(mineCity);
     }
 
     private void createFarms(Planet starting, Civilization c, Random selector) {
@@ -282,7 +265,10 @@ public class GameInitializer {
                 field.setTime(30);
                 field.grow();
                 faceBook.addArea(starting, field);
-            }            //Add a farm
+                field.setOperatingJobs(10000);
+                field.setMaxJobs(30000);
+            }
+            //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
             starting.buildings.put(pt, faceBook);
@@ -350,6 +336,9 @@ public class GameInitializer {
             for (ProductionProcess proc : c.productionProcesses) {
                 //Add new factory
                 ManufacturerArea factory = new ManufacturerArea(proc, 1);
+
+                factory.setMaxJobs(proc.diff * 10000);
+                factory.setOperatingJobs(proc.diff * 5000);
                 district.areas.add(factory);
             }
 
@@ -644,7 +633,14 @@ public class GameInitializer {
         for (City c : p.cities) {
             //Add first population segment
             PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
-            seg.size = selector.nextInt(20_000_000) + 150_000;
+            seg.size = selector.nextInt(30_000) + 30_000;
+            int i = 1;
+            for (District building1 : c.buildings) {
+                for (Area area : building1.areas) {
+                    i++;
+                }
+            }
+            seg.size *= i;
             seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
             c.population.addSegment(seg);
         }

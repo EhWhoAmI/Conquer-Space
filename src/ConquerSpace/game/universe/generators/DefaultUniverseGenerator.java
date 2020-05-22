@@ -432,7 +432,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             }
 
             //Select the things
-            stratum.setRadius(randint(rand, 1, planetSize));
+            stratum.setRadius(randint(rand, 3, planetSize));
             stratum.setX(rand.nextInt(p.getPlanetWidth()));
             stratum.setY(rand.nextInt(p.getPlanetHeight()));
             stratum.setDepth(rand.nextInt(planetSize / 2) + 1);

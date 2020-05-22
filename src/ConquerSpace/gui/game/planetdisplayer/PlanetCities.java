@@ -24,6 +24,7 @@ import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.buildings.area.ResearchArea;
 import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobType;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.Utilities;
@@ -64,6 +65,8 @@ public class PlanetCities extends JPanel {
     //private DefaultListModel<AreaWrapper> areaListModel;
     //private JList<AreaWrapper> areaList;
 
+    private JTabbedPane cityInfoTabs;
+
     private JTable jobTable;
     private JobTableModel jobTableModel;
     private final String[] jobListTableColunmNames = {"Job Name", "Count", "Percentage"};
@@ -77,6 +80,10 @@ public class PlanetCities extends JPanel {
     private Planet p;
 
     private int population = 1;
+
+    private int citySelectedTab = 0;
+    //So that the tab for the employment and things stay the same as you change your selection
+    boolean isBuildingUi = false;
 
     private City currentlySelectedCity;
 
@@ -128,7 +135,15 @@ public class PlanetCities extends JPanel {
         }
         cityList = new JList<>(cityListModel);
         cityList.setSelectedIndex(0);
+        cityInfoTabs = new JTabbedPane();
+        cityInfoTabs.addChangeListener(c -> {
+            if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
+                citySelectedTab = cityInfoTabs.getSelectedIndex();
+            }
+        });
+        
         cityList.addListSelectionListener(l -> {
+            isBuildingUi = true;
             cityData.removeAll();
 
             City selected = cityList.getSelectedValue();
@@ -176,7 +191,6 @@ public class PlanetCities extends JPanel {
 //                    }
 //                }
 //            }
-
             //Check if capital city
             for (int i = 0; i < u.getCivilizationCount(); i++) {
                 if (u.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
@@ -201,9 +215,9 @@ public class PlanetCities extends JPanel {
 
             //JLabel unemployment = new JLabel("Unemployment: " + );
             //Max population
-            JLabel maxPopulation = new JLabel("Population cap: " + (maxPop * 10) + " million people");
+            JLabel maxPopulation = new JLabel("Population cap: " + Utilities.longToHumanString(maxPop) + " people");
             cityData.add(maxPopulation);
-            
+
             JLabel districtCount = new JLabel("Districts: " + selected.buildings.size());
             cityData.add(districtCount);
 
@@ -261,11 +275,13 @@ public class PlanetCities extends JPanel {
             }
             availableJobTable = new JTable(availableJobModel);
 
-            JTabbedPane cityInfoTabs = new JTabbedPane();
+            cityInfoTabs.removeAll();
             cityInfoTabs.add("Areas", areaInfoPanel);
             cityInfoTabs.add("Employment", new JScrollPane(jobTable));
             cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
+            cityInfoTabs.setSelectedIndex(citySelectedTab);
             cityData.add(cityInfoTabs);
+            isBuildingUi = false;
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);
@@ -321,22 +337,19 @@ public class PlanetCities extends JPanel {
             populationCount = new HashMap<>();
             population = 0;
             //Get population job
-//            for (District value : currentlySelectedCity.buildings) {
-//                if (value instanceof PopulationStorage) {
-//                    PopulationStorage stor = (PopulationStorage) value;
-//                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
-//                        JobType job = unit.getJob().getJobType();
-//                        if (populationCount.containsKey(job)) {
-//                            //Add to it
-//                            int i = (populationCount.get(job) + 1);
-//                            populationCount.put(job, i);
-//                        } else {
-//                            populationCount.put(job, 1);
-//                        }
-//                        population++;
-//                    }
-//                }
-//            }
+            for (District value : currentlySelectedCity.buildings) {
+                for (Area area : value.areas) {
+                    if (area instanceof Workable) {
+                        if (!populationCount.containsKey(area.getJobClassification())) {
+                            populationCount.put(area.getJobClassification(), area.getMaxJobsProvided());
+                        } else {
+                            int count = populationCount.get(area.getJobClassification());
+                            count += area.getMaxJobsProvided();
+                            populationCount.put(area.getJobClassification(), count);
+                        }
+                    }
+                }
+            }
         }
 
         @Override
@@ -367,7 +380,7 @@ public class PlanetCities extends JPanel {
                 case 0:
                     return jobType.getName();
                 case 1:
-                    return (i * 10) + " million people";
+                    return Utilities.longToHumanString(i) + " people";
                 case 2:
                     return String.format("%.2f%%", (((double) i / (double) population) * 100));
             }

@@ -17,11 +17,14 @@
  */
 package ConquerSpace.game.buildings.area;
 
+import ConquerSpace.game.population.jobs.JobType;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class InfrastructureArea extends ConsumerArea{
+public class InfrastructureArea extends ConsumerArea {
+
     //The jobs provided
     private int jobsProvided;
     private int effectiveness;
@@ -45,5 +48,10 @@ public class InfrastructureArea extends ConsumerArea{
     @Override
     public String toString() {
         return "Infrastructure";
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Infrastructure);
     }
 }

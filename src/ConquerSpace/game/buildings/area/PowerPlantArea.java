@@ -19,6 +19,7 @@ package ConquerSpace.game.buildings.area;
 
 import ConquerSpace.game.buildings.area.Area;
 import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.resources.Good;
 
@@ -73,5 +74,11 @@ public class PowerPlantArea extends ConsumerArea {
 
     @Override
     public void processJob(Job j) {
+    }
+    
+        
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.PowerPlantTechnician);
     }
 }

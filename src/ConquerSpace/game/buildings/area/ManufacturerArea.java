@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.buildings.area;
 
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
@@ -54,5 +55,10 @@ public class ManufacturerArea extends Area {
     @Override
     public AreaClassification getAreaType() {
         return AreaClassification.Manufacturing;
+    }
+    
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.FactoryWorker);
     }
 }

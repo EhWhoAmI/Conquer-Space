@@ -36,8 +36,6 @@ public enum JobType {
     FactoryWorker("Factory Worker"),
     Researcher("Researcher"),
     Educator("Teacher");
-    
-    
     private final String name;
 
     JobType(String name) {

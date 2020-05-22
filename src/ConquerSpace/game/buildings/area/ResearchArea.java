@@ -18,6 +18,7 @@
 package ConquerSpace.game.buildings.area;
 
 import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.ScienceLab;
 import java.util.HashMap;
@@ -25,12 +26,12 @@ import java.util.HashMap;
 /**
  * For science labs and stuff
  */
-public class ResearchArea extends ConsumerArea implements ScienceLab{
+public class ResearchArea extends ConsumerArea implements ScienceLab {
 
     private String name;
-    
+
     public HashMap<String, Integer> focusFields;
-    
+
     public ResearchArea() {
         focusFields = new HashMap<>();
     }
@@ -46,6 +47,11 @@ public class ResearchArea extends ConsumerArea implements ScienceLab{
 
     @Override
     public HashMap<String, Integer> scienceProvided() {
-        return focusFields; 
+        return focusFields;
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Educator);
     }
 }

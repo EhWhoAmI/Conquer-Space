@@ -4,7 +4,7 @@
         //Add 1 for each process thing
         //Components needed to create factory
         //Other stuff I can't remember
-        //Maybe even procedually generated processes with some parameters
+        //Maybe even procedurally generated processes with some parameters
         name: Magnetite Smelting
         input: [
             "Magnetite:1"

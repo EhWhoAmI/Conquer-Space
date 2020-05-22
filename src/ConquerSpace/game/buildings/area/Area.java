@@ -18,13 +18,16 @@
 package ConquerSpace.game.buildings.area;
 
 import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 
 /**
  * Works as a modifier to the district
  */
-public class Area implements Workable{
+public class Area implements Workable {
 
+    private int operatingJobs;
+    private int maxJobs;
     private int powerUsage;
 
     public AreaClassification getAreaType() {
@@ -41,23 +44,34 @@ public class Area implements Workable{
 
     @Override
     public Job[] jobsNeeded() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Job[0];
     }
 
     @Override
     public void processJob(Job j) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //
     }
 
     @Override
     public int operatingJobsNeeded() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return operatingJobs;
     }
 
     @Override
     public int getMaxJobsProvided() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return maxJobs;
     }
-    
-    
+
+    public void setMaxJobs(int maxJobs) {
+        this.maxJobs = maxJobs;
+    }
+
+    public void setOperatingJobs(int operatingJobs) {
+        this.operatingJobs = operatingJobs;
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Jobless);
+    }
 }
