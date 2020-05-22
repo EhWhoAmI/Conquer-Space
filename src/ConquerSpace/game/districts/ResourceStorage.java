@@ -17,16 +17,12 @@
  */
 package ConquerSpace.game.districts;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.StorageNeeds;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.bodies.Planet;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  *

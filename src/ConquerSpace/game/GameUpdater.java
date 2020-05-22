@@ -25,23 +25,18 @@ import ConquerSpace.game.districts.ConstructingBuilding;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.DistrictType;
 import ConquerSpace.game.districts.PopulationStorage;
-import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.buildings.area.AreaClassification;
-import ConquerSpace.game.buildings.area.FarmFieldArea;
-import ConquerSpace.game.buildings.area.ManufacturerArea;
-import ConquerSpace.game.buildings.area.MineArea;
-import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.PowerPlantArea;
-import ConquerSpace.game.buildings.area.TimedManufacturerArea;
+import ConquerSpace.game.districts.area.Area;
+import ConquerSpace.game.districts.area.AreaClassification;
+import ConquerSpace.game.districts.area.FarmFieldArea;
+import ConquerSpace.game.districts.area.ManufacturerArea;
+import ConquerSpace.game.districts.area.MineArea;
+import ConquerSpace.game.districts.area.ResearchArea;
+import ConquerSpace.game.districts.area.PowerPlantArea;
+import ConquerSpace.game.districts.area.TimedManufacturerArea;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.population.jobs.Employer;
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.JobRank;
-import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.science.tech.Technologies;
@@ -66,8 +61,6 @@ import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Warning;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -231,7 +224,7 @@ public class GameUpdater {
         if (p.isHabitated()) {
             processCities(p, date, delta);
 
-            processBuildings(p, date, delta);
+            tickBuildings(p, date, delta);
 
             processPopulation(p, date);
         }
@@ -255,12 +248,11 @@ public class GameUpdater {
      * @param date
      * @param delta
      */
-    public void processBuildings(Planet p, StarDate date, long delta) {
-        //Process buildings, and jobs
+    public void tickBuildings(Planet p, StarDate date, long delta) {
         for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
             GeographicPoint key = entry.getKey();
             District building = entry.getValue();
-            //Process
+            //Process construction
             if (building instanceof ConstructingBuilding) {
                 ConstructingBuilding build = (ConstructingBuilding) building;
                 if (build.getLength() > 0) {
@@ -282,130 +274,9 @@ public class GameUpdater {
                 building.tick(date, delta);
             }
 
-            //Add energy usage for population
+            //Calculate energy usage
             if (building instanceof PopulationStorage) {
-                //Change value later when we need population difference in standard of living.
-                int energyMultiplier = 20;
-                // int energy = ((PopulationStorage) building).getPopulationArrayList().size() * energyMultiplier;
-                //building.setEnergyUsage(energy);
             }
-        }
-    }
-
-    /**
-     * Creates the jobs for an area.
-     */
-    private void processAreaJobs(City c, District b, Area a, StarDate date, int delta) {
-        if (a instanceof FarmFieldArea) {
-            FarmFieldArea area = (FarmFieldArea) a;
-            int removed = area.tick(delta);
-            if (removed > 0) {
-                Job farmerJob = new Job(JobType.Farmer);
-
-                farmerJob.setJobRank(JobRank.Low);
-                farmerJob.setWorkingFor(a);
-                //Set pay
-                farmerJob.setPay(1);
-                farmerJob.setEmployer(b.getOwner());
-
-                farmerJob.resources.put(area.getGrown().getFoodGood(), 10d * removed);
-                c.jobs.add(farmerJob);
-                area.grow();
-            }
-        } else if (a instanceof TimedManufacturerArea) {
-            //Subtract time
-            TimedManufacturerArea area = (TimedManufacturerArea) a;
-            int removed = area.tick(delta);
-            //Store resources
-            Job job = new Job(JobType.FactoryWorker);
-
-            job.setJobRank(JobRank.Low);
-            job.setWorkingFor(a);
-            //Set pay
-            job.setPay(1);
-            job.setEmployer(b.getOwner());
-
-            for (Map.Entry<Good, Double> entry : area.getProcess().output.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                job.resources.putIfAbsent(key, val * removed);
-            }
-            c.jobs.add(job);
-        }
-        if (a instanceof PowerPlantArea) {
-            PowerPlantArea powerPlant = (PowerPlantArea) a;
-            Job job = new Job(JobType.PowerPlantTechnician);
-
-            job.setJobRank(JobRank.Low);
-            job.setWorkingFor(a);
-            //Set pay
-            job.setPay(1);
-            job.setEmployer(b.getOwner());
-
-            job.resources.put(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()));
-            c.jobs.add(job);
-        } else if (a instanceof ManufacturerArea) {
-            Job job = new Job(JobType.FactoryWorker);
-
-            //Process resources used
-            ProductionProcess process = ((ManufacturerArea) a).getProcess();
-            for (Map.Entry<Good, Double> entry : process.input.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                job.resources.putIfAbsent(key, -val * delta);
-            }
-
-            for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                job.resources.putIfAbsent(key, val * delta);
-            }
-
-            job.setJobRank(JobRank.Low);
-            job.setWorkingFor(a);
-            //Set pay
-            job.setPay(1);
-            job.setEmployer(b.getOwner());
-
-            c.jobs.add(job);
-        } else if (a instanceof ResearchArea) {
-            Job researchJob = new Job(JobType.Researcher);
-
-            researchJob.setJobRank(JobRank.Medium);
-            researchJob.setWorkingFor(a);
-            //Set pay
-            researchJob.setPay(1);
-            researchJob.setEmployer(b.getOwner());
-            c.jobs.add(researchJob);
-
-            Job educationJob = new Job(JobType.Educator); //Improves education, and in the long run, improves science gain
-            educationJob.setJobRank(JobRank.Medium);
-            educationJob.setWorkingFor(a);
-            //Set pay
-            educationJob.setPay(1);
-            educationJob.setEmployer(b.getOwner());
-            c.jobs.add(educationJob);
-        } else if (a instanceof MineArea) {
-            MineArea area = (MineArea) a;
-            Job minerJob = new Job(JobType.Miner);
-
-            minerJob.setJobRank(JobRank.Low);
-            minerJob.setWorkingFor(a);
-            //Set pay
-            minerJob.setPay(1);
-            minerJob.setEmployer(b.getOwner());
-            for (Map.Entry<Good, Double> entry : area.getNecessaryGoods().entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                minerJob.resources.putIfAbsent(key, -val * delta);
-            }
-            minerJob.resources.put(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta));
-
-            c.jobs.add(minerJob);
         }
     }
 
@@ -526,9 +397,7 @@ public class GameUpdater {
         //Set the upkeep
         int amount = Math.round(upkeepAmount);
         for (int i = 0; i < amount; i++) {
-            Job job = new Job(JobType.PopUpkeepWorker);
-            job.setJobRank(JobRank.Medium);
-            c.jobs.add(job);
+            //Add maintenance jobs
         }
     }
 
@@ -544,17 +413,8 @@ public class GameUpdater {
 
         for (District b : c.buildings) {
             if (b instanceof PopulationStorage) {
+                //Calculate jobs
                 PopulationStorage storage = (PopulationStorage) b;
-//                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-//                    if (i < c.jobs.size()) {
-//                        //Set pop job
-//                        unit.setJob(c.jobs.get(i));
-//                    } else {
-//                        unit.getJob().setJobType(JobType.Jobless);
-//                        unit.getJob().setJobRank(JobRank.Low);
-//                    }
-//                    i++;
-//                }
             }
         }
     }
@@ -668,25 +528,7 @@ public class GameUpdater {
             District value = entry.getValue();
             if (value instanceof PopulationStorage) {
                 PopulationStorage storage = (PopulationStorage) value;
-//                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-//                    //Add normal pop upkeep
-//                    //All people consume food
-//                    processPopUnit(unit);
-//
-//                    //Do subtractions here in the future, like happiness, and etc.
-//                    //Process affect on building that it is working for
-//                    Workable workingFor = unit.getJob().getWorkingFor();
-//                    if (workingFor != null) {
-//                        workingFor.processJob(unit.getJob());
-//                    }
-//
-//                    //Process job resources, add to stockpiles
-//                    for (Good r : unit.getJob().resources.keySet()) {
-//                        if (r != null) {
-//                            storeResource(r, unit.getJob().resources.get(r), p.getOwnerID(), p.getUniversePath());
-//                        }
-//                    }
-//                }
+                //Process population upkeep
             }
         }
     }

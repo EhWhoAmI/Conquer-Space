@@ -18,7 +18,7 @@
 package ConquerSpace.game.districts;
 
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.logistics.SupplyNode;
 import ConquerSpace.game.population.jobs.Employer;

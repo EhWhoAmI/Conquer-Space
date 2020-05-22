@@ -17,14 +17,7 @@
  */
 package ConquerSpace.game.districts;
 
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.population.jobs.JobRank;
-import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.jobs.Workable;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Admin center. Is a center for admin stuff, and also stores peeps. because it

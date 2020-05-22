@@ -15,12 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
 
-import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.resources.Good;
 
 /**
@@ -66,17 +63,7 @@ public class PowerPlantArea extends ConsumerArea {
     public int getCurrentCapacity() {
         return currentCapacity;
     }
-
-    @Override
-    public Job[] jobsNeeded() {
-        return null;
-    }
-
-    @Override
-    public void processJob(Job j) {
-    }
-    
-        
+       
     @Override
     public JobType getJobClassification() {
         return (JobType.PowerPlantTechnician);

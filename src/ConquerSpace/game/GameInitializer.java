@@ -17,19 +17,19 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.districts.District;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.InfrastructureBuilding;
 import ConquerSpace.game.districts.Observatory;
 import ConquerSpace.game.districts.ResourceStorage;
-import ConquerSpace.game.buildings.area.CapitolArea;
-import ConquerSpace.game.buildings.area.FarmFieldArea;
-import ConquerSpace.game.buildings.area.ManufacturerArea;
-import ConquerSpace.game.buildings.area.MineArea;
-import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.PowerPlantArea;
-import ConquerSpace.game.buildings.area.ResidentialArea;
+import ConquerSpace.game.districts.area.CapitolArea;
+import ConquerSpace.game.districts.area.FarmFieldArea;
+import ConquerSpace.game.districts.area.ManufacturerArea;
+import ConquerSpace.game.districts.area.MineArea;
+import ConquerSpace.game.districts.area.ResearchArea;
+import ConquerSpace.game.districts.area.PowerPlantArea;
+import ConquerSpace.game.districts.area.ResidentialArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
@@ -53,7 +53,7 @@ import ConquerSpace.game.civilization.vision.VisionTypes;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.buildings.farm.Crop;
+import ConquerSpace.game.districts.area.farm.Crop;
 import ConquerSpace.game.population.Culture;
 import ConquerSpace.game.population.PopulationSegment;
 import ConquerSpace.game.ships.hull.HullMaterial;
@@ -633,7 +633,7 @@ public class GameInitializer {
         for (City c : p.cities) {
             //Add first population segment
             PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
-            seg.size = selector.nextInt(30_000) + 30_000;
+            seg.size = selector.nextInt(10_000) + 30_000;
             int i = 1;
             for (District building1 : c.buildings) {
                 for (Area area : building1.areas) {

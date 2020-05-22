@@ -15,19 +15,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
+
+import ConquerSpace.game.universe.resources.Good;
+import java.util.HashMap;
 
 /**
- *
+ * An area that does not generate resources, and only has resource intake.
  * @author EhWhoAmI
  */
-public enum AreaClassification {
-    Generic,
-    Residential,
-    Financial,
-    Infrastructure,
-    Research,
-    Manufacturing,
-    Farm,
-    Mine;
+public class ConsumerArea extends Area{
+    /**
+     * Consumed per tick
+     */
+    public HashMap<Good, Double> consumed;
+    
+    public ConsumerArea() {
+        consumed = new HashMap<>();
+    }
 }

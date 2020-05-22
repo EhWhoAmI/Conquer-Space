@@ -15,58 +15,50 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
 
-import ConquerSpace.game.life.Species;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
- * A farm field
+ * Resources in and out, quickly.
  *
  * @author EhWhoAmI
  */
-public class FarmFieldArea extends TimedManufacturerArea {
+public class ManufacturerArea extends Area {
+    protected ProductionProcess process;
+    //How much of that production process per round...
+    float productivity;
 
-    private Species grown;
-    private int time;
-
-    public FarmFieldArea(Species grownSpecies) {
-        super(new ProductionProcess(grownSpecies.getFoodGood()));
-        grown = grownSpecies;
-        //Because you can only grow one.
-        setLimit(1);
+    public ManufacturerArea(ProductionProcess process, float productivity) {
+        this.process = process;
+        this.productivity = productivity;
     }
 
-    public Species getGrown() {
-        return grown;
+    public ProductionProcess getProcess() {
+        return process;
     }
 
-    public void setGrown(Species grown) {
-        this.grown = grown;
+    public float getProductivity() {
+        return productivity;
     }
 
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public void grow() {
-        if (queue.isEmpty()) {
-            addQueue(time);
-        }
+    public void setProductivity(float productivity) {
+        this.productivity = productivity;
     }
 
     @Override
     public String toString() {
-        return "Farm Area";
+        return process.name + " Factory";
     }
-    
+
+    @Override
     public AreaClassification getAreaType() {
-        return AreaClassification.Farm;
+        return AreaClassification.Manufacturing;
     }
     
     @Override
     public JobType getJobClassification() {
-        return (JobType.Farmer);
+        return (JobType.FactoryWorker);
     }
 }

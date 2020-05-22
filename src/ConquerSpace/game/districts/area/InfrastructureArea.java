@@ -15,17 +15,43 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
+
+import ConquerSpace.game.population.jobs.JobType;
 
 /**
- * Capital of city
+ *
  * @author EhWhoAmI
  */
-public class CapitolArea extends ConsumerArea{
-    
+public class InfrastructureArea extends ConsumerArea {
+
+    //The jobs provided
+    private int jobsProvided;
+    private int effectiveness;
+
+    public int getEffectiveness() {
+        return effectiveness;
+    }
+
+    public void setEffectiveness(int effectiveness) {
+        this.effectiveness = effectiveness;
+    }
+
+    public int getJobsProvided() {
+        return jobsProvided;
+    }
+
+    public void setJobsProvided(int jobsProvided) {
+        this.jobsProvided = jobsProvided;
+    }
+
     @Override
     public String toString() {
-        return "Capitol Building";
+        return "Infrastructure";
     }
-    
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Infrastructure);
+    }
 }

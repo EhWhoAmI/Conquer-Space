@@ -15,50 +15,59 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
 
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.Stratum;
+import java.util.HashMap;
 
 /**
- * Resources in and out, quickly.
  *
  * @author EhWhoAmI
  */
-public class ManufacturerArea extends Area {
-    protected ProductionProcess process;
-    //How much of that production process per round...
-    float productivity;
+public class MineArea extends Area {
 
-    public ManufacturerArea(ProductionProcess process, float productivity) {
-        this.process = process;
+    private Stratum mining;
+    private float productivity;
+    private HashMap<Good, Double> necessaryGoods;
+    private Good resourceMined;
+
+    public MineArea(Stratum mining, Good resourceMined, float productivity) {
+        this.mining = mining;
         this.productivity = productivity;
+        this.resourceMined = resourceMined;
+        necessaryGoods = new HashMap<>();
     }
 
-    public ProductionProcess getProcess() {
-        return process;
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Mine;
     }
 
     public float getProductivity() {
         return productivity;
     }
 
-    public void setProductivity(float productivity) {
-        this.productivity = productivity;
+    public Stratum getMining() {
+        return mining;
+    }
+
+    public HashMap<Good, Double> getNecessaryGoods() {
+        return necessaryGoods;
+    }
+
+    public Good getResourceMined() {
+        return resourceMined;
     }
 
     @Override
     public String toString() {
-        return process.name + " Factory";
+        return resourceMined.getName() + " Mine";
     }
 
     @Override
-    public AreaClassification getAreaType() {
-        return AreaClassification.Manufacturing;
-    }
-    
-    @Override
     public JobType getJobClassification() {
-        return (JobType.FactoryWorker);
+        return (JobType.Miner);
     }
 }

@@ -21,8 +21,8 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Population;
-import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobProcessor;
+import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class City implements PersonEnterable {
     private Person governor;
     private String name;
     public ArrayList<District> buildings;
-    public ArrayList<Job> jobs;
+    public ArrayList<Workable> jobs;
     public ArrayList<Person> peopleAtCity;
 
     private UniversePath location;
@@ -89,7 +89,7 @@ public class City implements PersonEnterable {
 
     public void addDistrict(District stor) {
         buildings.add(stor);
-        stor.setCity(this);
+        stor.setCity(this);        
     }
 
     public Person getGovernor() {

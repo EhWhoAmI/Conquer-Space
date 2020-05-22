@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
 
-import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.ScienceLab;
 import java.util.HashMap;
 

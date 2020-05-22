@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.districts;
 
-import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.civilization.vision.VisionPoint;
 import java.awt.Color;

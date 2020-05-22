@@ -15,43 +15,58 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
 
+import ConquerSpace.game.life.Species;
 import ConquerSpace.game.population.jobs.JobType;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 
 /**
+ * A farm field
  *
  * @author EhWhoAmI
  */
-public class InfrastructureArea extends ConsumerArea {
+public class FarmFieldArea extends TimedManufacturerArea {
 
-    //The jobs provided
-    private int jobsProvided;
-    private int effectiveness;
+    private Species grown;
+    private int time;
 
-    public int getEffectiveness() {
-        return effectiveness;
+    public FarmFieldArea(Species grownSpecies) {
+        super(new ProductionProcess(grownSpecies.getFoodGood()));
+        grown = grownSpecies;
+        //Because you can only grow one.
+        setLimit(1);
     }
 
-    public void setEffectiveness(int effectiveness) {
-        this.effectiveness = effectiveness;
+    public Species getGrown() {
+        return grown;
     }
 
-    public int getJobsProvided() {
-        return jobsProvided;
+    public void setGrown(Species grown) {
+        this.grown = grown;
     }
 
-    public void setJobsProvided(int jobsProvided) {
-        this.jobsProvided = jobsProvided;
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public void grow() {
+        if (queue.isEmpty()) {
+            addQueue(time);
+        }
     }
 
     @Override
     public String toString() {
-        return "Infrastructure";
+        return "Farm Area";
     }
-
+    
+    public AreaClassification getAreaType() {
+        return AreaClassification.Farm;
+    }
+    
     @Override
     public JobType getJobClassification() {
-        return (JobType.Infrastructure);
+        return (JobType.Farmer);
     }
 }

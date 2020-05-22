@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area;
 
-import ConquerSpace.game.population.jobs.Job;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 
@@ -26,6 +25,7 @@ import ConquerSpace.game.population.jobs.Workable;
  */
 public class Area implements Workable {
 
+    private int currentlyManningJobs;
     private int operatingJobs;
     private int maxJobs;
     private int powerUsage;
@@ -40,16 +40,6 @@ public class Area implements Workable {
 
     public void setPowerUsage(int powerUsage) {
         this.powerUsage = powerUsage;
-    }
-
-    @Override
-    public Job[] jobsNeeded() {
-        return new Job[0];
-    }
-
-    @Override
-    public void processJob(Job j) {
-        //
     }
 
     @Override
@@ -73,5 +63,13 @@ public class Area implements Workable {
     @Override
     public JobType getJobClassification() {
         return (JobType.Jobless);
+    }
+
+    public int getCurrentlyManningJobs() {
+        return currentlyManningJobs;
+    }
+
+    public void setCurrentlyManningJobs(int currentlyManningJobs) {
+        this.currentlyManningJobs = currentlyManningJobs;
     }
 }

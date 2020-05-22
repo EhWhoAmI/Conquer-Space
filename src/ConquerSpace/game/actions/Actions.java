@@ -21,7 +21,7 @@ import ConquerSpace.Globals;
 import ConquerSpace.game.districts.District;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.ConstructingBuilding;
-import ConquerSpace.game.buildings.area.Area;
+import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.universe.GeographicPoint;

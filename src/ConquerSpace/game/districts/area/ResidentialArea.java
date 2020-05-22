@@ -15,25 +15,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.population.jobs;
-
+package ConquerSpace.game.districts.area;
 
 /**
  *
  * @author EhWhoAmI
  */
-public interface Workable {
-    
-    public int operatingJobsNeeded();
-    public int getMaxJobsProvided();
-    public JobType getJobClassification();
+public class ResidentialArea extends ConsumerArea {
 
-//    public long getNeededJobs();
-//
-//    /**
-//     * Number of non-required jobs.
-//     *
-//     * @return
-//     */
-//    public long getJobs();
+    int maxPopulation;
+
+    public AreaClassification getAreaType() {
+        return AreaClassification.Residential;
+    }
+
+    @Override
+    public String toString() {
+        return "Residential Area";
+    }
 }

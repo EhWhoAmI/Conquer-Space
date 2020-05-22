@@ -15,22 +15,53 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.buildings.area;
+package ConquerSpace.game.districts.area.farm;
+
+import ConquerSpace.game.life.Species;
 
 /**
- *
+ * A crop that grows stuff.
  * @author EhWhoAmI
  */
-public class ResidentialArea extends ConsumerArea {
+public class Crop {
+    private int timeLeft;
+    private Species species;
+    private int yield;
+    
+    public Crop(Species species) {
+        this.species = species;
+    }
 
-    int maxPopulation;
+    public int getTimeLeft() {
+        return timeLeft;
+    }
 
-    public AreaClassification getAreaType() {
-        return AreaClassification.Residential;
+    public Species getSpecies() {
+        return species;
+    }
+
+    public int getYield() {
+        return yield;
+    }
+
+    public void setSpecies(Species species) {
+        this.species = species;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    public void setYield(int yield) {
+        this.yield = yield;
+    }
+    
+    public void subtractTime() {
+        timeLeft--;
     }
 
     @Override
     public String toString() {
-        return "Residential Area";
+        return species.getName();
     }
 }

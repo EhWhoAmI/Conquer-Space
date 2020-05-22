@@ -20,9 +20,8 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.districts.District;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.InfrastructureBuilding;
-import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.population.jobs.Job;
+import ConquerSpace.game.districts.area.Area;
+import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -255,24 +254,6 @@ public class PlanetCities extends JPanel {
 
             availableJobModel = new DefaultTableModel(availableJobColunmNames, 0);
             //Fill up
-            HashMap<JobType, Integer> jobs = new HashMap<>();
-            for (Job j : currentlySelectedCity.jobs) {
-                JobType jt = j.getJobType();
-                if (jobs.containsKey(jt)) {
-                    //Add to it
-                    int i = (jobs.get(jt) + 1);
-                    jobs.put(jt, i);
-                } else {
-                    jobs.put(jt, 1);
-                }
-            }
-
-            for (Map.Entry<JobType, Integer> entry : jobs.entrySet()) {
-                JobType key = entry.getKey();
-                Integer val = entry.getValue();
-
-                availableJobModel.addRow(new Object[]{key, val});
-            }
             availableJobTable = new JTable(availableJobModel);
 
             cityInfoTabs.removeAll();

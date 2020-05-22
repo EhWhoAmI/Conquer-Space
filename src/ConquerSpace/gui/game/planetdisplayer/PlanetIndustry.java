@@ -18,34 +18,20 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.FarmBuilding;
-import ConquerSpace.game.buildings.area.Area;
-import ConquerSpace.game.buildings.area.ResearchArea;
-import ConquerSpace.game.buildings.area.ManufacturerArea;
-import ConquerSpace.game.population.jobs.Job;
-import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.buildings.farm.Crop;
 import ConquerSpace.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.Map;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -68,11 +54,6 @@ public class PlanetIndustry extends JPanel {
 
     private JPanel industryInfoContainer;
     private CardLayout industryInfoCardLayout;
-    private FarmingInfoPanel farmingInfoPanel;
-
-    private JPanel availableJobs;
-    private JobListModel availableJobListModel;
-    private JList<Job> availableJobList;
 
     private Planet p;
 
@@ -136,9 +117,6 @@ public class PlanetIndustry extends JPanel {
         jobSortingOutPanel.add(new JScrollPane(industryList));
         jobSortingOutPanel.add(industryInfoContainer);
 
-        farmingInfoPanel = new FarmingInfoPanel(p, c);
-
-        industryInfoContainer.add("Farm", farmingInfoPanel);
         tabs.add(jobSortingOutPanel, "Industries");
 
         //availableJobs = new JPanel();
@@ -158,178 +136,5 @@ public class PlanetIndustry extends JPanel {
             }
         }
         areaList.setSelectedIndex(selectedArea);
-    }
-
-    private class FarmingInfoPanel extends JPanel {
-
-        private JTable farmTable;
-        private FarmTableTableModel farmTableTableModel;
-
-        private JPanel farmInfoPanel;
-        private DefaultListModel<Crop> localLifeInFarmListModel;
-        private JList<Crop> localLifeInFarmList;
-
-        public FarmingInfoPanel(Planet p, Civilization c) {
-            setLayout(new HorizontalFlowLayout());
-            farmTableTableModel = new FarmTableTableModel();
-
-            farmTable = new JTable(farmTableTableModel);
-
-            farmInfoPanel = new JPanel();
-            farmInfoPanel.setLayout(new VerticalFlowLayout());
-            localLifeInFarmListModel = new DefaultListModel<>();
-            localLifeInFarmList = new JList<>(localLifeInFarmListModel);
-
-            farmInfoPanel.add(new JLabel("Crops"));
-            farmInfoPanel.add(new JScrollPane(localLifeInFarmList));
-            ListSelectionModel farmTableSelectionModel = farmTable.getSelectionModel();
-            farmTableSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            farmTableSelectionModel.addListSelectionListener(l -> {
-                if (farmTable.getSelectedRow() > -1) {
-                    FarmBuilding fb = farmTableTableModel.getFarmBuilding(farmTable.getSelectedRow());
-                    //Populate the list...
-                    localLifeInFarmListModel.clear();
-                    //Add the crops
-                    for (Crop crop : fb.crops) {
-                        localLifeInFarmListModel.addElement(crop);
-                    }
-                }
-            });
-
-            add(new JScrollPane(farmTable));
-            add(farmInfoPanel);
-            update();
-        }
-
-        public void update() {
-            for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
-                GeographicPoint key = en.getKey();
-                District value = en.getValue();
-                if (value instanceof FarmBuilding) {
-                    farmTableTableModel.addFarmBuilding((FarmBuilding) value);
-                }
-            }
-        }
-
-    }
-
-    private class MiningInfoPanel extends JPanel {
-
-    }
-
-    private class FarmTableTableModel extends AbstractTableModel {
-
-        private String[] colunms = {"Farm Type", "Productivity"};
-
-        private ArrayList<FarmBuilding> farmBuildingArrayList;
-
-        public FarmTableTableModel() {
-            farmBuildingArrayList = new ArrayList<>();
-        }
-
-        @Override
-        public int getRowCount() {
-            return farmBuildingArrayList.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return colunms.length;
-        }
-
-        @Override
-        public Object getValueAt(int row, int column) {
-            FarmBuilding fb = farmBuildingArrayList.get(row);
-            if (column == 0) {
-                return fb.getFarmType();
-            }
-            if (column == 1) {
-                return (fb.getProductivity());
-            }
-
-            return "";
-        }
-
-        public void addFarmBuilding(FarmBuilding building) {
-            farmBuildingArrayList.add(building);
-        }
-
-        @Override
-        public String getColumnName(int column) {
-            return colunms[column];
-        }
-
-        public FarmBuilding getFarmBuilding(int index) {
-            return farmBuildingArrayList.get(index);
-        }
-    }
-
-    private class JobListModel extends AbstractListModel<Job> {
-
-        ArrayList<Job> jobs;
-
-        public JobListModel(ArrayList<Job> jobs) {
-            this.jobs = jobs;
-        }
-
-        @Override
-        public int getSize() {
-            return jobs.size();
-        }
-
-        @Override
-        public Job getElementAt(int index) {
-            return jobs.get(index);
-        }
-    }
-
-    private class FactoryAreaInfo extends JPanel {
-
-        public FactoryAreaInfo(ManufacturerArea factory) {
-            JLabel info = new JLabel("Factory " + factory.getProcess().name);
-
-            String inputString = "Input: ";
-
-            for (Map.Entry<Good, Double> entry : factory.getProcess().input.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-                inputString = inputString + key.getName();
-                inputString = inputString + " amount " + val;
-                inputString = inputString + ", ";
-            }
-
-            JLabel input = new JLabel(inputString);
-
-            String outputString = "Output: ";
-            for (Map.Entry<Good, Double> entry : factory.getProcess().output.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-                outputString = outputString + key.getName();
-                outputString = outputString + " amount " + val;
-                outputString = outputString + ", ";
-            }
-
-            JLabel output = new JLabel(outputString);
-
-            add(info);
-            add(input);
-            add(output);
-
-            setLayout(new VerticalFlowLayout());
-        }
-    }
-
-    private class ResearchInstutitionInfo extends JPanel {
-
-        public ResearchInstutitionInfo(ResearchArea researchArea) {
-            //Do the things
-            JLabel text = new JLabel("Fields");
-
-            setLayout(new VerticalFlowLayout());
-            for (String field : researchArea.focusFields.keySet()) {
-                JLabel l = new JLabel(field);
-                add(l);
-            }
-        }
     }
 }
