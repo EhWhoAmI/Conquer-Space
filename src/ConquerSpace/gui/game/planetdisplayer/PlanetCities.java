@@ -17,9 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.districts.District;
 import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.InfrastructureBuilding;
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.population.jobs.JobType;
@@ -31,7 +29,6 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -140,7 +137,7 @@ public class PlanetCities extends JPanel {
                 citySelectedTab = cityInfoTabs.getSelectedIndex();
             }
         });
-        
+
         cityList.addListSelectionListener(l -> {
             isBuildingUi = true;
             cityData.removeAll();
@@ -152,7 +149,6 @@ public class PlanetCities extends JPanel {
             int maxPop = 0;
             int energyUsage = 0;
             int energyProvided = 0;
-            ArrayList<InfrastructureBuilding> building = new ArrayList<>();
 
             //Get breeding rate and energy usage.
 //            for (District build : selected.buildings) {
@@ -217,9 +213,6 @@ public class PlanetCities extends JPanel {
             JLabel maxPopulation = new JLabel("Population cap: " + Utilities.longToHumanString(maxPop) + " people");
             cityData.add(maxPopulation);
 
-            JLabel districtCount = new JLabel("Districts: " + selected.buildings.size());
-            cityData.add(districtCount);
-
             //Check for govenor
             if (cityList.getSelectedValue().getGovernor() != null) {
                 JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
@@ -230,11 +223,10 @@ public class PlanetCities extends JPanel {
 
             //Areas
             areaListModel = new DefaultListModel<>();
-            for (District building1 : cityList.getSelectedValue().buildings) {
-                for (Area area : building1.areas) {
-                    areaListModel.addElement(area);
-                }
+            for (Area area : selected.areas) {
+                areaListModel.addElement(area);
             }
+
             areaList = new JList<>(areaListModel);
             JScrollPane areascrollPane = new JScrollPane(areaList);
 
@@ -318,16 +310,14 @@ public class PlanetCities extends JPanel {
             populationCount = new HashMap<>();
             population = 0;
             //Get population job
-            for (District value : currentlySelectedCity.buildings) {
-                for (Area area : value.areas) {
-                    if (area instanceof Workable) {
-                        if (!populationCount.containsKey(area.getJobClassification())) {
-                            populationCount.put(area.getJobClassification(), area.getMaxJobsProvided());
-                        } else {
-                            int count = populationCount.get(area.getJobClassification());
-                            count += area.getMaxJobsProvided();
-                            populationCount.put(area.getJobClassification(), count);
-                        }
+            for (Area area : currentlySelectedCity.areas) {
+                if (area instanceof Workable) {
+                    if (!populationCount.containsKey(area.getJobClassification())) {
+                        populationCount.put(area.getJobClassification(), area.getMaxJobsProvided());
+                    } else {
+                        int count = populationCount.get(area.getJobClassification());
+                        count += area.getMaxJobsProvided();
+                        populationCount.put(area.getJobClassification(), count);
                     }
                 }
             }

@@ -1,15 +1,13 @@
 package ConquerSpace.game.universe;
 
-import static ConquerSpace.ConquerSpace.loadUniverse;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameLoader;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.game.universe.generators.UniverseGenerator;
 import ConquerSpace.gui.renderers.UniverseRenderer;
-import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,8 +18,6 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;

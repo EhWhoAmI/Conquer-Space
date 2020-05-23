@@ -17,8 +17,6 @@
  */
 package ConquerSpace.util;
 
-import java.util.StringTokenizer;
-
 /**
  * Version for easy parts.
  *

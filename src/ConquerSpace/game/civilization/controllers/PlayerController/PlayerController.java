@@ -20,17 +20,15 @@ package ConquerSpace.game.civilization.controllers.PlayerController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
-import ConquerSpace.game.events.Event;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.civilization.controllers.CivilizationController;
+import ConquerSpace.game.events.Event;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.game.AlertDisplayer;
 import ConquerSpace.gui.game.AlertNotification;
 import ConquerSpace.gui.game.GameWindow;
-import ConquerSpace.gui.game.TurnSaveWindow;
 import ConquerSpace.util.logging.CQSPLogger;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
 

@@ -18,12 +18,12 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.ShipClass;
-import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
+import ConquerSpace.game.universe.Vector;
+import ConquerSpace.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;

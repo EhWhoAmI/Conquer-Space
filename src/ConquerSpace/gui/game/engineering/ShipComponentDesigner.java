@@ -18,7 +18,6 @@
 package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.Calculators;
-import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.components.ShipComponentTypes;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;

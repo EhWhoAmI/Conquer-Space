@@ -20,20 +20,17 @@ package ConquerSpace.game;
 import ConquerSpace.Globals;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.ConstructingBuilding;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.civilization.vision.VisionPoint;
+import ConquerSpace.game.civilization.vision.VisionTypes;
 import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.DistrictType;
-import ConquerSpace.game.districts.PopulationStorage;
 import ConquerSpace.game.districts.area.Area;
-import ConquerSpace.game.districts.area.AreaClassification;
 import ConquerSpace.game.districts.area.FarmFieldArea;
 import ConquerSpace.game.districts.area.ManufacturerArea;
 import ConquerSpace.game.districts.area.MineArea;
-import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.districts.area.PowerPlantArea;
+import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.districts.area.TimedManufacturerArea;
-import ConquerSpace.game.events.Event;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
@@ -41,24 +38,20 @@ import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.science.tech.Technology;
+import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.vision.VisionPoint;
-import ConquerSpace.game.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.ships.Ship;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.ControlTypes;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
-import ConquerSpace.util.Warning;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
 import java.util.HashMap;
@@ -201,14 +194,14 @@ public class GameUpdater {
         }
     }
 
-    public void updateUniverse(Universe u, StarDate date, long delta) {
+    public void updateUniverse(Universe u, StarDate date, int delta) {
         //Loop through star systems
         for (int i = 0; i < u.getStarSystemCount(); i++) {
             updateStarSystem(u.getStarSystem(i), date, delta);
         }
     }
 
-    public void updateStarSystem(StarSystem sys, StarDate date, long delta) {
+    public void updateStarSystem(StarSystem sys, StarDate date, int delta) {
         //Maybe later the objects in space.
         for (int i = 0; i < sys.bodies.size(); i++) {
             Body body = sys.bodies.get(i);
@@ -220,18 +213,16 @@ public class GameUpdater {
         }
     }
 
-    public void processPlanet(Planet p, StarDate date, long delta) {
+    public void processPlanet(Planet p, StarDate date, int delta) {
         if (p.isHabitated()) {
             processCities(p, date, delta);
-
-            tickBuildings(p, date, delta);
 
             processPopulation(p, date);
         }
         processLocalLife(p, date, delta);
     }
 
-    public void processLocalLife(Planet p, StarDate date, long delta) {
+    public void processLocalLife(Planet p, StarDate date, int delta) {
         //Process locallife
         for (LocalLife localLife : p.localLife) {
             int biomass = localLife.getBiomass();
@@ -240,47 +231,7 @@ public class GameUpdater {
         }
     }
 
-    /**
-     * Ticks the building that needs actions and a game tick. A building is
-     * constructed, etc.
-     *
-     * @param p
-     * @param date
-     * @param delta
-     */
-    public void tickBuildings(Planet p, StarDate date, long delta) {
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            District building = entry.getValue();
-            //Process construction
-            if (building instanceof ConstructingBuilding) {
-                ConstructingBuilding build = (ConstructingBuilding) building;
-                if (build.getLength() > 0) {
-                    build.decrementLength((int) delta);
-                } else {
-                    //Done construction!
-                    //Check for cities near it
-                    if (build.getToBuild() == null) {
-                        p.buildings.remove(key);
-                    } else {
-                        p.addBuildingToPlanet(key, building);
-
-                        //Alert builder
-                        build.builder.passEvent(new Event("Building " + build.getToBuild().getType() + " finished"));
-                        p.buildings.put(key, build.getToBuild());
-                    }
-                }
-            } else {
-                building.tick(date, delta);
-            }
-
-            //Calculate energy usage
-            if (building instanceof PopulationStorage) {
-            }
-        }
-    }
-
-    public void processArea(City c, District b, Area a, StarDate date, int delta) {
+    public void processArea(City c, Area a, StarDate date, int delta) {
         if (a instanceof FarmFieldArea) {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
@@ -347,75 +298,34 @@ public class GameUpdater {
      * @param date
      * @param delta
      */
-    public void processCities(Planet p, StarDate date, long delta) {
+    public void processCities(Planet p, StarDate date, int delta) {
         for (City c : p.cities) {
             //Population growth
             c.incrementPopulation(date, delta);
 
-            createCityJobs(c, date, (int) delta);
-            //Assign jobs
-            assignJobs(c, date);
+            calculateCityJobs(c, date, delta);
+            for(Area a : c.areas) {
+                processArea(c, a, date, delta);
+            }
         }
     }
 
     /**
-     * Create the jobs in a city.
+     * See the amount of jobs that are filled
      *
      * @param c
      * @param date
      */
-    public void createCityJobs(City c, StarDate date, int delta) {
+    public void calculateCityJobs(City c, StarDate date, int delta) {
         //Add the jobs...
         //Assign everyone an empty job...
         float upkeepAmount = 0;
         c.jobs.clear();
-
-        for (District building : c.buildings) {
-            //Get the building type
-//            Job[] jobs = building.jobsNeeded();
-//            Collections.addAll(c.jobs, jobs);
-//
-//            //Get number of people and add support jobs
-//            if (building instanceof PopulationStorage) {
-//                PopulationStorage storage = (PopulationStorage) building;
-//                ArrayList<PopulationUnit> population = storage.getPopulationArrayList();
-//                for (PopulationUnit unit : population) {
-//                    upkeepAmount += unit.getSpecies().getUpkeep();
-//                }
-//            }
-//
-//            //Sort through areas
-//            for (Area a : building.areas) {
-//                //processAreaJobs(c, building, a, date, delta);
-//                processArea(c, building, a, date, delta);
-//            }
-//            DistrictType type = classifyDistrict(building);
-//            building.setDistrictType(type);
-            DistrictType type = classifyDistrict(building);
-            building.setDistrictType(type);
-        }
+        
         //Set the upkeep
         int amount = Math.round(upkeepAmount);
         for (int i = 0; i < amount; i++) {
             //Add maintenance jobs
-        }
-    }
-
-    /**
-     * Assigns the jobs that are created in createCityJobs to population.
-     *
-     * @param c
-     * @param date
-     */
-    public void assignJobs(City c, StarDate date) {
-        //Process through all the population units
-        int i = 0;
-
-        for (District b : c.buildings) {
-            if (b instanceof PopulationStorage) {
-                //Calculate jobs
-                PopulationStorage storage = (PopulationStorage) b;
-            }
         }
     }
 
@@ -456,7 +366,6 @@ public class GameUpdater {
         }
     }
 
-    @Warning("Warn")
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
@@ -518,18 +427,17 @@ public class GameUpdater {
     }
 
     public void processPopulation(Planet p, StarDate date) {
-        //Calculate total population
+        //Index panet population
         long total = 0;
         for (City c : p.cities) {
             total += c.population.getPopulationSize();
         }
         p.population = total;
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            District value = entry.getValue();
-            if (value instanceof PopulationStorage) {
-                PopulationStorage storage = (PopulationStorage) value;
-                //Process population upkeep
-            }
+        
+        for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
+            City city = entry.getValue();
+            
+            //Process population upkeep
         }
     }
 
@@ -578,52 +486,6 @@ public class GameUpdater {
 
     }
 
-    private DistrictType classifyDistrict(District dis) {
-        //Get the type of areas
-        HashMap<AreaClassification, Integer> areaType = new HashMap<>();
-        for (Area a : dis.areas) {
-            if (areaType.containsKey(a.getAreaType())) {
-                Integer num = areaType.get(a.getAreaType());
-                num++;
-                areaType.put(a.getAreaType(), num);
-            } else {
-                areaType.put(a.getAreaType(), 1);
-            }
-        }
-
-        //Calulate stuff
-        int highest = 0;
-        AreaClassification highestArea = AreaClassification.Generic;
-        for (Map.Entry<AreaClassification, Integer> entry : areaType.entrySet()) {
-            AreaClassification key = entry.getKey();
-            Integer val = entry.getValue();
-            if (val > highest && key != AreaClassification.Generic) {
-                highest = val;
-                highestArea = key;
-            }
-        }
-
-        switch (highestArea) {
-            case Financial:
-                return DistrictType.City;
-            case Generic:
-                return DistrictType.Generic;
-            case Infrastructure:
-                return DistrictType.Infrastructure;
-            case Research:
-                return DistrictType.Research;
-            case Residential:
-                return DistrictType.City;
-            case Manufacturing:
-                return DistrictType.Manufacturing;
-            case Farm:
-                return DistrictType.Farm;
-            case Mine:
-                return DistrictType.Mine;
-        }
-        return DistrictType.Generic;
-    }
-
     /**
      * Stores goods in the closest resource storage from <code>from</code>
      *
@@ -640,8 +502,8 @@ public class GameUpdater {
             Body body = universe.getSpaceObject(from);
             if (body instanceof Planet) {
                 Planet planet = (Planet) body;
-                for (Map.Entry<GeographicPoint, District> entry : planet.buildings.entrySet()) {
-                    District val = entry.getValue();
+                for (Map.Entry<GeographicPoint, City> entry : planet.cityDistributions.entrySet()) {
+                    City val = entry.getValue();
                     if (val.canStore(resourceType)) {
                         val.addResource(resourceType, amount);
                         break;
@@ -658,8 +520,8 @@ public class GameUpdater {
         Body body = universe.getSpaceObject(from);
         if (body instanceof Planet) {
             Planet planet = (Planet) body;
-            for (Map.Entry<GeographicPoint, District> entry : planet.buildings.entrySet()) {
-                District val = entry.getValue();
+            for (Map.Entry<GeographicPoint, City> entry : planet.cityDistributions.entrySet()) {
+                City val = entry.getValue();
                 //Get by positon...
                 //For now, we process only if it is on the planet or not.
                 if (val.canStore(resourceType) && val.removeResource(resourceType, amount)) {

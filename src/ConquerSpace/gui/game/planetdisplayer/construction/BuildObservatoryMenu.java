@@ -18,7 +18,6 @@
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.Calculators;
-import ConquerSpace.game.GameUpdater;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;

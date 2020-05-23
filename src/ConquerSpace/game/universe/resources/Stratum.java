@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.universe.resources;
 
-import ConquerSpace.game.universe.resources.Good;
 import java.util.HashMap;
 
 /**

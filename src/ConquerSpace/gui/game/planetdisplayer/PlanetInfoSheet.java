@@ -17,15 +17,11 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.SpacePort;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.ResourceLoader;
 import java.awt.BorderLayout;
-import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -91,7 +87,7 @@ public class PlanetInfoSheet extends JPanel {
         ImageIcon spaceport = ResourceLoader.getIcon("spaceport.icon");
         ImageIcon atmosphereIco = ResourceLoader.getIcon("atmosphere.icon");
         ImageIcon goods = ResourceLoader.getIcon("goods.icon");
-        
+
         tpane.setIconAt(0, overview);
         tpane.setIconAt(1, map);
         tpane.setIconAt(2, geo);
@@ -102,21 +98,7 @@ public class PlanetInfoSheet extends JPanel {
         tpane.setIconAt(7, life);
         tpane.setIconAt(8, goods);
 
-        tpane.setEnabledAt(spacePortIndex, false);
-        //Check if planet contains space port
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            District value = entry.getValue();
-
-            //Do stuff...
-            if (value instanceof SpacePort) {
-                tpane.setEnabledAt(spacePortIndex, true);
-                break;
-            }
-        }
-        if (c.values.get("haslaunch") != 1) {
-            tpane.setEnabledAt(spacePortIndex, false);
-        }
+        checkSpacePortTab();
 
         add(tpane, BorderLayout.CENTER);
     }
@@ -130,18 +112,15 @@ public class PlanetInfoSheet extends JPanel {
         industry.update();
         population.update();
 
-        tpane.setEnabledAt(spacePortIndex, false);
-        //Check if planet contains space port
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            District value = entry.getValue();
+        checkSpacePortTab();
+    }
 
-            //Enable space port tab
-            if (value instanceof SpacePort) {
-                tpane.setEnabledAt(spacePortIndex, true);
-                break;
-            }
-        }
+    private void checkSpacePortTab() {
+        tpane.setEnabledAt(spacePortIndex, false);
+
+        //Check if planet contains space port
+        //TODO
+        //Check if civ has launch capability
         if (c.values.get("haslaunch") != 1) {
             tpane.setEnabledAt(spacePortIndex, false);
         }

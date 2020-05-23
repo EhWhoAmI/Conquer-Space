@@ -24,23 +24,22 @@ import ConquerSpace.game.actions.InterstellarTravelAction;
 import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ShipSurveyAction;
 import ConquerSpace.game.actions.ToOrbitAction;
-import ConquerSpace.game.events.Event;
-import ConquerSpace.game.save.SaveGame;
-import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.civilization.controllers.PlayerController.PlayerController;
 import ConquerSpace.game.civilization.vision.VisionTypes;
+import ConquerSpace.game.events.Event;
+import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.ships.Ship;
+import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.GUI;
-import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
-import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.ExceptionHandling;
+import ConquerSpace.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -64,7 +63,6 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -101,8 +99,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     private PlayerController controller;
 
     private MainInterfaceWindow mainInterfaceWindow;
-
-    private NewsWindow newsWindow;
 
     private Universe u;
 

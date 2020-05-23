@@ -17,8 +17,8 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.science.Field;
 import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.science.Field;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

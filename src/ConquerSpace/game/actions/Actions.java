@@ -18,19 +18,16 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.districts.District;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.ConstructingBuilding;
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.tech.Technology;
-import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.Point;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.SpaceTelescope;
+import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -48,93 +45,11 @@ public class Actions {
     private Actions() {
     }
 
-    //Codes for the building status
-    public static final int BUILD_BUILDING_SUCCESS = 000;
-    public static final int BUILD_BUILDING_FAIL_NO_MONEY = 001;
-    public static final int BUILD_BUILDING_FAIL_NO_RESOURCES = 002;
-    public static final int BUILD_BUILDING_FAIL_NOT_OWNER = 003;
-
-    /**
-     * Builds a building on the planet.
-     *
-     * @param p planet you want to build on.
-     * @param pt of planet sector
-     * @param what What do you want to build?
-     * @param owner You the owner
-     * @param turns number of months...
-     * @return Success or not
-     */
-    public static int buildBuilding(Planet p, GeographicPoint pt, District what, Civilization owner, int turns) {
-        if (p.getOwnerID() == owner.getID()) {
-            ConstructingBuilding buildings = new ConstructingBuilding(what, pt, turns, owner);
-            buildings.setScale(1);
-            //Determine cost...
-
-            p.buildings.put(pt, buildings);
-            return BUILD_BUILDING_SUCCESS;
-        } else {
-            return BUILD_BUILDING_FAIL_NOT_OWNER;
-        }
-    }
-
-    /**
-     * Places building for free
-     *
-     * @param p
-     * @param what
-     */
-    public static void forcePlaceBuilding(Planet p, GeographicPoint pt, District what) {
-        p.buildings.put(pt, what);
-        //Check for working for
-        if (what instanceof Workable) {
-            //p.jobProviders.add(what);
-        }
-    }
-
-    /**
-     * Demolishes the building at point
-     *
-     * @param p
-     * @param pt
-     * @param turns
-     */
-    public static int demolishBuilding(Planet p, GeographicPoint pt, Civilization owner, int turns) {
-        if (p.getOwnerID() == owner.getID()) {
-            ConstructingBuilding buildings = new ConstructingBuilding(null, pt, turns, owner);
-            buildings.setScale(1);
-            //Determine cost...
-
-            p.buildings.put(pt, buildings);
-            return BUILD_BUILDING_SUCCESS;
-        } else {
-            return BUILD_BUILDING_FAIL_NOT_OWNER;
-        }
-    }
-
-    public static void addArea(Planet on, District building, Area a) {
-        building.areas.add(a);
+    public static void addArea(Planet on, City city, Area a) {
+        city.areas.add(a);
         if (a instanceof Workable) {
             on.jobProviders.add(a);
         }
-    }
-
-    public static City addBuildingToCity(Planet p, GeographicPoint pt, District what) {
-        //Check surroundings, and add to city if it's around it
-        City c = null;
-        if (p.buildings.containsKey(pt.getNorth())) {
-            c = p.buildings.get(pt.getNorth()).getCity();
-            c.addDistrict(what);
-        } else if (p.buildings.containsKey(pt.getSouth())) {
-            c = p.buildings.get(pt.getSouth()).getCity();
-            c.addDistrict(what);
-        } else if (p.buildings.containsKey(pt.getEast())) {
-            c = p.buildings.get(pt.getEast()).getCity();
-            c.addDistrict(what);
-        } else if (p.buildings.containsKey(pt.getWest())) {
-            c = p.buildings.get(pt.getWest()).getCity();
-            c.addDistrict(what);
-        }
-        return c;
     }
 
     public static void researchTech(Civilization c, Technology t) {

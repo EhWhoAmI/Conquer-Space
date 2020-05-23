@@ -84,10 +84,6 @@ public class BuildingCostGetter {
         }
     }
 
-    public static BuildingCost getCost(District building, Civilization c) {
-        return getCost(building.getType(), c);
-    }
-
     public static BuildingCost getCost(String name, Civilization c) {
         //Return cost
         BuildingCost actualCost = new BuildingCost();

@@ -21,7 +21,6 @@ import ConquerSpace.jLibNoise.noise.module.Perlin;
 import ConquerSpace.jLibNoise.noise.utils.Image;
 import ConquerSpace.jLibNoise.noise.utils.NoiseMap;
 import ConquerSpace.jLibNoise.noise.utils.NoiseMapBuilderPlane;
-import ConquerSpace.jLibNoise.noise.utils.NoiseMapBuilderSphere;
 import ConquerSpace.jLibNoise.noise.utils.RendererImage;
 import java.awt.Color;
 import java.util.HashMap;

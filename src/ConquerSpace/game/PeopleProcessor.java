@@ -17,15 +17,14 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.civilization.government.GovernmentPosition;
+import ConquerSpace.game.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.PopulationStorage;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.bodies.Body;
-import ConquerSpace.game.civilization.government.GovernmentPosition;
-import ConquerSpace.game.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -57,15 +56,8 @@ public class PeopleProcessor {
                             int populationSize = c.getPopulationSize();
                             //Calculate the percentage chance to create someone
                             int peopleCount = (int) ((double) populationSize * 0.05d);
-                            //Dew it
-                            for (int k = 0; k < peopleCount; k++) {
-                                //Get first thing
-                                if (c.buildings.get(0) instanceof PopulationStorage) {
-                                    //Race s = ((PopulationStorage) c.buildings.get(0)).getPopulationArrayList().get(0).species;
-                                    //Person people = createPerson(s);
-                                    //c.peopleAtCity.add(people);
-                                }
-                            }
+                            //Create people
+                            //TODO
                         }
                     }
                 }

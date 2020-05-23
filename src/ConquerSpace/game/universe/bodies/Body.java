@@ -18,7 +18,6 @@
 package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.universe.Orbit;
-import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.SpacePoint;
 
 /**

@@ -18,9 +18,9 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Alert;
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.science.tech.Technology;
-import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Universe;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;

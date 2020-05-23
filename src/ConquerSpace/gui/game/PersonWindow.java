@@ -17,10 +17,10 @@
  */
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Universe;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;

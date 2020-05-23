@@ -17,11 +17,11 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.districts.District;
+import ConquerSpace.game.districts.City;
 import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
-import ConquerSpace.game.universe.bodies.Planet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -218,9 +218,9 @@ public class PlanetResources extends javax.swing.JPanel {
     private void compileResources() {
         planetResource.clear();
         stockpiles.clear();
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
+        for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
             GeographicPoint key = entry.getKey();
-            District val = entry.getValue();
+            City val = entry.getValue();
 
             if (val instanceof ResourceStockpile) {
                 Good[] goods = ((ResourceStockpile) val).storedTypes();

@@ -17,20 +17,13 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
-import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.util.Utilities;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;

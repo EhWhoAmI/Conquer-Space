@@ -17,16 +17,8 @@
  */
 package ConquerSpace.game.save;
 
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.ships.Orbitable;
-import ConquerSpace.game.ships.Ship;
-import ConquerSpace.game.ships.satellites.Satellite;
-import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import java.util.ArrayList;
-import java.util.Map;
 import org.json.JSONObject;
 
 /**

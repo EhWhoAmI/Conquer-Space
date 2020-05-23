@@ -17,32 +17,6 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.districts.area.Area;
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.InfrastructureBuilding;
-import ConquerSpace.game.districts.Observatory;
-import ConquerSpace.game.districts.ResourceStorage;
-import ConquerSpace.game.districts.area.CapitolArea;
-import ConquerSpace.game.districts.area.FarmFieldArea;
-import ConquerSpace.game.districts.area.ManufacturerArea;
-import ConquerSpace.game.districts.area.MineArea;
-import ConquerSpace.game.districts.area.ResearchArea;
-import ConquerSpace.game.districts.area.PowerPlantArea;
-import ConquerSpace.game.districts.area.ResidentialArea;
-import ConquerSpace.game.life.LifeTrait;
-import ConquerSpace.game.life.LocalLife;
-import ConquerSpace.game.life.Species;
-import ConquerSpace.game.people.Administrator;
-import ConquerSpace.game.people.Scientist;
-import ConquerSpace.game.population.Race;
-import ConquerSpace.game.science.Field;
-import ConquerSpace.game.science.Fields;
-import ConquerSpace.game.science.tech.Technologies;
-import ConquerSpace.game.science.tech.Technology;
-import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.civilization.government.Government;
 import ConquerSpace.game.civilization.government.GovernmentPosition;
@@ -50,16 +24,36 @@ import ConquerSpace.game.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.civilization.government.PoliticalPowerSource;
 import ConquerSpace.game.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.civilization.vision.VisionTypes;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.districts.area.farm.Crop;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.area.CapitolArea;
+import ConquerSpace.game.districts.area.FarmFieldArea;
+import ConquerSpace.game.districts.area.ManufacturerArea;
+import ConquerSpace.game.districts.area.MineArea;
+import ConquerSpace.game.districts.area.PowerPlantArea;
+import ConquerSpace.game.districts.area.ResearchArea;
+import ConquerSpace.game.districts.area.ResidentialArea;
+import ConquerSpace.game.life.LifeTrait;
+import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.life.Species;
+import ConquerSpace.game.people.Administrator;
+import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.Culture;
 import ConquerSpace.game.population.PopulationSegment;
+import ConquerSpace.game.population.Race;
+import ConquerSpace.game.science.Field;
+import ConquerSpace.game.science.Fields;
+import ConquerSpace.game.science.tech.Technologies;
+import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.ships.hull.HullMaterial;
+import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -195,13 +189,13 @@ public class GameInitializer {
         for (int k = 0; k < p.strata.size(); k++) {
             Stratum stratum = p.strata.get(k);
             for (int i = 0; i < 3; i++) {
-                District miner = new District();
+                City miner = new City(p.getUniversePath());
                 for (Good g : stratum.minerals.keySet()) {
 
                     MineArea mineArea = new MineArea(stratum, g, 10);
                     mineArea.setOperatingJobs(50_000);
                     mineArea.setMaxJobs(100_000);
-                    miner.addArea(p, mineArea);
+                    miner.addArea(mineArea);
                 }
 
                 double randR = (stratum.getRadius() * Math.sqrt(Math.random()));
@@ -224,11 +218,9 @@ public class GameInitializer {
 
                 GeographicPoint pt = new GeographicPoint(x, y);
 
-                City city = p.addBuildingToPlanet(pt, miner);
+                p.addCityDefinition(pt, miner);
 
-                if (city.getName().equals(City.CITY_DEFAULT)) {
-                    city.setName(townGen.getName(0) + " Mines");
-                }
+                miner.setName(townGen.getName(0) + " Mines");
             }
         }
     }
@@ -237,8 +229,6 @@ public class GameInitializer {
         //Based on population
         //Add livestock
         //Create a test crop so that you can grow stuff
-        City farmCity = new City(starting.getUniversePath());
-        farmCity.setName("Farms");
         Species potato = new Species("Potato");
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
@@ -250,34 +240,26 @@ public class GameInitializer {
         localLife.setSpecies(potato);
         localLife.setBiomass(100_000);
         starting.localLife.add(localLife);
-        InfrastructureBuilding infrastructureBuilding = new InfrastructureBuilding();
 
         for (int i = 0; i < 10; i++) {
-            District faceBook = new District();
-            //Add crops
-            Crop crop = new Crop(potato);
-            crop.setTimeLeft(25);
-            crop.setYield(10000);
-            faceBook.setOwner(c);
+            City faceBook = new City(starting.getUniversePath());
+
             //Add farm fields...
             for (int k = 0; k < 30; k++) {
                 FarmFieldArea field = new FarmFieldArea(potato);
                 field.setTime(30);
                 field.grow();
-                faceBook.addArea(starting, field);
                 field.setOperatingJobs(10000);
                 field.setMaxJobs(30000);
+                
+                faceBook.addArea(field);
             }
             //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
-            starting.buildings.put(pt, faceBook);
-            farmCity.addDistrict(faceBook);
-            infrastructureBuilding.connectedTo.add(faceBook);
-            faceBook.infrastructure.add(infrastructureBuilding);
+            starting.cityDistributions.put(pt, faceBook);
         }
 
-        PowerPlantArea powerPlant = new PowerPlantArea();
         //Get the resources needed for powering plant
         //TODO sort out resources needed for powerplants
         /*Resource resource = null;
@@ -289,37 +271,7 @@ public class GameInitializer {
                 }
             }
         }*/
-
-        powerPlant.setMaxVolume(1000);
-        infrastructureBuilding.areas.add(powerPlant);
         //Connect it to many buildings
-        starting.buildings.put(getRandomEmptyPoint(starting, selector), infrastructureBuilding);
-        starting.cities.add(farmCity);
-    }
-
-    private void createObservatory(Planet starting, Civilization c, Random selector) {
-        //Add observetory
-        StarSystem container = universe.getStarSystem(starting.getParentStarSystem());
-        Observatory observatory = new Observatory(10 * GameController.AU_IN_LTYR, 100, c.getID(),
-                new ConquerSpace.game.universe.Point((long) container.getX(), (long) container.getY()));
-
-        observatory.setOwner(c);
-        GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-
-        c.visionPoints.add(observatory);
-        starting.buildings.put(pt, observatory);
-    }
-
-    private void createResourceStorages(Civilization c, Planet starting, Random selector) {
-        //Add storage
-        ResourceStorage storage = new ResourceStorage(starting);
-        storage.setOwner(c);
-        //Add all possible resources
-
-        GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-
-        c.resourceStorages.add(storage);
-        starting.buildings.put(pt, storage);
     }
 
     private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
@@ -331,7 +283,7 @@ public class GameInitializer {
             //Ignore, assume all ok
         }
         for (int i = 0; i < 10; i++) {
-            District district = new District();
+            City industrialCity = new City(starting.getUniversePath());
             //Add areas
             for (ProductionProcess proc : c.productionProcesses) {
                 //Add new factory
@@ -339,15 +291,13 @@ public class GameInitializer {
 
                 factory.setMaxJobs(proc.diff * 10000);
                 factory.setOperatingJobs(proc.diff * 5000);
-                district.areas.add(factory);
+                industrialCity.areas.add(factory);
             }
 
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
-            City city = starting.addBuildingToPlanet(pt, district);
-            if (city.getName().equals(City.CITY_DEFAULT)) {
-                city.setName(townGen.getName(0) + " Industial Complex");
-            }
+            starting.addCityDefinition(pt, industrialCity);
+            industrialCity.setName(townGen.getName(0) + " Industial Complex");
         }
     }
 
@@ -366,38 +316,33 @@ public class GameInitializer {
         int popStorMas = (selector.nextInt(7) + 5);
 
         for (int count = 0; count < popStorMas; count++) {
-            District district = new District();
-            String townName = townGen.getName(0);
+            City city = new City(starting.getUniversePath());
             if (count == 0) {
                 //Admin center
-                district.addArea(starting, new CapitolArea());
+                city.addArea(new CapitolArea());
             }
 
             //district.setMaxStorage(selector.nextInt(30) + 1);
-            district.setOwner(c);
+            //district.setOwner(c);
             //Distribute
             //Add random positions
             //Add residential areas.
             for (int k = 0; k < 5; k++) {
                 ResidentialArea residentialArea = new ResidentialArea();
-                district.addArea(starting, residentialArea);
+                city.addArea(residentialArea);
             }
 
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
-            starting.addBuildingToPlanet(pt, district);
+            starting.addCityDefinition(pt, city);
 
             //Expand sector
             //Choose a direction, and expand...
-            District district2 = new District();
-
             //district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
-            district2.setOwner(c);
-
             //Add residential areas.
             for (int k = 0; k < 5; k++) {
                 ResidentialArea residentialArea = new ResidentialArea();
-                district2.addArea(starting, residentialArea);
+                city.addArea(residentialArea);
             }
 
             //test2.setCity(city);
@@ -416,14 +361,13 @@ public class GameInitializer {
                 case 3:
                     pt2 = pt.getWest();
             }
-            City city = starting.addBuildingToPlanet(pt2, district2);
+            starting.addCityDefinition(pt2, city);
 
             if (count == 0) {
                 c.setCapitalCity(city);
             }
-            if (city.getName().equals(City.CITY_DEFAULT)) {
-                city.setName(townName);
-            }
+            String townName = townGen.getName(0);
+            city.setName(townName);
 
             //Add leader to city
             Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
@@ -530,7 +474,7 @@ public class GameInitializer {
             int x = (selector.nextInt(planet.getPlanetWidth() - 2) + 1);
             int y = (selector.nextInt(planet.getPlanetHeight() - 2) + 1);
             pt = new GeographicPoint(x, y);
-        } while (planet.buildings.containsKey(pt));
+        } while (planet.cityDistributions.containsKey(pt));
         return pt;
     }
 
@@ -593,12 +537,9 @@ public class GameInitializer {
     private void createInfrastructure(Planet p, Random selector) {
         //Adds the infrastructure to the planet...        
         for (City c : p.cities) {
-            int citySize = c.buildings.size();
-            if (citySize > 0) {
-                District b = c.buildings.get(selector.nextInt(citySize));
-                PowerPlantArea powerPlant = new PowerPlantArea();
-                //TODO: choose energy resource
-                /*
+            PowerPlantArea powerPlant = new PowerPlantArea();
+            //TODO: choose energy resource
+            /*
                 Resource resource = null;
                 for (Resource res : GameController.resources) {
                     for (String tag : res.getTags()) {
@@ -608,8 +549,7 @@ public class GameInitializer {
                         }
                     }
                 }*/
-                b.addArea(p, powerPlant);
-            }
+            c.addArea(powerPlant);
         }
     }
 
@@ -634,13 +574,8 @@ public class GameInitializer {
             //Add first population segment
             PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
             seg.size = selector.nextInt(10_000) + 30_000;
-            int i = 1;
-            for (District building1 : c.buildings) {
-                for (Area area : building1.areas) {
-                    i++;
-                }
-            }
-            seg.size *= i;
+
+            seg.size *= c.areas.size();
             seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
             c.population.addSegment(seg);
         }
@@ -674,9 +609,7 @@ public class GameInitializer {
             c.scienceLabs.add(research);
 
             //Choose random fields
-            if (p.cities.get(i).buildings.size() > 0) {
-                p.cities.get(i).buildings.get(0).areas.add(research);
-            }
+            p.cities.get(i).addArea(research);
         }
     }
 

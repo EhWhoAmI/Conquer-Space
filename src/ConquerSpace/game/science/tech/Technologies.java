@@ -18,14 +18,14 @@
 package ConquerSpace.game.science.tech;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.ProductionProcess;
+import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
-import ConquerSpace.util.logging.CQSPLogger;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.util.ResourceLoader;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

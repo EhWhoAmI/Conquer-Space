@@ -17,9 +17,9 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.civilization.Civilization;
 
 /**
  *
@@ -39,7 +39,7 @@ public class GameIndexer {
     public void compileResourceStorages(Civilization c) {
         c.resourceStorages.clear();
         for(Planet p : c.habitatedPlanets) {
-            p.buildings.forEach((a, b) -> c.resourceStorages.add(b));
+            p.cities.stream().forEach(cty -> {c.resourceStorages.add(cty);});
         }
     }
     

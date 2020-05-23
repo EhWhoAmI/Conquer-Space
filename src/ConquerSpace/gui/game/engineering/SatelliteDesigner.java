@@ -18,7 +18,6 @@
 package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.Calculators;
-import ConquerSpace.game.GameUpdater;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.satellites.SatelliteTypes;
 import ConquerSpace.util.names.NameGenerator;
@@ -35,8 +34,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;

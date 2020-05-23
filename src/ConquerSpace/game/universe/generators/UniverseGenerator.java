@@ -17,8 +17,6 @@
  */
 package ConquerSpace.game.universe.generators;
 
-import ConquerSpace.game.universe.UniverseConfig;
-import ConquerSpace.game.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 
 /**

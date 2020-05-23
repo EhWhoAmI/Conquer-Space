@@ -30,12 +30,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
 
 /**
  * Show debug stats, like memory used.

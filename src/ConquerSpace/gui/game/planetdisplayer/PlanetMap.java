@@ -17,17 +17,13 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.CityDistrict;
-import ConquerSpace.game.districts.DistrictType;
-import ConquerSpace.game.districts.ResourceStorage;
-import ConquerSpace.game.districts.SpacePort;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import ConquerSpace.util.Utilities;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -51,13 +47,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
-import javax.imageio.ImageIO;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
@@ -299,13 +290,13 @@ public class PlanetMap extends JPanel {
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
+                for (Map.Entry<GeographicPoint, City> en : p.cityDistributions.entrySet()) {
                     GeographicPoint point = en.getKey();
-                    District Building = en.getValue();
+                    City Building = en.getValue();
                     //Draw
                     Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
-                    
-                    g2d.setColor(DistrictType.getDistrictColor(Building.getDistrictType()));
+
+                    g2d.setColor(Color.red);
                     g2d.fill(rect);
                 }
 
@@ -362,7 +353,7 @@ public class PlanetMap extends JPanel {
                 int mapX = pt.x;
                 int mapY = pt.y;
 
-                District b = p.buildings.get(new GeographicPoint(mapX, mapY));
+                City b = p.cityDistributions.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
                     showBuildingInfo(b);
                 }
@@ -441,13 +432,11 @@ public class PlanetMap extends JPanel {
             int mapY = pt.y;
 
             if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
-                District b = p.buildings.get(new GeographicPoint(mapX, mapY));
+                City b = p.cityDistributions.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
                     String cityName = "No City";
-                    if(b.getCity() != null) {
-                        cityName = b.getCity().getName();
-                    }
-                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + b.getTooltipText() + "<br/>Type: " + b.getDistrictType().name() + "<br/>City: " + cityName + "<br/>" + mapX + ", " + mapY + "<br/></html>");
+                    cityName = b.getName();
+                    String text = ("<html>&nbsp;&nbsp;&nbsp;City: " + cityName + "<br/>Position: " + mapX + ", " + mapY + "<br/></html>");
 
                     toolTip.setTipText(text);
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
@@ -480,20 +469,14 @@ public class PlanetMap extends JPanel {
             }
         }
 
-        public void showBuildingInfo(District building) {
+        public void showBuildingInfo(City city) {
             //Get building type, determine what menu to show...
-            if (building instanceof CityDistrict) {
-                parent.population.showCity(((CityDistrict) building).getCity());
+            if (city != null) {
+                parent.population.showCity(city);
                 hideToolTip();
 
                 //Switch tabs
                 parent.tpane.setSelectedComponent(parent.population);
-            } else if (building instanceof SpacePort) {
-                //parent.spacePort;
-                //Switch tabs
-                parent.tpane.setSelectedComponent(parent.spacePort);
-            } else if (building instanceof ResourceStorage) {
-
             }
         }
 

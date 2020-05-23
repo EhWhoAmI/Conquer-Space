@@ -17,18 +17,16 @@
  */
 package ConquerSpace.game.universe.bodies;
 
-import ConquerSpace.game.districts.District;
+import ConquerSpace.game.civilization.stats.Economy;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.jobs.Workable;
-import ConquerSpace.game.universe.GeographicPoint;
-import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.civilization.stats.Economy;
-import ConquerSpace.game.population.Population;
-import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.ships.Orbitable;
 import ConquerSpace.game.ships.satellites.Satellite;
+import ConquerSpace.game.universe.GeographicPoint;
+import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.resources.Stratum;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,7 +55,7 @@ public class Planet extends Body {
 
     private ArrayList<Orbitable> satellites;
 
-    public HashMap<GeographicPoint, District> buildings;
+    public HashMap<GeographicPoint, City> cityDistributions;
 
     public ArrayList<Integer> scanned;
 
@@ -103,7 +101,7 @@ public class Planet extends Body {
         economy = new Economy();
         satellites = new ArrayList<>();
         strata = new ArrayList<>();
-        buildings = new HashMap<>();
+        cityDistributions = new HashMap<>();
 
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
@@ -254,68 +252,32 @@ public class Planet extends Body {
         this.governor = governor;
     }
 
-    /**
-     * Checks if it's near a city, and adds it to the city. If not, creates one.
-     *
-     * @param pt position
-     * @param b building to add
-     * @return The city it is added to.
-     */
-    public City addBuildingToPlanet(GeographicPoint pt, District b) {
-        City city = null;
-
-        if (buildings.containsKey(pt.getNorth())) {
-            city = buildings.get(pt.getNorth()).getCity();
-            city.addDistrict(b);
-        } else if (buildings.containsKey(pt.getSouth())) {
-            city = buildings.get(pt.getSouth()).getCity();
-            city.addDistrict(b);
-        } else if (buildings.containsKey(pt.getEast())) {
-            city = buildings.get(pt.getEast()).getCity();
-            city.addDistrict(b);
-        } else if (buildings.containsKey(pt.getWest())) {
-            city = buildings.get(pt.getWest()).getCity();
-            city.addDistrict(b);
-        }
-
-        //Create city
-        if (city == null) {
-            City createdCity = new City(this.getUniversePath());
-
-            createdCity.setName(City.CITY_DEFAULT);
-            city = createdCity;
-            city.addDistrict(b);
-            b.setCity(city);
-            cities.add(city);
-        }
-
-        placeBuilding(pt, b);
-        return city;
-    }
-
-    public void placeBuilding(GeographicPoint pt, District b) {
+    public void addCityDefinition(GeographicPoint pt, City b) {
         //Check if exists already
-        if (buildings.containsKey(pt)) {
-            District existed = buildings.get(pt);
-            if (existed != null) {
-                City preexisting = existed.getCity();
-                preexisting.buildings.remove(existed);
-                if(preexisting.buildings.isEmpty()) {
-                    cities.remove(preexisting);
-                }
-            }
+        if (cityDistributions.containsKey(pt)) {
+            //City exists in that place already
+            cityDistributions.remove(pt);
         }
-
-        buildings.put(pt, b);
-        if (b instanceof Workable) {
-            //jobProviders.add(b);
+        else {
+            b.incrementSize();
         }
+        
+        if(!cityDistributions.containsValue(b)) {
+            cities.add(b);
+        }
+        
+        cityDistributions.put(pt, b);
     }
 
+    /*
+    How the height of planet works
+    */
+    //Height of planet on map
     public int getPlanetHeight() {
         return (2 * planetSize);
     }
 
+    //Width of map
     public int getPlanetWidth() {
         int value = (int) (2 * planetSize * Math.PI);
         return value;

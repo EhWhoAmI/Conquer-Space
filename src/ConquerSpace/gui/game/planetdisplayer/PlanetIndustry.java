@@ -17,9 +17,9 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -69,7 +69,7 @@ public class PlanetIndustry extends JPanel {
         areaContainer = new JPanel();
         areaContainer.setLayout(new GridBagLayout());
         areaDefaultListModel = new DefaultListModel<>();
-        for (District city : p.buildings.values()) {
+        for (City city : p.cityDistributions.values()) {
             for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }
@@ -130,7 +130,7 @@ public class PlanetIndustry extends JPanel {
     public void update() {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
-        for (District city : p.buildings.values()) {
+        for (City city : p.cityDistributions.values()) {
             for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }

@@ -25,10 +25,10 @@ import ConquerSpace.gui.start.Loading;
 import ConquerSpace.gui.start.MainMenu;
 import ConquerSpace.i18n.Messages;
 import ConquerSpace.tools.ToolsSelectionMenu;
-import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.Checksum;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
+import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AWTEvent;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -405,10 +405,6 @@ public class ConquerSpace {
                 super.dispatchEvent(newEvent);
             } catch (Throwable t) {
                 ExceptionHandling.ExceptionMessageBox("Exception!", t);
-                //Also print stack trace if debug
-                if (true) {
-                    t.printStackTrace();
-                }
             }
         }
     }

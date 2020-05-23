@@ -20,8 +20,8 @@ package ConquerSpace.gui.renderers;
 import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ToOrbitAction;
-import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.ships.SpaceShip;
+import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;
@@ -45,8 +45,8 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
+import org.apache.logging.log4j.Logger;
 
 /**
  *

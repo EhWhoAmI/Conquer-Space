@@ -17,29 +17,14 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
-import ConquerSpace.game.Calculators;
-import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.districts.CityDistrict;
-import ConquerSpace.game.districts.Observatory;
-import ConquerSpace.game.districts.ResourceStorage;
-import ConquerSpace.game.districts.SpacePort;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Stratum;
-import ConquerSpace.game.ships.launch.LaunchSystem;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.gui.game.planetdisplayer.PlanetMap;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
@@ -50,33 +35,7 @@ import javax.swing.event.InternalFrameListener;
  */
 public class ConstructionPanel extends JInternalFrame implements InternalFrameListener {
 
-    private JComboBox<String> buildingType;
-    private DefaultComboBoxModel<String> buildingModel;
-
-    private CardLayout buildCardLayout;
-
-    private BuildPopulationStorage popStoragePanel;
-
-    private BuildSpaceLaunchSite buildSpaceLaunchSite;
-
-    private BuildObservatoryMenu buildObservatoryMenu;
-
-    private BuildResourceStorageMenu buildResourceStorageMenu;
-
-    private BuildMinerMenu buildMiningStorageMenu;
-
-    private BuildIndustrialAreaMenu buildIndustrialAreaMenu;
-
-    private final String RESIDENTIAL = "Residential area";
-    private final String LAUNCH = "Launch Systems";
-    private final String OBSERVATORY = "Observatory";
-    private final String RESOURCE_STOCKPILE = "Resource Storage";
-    private final String RESOURCE_MINER = "Resource Miner";
-    private final String INDUSTRIAL_DISTRICT = "Industrial Area";
-
     JPanel mainItemContainer = new JPanel();
-
-    private JButton buildButton;
 
     PlanetMap parent;
 
@@ -84,160 +43,10 @@ public class ConstructionPanel extends JInternalFrame implements InternalFrameLi
         setLayout(new VerticalFlowLayout());
 
         this.parent = parent;
-
-        buildingModel = new DefaultComboBoxModel<>();
-        buildingModel.addElement(RESIDENTIAL);
-        if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
-            //Do things
-            buildingModel.addElement(LAUNCH);
-        }
-        buildingModel.addElement(OBSERVATORY);
-        buildingModel.addElement(RESOURCE_STOCKPILE);
-        buildingModel.addElement(RESOURCE_MINER);
-        buildingModel.addElement(INDUSTRIAL_DISTRICT);
-        buildingType = new JComboBox<>(buildingModel);
-
-        buildingType.addActionListener(l -> {//Then update
-            int selected = buildingType.getSelectedIndex();
-            buildingModel.removeAllElements();
-            buildingModel.addElement(RESIDENTIAL);
-            if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
-                //Do things
-                buildingModel.addElement(LAUNCH);
-            }
-            buildingModel.addElement(OBSERVATORY);
-            buildingModel.addElement(RESOURCE_STOCKPILE);
-            buildingModel.addElement(RESOURCE_MINER);
-            buildingModel.addElement(INDUSTRIAL_DISTRICT);
-
-            buildingType.setSelectedIndex(selected);
-        });
-
-        buildingType.addActionListener(a -> {
-            if (buildingType.getSelectedIndex() > -1) {
-                switch ((String) buildingType.getSelectedItem()) {
-                    case RESIDENTIAL:
-                        //Configure cost
-                        //BuildingCostGetter.getCost("", c);
-                        buildCardLayout.show(mainItemContainer, RESIDENTIAL);
-                        break;
-                    case LAUNCH:
-                        //Configure cost
-                        buildCardLayout.show(mainItemContainer, LAUNCH);
-                        break;
-                    case OBSERVATORY:
-                        //Configure cost
-                        //setBuildingCost(BuildingCostGetter.getCost("observatory", c));
-                        buildCardLayout.show(mainItemContainer, OBSERVATORY);
-                        break;
-                    case RESOURCE_STOCKPILE:
-                        //Configure cost
-                        buildCardLayout.show(mainItemContainer, RESOURCE_STOCKPILE);
-                        break;
-                    case RESOURCE_MINER:
-                        //Configure cost
-                        buildCardLayout.show(mainItemContainer, RESOURCE_MINER);
-                        break;
-                    case INDUSTRIAL_DISTRICT:
-                        buildCardLayout.show(mainItemContainer, INDUSTRIAL_DISTRICT);
-                        break;
-                }
-            }
-        });
-
-        add(buildingType);
-
-        popStoragePanel = new BuildPopulationStorage();
-
-        buildSpaceLaunchSite = new BuildSpaceLaunchSite(c);
-
-        buildObservatoryMenu = new BuildObservatoryMenu();
-
-        buildResourceStorageMenu = new BuildResourceStorageMenu();
-
-        buildMiningStorageMenu = new BuildMinerMenu(p, c, point);
-
-        buildIndustrialAreaMenu = new BuildIndustrialAreaMenu();
-
-        buildCardLayout = new CardLayout();
-        mainItemContainer.setLayout(buildCardLayout);
-
-        JPanel container = new JPanel(new BorderLayout());
-        mainItemContainer.add(popStoragePanel, RESIDENTIAL);
-
-        mainItemContainer.add(buildSpaceLaunchSite, LAUNCH);
-
-        container = new JPanel(new BorderLayout());
-        container.add(buildObservatoryMenu, BorderLayout.CENTER);
-        mainItemContainer.add(container, OBSERVATORY);
-
-        container = new JPanel(new BorderLayout());
-        container.add(buildResourceStorageMenu, BorderLayout.CENTER);
-        mainItemContainer.add(container, RESOURCE_STOCKPILE);
-
-        mainItemContainer.add(buildMiningStorageMenu, RESOURCE_MINER);
-
-        container = new JPanel(new BorderLayout());
-        container.add(buildIndustrialAreaMenu, BorderLayout.CENTER);
-        mainItemContainer.add(container, INDUSTRIAL_DISTRICT);
-
-        add(mainItemContainer);
-
-        buildButton = new JButton("Build!");
-        buildButton.addActionListener(a -> {
-            String item = (String) buildingType.getSelectedItem();
-            boolean toReset = false;
-            //Get x and y position
-            GeographicPoint buildingPos = point;
-            //Check if any buildings there:
-            int toBuild = JOptionPane.YES_OPTION;
-            if (p.buildings.containsKey(buildingPos)) {
-                toBuild = JOptionPane.showConfirmDialog(null, "Do you want to demolish a " + p.buildings.get(buildingPos).toString() + " on the tile you are building?",
-                        "Are you sure you want to demolish a building?", JOptionPane.YES_NO_OPTION);
-            }
-            if (toBuild == JOptionPane.YES_OPTION) {
-                if (item.equals(RESIDENTIAL)) {
-                    CityDistrict storage = new CityDistrict();
-                    storage.setMaxStorage((int) popStoragePanel.maxPopulationTextField.getValue());
-                    Actions.buildBuilding(p, buildingPos, storage, c, 1);
-                    //Reset...
-                    toReset = true;
-                } else if (item.equals(LAUNCH)) {
-                    //Get civ launching type...
-                    SpacePort port = new SpacePort((LaunchSystem) buildSpaceLaunchSite.launchTypesValue.getSelectedItem(), (Integer) buildSpaceLaunchSite.maxPopulation.getValue());
-                    Actions.buildBuilding(p, buildingPos, port, c, 1);
-                    toReset = true;
-                } else if (item.equals(OBSERVATORY)) {
-                    StarSystem sys = u.getStarSystem(p.getParentStarSystem());
-                    Observatory observatory = new Observatory(
-                            Calculators.Optics.getRange(1, (int) buildObservatoryMenu.lensSizeSpinner.getValue()),
-                            (Integer) buildObservatoryMenu.lensSizeSpinner.getValue(),
-                            c.getID(), new ConquerSpace.game.universe.Point((long) sys.getX(), (long) sys.getY()));
-                    //Add visionpoint to civ
-                    c.visionPoints.add(observatory);
-                    Actions.buildBuilding(p, buildingPos, observatory, c, 1);
-                    toReset = true;
-                } else if (item.equals(RESOURCE_STOCKPILE)) {
-                    ResourceStorage stor = new ResourceStorage(p);
-                    
-                    stor.setMaximumStorage((int) buildResourceStorageMenu.resourceStorageSizeSpinner.getValue());
-                    
-                    //Add to planet...
-                    c.resourceStorages.add(stor);
-                    Actions.buildBuilding(p, buildingPos, stor, c, 1);
-                    toReset = true;
-                }
-                //Close the current window
-                if (toReset) {
-                    parent.resetBuildingIndicator();
-                    dispose();
-                }
-            }
-        });
         
+        add(new JLabel("TODO"));
         setTitle("Construction");
         
-        add(buildButton);
         pack();
         
         addInternalFrameListener(this);

@@ -17,15 +17,15 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.gui.game.engineering.SatelliteDesigner;
-import ConquerSpace.gui.game.engineering.BuildSpaceShipAutomationMenu;
-import ConquerSpace.gui.game.engineering.ShipComponentDesigner;
-import ConquerSpace.game.events.Event;
-import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.gui.game.engineering.LaunchSystemDesigner;
+import ConquerSpace.gui.game.engineering.SatelliteDesigner;
+import ConquerSpace.gui.game.engineering.ShipComponentDesigner;
+import ConquerSpace.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.util.ResourceLoader;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;

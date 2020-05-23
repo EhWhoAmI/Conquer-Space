@@ -51,9 +51,8 @@ public class Messages {
     }
 
     public Messages(Locale l) {
-        boolean found = false;
         for (Locale loc : SUPPORTED_LOCALES) {
-            if (loc.equals(SUPPORTED_LOCALES)) {
+            if (loc.equals(l)) {
                 try {
                     File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
                     URL[] urls = {resourcesFolder.toURI().toURL()};
@@ -62,20 +61,20 @@ public class Messages {
                 } catch (MalformedURLException ex) {
                     LOGGER.error(ex);
                 }
-                found = true;
-                break;
+                return;
             }
         }
-        if(!found) {
-            try {
-                    File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
-                    URL[] urls = {resourcesFolder.toURI().toURL()};
-                    ClassLoader loader = new URLClassLoader(urls);
-                    bundle = ResourceBundle.getBundle(("ApplicationMessages").replace("/", "."), new Locale("en", "us"), loader);
-                } catch (MalformedURLException ex) {
-                    LOGGER.error(ex);
-                }
+
+        LOGGER.warn("Can't find locale!");
+        try {
+            File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
+            URL[] urls = {resourcesFolder.toURI().toURL()};
+            ClassLoader loader = new URLClassLoader(urls);
+            bundle = ResourceBundle.getBundle(("ApplicationMessages").replace("/", "."), new Locale("en", "us"), loader);
+        } catch (MalformedURLException ex) {
+            LOGGER.error(ex);
         }
+
     }
 
     public String getMessage(String s) {

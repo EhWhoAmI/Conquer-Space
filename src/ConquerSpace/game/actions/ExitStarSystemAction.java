@@ -18,8 +18,8 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.ships.Ship;
+import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.StarSystem;
 
 /**

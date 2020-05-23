@@ -18,27 +18,42 @@
 package ConquerSpace.game.districts;
 
 import ConquerSpace.game.StarDate;
+import ConquerSpace.game.districts.area.Area;
+import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Population;
-import ConquerSpace.game.population.jobs.JobProcessor;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.universe.resources.StorageNeeds;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class City implements PersonEnterable {
+public class City implements PersonEnterable, ResourceStockpile {
 
+    private static int idCounter = 0;
+    private int id;
+    
     public Population population;
     public static final String CITY_DEFAULT = "emp";
     private Person governor;
     private String name;
-    public ArrayList<District> buildings;
+    public ArrayList<Area> areas;
     public ArrayList<Workable> jobs;
     public ArrayList<Person> peopleAtCity;
+    
+    private HashMap<Good, Double> resources;
+    public ArrayList<StorageNeeds> storageNeeds;
+    //public ArrayList<PopulationUnit> population;
+    private int maxStorage;
+    public ArrayList<SupplyChain> supplyChains;
 
     private UniversePath location;
 
@@ -48,16 +63,21 @@ public class City implements PersonEnterable {
     //Growth rates of the species...
     //private HashMap<Race, Float> speciesRates;
     private boolean resetJobs = false;
-
-    private JobProcessor jobProcessor;
+    
+    //Size in tiles
+    private int size;
 
     public City(UniversePath location) {
-        buildings = new ArrayList<>();
         jobs = new ArrayList<>();
+        areas = new ArrayList<>();
+        storageNeeds = new ArrayList<>();
+        resources = new HashMap<>();
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
         population = new Population();
+        size = 0;
+        this.id = idCounter++;
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
@@ -87,11 +107,6 @@ public class City implements PersonEnterable {
         return location;
     }
 
-    public void addDistrict(District stor) {
-        buildings.add(stor);
-        stor.setCity(this);        
-    }
-
     public Person getGovernor() {
         return governor;
     }
@@ -101,22 +116,6 @@ public class City implements PersonEnterable {
         this.governor = governor;
     }
 
-//    @Override
-//    public Job[] jobsNeeded() {
-//        ArrayList<Job> jobsNeeded = new ArrayList<>();
-//        //Add city needed jobs
-//
-//        //Add all children jobs
-//        for (District b : buildings) {
-//            Job[] jobs = b.jobsNeeded();
-//            for (Job j : jobs) {
-//                jobsNeeded.add(j);
-//            }
-//        }
-//
-//        Job[] jobArray = Arrays.copyOf(jobsNeeded.toArray(), jobsNeeded.size(), Job[].class);
-//        return jobArray;
-//    }
     public boolean toResetJobs() {
         return resetJobs;
     }
@@ -141,5 +140,73 @@ public class City implements PersonEnterable {
 
     public void incrementPopulation(StarDate date, long delta) {
         population.incrementPopulation(date, delta);
+    }
+    
+    @Override
+    public void addResourceTypeStore(Good type) {
+        resources.put(type, 0d);
+    }
+
+    @Override
+    public Double getResourceAmount(Good type) {
+        return resources.get(type);
+    }
+
+    @Override
+    public void addResource(Good type, Double amount) {
+        if (!resources.containsKey(type)) {
+            resources.put(type, 0d);
+        }
+        resources.put(type, resources.get(type) + amount);
+    }
+
+    @Override
+    public boolean canStore(Good type) {
+        return true;//(resources.containsKey(type));
+    }
+
+    @Override
+    public Good[] storedTypes() {
+        Iterator<Good> res = resources.keySet().iterator();
+        Good[] arr = new Good[resources.size()];
+        int i = 0;
+        while (res.hasNext()) {
+            Good next = res.next();
+            arr[i] = next;
+            i++;
+        }
+        return arr;
+    }
+
+    @Override
+    public boolean removeResource(Good type, Double amount) {
+        //Get the amount in the place
+        Double currentlyStored = resources.get(type);
+        if (amount > currentlyStored) {
+            return false;
+        }
+
+        resources.put(type, currentlyStored - amount);
+        return true;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+    
+    public void incrementSize(){
+        size++;
+    }
+    
+    public void addArea(Area a) {
+        areas.add(a);
     }
 }

@@ -17,14 +17,14 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.districts.District;
+import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.districts.City;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.PolarCoordinate;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import ConquerSpace.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -270,12 +270,12 @@ public class PlanetOverview extends JPanel {
                 }
 
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, District> en : p.buildings.entrySet()) {
+                for (Map.Entry<GeographicPoint, City> en : p.cityDistributions.entrySet()) {
                     GeographicPoint p = en.getKey();
-                    District Building = en.getValue();
+                    City Building = en.getValue();
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);
-                    g2d.setColor(Building.getColor());
+                    g2d.setColor(Color.red);
                     g2d.fill(rect);
                 }
             }

@@ -17,11 +17,9 @@
  */
 package ConquerSpace.util;
 
-import ConquerSpace.game.universe.Vector;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.SequenceInputStream;
 import java.nio.file.Files;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;

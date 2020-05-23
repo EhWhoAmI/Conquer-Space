@@ -18,7 +18,6 @@
 package ConquerSpace.game.life;
 
 import ConquerSpace.game.universe.resources.FoodGood;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.LiveGood;
 import java.util.ArrayList;
 

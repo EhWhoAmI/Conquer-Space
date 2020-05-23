@@ -18,7 +18,7 @@
 package ConquerSpace.game.universe;
 
 /**
- *
+ * Orbit description
  * @author EhWhoAmI
  */
 public class Orbit {

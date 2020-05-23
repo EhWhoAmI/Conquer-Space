@@ -97,4 +97,9 @@ public class PolarCoordinate {
 
         return (new SpacePoint(xpos, ypos));
     }
+
+    @Override
+    public int hashCode() {
+        return (int) (degrees*31 + distance);
+    }
 }

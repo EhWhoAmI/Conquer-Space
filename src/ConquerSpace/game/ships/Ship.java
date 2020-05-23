@@ -17,10 +17,10 @@
  */
 package ConquerSpace.game.ships;
 
-import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.ships.components.ShipComponent;
 import ConquerSpace.game.ships.hull.Hull;
+import ConquerSpace.game.universe.UniversePath;
+import ConquerSpace.game.universe.Vector;
 import java.util.ArrayList;
 
 /**

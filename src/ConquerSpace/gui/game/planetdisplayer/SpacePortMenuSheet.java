@@ -18,14 +18,13 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.SpacePort;
-import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.districts.City;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.ShipClass;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.Satellites;
+import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.bodies.Planet;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -405,11 +404,12 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         
         //Get the amount of launch pads
         int launchPadCount = 0;
-        for(District b : p.buildings.values()) {
+        for(City b : p.cityDistributions.values()) {
+            /*
             if(b instanceof SpacePort) {
                 SpacePort port = (SpacePort) b;
                 launchPadCount += port.launchPads.size();
-            }
+            }*/
         }
         spaceportCount.setText("" + launchPadCount);
     }

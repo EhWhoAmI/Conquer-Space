@@ -17,9 +17,9 @@
  */
 package ConquerSpace.game.universe.bodies;
 
+import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.ships.SpaceShip;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 

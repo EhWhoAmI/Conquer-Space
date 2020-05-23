@@ -63,7 +63,7 @@ public class GeographicPoint {
 
     @Override
     public int hashCode() {
-        return (X + "" + Y).hashCode();
+        return (X * 31 + Y);
     }
 
     public GeographicPoint getNorth() {

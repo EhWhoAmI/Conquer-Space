@@ -17,11 +17,10 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.districts.District;
-import ConquerSpace.game.districts.SpacePort;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.districts.City;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
+import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.LaunchSatelliteMenu;
 import ConquerSpace.gui.game.LaunchSpaceShipMenu;
@@ -53,30 +52,16 @@ public class SpacePortMenu extends JPanel {
         this.c = c;
         setLayout(new HorizontalFlowLayout());
         launchPads = new ArrayList<>();
-        //Do stuff
-        //Compile all the launch pads on the planet
 
+        //Compile all the launch pads on the planet
         spaceLPModel = new DefaultListModel<>();
 
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            District value = entry.getValue();
-
-            //Do stuff...
-            if (value instanceof SpacePort) {
-                SpacePort port = (SpacePort) value;
-                //Do things
-                for (SpacePortLaunchPad lp : port.launchPads) {
-                    launchPads.add(lp);
-                    spaceLPModel.addElement(lp);
-                }
-            }
-        }
+        compileSpacePorts();
         //Add components and stuff
 
         launchPadList = new JList<>(spaceLPModel);
         JScrollPane launchPadListScrollPane = new JScrollPane(launchPadList);
-        
+
         JTabbedPane pane = new JTabbedPane();
         JPanel launchSatelliteMenuContainer = new JPanel(new HorizontalFlowLayout());
         pane.add("Satellite", launchSatelliteMenuContainer);
@@ -99,21 +84,22 @@ public class SpacePortMenu extends JPanel {
     }
 
     public void update() {
-        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            District value = entry.getValue();
+        compileSpacePorts();
+    }
 
-            //Do stuff...
-            if (value instanceof SpacePort) {
-                SpacePort port = (SpacePort) value;
-                //Do things
-                for (SpacePortLaunchPad lp : port.launchPads) {
-                    if (!launchPads.contains(lp)) {
-                        launchPads.add(lp);
-                        spaceLPModel.addElement(lp);
-                    }
-                }
-            }
+    private void compileSpacePorts() {
+        for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
+            GeographicPoint key = entry.getKey();
+            City value = entry.getValue();
+//Find space port in city
+//            if (value instanceof SpacePort) {
+//                SpacePort port = (SpacePort) value;
+//                //Do things
+//                for (SpacePortLaunchPad lp : port.launchPads) {
+//                    launchPads.add(lp);
+//                    spaceLPModel.addElement(lp);
+//                }
+//            }
         }
     }
 }
