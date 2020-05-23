@@ -278,7 +278,7 @@ public class GameUpdater {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
-                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c.getUniversePath());
+                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c);
                 area.grow();
             }
         } else if (a instanceof TimedManufacturerArea) {
@@ -291,14 +291,14 @@ public class GameUpdater {
                     Good key = entry.getKey();
                     Double val = entry.getValue();
 
-                    storeResource(key, val * removed, 0, c.getUniversePath());
+                    storeResource(key, val * removed, 0, c);
                 }
             }
         }
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
-                storeResource(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()), 0, c.getUniversePath());
+                storeResource(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()), 0, c);
             }
         } else if (a instanceof ManufacturerArea) {
             //Process resources used
@@ -308,14 +308,14 @@ public class GameUpdater {
                     Good key = entry.getKey();
                     Double val = entry.getValue();
 
-                    storeResource(key, -val * delta, 0, c.getUniversePath());
+                    storeResource(key, -val * delta, 0, c);
                 }
 
                 for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
                     Good key = entry.getKey();
                     Double val = entry.getValue();
 
-                    storeResource(key, val * delta, 0, c.getUniversePath());
+                    storeResource(key, val * delta, 0, c);
                 }
             }
         } else if (a instanceof ResearchArea) {
@@ -327,9 +327,9 @@ public class GameUpdater {
                     Good key = entry.getKey();
                     Double val = entry.getValue();
 
-                    storeResource(key, -val * delta, 0, c.getUniversePath());
+                    storeResource(key, -val * delta, 0, c);
                 }
-                storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c.getUniversePath());
+                storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c);
             }
 
         }
@@ -519,6 +519,17 @@ public class GameUpdater {
                         break;
                     }
                 }
+            }
+        }
+    }
+    
+    public void storeResource(Good resourceType, Double amount, int owner, City from) {
+        if (resourceType != null) {
+            if(from.canStore(resourceType)) {
+                //Store resource
+                from.addResource(resourceType, amount);
+            } else {
+                storeResource(resourceType, amount, owner, from.getUniversePath());
             }
         }
     }

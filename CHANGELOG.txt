@@ -1,26 +1,30 @@
 Changelog:
 
 0.0.3
-Technical
+Total Overhauls:
+Removed district systems, replaced with cities being defined by a series of points, because it is probably better for performance, and better for code
+As a result, areas generate resources too
+Removed population units, Change to population segment system
+
+Technical:
 Change java version from 1.12 to 1.8 for compatability
 Game runs in the main thread
 
-Graphics and UI
+Graphics and UI:
 Add lighting to planet surfaces so it looks cooler
 More accurate orbit circles, now even eccentric orbit circles can be shown, such as an ellipse
 Better music
  - Volume can now be changed
  - Music can be toggled better
 Available job list
-Can now customize colors of districts
 
 Gameplay:
 All buildings are resource storages now
 Planet sizes and width changed
-Districts now do not generate resources, areas do
-Change from pop system to population segment system.
+Areas now generate resources
 
-0.0.2:
+~~~~~~~~~~
+0.0.2
 Total Overhauls:
 Resources are changed into goods, that can be processed into different resources
 Mining is changed into strata, that are similar to veins, just that they have multiple resources
@@ -39,8 +43,8 @@ Add console to see logs without the need to open files up
 Bug Fixes:
 Pressing the console button twice will not lead to an exception
 
-
-0.0.1:
+~~~~~~~~~~
+0.0.1
 Massive changes:
 We removed the planet sector system, and replaced it with terrain.
 Buildings have been shaken up also

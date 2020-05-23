@@ -42,7 +42,7 @@ public class PlanetResources extends javax.swing.JPanel {
     private StockpileStorageModel storageModel;
 
     private PlanetResourceTableModel planetModel;
-    
+
     private ResourceStorageListModel storageList;
 
     private ResourceStockpile selectedStockpile = null;
@@ -58,7 +58,7 @@ public class PlanetResources extends javax.swing.JPanel {
         planetModel = new PlanetResourceTableModel();
         storageModel = new StockpileStorageModel();
         storageList = new ResourceStorageListModel();
-        
+
         initComponents();
 
         Timer t = new Timer(1000, l -> {
@@ -112,8 +112,6 @@ public class PlanetResources extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         jPanel3.add(jScrollPane5, gridBagConstraints);
 
         storageResources.setModel(storageModel);
@@ -210,6 +208,10 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public String getElementAt(int index) {
+            ResourceStockpile storage = stockpiles.get(index);
+            if(storage instanceof City) {
+                return ("Storage at " + ((City) storage).getName());
+            }
             return "Storage";
         }
 
@@ -218,25 +220,20 @@ public class PlanetResources extends javax.swing.JPanel {
     private void compileResources() {
         planetResource.clear();
         stockpiles.clear();
-        for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            City val = entry.getValue();
-
-            if (val instanceof ResourceStockpile) {
-                Good[] goods = ((ResourceStockpile) val).storedTypes();
-                //Sort through stuff
-                for (Good g : goods) {
-                    if (!planetResource.containsKey(g)) {
-                        //Add key
-                        planetResource.put(g, 0d);
-                    }
-                    Double amount = planetResource.get(g);
-                    Double toAdd = ((ResourceStockpile) val).getResourceAmount(g) + amount;
-
-                    planetResource.put(g, toAdd);
+        for (City city : p.cities) {
+            Good[] goods = city.storedTypes();
+            //Sort through stuff
+            for (Good g : goods) {
+                if (!planetResource.containsKey(g)) {
+                    //Add key
+                    planetResource.put(g, 0d);
                 }
-                stockpiles.add(((ResourceStockpile) val));
+                Double amount = planetResource.get(g);
+                Double toAdd = (city.getResourceAmount(g) + amount);
+
+                planetResource.put(g, toAdd);
             }
+            stockpiles.add(city);
         }
     }
 
