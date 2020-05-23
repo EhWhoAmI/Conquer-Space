@@ -46,7 +46,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     private Person governor;
     private String name;
     public ArrayList<Area> areas;
-    public ArrayList<Workable> jobs;
+    public ArrayList<Workable> workableFor;
     public ArrayList<Person> peopleAtCity;
     
     private HashMap<Good, Double> resources;
@@ -68,7 +68,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     private int size;
 
     public City(UniversePath location) {
-        jobs = new ArrayList<>();
+        workableFor = new ArrayList<>();
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
         resources = new HashMap<>();

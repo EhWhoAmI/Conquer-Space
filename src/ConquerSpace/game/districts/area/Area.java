@@ -25,6 +25,9 @@ import ConquerSpace.game.population.jobs.Workable;
  */
 public class Area implements Workable {
 
+    /**
+     * The number of people currently manning the place.
+     */
     private int currentlyManningJobs;
     private int operatingJobs;
     private int maxJobs;

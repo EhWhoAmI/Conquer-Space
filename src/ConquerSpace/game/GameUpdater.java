@@ -231,66 +231,6 @@ public class GameUpdater {
         }
     }
 
-    public void processArea(City c, Area a, StarDate date, int delta) {
-        if (a instanceof FarmFieldArea) {
-            FarmFieldArea area = (FarmFieldArea) a;
-            int removed = area.tick(delta);
-            if (removed > 0) {
-
-                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c.getUniversePath());
-                area.grow();
-            }
-        } else if (a instanceof TimedManufacturerArea) {
-            //Subtract time
-            TimedManufacturerArea area = (TimedManufacturerArea) a;
-            int removed = area.tick(delta);
-
-            for (Map.Entry<Good, Double> entry : area.getProcess().output.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                storeResource(key, val * removed, 0, c.getUniversePath());
-            }
-        }
-        if (a instanceof PowerPlantArea) {
-            PowerPlantArea powerPlant = (PowerPlantArea) a;
-
-            storeResource(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()), 0, c.getUniversePath());
-        } else if (a instanceof ManufacturerArea) {
-            //Process resources used
-            ProductionProcess process = ((ManufacturerArea) a).getProcess();
-            for (Map.Entry<Good, Double> entry : process.input.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                storeResource(key, -val * delta, 0, c.getUniversePath());
-            }
-
-            for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                storeResource(key, val * delta, 0, c.getUniversePath());
-            }
-        } else if (a instanceof ResearchArea) {
-
-        } else if (a instanceof MineArea) {
-            MineArea area = (MineArea) a;
-            for (Map.Entry<Good, Double> entry : area.getNecessaryGoods().entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-
-                storeResource(key, -val * delta, 0, c.getUniversePath());
-            }
-            storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c.getUniversePath());
-
-        }
-    }
-
-    public void processStar(Star s, StarDate date) {
-
-    }
-
     /**
      * Increments population of city, creates city jobs, and assigns them.
      *
@@ -304,7 +244,8 @@ public class GameUpdater {
             c.incrementPopulation(date, delta);
 
             calculateCityJobs(c, date, delta);
-            for(Area a : c.areas) {
+
+            for (Area a : c.areas) {
                 processArea(c, a, date, delta);
             }
         }
@@ -317,16 +258,85 @@ public class GameUpdater {
      * @param date
      */
     public void calculateCityJobs(City c, StarDate date, int delta) {
-        //Add the jobs...
-        //Assign everyone an empty job...
-        float upkeepAmount = 0;
-        c.jobs.clear();
-        
-        //Set the upkeep
-        int amount = Math.round(upkeepAmount);
-        for (int i = 0; i < amount; i++) {
-            //Add maintenance jobs
+        long maxJobsProviding = 0;
+        long necessaryJobsProviding = 0;
+        long size = c.population.getPopulationSize();
+        for (Area a : c.areas) {
+            necessaryJobsProviding += a.operatingJobsNeeded();
+            maxJobsProviding += a.getMaxJobsProvided();
         }
+        if (necessaryJobsProviding < size) {
+            //All the jobs ok
+            for (Area a : c.areas) {
+                a.setCurrentlyManningJobs(a.getMaxJobsProvided());
+            }
+        }
+    }
+
+    public void processArea(City c, Area a, StarDate date, int delta) {
+        if (a instanceof FarmFieldArea) {
+            FarmFieldArea area = (FarmFieldArea) a;
+            int removed = area.tick(delta);
+            if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
+                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c.getUniversePath());
+                area.grow();
+            }
+        } else if (a instanceof TimedManufacturerArea) {
+            //Subtract time
+            TimedManufacturerArea area = (TimedManufacturerArea) a;
+            int removed = area.tick(delta);
+
+            if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
+                for (Map.Entry<Good, Double> entry : area.getProcess().output.entrySet()) {
+                    Good key = entry.getKey();
+                    Double val = entry.getValue();
+
+                    storeResource(key, val * removed, 0, c.getUniversePath());
+                }
+            }
+        }
+        if (a instanceof PowerPlantArea) {
+            PowerPlantArea powerPlant = (PowerPlantArea) a;
+            if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
+                storeResource(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()), 0, c.getUniversePath());
+            }
+        } else if (a instanceof ManufacturerArea) {
+            //Process resources used
+            ProductionProcess process = ((ManufacturerArea) a).getProcess();
+            if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
+                for (Map.Entry<Good, Double> entry : process.input.entrySet()) {
+                    Good key = entry.getKey();
+                    Double val = entry.getValue();
+
+                    storeResource(key, -val * delta, 0, c.getUniversePath());
+                }
+
+                for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
+                    Good key = entry.getKey();
+                    Double val = entry.getValue();
+
+                    storeResource(key, val * delta, 0, c.getUniversePath());
+                }
+            }
+        } else if (a instanceof ResearchArea) {
+
+        } else if (a instanceof MineArea) {
+            MineArea area = (MineArea) a;
+            if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
+                for (Map.Entry<Good, Double> entry : area.getNecessaryGoods().entrySet()) {
+                    Good key = entry.getKey();
+                    Double val = entry.getValue();
+
+                    storeResource(key, -val * delta, 0, c.getUniversePath());
+                }
+                storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c.getUniversePath());
+            }
+
+        }
+    }
+
+    public void processStar(Star s, StarDate date) {
+
     }
 
     public void processResearch() {
@@ -433,10 +443,10 @@ public class GameUpdater {
             total += c.population.getPopulationSize();
         }
         p.population = total;
-        
+
         for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
             City city = entry.getValue();
-            
+
             //Process population upkeep
         }
     }

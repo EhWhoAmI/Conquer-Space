@@ -96,6 +96,7 @@ public class GameController {
         updater = new GameUpdater(Globals.universe, Globals.date, GameRefreshRate);
         initer = new GameInitializer(Globals.universe, Globals.date, updater);
 
+        //Will need a different initializer later...
         initer.initGame();
 
         //Process the 0th turn and initalize the universe.

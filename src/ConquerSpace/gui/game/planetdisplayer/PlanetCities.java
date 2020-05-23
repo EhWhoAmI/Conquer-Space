@@ -86,7 +86,10 @@ public class PlanetCities extends JPanel {
     private DefaultListModel<Area> areaListModel;
     private JList<Area> areaList;
 
+    private Universe u;
+
     public PlanetCities(Universe u, Planet p, int turn) {
+        this.u = u;
         this.p = p;
         tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
@@ -138,123 +141,11 @@ public class PlanetCities extends JPanel {
             }
         });
 
+        //Initialize table
+        jobTableModel = new JobTableModel();
+
         cityList.addListSelectionListener(l -> {
-            isBuildingUi = true;
-            cityData.removeAll();
-
-            City selected = cityList.getSelectedValue();
-
-            int popcount = 0;
-            float increment = 0;
-            int maxPop = 0;
-            int energyUsage = 0;
-            int energyProvided = 0;
-
-            //Get breeding rate and energy usage.
-//            for (District build : selected.buildings) {
-//                if (build instanceof PopulationStorage) {
-//                    PopulationStorage stor = (PopulationStorage) build;
-//
-//                    popcount += stor.getPopulationArrayList().size();
-//                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
-//                        //Fraction it so it does not accelerate at a crazy rate
-//                        //Do subtractions here in the future, like happiness, and etc.
-//                        increment += (unit.getSpecies().getBreedingRate() / 50);
-//                    }
-//                    maxPop += stor.getMaxStorage();
-//                    if (stor instanceof District) {
-//                        energyUsage += ((District) stor).getEnergyUsage();
-//                        //Get the infrastructure connected to.
-//                        for (InfrastructureBuilding infra : ((District) stor).infrastructure) {
-//
-//                            if (!building.contains(infra)) {
-//                                building.add(infra);
-//                                for (Area a : infra.areas) {
-//                                    //energyProvided += infra
-//                                    if (a instanceof PowerPlantArea) {
-//                                        //Get the resource produced
-//
-//                                        //TODO
-//                                        //Integer energy = (((PowerPlantArea) a).getUsedResource().getAttributes().get("energy"));
-////                                        if (energy != null) {
-////                                            energyProvided += (((PowerPlantArea) a).getMaxVolume() * energy);
-////                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-            //Check if capital city
-            for (int i = 0; i < u.getCivilizationCount(); i++) {
-                if (u.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
-                    JLabel isCapital = new JLabel("Capital City of " + u.getCivilization(i).getName());
-                    cityData.add(isCapital);
-                    break;
-                }
-            }
-
-            //Population
-            JLabel popCount = new JLabel("Population: " + Utilities.longToHumanString(selected.population.getPopulationSize()));
-            cityData.add(popCount);
-
-            //Get the number of powerplants leading to it
-            //Energy usage
-            JLabel energyUsageLabel = new JLabel("Energy Usage (used/provided): " + energyUsage + "/" + energyProvided);
-            cityData.add(energyUsageLabel);
-
-            //Growth
-            JLabel growthAmount = new JLabel("Growth: " + 0 + "%");//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
-            cityData.add(growthAmount);
-
-            //JLabel unemployment = new JLabel("Unemployment: " + );
-            //Max population
-            JLabel maxPopulation = new JLabel("Population cap: " + Utilities.longToHumanString(maxPop) + " people");
-            cityData.add(maxPopulation);
-
-            //Check for govenor
-            if (cityList.getSelectedValue().getGovernor() != null) {
-                JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
-                cityData.add(governorLabel);
-            }
-
-            JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
-
-            //Areas
-            areaListModel = new DefaultListModel<>();
-            for (Area area : selected.areas) {
-                areaListModel.addElement(area);
-            }
-
-            areaList = new JList<>(areaListModel);
-            JScrollPane areascrollPane = new JScrollPane(areaList);
-
-            JPanel areaInfoContainerPanel = new JPanel();
-
-            areaList.addListSelectionListener(o -> {
-                areaInfoContainerPanel.removeAll();
-                areaInfoContainerPanel.add(new AreaInformationPanel(areaList.getSelectedValue()));
-            });
-
-            areaInfoPanel.add(areascrollPane);
-            areaInfoPanel.add(areaInfoContainerPanel);
-
-            currentlySelectedCity = cityList.getSelectedValue();
-            jobTableModel = new JobTableModel();
-            jobTable = new JTable(jobTableModel);
-
-            availableJobModel = new DefaultTableModel(availableJobColunmNames, 0);
-            //Fill up
-            availableJobTable = new JTable(availableJobModel);
-
-            cityInfoTabs.removeAll();
-            cityInfoTabs.add("Areas", areaInfoPanel);
-            cityInfoTabs.add("Employment", new JScrollPane(jobTable));
-            cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
-            cityInfoTabs.setSelectedIndex(citySelectedTab);
-            cityData.add(cityInfoTabs);
-            isBuildingUi = false;
+            selectCity();
         });
 
         JScrollPane scrollPane = new JScrollPane(cityList);
@@ -272,30 +163,112 @@ public class PlanetCities extends JPanel {
         growthPanel.add(cityListPanel);
         //tabs.add(jobContainer, "Jobs");
         add(growthPanel);
+
+        //Select first city
+        if (!cityListModel.isEmpty()) {
+            showCity(cityListModel.get(0));
+        }
+    }
+
+    private void selectCity() {
+        isBuildingUi = true;
+        cityData.removeAll();
+
+        City selected = cityList.getSelectedValue();
+
+        int popcount = 0;
+        float increment = 0;
+        int maxPop = 0;
+        int energyUsage = 0;
+        int energyProvided = 0;
+
+        JLabel cityName = new JLabel(selected.getName());
+        cityData.add(cityName);
+
+        //Check if capital city
+        for (int i = 0; i < u.getCivilizationCount(); i++) {
+            if (u.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
+                JLabel isCapital = new JLabel("Capital City of " + u.getCivilization(i).getName());
+                cityData.add(isCapital);
+                break;
+            }
+        }
+
+        //Population
+        JLabel popCount = new JLabel("Population: " + Utilities.longToHumanString(selected.population.getPopulationSize()));
+        cityData.add(popCount);
+
+        //Get the number of powerplants leading to it
+        //Energy usage
+        JLabel energyUsageLabel = new JLabel("Energy Usage (used/provided): " + energyUsage + "/" + energyProvided);
+        cityData.add(energyUsageLabel);
+
+        //Growth
+        JLabel growthAmount = new JLabel("Growth: " + 0 + "%");//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
+        cityData.add(growthAmount);
+
+        //JLabel unemployment = new JLabel("Unemployment: " + );
+        //Max population
+        JLabel maxPopulation = new JLabel("Population cap: " + Utilities.longToHumanString(maxPop) + " people");
+        cityData.add(maxPopulation);
+
+        //Check for govenor
+        if (cityList.getSelectedValue().getGovernor() != null) {
+            JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
+            cityData.add(governorLabel);
+        }
+
+        JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
+
+        //Areas
+        areaListModel = new DefaultListModel<>();
+        for (Area area : selected.areas) {
+            areaListModel.addElement(area);
+        }
+
+        areaList = new JList<>(areaListModel);
+        JScrollPane areascrollPane = new JScrollPane(areaList);
+
+        JPanel areaInfoContainerPanel = new JPanel();
+
+        areaList.addListSelectionListener(o -> {
+            areaInfoContainerPanel.removeAll();
+            areaInfoContainerPanel.add(new AreaInformationPanel(areaList.getSelectedValue()));
+        });
+
+        areaInfoPanel.add(areascrollPane);
+        areaInfoPanel.add(areaInfoContainerPanel);
+
+        currentlySelectedCity = cityList.getSelectedValue();
+        jobTableModel.newCitySelection();
+        jobTable = new JTable(jobTableModel);
+
+        availableJobModel = new DefaultTableModel(availableJobColunmNames, 0);
+        //Fill up
+        availableJobTable = new JTable(availableJobModel);
+
+        cityInfoTabs.removeAll();
+        cityInfoTabs.add("Areas", areaInfoPanel);
+        cityInfoTabs.add("Employment", new JScrollPane(jobTable));
+        cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
+        cityInfoTabs.setSelectedIndex(citySelectedTab);
+        cityData.add(cityInfoTabs);
+
+        //Select first area
+        if (!selected.areas.isEmpty()) {
+            //Select first area
+            areaList.setSelectedIndex(0);
+        }
+        cityData.repaint();
+        isBuildingUi = false;
     }
 
     public void showCity(City whichCity) {
         //Determine if on planet
         if (whichCity != null && cityListModel.contains(whichCity)) {
             cityList.setSelectedValue(whichCity, true);
-            jobTableModel.setSelectedCity(whichCity);
-        }
-    }
-
-    private class AreaWrapper {
-
-        Area area;
-
-        public AreaWrapper(Area area) {
-            this.area = area;
-        }
-
-        @Override
-        public String toString() {
-            if (area instanceof ResearchArea) {
-                return "Research";
-            }
-            return "";
+            selectCity();
+            jobTableModel.newCitySelection();
         }
     }
 
@@ -308,6 +281,10 @@ public class PlanetCities extends JPanel {
 
         public JobTableModel() {
             populationCount = new HashMap<>();
+        }
+
+        private void newCitySelection() {
+            populationCount.clear();
             population = 0;
             //Get population job
             for (Area area : currentlySelectedCity.areas) {
@@ -361,25 +338,6 @@ public class PlanetCities extends JPanel {
         @Override
         public String getColumnName(int column) {
             return jobListTableColunmNames[column];
-        }
-
-        public void setSelectedCity(City city) {
-            populationCount.clear();
-//            for (District value : currentlySelectedCity.buildings) {
-//                if (value instanceof PopulationStorage) {
-//                    PopulationStorage stor = (PopulationStorage) value;
-//                    for (PopulationUnit unit : stor.getPopulationArrayList()) {
-//                        JobType job = unit.getJob().getJobType();
-//                        if (populationCount.containsKey(job)) {
-//                            //Add to it
-//                            int i = (populationCount.get(job) + 1);
-//                            populationCount.put(job, i);
-//                        } else {
-//                            populationCount.put(job, 1);
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }

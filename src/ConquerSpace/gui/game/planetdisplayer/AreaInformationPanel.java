@@ -27,6 +27,7 @@ import ConquerSpace.game.districts.area.MineArea;
 import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.universe.resources.Good;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -42,88 +43,101 @@ import javax.swing.table.DefaultTableModel;
 public class AreaInformationPanel extends JPanel {
 
     public AreaInformationPanel(Area a) {
-        setLayout(new VerticalFlowLayout());
-        if (a instanceof ResearchArea) {
-            JLabel title = new JLabel("Research Area");
-            add(title);
+        if (a != null) {
+            setLayout(new VerticalFlowLayout());
+            if (a instanceof ResearchArea) {
+                JLabel title = new JLabel("Research Area");
+                add(title);
 
-            ResearchArea research = (ResearchArea) a;
+                ResearchArea research = (ResearchArea) a;
 
-            DefaultTableModel model = new DefaultTableModel(new String[]{"Field", "Value"}, 0);
-            for (Map.Entry<String, Integer> en : research.focusFields.entrySet()) {
-                String key = en.getKey();
-                Integer val = en.getValue();
+                DefaultTableModel model = new DefaultTableModel(new String[]{"Field", "Value"}, 0);
+                for (Map.Entry<String, Integer> en : research.focusFields.entrySet()) {
+                    String key = en.getKey();
+                    Integer val = en.getValue();
 
-                model.addRow(new Object[]{key, val});
-            }
-            JTable table = new JTable(model) {
-                @Override
-                public Dimension getPreferredScrollableViewportSize() {
-                    //So that you don't see too much
-                    return new Dimension(super.getPreferredSize().width,
-                            getRowHeight() * getRowCount());
+                    model.addRow(new Object[]{key, val});
                 }
-            };
-            JScrollPane scroll = new JScrollPane(table);
-            add(scroll);
-        } else if (a instanceof CapitolArea) {
-            JLabel title = new JLabel("Capitol Area");
-            add(title);
-        } else if (a instanceof FinancialArea) {
-            JLabel title = new JLabel("Finance Area");
-            add(title);
-        } else if (a instanceof InfrastructureArea) {
-            JLabel title = new JLabel("Infrastructure Area");
-            add(title);
-        } else if (a instanceof ManufacturerArea) {
-            JLabel title = new JLabel("Factory Area");
-            add(title);
+                JTable table = new JTable(model) {
+                    @Override
+                    public Dimension getPreferredScrollableViewportSize() {
+                        //So that you don't see too much
+                        return new Dimension(super.getPreferredSize().width,
+                                getRowHeight() * getRowCount());
+                    }
+                };
+                JScrollPane scroll = new JScrollPane(table);
+                add(scroll);
+            } else if (a instanceof CapitolArea) {
+                JLabel title = new JLabel("Capitol Area");
+                add(title);
+            } else if (a instanceof FinancialArea) {
+                JLabel title = new JLabel("Finance Area");
+                add(title);
+            } else if (a instanceof InfrastructureArea) {
+                JLabel title = new JLabel("Infrastructure Area");
+                add(title);
+            } else if (a instanceof ManufacturerArea) {
+                JLabel title = new JLabel("Factory Area");
+                add(title);
 
-            ManufacturerArea factory = (ManufacturerArea) a;
+                ManufacturerArea factory = (ManufacturerArea) a;
 
-            JLabel processName = new JLabel(factory.getProcess().name);
-            String inputString = "Input: ";
+                JLabel processName = new JLabel(factory.getProcess().name);
+                String inputString = "Input: ";
 
-            for (Map.Entry<Good, Double> entry : factory.getProcess().input.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-                inputString = inputString + key.getName();
-                inputString = inputString + " amount " + val;
-                inputString = inputString + ", ";
+                for (Map.Entry<Good, Double> entry : factory.getProcess().input.entrySet()) {
+                    Good key = entry.getKey();
+                    Double val = entry.getValue();
+                    inputString = inputString + key.getName();
+                    inputString = inputString + " amount " + val;
+                    inputString = inputString + ", ";
+                }
+
+                JLabel input = new JLabel(inputString);
+
+                String outputString = "Output: ";
+                for (Map.Entry<Good, Double> entry : factory.getProcess().output.entrySet()) {
+                    Good key = entry.getKey();
+                    Double val = entry.getValue();
+                    outputString = outputString + key.getName();
+                    outputString = outputString + " amount " + val;
+                    outputString = outputString + ", ";
+                }
+
+                JLabel output = new JLabel(outputString);
+
+                add(processName);
+                add(input);
+                add(output);
+            } else if (a instanceof FarmFieldArea) {
+                JLabel title = new JLabel("Field Area");
+                add(title);
+                FarmFieldArea field = (FarmFieldArea) a;
+                JLabel fieldType = new JLabel("Growing: " + field.getGrown());
+                add(fieldType);
+                if (field.getQueue().size() == 1) {
+                    JLabel timeLeft = new JLabel("Time Left: " + field.getQueue().get(0).getTimeLeft());
+                    add(timeLeft);
+                }
+            } else if (a instanceof MineArea) {
+                JLabel title = new JLabel("Mine Area");
+                add(title);
+                MineArea area = (MineArea) a;
+                JLabel resourceMined = new JLabel("Time Left: " + area.getResourceMined());
+                add(resourceMined);
             }
 
-            JLabel input = new JLabel(inputString);
-
-            String outputString = "Output: ";
-            for (Map.Entry<Good, Double> entry : factory.getProcess().output.entrySet()) {
-                Good key = entry.getKey();
-                Double val = entry.getValue();
-                outputString = outputString + key.getName();
-                outputString = outputString + " amount " + val;
-                outputString = outputString + ", ";
+            JLabel currentJobs = new JLabel("Current Manpower: " + a.getCurrentlyManningJobs());
+            JLabel minimumJobs = new JLabel("Minimum Jobs Needed: " + a.operatingJobsNeeded());
+            JLabel maximumJobs = new JLabel("Maximum Jobs supportable: " + a.getMaxJobsProvided());
+            if(a.getCurrentlyManningJobs() < a.operatingJobsNeeded()) {
+                currentJobs.setForeground(Color.red);
+                currentJobs.setToolTipText("Insufficient manpower to operate this area!");
             }
-
-            JLabel output = new JLabel(outputString);
-
-            add(processName);
-            add(input);
-            add(output);
-        } else if (a instanceof FarmFieldArea) {
-            JLabel title = new JLabel("Field Area");
-            add(title);
-            FarmFieldArea field = (FarmFieldArea) a;
-            JLabel fieldType = new JLabel("Growing: " + field.getGrown());
-            add(fieldType);
-            if (field.getQueue().size() == 1) {
-                JLabel timeLeft = new JLabel("Time Left: " + field.getQueue().get(0).getTimeLeft());
-                add(timeLeft);
-            }
-        } else if (a instanceof MineArea) {
-            JLabel title = new JLabel("Mine Area");
-            add(title);
-            MineArea area = (MineArea) a;
-            JLabel resourceMined = new JLabel("Time Left: " + area.getResourceMined());
-            add(resourceMined);
+            add(currentJobs);
+            add(minimumJobs);
+            add(maximumJobs);
         }
     }
 }
