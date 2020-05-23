@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * http://libnoise.sourceforge.net/tutorials/tutorial4.html
+ * http://libnoise.sourceforge.net/tutorials/tutorial4.html. Just a quick driver to simplify the generation of the background
  *
  * @author EhWhoAmI
  */

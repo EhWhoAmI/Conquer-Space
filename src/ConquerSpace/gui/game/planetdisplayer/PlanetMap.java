@@ -48,6 +48,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
@@ -70,7 +71,6 @@ public class PlanetMap extends JPanel {
     private static final Logger LOGGER = CQSPLogger.getLogger(PlanetMap.class.getName());
 
     private PlanetInfoSheet parent;
-    private Image mapImage = null;
 
     private Planet p;
     private Civilization c;
@@ -114,22 +114,22 @@ public class PlanetMap extends JPanel {
     private int resourceShown = -1;
     private int displayedView = NORMAL_VIEW;
     private boolean showTerrain = true;
+    private Image planetMap;
 
-    public PlanetMap(Planet p, Civilization c, Universe u, PlanetInfoSheet parent) {
+    public PlanetMap(Planet p, Civilization c, Universe u, PlanetInfoSheet parent, Image planetMap) {
         this.p = p;
         this.c = c;
         this.u = u;
+        this.planetMap = planetMap;
+
         this.parent = parent;
 
         setLayout(new BorderLayout());
         //Render map
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        TerrainRenderer renderer = new TerrainRenderer(p);
-        mapImage = renderer.getImage(2d);
-
-        mapWidth = mapImage.getWidth(null);
-        mapHeight = mapImage.getHeight(null);
+        mapWidth = planetMap.getWidth(null);
+        mapHeight = planetMap.getHeight(null);
 
         menuBar = new JMenuBar();
 
@@ -227,7 +227,7 @@ public class PlanetMap extends JPanel {
 
     public void resetBuildingIndicator() {
         map.currentlyBuildingPoint = null;
-        map.isActive = false;
+        map.constructionActive = false;
         displayedView = NORMAL_VIEW;
         buildingViewButton.setSelected(true);
         showResourceButton.setSelected(false);
@@ -238,10 +238,11 @@ public class PlanetMap extends JPanel {
     private class MapPanel extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
 
         private BufferedImage resourceImage = null;
+        private BufferedImage cityMapImage = null;
         boolean needRefresh = false;
 
         GeographicPoint currentlyBuildingPoint;
-        boolean isActive = false;
+        boolean constructionActive = false;
 
         int mouseX = 0;
         int mouseY = 0;
@@ -262,8 +263,8 @@ public class PlanetMap extends JPanel {
             g2d.scale(scale, scale);
 
             //Terrain
-            if (showTerrain && mapImage != null) {
-                g2d.drawImage(mapImage, 0, 0, null);
+            if (showTerrain && planetMap != null) {
+                g2d.drawImage(planetMap, 0, 0, null);
             }
 
             if (displayedView == RESOURCE_VIEW || displayedView == BOTH_VIEW || displayedView == CONSTRUCTION_VIEW) {
@@ -274,7 +275,8 @@ public class PlanetMap extends JPanel {
                     Graphics2D resourceGraphics = resourceImage.createGraphics();
                     resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));
 
-                    for (Stratum v : p.strata) {
+                    for (int i = 0; i < p.strata.size(); i++) {
+                        Stratum v = p.strata.get(i);
                         //Draw...
                         Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * tileSize,
                                 (v.getY() - v.getRadius()) * tileSize,
@@ -290,25 +292,36 @@ public class PlanetMap extends JPanel {
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, City> en : p.cityDistributions.entrySet()) {
-                    GeographicPoint point = en.getKey();
-                    City Building = en.getValue();
-                    //Draw
-                    Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
 
-                    g2d.setColor(Color.red);
-                    g2d.fill(rect);
-                }
+                if (cityMapImage == null || needRefresh) {
+                    cityMapImage = new BufferedImage((int) (p.getPlanetWidth() * tileSize), (int) (p.getPlanetHeight() * tileSize), BufferedImage.TYPE_INT_ARGB);
 
-                if (isActive) {
-                    //Draw it
-                    Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
-                    g2d.setColor(Color.RED);
-                    g2d.fill(buildingPointOutside);
-                    Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
-                    g2d.setColor(Color.BLUE);
-                    g2d.fill(buildingPointInside);
+                    Graphics2D mapGraphics = cityMapImage.createGraphics();
+
+                    Iterator<GeographicPoint> distIterator = p.cityDistributions.keySet().iterator();
+
+                    //for (int i = 0; i < size(); i++) {
+                    while (distIterator.hasNext()) {
+                        GeographicPoint point = distIterator.next();
+                        //Draw
+                        Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
+
+                        mapGraphics.setColor(Color.red);
+                        mapGraphics.fill(rect);
+                    }
+
+                    if (constructionActive) {
+                        //Draw it
+                        Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
+                        mapGraphics.setColor(Color.RED);
+                        mapGraphics.fill(buildingPointOutside);
+                        Rectangle2D.Double buildingPointInside = new Rectangle2D.Double((currentlyBuildingPoint.getX()) * tileSize, (currentlyBuildingPoint.getY()) * tileSize, tileSize, tileSize);
+                        mapGraphics.setColor(Color.BLUE);
+                        mapGraphics.fill(buildingPointInside);
+                    }
                 }
+                //Draw
+                g2d.drawImage(cityMapImage, 0, 0, null);
             }
 
             if (displayedView == CONSTRUCTION_VIEW) {
@@ -361,10 +374,10 @@ public class PlanetMap extends JPanel {
                 //Make the things
                 //Create construction panel
                 //Check if point is within bounds
-                if (mouseX > 0 && mouseY > 0 && mouseX < (p.getPlanetSize() * 2) && mouseY < p.getPlanetSize() && !isActive) {
+                if (mouseX > 0 && mouseY > 0 && mouseX < (p.getPlanetSize() * 2) && mouseY < p.getPlanetSize() && !constructionActive) {
                     GeographicPoint pt = new GeographicPoint(mouseX, mouseY);
                     currentlyBuildingPoint = pt;
-                    isActive = true;
+                    constructionActive = true;
                     ConstructionPanel construction = new ConstructionPanel(c, p, u, pt, PlanetMap.this);
                     ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(construction);
 
@@ -445,7 +458,8 @@ public class PlanetMap extends JPanel {
             } else if (displayedView == RESOURCE_VIEW || displayedView == CONSTRUCTION_VIEW) {
                 //Check if lying on strata
                 ArrayList<Stratum> strataToShow = new ArrayList<>();
-                for (Stratum stratum : p.strata) {
+                for (int i = 0; i < p.strata.size(); i++) {
+                    Stratum stratum = p.strata.get(i);
                     if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), mapX, mapY)) {
                         strataToShow.add(stratum);
                     }

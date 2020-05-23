@@ -20,6 +20,9 @@ package ConquerSpace.gui.renderers;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.PlanetTypes;
 import ConquerSpace.game.universe.bodies.terrain.TerrainColoring;
+import ConquerSpace.jLibNoise.noise.module.Perlin;
+import ConquerSpace.jLibNoise.noise.utils.NoiseMap;
+import ConquerSpace.jLibNoise.noise.utils.NoiseMapBuilderPlane;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -35,7 +38,6 @@ public class TerrainRenderer {
 
     public TerrainRenderer(Planet p) {
         this.p = p;
-
     }
 
     public Image getImage(double scale) {
@@ -49,12 +51,12 @@ public class TerrainRenderer {
             colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
             terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
                     6, 0.5f, 2f, 0.5f, p.getPlanetWidth() * 2, p.getPlanetHeight() * 2,
-                    -p.getPlanetWidth()/32, p.getPlanetWidth()/32, -p.getPlanetHeight()/32, p.getPlanetHeight()/32, colors);
+                    -p.getPlanetWidth() / 32, p.getPlanetWidth() / 32, -p.getPlanetHeight() / 32, p.getPlanetHeight() / 32, colors);
         } else if (p.getPlanetType() == PlanetTypes.GAS) {
             colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
             terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
                     6, 0.5f, 2f, 0.5f, p.getPlanetWidth(), p.getPlanetHeight(),
-                    0, p.getPlanetWidth()/16, 0, p.getPlanetHeight()/4, colors);
+                    0, p.getPlanetWidth() / 16, 0, p.getPlanetHeight() / 4, colors);
         }
 
         planetDisplaying = terrainColorses.toBufferedImage();
@@ -89,4 +91,5 @@ public class TerrainRenderer {
         }
         return ((planetDisplaying.getScaledInstance((int) (p.getPlanetHeight() * scale), (int) (p.getPlanetHeight() * scale), Image.SCALE_DEFAULT)));
     }
+
 }

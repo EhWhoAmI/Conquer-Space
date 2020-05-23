@@ -92,10 +92,13 @@ public class PlanetOverview extends JPanel {
 
     private boolean showPlanetTerrain = true;
     private NumberFormat numberFormatter;
-    
+
     private int population;
 
-    public PlanetOverview(Universe u, Planet p, Civilization c) {
+    private Image planetMap;
+
+    public PlanetOverview(Universe u, Planet p, Civilization c, Image planetMap) {
+        this.planetMap = planetMap;
         this.p = p;
         setLayout(new GridLayout(1, 2));
 
@@ -140,7 +143,6 @@ public class PlanetOverview extends JPanel {
 
         population = 0;
 
-
         populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population));
         currentStats.add(populationCount);
 
@@ -151,11 +153,11 @@ public class PlanetOverview extends JPanel {
         planetSectors = new JPanel(new VerticalFlowLayout());
         PlanetMinimap sectorDisplayer = new PlanetMinimap(p, c);
 
-        JPanel wrapper = new JPanel(new VerticalFlowLayout());
-        wrapper.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map"));
-        wrapper.add(sectorDisplayer);
-
-        planetSectors.add(wrapper);
+        planetSectors.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map"));
+        planetSectors.setPreferredSize(
+                new Dimension(sectorDisplayer.getPreferredSize().width,
+                        sectorDisplayer.getPreferredSize().height + 20));
+        planetSectors.add(sectorDisplayer);
 
         //Add components
         planetOverview.add(planetName);
@@ -175,9 +177,9 @@ public class PlanetOverview extends JPanel {
         jobListTableModel = new JobTableModel();
         jobListTable = new JTable(jobListTableModel);
         jobListPanel.add(new JScrollPane(jobListTable));
-        
+
         overviewPanel2.add(jobListPanel);
-        
+
         add(overviewPanel1);
         add(overviewPanel2);
     }
@@ -209,12 +211,11 @@ public class PlanetOverview extends JPanel {
         public PlanetMinimap(Planet p, Civilization c) {
             this.c = c;
             setPreferredSize(
-                    new Dimension(p.getPlanetSize() * 4, p.getPlanetSize() * 2));
+                    new Dimension(p.getPlanetWidth(), p.getPlanetHeight() * 2));
             menu = new JPopupMenu();
             addMouseListener(this);
             addMouseWheelListener(this);
             addMouseMotionListener(this);
-            renderer = new TerrainRenderer(p);
             setToolTipText("Use the left mouse button to move");
         }
 
@@ -224,9 +225,6 @@ public class PlanetOverview extends JPanel {
             Graphics2D g2d = (Graphics2D) g;
             //Zoom and stuff
 
-            if (img == null) {
-                img = renderer.getImage(2d);
-            }
             g2d.scale(scale, scale);
             g2d.translate(translateX, translateY);
             //The thingy has to be a square number
@@ -237,7 +235,9 @@ public class PlanetOverview extends JPanel {
             }
             //Draw planet terrain
             if (showPlanetTerrain) {
-                g2d.drawImage(img, 0, 0, null);
+                if (planetMap != null) {
+                    g2d.drawImage(planetMap, 0, 0, null);
+                }
             } else {
                 //Black for visibility
                 Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
@@ -421,22 +421,22 @@ public class PlanetOverview extends JPanel {
             int i = 0;
             JobType jobType = null;
             for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
-                if(i == rowIndex) {
+                if (i == rowIndex) {
                     i = entry.getValue();
                     jobType = entry.getKey();
                     break;
                 }
                 i++;
-                
+
             }
-            
+
             switch (columnIndex) {
                 case 0:
                     return jobType.getName();
                 case 1:
-                    return (i*10) + " million people";
+                    return (i * 10) + " million people";
                 case 2:
-                    return String.format("%.2f%%", (((double)i/(double)population) * 100));
+                    return String.format("%.2f%%", (((double) i / (double) population) * 100));
             }
             return "";
         }

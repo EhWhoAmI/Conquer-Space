@@ -20,8 +20,10 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.gui.renderers.TerrainRenderer;
 import ConquerSpace.util.ResourceLoader;
 import java.awt.BorderLayout;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -43,7 +45,9 @@ public class PlanetInfoSheet extends JPanel {
     PlanetEconomy planetEconomy;
     PlanetGeology planetGeology;
     PlanetResources planetResources;
-
+    
+    private Image planetImage;
+    
     private Civilization c;
     private Planet p;
 
@@ -52,10 +56,14 @@ public class PlanetInfoSheet extends JPanel {
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
         this.c = c;
         this.p = p;
+        
+        TerrainRenderer renderer = new TerrainRenderer(p);
+        planetImage = renderer.getImage(2d);
+        
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
 
-        overview = new PlanetOverview(u, p, c);
+        overview = new PlanetOverview(u, p, c, planetImage);
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetCities(u, p, 0);
         spacePort = new SpacePortMenuSheet(p, c);
@@ -63,7 +71,7 @@ public class PlanetInfoSheet extends JPanel {
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
-        planetMap = new PlanetMap(p, c, u, this);
+        planetMap = new PlanetMap(p, c, u, this, planetImage);
         planetEconomy = new PlanetEconomy();
         planetResources = new PlanetResources(p);
 
