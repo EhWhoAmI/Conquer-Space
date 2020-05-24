@@ -108,7 +108,6 @@ public class GameLoader {
         GameController.ores = ores;
 
         GameController.prodProcesses = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
-        readBuildingCosts();
 
         //Events
         readPopulationEvents();

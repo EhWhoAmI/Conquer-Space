@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.districts.BuildingCostGetter;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
@@ -230,10 +229,6 @@ public class AssetReader {
                 }
             }
         }
-    }
-
-    public static void readBuildingCosts() {
-        BuildingCostGetter.initializeBuildingCosts();
     }
 
     public static Object processElement(JSONObject obj) {
