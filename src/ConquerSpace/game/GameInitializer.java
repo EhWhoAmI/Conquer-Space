@@ -26,6 +26,7 @@ import ConquerSpace.game.civilization.government.PoliticalPowerTransitionMethod;
 import ConquerSpace.game.civilization.vision.VisionTypes;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.area.CapitolArea;
+import ConquerSpace.game.districts.area.CommercialArea;
 import ConquerSpace.game.districts.area.FarmFieldArea;
 import ConquerSpace.game.districts.area.ManufacturerArea;
 import ConquerSpace.game.districts.area.MineArea;
@@ -160,18 +161,26 @@ public class GameInitializer {
         //Add resource miners
         createResourceMiners(starting, c, c.getFoundingSpecies());
 
-        //createResourceStorages(c, starting, selector);
         createPopulationStorages(starting, c, selector);
 
         createFarms(starting, c, selector);
 
         createIndustrialZones(c, selector, starting);
-
-        //createObservatory(starting, c, selector);
-        //Add infrastructure
-        createInfrastructure(starting, selector);
-
-        addResearchInstitutions(starting, c, selector);
+        
+        //Initialize namelists
+        NameGenerator researchInstitutionGenerator = null;
+        try {
+            researchInstitutionGenerator = NameGenerator.getNameGenerator("uni.names");
+        } catch (IOException ex) {
+            //Ignore
+        }
+        
+        for (int i = 0; i < starting.cities.size(); i++) {
+            City city = starting.cities.get(i);
+            addInfrastructure(city);
+            addResearchInstitution(city, c, researchInstitutionGenerator, selector);
+            addCommercialArea(city);
+        }
     }
 
     private void createResourceMiners(Planet p, Civilization c, Race founding) {
@@ -251,7 +260,7 @@ public class GameInitializer {
                 field.grow();
                 field.setOperatingJobs(10000);
                 field.setMaxJobs(30000);
-                
+
                 faceBook.addArea(field);
             }
             //Add a farm
@@ -534,29 +543,6 @@ public class GameInitializer {
         }
     }
 
-    private void createInfrastructure(Planet p, Random selector) {
-        //Adds the infrastructure to the planet...        
-        for (City c : p.cities) {
-            PowerPlantArea powerPlant = new PowerPlantArea();
-            //TODO: choose energy resource
-            /*
-                Resource resource = null;
-                for (Resource res : GameController.resources) {
-                    for (String tag : res.getTags()) {
-                        if (tag.equals("energy")) {
-                            resource = res;
-                            break;
-                        }
-                    }
-                }*/
-            c.addArea(powerPlant);
-        }
-    }
-
-    private PowerPlantArea createPowerPlant() {
-        return null;
-    }
-
     private void nameStratumOnPlanet(Planet p) {
         NameGenerator gen = null;
         try {
@@ -573,7 +559,7 @@ public class GameInitializer {
         for (City c : p.cities) {
             //Add first population segment
             PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
-            seg.size = selector.nextInt(10_000) + 30_000;
+            seg.size = selector.nextInt(200_000) + 300_000;
 
             seg.size *= c.areas.size();
             seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
@@ -581,36 +567,53 @@ public class GameInitializer {
         }
     }
 
-    private void addResearchInstitutions(Planet p, Civilization c, Random selector) {
-        NameGenerator gen = null;
-        try {
-            gen = NameGenerator.getNameGenerator("uni.names");
-        } catch (IOException ex) {
-            //Ignore
-        }
+    private void addResearchInstitution(City city, Civilization civilization, NameGenerator gen, Random selector) {
+        //Add to city
+        String name = gen.getName(0);
+        ResearchArea research = new ResearchArea();
+        research.setName(name);
 
-        int count = p.cities.size();
-        for (int i = 0; i < count; i++) {
-            //Add to city
-            String name = gen.getName(0);
-            ResearchArea research = new ResearchArea();
-            research.setName(name);
+        research.setMaxJobs(30_000);
+        research.setOperatingJobs(15_000);
 
-            //Add fields
-            ArrayList<Field> fields = new ArrayList<>();
-            //Remove the first one
-            Field toFind = c.fields.getNode(0); //Because everyone does science for now, not magic when we add it...
-            toFind.getFieldsExclusivse(fields);
+        //Add fields
+        ArrayList<Field> fields = new ArrayList<>();
+        //Remove the first one
+        Field toFind = civilization.fields.getNode(0); //Because everyone does science for now, not magic when we add it...
+        toFind.getFieldsExclusivse(fields);
 
-            //Choose random field
-            Field toAdd = fields.get(selector.nextInt(fields.size()));
-            research.focusFields.put(toAdd.getName(), 1);
+        //Choose random field
+        Field toAdd = fields.get(selector.nextInt(fields.size()));
+        research.focusFields.put(toAdd.getName(), 1);
 
-            c.scienceLabs.add(research);
+        civilization.scienceLabs.add(research);
 
-            //Choose random fields
-            p.cities.get(i).addArea(research);
-        }
+        //Choose random fields
+        city.addArea(research);
+    }
+    
+    private void addCommercialArea(City c) {
+        CommercialArea area = new CommercialArea();
+        area.setMaxJobs(100_000);
+        area.setOperatingJobs(1_000);
+        area.setTradeValue(50_000);
+        c.addArea(area);
+    }
+
+    private void addInfrastructure(City c) {
+        PowerPlantArea powerPlant = new PowerPlantArea();
+        //TODO: choose energy resource
+        /*
+                Resource resource = null;
+                for (Resource res : GameController.resources) {
+                    for (String tag : res.getTags()) {
+                        if (tag.equals("energy")) {
+                            resource = res;
+                            break;
+                        }
+                    }
+                }*/
+        c.addArea(powerPlant);
     }
 
     private void addSupplyLines(Planet p) {

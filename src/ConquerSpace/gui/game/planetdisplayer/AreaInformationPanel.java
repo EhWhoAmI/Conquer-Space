@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.districts.area.CapitolArea;
+import ConquerSpace.game.districts.area.CommercialArea;
 import ConquerSpace.game.districts.area.FarmFieldArea;
 import ConquerSpace.game.districts.area.FinancialArea;
 import ConquerSpace.game.districts.area.InfrastructureArea;
@@ -126,6 +127,12 @@ public class AreaInformationPanel extends JPanel {
                 MineArea area = (MineArea) a;
                 JLabel resourceMined = new JLabel("Time Left: " + area.getResourceMined());
                 add(resourceMined);
+            } else if (a instanceof CommercialArea) {
+                JLabel title = new JLabel("Commercial Area");
+                add(title);
+                CommercialArea area = (CommercialArea) a;
+                JLabel tradeValue = new JLabel("Trade Value: " + area.getTradeValue());
+                add(tradeValue);
             }
 
             JLabel currentJobs = new JLabel("Current Manpower: " + a.getCurrentlyManningJobs());
