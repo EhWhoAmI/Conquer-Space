@@ -80,6 +80,7 @@
         <delete file="${dist.dir}/README.TXT"/>
         <copy todir="${dist.dir}" >  
             <fileset file="run_CQSP.bat"/>
+            <fileset file="cqsp_debug.bat"/>
             <fileset file="CHANGELOG.txt"/>
             <fileset file="LICENSE.txt"/>
             <fileset file="README.txt"/>

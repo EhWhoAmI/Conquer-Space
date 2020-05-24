@@ -393,6 +393,11 @@ public class SystemRenderer {
         if (fpsCounter == 0) {
             fpsCounter = 1;
         }
+        //Because the FPS is just so good. Make sure there is no divide by zero mistake or something
+        long diff = (current - fpsCounter);
+        if (diff == 0) {
+            diff = 1;
+        }
         g2d.drawString(String.format("%d", 1000 / (current - fpsCounter)) + " fps", 10, 40);
         fpsCounter = current;
 

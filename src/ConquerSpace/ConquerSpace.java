@@ -19,7 +19,10 @@ package ConquerSpace;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
+import ConquerSpace.game.civilization.CivilizationConfig;
+import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.gui.start.Loading;
 import ConquerSpace.gui.start.MainMenu;
@@ -30,6 +33,7 @@ import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Version;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.io.File;
@@ -98,7 +102,7 @@ public class ConquerSpace {
     public static String codeChecksum = null;
     public static String assetChecksum = null;
 
-    public static final boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public static final Properties defaultProperties = new Properties();
 
@@ -111,6 +115,10 @@ public class ConquerSpace {
         if (args.length >= 1 && args[0].equals("-t")) {
             new ToolsSelectionMenu();
         } else {
+            if (args.length >= 1 && args[0].equals("-debug")) {
+                DEBUG = true;
+            }
+            
             CQSPLogger.initLoggers();
             LOGGER.info("Run started: " + new Date().toString());
             LOGGER.info("Version " + VERSION.toString());
@@ -145,14 +153,21 @@ public class ConquerSpace {
 
             //New Game Menu
             try {
-                MainMenu menu = new MainMenu();
-                menu.setVisible(true);
 
-                //While the menu not loaded...
-                while (!menu.isLoadedUniverse()) {
-                    Thread.sleep(100);
+                //Add debug menu
+                if (DEBUG) {
+                    //Debug game loader
+                    setDebugUniverseGenerator();
+                } else {
+                    MainMenu menu = new MainMenu();
+                    menu.setVisible(true);
+
+                    //While the menu not loaded...
+                    while (!menu.isLoadedUniverse()) {
+                        Thread.sleep(100);
+                    }
+                    menu = null;
                 }
-                menu = null;
                 //Show loading screen
                 Loading load = new Loading();
                 loadUniverse();
@@ -393,6 +408,35 @@ public class ConquerSpace {
 
         defaultProperties.setProperty("laf", "default");
 
+    }
+
+    static void setDebugUniverseGenerator() {
+        UniverseConfig config = new UniverseConfig();
+
+        config.setUniverseSize("Medium");
+        config.setUniverseShape("Irregular");
+        config.setUniverseAge("Medium");
+        config.setCivilizationCount("Common");
+        config.setPlanetCommonality("Common");
+
+        //XD
+        config.setSeed(42);
+
+        //Set the player Civ options
+        CivilizationConfig civilizationConfig = new CivilizationConfig();
+        civilizationConfig.setCivColor(Color.CYAN);
+        civilizationConfig.setCivSymbol("A");
+        civilizationConfig.setCivilizationName("Humans");
+        civilizationConfig.setCivilizationPreferredClimate("Varied");
+        civilizationConfig.setHomePlanetName("Earth");
+        civilizationConfig.setSpeciesName("Earthlings");
+        civilizationConfig.setCivCurrencyName("Money");
+        civilizationConfig.setCivCurrencySymbol("M");
+        config.setCivilizationConfig(civilizationConfig);
+
+        //Create generator
+        DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
+        Globals.generator = gen;
     }
 
     /**

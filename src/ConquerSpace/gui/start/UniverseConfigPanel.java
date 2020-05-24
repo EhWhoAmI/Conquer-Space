@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
+import static ConquerSpace.ConquerSpace.DEBUG;
 import ConquerSpace.Globals;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -110,10 +111,10 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
 
         seedLabel = new JLabel("Seed");
         seedText = new JTextField();
-        if (Globals.settings.getProperty("debug") != null && Globals.settings.getProperty("debug").equals("yes")) {
+        if (DEBUG) {
             seedText.setText("test");
         } else {
-            seedText.setText("" + System.currentTimeMillis());
+            seedText.setText(Long.toString(System.currentTimeMillis()));
         }
 
         JPanel rsidePan = new JPanel();
