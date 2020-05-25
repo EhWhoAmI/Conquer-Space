@@ -312,7 +312,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
                 //Check if it orbits a planet
                 sat.setOwner(c.getID());
-                Actions.launchSatellite(sat, p, 100, c);
+                Actions.launchSatellite(sat, p, c);
                 JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
             } else if (tab == 1) {
                 int selection = qlSpaceshipList.getSelectedIndex();

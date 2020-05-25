@@ -15,16 +15,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.logistics;
+package ConquerSpace.game.districts.area;
 
-import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.ships.launch.LaunchSystem;
+import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
+import java.util.ArrayList;
 
 /**
- *
+ * A place where you can start to Conquer Space!
  * @author EhWhoAmI
  */
-public class TransportOrder {
-    float completion;
-    Good resource;
-    double amount;
+public class SpacePortArea extends Area{
+    public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
+    private LaunchSystem system;
+
+    public SpacePortArea(LaunchSystem system, int amount) {
+        this.system = system;
+        launchPads = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            launchPads.add(new SpacePortLaunchPad(system));
+        }
+    }
+    
+    public LaunchSystem getLaunchSystem() {
+        return system;
+    }
 }

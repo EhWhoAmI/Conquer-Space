@@ -53,4 +53,8 @@ public class SpacePortLaunchPad {
     public String toString() {
         return type.getName();
     }
+
+    public Launchable getLaunching() {
+        return launching;
+    }
 }

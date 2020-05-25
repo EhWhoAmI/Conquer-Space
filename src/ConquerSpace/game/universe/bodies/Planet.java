@@ -193,6 +193,7 @@ public class Planet extends Body {
     }
 
     public void addSatellite(Satellite s) {
+        s.setOrbiting(getUniversePath());
         satellites.add(s);
     }
 

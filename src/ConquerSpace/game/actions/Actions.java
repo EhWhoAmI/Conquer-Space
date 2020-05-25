@@ -24,6 +24,7 @@ import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.science.tech.Technology;
+import ConquerSpace.game.ships.Launchable;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.SpaceTelescope;
@@ -56,7 +57,7 @@ public class Actions {
 
     }
 
-    public static void launchSatellite(Satellite what, Planet whichPlanet, int distance, Civilization c) {
+    public static void launchSatellite(Satellite what, Planet whichPlanet, Civilization c) {
         if (what instanceof VisionPoint) {
             SpaceTelescope obs = ((SpaceTelescope) what);
             StarSystem sys = Globals.universe.getStarSystem(whichPlanet.getParentStarSystem());
@@ -74,6 +75,18 @@ public class Actions {
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
         civ.spaceships.add(what);
+    }
+
+    public static void launchLaunchable(Launchable launch, Planet planet) {
+        if (launch instanceof Ship) {
+            Ship ship = (Ship) launch;
+            ship.setLocation(planet.getUniversePath());
+            ship.setIsOrbiting(true);
+            planet.putShipInOrbit(ship);
+        } else if (launch instanceof Satellite) {
+            Satellite satellite = (Satellite) launch;
+            planet.addSatellite(satellite);
+        }
     }
 
     public static void moveShip(Ship what, Civilization civ, long x, long y, Universe u) {

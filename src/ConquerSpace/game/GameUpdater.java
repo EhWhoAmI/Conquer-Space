@@ -18,6 +18,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.civilization.Civilization;
@@ -30,6 +31,7 @@ import ConquerSpace.game.districts.area.ManufacturerArea;
 import ConquerSpace.game.districts.area.MineArea;
 import ConquerSpace.game.districts.area.PowerPlantArea;
 import ConquerSpace.game.districts.area.ResearchArea;
+import ConquerSpace.game.districts.area.SpacePortArea;
 import ConquerSpace.game.districts.area.TimedManufacturerArea;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
@@ -39,6 +41,7 @@ import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.ships.Ship;
+import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Body;
@@ -246,7 +249,7 @@ public class GameUpdater {
             calculateCityJobs(c, date, delta);
 
             for (Area a : c.areas) {
-                processArea(c, a, date, delta);
+                processArea(p, c, a, date, delta);
             }
         }
     }
@@ -273,7 +276,7 @@ public class GameUpdater {
         }
     }
 
-    public void processArea(City c, Area a, StarDate date, int delta) {
+    public void processArea(Planet p, City c, Area a, StarDate date, int delta) {
         if (a instanceof FarmFieldArea) {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
@@ -331,7 +334,17 @@ public class GameUpdater {
                 }
                 storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c);
             }
-
+        } else if (a instanceof SpacePortArea) {
+            SpacePortArea area = (SpacePortArea) a;
+            for (int i = 0; i < area.launchPads.size(); i++) {
+                SpacePortLaunchPad get = area.launchPads.get(i);
+                get.ticks -= delta;
+                if (get.ticks <= 0) {
+                    //Launch!
+                    //Get the owner somehow...
+                    Actions.launchLaunchable(get.getLaunching(), p);
+                }
+            }
         }
     }
 
@@ -522,10 +535,10 @@ public class GameUpdater {
             }
         }
     }
-    
+
     public void storeResource(Good resourceType, Double amount, int owner, City from) {
         if (resourceType != null) {
-            if(from.canStore(resourceType)) {
+            if (from.canStore(resourceType)) {
                 //Store resource
                 from.addResource(resourceType, amount);
             } else {
