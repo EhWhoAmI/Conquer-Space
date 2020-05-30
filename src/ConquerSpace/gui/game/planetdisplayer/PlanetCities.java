@@ -19,7 +19,6 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.area.Area;
-import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -72,6 +71,8 @@ public class PlanetCities extends JPanel {
     private final String[] availableJobColunmNames = {"Job name", "Count"};
 
     private JPanel cityData;
+
+    private AreaConstructionPanel areaConstructionPanel;
 
     private Planet p;
 
@@ -138,6 +139,12 @@ public class PlanetCities extends JPanel {
         cityInfoTabs.addChangeListener(c -> {
             if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
                 citySelectedTab = cityInfoTabs.getSelectedIndex();
+            }
+            if (areaListModel != null && cityList.getSelectedValue() != null) {
+                for (Area area : cityList.getSelectedValue().areas) {
+                    areaListModel.addElement(area);
+                }
+
             }
         });
 
@@ -247,10 +254,13 @@ public class PlanetCities extends JPanel {
         //Fill up
         availableJobTable = new JTable(availableJobModel);
 
+        areaConstructionPanel = new AreaConstructionPanel(p, selected);
+
         cityInfoTabs.removeAll();
         cityInfoTabs.add("Areas", areaInfoPanel);
         cityInfoTabs.add("Employment", new JScrollPane(jobTable));
         cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
+        cityInfoTabs.add("Construction", areaConstructionPanel);
         cityInfoTabs.setSelectedIndex(citySelectedTab);
         cityData.add(cityInfoTabs);
 

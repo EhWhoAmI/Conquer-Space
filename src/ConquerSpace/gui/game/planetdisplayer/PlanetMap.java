@@ -193,7 +193,7 @@ public class PlanetMap extends JPanel {
 
         viewMenu.addSeparator();
 
-        buildMenuButton = new JCheckBoxMenuItem("Construction View");
+        buildMenuButton = new JCheckBoxMenuItem("Create New City");
         //viewMenuButtonGroup.add(buildMenuButton);
         buildMenuButton.addActionListener(viewActionListener);
         viewMenu.add(buildMenuButton);
