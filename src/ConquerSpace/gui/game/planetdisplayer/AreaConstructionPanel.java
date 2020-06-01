@@ -17,10 +17,12 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.planetdisplayer.construction.AreaDesignPanel;
 import ConquerSpace.gui.game.planetdisplayer.construction.MinerAreaConstructionPanel;
+import ConquerSpace.gui.game.planetdisplayer.construction.SpacePortConstructionPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -48,30 +50,43 @@ public class AreaConstructionPanel extends JPanel {
 
     private JPanel areaConstructionInfo;
 
-    private static String[] AREA_LIST_NAMES = {"Mine", "Manufacturer", "Power Planet", "Space Port"};
+    private static final String MINE_STRING = "Mine";
+    private static final String SPACE_PORT_STRING = "Space Port";
+
+    private static String[] AREA_LIST_NAMES = {MINE_STRING, "Manufacturer", "Power Planet", SPACE_PORT_STRING};
 
     private AreaDesignPanel areaDesignPanel = null;
 
-    public AreaConstructionPanel(Planet planet, City city) {
+    public AreaConstructionPanel(Planet planet, Civilization c, City city) {
         setLayout(new BorderLayout());
 
         areaTypeListModel = new DefaultListModel<>();
         for (int i = 0; i < AREA_LIST_NAMES.length; i++) {
-            areaTypeListModel.addElement(AREA_LIST_NAMES[i]);
+            //Has launch capability
+            if (AREA_LIST_NAMES[i].equals(SPACE_PORT_STRING)) {
+                if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
+                    areaTypeListModel.addElement(AREA_LIST_NAMES[i]);
+                }
+            } else {
+                areaTypeListModel.addElement(AREA_LIST_NAMES[i]);
+            }
         }
         areaTypeList = new JList<>(areaTypeListModel);
         areaTypeList.addListSelectionListener(l -> {
             areaConstructionInfo.removeAll();
             //Get selected area type
-            switch (areaTypeList.getSelectedIndex()) {
-                case 0:
+            switch (areaTypeList.getSelectedValue()) {
+                case MINE_STRING:
                     areaDesignPanel = new MinerAreaConstructionPanel(planet, city);
+                    break;
+                case SPACE_PORT_STRING:
+                    areaDesignPanel = new SpacePortConstructionPanel(planet, city, c);
                     break;
                 default:
                     areaDesignPanel = new AreaDesignPanel(planet, city);
                     break;
             }
-            areaConstructionInfo.add(areaDesignPanel, BorderLayout.CENTER);
+            areaConstructionInfo.add(areaDesignPanel, BorderLayout.PAGE_START);
         });
 
         areaConstructionInfo = new JPanel(new BorderLayout());

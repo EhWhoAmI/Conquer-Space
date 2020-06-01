@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.population.jobs.JobType;
@@ -88,10 +89,12 @@ public class PlanetCities extends JPanel {
     private JList<Area> areaList;
 
     private Universe u;
+    private Civilization owner;
 
-    public PlanetCities(Universe u, Planet p, int turn) {
+    public PlanetCities(Universe u, Planet p, Civilization civ, int turn) {
         this.u = u;
         this.p = p;
+        this.owner = civ;
         tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
 
@@ -254,7 +257,7 @@ public class PlanetCities extends JPanel {
         //Fill up
         availableJobTable = new JTable(availableJobModel);
 
-        areaConstructionPanel = new AreaConstructionPanel(p, selected);
+        areaConstructionPanel = new AreaConstructionPanel(p, owner, selected);
 
         cityInfoTabs.removeAll();
         cityInfoTabs.add("Areas", areaInfoPanel);

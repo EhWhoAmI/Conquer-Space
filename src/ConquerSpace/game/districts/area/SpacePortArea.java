@@ -40,4 +40,9 @@ public class SpacePortArea extends Area{
     public LaunchSystem getLaunchSystem() {
         return system;
     }
+
+    @Override
+    public String toString() {
+        return "Space Port";
+    }
 }

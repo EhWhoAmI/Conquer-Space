@@ -17,17 +17,81 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
+import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.districts.City;
+import ConquerSpace.game.districts.area.Area;
+import ConquerSpace.game.districts.area.SpacePortArea;
+import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.universe.bodies.Planet;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class SpacePortConstructionPanel extends AreaDesignPanel{
-    
-    public SpacePortConstructionPanel(Planet p, City c) {
+public class SpacePortConstructionPanel extends AreaDesignPanel {
+
+    private JLabel amount;
+    private JSpinner maxLaunchTubes;
+    private JLabel launchTypes;
+    private JComboBox<LaunchSystem> launchTypesValue;
+
+    public SpacePortConstructionPanel(Planet p, City c, Civilization civ) {
         super(p, c);
+
+        setLayout(new GridBagLayout());
+        amount = new JLabel("Amount of launch ports");
+
+        launchTypes = new JLabel("Launch types");
+
+        SpinnerNumberModel model = new SpinnerNumberModel(3, 1, 5000, 1);
+
+        maxLaunchTubes = new JSpinner(model);
+        ((JSpinner.DefaultEditor) maxLaunchTubes.getEditor()).getTextField().setEditable(false);
+
+        launchTypesValue = new JComboBox<LaunchSystem>();
+
+        for (LaunchSystem t : civ.launchSystems) {
+            launchTypesValue.addItem(t);
+        }
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 1;
+        constraints.weighty = 0.1;
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.BOTH;
+        add(amount, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        add(maxLaunchTubes, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        add(launchTypes, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        add(launchTypesValue, constraints);
     }
-    
+
+    @Override
+    public Area getAreaToConstruct() {
+        if (launchTypesValue.getSelectedItem() != null && launchTypesValue.getSelectedItem() instanceof LaunchSystem) {
+            LaunchSystem ls = (LaunchSystem) launchTypesValue.getSelectedItem();
+            return new SpacePortArea(ls, (Integer) maxLaunchTubes.getValue());
+        }
+        return null;
+    }
 }

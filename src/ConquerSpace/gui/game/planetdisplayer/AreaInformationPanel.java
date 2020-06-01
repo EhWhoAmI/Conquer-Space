@@ -26,6 +26,7 @@ import ConquerSpace.game.districts.area.InfrastructureArea;
 import ConquerSpace.game.districts.area.ManufacturerArea;
 import ConquerSpace.game.districts.area.MineArea;
 import ConquerSpace.game.districts.area.ResearchArea;
+import ConquerSpace.game.districts.area.SpacePortArea;
 import ConquerSpace.game.universe.resources.Good;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
@@ -133,6 +134,14 @@ public class AreaInformationPanel extends JPanel {
                 CommercialArea area = (CommercialArea) a;
                 JLabel tradeValue = new JLabel("Trade Value: " + area.getTradeValue());
                 add(tradeValue);
+            } else if (a instanceof SpacePortArea) {
+                JLabel title = new JLabel("Space Port");
+                add(title);
+                SpacePortArea area = (SpacePortArea) a;
+                JLabel launchSystemLabel = new JLabel("Launch System: " + area.getLaunchSystem().getName());
+                add(launchSystemLabel);
+                JLabel launchPadLabel = new JLabel("Launch Pads: " + area.launchPads.size());
+                add(launchPadLabel);
             }
 
             JLabel currentJobs = new JLabel("Current Manpower: " + a.getCurrentlyManningJobs());

@@ -62,5 +62,4 @@ public class SwingMessageAppender extends AbstractAppender {
     private void initFrame() {
         panel = new LoggerPanel(events);
     }
-
 }

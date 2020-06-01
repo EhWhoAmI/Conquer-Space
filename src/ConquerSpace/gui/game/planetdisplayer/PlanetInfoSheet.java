@@ -65,7 +65,7 @@ public class PlanetInfoSheet extends JPanel {
 
         overview = new PlanetOverview(u, p, c, planetImage);
         atmosphere = new AtmosphereInfo(p, c);
-        population = new PlanetCities(u, p, 0);
+        population = new PlanetCities(u, p, c, 0);
         spacePort = new SpacePortMenuSheet(p, c);
         planetGeology = new PlanetGeology(p);
         //building = new ConstructionMenu(u, p, c);
@@ -130,6 +130,8 @@ public class PlanetInfoSheet extends JPanel {
         //TODO
         //Check if civ has launch capability
         if (c.values.get("haslaunch") != 1) {
+            
+            //Disable
             tpane.setEnabledAt(spacePortIndex, false);
         }
     }
