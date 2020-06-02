@@ -346,6 +346,7 @@ public class AssetReader {
     //Lol the name
     public static Object processProcess(JSONObject obj) {
         String name = obj.getString("name");
+        String identifier = obj.getString("identifier");
 
         HashMap<Integer, Double> input = new HashMap<>();
 
@@ -384,10 +385,12 @@ public class AssetReader {
 
         ProductionProcess process = new ProductionProcess();
         process.name = name;
+        process.identifier = identifier;
         process.input = input;
         process.output = output;
         process.diff = diff;
 
+        GameController.prodProcesses.put(name, process);
         return process;
     }
 

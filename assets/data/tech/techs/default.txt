@@ -592,8 +592,8 @@
     upgradable: false
     difficulty: 1
     action: [
-        process:Magnetite Smelting
-        process:Hematite Smelting
+        process:smelting_o_magnetite
+        process:smelting_o_hematitie
     ]
     fields:
     [
@@ -668,9 +668,9 @@
     upgradable: false
     difficulty: 1
     action: [
-        process:Bayer process gibbsite
-        process:Bayer process diaspore
-        process:Bayer process boehmite
+        process:smelting_o_gibbsite
+        process:smelting_o_diaspore
+        process:smelting_o_boehmite
     ]
     fields:
     [
@@ -694,7 +694,7 @@
     upgradable: false
     difficulty: 1
     action: [
-      process:Low Grade Steel Making
+      process:steel_low_grade_making
     ]
     fields:
     [
@@ -718,7 +718,7 @@
     upgradable: false
     difficulty: 1
     action: [
-      process:Consumer Good Making
+      process:consumer_good_making
     ]
     fields:
     [

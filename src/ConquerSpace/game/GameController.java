@@ -73,7 +73,6 @@ public class GameController {
     public static MusicPlayer musicPlayer;
 
     public static ArrayList<Element> elements;
-    public static ArrayList<NonElement> rawMaterials;
     public static HashMap<Integer, ResourceDistribution> ores = new HashMap<>();
     public static ArrayList<Good> allGoods;
     public static HashMap<Integer, Good> goodHashMap;
@@ -83,7 +82,7 @@ public class GameController {
 
     public static ArrayList<SupplyChain> supplyChains = new ArrayList<>();
 
-    public static ArrayList<ProductionProcess> prodProcesses;
+    public static HashMap<String, ProductionProcess> prodProcesses;
 
     public static Civilization playerCiv = null;
 

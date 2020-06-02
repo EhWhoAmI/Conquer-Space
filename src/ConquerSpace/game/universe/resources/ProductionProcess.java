@@ -26,7 +26,11 @@ import java.util.HashMap;
  */
 public class ProductionProcess {
 
+    private static int idCounter = 0;
+    
+    private int id;
     public String name;
+    public String identifier;
     public HashMap<Integer, Double> input;
     public HashMap<Integer, Double> output;
     public ArrayList<Integer> catalyst;
@@ -37,6 +41,7 @@ public class ProductionProcess {
         input = new HashMap<>();
         output = new HashMap<>();
         catalyst = new ArrayList<>();
+        id = idCounter++;
     }
     
     
@@ -45,10 +50,15 @@ public class ProductionProcess {
         output = new HashMap<>();
         output.put(outputGood, 1d);
         catalyst = new ArrayList<>();
+        id = idCounter++;
     }
 
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 }

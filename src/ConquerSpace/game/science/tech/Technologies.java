@@ -247,19 +247,10 @@ public class Technologies {
             String[] text = action.split(":");
             String content = text[1].trim();
 
-            ProductionProcess process = null;
-            //Find the process name
-            for (int i = 0; i < GameController.prodProcesses.size(); i++) {
-                ProductionProcess proc = GameController.prodProcesses.get(i);
-
-                if (proc.name.equals(content)) {
-                    process = proc;
-                    //So that it's not null
-                    c.productionProcesses.add(process);
-                    break;
-                }
-            }
-            if (process == null) {
+            ProductionProcess process = GameController.prodProcesses.get(content);
+            if (process != null) {
+                c.productionProcesses.add(process);
+            } else (process == null) {
                 LOGGER.trace("Could not find process " + content);
             }
         } else if (action.startsWith("mine")) {

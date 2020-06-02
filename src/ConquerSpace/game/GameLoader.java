@@ -98,7 +98,7 @@ public class GameLoader {
             Good g = GameController.allGoods.get(i);
             GameController.goodHashMap.put(g.getId(), g);
         }
-        
+
         ArrayList<ResourceDistribution> res = readHjsonFromDirInArray("dirs.distributions", ResourceDistribution.class, AssetReader::processDistributions);
 
         //Sort through the list
@@ -106,8 +106,8 @@ public class GameLoader {
             Integer identifier = GameController.goodIdentifiers.get(dist.resourceName);
             GameController.ores.put(identifier, dist);
         }
-
-        GameController.prodProcesses = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
+        GameController.prodProcesses = new HashMap<>();
+        ArrayList<ProductionProcess> process = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
 
         //Events
         readPopulationEvents();
