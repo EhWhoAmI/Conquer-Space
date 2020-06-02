@@ -52,8 +52,8 @@ public class ResourceManager extends JPanel {
         resourceTable = new JTable(resourceTableModel);
 
         //Initalize with default values
-        for (Map.Entry<Good, Double> entry : c.resourceList.entrySet()) {
-            Good key = entry.getKey();
+        for (Map.Entry<Integer, Double> entry : c.resourceList.entrySet()) {
+            Integer key = entry.getKey();
             resourceTableModel.addRow(new String[]{key.toString(), "0"});
         }
         JScrollPane pane = new JScrollPane(resourceTable);
@@ -64,10 +64,10 @@ public class ResourceManager extends JPanel {
         //fill table
         int x = 0;
         resourceTableModel.setRowCount(0);
-        for (Map.Entry<Good, Double> entry : c.resourceList.entrySet()) {
-            Good key = entry.getKey();
+        for (Map.Entry<Integer, Double> entry : c.resourceList.entrySet()) {
+            Integer key = entry.getKey();
             Double val = entry.getValue();
-            resourceTableModel.addRow(new String[]{key.toString(), val + ""});
+            resourceTableModel.addRow(new String[]{key.toString(), Double.toString(val)});
             x++;
         }
     }

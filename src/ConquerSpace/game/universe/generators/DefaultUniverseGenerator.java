@@ -37,7 +37,6 @@ import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.StarTypes;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.bodies.terrain.TerrainColoring;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
 import ConquerSpace.game.universe.resources.Stratum;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -406,9 +405,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Find the amount of resources to add...
         //Sort through resources, and find suitable
-        ArrayList<Good> toAdd = new ArrayList<>();
-        for (Map.Entry<Good, ResourceDistribution> entry : GameController.ores.entrySet()) {
-            Good key = entry.getKey();
+        ArrayList<Integer> toAdd = new ArrayList<>();
+        for (Map.Entry<Integer, ResourceDistribution> entry : GameController.ores.entrySet()) {
+            Integer key = entry.getKey();
             ResourceDistribution val = entry.getValue();
             double rarity = val.rarity;
             if (rand.nextDouble() < rarity) {
@@ -425,7 +424,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Stratum stratum = new Stratum();
 
             //Add resources
-            for (Good o : toAdd) {
+            for (Integer o : toAdd) {
                 stratum.minerals.put(o, randint(rand, 10000, 500_000));
             }
 

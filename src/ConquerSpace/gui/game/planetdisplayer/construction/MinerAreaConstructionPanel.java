@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.districts.area.MineArea;
@@ -81,11 +82,11 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
         stratumList.addListSelectionListener(l -> {
             resourceListTableModel.setRowCount(0);
             Stratum strat = strataListModel.elementAt(stratumList.getSelectedIndex());
-            for (Map.Entry<Good, Integer> en : strat.minerals.entrySet()) {
-                Good key = en.getKey();
+            for (Map.Entry<Integer, Integer> en : strat.minerals.entrySet()) {
+                Integer key = en.getKey();
                 Integer val = en.getValue();
 
-                resourceListTableModel.addRow(new Object[]{key, val});
+                resourceListTableModel.addRow(new Object[]{GameController.goodHashMap.get(key).getName(), val});
             }
 
             if (resourceListTableModel.getRowCount() > 0) {
@@ -143,7 +144,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     @Override
     public Area getAreaToConstruct() {
         if (miningStratum != null && miningGood != null) {
-            return new MineArea(miningStratum, miningGood, amountMining);
+            return new MineArea(miningStratum, miningGood.getId(), amountMining);
         }
         return null;
     }

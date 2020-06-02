@@ -27,8 +27,8 @@ public class TempNonElement extends Good{
 
     public HashMap<String, Double> recipie;
 
-    public TempNonElement(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
+    public TempNonElement(String name, String identifier, double volume, double mass) {
+        super(name, identifier, volume, mass);
         recipie = new HashMap<>();
     }
 }

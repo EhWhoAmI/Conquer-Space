@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.logistics;
 
-import ConquerSpace.game.universe.resources.Good;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +29,7 @@ public class SupplyChain {
     public ArrayList<SupplyNode> nodes;
     int time;
     int distance;
-    Good good;
+    Integer good;
     //In units
     double currentAmount;
     //In units

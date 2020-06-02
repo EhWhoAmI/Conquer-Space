@@ -27,9 +27,9 @@ import java.util.HashMap;
 public class ProductionProcess {
 
     public String name;
-    public HashMap<Good, Double> input;
-    public HashMap<Good, Double> output;
-    public ArrayList<Good> catalyst;
+    public HashMap<Integer, Double> input;
+    public HashMap<Integer, Double> output;
+    public ArrayList<Integer> catalyst;
     //How difficult it is to extract. Will replace with the parts for the factory in the futute.
     public int diff;
 
@@ -40,7 +40,7 @@ public class ProductionProcess {
     }
     
     
-    public ProductionProcess(Good outputGood) {
+    public ProductionProcess(Integer outputGood) {
         input = new HashMap<>();
         output = new HashMap<>();
         output.put(outputGood, 1d);

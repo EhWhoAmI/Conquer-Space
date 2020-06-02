@@ -26,7 +26,7 @@ import ConquerSpace.game.universe.resources.Good;
  */
 public class PowerPlantArea extends ConsumerArea {
     //Needs the attribute 'energy'
-    private Good usesResource;
+    private Integer usesResource;
     //Amount of units needed to get each time
     private int maxVolume;
     
@@ -40,11 +40,11 @@ public class PowerPlantArea extends ConsumerArea {
         return "Power Plant";
     }
 
-    public Good getUsedResource() {
+    public Integer getUsedResource() {
         return usesResource;
     }
 
-    public void setUsedResource(Good usesResource) {
+    public void setUsedResource(Integer usesResource) {
         this.usesResource = usesResource;
     }
 

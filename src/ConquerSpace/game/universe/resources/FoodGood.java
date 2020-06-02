@@ -20,13 +20,13 @@ package ConquerSpace.game.universe.resources;
 import ConquerSpace.game.life.Species;
 
 /**
- *
+ * Consumable
  * @author EhWhoAmI
  */
 public class FoodGood extends Good{
     Species species;
-    public FoodGood(Species s, int id, double volume, double mass) {
-        super(s.getName(), id, volume, mass);
+    public FoodGood(Species s, double volume, double mass) {
+        super(s.getName(), "f_" + s.getName() + "_" + s.getId(), volume, mass);
         this.species = s;
     }
 }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.districts.area.Area;
 import ConquerSpace.game.districts.area.CapitolArea;
 import ConquerSpace.game.districts.area.CommercialArea;
@@ -27,7 +28,6 @@ import ConquerSpace.game.districts.area.ManufacturerArea;
 import ConquerSpace.game.districts.area.MineArea;
 import ConquerSpace.game.districts.area.ResearchArea;
 import ConquerSpace.game.districts.area.SpacePortArea;
-import ConquerSpace.game.universe.resources.Good;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -88,10 +88,10 @@ public class AreaInformationPanel extends JPanel {
                 JLabel processName = new JLabel(factory.getProcess().name);
                 String inputString = "Input: ";
 
-                for (Map.Entry<Good, Double> entry : factory.getProcess().input.entrySet()) {
-                    Good key = entry.getKey();
+                for (Map.Entry<Integer, Double> entry : factory.getProcess().input.entrySet()) {
+                    Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    inputString = inputString + key.getName();
+                    inputString = inputString + GameController.goodHashMap.get(key).getName();
                     inputString = inputString + " amount " + val;
                     inputString = inputString + ", ";
                 }
@@ -99,10 +99,10 @@ public class AreaInformationPanel extends JPanel {
                 JLabel input = new JLabel(inputString);
 
                 String outputString = "Output: ";
-                for (Map.Entry<Good, Double> entry : factory.getProcess().output.entrySet()) {
-                    Good key = entry.getKey();
+                for (Map.Entry<Integer, Double> entry : factory.getProcess().output.entrySet()) {
+                    Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    outputString = outputString + key.getName();
+                    outputString = outputString + GameController.goodHashMap.get(key).getName();
                     outputString = outputString + " amount " + val;
                     outputString = outputString + ", ";
                 }
@@ -126,7 +126,7 @@ public class AreaInformationPanel extends JPanel {
                 JLabel title = new JLabel("Mine Area");
                 add(title);
                 MineArea area = (MineArea) a;
-                JLabel resourceMined = new JLabel("Time Left: " + area.getResourceMined());
+                JLabel resourceMined = new JLabel("Resource Mine: " + area.getResourceMined());
                 add(resourceMined);
             } else if (a instanceof CommercialArea) {
                 JLabel title = new JLabel("Commercial Area");
@@ -147,7 +147,7 @@ public class AreaInformationPanel extends JPanel {
             JLabel currentJobs = new JLabel("Current Manpower: " + a.getCurrentlyManningJobs());
             JLabel minimumJobs = new JLabel("Minimum Jobs Needed: " + a.operatingJobsNeeded());
             JLabel maximumJobs = new JLabel("Maximum Jobs supportable: " + a.getMaxJobsProvided());
-            if(a.getCurrentlyManningJobs() < a.operatingJobsNeeded()) {
+            if (a.getCurrentlyManningJobs() < a.operatingJobsNeeded()) {
                 currentJobs.setForeground(Color.red);
                 currentJobs.setToolTipText("Insufficient manpower to operate this area!");
             }

@@ -22,8 +22,8 @@ package ConquerSpace.game.universe.resources;
  * @author EhWhoAmI
  */
 public class Element extends Good{
-    
-    public Element(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
+    private int elementNumber;
+    public Element(String name, double volume, double mass) {
+        super(name, "e_" + name.toLowerCase(), volume, mass);
     }
 }

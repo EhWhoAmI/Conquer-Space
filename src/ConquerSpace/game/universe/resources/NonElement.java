@@ -24,10 +24,10 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class NonElement extends Good{
-    public HashMap<Good, Double> recipie;
+    public HashMap<Integer, Double> recipie;
 
-    public NonElement(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
+    public NonElement(String name, String identifier, double volume, double mass) {
+        super(name, identifier, volume, mass);
         recipie = new HashMap<>();
     }
 }

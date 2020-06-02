@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.life;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.resources.FoodGood;
 import ConquerSpace.game.universe.resources.LiveGood;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 public class Species {
+    
+    private static int idCounter = 0;
+    private int id = 0;
     public ArrayList<LifeTrait> lifeTraits;
 
     private LiveGood speciesGood;
@@ -37,11 +41,14 @@ public class Species {
     private String name;
     
     public Species(String name) {
+        id = idCounter++;
         lifeTraits = new ArrayList<>();
         this.name = name;
         //Nice
-        foodGood = new FoodGood(this, 0, 1, 120);
-        speciesGood = new LiveGood(this, 0, 1, 120);
+        foodGood = new FoodGood(this, 1, 420);
+        speciesGood = new LiveGood(this, 1, 420);
+        GameController.goodHashMap.put(foodGood.getId(), foodGood);
+        GameController.goodHashMap.put(speciesGood.getId(), speciesGood);
     }
 
     public void setName(String name) {
@@ -71,5 +78,9 @@ public class Species {
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 }

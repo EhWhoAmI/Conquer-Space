@@ -45,7 +45,6 @@ import ConquerSpace.game.ships.launch.LaunchVehicle;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import java.awt.Color;
@@ -113,7 +112,7 @@ public class Civilization implements Employer{
     public ArrayList<EngineTechnology> engineTechs;
     public ArrayList<LaunchVehicle> launchVehicles;
 
-    public HashMap<Good, Double> resourceList;
+    public HashMap<Integer, Double> resourceList;
 
     public ArrayList<Planet> habitatedPlanets;
 
@@ -122,7 +121,7 @@ public class Civilization implements Employer{
     
     public ArrayList<ProductionProcess> productionProcesses;
     
-    public ArrayList<Good> mineableGoods;
+    public ArrayList<Integer> mineableGoods;
     
     public ArrayList<ScienceLab> scienceLabs;
 

@@ -17,8 +17,8 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.Stratum;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -157,11 +157,11 @@ public class PlanetGeology extends javax.swing.JPanel {
             
             //Set the stuff
             resourceListModel.clear();
-            for (Map.Entry<Good, Integer> en : stratum.minerals.entrySet()) {
-                Good key = en.getKey();
+            for (Map.Entry<Integer, Integer> en : stratum.minerals.entrySet()) {
+                Integer key = en.getKey();
                 Integer val = en.getValue();
                 
-                resourceListModel.addElement(key.getName() + " " + val);
+                resourceListModel.addElement(GameController.goodHashMap.get(key).getName() + " " + val);
             }
            
         }

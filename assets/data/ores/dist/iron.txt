@@ -1,6 +1,6 @@
 [
     {
-        name: Hematite
+        name: o_hematitie
         distribution: [
             30
             60
@@ -17,7 +17,7 @@
         ]
     }
     {
-        name: Magnetite
+        name: o_magnetite
         distribution: [
             30
             60

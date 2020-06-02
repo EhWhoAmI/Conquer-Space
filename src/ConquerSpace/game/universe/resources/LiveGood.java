@@ -25,8 +25,8 @@ import ConquerSpace.game.life.Species;
  */
 public class LiveGood extends Good{
     Species species;
-    public LiveGood(Species s, int id, double volume, double mass) {
-        super(s.getName(), id, volume, mass);
+    public LiveGood(Species s, double volume, double mass) {
+        super(s.getName(), "l_" + s.getName() + "_" + s.getId(), volume, mass);
         this.species = s;
     }
 }

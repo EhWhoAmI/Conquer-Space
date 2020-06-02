@@ -50,7 +50,6 @@ import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.gui.renderers.RendererMath;
@@ -281,7 +280,7 @@ public class GameUpdater {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
-                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c);
+                storeResource(area.getGrown().getFoodGood().getId(), 10d * removed, 0, c);
                 area.grow();
             }
         } else if (a instanceof TimedManufacturerArea) {
@@ -290,8 +289,8 @@ public class GameUpdater {
             int removed = area.tick(delta);
 
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
-                for (Map.Entry<Good, Double> entry : area.getProcess().output.entrySet()) {
-                    Good key = entry.getKey();
+                for (Map.Entry<Integer, Double> entry : area.getProcess().output.entrySet()) {
+                    Integer key = entry.getKey();
                     Double val = entry.getValue();
 
                     storeResource(key, val * removed, 0, c);
@@ -307,15 +306,14 @@ public class GameUpdater {
             //Process resources used
             ProductionProcess process = ((ManufacturerArea) a).getProcess();
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
-                for (Map.Entry<Good, Double> entry : process.input.entrySet()) {
-                    Good key = entry.getKey();
+                for (Map.Entry<Integer, Double> entry : process.input.entrySet()) {
+                    Integer key = entry.getKey();
                     Double val = entry.getValue();
-
                     storeResource(key, -val * delta, 0, c);
                 }
 
-                for (Map.Entry<Good, Double> entry : process.output.entrySet()) {
-                    Good key = entry.getKey();
+                for (Map.Entry<Integer, Double> entry : process.output.entrySet()) {
+                    Integer key = entry.getKey();
                     Double val = entry.getValue();
 
                     storeResource(key, val * delta, 0, c);
@@ -326,13 +324,13 @@ public class GameUpdater {
         } else if (a instanceof MineArea) {
             MineArea area = (MineArea) a;
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
-                for (Map.Entry<Good, Double> entry : area.getNecessaryGoods().entrySet()) {
-                    Good key = entry.getKey();
+                for (Map.Entry<Integer, Double> entry : area.getNecessaryGoods().entrySet()) {
+                    Integer key = entry.getKey();
                     Double val = entry.getValue();
-
                     storeResource(key, -val * delta, 0, c);
                 }
-                storeResource(area.getResourceMined(), Double.valueOf(area.getProductivity() * delta), 0, c);
+                
+                storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * delta), 0, c);
             }
         } else if (a instanceof SpacePortArea) {
             SpacePortArea area = (SpacePortArea) a;
@@ -392,14 +390,14 @@ public class GameUpdater {
     public void processResources() {
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
             Civilization c = Globals.universe.getCivilization(i);
-            for (Map.Entry<Good, Double> entry : c.resourceList.entrySet()) {
+            for (Map.Entry<Integer, Double> entry : c.resourceList.entrySet()) {
                 c.resourceList.put(entry.getKey(), 0d);
             }
             //Process resources
             for (ResourceStockpile s : c.resourceStorages) {
                 //Get resource types allowed, and do stuff
                 //c.resourceList.
-                for (Good type : s.storedTypes()) {
+                for (Integer type : s.storedTypes()) {
                     //add to index
                     if (!c.resourceList.containsKey(type)) {
                         c.resourceList.put(type, 0d);
@@ -517,11 +515,11 @@ public class GameUpdater {
      * @param owner
      * @param from
      */
-    public void storeResource(Good resourceType, Double amount, int owner, UniversePath from) {
+    public void storeResource(Integer resourceType, Double amount, int owner, UniversePath from) {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.
-        if (resourceType != null) {
+        if (resourceType != null && amount > 0) {
             Body body = universe.getSpaceObject(from);
             if (body instanceof Planet) {
                 Planet planet = (Planet) body;
@@ -536,8 +534,8 @@ public class GameUpdater {
         }
     }
 
-    public void storeResource(Good resourceType, Double amount, int owner, City from) {
-        if (resourceType != null) {
+    public void storeResource(Integer resourceType, Double amount, int owner, City from) {
+        if (resourceType != null && amount > 0) {
             if (from.canStore(resourceType)) {
                 //Store resource
                 from.addResource(resourceType, amount);
@@ -547,7 +545,7 @@ public class GameUpdater {
         }
     }
 
-    public boolean removeResource(Good resourceType, Double amount, int owner, UniversePath from) {
+    public boolean removeResource(Integer resourceType, Double amount, int owner, UniversePath from) {
         //Get closest resources storage
         //No matter their alleigence, they will store resource to the closest resource storage...
         //Search planet, because we don't have space storages for now.

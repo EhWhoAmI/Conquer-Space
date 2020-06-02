@@ -402,7 +402,7 @@ public class ResourceViewer extends JFrame {
                     double volume = obj.getDouble("volume");
                     double mass = obj.getDouble("mass");
 
-                    TempNonElement tempNonElement = new TempNonElement(name, i, volume, mass);
+                    //TempNonElement tempNonElement = new TempNonElement(name, i, volume, mass);
                     //NonElement nonElement = new NonElement(name, i, volume, mass);
 
                     //Process formula
@@ -414,14 +414,14 @@ public class ResourceViewer extends JFrame {
                         //Find the resources
                         String resourceName = content[0];
                         double amount = Double.parseDouble(content[1]);
-                        tempNonElement.recipie.put(resourceName, amount);
+                        //tempNonElement.recipie.put(resourceName, amount);
                     }
 
                     //Sort through elements
                     JSONArray tags = obj.getJSONArray("tags");
                     String[] tagArray = Arrays.copyOf(tags.toList().toArray(), tags.toList().toArray().length, String[].class);
-                    tempNonElement.tags = tagArray;
-                    goods.add(tempNonElement);
+                    //tempNonElement.tags = tagArray;
+                    //goods.add(tempNonElement);
                 } catch (ClassCastException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -479,7 +479,7 @@ public class ResourceViewer extends JFrame {
                         if (densityT instanceof Double) {
                             density = (Double) densityT;
                         }
-                        Element e = new Element(name, id, 1d, density);
+                        Element e = new Element(name, 1d, density);
 
                         //Set tags
                         e.tags = new String[0];

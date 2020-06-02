@@ -27,7 +27,6 @@ import ConquerSpace.game.universe.resources.NonElement;
 import ConquerSpace.game.universe.resources.Ore;
 import ConquerSpace.game.universe.resources.ProductionProcess;
 import ConquerSpace.game.universe.resources.ResourceDistribution;
-import ConquerSpace.game.universe.resources.TempNonElement;
 import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
@@ -37,10 +36,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import org.apache.logging.log4j.Logger;
 import org.hjson.JsonValue;
+import org.hjson.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -241,8 +240,8 @@ public class AssetReader {
         if (densityT instanceof Double) {
             density = (Double) densityT;
         }
-        Element e = new Element(name, id, 1d, density);
-        
+        Element e = new Element(name, 1d, density);
+
         //Set tags
         e.tags = new String[0];
         return e;
@@ -302,14 +301,11 @@ public class AssetReader {
         return trait;
     }
 
-    public static Object processGood(JSONObject obj) {
-        return new NonElement("sadf", 0, 12, 4);
-    }
-
     public static Object processOre(JSONObject obj) {
         String name = obj.getString("name");
+        String identifier = obj.getString("identifier");
         double density = obj.getDouble("density");
-        Ore element = new Ore(name, 0, 1, density);
+        Ore element = new Ore(name, identifier, 0, 1, density);
         //Process formula
         JSONArray arr = obj.getJSONArray("formula");
         //Sort through things
@@ -351,7 +347,7 @@ public class AssetReader {
     public static Object processProcess(JSONObject obj) {
         String name = obj.getString("name");
 
-        HashMap<Good, Double> input = new HashMap<>();
+        HashMap<Integer, Double> input = new HashMap<>();
 
         JSONArray inputArray = obj.getJSONArray("input");
 
@@ -359,24 +355,16 @@ public class AssetReader {
             String s = inputArray.getString(i);
             String[] content = s.split(":");
 
-            Good toFind = null;
-            //Find good
-            for (int k = 0; k < GameController.allGoods.size(); k++) {
-                Good g = GameController.allGoods.get(k);
-                if (g.getName().equals(content[0])) {
-                    toFind = g;
-                    break;
-                }
-            }
+            Integer resourceId = GameController.goodIdentifiers.get(content[0]);
 
-            if (toFind != null) {
+            if (resourceId != null) {
                 //Parse things
                 Double value = Double.parseDouble(content[1]);
-                input.put(toFind, value);
+                input.put(resourceId, value);
             }
         }
 
-        HashMap<Good, Double> output = new HashMap<>();
+        HashMap<Integer, Double> output = new HashMap<>();
 
         JSONArray outputArray = obj.getJSONArray("output");
 
@@ -384,20 +372,11 @@ public class AssetReader {
             String s = outputArray.getString(i);
             String[] content = s.split(":");
 
-            Good toFind = null;
-            //Find good
-            for (int k = 0; k < GameController.allGoods.size(); k++) {
-                Good g = GameController.allGoods.get(k);
-                if (g.getName().equals(content[0])) {
-                    toFind = g;
-                    break;
-                }
-            }
-
-            if (toFind != null) {
+            Integer resourceId = GameController.goodIdentifiers.get(content[0]);
+            if (resourceId != null) {
                 //Parse things
                 Double value = Double.parseDouble(content[1]);
-                output.put(toFind, value);
+                output.put(resourceId, value);
             }
         }
 
@@ -442,8 +421,9 @@ public class AssetReader {
      * iterate through it twice.
      */
     public static ArrayList<Good> processGoods() {
-        HashMap<String, Good> resourcea = new HashMap<>();
-        HashMap<TempNonElement, NonElement> nonElementHashMap = new HashMap<>();
+        ArrayList<Good> goods = new ArrayList<>();
+        HashMap<String, JSONObject> recipieInfo = new HashMap<>();
+
         File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.goods");
         File[] files = launchSystemsFolder.listFiles();
         for (File f : files) {
@@ -461,50 +441,30 @@ public class AssetReader {
                 text = JsonValue.readHjson(text).toString();
                 JSONArray root = new JSONArray(text);
                 for (int i = 0; i < root.length(); i++) {
-                    try {
-                        JSONObject obj = root.getJSONObject(i);
+                    JSONObject obj = root.getJSONObject(i);
+                    String name = obj.getString("name");
+                    String identifier = obj.getString("identifier");
+                    double volume = obj.getDouble("volume");
+                    double mass = obj.getDouble("mass");
+                    NonElement nonElement = new NonElement(name, identifier, volume, mass);
 
-                        //Process both...
-                        String name = obj.getString("name");
-                        double volume = obj.getDouble("volume");
-                        double mass = obj.getDouble("mass");
-
-                        TempNonElement tempNonElement = new TempNonElement(name, i, volume, mass);
-                        NonElement nonElement = new NonElement(name, i, volume, mass);
-
-                        //Process formula
-                        JSONArray arr = obj.getJSONArray("formula");
-                        //Sort through things
-                        for (int k = 0; k < arr.length(); k++) {
-                            String s = arr.getString(k);
-                            String[] content = s.split(":");
-                            //Find the resources
-                            String resourceName = content[0];
-                            double amount = Double.parseDouble(content[1]);
-                            tempNonElement.recipie.put(resourceName, amount);
-                        }
-
-                        //Sort through elements
-                        JSONArray tags = obj.getJSONArray("tags");
-                        String[] tagArray = Arrays.copyOf(tags.toList().toArray(), tags.toList().toArray().length, String[].class);
-                        nonElement.tags = tagArray;
-
-                        resourcea.put(name, nonElement);
-                        nonElementHashMap.put(tempNonElement, nonElement);
-                    } catch (ClassCastException e) {
-                        LOGGER.error("CCE!", e);
-                    } catch (JSONException exception) {
-                        LOGGER.error("JSONException!", exception);
-                    } catch (IllegalArgumentException ile) {
-                        LOGGER.error("IllegalArgumentException!", ile);
-                    }
+                    //Get tags
+                    Object[] tagObjects = obj.getJSONArray("tags").toList().toArray();
+                    nonElement.tags = Arrays.copyOf(tagObjects, tagObjects.length, String[].class
+                    );
+                    obj.getJSONArray("tags").toList().toArray();
+                    goods.add(nonElement);
+                    GameController.goodIdentifiers.put(identifier, nonElement.getId());
+                    recipieInfo.put(identifier, obj);
                 }
             } catch (FileNotFoundException ex) {
-                LOGGER.error("File not found!", ex);
+                LOGGER.error("File not found: " + f.getAbsolutePath() + "!", ex);
             } catch (IOException ex) {
-                LOGGER.error("IO exception!", ex);
+                LOGGER.error("IO exception: " + f.getAbsolutePath() + "!", ex);
             } catch (JSONException ex) {
-                LOGGER.warn("JSON EXCEPTION!", ex);
+                LOGGER.warn("JSON EXCEPTION: " + f.getAbsolutePath() + "!", ex);
+            } catch (ParseException ex) {
+                LOGGER.warn("HJSON EXCEPTION: " + f.getAbsolutePath() + "!", ex);
             } finally {
                 try {
                     //Because continue stat
@@ -515,41 +475,43 @@ public class AssetReader {
                 }
             }
         }
-        ArrayList<Good> goods = new ArrayList<>();
-        //Sort through another time...
-        for (Map.Entry<TempNonElement, NonElement> entry : nonElementHashMap.entrySet()) {
-            TempNonElement key = entry.getKey();
-            NonElement val = entry.getValue();
 
-            for (Map.Entry<String, Double> entry1 : key.recipie.entrySet()) {
-                String name = entry1.getKey();
-                Double amount = entry1.getValue();
-
-                //Find
-                Good g = resourcea.get(name);
-                //Put in thing
-                if (g == null) {
-                    //Find in elements
-                    for (Element e : GameController.elements) {
-                        if (e.getName().equals(name)) {
-                            //insert the stuff
-                            val.recipie.put(e, amount);
-                            break;
-                        }
-                    }
-
-                } else {
-                    val.recipie.put(g, amount);
-                }
-            }
-            goods.add(val);
+        //Add elements
+        for (int k = 0; k < GameController.elements.size(); k++) {
+            Element e = GameController.elements.get(k);
+            GameController.goodIdentifiers.put(e.getIdentifier(), e.getId());
         }
+        for (int i = 0; i < goods.size(); i++) {
+            try {
+                Good g = goods.get(i);
+                if (g instanceof NonElement) {
+                    NonElement resource = (NonElement) g;
+                    JSONArray recipie = recipieInfo.get(resource.getIdentifier()).getJSONArray("formula");
+                    for (int l = 0; l < recipie.length(); l++) {
+                        String rec = recipie.getString(l);
+                        String[] text = rec.split(":");
+
+                        String goodIdentifier = text[0];
+                        String amount = text[1];
+
+                        double goodAmount = Double.parseDouble(amount);
+                        int goodId = GameController.goodIdentifiers.get(goodIdentifier);
+                        resource.recipie.put(goodId, goodAmount);
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.warn("EXCEPTION: " + goods.get(i) + "!", e);
+            }
+        }
+
         //Wrap up
         return goods;
+
     }
 }
 
 //Something to pass the parameters
 interface PassThingy {
+
     public Object thingy(JSONObject obj);
 }

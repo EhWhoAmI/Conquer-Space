@@ -23,6 +23,8 @@ package ConquerSpace.game.universe.resources;
  */
 public class ResourceDistribution {
     public String resourceName;
+    
+    public int resourceId;
     /**
      * How maximum size of the vein.
      */

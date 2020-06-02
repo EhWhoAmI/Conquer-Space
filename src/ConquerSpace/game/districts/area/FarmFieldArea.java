@@ -32,7 +32,7 @@ public class FarmFieldArea extends TimedManufacturerArea {
     private int time;
 
     public FarmFieldArea(Species grownSpecies) {
-        super(new ProductionProcess(grownSpecies.getFoodGood()));
+        super(new ProductionProcess(grownSpecies.getId()));
         grown = grownSpecies;
         //Because you can only grow one.
         setLimit(1);

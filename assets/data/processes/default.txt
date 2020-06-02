@@ -7,11 +7,11 @@
         //Maybe even procedurally generated processes with some parameters
         name: Magnetite Smelting
         input: [
-            "Magnetite:1"
+            "o_magnetite:1"
         ]
         output: [
-            "Iron:1"
-            "Oxygen:2"
+            "e_iron:1"
+            "e_oxygen:2"
         ]
         diff: 1
         catalysts: [
@@ -20,11 +20,11 @@
     {
         name: Hematite Smelting
         input: [
-            "Hematite:1"
+            "o_hematitie:1"
         ]
         output: [
-            "Iron:3"
-            "Oxygen:4"
+            "e_iron:3"
+            "e_oxygen:4"
         ]
         diff: 1
         catalysts: [
@@ -33,11 +33,11 @@
     {
         name: Low Grade Steel Making
         input: [
-            "Iron:9"
-            "Carbon:1"
+            "e_iron:9"
+            "e_carbon:1"
         ]
         output: [
-            "Low Grade Steel:1"
+            "steel_low_grade:1"
         ]
         diff: 1
         catalysts: [
@@ -48,12 +48,12 @@
         name: Bayer process gibbsite
         //It produces Aluminium oxide 
         input: [
-            "Gibbsite:1"
+            "o_gibbsite:1"
         ]
         //Eh makes sense I guess
         output: [
-            "Aluminium:1"
-            "Water:2"
+            "e_aluminium:1"
+            "water:2"
         ]
         diff: 1
         catalysts: [
@@ -63,12 +63,12 @@
         name: Bayer process diaspore
         //It produces Aluminium oxide 
         input: [
-            "Diaspore:1"
+            "o_diaspore:1"
         ]
         //Eh makes sense I guess
         output: [
-            "Aluminium:1"
-            "Water:2"
+            "e_aluminium:1"
+            "water:2"
         ]
         diff: 1
         catalysts: [
@@ -78,12 +78,12 @@
         name: Bayer process boehmite
         //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
         input: [
-            "Boehmite:1"
+            "o_boehmite:1"
         ]
         //Eh makes sense I guess
         output: [
-            "Aluminium:1"
-            "Water:2"
+            "e_aluminium:1"
+            "water:2"
         ]
         diff: 1
         catalysts: [
@@ -93,12 +93,12 @@
         name:Consumer Good Making
          //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
         input: [
-            "Plastic:1"
-            "Low Grade Steel:1"
+            "plastic:1"
+            "steel_low_grade:1"
         ]
         //Eh makes sense I guess
         output: [
-            "Generic Consumer Good:1"
+            "generic_consumer_good:1"
         ]
         diff: 1
         catalysts: [

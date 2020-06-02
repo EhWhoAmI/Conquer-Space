@@ -22,18 +22,24 @@ package ConquerSpace.game.universe.resources;
  * @author EhWhoAmI
  */
 public abstract class Good implements Comparable<Good>{
+    private static int idCounter = 0;
+    
+    //On Screen name
     String name;
+    //Unique identifier for human readable things
+    String identifier;
     int id;
     double volume; // volume, m^3
     double mass; //mass, kg
     public String[] tags = new String[0];
     private boolean fractionable;
 
-    public Good(String name, int id, double volume, double mass) {
+    public Good(String name, String identifier, double volume, double mass) {
+        this.id = idCounter++;
         this.name = name;
-        this.id = id;
         this.volume = volume;
         this.mass = mass;
+        this.identifier = identifier;
         fractionable = false;
     }
 
@@ -79,5 +85,9 @@ public abstract class Good implements Comparable<Good>{
 
     public void setFractionable(boolean fractionable) {
         this.fractionable = fractionable;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 }

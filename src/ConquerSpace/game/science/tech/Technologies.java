@@ -266,13 +266,9 @@ public class Technologies {
             String[] text = action.split(":");
             String content = text[1].trim();
 
-            //Find the resource
-            for (int i = 0; i < GameController.allGoods.size(); i++) {
-                Good proc = GameController.allGoods.get(i);
-                if (proc.getName().equals(content)) {
-                    c.mineableGoods.add(proc);
-                    break;
-                }
+            Integer goodId = GameController.goodIdentifiers.get(content);
+            if (goodId != null) {
+                c.mineableGoods.add(goodId);
             }
         }
     }

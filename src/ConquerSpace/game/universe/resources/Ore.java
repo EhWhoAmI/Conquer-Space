@@ -24,8 +24,8 @@ package ConquerSpace.game.universe.resources;
 public class Ore extends NonElement{
     public ResourceDistribution dist;
     
-    public Ore(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
+    public Ore(String name, String identifier, int id, double volume, double mass) {
+        super(name, identifier, volume, mass);
         dist = new ResourceDistribution();
     }
     

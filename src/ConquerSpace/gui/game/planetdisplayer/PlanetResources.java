@@ -17,14 +17,12 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.districts.City;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import javax.swing.AbstractListModel;
 import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
@@ -36,7 +34,7 @@ import javax.swing.table.AbstractTableModel;
 public class PlanetResources extends javax.swing.JPanel {
 
     private Planet p;
-    private HashMap<Good, Double> planetResource;
+    private HashMap<Integer, Double> planetResource;
     private ArrayList<ResourceStockpile> stockpiles;
 
     private StockpileStorageModel storageModel;
@@ -99,6 +97,7 @@ public class PlanetResources extends javax.swing.JPanel {
 
         planetResourceTable.setModel(planetModel);
         planetResourceTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        planetResourceTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(planetResourceTable);
 
         jTabbedPane1.addTab("Planet Resources", jScrollPane1);
@@ -116,6 +115,7 @@ public class PlanetResources extends javax.swing.JPanel {
 
         storageResources.setModel(storageModel);
         storageResources.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        storageResources.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane6.setViewportView(storageResources);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -152,7 +152,7 @@ public class PlanetResources extends javax.swing.JPanel {
             if (selectedStockpile != null) {
                 switch (columnIndex) {
                     case 0:
-                        return selectedStockpile.storedTypes()[rowIndex];
+                        return GameController.goodHashMap.get(selectedStockpile.storedTypes()[rowIndex]);
                     case 1:
                         return selectedStockpile.getResourceAmount(selectedStockpile.storedTypes()[rowIndex]);
                 }
@@ -185,7 +185,7 @@ public class PlanetResources extends javax.swing.JPanel {
         public Object getValueAt(int rowIndex, int columnIndex) {
             switch (columnIndex) {
                 case 0:
-                    return planetResource.keySet().toArray()[rowIndex];
+                    return GameController.goodHashMap.get(planetResource.keySet().toArray()[rowIndex]).getName();
                 case 1:
                     return planetResource.get(planetResource.keySet().toArray()[rowIndex]);
             }
@@ -209,7 +209,7 @@ public class PlanetResources extends javax.swing.JPanel {
         @Override
         public String getElementAt(int index) {
             ResourceStockpile storage = stockpiles.get(index);
-            if(storage instanceof City) {
+            if (storage instanceof City) {
                 return ("Storage at " + ((City) storage).getName());
             }
             return "Storage";
@@ -220,10 +220,23 @@ public class PlanetResources extends javax.swing.JPanel {
     private void compileResources() {
         planetResource.clear();
         stockpiles.clear();
+        int planetResourceRow = 0;
+        int planetResourceColunm = 0;
+        if (planetResourceTable != null) {
+            planetResourceRow = planetResourceTable.getSelectedRow();
+            planetResourceColunm = planetResourceTable.getSelectedColumn();
+        }
+        
+        int stockpileRow = 0;
+        int stockpileColunm = 0;
+        if (storageResources != null) {
+            stockpileRow = storageResources.getSelectedRow();
+            stockpileColunm = storageResources.getSelectedColumn();
+        }
         for (City city : p.cities) {
-            Good[] goods = city.storedTypes();
+            Integer[] goods = city.storedTypes();
             //Sort through stuff
-            for (Good g : goods) {
+            for (Integer g : goods) {
                 if (!planetResource.containsKey(g)) {
                     //Add key
                     planetResource.put(g, 0d);
@@ -234,6 +247,25 @@ public class PlanetResources extends javax.swing.JPanel {
                 planetResource.put(g, toAdd);
             }
             stockpiles.add(city);
+        }
+
+        if (planetModel != null) {
+            planetModel.fireTableDataChanged();
+        }
+        if (storageModel != null) {
+            storageModel.fireTableDataChanged();
+        }
+
+        if (planetResourceTable != null) {
+            if (planetResourceRow > -1 && planetResourceTable.getRowCount() > planetResourceRow) {
+                planetResourceTable.setRowSelectionInterval(planetResourceRow, planetResourceRow);
+            }
+        }
+        
+        if (storageResources != null) {
+            if (stockpileRow > -1 && storageResources.getRowCount() > stockpileRow) {
+                storageResources.setRowSelectionInterval(stockpileRow, stockpileRow);
+            }
         }
     }
 

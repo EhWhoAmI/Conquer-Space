@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.logistics;
 
-import ConquerSpace.game.universe.resources.Good;
 
 /**
  *
@@ -25,6 +24,6 @@ import ConquerSpace.game.universe.resources.Good;
  */
 public class TransportOrder {
     float completion;
-    Good resource;
+    Integer resource;
     double amount;
 }

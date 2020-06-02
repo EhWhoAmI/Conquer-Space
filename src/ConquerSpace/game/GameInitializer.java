@@ -159,7 +159,7 @@ public class GameInitializer {
 
     private void initializeBuildings(Planet starting, Civilization c, Random selector) {
         //Add resource miners
-        createResourceMiners(starting, c, c.getFoundingSpecies());
+        createResourceMiners(starting, c, c.getFoundingSpecies(), selector);
 
         createPopulationStorages(starting, c, selector);
 
@@ -183,7 +183,7 @@ public class GameInitializer {
         }
     }
 
-    private void createResourceMiners(Planet p, Civilization c, Race founding) {
+    private void createResourceMiners(Planet p, Civilization c, Race founding, Random selector) {
         NameGenerator townGen = null;
 
         try {
@@ -199,9 +199,8 @@ public class GameInitializer {
             Stratum stratum = p.strata.get(k);
             for (int i = 0; i < 3; i++) {
                 City miner = new City(p.getUniversePath());
-                for (Good g : stratum.minerals.keySet()) {
-
-                    MineArea mineArea = new MineArea(stratum, g, 10);
+                for (Integer g : stratum.minerals.keySet()) {
+                    MineArea mineArea = new MineArea(stratum, g, (float) (10 * (selector.nextDouble() + 0.1)));
                     mineArea.setOperatingJobs(50_000);
                     mineArea.setMaxJobs(100_000);
                     miner.addArea(mineArea);

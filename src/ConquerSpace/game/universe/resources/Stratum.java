@@ -31,7 +31,7 @@ public class Stratum {
     private int radius;
     private String name = "layer";
     
-    public HashMap<Good, Integer> minerals;
+    public HashMap<Integer, Integer> minerals;
 
     public Stratum() {
         minerals = new HashMap<>();

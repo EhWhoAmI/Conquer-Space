@@ -87,25 +87,25 @@ public class GameLoader {
         //Fill all goods
         GameController.allGoods.addAll(GameController.ores);
          */
+        GameController.goodIdentifiers = new HashMap<>();
         GameController.goods = processGoods();
 
         GameController.allGoods.addAll(GameController.elements);
         GameController.allGoods.addAll(GameController.goods);
 
+        GameController.goodHashMap = new HashMap<>();
+        for (int i = 0; i < GameController.allGoods.size(); i++) {
+            Good g = GameController.allGoods.get(i);
+            GameController.goodHashMap.put(g.getId(), g);
+        }
+        
         ArrayList<ResourceDistribution> res = readHjsonFromDirInArray("dirs.distributions", ResourceDistribution.class, AssetReader::processDistributions);
 
-        HashMap<Good, ResourceDistribution> ores = new HashMap<>();
         //Sort through the list
         for (ResourceDistribution dist : res) {
-            //Find in allgoods
-            for (Good g : GameController.allGoods) {
-                if (g.getName().equals(dist.resourceName)) {
-                    ores.put(g, dist);
-                    break;
-                }
-            }
+            Integer identifier = GameController.goodIdentifiers.get(dist.resourceName);
+            GameController.ores.put(identifier, dist);
         }
-        GameController.ores = ores;
 
         GameController.prodProcesses = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
 

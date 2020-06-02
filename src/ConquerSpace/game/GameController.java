@@ -74,8 +74,11 @@ public class GameController {
 
     public static ArrayList<Element> elements;
     public static ArrayList<NonElement> rawMaterials;
-    public static HashMap<Good, ResourceDistribution> ores = new HashMap<>();
+    public static HashMap<Integer, ResourceDistribution> ores = new HashMap<>();
     public static ArrayList<Good> allGoods;
+    public static HashMap<Integer, Good> goodHashMap;
+    public static HashMap<String, Integer> goodIdentifiers;
+
     public static ArrayList<Good> goods;
 
     public static ArrayList<SupplyChain> supplyChains = new ArrayList<>();

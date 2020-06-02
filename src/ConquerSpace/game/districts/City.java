@@ -25,7 +25,6 @@ import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Population;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.resources.Good;
 import ConquerSpace.game.universe.resources.ResourceStockpile;
 import ConquerSpace.game.universe.resources.StorageNeeds;
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     public ArrayList<Workable> workableFor;
     public ArrayList<Person> peopleAtCity;
     
-    private HashMap<Good, Double> resources;
+    public HashMap<Integer, Double> resources;
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
     private int maxStorage;
@@ -143,17 +142,17 @@ public class City implements PersonEnterable, ResourceStockpile {
     }
     
     @Override
-    public void addResourceTypeStore(Good type) {
+    public void addResourceTypeStore(Integer type) {
         resources.put(type, 0d);
     }
 
     @Override
-    public Double getResourceAmount(Good type) {
+    public Double getResourceAmount(Integer type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(Good type, Double amount) {
+    public void addResource(Integer type, Double amount) {
         if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
@@ -161,17 +160,17 @@ public class City implements PersonEnterable, ResourceStockpile {
     }
 
     @Override
-    public boolean canStore(Good type) {
+    public boolean canStore(Integer type) {
         return true;//(resources.containsKey(type));
     }
 
     @Override
-    public Good[] storedTypes() {
-        Iterator<Good> res = resources.keySet().iterator();
-        Good[] arr = new Good[resources.size()];
+    public Integer[] storedTypes() {
+        Iterator<Integer> res = resources.keySet().iterator();
+        Integer[] arr = new Integer[resources.size()];
         int i = 0;
         while (res.hasNext()) {
-            Good next = res.next();
+            Integer next = res.next();
             arr[i] = next;
             i++;
         }
@@ -179,7 +178,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     }
 
     @Override
-    public boolean removeResource(Good type, Double amount) {
+    public boolean removeResource(Integer type, Double amount) {
         //Get the amount in the place
         Double currentlyStored = resources.get(type);
         if (amount > currentlyStored) {

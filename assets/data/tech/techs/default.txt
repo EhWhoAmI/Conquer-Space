@@ -617,8 +617,8 @@
     upgradable: false
     difficulty: 1
     action: [
-        mine:Magnetite
-        mine:Hematite
+        mine:o_magnetite
+        mine:o_hematitie
     ]
     fields:
     [
@@ -642,9 +642,9 @@
     upgradable: false
     difficulty: 1
     action: [
-        mine:Boehmite
-        mine:Diaspore
-        mine:Gibbsite
+        mine:o_boehmite
+        mine:o_diaspore
+        mine:o_gibbsite
     ]
     fields:
     [

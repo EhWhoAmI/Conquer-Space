@@ -24,8 +24,9 @@ package ConquerSpace.game.universe.resources;
 public class TempOre extends TempNonElement{
     public ResourceDistribution dist;
     
-    public TempOre(String name, int id, double volume, double mass) {
-        super(name, id, volume, mass);
+    public TempOre(String name, String identifier, double volume, double mass) {
+        
+        super(name, identifier, volume, mass);
         dist = new ResourceDistribution();
     }
 }
