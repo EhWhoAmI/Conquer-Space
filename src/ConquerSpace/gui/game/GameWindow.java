@@ -30,6 +30,7 @@ import ConquerSpace.game.civilization.vision.VisionTypes;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.ships.Ship;
+import ConquerSpace.game.universe.SpacePoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -685,7 +686,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                 long x = (long) (slope * 10_000_000_000l);
                                 //Get distance of ship to 
                                 ShipMoveAction action = new ShipMoveAction(s);
-                                action.setPosition(new ConquerSpace.game.universe.Point(100l, x));
+                                
+                                //TODO: FIX SHIPS
+                                action.setPosition(new SpacePoint(100l, x));
 
                                 s.addAction(action);
                                 //Add exit star system action
@@ -705,7 +708,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
                             //Get Location
                             ShipMoveAction action = new ShipMoveAction(s);
-                            action.setPosition(new ConquerSpace.game.universe.Point(gotoX, gotoY));
+                            action.setPosition(new SpacePoint(gotoX, gotoY));
 
                             s.addAction(action);
 

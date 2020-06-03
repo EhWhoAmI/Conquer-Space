@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.actions;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.city.City;
@@ -28,9 +27,7 @@ import ConquerSpace.game.ships.Launchable;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.SpaceTelescope;
-import ConquerSpace.game.universe.Point;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
 
 /**
@@ -60,8 +57,7 @@ public class Actions {
     public static void launchSatellite(Satellite what, Planet whichPlanet, Civilization c) {
         if (what instanceof VisionPoint) {
             SpaceTelescope obs = ((SpaceTelescope) what);
-            StarSystem sys = Globals.universe.getStarSystem(whichPlanet.getParentStarSystem());
-            obs.setPosition(new Point((long) sys.getX(), (long) sys.getY()));
+            obs.setPosition(whichPlanet.getUniversePath());
             c.visionPoints.add((VisionPoint) what);
 
         }

@@ -112,7 +112,11 @@ public class Universe extends Body {
     public Body getSpaceObject(UniversePath p) {
         StarSystem system = getStarSystem(p.getSystemID());
         if (p.getBodyID() != -1) {
-            return system.bodies.get(p.getBodyID());
+            if (system.bodies.size() < p.getBodyID()) {
+                return null;
+            } else {
+                return system.bodies.get(p.getBodyID());
+            }
         } else {
             return system;
         }

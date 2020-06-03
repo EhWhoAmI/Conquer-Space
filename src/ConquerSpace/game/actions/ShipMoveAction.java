@@ -19,7 +19,7 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.ships.Ship;
-import ConquerSpace.game.universe.Point;
+import ConquerSpace.game.universe.SpacePoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 
@@ -29,7 +29,7 @@ import ConquerSpace.game.universe.bodies.StarSystem;
  */
 public class ShipMoveAction extends ShipAction {
 
-    private Point position;
+    private SpacePoint position;
     private int starSystem;
 
     private boolean done = false;
@@ -38,7 +38,7 @@ public class ShipMoveAction extends ShipAction {
         super(ship);
     }
 
-    public void setPosition(Point position) {
+    public void setPosition(SpacePoint position) {
         this.position = position;
     }
 
@@ -80,7 +80,7 @@ public class ShipMoveAction extends ShipAction {
         return (ship.getX() == position.getX() && ship.getY() == position.getY());
     }
 
-    public Point getPosition() {
+    public SpacePoint getPosition() {
         return position;
     }
 

@@ -29,6 +29,7 @@ import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.FarmFieldArea;
 import ConquerSpace.game.city.area.ManufacturerArea;
 import ConquerSpace.game.city.area.MineArea;
+import ConquerSpace.game.city.area.ObservatoryArea;
 import ConquerSpace.game.city.area.PowerPlantArea;
 import ConquerSpace.game.city.area.ResearchArea;
 import ConquerSpace.game.city.area.SpacePortArea;
@@ -52,6 +53,8 @@ import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
+import ConquerSpace.game.universe.SpacePoint;
+import static ConquerSpace.game.universe.generators.DefaultUniverseGenerator.AU_IN_LTYR;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
@@ -179,17 +182,21 @@ public class GameUpdater {
             for (VisionPoint pt : civil.visionPoints) {
                 int range = pt.getRange();
                 //Distance between all star systems...
-                ConquerSpace.game.universe.Point pos = pt.getPosition();
-                for (int g = 0; g < universe.getStarSystemCount(); g++) {
-                    //Difference between points...
-                    double dist = Math.hypot(pos.getY() - universe.getStarSystem(g).getY(),
-                            pos.getX() - universe.getStarSystem(g).getX());
-                    if (dist < range) {
-                        //Its in!
-                        int amount = ((int) ((1 - (dist / (double) range)) * 100));
-                        //int previous = universe.getCivilization(pt.getCivilization().vision.get(universe.getStarSystem(g).getUniversePath()));
-                        universe.getCivilization(pt.getCivilization()).vision.put(universe.getStarSystem(g).getUniversePath(),
-                                (amount > 100) ? 100 : (amount));
+                UniversePath path = pt.getPosition();
+                if (path.getSystemID() > -1) {
+                    //Get system position
+                    SpacePoint pos = universe.getSpaceObject(new UniversePath(path.getSystemID())).point;
+                    for (int g = 0; g < universe.getStarSystemCount(); g++) {
+                        //Difference between points...
+                        double dist = Math.hypot(pos.getY() - universe.getStarSystem(g).getY(),
+                                pos.getX() - universe.getStarSystem(g).getX());
+                        if (dist < (range * AU_IN_LTYR)) {
+                            //Its in!
+                            int amount = ((int) ((1 - (dist / (double) (range * AU_IN_LTYR))) * 100));
+                            //int previous = universe.getCivilization(pt.getCivilization().vision.get(universe.getStarSystem(g).getUniversePath()));
+                            universe.getCivilization(civ).vision.put(universe.getStarSystem(g).getUniversePath(),
+                                    (amount > 100) ? 100 : (amount));
+                        }
                     }
                 }
             }
@@ -329,7 +336,7 @@ public class GameUpdater {
                     Double val = entry.getValue();
                     storeResource(key, -val * delta, 0, c);
                 }
-                
+
                 storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * delta), 0, c);
             }
         } else if (a instanceof SpacePortArea) {
@@ -342,6 +349,12 @@ public class GameUpdater {
                     //Get the owner somehow...
                     Actions.launchLaunchable(get.getLaunching(), p);
                 }
+            }
+        } else if (a instanceof ObservatoryArea) {
+            ObservatoryArea area = (ObservatoryArea) a;
+            //Just slightly inelagant code to get the vision points
+            if (!Globals.universe.civs.get(area.getCivilization()).visionPoints.contains(area)) {
+                Globals.universe.civs.get(area.getCivilization()).visionPoints.add(area);
             }
         }
     }
@@ -432,12 +445,9 @@ public class GameUpdater {
         //Loop through star systems
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystem(i);
-            RendererMath.Point pt
-                    = RendererMath.polarCoordToCartesianCoord((double) system.getGalaticLocation().getDistance(),
-                            system.getGalaticLocation().getDegrees(), new RendererMath.Point(0, 0), 1);
 
-            system.setX(pt.x);
-            system.setY(pt.y);
+            system.setPoint(system.getOrbit().toSpacePoint());
+            
             for (int k = 0; k < system.bodies.size(); k++) {
                 Body body = system.bodies.get(k);
                 body.setPoint(body.getOrbit().toSpacePoint());

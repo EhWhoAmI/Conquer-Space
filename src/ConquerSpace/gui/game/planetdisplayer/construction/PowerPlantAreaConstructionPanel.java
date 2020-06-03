@@ -15,40 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe;
+package ConquerSpace.gui.game.planetdisplayer.construction;
+
+import ConquerSpace.game.city.City;
+import ConquerSpace.game.universe.bodies.Planet;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Point {
-    private long x;
-    private long y;
-
-    public long getX() {
-        return x;
+public class PowerPlantAreaConstructionPanel extends AreaDesignPanel{
+    
+    public PowerPlantAreaConstructionPanel(Planet p, City c) {
+        super(p, c);
     }
-
-    public long getY() {
-        return y;
-    }
-
-    public Point(long x, long y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (x*31 + y);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Point) {
-            Point ither = (Point) obj;
-            return ((ither.x == x) && (ither.y == y));
-        }
-        return false;
-    }  
+    
 }

@@ -52,7 +52,6 @@ import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.Stratum;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -149,8 +148,10 @@ public class GameInitializer {
                 createUnrecruitedPeople(c, starting, gen);
 
                 initializeGovernment(c, gen);
+                
+                //Set head of state position
+                c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
             }
-            c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
         }
 
         updater.calculateControl();
@@ -166,7 +167,7 @@ public class GameInitializer {
         createFarms(starting, c, selector);
 
         createIndustrialZones(c, selector, starting);
-        
+
         //Initialize namelists
         NameGenerator researchInstitutionGenerator = null;
         try {
@@ -174,7 +175,7 @@ public class GameInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-        
+
         for (int i = 0; i < starting.cities.size(); i++) {
             City city = starting.cities.get(i);
             addInfrastructure(city);
@@ -389,7 +390,7 @@ public class GameInitializer {
         }
     }
 
-    private void createCityDistrict(Planet starting, Civilization c, ConquerSpace.game.universe.Point pt, City city) {
+    private void createCityDistrict(Planet starting, Civilization c, GeographicPoint pt, City city) {
         //Add
     }
 
@@ -590,7 +591,7 @@ public class GameInitializer {
         //Choose random fields
         city.addArea(research);
     }
-    
+
     private void addCommercialArea(City c) {
         CommercialArea area = new CommercialArea();
         area.setMaxJobs(100_000);

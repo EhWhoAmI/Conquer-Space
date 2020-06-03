@@ -18,6 +18,7 @@
 package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.ships.SpaceShip;
+import ConquerSpace.game.universe.Orbit;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
@@ -46,9 +47,6 @@ public class StarSystem extends Body {
     private PolarCoordinate location;
 
     public ArrayList<SpaceShip> spaceShips;
-
-    private double xpos;
-    private double ypos;
     
     private String name = "";
 
@@ -61,6 +59,7 @@ public class StarSystem extends Body {
     public StarSystem(int id, PolarCoordinate location) {
         this.id = id;
         this.location = location;
+        orbit = new Orbit(location.getDegrees(), location.getDistance(), 0, 0);
         spaceShips = new ArrayList<>();
         bodies = new ArrayList<>();
     }
@@ -95,7 +94,7 @@ public class StarSystem extends Body {
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Star system " + this.id + " Location-" + location.toString() + " Rectangular pos"
-                + xpos + ", " + ypos + ": [\n");
+                + getX() + ", " + getY() + ": [\n");
         builder.append(">\n");
         return (builder.toString());
     }
@@ -119,21 +118,6 @@ public class StarSystem extends Body {
      */
     public UniversePath getUniversePath() {
         return (new UniversePath(id));
-    }
-
-    public double getX() {
-        return xpos;
-    }
-    public double getY() {
-        return ypos;
-    }
-
-    public void setX(double x) {
-        xpos = x;
-    }
-
-    public void setY(double y) {
-        ypos = y;
     }
 
     public void setName(String name) {

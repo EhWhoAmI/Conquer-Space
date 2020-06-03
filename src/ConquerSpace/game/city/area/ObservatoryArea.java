@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.ships.satellites;
+package ConquerSpace.game.city.area;
 
 import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.UniversePath;
@@ -24,40 +24,38 @@ import ConquerSpace.game.universe.UniversePath;
  *
  * @author EhWhoAmI
  */
-public class SpaceTelescope extends Satellite implements VisionPoint{
+public class ObservatoryArea extends Area implements VisionPoint {
 
-    private int civilization = -1;
-    private int range = 0;
+    private int civilization;
+    private int range;
     private UniversePath position;
-    public SpaceTelescope(int dist, int mass) {
-        super(dist, mass);
-    }
 
-    public void setCivilization(int civ) {
-        owner = civ;
-    }
-    
-    @Override
-    public int getCivilization() {
-        return getOwner();
-    }
-
-    public void setRange(int range) {
+    public ObservatoryArea(int civilization, int range, UniversePath position) {
+        this.civilization = civilization;
         this.range = range;
+        this.position = position;
     }
 
-    
     @Override
     public int getRange() {
         return range;
     }
 
-    public void setPosition(UniversePath position) {
-        this.position = position;
+    @Override
+    public int getCivilization() {
+        return civilization;
     }
 
     @Override
     public UniversePath getPosition() {
         return position;
+    }
+
+    public void setCivilization(int civilization) {
+        this.civilization = civilization;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
     }
 }

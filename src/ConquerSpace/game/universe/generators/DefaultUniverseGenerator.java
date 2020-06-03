@@ -57,6 +57,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     private static final Logger LOGGER = CQSPLogger.getLogger(DefaultUniverseGenerator.class.getName());
 
     public static final double G = 6.674 * Math.pow(10, -11);          //Gravitational constant, same for everything
+    
+    public static final double AU_IN_LTYR = 63241.1;
     /**
      * Percentage that life happens on all planets. Only planets with life will
      * start of with life.
@@ -101,7 +103,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         for (int i = 0; i < starSystemCount; i++) {
             //Create star system
-            int dist = rand.nextInt(6324100);
+            // 100 light years
+            int dist = rand.nextInt((int) (AU_IN_LTYR * 100));
             float degrees = (rand.nextFloat() * 360);
             StarSystem sys = new StarSystem(i, new PolarCoordinate(degrees, dist));
 
@@ -236,7 +239,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
      */
     private UniversePath createSuitablePlanet(Civilization c, Universe u, Random rand, int lastStarSystem, NameGenerator planetNameGenerator) {
         //Make the things
-        int dist = rand.nextInt(6324100);
+        //
+        int dist = rand.nextInt((int) (AU_IN_LTYR * 100));
         float degrees = (rand.nextFloat() * 360);
         StarSystem sys = new StarSystem(lastStarSystem, new PolarCoordinate(degrees, dist));
 

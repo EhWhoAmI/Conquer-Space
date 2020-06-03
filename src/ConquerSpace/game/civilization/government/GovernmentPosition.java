@@ -22,11 +22,15 @@ package ConquerSpace.game.civilization.government;
  * @author EhWhoAmI
  */
 public class GovernmentPosition {
+    private static int idCounter = 0;
+    int id;
+    
     String name;
     int power;
     PoliticalPowerTransitionMethod method;
 
     public GovernmentPosition() {
+        id = idCounter++;
     }
 
     public String getName() {
@@ -56,5 +60,14 @@ public class GovernmentPosition {
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }
