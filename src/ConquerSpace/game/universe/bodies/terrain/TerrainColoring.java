@@ -44,24 +44,25 @@ public class TerrainColoring {
             case 1:
                 colors.put(-1f, new Color(80, 78, 81));
                 colors.put(0f, new Color(151, 151, 159));
-                colors.put(0.5f, new Color(206, 204, 209));
-                colors.put(1f, new Color(181, 167, 167));
+                colors.put(0.5f, new Color(181, 167, 167));
+                colors.put(1f, new Color(246, 244, 249));
                 break;
             case 2:
                 colors.put(-1f, new Color(49, 48, 46));
                 colors.put(0.25f, new Color(148, 144, 141));
                 colors.put(0.5f, new Color(218, 217, 215));
                 colors.put(0.7f, new Color(240, 240, 240));
-                colors.put(1f, new Color(195, 194, 190));
                 break;
             case 3:
                 colors.put(-1f, new Color(225, 255, 255));
                 colors.put(0.7f, new Color(182, 196, 219));
+                colors.put(0.9f, new Color(240, 231, 231));
                 break;
             case 4:
                 colors.put(-1f, new Color(0, 0, 255));
                 colors.put(0.25f, new Color(182, 196, 219));
                 colors.put(0.5f, new Color(10, 196, 0));
+                colors.put(0.9f, new Color(240, 231, 231));
         }
         return colors;
     }

@@ -25,17 +25,18 @@ package ConquerSpace.jLibNoise.noise.utils;
 
 /**
  * Defines a color.
- * 
- * A color object contains four 8-bit channels: red, green, blue, and an
- * alpha (transparency) channel.  Channel values range from 0 to 255.
- * 
- * The alpha channel defines the transparency of the color.  If the alpha
- * channel has a value of 0, the color is completely transparent. If the
- * alpha channel has a value of 255, the color is completely opaque.
+ *
+ * A color object contains four 8-bit channels: red, green, blue, and an alpha
+ * (transparency) channel. Channel values range from 0 to 255.
+ *
+ * The alpha channel defines the transparency of the color. If the alpha channel
+ * has a value of 0, the color is completely transparent. If the alpha channel
+ * has a value of 255, the color is completely opaque.
  *
  * source 'noiseutils.h'
  */
 public class Color {
+
     // Value of the alpha (transparency) channel.
     public short alpha;
 
@@ -102,6 +103,19 @@ public class Color {
     }
 
     public int toIntensity() {
-        return (int)((red + green + blue) / 3);
+        return (int) ((red + green + blue) / 3);
+    }
+
+    public Color multiply(Color color) {
+        double thisRed = (double) this.red / 255.0;
+        double thisGreen = (double) this.green / 255.0;
+        double thisBlue = (double) this.blue / 255.0;
+
+        double otherRed = (double) color.red / 255.0;
+        double otherGreen = (double) color.green / 255.0;
+        double otherBlue = (double) color.blue / 255.0;
+
+        return new Color((int) ((thisRed * otherRed) * 255), (int) ((thisGreen * otherGreen) * 255), (int) ((thisBlue * otherBlue) * 255), 255);
+
     }
 }

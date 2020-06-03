@@ -159,6 +159,8 @@ public class TerrainGenerator {
             renderer.addGradientPoint(key, new ConquerSpace.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
         }
         renderer.enableLight();
+        renderer.enablePoleTemperature();
+        renderer.setPoleTemperature(0.4);
         renderer.setLightContrast(2.5);
         renderer.setLightBrightness(2);
         renderer.setDestImage(image);
