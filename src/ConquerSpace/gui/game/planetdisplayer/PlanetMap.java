@@ -23,8 +23,6 @@ import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.Stratum;
-import ConquerSpace.gui.game.planetdisplayer.construction.ConstructionPanel;
-import ConquerSpace.gui.renderers.TerrainRenderer;
 import ConquerSpace.util.Utilities;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AlphaComposite;
@@ -378,17 +376,6 @@ public class PlanetMap extends JPanel {
                     GeographicPoint pt = new GeographicPoint(mouseX, mouseY);
                     currentlyBuildingPoint = pt;
                     constructionActive = true;
-                    ConstructionPanel construction = new ConstructionPanel(c, p, u, pt, PlanetMap.this);
-                    ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(construction);
-
-                    construction.toFront();
-
-                    try {
-                        construction.setSelected(true);
-                    } catch (PropertyVetoException ex) {
-                        //Ignore, because it doesn't need to show anyway.
-                        LOGGER.trace("Property veto exception for showing construction window", ex);
-                    }
 
                     //Switch to normal view
                     displayedView = NORMAL_VIEW;

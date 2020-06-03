@@ -57,7 +57,8 @@ public class Population {
 
     public void incrementPopulation(StarDate date, long delta) {
         for (PopulationSegment seg : populations) {
-            seg.size = (long) ((double) seg.size * (1 + seg.populationIncrease));
+            double fraction = ((double) delta) / 10000d;
+            seg.size = (long) ((double) seg.size * ((1 + seg.populationIncrease * fraction)));
         }
     }
 }

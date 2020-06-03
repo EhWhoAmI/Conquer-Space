@@ -58,4 +58,9 @@ public class ObservatoryArea extends Area implements VisionPoint {
     public void setRange(int range) {
         this.range = range;
     }
+
+    @Override
+    public String toString() {
+        return "Observatory";
+    }
 }
