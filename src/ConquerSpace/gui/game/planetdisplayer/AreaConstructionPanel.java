@@ -21,6 +21,7 @@ import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.districts.City;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.planetdisplayer.construction.AreaDesignPanel;
+import ConquerSpace.gui.game.planetdisplayer.construction.IndustrialFactoryConstructionPanel;
 import ConquerSpace.gui.game.planetdisplayer.construction.MinerAreaConstructionPanel;
 import ConquerSpace.gui.game.planetdisplayer.construction.SpacePortConstructionPanel;
 import java.awt.BorderLayout;
@@ -51,9 +52,12 @@ public class AreaConstructionPanel extends JPanel {
     private JPanel areaConstructionInfo;
 
     private static final String MINE_STRING = "Mine";
+    private static final String MANUFACTURER_STRING = "Manufacturer";
+    private static final String POWER_PLANT_STRING = "Power Plant";
     private static final String SPACE_PORT_STRING = "Space Port";
 
-    private static String[] AREA_LIST_NAMES = {MINE_STRING, "Manufacturer", "Power Planet", SPACE_PORT_STRING};
+    
+    private static String[] AREA_LIST_NAMES = {MINE_STRING, MANUFACTURER_STRING, POWER_PLANT_STRING, SPACE_PORT_STRING};
 
     private AreaDesignPanel areaDesignPanel = null;
 
@@ -81,6 +85,9 @@ public class AreaConstructionPanel extends JPanel {
                     break;
                 case SPACE_PORT_STRING:
                     areaDesignPanel = new SpacePortConstructionPanel(planet, city, c);
+                    break;
+                case MANUFACTURER_STRING:
+                    areaDesignPanel = new IndustrialFactoryConstructionPanel(planet, city, c);
                     break;
                 default:
                     areaDesignPanel = new AreaDesignPanel(planet, city);

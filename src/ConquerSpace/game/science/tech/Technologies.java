@@ -250,7 +250,7 @@ public class Technologies {
             ProductionProcess process = GameController.prodProcesses.get(content);
             if (process != null) {
                 c.productionProcesses.add(process);
-            } else (process == null) {
+            } else {
                 LOGGER.trace("Could not find process " + content);
             }
         } else if (action.startsWith("mine")) {

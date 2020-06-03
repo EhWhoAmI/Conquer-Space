@@ -389,8 +389,8 @@ public class AssetReader {
         process.input = input;
         process.output = output;
         process.diff = diff;
-
-        GameController.prodProcesses.put(name, process);
+        
+        GameController.prodProcesses.put(identifier, process);
         return process;
     }
 

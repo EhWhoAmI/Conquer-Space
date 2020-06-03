@@ -2,13 +2,18 @@ Changelog:
 
 0.0.3
 Total Overhauls:
-Removed district systems, replaced with cities being defined by a series of points, because it is probably better for performance, and better for code
+Removed district systems, replaced with cities being defined by a series of points, 
+	- probably better for performance
+	- better for code
+	- better for understanding
 As a result, areas generate resources too
 Removed population units, Change to population segment system
 
 Technical:
 Change java version from 1.12 to 1.8 for compatability
 Game runs in the main thread
+Change to references to goods
+Add identifiers to resource and production processes
 
 Graphics and UI:
 Add lighting to planet surfaces so it looks cooler
@@ -17,6 +22,7 @@ Better music
  - Volume can now be changed
  - Music can be toggled better
 Available job list
+Add constructing areas UI to cities
 
 Gameplay:
 All buildings are resource storages now
