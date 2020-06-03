@@ -18,8 +18,8 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.area.Area;
+import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;

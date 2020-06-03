@@ -27,10 +27,10 @@ import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.resources.Element;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.ResourceDistribution;
+import ConquerSpace.game.resources.Element;
+import ConquerSpace.game.resources.Good;
+import ConquerSpace.game.resources.ProductionProcess;
+import ConquerSpace.game.resources.ResourceDistribution;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,30 +75,20 @@ public class GameLoader {
         GameController.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",
                 EngineTechnology.class, AssetReader::processEngineTech);
 
-        GameController.allGoods = new ArrayList<>();
 
+        //Init all resource references
+        GameController.goodIdentifiers = new HashMap<>();
+        GameController.goodHashMap = new HashMap<>();
+        
         //Read elements
         GameController.elements = readHjsonFromDirInArray("dirs.elements",
                 Element.class, AssetReader::processElement);
 
-        /*
-        GameController.ores = readHjsonFromDirInArray("dirs.ores", Ore.class, AssetReader::processOre);
+        processGoods();
+        
+        //Everything is compiled into the resource references, no need for extra loading
 
-        //Fill all goods
-        GameController.allGoods.addAll(GameController.ores);
-         */
-        GameController.goodIdentifiers = new HashMap<>();
-        GameController.goods = processGoods();
-
-        GameController.allGoods.addAll(GameController.elements);
-        GameController.allGoods.addAll(GameController.goods);
-
-        GameController.goodHashMap = new HashMap<>();
-        for (int i = 0; i < GameController.allGoods.size(); i++) {
-            Good g = GameController.allGoods.get(i);
-            GameController.goodHashMap.put(g.getId(), g);
-        }
-
+        //Resource distributions
         ArrayList<ResourceDistribution> res = readHjsonFromDirInArray("dirs.distributions", ResourceDistribution.class, AssetReader::processDistributions);
 
         //Sort through the list
@@ -107,7 +97,7 @@ public class GameLoader {
             GameController.ores.put(identifier, dist);
         }
         GameController.prodProcesses = new HashMap<>();
-        ArrayList<ProductionProcess> process = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
+        readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
 
         //Events
         readPopulationEvents();

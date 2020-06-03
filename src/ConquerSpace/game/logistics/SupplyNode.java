@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.logistics;
 
-import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.resources.ResourceStockpile;
 import java.util.ArrayList;
 
 /**

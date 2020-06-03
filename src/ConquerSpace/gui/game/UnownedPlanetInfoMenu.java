@@ -18,13 +18,13 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.PlanetTypes;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.resources.Stratum;
 import ConquerSpace.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.gui.renderers.TerrainRenderer;
 import com.alee.extended.layout.VerticalFlowLayout;

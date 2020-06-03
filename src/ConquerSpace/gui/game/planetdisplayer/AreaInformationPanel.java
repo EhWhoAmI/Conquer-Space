@@ -18,16 +18,16 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.districts.area.Area;
-import ConquerSpace.game.districts.area.CapitolArea;
-import ConquerSpace.game.districts.area.CommercialArea;
-import ConquerSpace.game.districts.area.FarmFieldArea;
-import ConquerSpace.game.districts.area.FinancialArea;
-import ConquerSpace.game.districts.area.InfrastructureArea;
-import ConquerSpace.game.districts.area.ManufacturerArea;
-import ConquerSpace.game.districts.area.MineArea;
-import ConquerSpace.game.districts.area.ResearchArea;
-import ConquerSpace.game.districts.area.SpacePortArea;
+import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.CapitolArea;
+import ConquerSpace.game.city.area.CommercialArea;
+import ConquerSpace.game.city.area.FarmFieldArea;
+import ConquerSpace.game.city.area.FinancialArea;
+import ConquerSpace.game.city.area.InfrastructureArea;
+import ConquerSpace.game.city.area.ManufacturerArea;
+import ConquerSpace.game.city.area.MineArea;
+import ConquerSpace.game.city.area.ResearchArea;
+import ConquerSpace.game.city.area.SpacePortArea;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Dimension;

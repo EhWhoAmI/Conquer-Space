@@ -17,13 +17,13 @@
  */
 package ConquerSpace.game.civilization;
 
-import ConquerSpace.game.civilization.controllers.AIController.AIController;
+import ConquerSpace.game.civilization.controllers.AIController;
 import ConquerSpace.game.civilization.controllers.CivilizationController;
 import ConquerSpace.game.civilization.government.Government;
 import ConquerSpace.game.civilization.stats.Economy;
 import ConquerSpace.game.civilization.stats.PopulationStats;
 import ConquerSpace.game.civilization.vision.VisionPoint;
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.people.Administrator;
@@ -45,8 +45,8 @@ import ConquerSpace.game.ships.launch.LaunchVehicle;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.resources.ProductionProcess;
+import ConquerSpace.game.resources.ResourceStockpile;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -29,6 +29,8 @@ public class Body {
     
     public Orbit orbit = new Orbit(0, 0, 0, 0);
     public SpacePoint point = new SpacePoint(0, 0);
+    
+    Body referenceBody;
 
     public Orbit getOrbit() {
         return orbit;

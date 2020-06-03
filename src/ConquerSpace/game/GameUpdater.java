@@ -24,15 +24,15 @@ import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.civilization.vision.VisionTypes;
-import ConquerSpace.game.districts.City;
-import ConquerSpace.game.districts.area.Area;
-import ConquerSpace.game.districts.area.FarmFieldArea;
-import ConquerSpace.game.districts.area.ManufacturerArea;
-import ConquerSpace.game.districts.area.MineArea;
-import ConquerSpace.game.districts.area.PowerPlantArea;
-import ConquerSpace.game.districts.area.ResearchArea;
-import ConquerSpace.game.districts.area.SpacePortArea;
-import ConquerSpace.game.districts.area.TimedManufacturerArea;
+import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.FarmFieldArea;
+import ConquerSpace.game.city.area.ManufacturerArea;
+import ConquerSpace.game.city.area.MineArea;
+import ConquerSpace.game.city.area.PowerPlantArea;
+import ConquerSpace.game.city.area.ResearchArea;
+import ConquerSpace.game.city.area.SpacePortArea;
+import ConquerSpace.game.city.area.TimedManufacturerArea;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
@@ -50,8 +50,8 @@ import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Star;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.resources.ProductionProcess;
+import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
@@ -280,7 +280,7 @@ public class GameUpdater {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
-                storeResource(area.getGrown().getFoodGood().getId(), 10d * removed, 0, c);
+                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c);
                 area.grow();
             }
         } else if (a instanceof TimedManufacturerArea) {

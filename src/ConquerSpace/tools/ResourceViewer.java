@@ -17,9 +17,11 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.game.universe.resources.Element;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.TempNonElement;
+import ConquerSpace.game.AssetReader;
+import ConquerSpace.game.GameController;
+import ConquerSpace.game.resources.Element;
+import ConquerSpace.game.resources.Good;
+import ConquerSpace.game.resources.NonElement;
 import ConquerSpace.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -34,6 +36,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -64,6 +67,7 @@ import org.json.JSONObject;
  * @author EhWhoAmI
  */
 public class ResourceViewer extends JFrame {
+
     private JPanel resourceListPanel;
     private JList<Good> resourceList;
     private DefaultListModel<Good> resourceListModel;
@@ -74,6 +78,7 @@ public class ResourceViewer extends JFrame {
     private JPanel resourceInfoPanel;
 
     private JTextField resourceNameField;
+    private JTextField resourceIdentifierField;
     private JSpinner id;
     private JTextField mass;
     private JTextField volume;
@@ -136,25 +141,22 @@ public class ResourceViewer extends JFrame {
             Good selected = resourceList.getSelectedValue();
             if (selected != null) {
                 resourceNameField.setText(selected.getName());
+                resourceIdentifierField.setText(selected.getIdentifier());
                 id.setValue(selected.getId());
                 mass.setText("" + selected.getMass());
                 volume.setText("" + selected.getVolume());
 
                 //do formula
                 forumlaTableModel.setRowCount(0);
-                if (selected instanceof TempNonElement) {
-                    TempNonElement nonElement = (TempNonElement) selected;
-                    for (Map.Entry<String, Double> map : nonElement.recipie.entrySet()) {
-                        String key = map.getKey();
-                        Double val = map.getValue();
 
-                        forumlaTableModel.addRow(new Object[]{key, val});
+                if (selected instanceof NonElement) {
+                    NonElement ne = (NonElement) selected;
+                    for (Map.Entry<Integer, Double> entry : ne.recipie.entrySet()) {
+                        Integer key = entry.getKey();
+                        Double val = entry.getValue();
+                        forumlaTableModel.addRow(new Object[]{GameController.goodHashMap.get(key).getName(), val});
                     }
-                    forumlaTableModel.fireTableDataChanged();
-                    formulaTableWrapper.setVisible(true);
-                    formulaTable.setVisible(true);
-                } else {
-                    formulaTableWrapper.setVisible(false);
+                    
                 }
                 //Add tags
                 tagsListModel.removeAllElements();
@@ -183,15 +185,24 @@ public class ResourceViewer extends JFrame {
 
         constraints.gridx = 0;
         constraints.gridy = 1;
+        resourceInfoPanel.add(new JLabel("Identifier: "), constraints);
+
+        resourceIdentifierField = new JTextField(16);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        resourceInfoPanel.add(resourceIdentifierField, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
         resourceInfoPanel.add(new JLabel("Id: "), constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         id = new JSpinner(new SpinnerNumberModel());
         resourceInfoPanel.add(id, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         resourceInfoPanel.add(new JLabel("Mass: "), constraints);
 
         mass = new JTextField();
@@ -213,11 +224,11 @@ public class ResourceViewer extends JFrame {
         });
 
         constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         resourceInfoPanel.add(mass, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         resourceInfoPanel.add(new JLabel("Volume: "), constraints);
 
         volume = new JTextField();
@@ -238,39 +249,39 @@ public class ResourceViewer extends JFrame {
             }
         });
         constraints.gridx = 1;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         resourceInfoPanel.add(volume, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         resourceInfoPanel.add(new JLabel("Formula: "), constraints);
 
         forumlaTableModel = new DefaultTableModel(new String[]{"Resource", "Amount"}, 0);
         formulaTable = new JTable(forumlaTableModel);
         constraints.gridx = 0;
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         constraints.gridwidth = 2;
         formulaTableWrapper = new JScrollPane(formulaTable);
         resourceInfoPanel.add(formulaTableWrapper, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         resourceInfoPanel.add(new JLabel("Tags: "), constraints);
 
         tagsListModel = new DefaultListModel<>();
         tagsList = new JList<>(tagsListModel);
         constraints.gridx = 0;
-        constraints.gridy = 7;
+        constraints.gridy = 8;
         resourceInfoPanel.add(new JScrollPane(tagsList), constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 8;
+        constraints.gridy = 9;
         constraints.gridwidth = 1;
         toAddTagFieldTextField = new JTextField(30);
         resourceInfoPanel.add(toAddTagFieldTextField, constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 8;
+        constraints.gridy = 9;
         addTagButton = new JButton("Add tag");
         addTagButton.addActionListener(l -> {
             if (!toAddTagFieldTextField.getText().isEmpty()) {
@@ -283,7 +294,7 @@ public class ResourceViewer extends JFrame {
         resourceInfoPanel.add(addTagButton, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 9;
+        constraints.gridy = 10;
         constraints.gridwidth = 2;
         deleteTagButton = new JButton("Delete tag");
         deleteTagButton.addActionListener(l -> {
@@ -398,30 +409,7 @@ public class ResourceViewer extends JFrame {
             for (int i = 0; i < root.length(); i++) {
                 try {
                     JSONObject obj = root.getJSONObject(i);
-                    String name = obj.getString("name");
-                    double volume = obj.getDouble("volume");
-                    double mass = obj.getDouble("mass");
 
-                    //TempNonElement tempNonElement = new TempNonElement(name, i, volume, mass);
-                    //NonElement nonElement = new NonElement(name, i, volume, mass);
-
-                    //Process formula
-                    JSONArray arr = obj.getJSONArray("formula");
-                    //Sort through things
-                    for (int k = 0; k < arr.length(); k++) {
-                        String s = arr.getString(k);
-                        String[] content = s.split(":");
-                        //Find the resources
-                        String resourceName = content[0];
-                        double amount = Double.parseDouble(content[1]);
-                        //tempNonElement.recipie.put(resourceName, amount);
-                    }
-
-                    //Sort through elements
-                    JSONArray tags = obj.getJSONArray("tags");
-                    String[] tagArray = Arrays.copyOf(tags.toList().toArray(), tags.toList().toArray().length, String[].class);
-                    //tempNonElement.tags = tagArray;
-                    //goods.add(tempNonElement);
                 } catch (ClassCastException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -506,15 +494,16 @@ public class ResourceViewer extends JFrame {
     }
 
     private void resetLoadedGoods() {
-        ArrayList<Good> allGoods = new ArrayList<>();
-        File goodDir = ResourceLoader.getResourceByFile("dirs.goods");
-        for (File goodFile : goodDir.listFiles()) {
-            readFile(goodFile, allGoods);
-        }
+        GameController.goodIdentifiers = new HashMap<>();
+        GameController.goodHashMap = new HashMap<>();
 
-        allGoods.addAll(getElements());
+        //Read elements
+        GameController.elements = AssetReader.readHjsonFromDirInArray("dirs.elements",
+                Element.class, AssetReader::processElement);
 
-        resources = allGoods;
+        AssetReader.processGoods();
+
+        resources = new ArrayList<Good>(GameController.goodHashMap.values());
     }
 
     private void loadGoodsFromList() {

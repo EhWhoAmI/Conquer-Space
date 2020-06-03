@@ -18,9 +18,9 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.resources.ResourceStockpile;
+import ConquerSpace.game.resources.ResourceStockpile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.AbstractListModel;

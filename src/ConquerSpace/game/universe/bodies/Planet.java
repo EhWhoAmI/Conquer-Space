@@ -18,7 +18,7 @@
 package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.civilization.stats.Economy;
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.jobs.Workable;
@@ -26,7 +26,7 @@ import ConquerSpace.game.ships.Orbitable;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
-import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.resources.Stratum;
 import java.util.ArrayList;
 import java.util.HashMap;
 

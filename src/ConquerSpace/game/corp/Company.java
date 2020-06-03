@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.corp;
 
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.population.jobs.Employer;
 import ConquerSpace.game.universe.bodies.Planet;

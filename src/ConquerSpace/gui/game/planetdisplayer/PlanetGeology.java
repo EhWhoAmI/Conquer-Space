@@ -19,7 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.resources.Stratum;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 

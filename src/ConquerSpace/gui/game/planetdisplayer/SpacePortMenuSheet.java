@@ -19,7 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.ShipClass;
 import ConquerSpace.game.ships.satellites.Satellite;

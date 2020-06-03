@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.universe.resources.Good;
+import ConquerSpace.game.resources.Good;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

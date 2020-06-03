@@ -25,7 +25,7 @@ import ConquerSpace.game.actions.ShipMoveAction;
 import ConquerSpace.game.actions.ShipSurveyAction;
 import ConquerSpace.game.actions.ToOrbitAction;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.civilization.controllers.PlayerController;
 import ConquerSpace.game.civilization.vision.VisionTypes;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.save.SaveGame;

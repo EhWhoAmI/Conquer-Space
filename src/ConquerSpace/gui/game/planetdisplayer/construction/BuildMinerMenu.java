@@ -20,7 +20,7 @@ package ConquerSpace.gui.game.planetdisplayer.construction;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.resources.Stratum;
+import ConquerSpace.game.resources.Stratum;
 import ConquerSpace.util.Utilities;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

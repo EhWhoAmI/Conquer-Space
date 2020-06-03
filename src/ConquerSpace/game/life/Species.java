@@ -18,37 +18,40 @@
 package ConquerSpace.game.life;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.universe.resources.FoodGood;
-import ConquerSpace.game.universe.resources.LiveGood;
+import ConquerSpace.game.resources.FoodGood;
+import ConquerSpace.game.resources.LiveGood;
 import java.util.ArrayList;
 
 /**
  * Species on a planet, can go to other planets
+ *
  * @author EhWhoAmI
  */
 public class Species {
-    
+
     private static int idCounter = 0;
     private int id = 0;
     public ArrayList<LifeTrait> lifeTraits;
 
-    private LiveGood speciesGood;
-    private FoodGood foodGood;
+    private int speciesGood;
+    private int foodGood;
     //Breeding rate
     private float baseBreedingRate = 0;
     //Breeding method
     //Etc...
     private String name;
-    
+
     public Species(String name) {
         id = idCounter++;
         lifeTraits = new ArrayList<>();
         this.name = name;
         //Nice
-        foodGood = new FoodGood(this, 1, 420);
-        speciesGood = new LiveGood(this, 1, 420);
-        GameController.goodHashMap.put(foodGood.getId(), foodGood);
-        GameController.goodHashMap.put(speciesGood.getId(), speciesGood);
+        FoodGood foodGoodResource = new FoodGood(this, 1, 420);
+        LiveGood speciesGoodResource = new LiveGood(this, 1, 420);
+        GameController.goodHashMap.put(foodGoodResource.getId(), foodGoodResource);
+        GameController.goodHashMap.put(speciesGoodResource.getId(), speciesGoodResource);
+        speciesGood = speciesGoodResource.getId();
+        foodGood = foodGoodResource.getId();
     }
 
     public void setName(String name) {
@@ -67,11 +70,11 @@ public class Species {
         this.baseBreedingRate = baseBreedingRate;
     }
 
-    public FoodGood getFoodGood() {
+    public int getFoodGood() {
         return foodGood;
     }
 
-    public LiveGood getLiveSpeciesGood() {
+    public int getLiveSpeciesGood() {
         return speciesGood;
     }
 

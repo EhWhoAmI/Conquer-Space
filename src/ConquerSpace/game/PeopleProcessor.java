@@ -19,7 +19,7 @@ package ConquerSpace.game;
 
 import ConquerSpace.game.civilization.government.GovernmentPosition;
 import ConquerSpace.game.civilization.government.HeritableGovernmentPosition;
-import ConquerSpace.game.districts.City;
+import ConquerSpace.game.city.City;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;

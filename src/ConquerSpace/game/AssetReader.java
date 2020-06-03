@@ -21,12 +21,11 @@ import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
-import ConquerSpace.game.universe.resources.Element;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.NonElement;
-import ConquerSpace.game.universe.resources.Ore;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.ResourceDistribution;
+import ConquerSpace.game.resources.Element;
+import ConquerSpace.game.resources.Good;
+import ConquerSpace.game.resources.NonElement;
+import ConquerSpace.game.resources.ProductionProcess;
+import ConquerSpace.game.resources.ResourceDistribution;
 import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
@@ -54,7 +53,7 @@ public class AssetReader {
 
     //This is kinda hacked together, but it's not too fancy
     @SuppressWarnings("unchecked")
-    public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, PassThingy thing) {
+    public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, AssetPasser assetReader) {
         ArrayList<T> elements = new ArrayList<>();
         //Get the launch systems folder
         File resourceFolder = ResourceLoader.getResourceByFile(dir);
@@ -76,7 +75,7 @@ public class AssetReader {
                 for (int i = 0; i < root.length(); i++) {
                     try {
                         JSONObject obj = root.getJSONObject(i);
-                        elements.add((T) thing.thingy(obj));
+                        elements.add((T) assetReader.parseJSONObject(obj));
                     } catch (ClassCastException e) {
                         LOGGER.error("CCE while reading file" + f.getAbsolutePath(), e);
                     } catch (JSONException exception) {
@@ -241,9 +240,12 @@ public class AssetReader {
             density = (Double) densityT;
         }
         Element e = new Element(name, 1d, density);
-
+        e.setElementNumber(id);
         //Set tags
         e.tags = new String[0];
+
+        GameController.goodIdentifiers.put(e.getIdentifier(), e.getId());
+        GameController.goodHashMap.put(e.getId(), e);
         return e;
     }
 
@@ -301,44 +303,6 @@ public class AssetReader {
         return trait;
     }
 
-    public static Object processOre(JSONObject obj) {
-        String name = obj.getString("name");
-        String identifier = obj.getString("identifier");
-        double density = obj.getDouble("density");
-        Ore element = new Ore(name, identifier, 0, 1, density);
-        //Process formula
-        JSONArray arr = obj.getJSONArray("formula");
-        //Sort through things
-        for (int i = 0; i < arr.length(); i++) {
-            String s = arr.getString(i);
-            String[] content = s.split(":");
-            //Find the resources
-            //content[0]
-            //element.recipie.put(, Integer.parseInt(content[1]));
-        }
-
-        //Process distribution
-        JSONArray dist = obj.getJSONArray("distribution");
-        int distributionLow = dist.getInt(0);
-        int distributionHigh = dist.getInt(1);
-        JSONArray depth = obj.getJSONArray("depth");
-        int depthLow = depth.getInt(0);
-        int depthHigh = depth.getInt(1);
-        double rarity = obj.getDouble("rarity");
-        int abundance = obj.getInt("abundance");
-        int resourceDistDensity = obj.getInt("dist-density");
-
-        element.dist.distributionLow = distributionLow;
-        element.dist.distributionHigh = distributionHigh;
-        element.dist.depthLow = depthLow;
-        element.dist.depthHigh = depthHigh;
-        element.dist.rarity = rarity;
-        element.dist.abundance = abundance;
-        element.dist.density = resourceDistDensity;
-
-        return (element);
-    }
-
     public static Object processUncompleteGood(JSONObject obj) {
         return null;
     }
@@ -389,7 +353,7 @@ public class AssetReader {
         process.input = input;
         process.output = output;
         process.diff = diff;
-        
+
         GameController.prodProcesses.put(identifier, process);
         return process;
     }
@@ -418,12 +382,12 @@ public class AssetReader {
         distribution.density = resourceDistDensity;
         return distribution;
     }
-
+    
     /**
      * We need a separate function for reading goods, because you need to
      * iterate through it twice.
      */
-    public static ArrayList<Good> processGoods() {
+    public static void processGoods() {
         ArrayList<Good> goods = new ArrayList<>();
         HashMap<String, JSONObject> recipieInfo = new HashMap<>();
 
@@ -449,16 +413,17 @@ public class AssetReader {
                     String identifier = obj.getString("identifier");
                     double volume = obj.getDouble("volume");
                     double mass = obj.getDouble("mass");
-                    NonElement nonElement = new NonElement(name, identifier, volume, mass);
+                    NonElement goodElement = new NonElement(name, identifier, volume, mass);
 
                     //Get tags
                     Object[] tagObjects = obj.getJSONArray("tags").toList().toArray();
-                    nonElement.tags = Arrays.copyOf(tagObjects, tagObjects.length, String[].class
-                    );
-                    obj.getJSONArray("tags").toList().toArray();
-                    goods.add(nonElement);
-                    GameController.goodIdentifiers.put(identifier, nonElement.getId());
+                    goodElement.tags = Arrays.copyOf(tagObjects, tagObjects.length, String[].class);
+
+                    goods.add(goodElement);
                     recipieInfo.put(identifier, obj);
+
+                    GameController.goodIdentifiers.put(identifier, goodElement.getId());
+                    GameController.goodHashMap.put(goodElement.getId(), goodElement);
                 }
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found: " + f.getAbsolutePath() + "!", ex);
@@ -479,11 +444,7 @@ public class AssetReader {
             }
         }
 
-        //Add elements
-        for (int k = 0; k < GameController.elements.size(); k++) {
-            Element e = GameController.elements.get(k);
-            GameController.goodIdentifiers.put(e.getIdentifier(), e.getId());
-        }
+        //Resolve references
         for (int i = 0; i < goods.size(); i++) {
             try {
                 Good g = goods.get(i);
@@ -506,15 +467,10 @@ public class AssetReader {
                 LOGGER.warn("EXCEPTION: " + goods.get(i) + "!", e);
             }
         }
-
-        //Wrap up
-        return goods;
-
     }
-}
 
-//Something to pass the parameters
-interface PassThingy {
+    public static interface AssetPasser {
 
-    public Object thingy(JSONObject obj);
+        public Object parseJSONObject(JSONObject obj);
+    }
 }

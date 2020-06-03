@@ -19,18 +19,18 @@ package ConquerSpace.game;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.controllers.PlayerController.PlayerController;
+import ConquerSpace.game.civilization.controllers.PlayerController;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.ships.satellites.Satellite;
-import ConquerSpace.game.universe.resources.Element;
-import ConquerSpace.game.universe.resources.Good;
-import ConquerSpace.game.universe.resources.NonElement;
-import ConquerSpace.game.universe.resources.ProductionProcess;
-import ConquerSpace.game.universe.resources.ResourceDistribution;
+import ConquerSpace.game.resources.Element;
+import ConquerSpace.game.resources.Good;
+import ConquerSpace.game.resources.NonElement;
+import ConquerSpace.game.resources.ProductionProcess;
+import ConquerSpace.game.resources.ResourceDistribution;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Timer;
@@ -74,7 +74,7 @@ public class GameController {
 
     public static ArrayList<Element> elements;
     public static HashMap<Integer, ResourceDistribution> ores = new HashMap<>();
-    public static ArrayList<Good> allGoods;
+
     public static HashMap<Integer, Good> goodHashMap;
     public static HashMap<String, Integer> goodIdentifiers;
 
