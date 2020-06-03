@@ -19,6 +19,8 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.SpacePortArea;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -88,18 +90,17 @@ public class SpacePortMenu extends JPanel {
     }
 
     private void compileSpacePorts() {
-        for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
-            GeographicPoint key = entry.getKey();
-            City value = entry.getValue();
-//Find space port in city
-//            if (value instanceof SpacePort) {
-//                SpacePort port = (SpacePort) value;
-//                //Do things
-//                for (SpacePortLaunchPad lp : port.launchPads) {
-//                    launchPads.add(lp);
-//                    spaceLPModel.addElement(lp);
-//                }
-//            }
+        for (City c : p.cities) {
+            for (Area a : c.areas) {
+                if (a instanceof SpacePortArea) {
+                    SpacePortArea port = (SpacePortArea) a;
+                    for (SpacePortLaunchPad lp : port.launchPads) {
+                        launchPads.add(lp);
+                        spaceLPModel.addElement(lp);
+                    }
+                }
+            }
         }
     }
+
 }

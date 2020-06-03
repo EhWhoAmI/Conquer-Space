@@ -17,6 +17,9 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.SpacePortArea;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -45,9 +48,9 @@ public class PlanetInfoSheet extends JPanel {
     PlanetEconomy planetEconomy;
     PlanetGeology planetGeology;
     PlanetResources planetResources;
-    
+
     private Image planetImage;
-    
+
     private Civilization c;
     private Planet p;
 
@@ -56,10 +59,10 @@ public class PlanetInfoSheet extends JPanel {
     public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
         this.c = c;
         this.p = p;
-        
+
         TerrainRenderer renderer = new TerrainRenderer(p);
         planetImage = renderer.getImage(2d);
-        
+
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
 
@@ -127,10 +130,18 @@ public class PlanetInfoSheet extends JPanel {
         tpane.setEnabledAt(spacePortIndex, false);
 
         //Check if planet contains space port
-        //TODO
+        cityloop:
+        for (City c : p.cities) {
+            for (Area a : c.areas) {
+                if (a instanceof SpacePortArea) {
+                    tpane.setEnabledAt(spacePortIndex, true);
+                    break cityloop;
+                }
+            }
+        }
         //Check if civ has launch capability
         if (c.values.get("haslaunch") != 1) {
-            
+
             //Disable
             tpane.setEnabledAt(spacePortIndex, false);
         }

@@ -60,6 +60,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 /**
  *
@@ -110,6 +111,8 @@ public class GameInitializer {
 
             //Science
             initializeTech(c, selector);
+            
+            //
 
             initalizeCivValues(c);
 
@@ -618,5 +621,9 @@ public class GameInitializer {
 
     private void addSupplyLines(Planet p) {
         //Consolidate all resource miners
+    }
+    
+    private void initializeSpaceships(Civilization c) {
+        
     }
 }

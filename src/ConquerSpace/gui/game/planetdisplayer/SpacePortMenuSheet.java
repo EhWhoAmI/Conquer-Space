@@ -20,8 +20,11 @@ package ConquerSpace.gui.game.planetdisplayer;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.SpacePortArea;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.ShipClass;
+import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.Satellites;
 import ConquerSpace.game.universe.Vector;
@@ -41,7 +44,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
     private SatelliteListModel satelliteListModel;
     private SpaceShipListModel spaceShipListModel;
-    
+
     /**
      * Creates new form SpacePortMenuSheet
      */
@@ -318,7 +321,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 int selection = qlSpaceshipList.getSelectedIndex();
                 //Create satellite
                 ShipClass selectedObject = c.shipClasses.get(selection);
-                
+
                 Ship ship = new Ship(selectedObject,
                         0, 0, new Vector(0, 0),
                         p.getUniversePath());
@@ -381,7 +384,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
             fireIntervalAdded(this, c.launchVehicles.size(), c.launchVehicles.size());
         }
     }
-    
+
     private class SpaceShipListModel extends DefaultListModel<String> {
 
         @Override
@@ -401,15 +404,18 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
     private void updateComponent() {
         satelliteListModel.fireEvent();
-        
+
         //Get the amount of launch pads
         int launchPadCount = 0;
-        for(City b : p.cityDistributions.values()) {
-            /*
-            if(b instanceof SpacePort) {
-                SpacePort port = (SpacePort) b;
-                launchPadCount += port.launchPads.size();
-            }*/
+        for (City c : p.cities) {
+            for (Area a : c.areas) {
+                if (a instanceof SpacePortArea) {
+                    SpacePortArea port = (SpacePortArea) a;
+                    for (SpacePortLaunchPad lp : port.launchPads) {
+                        launchPadCount++;
+                    }
+                }
+            }
         }
         spaceportCount.setText("" + launchPadCount);
     }
