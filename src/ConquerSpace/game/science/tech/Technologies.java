@@ -212,12 +212,14 @@ public class Technologies {
             //Split it
             String[] orbitSplit = orbitName.split(":");
             int satelliteID = Integer.parseInt(orbitSplit[1]);
-            JSONObject s = GameController.satelliteTemplates.stream().
-                    filter(e -> e.getInt("id") == satelliteID).findFirst().orElseGet(null);
-            if (s != null) {
-                //Add it to civ
-                c.addSatelliteTemplate(s);
-            }
+            
+            //TODO, preinitialized satellites
+//            JSONObject s = GameController.satelliteTemplates.stream().
+//                    filter(e -> e.getInt("id") == satelliteID).findFirst().orElseGet(null);
+//            if (s != null) {
+//                //Add it to civ
+//                c.addSatelliteTemplate(s);
+//            }
             //Or else ignore it. there is no need to complain.
         } else if (action.startsWith("component")) {
             //Do component

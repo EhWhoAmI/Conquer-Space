@@ -17,6 +17,8 @@
  */
 package ConquerSpace.game.ships.satellites;
 
+import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
+import ConquerSpace.game.ships.satellites.templates.TelescopeTemplate;
 import ConquerSpace.util.MultiplierProcessor;
 import java.util.HashMap;
 import org.json.JSONObject;
@@ -36,12 +38,12 @@ public class Satellites {
         int id = object.getInt("id");
         switch(getSatelliteTypeFromString(type)) {
             case SatelliteTypes.NONE:
-                satellite = new NoneSatellite(distance, mass);
+                satellite = new NoneSatellite();
                 satellite.setId(id);
                 satellite.setName(name);
                 break;
             case SatelliteTypes.TELESCOPE:
-                satellite = new SpaceTelescope(distance, mass);
+                satellite = new SpaceTelescope();
                 satellite.setId(id);
                 satellite.setName(name);
                 //Range...
@@ -57,10 +59,30 @@ public class Satellites {
                 break;
             default:
                 //Just a none satellite then
-                satellite = new NoneSatellite(0, 0);
+                satellite = new NoneSatellite();
                 satellite.setId(-1);
                 satellite.setName("Unknown satellite");
         }
+        return satellite;
+    }
+    
+    public static Satellite parseSatellite(SatelliteTemplate object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {
+        //Parse
+        Satellite satellite = new NoneSatellite();
+        String name = object.getName();
+        int mass = object.getMass();
+        int id = object.getId();
+        
+        if(object instanceof TelescopeTemplate) {
+            TelescopeTemplate template = (TelescopeTemplate) object;
+            satellite = new SpaceTelescope();
+            
+            ((SpaceTelescope)satellite).setRange(template.getRange());
+        }
+        
+        satellite.mass = mass;
+        satellite.name = name;
+        satellite.id = id;
         return satellite;
     }
     

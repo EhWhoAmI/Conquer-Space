@@ -27,6 +27,7 @@ import ConquerSpace.game.ships.ShipClass;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.Satellites;
+import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.game.universe.Vector;
 import ConquerSpace.game.universe.bodies.Planet;
 import javax.swing.DefaultListModel;
@@ -311,7 +312,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 //Automate
                 int selection = qlsatelliteList.getSelectedIndex();
                 //Create satellite
-                JSONObject selectedObject = c.satelliteTemplates.get(selection);
+                SatelliteTemplate selectedObject = c.satelliteTemplates.get(selection);
                 Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
                 //Check if it orbits a planet
                 sat.setOwner(c.getID());
@@ -340,9 +341,9 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         if (!qlsatelliteList.isSelectionEmpty()) {
             int selection = qlsatelliteList.getSelectedIndex();
             //Create satellite
-            JSONObject selectedObject = c.satelliteTemplates.get(selection);
-            qlSatNameLabel.setText(selectedObject.getString("name"));
-            qlSatMassLabel.setText(selectedObject.getInt("mass") + "");
+            SatelliteTemplate selectedObject = c.satelliteTemplates.get(selection);
+            qlSatNameLabel.setText(selectedObject.getName());
+            qlSatMassLabel.setText(Integer.toString(selectedObject.getMass()));
         }
     }//GEN-LAST:event_qlsatelliteListMouseClicked
 
@@ -372,7 +373,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
         @Override
         public String getElementAt(int index) {
-            return c.satelliteTemplates.get(index).getString("name");
+            return c.satelliteTemplates.get(index).getName();
         }
 
         @Override

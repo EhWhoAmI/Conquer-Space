@@ -20,6 +20,8 @@ package ConquerSpace.gui.game.engineering;
 import ConquerSpace.game.Calculators;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.satellites.SatelliteTypes;
+import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
+import ConquerSpace.game.ships.satellites.templates.TelescopeTemplate;
 import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -111,33 +113,26 @@ public class SatelliteDesigner extends JPanel {
         saveSatelliteMenu.addActionListener(a -> {
             //Create the satellite
             if (!satelliteNameField.getText().equals("")) {
+                SatelliteTemplate template = new SatelliteTemplate();
                 JSONObject obj = new JSONObject();
-
-                obj.put("name", satelliteNameField.getText());
-                obj.put("mass", mass);
-                String type = "";
-                //Doesnt really matter
-                obj.put("dist", 0);
 
                 switch (satelliteTypeList.getSelectedIndex()) {
                     case SatelliteTypes.NONE:
-                        type = "none";
                         break;
                     case SatelliteTypes.TELESCOPE:
-                        type = "telescope";
                         //Add Info
-                        obj.put("range", Calculators.Optics.getRange(c.values.get("optics.quality"), (int) telescopeSatelliteSizeSpinner.getValue()));
+                        template = new TelescopeTemplate();
+                        ((TelescopeTemplate) template).setRange(Calculators.Optics.getRange(c.values.get("optics.quality"), (int) telescopeSatelliteSizeSpinner.getValue()));
                         break;
                     case SatelliteTypes.MILITARY:
-                        type = "military";
                         break;
                 }
-                obj.put("type", type);
-                obj.put("mass", mass);
-                obj.put("cost", new JSONArray(new Integer[]{0}));
-                obj.put("id", c.satelliteTemplates.size());
-                c.satelliteTemplates.add(obj);
-                satelliteListModel.addElement(new SatelliteWrapper(obj));
+                template.setName(satelliteNameField.getText());
+                template.setMass(mass);
+
+                //Add cost
+                c.satelliteTemplates.add(template);
+                satelliteListModel.addElement(new SatelliteWrapper(template));
             } else {
                 //Show alert
                 JOptionPane.showInternalMessageDialog(this, "You need a name for the satellite!");
@@ -172,7 +167,7 @@ public class SatelliteDesigner extends JPanel {
         satelliteNameLabel = new JLabel("Name: ");
         satelliteNameField = new JTextField();
         getRandomSatelliteNameButton = new JButton("Get random name");
-        
+
         getRandomSatelliteNameButton.addActionListener(l -> {
             satelliteNameField.setText(componentGenerator.getName(0));
         });
@@ -279,20 +274,12 @@ public class SatelliteDesigner extends JPanel {
             SatelliteWrapper wrapper = ((SatelliteWrapper) satelliteList.getSelectedValue());
 
             if (wrapper != null) {
-                JSONObject obj = wrapper.getObject();
-                satelliteNameField.setText(obj.getString("name"));
-                satelliteMassValueLabel.setText(obj.getInt("mass") + "");
-                switch (obj.getString("type")) {
-                    case "none":
-                        break;
-                    case "telescope":
-                        //Add Info
-                        //System.out.println(obj.getInt("range"));
-                        telescopeSatelliteSizeSpinner.setValue(Calculators.Optics.getLensSize(0, obj.getInt("range")));
-                        telescopeSatelliteRangeValueLabel.setText(obj.getInt("range") + " light years");
-                        break;
-                    case "military":
-                        break;
+                SatelliteTemplate obj = wrapper.getObject();
+                satelliteNameField.setText(obj.getName());
+                satelliteMassValueLabel.setText(Integer.toString(obj.getMass()));
+                if (obj instanceof TelescopeTemplate) {
+                    telescopeSatelliteSizeSpinner.setValue(Calculators.Optics.getLensSize(0, ((TelescopeTemplate) obj).getRange()));
+                    telescopeSatelliteRangeValueLabel.setText(((TelescopeTemplate) obj).getRange() + " light years");
                 }
             }
         });
@@ -314,18 +301,18 @@ public class SatelliteDesigner extends JPanel {
 
     private class SatelliteWrapper {
 
-        private JSONObject object;
+        private SatelliteTemplate object;
 
-        public SatelliteWrapper(JSONObject object) {
+        public SatelliteWrapper(SatelliteTemplate object) {
             this.object = object;
         }
 
         @Override
         public String toString() {
-            return object.getString("name");
+            return object.getName();
         }
 
-        public JSONObject getObject() {
+        public SatelliteTemplate getObject() {
             return object;
         }
 

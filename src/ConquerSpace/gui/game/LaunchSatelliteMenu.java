@@ -22,6 +22,7 @@ import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.Satellites;
+import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
@@ -60,9 +61,9 @@ public class LaunchSatelliteMenu extends JPanel {
 
         listModel = new DefaultListModel<>();
 
-        for (JSONObject s : c.satelliteTemplates) {
+        for (SatelliteTemplate s : c.satelliteTemplates) {
             //Process satellite
-            SatelliteWrapper wrap = new SatelliteWrapper(s.getInt("id"), s.getString("name"));
+            SatelliteWrapper wrap = new SatelliteWrapper(s.getId(), s.getName());
             listModel.addElement(wrap);
         }
         satelliteSelectList = new JList(listModel);
@@ -74,17 +75,17 @@ public class LaunchSatelliteMenu extends JPanel {
             SatelliteWrapper selected = satelliteSelectList.getSelectedValue();
             int id = selected.getId();
             //Get compatable
-            JSONObject selectedObject = null;
-            for (JSONObject s : c.satelliteTemplates) {
+            SatelliteTemplate selectedObject = null;
+            for (SatelliteTemplate s : c.satelliteTemplates) {
                 //Process satellite
-                if (id == s.getInt("id")) {
+                if (id == s.getId()) {
                     selectedObject = s;
                     break;
                 }
             }
             if (selectedObject != null) {
-                satelliteMass.setText("Mass: " + selectedObject.getInt("mass"));
-                satelliteName.setText(selectedObject.getString("name"));
+                satelliteMass.setText("Mass: " + selectedObject.getMass());
+                satelliteName.setText(selectedObject.getName());
             }
         });
         satelliteSelectPanel.add(satelliteSelectList);
@@ -110,10 +111,10 @@ public class LaunchSatelliteMenu extends JPanel {
                 SatelliteWrapper selected = satelliteSelectList.getSelectedValue();
                 int id = selected.getId();
                 //Get compatable
-                JSONObject selectedObject = null;
-                for (JSONObject s : c.satelliteTemplates) {
+                SatelliteTemplate selectedObject = null;
+                for (SatelliteTemplate s : c.satelliteTemplates) {
                     //Process satellite
-                    if (id == s.getInt("id")) {
+                    if (id == s.getId()) {
                         selectedObject = s;
                         Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
                         //Check if it orbits a planet

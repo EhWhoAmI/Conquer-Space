@@ -15,49 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.ships.satellites;
-
-import ConquerSpace.game.civilization.vision.VisionPoint;
-import ConquerSpace.game.universe.UniversePath;
+package ConquerSpace.game.ships.satellites.templates;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class SpaceTelescope extends Satellite implements VisionPoint{
+public class TelescopeTemplate extends SatelliteTemplate{
+    int range;
 
-    private int civilization = -1;
-    private int range = 0;
-
-    public SpaceTelescope() {
-        super();
-    }
-
-    public void setCivilization(int civ) {
-        owner = civ;
-    }
-    
-    @Override
-    public int getCivilization() {
-        return getOwner();
-    }
-
-    public void setRange(int range) {
-        this.range = range;
-    }
-
-    
-    @Override
     public int getRange() {
         return range;
     }
 
-    public void setPosition(UniversePath position) {
-        this.orbiting = position;
-    }
-
-    @Override
-    public UniversePath getPosition() {
-        return this.orbiting;
+    public void setRange(int range) {
+        this.range = range;
     }
 }

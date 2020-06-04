@@ -28,28 +28,17 @@ import ConquerSpace.game.universe.UniversePath;
  */
 public class Satellite implements Launchable, Orbitable{
     
-    protected PolarCoordinate location;
     protected int mass;
     protected String name = "";
     protected int id;
     protected int owner = -1;
     protected UniversePath orbiting = null;
         
-    public Satellite(int distance, int mass) {
-        this.mass = mass;
-        location = new PolarCoordinate(0, distance);
+    public Satellite() {
     }
 
     public int getMass() {
         return mass;
-    }
-    
-    /**
-     * Get orbit distance, in km. A distance of 0 means that the satellite can orbit in any orbit.
-     * @return 
-     */
-    public double getDistance() {
-        return location.getDistance();
     }
 
     public void setName(String name) {
@@ -89,6 +78,4 @@ public class Satellite implements Launchable, Orbitable{
     public void setOrbiting(UniversePath orbiting) {
         this.orbiting = orbiting;
     }
-    
-    
 }
