@@ -34,6 +34,4 @@ public class ScienceComponent extends ShipComponent{
         sc.scienceContribution = scienceContribution;
         return sc;
     }
-    
-    
 }

@@ -54,6 +54,7 @@ import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.Stratum;
+import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -112,7 +113,8 @@ public class GameInitializer {
             //Science
             initializeTech(c, selector);
             
-            //
+            //Init templates
+            initializeSpaceships(c);
 
             initalizeCivValues(c);
 
@@ -624,6 +626,9 @@ public class GameInitializer {
     }
     
     private void initializeSpaceships(Civilization c) {
-        
+        SatelliteTemplate template = new SatelliteTemplate();
+        template.setMass(84);
+        template.setName("Sputnik");
+        c.satelliteTemplates.add(template);
     }
 }

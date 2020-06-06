@@ -18,6 +18,7 @@
 package ConquerSpace.game.ships;
 
 import ConquerSpace.game.ships.components.ShipComponent;
+import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.game.ships.hull.Hull;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class ShipClass implements Serializable {
 
     private String name;
     private Hull hull;
-    public ArrayList<ShipComponent> components;
+    public ArrayList<ShipComponentTemplate> components;
     private int mass = 1;
     private long estimatedThrust = 0;
 

@@ -151,6 +151,9 @@ public class SatelliteDesigner extends JPanel {
         add(menuBar, BorderLayout.NORTH);
         JPanel container = new JPanel();
         satelliteListModel = new DefaultListModel<>();
+        for (SatelliteTemplate temp : c.satelliteTemplates) {
+            satelliteListModel.addElement(new SatelliteWrapper(temp));
+        }
         satelliteTypeListModel = new DefaultListModel<>();
 
         satelliteList = new JList(satelliteListModel);

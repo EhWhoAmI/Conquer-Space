@@ -18,6 +18,7 @@
 package ConquerSpace.game.ships;
 
 import ConquerSpace.game.ships.components.ShipComponent;
+import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.game.ships.hull.Hull;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.Vector;
@@ -50,8 +51,8 @@ public class Ship extends SpaceShip {
         components = new ArrayList<>();
         //Get components
         if (!sclass.components.isEmpty()) {
-            for (ShipComponent s : sclass.components) {
-                components.add((ShipComponent) s.clone());
+            for (ShipComponentTemplate s : sclass.components) {
+                //components.add((ShipComponent) s.clone());
             }
         }
         this.hull = (Hull) sclass.getHull().clone();

@@ -21,6 +21,8 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.ShipClass;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.game.ships.components.templates.EngineTemplate;
+import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.game.ships.hull.Hull;
 import ConquerSpace.game.ships.hull.HullMaterial;
 import ConquerSpace.util.names.NameGenerator;
@@ -54,7 +56,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import org.json.JSONObject;
 
 /**
  *
@@ -130,6 +131,8 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
     private NameGenerator nameGenerator;
 
+    private EngineTemplate selectedEngine;
+
     public BuildSpaceShipAutomationMenu(Civilization c) {
         this.civ = c;
         setLayout(new BorderLayout());
@@ -163,6 +166,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             civ.hulls.add(selectedHull);
             ShipClass sc = new ShipClass(shipNameField.getText(), selectedHull);
             //Add components
+            //Autogenerate engine
 
             civ.shipClasses.add(sc);
         });
@@ -219,7 +223,6 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         }
                     }
                 }
-                //shipSensorButton.get
             });
 
             shipSpeedLabel = new JLabel("Speed");
@@ -616,18 +619,21 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         public EngineConfigWindow() {
             setLayout(new VerticalFlowLayout());
+            setTitle("Engine Designer");
             setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
             add(new JLabel("Engine Designer"));
-            toDesignOrNotToDesign = new JCheckBox("Autodesign Engines/Use Preexisting engines");
+            toDesignOrNotToDesign = new JCheckBox("Currently Autodesigning Engines");
             toDesignOrNotToDesign.setSelected(true);
 
             toDesignOrNotToDesign.addItemListener(l -> {
                 //l.getStateChange() == 1 means checked
                 if (l.getStateChange() == 1) {
                     cardLayout.show(mainEngineEventPanel, "autodesign");
+                    toDesignOrNotToDesign.setText("Currently Autodesigning Engines");
                 } else {
                     cardLayout.show(mainEngineEventPanel, "no");
+                    toDesignOrNotToDesign.setText("Manually creating engines");
                 }
             });
             add(toDesignOrNotToDesign);
@@ -652,6 +658,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             createEnginePanel.add(new JLabel("Engine tech:"));
             createEnginePanel.add(engineTechComboBox);
 
+            //Select engine....
             chooseEnginePanel = new JPanel();
             mainEngineEventPanel.add("no", chooseEnginePanel);
             chooseEnginePanel.setLayout(new VerticalFlowLayout());
@@ -661,26 +668,28 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             engineListModel = new DefaultListModel<>();
             //Fill list
             {
-                for (JSONObject obj : civ.shipComponentList) {
-                    if (obj.getString("type").equals("engine")) {
+                for (ShipComponentTemplate obj : civ.shipComponentList) {
+                    if (obj instanceof EngineTemplate) {
                         engineListModel.addElement(new EngineComponentWrapper(obj));
                     }
                 }
             }
             engineList = new JList<>(engineListModel);
             engineList.addListSelectionListener(l -> {
-                JSONObject obj = engineList.getSelectedValue().object;
-                engineInfoPanel.removeAll();
-                //Add info
-                engineInfoPanel.setLayout(new VerticalFlowLayout());
-                engineInfoPanel.add(new JLabel("Name: " + obj.getString("name")));
-                EngineTechnology tech = civ.engineTechs.stream().findFirst().filter(e -> e.getId() == obj.getInt("eng-tech")).get();
-                engineInfoPanel.add(new JLabel("Engine tech: " + tech.getName()));
-                engineInfoPanel.add(new JLabel("Power: " + obj.getInt("rating") + " kn"));
-                engineInfoPanel.add(new JLabel("Mass: " + obj.getInt("mass") + " kg"));
+                ShipComponentTemplate componentTemplate = engineList.getSelectedValue().object;
+                if (componentTemplate instanceof EngineTemplate) {
+                    EngineTemplate engineTemplate = (EngineTemplate) componentTemplate;
+                    engineInfoPanel.removeAll();
+                    //Add info
+                    engineInfoPanel.setLayout(new VerticalFlowLayout());
+                    engineInfoPanel.add(new JLabel("Name: " + engineTemplate.getName()));
+                    engineInfoPanel.add(new JLabel("Engine tech: " + engineTemplate.getEngineTechnology().getName()));
+                    engineInfoPanel.add(new JLabel("Power: " + engineTemplate.getThrust() + " kn"));
+                    engineInfoPanel.add(new JLabel("Mass: " + engineTemplate.getMass() + " kg"));
 
-                engineInfoPanel.validate();
-                engineInfoPanel.repaint();
+                    engineInfoPanel.validate();
+                    engineInfoPanel.repaint();
+                }
             });
             JScrollPane engineListScrollPane = new JScrollPane(engineList);
             //chooseEnginePanel.add(engineListScrollPane);
@@ -692,6 +701,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             engineSelectionPanel.add(engineListScrollPane);
             engineSelectionPanel.add(engineInfoPanel);
             chooseEnginePanel.add(engineSelectionPanel);
+            //End Self design
 
             //Other panel...
             closeButton = new JButton("Close");
@@ -701,7 +711,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                     engineTypeNotificationLabel.repaint();
                 } else {
                     if (engineList.getSelectedValue() != null) {
-                        engineTypeNotificationLabel.setText(engineList.getSelectedValue().object.getString("name"));
+                        engineTypeNotificationLabel.setText(engineList.getSelectedValue().object.getName());
                         engineTypeNotificationLabel.repaint();
                     }
                 }
@@ -715,15 +725,15 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         private class EngineComponentWrapper {
 
-            JSONObject object;
+            ShipComponentTemplate object;
 
-            public EngineComponentWrapper(JSONObject object) {
+            public EngineComponentWrapper(ShipComponentTemplate object) {
                 this.object = object;
             }
 
             @Override
             public String toString() {
-                return object.getString("name");
+                return object.getName();
             }
         }
     }

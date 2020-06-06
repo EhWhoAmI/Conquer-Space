@@ -232,7 +232,8 @@ public class Technologies {
             JSONObject s = GameController.shipComponentTemplates.stream().
                     filter(e -> e.getString("id").equals(compName)).findFirst().orElseGet(null);
             if (s != null) {
-                c.addShipComponent(s);
+                //TODO add preinstalled templates
+                //c.addShipComponent(s);
             }
         } else if (action.startsWith("thrust")) {
             //Do component

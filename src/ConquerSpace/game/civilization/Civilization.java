@@ -47,6 +47,7 @@ import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
+import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ public class Civilization implements Employer{
     public ArrayList<HullMaterial> hullMaterials;
     public ArrayList<Hull> hulls;
     public Field fields;
-    public ArrayList<JSONObject> shipComponentList;
+    public ArrayList<ShipComponentTemplate> shipComponentList;
     public ArrayList<EngineTechnology> engineTechs;
     public ArrayList<LaunchVehicle> launchVehicles;
 
@@ -351,7 +352,7 @@ public class Civilization implements Employer{
         satelliteTemplates.add(s);
     }
 
-    public void addShipComponent(JSONObject s) {
+    public void addShipComponent(ShipComponentTemplate s) {
         shipComponentList.add(s);
     }
 

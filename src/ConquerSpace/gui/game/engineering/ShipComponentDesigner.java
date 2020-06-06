@@ -21,6 +21,8 @@ import ConquerSpace.game.Calculators;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.ships.components.ShipComponentTypes;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.game.ships.components.templates.EngineTemplate;
+import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.util.names.NameGenerator;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -56,8 +58,8 @@ public class ShipComponentDesigner extends JPanel {
     private DefaultListModel<ShipComponentContainer> componentsListModel;
     private JList<ShipComponentContainer> componentsList;
 
-    private DefaultListModel<String> componentTypeListModel;
-    private JList<String> componentTypeList;
+    private DefaultListModel<ShipComponentTypes> componentTypeListModel;
+    private JList<ShipComponentTypes> componentTypeList;
 
     private JPanel componentPanel;
     private JLabel nameLabel;
@@ -95,7 +97,7 @@ public class ShipComponentDesigner extends JPanel {
     private final String ENGINE_COMPONENT = "engine";
 
     private int mass = 0;
-    
+
     private NameGenerator componentGenerator;
 
     @SuppressWarnings("unchecked")
@@ -103,10 +105,10 @@ public class ShipComponentDesigner extends JPanel {
         setLayout(new BorderLayout());
 
         try {
-            componentGenerator =  NameGenerator.getNameGenerator("component.names");
+            componentGenerator = NameGenerator.getNameGenerator("component.names");
         } catch (IOException ex) {
         }
-        
+
         menuBar = new JMenuBar();
         JMenu menu = new JMenu("Ship Components");
 
@@ -114,36 +116,34 @@ public class ShipComponentDesigner extends JPanel {
         saveShipComponents.addActionListener(a -> {
             //Create object
             if (!nameTextField.getText().equals("")) {
-                JSONObject obj = new JSONObject();
-                obj.put("name", nameTextField.getText());
-                obj.put("id", c.shipComponentList.size());
-                obj.put("volume", 0);
+                ShipComponentTemplate obj = new ShipComponentTemplate();
+
                 String type = "";
                 int rating = 0;
                 int mass = 0;
-                switch (componentTypeList.getSelectedIndex()) {
-                    case ShipComponentTypes.TEST_COMPONENT:
-                        type = "test";
+                switch (componentTypeList.getSelectedValue()) {
+                    case Test:
+                        //
                         mass = 18000;
                         break;
-                    case ShipComponentTypes.SCIENCE_COMPONENT:
+                    case Science:
                         type = "science";
                         break;
-                    case ShipComponentTypes.ENGINE_COMPONENT:
-                        type = "engine";
-                        obj.put("eng-tech", ((EngineTechnology) engineTechBox.getSelectedItem()).getId());
-                        rating = ((int) thrustRatingSpinner.getValue());
+                    case Engine:
+                        obj = new EngineTemplate();
                         EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
+                        ((EngineTemplate) obj).setEngineTechnology(tech);
+                        rating = ((int) thrustRatingSpinner.getValue());
 
+                        ((EngineTemplate) obj).setThrust(mass);
                         mass = Calculators.Engine.getEngineMass((int) thrustRatingSpinner.getValue(), tech);
+
                         break;
                 }
-                obj.put("type", type);
+                obj.setName(nameTextField.getText());
+                //obj.put("id", c.shipComponentList.size());
 
-                //What ever, who cares
-                obj.put("rating", rating);
-                obj.put("cost", 0);
-                obj.put("mass", mass);
+                obj.setMass(mass);
                 c.shipComponentList.add(obj);
                 componentsListModel.addElement(new ShipComponentContainer(obj));
             }
@@ -154,6 +154,9 @@ public class ShipComponentDesigner extends JPanel {
         add(menuBar, BorderLayout.NORTH);
 
         componentsListModel = new DefaultListModel<>();
+        for (ShipComponentTemplate obj : c.shipComponentList) {
+            componentsListModel.addElement(new ShipComponentContainer(obj));
+        }
         componentsList = new JList(componentsListModel);
         componentsList.isSelectedIndex(0);
 
@@ -163,20 +166,20 @@ public class ShipComponentDesigner extends JPanel {
 
         componentsList.addListSelectionListener(l -> {
             //Set the component name
-            JSONObject object = componentsList.getSelectedValue().object;
-            nameTextField.setText(object.getString("name"));
+            ShipComponentTemplate object = componentsList.getSelectedValue().object;
+            nameTextField.setText(object.getName());
             //Set seleceted
             //Get type
-            switch (object.getString("type")) {
-                case "test":
+            switch (object.getType()) {
+                case Test:
                     //Set values
                     cardLayout.show(lowerPanel, TEST_COMPONENT);
                     break;
-                case "science":
+                case Science:
                     cardLayout.show(lowerPanel, SCIENCE_COMPONENT);
                     break;
-                case "engine":
-                    EngineTechnology engt = c.engineTechs.stream().filter(o -> o.getId() == object.getInt("eng-tech")).findFirst().get();
+                case Engine:
+                    EngineTechnology engt = ((EngineTemplate) object).getEngineTechnology();
                     //Set the stuff
                     //Set selectdd thing
                     componentTypeList.setSelectedIndex(4);
@@ -197,11 +200,11 @@ public class ShipComponentDesigner extends JPanel {
                     break;
             }
             //Set mass
-            int mass = object.getInt("mass");
+            int mass = object.getMass();
             massText.setText("" + mass);
         });
 
-        for (JSONObject obj : c.shipComponentList) {
+        for (ShipComponentTemplate obj : c.shipComponentList) {
             componentsListModel.addElement(new ShipComponentContainer(obj));
         }
 
@@ -214,7 +217,7 @@ public class ShipComponentDesigner extends JPanel {
         nameLabel = new JLabel("Name: ");
         nameTextField = new JTextField();
         selectRandomNameButton = new JButton("Get Random Name");
-        
+
         selectRandomNameButton.addActionListener(l -> {
             nameTextField.setText(componentGenerator.getName(0));
         });
@@ -291,7 +294,7 @@ public class ShipComponentDesigner extends JPanel {
         d.width = 100;
         componentTypeList.setPreferredSize(d);
 
-        for (String s : ShipComponentTypes.SHIP_COMPONENT_TYPE_NAMES) {
+        for (ShipComponentTypes s : ShipComponentTypes.values()) {
             componentTypeListModel.addElement(s);
         }
         componentTypeList.setSelectedIndex(0);
@@ -301,19 +304,19 @@ public class ShipComponentDesigner extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 //This is the important one
                 //Get selected one
-                int selected = componentTypeList.getSelectedIndex();
+                ShipComponentTypes selected = componentTypeList.getSelectedValue();
                 //Because the strings in ShipComponentTypes.SHIP_COMPONENT_TYPE_NAMES is 
                 //coordinated with the index, so we do not need for much
                 //coordination
                 switch (selected) {
-                    case ShipComponentTypes.TEST_COMPONENT:
+                    case Test:
                         cardLayout.show(lowerPanel, TEST_COMPONENT);
                         massText.setText("" + 18000);
                         break;
-                    case ShipComponentTypes.SCIENCE_COMPONENT:
+                    case Science:
                         cardLayout.show(lowerPanel, SCIENCE_COMPONENT);
                         break;
-                    case ShipComponentTypes.ENGINE_COMPONENT:
+                    case Engine:
                         //Update components
                         engineTechBoxModel.removeAllElements();
                         for (EngineTechnology t : c.engineTechs) {
@@ -340,15 +343,15 @@ public class ShipComponentDesigner extends JPanel {
 
     private static class ShipComponentContainer {
 
-        private JSONObject object;
+        private ShipComponentTemplate object;
 
-        public ShipComponentContainer(JSONObject object) {
+        public ShipComponentContainer(ShipComponentTemplate object) {
             this.object = object;
         }
 
         @Override
         public String toString() {
-            return object.getString("name");
+            return object.getName();
         }
     }
 }
