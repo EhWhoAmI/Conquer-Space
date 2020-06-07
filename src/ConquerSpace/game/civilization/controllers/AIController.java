@@ -33,8 +33,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class AIController implements CivilizationController {
-
+public class AIController extends CivilizationController {
     private static final Logger LOGGER = CQSPLogger.getLogger(AIController.class.getName());
 
     @Override
@@ -52,7 +51,7 @@ public class AIController implements CivilizationController {
 
     @Override
     public void init(Universe u, StarDate d, Civilization c) {
-        LOGGER.info("initialized the ai");
+        LOGGER.info("initialized the ai for " + c.getName());
     }
 
     @Override

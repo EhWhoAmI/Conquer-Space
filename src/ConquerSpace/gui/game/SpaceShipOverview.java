@@ -19,6 +19,8 @@ package ConquerSpace.gui.game;
 
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.universe.bodies.Universe;
+import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -27,18 +29,21 @@ import javax.swing.JTabbedPane;
  * @author EhWhoAmI
  */
 public class SpaceShipOverview extends JPanel {
+
     private ShipListManager shipListManager;
     private JTabbedPane tabs;
 
     public SpaceShipOverview(Civilization civ, Universe u) {
+        setLayout(new BorderLayout());
         tabs = new JTabbedPane();
+
         shipListManager = new ShipListManager(u, civ);
-        
         tabs.add("Ship List", shipListManager);
 
         tabs.addChangeListener(l -> {
+            update();
         });
-        add(tabs);
+        add(tabs, BorderLayout.CENTER);
     }
 
     public void update() {

@@ -29,10 +29,10 @@ import java.util.ArrayList;
  * This is the interface of the civilization controller.
  * @author EhWhoAmI
  */
-public interface CivilizationController{
-    public ArrayList<Action> doTurn(Civilization c);
-    public void alert(Alert a);
-    public void init(Universe u, StarDate d, Civilization c);
-    public void refreshUI();
-    public void passEvent(Event e);
+public abstract class CivilizationController{
+    public abstract ArrayList<Action> doTurn(Civilization c);
+    public abstract void alert(Alert a);
+    public abstract void init(Universe u, StarDate d, Civilization c);
+    public abstract void refreshUI();
+    public abstract void passEvent(Event e);
 }

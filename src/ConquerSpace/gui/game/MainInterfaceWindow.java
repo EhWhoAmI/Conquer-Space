@@ -142,8 +142,10 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         planetInfoSheetContainer = new JPanel();
         planetInfoSheetContainer.setLayout(new BorderLayout());
 
+        //Space ship tabs
         spaceShipOverview = new SpaceShipOverview(c, u);
 
+        //Engineering tabs
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
 
         shipsComponentsOverviewPanel = new JTabbedPane();

@@ -69,7 +69,7 @@ public class GameLoader {
         readShipTypes();
         readShipComponents();
 
-        GameController.personalityTraits = readHjsonFromDirInArray("dirs.ship.engine.tech",
+        GameController.personalityTraits = readHjsonFromDirInArray("dirs.traits",
                 PersonalityTrait.class, AssetReader::processPersonalityTraits);
 
         GameController.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",

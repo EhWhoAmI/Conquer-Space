@@ -21,7 +21,6 @@ import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.controllers.CivilizationController;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -37,7 +36,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class PlayerController implements CivilizationController {
+public class PlayerController extends CivilizationController {
 
     private Civilization c;
     private Universe u;
