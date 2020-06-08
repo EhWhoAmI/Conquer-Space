@@ -23,7 +23,7 @@ import ConquerSpace.game.population.jobs.Workable;
 /**
  * Works as a modifier to the district
  */
-public class Area implements Workable {
+public class Area implements Workable, Comparable<Area> {
 
     /**
      * The number of people currently manning the place.
@@ -32,6 +32,13 @@ public class Area implements Workable {
     private int operatingJobs;
     private int maxJobs;
     private int powerUsage;
+    
+    protected int priority = Integer.MAX_VALUE;
+
+    /**
+     * This is how productive the area is when it is at only <code> currentlyManningJobs</code>.
+     */
+    private float workingmultiplier = 1;
 
     public AreaClassification getAreaType() {
         return AreaClassification.Generic;
@@ -74,5 +81,18 @@ public class Area implements Workable {
 
     public void setCurrentlyManningJobs(int currentlyManningJobs) {
         this.currentlyManningJobs = currentlyManningJobs;
+    }
+
+    public void setWorkingmultiplier(float workingmultiplier) {
+        this.workingmultiplier = workingmultiplier;
+    }
+
+    public float getWorkingmultiplier() {
+        return workingmultiplier;
+    }
+
+    @Override
+    public int compareTo(Area o) {
+        return Integer.compare(priority, o.priority);
     }
 }

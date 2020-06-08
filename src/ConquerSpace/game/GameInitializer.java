@@ -112,7 +112,7 @@ public class GameInitializer {
 
             //Science
             initializeTech(c, selector);
-            
+
             //Init templates
             initializeSpaceships(c);
 
@@ -153,7 +153,7 @@ public class GameInitializer {
                 createUnrecruitedPeople(c, starting, gen);
 
                 initializeGovernment(c, gen);
-                
+
                 //Set head of state position
                 c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
             }
@@ -207,6 +207,7 @@ public class GameInitializer {
                 City miner = new City(p.getUniversePath());
                 for (Integer g : stratum.minerals.keySet()) {
                     MineArea mineArea = new MineArea(stratum, g, (float) (10 * (selector.nextDouble() + 0.1)));
+                    mineArea.setWorkingmultiplier(1.5f);
                     mineArea.setOperatingJobs(50_000);
                     mineArea.setMaxJobs(100_000);
                     miner.addArea(mineArea);
@@ -305,6 +306,7 @@ public class GameInitializer {
 
                 factory.setMaxJobs(proc.diff * 10000);
                 factory.setOperatingJobs(proc.diff * 5000);
+                factory.setWorkingmultiplier(1.2f);
                 industrialCity.areas.add(factory);
             }
 
@@ -624,7 +626,7 @@ public class GameInitializer {
     private void addSupplyLines(Planet p) {
         //Consolidate all resource miners
     }
-    
+
     private void initializeSpaceships(Civilization c) {
         SatelliteTemplate template = new SatelliteTemplate();
         template.setMass(84);

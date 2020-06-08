@@ -17,13 +17,20 @@
  */
 package ConquerSpace.game.city.area;
 
+import ConquerSpace.game.economy.Currency;
+
 /**
  * Symbolizes all the smaller businesses and normal day to day trade in 
  * @author EhWhoAmI
  */
 public class CommercialArea extends Area{
     private int tradeValue;
+    private Currency currency;
 
+    public CommercialArea() {
+        priority = 10;
+    }
+    
     public void setTradeValue(int tradeValue) {
         this.tradeValue = tradeValue;
     }

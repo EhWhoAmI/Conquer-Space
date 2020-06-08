@@ -19,13 +19,18 @@ package ConquerSpace.game.city.area;
 
 /**
  * Capital of city
+ *
  * @author EhWhoAmI
  */
-public class CapitolArea extends ConsumerArea{
-    
+public class CapitolArea extends ConsumerArea {
+
+    public CapitolArea() {
+        priority = 1;
+    }
+
     @Override
     public String toString() {
         return "Capitol Building";
     }
-    
+
 }

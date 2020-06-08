@@ -28,7 +28,6 @@ import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.resources.Element;
 import ConquerSpace.game.resources.Good;
-import ConquerSpace.game.resources.NonElement;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceDistribution;
 import ConquerSpace.gui.music.MusicPlayer;

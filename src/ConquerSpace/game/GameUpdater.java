@@ -59,6 +59,7 @@ import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -270,14 +271,46 @@ public class GameUpdater {
         long maxJobsProviding = 0;
         long necessaryJobsProviding = 0;
         long size = c.population.getPopulationSize();
+
+        //Sort them out based off piority
+        Collections.sort(c.areas);
+
         for (Area a : c.areas) {
             necessaryJobsProviding += a.operatingJobsNeeded();
             maxJobsProviding += a.getMaxJobsProvided();
         }
-        if (necessaryJobsProviding < size) {
-            //All the jobs ok
+
+        if (maxJobsProviding < size) {
+            //Fill necessary jobs if there are not enough people to get the max amount of people
             for (Area a : c.areas) {
                 a.setCurrentlyManningJobs(a.getMaxJobsProvided());
+            }
+        } else if (necessaryJobsProviding < size) {
+            //Fill all the jobs needed to operate
+
+            for (Area a : c.areas) {
+                size -= a.operatingJobsNeeded();
+                a.setCurrentlyManningJobs(a.operatingJobsNeeded());
+            }
+            //Go through again, and add the jobs
+            for (Area a : c.areas) {
+                int toFill = a.getMaxJobsProvided() - a.operatingJobsNeeded();
+
+                if ((size - toFill) > 0) {
+                    a.setCurrentlyManningJobs(a.getMaxJobsProvided());
+                } else {
+                    a.setCurrentlyManningJobs((a.operatingJobsNeeded() + (int) size));
+                    break;
+                }
+            }
+        } else {
+            //Not enough jobs, so fill stuff according to piority
+            for (Area a : c.areas) {
+                int jobsToAdd = a.operatingJobsNeeded();
+                if ((size - jobsToAdd) > 0) {
+                    size -= jobsToAdd;
+                    a.setCurrentlyManningJobs(jobsToAdd);
+                }
             }
         }
     }
@@ -287,7 +320,10 @@ public class GameUpdater {
             FarmFieldArea area = (FarmFieldArea) a;
             int removed = area.tick(delta);
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
+                //Calculate percentage
+
                 storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c);
+
                 area.grow();
             }
         } else if (a instanceof TimedManufacturerArea) {
@@ -300,6 +336,7 @@ public class GameUpdater {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
 
+                    //Get percentage
                     storeResource(key, val * removed, 0, c);
                 }
             }
@@ -337,7 +374,9 @@ public class GameUpdater {
                     storeResource(key, -val * delta, 0, c);
                 }
 
-                storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * delta), 0, c);
+                double multiplier = getMultiplier(a);
+
+                storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * delta) * multiplier, 0, c);
             }
         } else if (a instanceof SpacePortArea) {
             SpacePortArea area = (SpacePortArea) a;
@@ -447,7 +486,7 @@ public class GameUpdater {
             StarSystem system = universe.getStarSystem(i);
 
             system.setPoint(system.getOrbit().toSpacePoint());
-            
+
             for (int k = 0; k < system.bodies.size(); k++) {
                 Body body = system.bodies.get(k);
                 body.setPoint(body.getOrbit().toSpacePoint());
@@ -572,5 +611,25 @@ public class GameUpdater {
             }
         }
         return false;
+    }
+
+    private double getMultiplier(Area area) {
+        double extraJobs = area.getCurrentlyManningJobs() - area.operatingJobsNeeded();
+
+        double multiplier = 1;
+        if (extraJobs > 0) {
+            double maxExtraJobs = area.getMaxJobsProvided() - area.operatingJobsNeeded();
+
+            float workingMultiplier = area.getWorkingmultiplier() - 1f;
+
+            double extraJobsRatio = extraJobs / maxExtraJobs;
+            if (extraJobsRatio > 1) {
+                extraJobsRatio = 1;
+            }
+            double multiplyBy = 1d + extraJobsRatio * workingMultiplier;
+
+            multiplier = multiplyBy;
+        }
+        return multiplier;
     }
 }
