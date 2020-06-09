@@ -26,6 +26,7 @@ import ConquerSpace.game.civilization.vision.VisionPoint;
 import ConquerSpace.game.civilization.vision.VisionTypes;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.ConstructingArea;
 import ConquerSpace.game.city.area.FarmFieldArea;
 import ConquerSpace.game.city.area.ManufacturerArea;
 import ConquerSpace.game.city.area.MineArea;
@@ -59,6 +60,7 @@ import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -258,6 +260,18 @@ public class GameUpdater {
             for (Area a : c.areas) {
                 processArea(p, c, a, date, delta);
             }
+
+            //Replace cities
+            Iterator<Area> areaIterator = c.areas.iterator();
+            ArrayList<Area> areasToAdd = new ArrayList<>();
+            while (areaIterator.hasNext()) {
+                Area a = areaIterator.next();
+                if (a instanceof ConstructingArea && ((ConstructingArea) a).getTicksLeft() <= 0) {
+                    areasToAdd.add(((ConstructingArea) a).getToBuild());
+                    areaIterator.remove();
+                }
+            }
+            c.areas.addAll(areasToAdd);
         }
     }
 
@@ -395,6 +409,11 @@ public class GameUpdater {
             if (!Globals.universe.civs.get(area.getCivilization()).visionPoints.contains(area)) {
                 Globals.universe.civs.get(area.getCivilization()).visionPoints.add(area);
             }
+        }
+
+        if (a instanceof ConstructingArea) {
+            ConstructingArea area = (ConstructingArea) a;
+            area.tickConstruction(delta);
         }
     }
 

@@ -21,6 +21,7 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.CapitolArea;
 import ConquerSpace.game.city.area.CommercialArea;
+import ConquerSpace.game.city.area.ConstructingArea;
 import ConquerSpace.game.city.area.FarmFieldArea;
 import ConquerSpace.game.city.area.FinancialArea;
 import ConquerSpace.game.city.area.InfrastructureArea;
@@ -142,6 +143,14 @@ public class AreaInformationPanel extends JPanel {
                 add(launchSystemLabel);
                 JLabel launchPadLabel = new JLabel("Launch Pads: " + area.launchPads.size());
                 add(launchPadLabel);
+            } else if (a instanceof ConstructingArea) {
+                JLabel title = new JLabel("Area Under Construction");
+                add(title);
+                ConstructingArea area = (ConstructingArea) a;
+                JLabel constructingArea = new JLabel("Building: " + area.getToBuild().toString());
+                add(constructingArea);
+                JLabel timeLeft = new JLabel("Time Left: " + area.getTicksLeft());
+                add(timeLeft);
             }
 
             JLabel currentJobs = new JLabel("Current Manpower: " + a.getCurrentlyManningJobs());

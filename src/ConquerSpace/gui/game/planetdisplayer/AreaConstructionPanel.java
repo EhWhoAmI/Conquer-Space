@@ -19,6 +19,8 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.area.Area;
+import ConquerSpace.game.city.area.ConstructingArea;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.gui.game.planetdisplayer.construction.AreaDesignPanel;
 import ConquerSpace.gui.game.planetdisplayer.construction.IndustrialFactoryConstructionPanel;
@@ -104,9 +106,10 @@ public class AreaConstructionPanel extends JPanel {
 
         constructButton = new JButton("Construct!");
         constructButton.addActionListener(l -> {
-            if (areaDesignPanel != null && areaDesignPanel.getAreaToConstruct() != null) {
+            Area areaToBuild = areaDesignPanel.getAreaToConstruct();
+            if (areaDesignPanel != null && areaToBuild != null) {
                 //Then construct area
-                city.addArea(areaDesignPanel.getAreaToConstruct());
+                city.addArea(new ConstructingArea(10_000, areaToBuild));
                 JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, "Created Area!");
             }
         });
