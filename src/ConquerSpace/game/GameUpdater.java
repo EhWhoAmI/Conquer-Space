@@ -56,7 +56,6 @@ import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.universe.SpacePoint;
 import static ConquerSpace.game.universe.generators.DefaultUniverseGenerator.AU_IN_LTYR;
-import ConquerSpace.gui.renderers.RendererMath;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -131,7 +130,7 @@ public class GameUpdater {
         //Increment resources
         processResources();
 
-        peopleProcessor.processPeople();
+        peopleProcessor.processPeople(GameRefreshRate);
 
         long end = System.currentTimeMillis();
 
@@ -179,6 +178,7 @@ public class GameUpdater {
             }
         }
 
+        int looping = 0;
         //Loop through all the vision points in the universe
         for (int civ = 0; civ < universe.getCivilizationCount(); civ++) {
             Civilization civil = universe.getCivilization(civ);
@@ -200,6 +200,7 @@ public class GameUpdater {
                             universe.getCivilization(civ).vision.put(universe.getStarSystem(g).getUniversePath(),
                                     (amount > 100) ? 100 : (amount));
                         }
+                        looping++;
                     }
                 }
             }

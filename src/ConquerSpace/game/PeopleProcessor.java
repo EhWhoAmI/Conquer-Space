@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.civilization.government.GovernmentPosition;
 import ConquerSpace.game.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.city.City;
@@ -73,20 +74,16 @@ public class PeopleProcessor {
         return p;
     }
 
-    public void processPeople() {
-        for (int starSystemCount = 0; starSystemCount < u.getStarSystemCount(); starSystemCount++) {
-            StarSystem starSystem = u.getStarSystem(starSystemCount);
-            //Check for ships or whatever
-            for (int planetCount = 0; planetCount < starSystem.bodies.size(); planetCount++) {
-                Body body = starSystem.bodies.get(planetCount);
-                if (body instanceof Planet) {
-                    Planet planet = (Planet) body;
-                    //If city is populated
-                    if (planet.isHabitated()) {
-                        processPlanet(planet);
+    public void processPeople(int delta) {
+        for(Person person: u.people.values()) {
+            if (!person.isDead()) {                    
+                    //Increment age
+                    person.age += (int) delta;
+                    
+                    if (person.age > 50_000) {
+                        processDeath(person);
                     }
                 }
-            }
         }
         //Set previous date
         resetDate();
@@ -120,24 +117,6 @@ public class PeopleProcessor {
                 Person next = ((Administrator) p).employer.government.officials.get(nextPosition);
                 ((Administrator) p).employer.government.officials.put(pos, next);
                 next.setRole("GOT EM");
-            }
-        }
-    }
-
-    private void processPlanet(Planet planet) {
-        for (City c : planet.cities) {
-            for (Person p : c.peopleAtCity) {
-                if (!p.isDead()) {
-                    //Process stuff
-                    //Increment age
-
-                    long previous = date.bigint - before.bigint;
-                    p.age += (int) previous;
-
-                    if (p.age > 500) {
-                        processDeath(p);
-                    }
-                }
             }
         }
     }

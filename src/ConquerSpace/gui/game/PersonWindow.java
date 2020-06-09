@@ -74,7 +74,12 @@ public class PersonWindow extends JPanel {
                 if (personList.getSelectedValue() instanceof Scientist) {
                     skillLabel.setText("Skill: " + ((Scientist) personList.getSelectedValue()).getSkill());
                 }
-                positionLabel.setText("Location: " + personList.getSelectedValue().getPosition().getName() + ", " + u.getSpaceObject(personList.getSelectedValue().getPosition().getUniversePath()));
+                String position = "Unknown";
+                if(personList.getSelectedValue().getPosition() != null) {
+                    position = personList.getSelectedValue().getPosition().getName();
+                }
+                
+                positionLabel.setText("Location: " + position); // + u.getSpaceObject(personList.getSelectedValue().getPosition().getUniversePath())
                 if (personList.getSelectedValue().isDead()) {
                     isDeadLabel.setText("Ded - F");
                 } else {

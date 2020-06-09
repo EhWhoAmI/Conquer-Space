@@ -18,12 +18,15 @@
 package ConquerSpace.game.universe.bodies;
 
 import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**
  * Universe Object.
@@ -43,6 +46,8 @@ public class Universe extends Body {
     public ArrayList<SpaceShip> spaceShips;
 
     public ArrayList<Race> species;
+    
+    public DualHashBidiMap<Integer, Person> people;
 
     public Universe(long seed) {
         this.seed = seed;
@@ -51,6 +56,7 @@ public class Universe extends Body {
         starSystems = new ArrayList<>();
         spaceShips = new ArrayList<>();
         species = new ArrayList<>();
+        people = new DualHashBidiMap<>();
     }
 
     /**

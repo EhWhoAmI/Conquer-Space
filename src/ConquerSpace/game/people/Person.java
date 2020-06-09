@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.people;
 
+import ConquerSpace.Globals;
 import ConquerSpace.game.population.jobs.Employer;
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 public class Person {
+    private static int idCounter = 0;
+    private int id;
     private String name;
     public int age;
     private PersonEnterable position;
@@ -42,8 +45,10 @@ public class Person {
         this.name = name;
         this.dead = false;
         this.age = age;
+        id = idCounter++;
         traits = new ArrayList<>();
         role = new Role();
+        Globals.universe.people.put(id, this);
     }
 
     public int getAge() {
@@ -96,5 +101,9 @@ public class Person {
 
     public void setDead(boolean dead) {
         this.dead = dead;
+    }
+
+    public int getId() {
+        return id;
     }
 }

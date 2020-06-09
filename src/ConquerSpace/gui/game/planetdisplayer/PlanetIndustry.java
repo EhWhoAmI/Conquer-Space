@@ -131,6 +131,7 @@ public class PlanetIndustry extends JPanel {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
         for (City city : p.cityDistributions.values()) {
+            //Throws currentmodificationexception, so need to fix in the future
             for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }

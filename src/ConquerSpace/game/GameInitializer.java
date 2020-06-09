@@ -164,9 +164,16 @@ public class GameInitializer {
     }
 
     private void initializeCities(Planet starting, Civilization c, Random selector) {
+        NameGenerator gen = null;
+        try {
+            gen = NameGenerator.getNameGenerator("us.names");
+        } catch (IOException ex) {
+            //Ignore
+        }
+
         //Add resource miners
         createResourceMiners(starting, c, c.getFoundingSpecies(), selector);
-        createFarms(starting, c, selector);
+        createFarms(starting, c, selector, gen);
 
         createCities(starting, c, selector);
 
@@ -184,7 +191,18 @@ public class GameInitializer {
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city);
             addPopulation(city, selector, c);
+            addGovenor(city, c, selector, gen);
         }
+    }
+
+    private void addGovenor(City c, Civilization civ, Random selector, NameGenerator personGenerator) {
+        String name = personGenerator.getName(selector.nextInt(personGenerator.getRulesCount()));
+        Administrator admin = new Administrator(name, selector.nextInt(20) + 40);
+        admin.setRole("Governing " + c.getName());
+        admin.setPosition(c);
+        c.setGovernor(admin);
+        c.peopleAtCity.add(admin);
+        civ.people.add(admin);
     }
 
     private void addPopulation(City c, Random selector, Civilization civ) {
@@ -214,7 +232,10 @@ public class GameInitializer {
             //Add areas
             if (i == 0) {
                 c.setCapitalCity(city);
+                CapitolArea area = new CapitolArea();
+                city.addArea(area);
             }
+            
             for (int k = 0; k < 4; k++) {
                 //Add random thing
                 ProductionProcess proc = c.productionProcesses.get(selector.nextInt(c.productionProcesses.size()));
@@ -295,7 +316,7 @@ public class GameInitializer {
         }
     }
 
-    private void createFarms(Planet starting, Civilization c, Random selector) {
+    private void createFarms(Planet starting, Civilization c, Random selector, NameGenerator gen) {
         //Based on population
         //Add livestock
         //Create a test crop so that you can grow stuff
@@ -324,10 +345,12 @@ public class GameInitializer {
 
                 faceBook.addArea(field);
             }
+            
+            faceBook.setName(gen.getName(0));
             //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
-            starting.cityDistributions.put(pt, faceBook);
+            starting.addCityDefinition(pt, faceBook);
         }
 
         //Get the resources needed for powering plant
@@ -341,35 +364,6 @@ public class GameInitializer {
                 }
             }
         }*/
-        //Connect it to many buildings
-    }
-
-    private void createIndustrialZones(Civilization c, Random selector, Planet starting) {
-        NameGenerator townGen = null;
-
-        try {
-            townGen = NameGenerator.getNameGenerator("town.names");
-        } catch (IOException ex) {
-            //Ignore, assume all ok
-        }
-        for (int i = 0; i < 10; i++) {
-            City industrialCity = new City(starting.getUniversePath());
-            //Add areas
-            for (ProductionProcess proc : c.productionProcesses) {
-                //Add new factory
-                ManufacturerArea factory = new ManufacturerArea(proc, 1);
-
-                factory.setMaxJobs(proc.diff * 10000);
-                factory.setOperatingJobs(proc.diff * 5000);
-                factory.setWorkingmultiplier(1.2f);
-                industrialCity.areas.add(factory);
-            }
-
-            GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-
-            starting.addCityDefinition(pt, industrialCity);
-            industrialCity.setName(townGen.getName(0) + " Industial Complex");
-        }
     }
 
     private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen) {
