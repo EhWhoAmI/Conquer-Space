@@ -128,8 +128,8 @@ public class GameInitializer {
                 Planet starting = (Planet) universe.getSpaceObject(p);
                 c.setCapitalPlanet(starting);
 
-                initializeBuildings(starting, c, selector);
-                initializePopulation(c, starting, selector);
+                initializeCities(starting, c, selector);
+
                 nameStratumOnPlanet(starting);
 
                 //Set ownership
@@ -163,15 +163,12 @@ public class GameInitializer {
         updater.calculateVision();
     }
 
-    private void initializeBuildings(Planet starting, Civilization c, Random selector) {
+    private void initializeCities(Planet starting, Civilization c, Random selector) {
         //Add resource miners
         createResourceMiners(starting, c, c.getFoundingSpecies(), selector);
-
-        createPopulationStorages(starting, c, selector);
-
         createFarms(starting, c, selector);
 
-        createIndustrialZones(c, selector, starting);
+        createCities(starting, c, selector);
 
         //Initialize namelists
         NameGenerator researchInstitutionGenerator = null;
@@ -186,6 +183,54 @@ public class GameInitializer {
             addInfrastructure(city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city);
+            addPopulation(city, selector, c);
+        }
+    }
+
+    private void addPopulation(City c, Random selector, Civilization civ) {
+        PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
+        seg.size = selector.nextInt(200_000) + 300_000;
+        seg.size *= c.areas.size();
+
+        seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
+        c.population.addSegment(seg);
+
+        ResidentialArea residentialArea = new ResidentialArea();
+        c.addArea(residentialArea);
+    }
+
+    //Cities whose primary industry relies on manufacturing, not mining or farming
+    private void createCities(Planet starting, Civilization c, Random selector) {
+        NameGenerator townGen = null;
+
+        try {
+            townGen = NameGenerator.getNameGenerator("town.names");
+        } catch (IOException ex) {
+            //Ignore, assume all ok
+        }
+
+        for (int i = 0; i < 10; i++) {
+            City city = new City(starting.getUniversePath());
+            //Add areas
+            if (i == 0) {
+                c.setCapitalCity(city);
+            }
+            for (int k = 0; k < 4; k++) {
+                //Add random thing
+                ProductionProcess proc = c.productionProcesses.get(selector.nextInt(c.productionProcesses.size()));
+                //Add new factory
+                ManufacturerArea factory = new ManufacturerArea(proc, 1);
+
+                factory.setMaxJobs(proc.diff * 10000);
+                factory.setOperatingJobs(proc.diff * 5000);
+                factory.setWorkingmultiplier(1.2f);
+                city.areas.add(factory);
+            }
+
+            GeographicPoint pt = getRandomEmptyPoint(starting, selector);
+            city.setName(townGen.getName(0));
+
+            starting.addCityDefinition(pt, city);
         }
     }
 
@@ -212,6 +257,16 @@ public class GameInitializer {
                     mineArea.setMaxJobs(100_000);
                     miner.addArea(mineArea);
                 }
+
+                //Add random production process
+                ProductionProcess proc = c.productionProcesses.get(selector.nextInt(c.productionProcesses.size()));
+                //Add new factory
+                ManufacturerArea factory = new ManufacturerArea(proc, 1);
+
+                factory.setMaxJobs(proc.diff * 10000);
+                factory.setOperatingJobs(proc.diff * 5000);
+                factory.setWorkingmultiplier(1.2f);
+                miner.areas.add(factory);
 
                 double randR = (stratum.getRadius() * Math.sqrt(Math.random()));
                 double theta = (Math.random() * 2 * Math.PI);
@@ -317,90 +372,6 @@ public class GameInitializer {
         }
     }
 
-    private void createPopulationStorages(Planet starting, Civilization c, Random selector) {
-        NameGenerator townGen = null;
-        NameGenerator gen = null;
-
-        try {
-            townGen = NameGenerator.getNameGenerator("town.names");
-            gen = NameGenerator.getNameGenerator("us.names");
-        } catch (IOException ex) {
-            //Ignore, assume all ok
-        }
-
-        //Amount of pop storages
-        int popStorMas = (selector.nextInt(7) + 5);
-
-        for (int count = 0; count < popStorMas; count++) {
-            City city = new City(starting.getUniversePath());
-            if (count == 0) {
-                //Admin center
-                city.addArea(new CapitolArea());
-            }
-
-            //district.setMaxStorage(selector.nextInt(30) + 1);
-            //district.setOwner(c);
-            //Distribute
-            //Add random positions
-            //Add residential areas.
-            for (int k = 0; k < 5; k++) {
-                ResidentialArea residentialArea = new ResidentialArea();
-                city.addArea(residentialArea);
-            }
-
-            GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-
-            starting.addCityDefinition(pt, city);
-
-            //Expand sector
-            //Choose a direction, and expand...
-            //district2.setMaxStorage(selector.nextInt(popCount2 + 5) + 1);
-            //Add residential areas.
-            for (int k = 0; k < 5; k++) {
-                ResidentialArea residentialArea = new ResidentialArea();
-                city.addArea(residentialArea);
-            }
-
-            //test2.setCity(city);
-            int dir = selector.nextInt(4) + 1;
-            GeographicPoint pt2 = pt.getNorth();
-            switch (dir) {
-                case 0:
-                    pt2 = pt.getNorth();
-                    break;
-                case 1:
-                    pt2 = pt.getSouth();
-                    break;
-                case 2:
-                    pt2 = pt.getEast();
-                    break;
-                case 3:
-                    pt2 = pt.getWest();
-            }
-            starting.addCityDefinition(pt2, city);
-
-            if (count == 0) {
-                c.setCapitalCity(city);
-            }
-            String townName = townGen.getName(0);
-            city.setName(townName);
-
-            //Add leader to city
-            Administrator gov = new Administrator(gen.getName(Math.round(selector.nextFloat())), 42);
-            city.setGovernor(gov);
-
-            c.people.add(gov);
-            PeopleProcessor.placePerson(city, gov);
-            //Set growth
-            //Add city
-            //starting.cities.add(city);
-        }
-    }
-
-    private void createCityDistrict(Planet starting, Civilization c, GeographicPoint pt, City city) {
-        //Add
-    }
-
     private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen) {
         c.unrecruitedPeople.clear();
         int peopleCount = (int) (Math.random() * 5) + 5;
@@ -469,7 +440,7 @@ public class GameInitializer {
         }
 
         Scientist r = new Scientist(name, 20);
-        r.setSkill(1);
+        r.setSkill(5);
         //Add random trait 
         r.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
         PeopleProcessor.placePerson(c.getCapitalCity(), r);
@@ -494,6 +465,7 @@ public class GameInitializer {
         return pt;
     }
 
+    //Test, will change in the future with a more robust system
     private void initializeGovernment(Civilization c, NameGenerator gen) {
         //Create person
         int age = (int) (Math.random() * 40) + 20;
@@ -559,18 +531,6 @@ public class GameInitializer {
         }
         for (Stratum strata : p.strata) {
             strata.setName(gen.getName(0));
-        }
-    }
-
-    private void initializePopulation(Civilization civ, Planet p, Random selector) {
-        for (City c : p.cities) {
-            //Add first population segment
-            PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
-            seg.size = selector.nextInt(200_000) + 300_000;
-
-            seg.size *= c.areas.size();
-            seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
-            c.population.addSegment(seg);
         }
     }
 

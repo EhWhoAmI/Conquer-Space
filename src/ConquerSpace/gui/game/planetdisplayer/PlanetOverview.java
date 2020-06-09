@@ -76,7 +76,6 @@ public class PlanetOverview extends JPanel {
     //private JList<Orbitable> satelliteList;
     private JLabel planetName;
     private JLabel planetPath;
-    private JLabel planetType;
     private JLabel planetSize;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
@@ -110,8 +109,7 @@ public class PlanetOverview extends JPanel {
         //If name is nothing, then call it unnamed planet
         planetName = new JLabel();
         planetPath = new JLabel();
-        planetType = new JLabel("Planet type: " + p.getPlanetType());
-        planetSize = new JLabel("Planet radius: " + p.getPlanetSize());
+        planetSize = new JLabel("Planet radius: " + p.getPlanetSize() * 100 + " km");
         ownerLabel = new JLabel();
         PolarCoordinate pos = p.orbit.toPolarCoordinate();
         orbitDistance = new JLabel("Distance: " + numberFormatter.format(pos.getDistance()) + " km, " + numberFormatter.format((double) pos.getDistance() / 149598000d) + " AU");
@@ -162,7 +160,6 @@ public class PlanetOverview extends JPanel {
         //Add components
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
-        planetOverview.add(planetType);
         planetOverview.add(planetSize);
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);

@@ -39,7 +39,7 @@ public class Planet extends Body {
 
     private int planetType;
 
-    //Radius in hundreds of kilometers
+    //Radius in hundreds of kilometers, which means that one tile is 100x100 km
     private int planetSize;
 
     public ArrayList<Stratum> strata;
