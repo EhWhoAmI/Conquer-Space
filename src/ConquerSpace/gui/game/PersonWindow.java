@@ -22,9 +22,11 @@ import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -48,6 +50,7 @@ public class PersonWindow extends JPanel {
     private JLabel skillLabel;
     private JLabel positionLabel;
     private JLabel isDeadLabel;
+    private JLabel personImageLabel;
     private DefaultListModel<PersonalityTrait> personalityListModel;
     private JList<PersonalityTrait> personPersonalityList;
 
@@ -75,10 +78,10 @@ public class PersonWindow extends JPanel {
                     skillLabel.setText("Skill: " + ((Scientist) personList.getSelectedValue()).getSkill());
                 }
                 String position = "Unknown";
-                if(personList.getSelectedValue().getPosition() != null) {
+                if (personList.getSelectedValue().getPosition() != null) {
                     position = personList.getSelectedValue().getPosition().getName();
                 }
-                
+
                 positionLabel.setText("Location: " + position); // + u.getSpaceObject(personList.getSelectedValue().getPosition().getUniversePath())
                 if (personList.getSelectedValue().isDead()) {
                     isDeadLabel.setText("Ded - F");
@@ -100,6 +103,10 @@ public class PersonWindow extends JPanel {
         //Set UI
 
         name = new JLabel("Name: " + personList.getSelectedValue().getName());
+
+        ImageIcon icon = ResourceLoader.getIcon("portrait.person.icon");
+        personImageLabel = new JLabel(icon);
+
         personAgeLabel = new JLabel("Age: " + personList.getSelectedValue().getAge());
 
         personJobLabel = new JLabel("Job: " + personList.getSelectedValue().getJobName());
@@ -113,7 +120,10 @@ public class PersonWindow extends JPanel {
         personalityListModel = new DefaultListModel<>();
         personPersonalityList = new JList<>(personalityListModel);
 
-        container.add(name);
+        JPanel personImageContainer = new JPanel(new HorizontalFlowLayout());
+        personImageContainer.add(name);
+        personImageContainer.add(personImageLabel);
+        container.add(personImageContainer);
         container.add(personAgeLabel);
         container.add(personJobLabel);
         container.add(personRoleLabel);
