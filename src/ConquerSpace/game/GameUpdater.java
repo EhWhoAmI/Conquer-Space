@@ -38,6 +38,7 @@ import ConquerSpace.game.city.area.TimedManufacturerArea;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
+import ConquerSpace.game.population.PopulationSegment;
 import ConquerSpace.game.science.Field;
 import ConquerSpace.game.science.ScienceLab;
 import ConquerSpace.game.science.tech.Technologies;
@@ -56,6 +57,7 @@ import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.universe.SpacePoint;
 import static ConquerSpace.game.universe.generators.DefaultUniverseGenerator.AU_IN_LTYR;
+import ConquerSpace.util.DoubleHashMap;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -253,6 +255,9 @@ public class GameUpdater {
      */
     public void processCities(Planet p, StarDate date, int delta) {
         for (City c : p.cities) {
+            //Clear ledger
+            c.resourceLedger.clear();
+
             //Population growth
             c.incrementPopulation(date, delta);
 
@@ -262,7 +267,7 @@ public class GameUpdater {
                 processArea(p, c, a, date, delta);
             }
 
-            //Replace cities
+            //Replace constructing areas
             Iterator<Area> areaIterator = c.areas.iterator();
             ArrayList<Area> areasToAdd = new ArrayList<>();
             while (areaIterator.hasNext()) {
@@ -368,7 +373,7 @@ public class GameUpdater {
                 for (Map.Entry<Integer, Double> entry : process.input.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    storeResource(key, -val * delta, 0, c);
+                    removeResource(key, val * delta, 0, c);
                 }
 
                 for (Map.Entry<Integer, Double> entry : process.output.entrySet()) {
@@ -386,7 +391,7 @@ public class GameUpdater {
                 for (Map.Entry<Integer, Double> entry : area.getNecessaryGoods().entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    storeResource(key, -val * delta, 0, c);
+                    removeResource(key, val * delta, 0, c);
                 }
 
                 double multiplier = getMultiplier(a);
@@ -528,6 +533,9 @@ public class GameUpdater {
             City city = entry.getValue();
 
             //Process population upkeep
+            for (PopulationSegment seg : city.population.populations) {
+
+            }
         }
     }
 
@@ -612,6 +620,18 @@ public class GameUpdater {
                 storeResource(resourceType, amount, owner, from.getUniversePath());
             }
         }
+    }
+
+    public boolean removeResource(Integer resourceType, Double amount, int owner, City from) {
+        if (resourceType != null && amount != 0) {
+            if (from.canStore(resourceType)) {
+                //Store resource
+                from.removeResource(resourceType, amount);
+            } else {
+                removeResource(resourceType, amount, owner, from.getUniversePath());
+            }
+        }
+        return false;
     }
 
     public boolean removeResource(Integer resourceType, Double amount, int owner, UniversePath from) {

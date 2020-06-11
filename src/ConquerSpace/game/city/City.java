@@ -27,6 +27,7 @@ import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.resources.StorageNeeds;
+import ConquerSpace.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,7 +40,7 @@ public class City implements PersonEnterable, ResourceStockpile {
 
     private static int idCounter = 0;
     private int id;
-    
+
     public Population population;
     public static final String CITY_DEFAULT = "emp";
     private Person governor;
@@ -47,13 +48,14 @@ public class City implements PersonEnterable, ResourceStockpile {
     public ArrayList<Area> areas;
     public ArrayList<Workable> workableFor;
     public ArrayList<Person> peopleAtCity;
-    
+
     public HashMap<Integer, Double> resources;
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
     private int maxStorage;
     public ArrayList<SupplyChain> supplyChains;
 
+    public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     private UniversePath location;
 
     //% to completing a unit
@@ -62,7 +64,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     //Growth rates of the species...
     //private HashMap<Race, Float> speciesRates;
     private boolean resetJobs = false;
-    
+
     //Size in tiles
     private int size;
 
@@ -75,6 +77,7 @@ public class City implements PersonEnterable, ResourceStockpile {
         this.location = location;
         peopleAtCity = new ArrayList<>();
         population = new Population();
+        resourceLedger = new HashMap<>();
         size = 0;
         this.id = idCounter++;
     }
@@ -140,7 +143,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     public void incrementPopulation(StarDate date, long delta) {
         population.incrementPopulation(date, delta);
     }
-    
+
     @Override
     public void addResourceTypeStore(Integer type) {
         resources.put(type, 0d);
@@ -157,6 +160,15 @@ public class City implements PersonEnterable, ResourceStockpile {
             resources.put(type, 0d);
         }
         resources.put(type, resources.get(type) + amount);
+        //Add to ledger
+        if (resourceLedger.containsKey(type)) {
+            DoubleHashMap<String> resource = resourceLedger.get(type);
+            resource.put("added", (amount));
+        } else {
+            DoubleHashMap<String> resource = new DoubleHashMap<>();
+            resource.put("added", amount);
+            resourceLedger.put(type, resource);
+        }
     }
 
     @Override
@@ -181,11 +193,25 @@ public class City implements PersonEnterable, ResourceStockpile {
     public boolean removeResource(Integer type, Double amount) {
         //Get the amount in the place
         Double currentlyStored = resources.get(type);
+        if (currentlyStored == null) {
+            //Remove stuff for now
+            resources.put(type, amount);
+            return false;
+        }
         if (amount > currentlyStored) {
             return false;
         }
 
         resources.put(type, currentlyStored - amount);
+        //Add to ledger
+        if (resourceLedger.containsKey(type)) {
+            DoubleHashMap<String> resource = resourceLedger.get(type);
+            resource.addValue("removed", -amount);
+        } else {
+            DoubleHashMap<String> resource = new DoubleHashMap<>();
+            resource.put("removed", -amount);
+            resourceLedger.put(type, resource);
+        }
         return true;
     }
 
@@ -200,11 +226,11 @@ public class City implements PersonEnterable, ResourceStockpile {
     public void setSize(int size) {
         this.size = size;
     }
-    
-    public void incrementSize(){
+
+    public void incrementSize() {
         size++;
     }
-    
+
     public void addArea(Area a) {
         areas.add(a);
     }

@@ -236,9 +236,9 @@ public class GameInitializer {
                 city.addArea(area);
             }
             
-            for (int k = 0; k < 4; k++) {
+            for (int k = 0; k < c.productionProcesses.size(); k++) {
                 //Add random thing
-                ProductionProcess proc = c.productionProcesses.get(selector.nextInt(c.productionProcesses.size()));
+                ProductionProcess proc = c.productionProcesses.get(k);
                 //Add new factory
                 ManufacturerArea factory = new ManufacturerArea(proc, 1);
 

@@ -26,6 +26,7 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -131,8 +132,9 @@ public class PlanetIndustry extends JPanel {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
         for (City city : p.cityDistributions.values()) {
-            //Throws currentmodificationexception, so need to fix in the future
-            for (Area a : city.areas) {
+            Iterator<Area> it = city.areas.iterator();
+            while (it.hasNext()) {
+                Area a = it.next();
                 areaDefaultListModel.addElement(a);
             }
         }

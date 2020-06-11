@@ -320,7 +320,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         menuBar.add(resources);
 
         //Set timer
-        gameTickTimer = new Timer(40, a -> {
+        gameTickTimer = new Timer(50, a -> {
             if (this.isActive()) {
                 try {
                     //Only update when visible, and mouse is moving into it, saves performance
