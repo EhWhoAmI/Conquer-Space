@@ -44,10 +44,10 @@ public class Universe extends Body {
     public HashMap<UniversePath, Integer> control;
 
     public ArrayList<SpaceShip> spaceShips;
-
-    public ArrayList<Race> species;
     
     public DualHashBidiMap<Integer, Person> people;
+    
+    public HashMap<Integer, Race> species;
 
     public Universe(long seed) {
         this.seed = seed;
@@ -55,7 +55,7 @@ public class Universe extends Body {
         control = new HashMap<>();
         starSystems = new ArrayList<>();
         spaceShips = new ArrayList<>();
-        species = new ArrayList<>();
+        species = new HashMap<>();
         people = new DualHashBidiMap<>();
     }
 

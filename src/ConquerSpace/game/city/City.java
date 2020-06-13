@@ -199,7 +199,8 @@ public class City implements PersonEnterable, ResourceStockpile {
             return false;
         }
         if (amount > currentlyStored) {
-            return false;
+            //Temp disable resources
+            //return false;
         }
 
         resources.put(type, currentlyStored - amount);

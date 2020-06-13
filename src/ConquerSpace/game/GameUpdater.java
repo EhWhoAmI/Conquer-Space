@@ -529,12 +529,12 @@ public class GameUpdater {
         }
         p.population = total;
 
-        for (Map.Entry<GeographicPoint, City> entry : p.cityDistributions.entrySet()) {
-            City city = entry.getValue();
-
+        for (City city : p.cities) {
             //Process population upkeep
             for (PopulationSegment seg : city.population.populations) {
-
+                long amount = (seg.size / 1000);
+                double consume = ((double) amount) * 0.5d;
+                boolean success = removeResource(universe.species.get(seg.species).food, consume, 0, city);
             }
         }
     }
@@ -626,7 +626,7 @@ public class GameUpdater {
         if (resourceType != null && amount != 0) {
             if (from.canStore(resourceType)) {
                 //Store resource
-                from.removeResource(resourceType, amount);
+                return from.removeResource(resourceType, amount);
             } else {
                 removeResource(resourceType, amount, owner, from.getUniversePath());
             }

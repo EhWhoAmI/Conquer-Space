@@ -23,13 +23,13 @@ package ConquerSpace.game.population;
  */
 public class PopulationSegment {
     public long size = 0;
-    public Race species;
+    public int species;
     public Culture culture;
     //Placeholder value for now...
     public int tier;
     public float populationIncrease;
 
-    public PopulationSegment(Race species, Culture culture) {
+    public PopulationSegment(int species, Culture culture) {
         this.species = species;
         this.culture = culture;
     }
@@ -42,7 +42,7 @@ public class PopulationSegment {
         return size;
     }
 
-    public Race getSpecies() {
+    public int getSpecies() {
         return species;
     }
 }

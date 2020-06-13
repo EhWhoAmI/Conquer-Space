@@ -176,6 +176,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setStartingPlanet(up);
         //Generate Species
         Race playerSpecies = new Race(1, 0.01f, c.speciesName);
+        universe.species.put(playerSpecies.getId(), playerSpecies);
         playerSpecies.setUpkeep(0.05f);
 
         //Set currency
@@ -209,6 +210,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             starSystemCount++;
             civ.setStartingPlanet(up1);
             Race civSpecies = new Race(1, 0.01f, "Race " + i);
+            universe.species.put(civSpecies.getId(), civSpecies);
             civ.setFoundingSpecies(civSpecies);
 
             //Create currency

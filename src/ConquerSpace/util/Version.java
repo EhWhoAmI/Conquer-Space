@@ -94,7 +94,16 @@ public class Version implements Comparable<Version> {
     }
 
     static boolean isGreater(Version v1, Version v2) {
-        if (v1.major > v2.major && v1.minor > v2.minor && v1.patch > v2.patch) {
+        if (v1.major > v2.major) {
+            return true;
+        } else if (v1.major == v2.major) {
+            if(v1.minor > v2.minor) {
+                return true;
+            } else if (v1.minor == v2.minor) {
+                if(v1.patch > v2.patch) {
+                    return true;
+                }
+            }
             return true;
         }
         return false;
@@ -125,4 +134,15 @@ public class Version implements Comparable<Version> {
     public int compareTo(Version o) {
         return 0;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Version) {
+            Version v = (Version) obj;
+            return (v.major == this.major && v.minor == this.minor && v.patch == v.patch);
+        }
+        return false;
+    }
+    
+    
 }

@@ -22,7 +22,6 @@ import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
-import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;

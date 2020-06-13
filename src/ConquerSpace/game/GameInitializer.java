@@ -101,7 +101,6 @@ public class GameInitializer {
 
         //Memory saving tricks
         universe.civs.trimToSize();
-        universe.species.trimToSize();
         universe.spaceShips.trimToSize();
         universe.starSystems.trimToSize();
 
@@ -206,7 +205,7 @@ public class GameInitializer {
     }
 
     private void addPopulation(City c, Random selector, Civilization civ) {
-        PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies(), new Culture());
+        PopulationSegment seg = new PopulationSegment(civ.getFoundingSpecies().getId(), new Culture());
         seg.size = selector.nextInt(200_000) + 300_000;
         seg.size *= c.areas.size();
 
@@ -235,7 +234,7 @@ public class GameInitializer {
                 CapitolArea area = new CapitolArea();
                 city.addArea(area);
             }
-            
+
             for (int k = 0; k < c.productionProcesses.size(); k++) {
                 //Add random thing
                 ProductionProcess proc = c.productionProcesses.get(k);
@@ -324,6 +323,8 @@ public class GameInitializer {
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
+        System.out.println(potato.getId());
+        c.getFoundingSpecies().food = potato.getFoodGood();
 
         //Add the biomass
         //Set the amount on planet...
@@ -345,7 +346,7 @@ public class GameInitializer {
 
                 faceBook.addArea(field);
             }
-            
+
             faceBook.setName(gen.getName(0));
             //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);

@@ -18,12 +18,12 @@
 package ConquerSpace.game.population;
 
 /**
- * Species or race
+ * Sentient Species or race
  *
  * @author EhWhoAmI
  */
 public class Race {
-
+    public Integer food;
     private static int idCounter = 0;
 
     private int id;
