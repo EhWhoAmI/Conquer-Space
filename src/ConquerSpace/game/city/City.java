@@ -58,6 +58,8 @@ public class City implements PersonEnterable, ResourceStockpile {
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     private UniversePath location;
 
+    public ArrayList<String> tags;
+
     //% to completing a unit
     private float populationUnitPercentage = 0;
 
@@ -78,6 +80,7 @@ public class City implements PersonEnterable, ResourceStockpile {
         peopleAtCity = new ArrayList<>();
         population = new Population();
         resourceLedger = new HashMap<>();
+        tags = new ArrayList<>();
         size = 0;
         this.id = idCounter++;
     }
@@ -163,7 +166,7 @@ public class City implements PersonEnterable, ResourceStockpile {
         //Add to ledger
         if (resourceLedger.containsKey(type)) {
             DoubleHashMap<String> resource = resourceLedger.get(type);
-            resource.put("added", (amount));
+            resource.addValue("added", (amount));
         } else {
             DoubleHashMap<String> resource = new DoubleHashMap<>();
             resource.put("added", amount);
@@ -199,8 +202,7 @@ public class City implements PersonEnterable, ResourceStockpile {
             return false;
         }
         if (amount > currentlyStored) {
-            //Temp disable resources
-            //return false;
+            return false;
         }
 
         resources.put(type, currentlyStored - amount);
@@ -208,9 +210,10 @@ public class City implements PersonEnterable, ResourceStockpile {
         if (resourceLedger.containsKey(type)) {
             DoubleHashMap<String> resource = resourceLedger.get(type);
             resource.addValue("removed", -amount);
+            resourceLedger.put(type, resource);
         } else {
             DoubleHashMap<String> resource = new DoubleHashMap<>();
-            resource.put("removed", -amount);
+            resource.addValue("removed", -amount);
             resourceLedger.put(type, resource);
         }
         return true;

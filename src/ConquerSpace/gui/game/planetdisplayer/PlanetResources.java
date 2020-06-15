@@ -21,6 +21,7 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.ResourceStockpile;
+import ConquerSpace.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

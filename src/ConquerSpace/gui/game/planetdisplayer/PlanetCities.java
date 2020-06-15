@@ -227,7 +227,10 @@ public class PlanetCities extends JPanel {
             JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
             cityData.add(governorLabel);
         }
-
+        
+        JList tagsList = new JList(selected.tags.toArray());
+        cityData.add(new JScrollPane(tagsList));
+        
         JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
 
         //Areas

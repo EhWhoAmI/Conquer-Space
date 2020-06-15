@@ -343,7 +343,7 @@ public class GameUpdater {
                 //Calculate percentage
 
                 storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c);
-
+                
                 area.grow();
             }
         } else if (a instanceof TimedManufacturerArea) {
@@ -535,6 +535,15 @@ public class GameUpdater {
                 long amount = (seg.size / 1000);
                 double consume = ((double) amount) * 0.5d;
                 boolean success = removeResource(universe.species.get(seg.species).food, consume, 0, city);
+                //Not enough food
+                if (!success) {
+                    //can probably calculate other stuff, but who cares for now
+                    if (!city.tags.contains("Starvation")) {
+                        city.tags.add("Starvation");
+                    }
+                } else {
+                    city.tags.remove("Starvation");
+                }
             }
         }
     }
