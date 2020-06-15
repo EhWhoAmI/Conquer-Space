@@ -342,8 +342,8 @@ public class GameUpdater {
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
                 //Calculate percentage
 
-                storeResource(area.getGrown().getFoodGood(), 10d * removed, 0, c);
-                
+                storeResource(area.getGrown().getFoodGood(), (removed * (double) area.getFieldSize()), 0, c);
+
                 area.grow();
             }
         } else if (a instanceof TimedManufacturerArea) {

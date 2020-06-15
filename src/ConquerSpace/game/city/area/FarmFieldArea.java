@@ -30,12 +30,21 @@ public class FarmFieldArea extends TimedManufacturerArea {
 
     private Species grown;
     private int time;
+    private int fieldSize;
 
     public FarmFieldArea(Species grownSpecies) {
         super(new ProductionProcess(grownSpecies.getId()));
         grown = grownSpecies;
         //Because you can only grow one.
         setLimit(1);
+    }
+
+    public void setFieldSize(int fieldSize) {
+        this.fieldSize = fieldSize;
+    }
+
+    public int getFieldSize() {
+        return fieldSize;
     }
 
     public Species getGrown() {

@@ -339,8 +339,10 @@ public class GameInitializer {
             //Add farm fields...
             for (int k = 0; k < 30; k++) {
                 FarmFieldArea field = new FarmFieldArea(potato);
-                field.setTime(30);
+                //30 days
+                field.setTime(30*24);
                 field.grow();
+                field.setFieldSize(5000);
                 field.setOperatingJobs(10000);
                 field.setMaxJobs(30000);
 
