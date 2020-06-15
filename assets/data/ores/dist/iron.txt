@@ -1,23 +1,6 @@
 [
     {
-        name: o_hematitie
-        distribution: [
-            30
-            60
-        ]
-        depth: [
-            1
-            30
-        ]
-        rarity: 1
-        abundance: 50000
-        dist-density: 32
-        tags: [
-
-        ]
-    }
-    {
-        name: o_magnetite
+        name: o_iron
         distribution: [
             30
             60

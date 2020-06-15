@@ -61,7 +61,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 /**
  *
@@ -323,7 +322,8 @@ public class GameInitializer {
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
-        System.out.println(potato.getId());
+
+        //Set food good
         c.getFoundingSpecies().food = potato.getFoodGood();
 
         //Add the biomass

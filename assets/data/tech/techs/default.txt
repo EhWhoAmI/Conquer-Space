@@ -592,8 +592,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        process:smelting_o_magnetite
-        process:smelting_o_hematitie
+        process:smelting_o_iron
     ]
     fields:
     [
@@ -617,8 +616,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        mine:o_magnetite
-        mine:o_hematitie
+        mine:o_iron
     ]
     fields:
     [
@@ -642,9 +640,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        mine:o_boehmite
-        mine:o_diaspore
-        mine:o_gibbsite
+        mine:o_aluminium
     ]
     fields:
     [
@@ -668,9 +664,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        process:smelting_o_gibbsite
-        process:smelting_o_diaspore
-        process:smelting_o_boehmite
+        process:smelting_o_aluminium
     ]
     fields:
     [

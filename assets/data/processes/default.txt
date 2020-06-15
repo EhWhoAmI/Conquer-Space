@@ -5,10 +5,10 @@
         //Components needed to create factory
         //Other stuff I can't remember
         //Maybe even procedurally generated processes with some parameters
-        name: Magnetite Smelting
-        identifier: smelting_o_magnetite
+        name: Iron Ore Smelting
+        identifier: smelting_o_iron
         input: [
-            "o_magnetite:1"
+            "o_iron:1"
         ]
         output: [
             "e_iron:1"
@@ -19,25 +19,11 @@
         ]
     }
     {
-        name: Hematite Smelting
-        identifier: smelting_o_hematitie
-        input: [
-            "o_hematitie:1"
-        ]
-        output: [
-            "e_iron:3"
-            "e_oxygen:4"
-        ]
-        diff: 1
-        catalysts: [
-        ]
-    }
-    {
         name: Low Grade Steel Making
         identifier: steel_low_grade_making
         input: [
-            "e_iron:9"
-            "e_carbon:1"
+            "e_iron:1"
+            "e_carbon:0.1"
         ]
         output: [
             "steel_low_grade:1"
@@ -46,45 +32,11 @@
         catalysts: [
         ]
     }
-    //https://en.wikipedia.org/wiki/Bayer_process
     {
-        name: Bayer process gibbsite
-        identifier: smelting_o_gibbsite
-        //It produces Aluminium oxide 
+        name: Aluminium ore smelting
+        identifier: smelting_o_aluminium
         input: [
-            "o_gibbsite:1"
-        ]
-        //Eh makes sense I guess
-        output: [
-            "e_aluminium:1"
-            "water:2"
-        ]
-        diff: 1
-        catalysts: [
-        ]
-    }
-    {
-        name: Bayer process diaspore
-        identifier: smelting_o_diaspore
-        //It produces Aluminium oxide 
-        input: [
-            "o_diaspore:1"
-        ]
-        //Eh makes sense I guess
-        output: [
-            "e_aluminium:1"
-            "water:2"
-        ]
-        diff: 1
-        catalysts: [
-        ]
-    }
-    {
-        name: Bayer process boehmite
-        identifier: smelting_o_boehmite
-        //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
-        input: [
-            "o_boehmite:1"
+            "o_aluminium:1"
         ]
         //Eh makes sense I guess
         output: [
