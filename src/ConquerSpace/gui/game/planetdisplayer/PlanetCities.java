@@ -227,10 +227,21 @@ public class PlanetCities extends JPanel {
             JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
             cityData.add(governorLabel);
         }
-        
-        JList tagsList = new JList(selected.tags.toArray());
+
+        DefaultListModel<String> tagsListModel = new DefaultListModel<>();
+        for (Map.Entry<String, Integer> entry : selected.tags.entrySet()) {
+            String key = entry.getKey();
+            Integer val = entry.getValue();
+            if (val == null) {
+                tagsListModel.addElement(key);
+            } else {
+                tagsListModel.addElement(key + " " + val);
+            }
+        }
+        JList<String> tagsList = new JList<String>(tagsListModel);
+
         cityData.add(new JScrollPane(tagsList));
-        
+
         JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
 
         //Areas

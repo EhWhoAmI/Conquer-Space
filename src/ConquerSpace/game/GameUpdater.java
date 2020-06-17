@@ -232,7 +232,7 @@ public class GameUpdater {
         if (p.isHabitated()) {
             processCities(p, date, delta);
 
-            processPopulation(p, date);
+            processPopulation(p, date, delta);
         }
         processLocalLife(p, date, delta);
     }
@@ -259,8 +259,7 @@ public class GameUpdater {
             c.resourceLedger.clear();
 
             //Population growth
-            c.incrementPopulation(date, delta);
-
+            //c.incrementPopulation(date, delta);
             calculateCityJobs(c, date, delta);
 
             for (Area a : c.areas) {
@@ -341,7 +340,6 @@ public class GameUpdater {
             int removed = area.tick(delta);
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
                 //Calculate percentage
-
                 storeResource(area.getGrown().getFoodGood(), (removed * (double) area.getFieldSize()), 0, c);
 
                 area.grow();
@@ -521,7 +519,7 @@ public class GameUpdater {
         //System.out.println((end - start));
     }
 
-    public void processPopulation(Planet p, StarDate date) {
+    public void processPopulation(Planet p, StarDate date, int delta) {
         //Index panet population
         long total = 0;
         for (City c : p.cities) {
@@ -534,16 +532,30 @@ public class GameUpdater {
             for (PopulationSegment seg : city.population.populations) {
                 long amount = (seg.size / 1000);
                 double consume = ((double) amount) * 0.5d;
+
+                double foodAmount = 0;
+                if (city.resources.containsKey(universe.species.get(seg.species).food)) {
+                    foodAmount = city.getResourceAmount(universe.species.get(seg.species).food);
+                }
+
                 boolean success = removeResource(universe.species.get(seg.species).food, consume, 0, city);
                 //Not enough food
                 if (!success) {
                     //can probably calculate other stuff, but who cares for now
-                    if (!city.tags.contains("Starvation")) {
-                        city.tags.add("Starvation");
-                    }
+                    //Calculate ratio of food
+                    double populationConsumption = foodAmount * 2;
+                    //city.tags.add(Double.toString(consume/populationConsumption));
+                    double percentage = (populationConsumption / consume);
+                    city.tags.put("Starvation", (int) (percentage * 100d));
                 } else {
                     city.tags.remove("Starvation");
                 }
+
+                //Increment population
+                //if starving...
+                double fraction = ((double) delta) / 10000d;
+                seg.size = (long) ((double) seg.size * ((1 + seg.populationIncrease * fraction)));
+
             }
         }
     }

@@ -54,11 +54,4 @@ public class Population {
     public Iterator<PopulationSegment> getIterator() {
         return populations.iterator();
     }
-
-    public void incrementPopulation(StarDate date, long delta) {
-        for (PopulationSegment seg : populations) {
-            double fraction = ((double) delta) / 10000d;
-            seg.size = (long) ((double) seg.size * ((1 + seg.populationIncrease * fraction)));
-        }
-    }
 }

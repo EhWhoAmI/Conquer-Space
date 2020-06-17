@@ -337,8 +337,9 @@ public class GameInitializer {
             City faceBook = new City(starting.getUniversePath());
 
             //Add farm fields...
-            for (int k = 0; k < 30; k++) {
+            for (int k = 0; k < 15; k++) {
                 FarmFieldArea field = new FarmFieldArea(potato);
+                field.setGrown(potato);
                 //30 days
                 field.setTime(30*24);
                 field.grow();
