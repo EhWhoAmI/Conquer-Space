@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.city.City;
+import ConquerSpace.game.city.CityType;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -275,7 +276,7 @@ public class PlanetMap extends JPanel {
 
                     for (int i = 0; i < p.strata.size(); i++) {
                         Stratum v = p.strata.get(i);
-                        //Draw...
+                        //Draw stratum
                         Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * tileSize,
                                 (v.getY() - v.getRadius()) * tileSize,
                                 v.getRadius() * 2 * tileSize,
@@ -301,10 +302,12 @@ public class PlanetMap extends JPanel {
                     //for (int i = 0; i < size(); i++) {
                     while (distIterator.hasNext()) {
                         GeographicPoint point = distIterator.next();
-                        //Draw
+                        City c = p.cityDistributions.get(point);
+                        //Draw city
                         Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
 
-                        mapGraphics.setColor(Color.red);
+                        mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
+                        
                         mapGraphics.fill(rect);
                     }
 

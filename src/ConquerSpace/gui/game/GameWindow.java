@@ -115,14 +115,14 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         //Edit menu bar
         addWindowListener(this);
         init();
+        
+        setTitle("Conquer Space");
 
         //Debug stuff
         //addFrame(new DegreeSetter());
         //A window to greet the user
         JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
                 + "May we live and prosper in these exciting new times.");
-
-        setTitle("Conquer Space");
     }
 
     public void addFrame(JInternalFrame frame) {

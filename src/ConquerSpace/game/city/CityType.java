@@ -29,7 +29,7 @@ import java.util.Properties;
  *
  * @author EhWhoAmI
  */
-public enum DistrictType {
+public enum CityType {
 
     Generic,
     City,
@@ -39,7 +39,7 @@ public enum DistrictType {
     Research,
     Mine;
 
-    private static final HashMap<DistrictType, Color> districtColors;
+    private static final HashMap<CityType, Color> districtColors;
 
     static {
         districtColors = new HashMap<>();
@@ -52,7 +52,7 @@ public enum DistrictType {
                 if (key instanceof String && set instanceof String) {
                     String propertyName = (String) key;
                     String value = (String) set;
-                    DistrictType type = DistrictType.valueOf(propertyName);
+                    CityType type = CityType.valueOf(propertyName);
                     if (type != null) {
                         String[] colors = value.split(",");
                         if (colors.length == 3) {
@@ -75,7 +75,7 @@ public enum DistrictType {
         }
     }
 
-    public static Color getDistrictColor(DistrictType type) {
+    public static Color getDistrictColor(CityType type) {
         return (districtColors.get(type));
     }
 }

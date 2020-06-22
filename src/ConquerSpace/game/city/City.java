@@ -50,6 +50,8 @@ public class City implements PersonEnterable, ResourceStockpile {
     public ArrayList<Person> peopleAtCity;
 
     public HashMap<Integer, Double> resources;
+    public HashMap<Integer, Double> resourceDemands;
+
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
     private int maxStorage;
@@ -67,6 +69,8 @@ public class City implements PersonEnterable, ResourceStockpile {
     //private HashMap<Race, Float> speciesRates;
     private boolean resetJobs = false;
 
+    private CityType cityType;
+    
     //Size in tiles
     private int size;
 
@@ -80,7 +84,9 @@ public class City implements PersonEnterable, ResourceStockpile {
         peopleAtCity = new ArrayList<>();
         population = new Population();
         resourceLedger = new HashMap<>();
+        resourceDemands = new HashMap<>();
         tags = new HashMap<>();
+        cityType = CityType.Generic;
         size = 0;
         this.id = idCounter++;
     }
@@ -237,5 +243,13 @@ public class City implements PersonEnterable, ResourceStockpile {
 
     public void addArea(Area a) {
         areas.add(a);
+    }
+
+    public CityType getCityType() {
+        return cityType;
+    }
+
+    public void setCityType(CityType cityType) {
+        this.cityType = cityType;
     }
 }
