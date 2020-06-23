@@ -30,3 +30,11 @@ jobs:
         name: Conquer_Space
         # A file, directory or wildcard pattern that describes what to upload
         path: dist/*
+    - name: Zipping
+      run: cd tools/release && python release.py
+    - name: Upload to one place
+      uses: eine/tip@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: 'nightly'
+        files: Conquer_Space.zip
