@@ -1,1 +1,1 @@
-../proguard/bin/proguard @../../proguard.conf -verbose
+../proguard/bin/proguard.sh @../../proguard.conf -verbose
