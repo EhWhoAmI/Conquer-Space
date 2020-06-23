@@ -23,7 +23,7 @@ jobs:
     - name: Build with Ant
       run: ant -f build.xml -Dplatforms.JDK_1.8.home=$JAVA_HOME -Dnb.internal.action.name=rebuild clean jar
     - name: Copy libraries
-      run: mkdir dist/lib && cp -R lib dist/lib
+      run: mkdir dist/lib && cp -R lib dist
     - name: Upload Build
       uses: actions/upload-artifact@v2
       with:
