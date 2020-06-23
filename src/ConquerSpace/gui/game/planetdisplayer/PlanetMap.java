@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.AssetReader;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.CityType;
@@ -24,6 +25,8 @@ import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.Stratum;
+import ConquerSpace.gui.game.ResourceManager;
+import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.Utilities;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AlphaComposite;
@@ -46,9 +49,15 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import javax.imageio.ImageIO;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
@@ -75,7 +84,7 @@ public class PlanetMap extends JPanel {
     private Civilization c;
     private Universe u;
 
-    private double tileSize = 2;
+    private double tileSize = 8;
     private double scale = 1;
     private double translateX = 0;
     private double translateY = 0;
@@ -238,6 +247,12 @@ public class PlanetMap extends JPanel {
 
         private BufferedImage resourceImage = null;
         private BufferedImage cityMapImage = null;
+        private Image planetSurfaceMap = null;
+
+        private Image farmImage;
+        private HashMap<String, Image[]> districtImages;
+
+        //Pre save images...
         boolean needRefresh = false;
 
         GeographicPoint currentlyBuildingPoint;
@@ -252,6 +267,32 @@ public class PlanetMap extends JPanel {
             addMouseWheelListener(this);
             addMouseMotionListener(this);
             addMouseListener(this);
+
+            //Enlarge map
+            //Because the pixel size is 2, we need to multiply the size by 4
+            int enlargementSize = 4;
+            planetSurfaceMap = planetMap.getScaledInstance(planetMap.getWidth(null) * enlargementSize, planetMap.getHeight(null) * enlargementSize, Image.SCALE_DEFAULT);
+
+            try {
+                farmImage = ImageIO.read(new File("assets/img/district_icons/farm/0.png"));
+            } catch (IOException ex) {
+            }
+
+            //Read images
+            districtImages = new HashMap<>();
+            File imagesDir = ResourceLoader.getResourceByFile("dirs.map.images");
+            File[] dirs = imagesDir.listFiles();
+            for (File dirImage : dirs) {
+                ArrayList<Image> imageList = new ArrayList<>();
+                for (File imageFile : dirImage.listFiles()) {
+                    try {
+                        Image img = ImageIO.read(imageFile);
+                        imageList.add(img);
+                    } catch (IOException ex) {
+                    }
+                }
+                districtImages.put(dirImage.getName(), Arrays.copyOf(imageList.toArray(), imageList.size(), Image[].class));
+            }
         }
 
         @Override
@@ -262,8 +303,8 @@ public class PlanetMap extends JPanel {
             g2d.scale(scale, scale);
 
             //Terrain
-            if (showTerrain && planetMap != null) {
-                g2d.drawImage(planetMap, 0, 0, null);
+            if (showTerrain && planetSurfaceMap != null) {
+                g2d.drawImage(planetSurfaceMap, 0, 0, null);
             }
 
             if (displayedView == RESOURCE_VIEW || displayedView == BOTH_VIEW || displayedView == CONSTRUCTION_VIEW) {
@@ -306,9 +347,18 @@ public class PlanetMap extends JPanel {
                         //Draw city
                         Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
 
+                        //Draw tile color
                         mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
-                        
                         mapGraphics.fill(rect);
+                        //mapGraphics.drawIm
+                        //Get id of 
+                        //Draw image
+                        Image[] list = districtImages.get(c.getCityType().name());
+                        if (list != null) {
+                            int listSize = list.length;
+                            Image im = list[point.hashCode() % listSize];
+                            mapGraphics.drawImage(im, (int) (point.getX() * tileSize), (int) (point.getY() * tileSize), null);
+                        }
                     }
 
                     if (constructionActive) {
