@@ -1,15 +1,17 @@
 import os
 import zipfile
 import shutil
-
+import platform
 cqsp_dir = '../../'
 build_dir = cqsp_dir + 'dist/'
 zip_dir = cqsp_dir + 'Conquer-Space/'
 zip_name = 'Conquer_Space'
 if __name__ == '__main__':
     if os.path.isdir(build_dir):
-        os.system('proguard')
-        
+        if 'win' in platform.system().lower():
+             os.system('proguard.bat')
+        elif 'nux' in platform.system().lower():
+             os.system('./proguard.sh')
         # Rename files
         # Remove og conquer space file
         os.remove(build_dir + 'Conquer-Space.jar')
