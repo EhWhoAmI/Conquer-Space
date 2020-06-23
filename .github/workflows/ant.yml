@@ -30,19 +30,3 @@ jobs:
         name: Conquer-Space
         # A file, directory or wildcard pattern that describes what to upload
         path: dist/*
-        
-        
-  nightly:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/download-artifact@v2
-      with:
-        path: ./
-    - run: ls
-    - uses: eine/tip@master
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag: 'nightly'
-        files: |
-          ./artifact/*
