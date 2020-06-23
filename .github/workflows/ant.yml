@@ -37,4 +37,5 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: 'nightly'
-        files: Conquer_Space.zip
+        files: |
+          ./Conquer_Space.zip
