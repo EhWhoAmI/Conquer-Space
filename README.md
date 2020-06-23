@@ -1,5 +1,6 @@
 Conquer Space
 =======
+![Java CI](https://github.com/EhWhoAmI/Conquer-Space/workflows/Java%20CI/badge.svg?branch=dev)
 
 The general idea: Conquer Space!
 
