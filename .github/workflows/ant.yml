@@ -27,7 +27,7 @@ jobs:
     - name: Upload Build
       uses: actions/upload-artifact@v2
       with:
-        name: Conquer_Space
+        name: Conquer-Space
         # A file, directory or wildcard pattern that describes what to upload
         path: dist/*
     - name: Zipping
@@ -38,4 +38,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: 'nightly'
         files: |
-          ./Conquer_Space.zip
+          ./Conquer-Space.zip
