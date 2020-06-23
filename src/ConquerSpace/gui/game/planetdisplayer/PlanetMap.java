@@ -273,11 +273,6 @@ public class PlanetMap extends JPanel {
             int enlargementSize = 4;
             planetSurfaceMap = planetMap.getScaledInstance(planetMap.getWidth(null) * enlargementSize, planetMap.getHeight(null) * enlargementSize, Image.SCALE_DEFAULT);
 
-            try {
-                farmImage = ImageIO.read(new File("assets/img/district_icons/farm/0.png"));
-            } catch (IOException ex) {
-            }
-
             //Read images
             districtImages = new HashMap<>();
             File imagesDir = ResourceLoader.getResourceByFile("dirs.map.images");
@@ -350,12 +345,12 @@ public class PlanetMap extends JPanel {
                         //Draw tile color
                         mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
                         mapGraphics.fill(rect);
-                        //mapGraphics.drawIm
-                        //Get id of 
+                        
                         //Draw image
                         Image[] list = districtImages.get(c.getCityType().name());
                         if (list != null) {
                             int listSize = list.length;
+                            //Id helps make sure that image is the same
                             Image im = list[point.hashCode() % listSize];
                             mapGraphics.drawImage(im, (int) (point.getX() * tileSize), (int) (point.getY() * tileSize), null);
                         }
@@ -489,7 +484,7 @@ public class PlanetMap extends JPanel {
                 if (b != null) {
                     String cityName = "No City";
                     cityName = b.getName();
-                    String text = ("<html>&nbsp;&nbsp;&nbsp;City: " + cityName + "<br/>Position: " + mapX + ", " + mapY + "<br/></html>");
+                    String text = ("<html>&nbsp;&nbsp;&nbsp;City: " + cityName + "<br/>Type: " + b.getCityType() + "<br/>Position: " + mapX + ", " + mapY + "<br/></html>");
 
                     toolTip.setTipText(text);
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());

@@ -582,7 +582,8 @@ public class GameUpdater {
             case Residential:
                 return CityType.City;
             case Manufacturing:
-                return CityType.Manufacturing;
+                //City because it represents it better
+                return CityType.City;
             case Farm:
                 return CityType.Farm;
             case Mine:
