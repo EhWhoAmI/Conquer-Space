@@ -276,10 +276,12 @@ public class GameUpdater {
                 }
             }
             c.areas.addAll(areasToAdd);
-            
+
             CityType type = classifyDistrict(c);
             c.setCityType(type);
         }
+        
+        distributeResources(p);
     }
 
     /**
@@ -349,7 +351,12 @@ public class GameUpdater {
             }
 
             //Request food
-            city.resourceDemands.put(universe.species.get(seg.species).food, consume);
+            //Append resources
+            if (city.resourceDemands.containsKey(universe.species.get(seg.species).food)) {
+                city.resourceDemands.put(universe.species.get(seg.species).food, city.resourceDemands.get(universe.species.get(seg.species).food) + consume);
+            } else {
+                city.resourceDemands.put(universe.species.get(seg.species).food, consume);
+            }
 
             boolean success = removeResource(universe.species.get(seg.species).food, consume, 0, city);
             //Not enough food
@@ -373,7 +380,6 @@ public class GameUpdater {
             if (!starving) {
                 seg.size = (long) ((double) seg.size * ((1 + seg.populationIncrease * fraction)));
             }
-
         }
     }
 
@@ -384,6 +390,50 @@ public class GameUpdater {
             total += c.population.getPopulationSize();
         }
         p.population = total;
+    }
+
+    private void distributeResources(Planet p) {
+        //Find stuff
+        for (City c : p.cities) {
+            //Resources needed, keep
+            HashMap<Integer, Double> resourcesToSpend = new HashMap<>();
+            for (Map.Entry<Integer, Double> entry : c.resourceDemands.entrySet()) {
+                Integer key = entry.getKey();
+                Double val = entry.getValue();
+                if (c.resources.containsKey(key)) {
+                    double amount = c.resources.get(key) - val;
+                    if (amount > 0) {
+                        resourcesToSpend.put(key, amount);
+                    }
+                }
+            }
+
+            //Then, distribute resources
+            for (City cit : p.cities) {
+                if (!cit.equals(c)) {
+                    //Send the resources to other places
+                    for (Map.Entry<Integer, Double> entry : cit.resourceDemands.entrySet()) {
+                        Integer key = entry.getKey();
+                        Double val = entry.getValue();
+                        //If have enough resources to put in
+                        if (resourcesToSpend.containsKey(key)) {
+                            double toSpendAmount = resourcesToSpend.get(key);
+                            if (val > 0 && toSpendAmount > 0) {
+                                if (val > toSpendAmount) {
+                                    //Send the resources
+                                    sendResources(key, toSpendAmount, 0, c, cit);
+                                    //Subtract resources
+                                    resourcesToSpend.put(key, 0d);
+                                } else {
+                                    sendResources(key, val, 0, c, cit);
+                                    resourcesToSpend.put(key, (toSpendAmount - val));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void processArea(Planet p, City c, Area a, StarDate date, int delta) {
@@ -733,6 +783,14 @@ public class GameUpdater {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    private boolean sendResources(Integer resourceType, Double amount, int owner, City from, City to) {
+        if (removeResource(resourceType, amount, owner, from)) {
+            storeResource(resourceType, amount, owner, to);
+            return true;
         }
         return false;
     }

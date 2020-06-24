@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -84,6 +85,8 @@ public class PlanetCities extends JPanel {
     boolean isBuildingUi = false;
 
     private City currentlySelectedCity;
+    
+    private StockpileStorageModel stockpileStorageModel;
 
     private DefaultListModel<Area> areaListModel;
     private JList<Area> areaList;
@@ -273,11 +276,15 @@ public class PlanetCities extends JPanel {
 
         areaConstructionPanel = new AreaConstructionPanel(p, owner, selected);
 
+        stockpileStorageModel = new StockpileStorageModel();
+        
         cityInfoTabs.removeAll();
         cityInfoTabs.add("Areas", areaInfoPanel);
         cityInfoTabs.add("Employment", new JScrollPane(jobTable));
         cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
         cityInfoTabs.add("Construction", areaConstructionPanel);
+        cityInfoTabs.add("Resources", new JScrollPane(new JTable(stockpileStorageModel)));
+
         cityInfoTabs.setSelectedIndex(citySelectedTab);
         cityData.add(cityInfoTabs);
 
@@ -365,6 +372,49 @@ public class PlanetCities extends JPanel {
         @Override
         public String getColumnName(int column) {
             return jobListTableColunmNames[column];
+        }
+    }
+    
+    private class StockpileStorageModel extends AbstractTableModel {
+
+        String[] colunmNames = {"Good", "Count", "Change"};
+
+        @Override
+        public int getRowCount() {
+            if (currentlySelectedCity == null) {
+                return 0;
+            } else {
+                return currentlySelectedCity.storedTypes().length;
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunmNames.length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            if (currentlySelectedCity != null) {
+                switch (columnIndex) {
+                    case 0:
+                        return GameController.goodHashMap.get(currentlySelectedCity.storedTypes()[rowIndex]);
+                    case 1:
+                        return currentlySelectedCity.getResourceAmount(currentlySelectedCity.storedTypes()[rowIndex]);
+                    case 2:
+                        if (currentlySelectedCity instanceof City) {
+                            City c = (City) currentlySelectedCity;
+                            return c.resourceLedger.get(currentlySelectedCity.storedTypes()[rowIndex]);
+                        }
+                        return "N/A";
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunmNames[column];
         }
     }
 }

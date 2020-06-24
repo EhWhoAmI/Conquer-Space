@@ -102,6 +102,6 @@ public class GameLoader {
         //Events
         readPopulationEvents();
         long end = System.currentTimeMillis();
-        LOGGER.trace("Inited all resources: " + (end - start) + "ms");
+        LOGGER.info("Inited all resources: " + (end - start) + "ms");
     }
 }

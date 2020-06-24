@@ -39,7 +39,6 @@ public class TechonologiesTest {
     public void testReadTech() {
         System.out.println("readTech");
         Technologies.readTech();
-        fail("The test case is a prototype.");
     }
 
     @Test

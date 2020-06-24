@@ -70,7 +70,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     private boolean resetJobs = false;
 
     private CityType cityType;
-    
+
     //Size in tiles
     private int size;
 
@@ -252,4 +252,13 @@ public class City implements PersonEnterable, ResourceStockpile {
     public void setCityType(CityType cityType) {
         this.cityType = cityType;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof City) {
+            return (((City) obj).id == this.id);
+        }
+        return false;
+    }
+
 }

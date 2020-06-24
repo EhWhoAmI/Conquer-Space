@@ -1,5 +1,6 @@
 package ConquerSpace.game.universe;
 
+import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import java.awt.Color;
@@ -12,7 +13,11 @@ import java.util.Random;
 public class UniverseGenTest {
 
     public static void main(String[] args) {
-        DefaultUniverseGenerator gen = new DefaultUniverseGenerator();
+        long timeStart = System.currentTimeMillis();
+        GameLoader.load();
+        long timeEnd = System.currentTimeMillis();
+        System.out.println("Took " + (timeEnd - timeStart) + "ms to load assets");
+
         UniverseConfig uc = new UniverseConfig();
         uc.seed = 0;
         uc.universeSize = "Medium";
@@ -25,10 +30,15 @@ public class UniverseGenTest {
         c.civilizationPreferredClimate = "Cold";
 
         Random rand = new Random();
-        for (int i = 0; i < 250; i++) {
-            int seed = rand.nextInt();
-            gen.generate(uc, c, seed);
-            System.out.println(i + ", " + seed);
-        }
+
+        int seed = rand.nextInt();
+        timeStart = System.currentTimeMillis();
+
+        DefaultUniverseGenerator gen = new DefaultUniverseGenerator(uc, c, seed);
+        gen.generate();
+
+        timeEnd = System.currentTimeMillis();
+        System.out.println("Generated with seed " + seed);
+        System.out.println("Took " + (timeEnd - timeStart) + "ms to generate game");
     }
 }
