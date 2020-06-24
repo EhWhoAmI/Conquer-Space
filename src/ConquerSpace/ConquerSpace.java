@@ -49,6 +49,11 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.Logger;
 
 /*
@@ -101,7 +106,9 @@ public class ConquerSpace {
 
     public static String codeChecksum = null;
     public static String assetChecksum = null;
-
+    
+    public static CommandLine commandLineArgs;
+    
     public static boolean DEBUG = false;
 
     public static final Properties defaultProperties = new Properties();
@@ -112,13 +119,14 @@ public class ConquerSpace {
      * @param args Command line arguments. Does nothing so far.
      */
     public static void main(String[] args) throws InterruptedException {
-        if (args.length >= 1 && args[0].equals("-t")) {
+        initalizeCommandLineArgs(args);
+        if (commandLineArgs.hasOption('t')) {
             new ToolsSelectionMenu();
         } else {
-            if (args.length >= 1 && args[0].equals("-debug")) {
+            if (commandLineArgs.hasOption('d')) {
                 DEBUG = true;
             }
-            
+
             CQSPLogger.initLoggers();
             LOGGER.info("Run started: " + new Date().toString());
             LOGGER.info("Version " + VERSION.toString());
@@ -390,8 +398,15 @@ public class ConquerSpace {
         checksumThread.start();
     }
 
-    public static void initalizeCommandLineArgs() {
-
+    public static void initalizeCommandLineArgs(String[] args) {
+        Options options = new Options();
+        options.addOption("d", false, "Debug, default seed (42), all the menus can be skipped");
+        options.addOption("t", false, "Run tool viewer");
+        CommandLineParser parser = new DefaultParser();
+        try {
+            commandLineArgs = parser.parse(options, args);
+        } catch (ParseException ex) {
+        }
     }
 
     static void setDefaultOptions() {
@@ -404,7 +419,7 @@ public class ConquerSpace {
         defaultProperties.setProperty("debug", "no");
 
         defaultProperties.setProperty("music", "yes");
-        defaultProperties.setProperty("music.volume", "1");
+        defaultProperties.setProperty("music.volume", "0.8");
 
         defaultProperties.setProperty("laf", "default");
 

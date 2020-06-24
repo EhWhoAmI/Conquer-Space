@@ -43,7 +43,7 @@ public class MusicPlayer implements Runnable {
     Thread musicThread;
     boolean toStop = false;
 
-    float volume = 1;
+    float volume = 0.8f;
     
     long songStart = 0;
     long songPause = 0;

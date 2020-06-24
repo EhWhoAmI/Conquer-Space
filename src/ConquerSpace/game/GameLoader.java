@@ -50,7 +50,6 @@ public class GameLoader {
      */
     public static void load() {
         long start = System.currentTimeMillis();
-        satelliteTemplates = new ArrayList<>();
         shipTypes = new HashMap<>();
         shipTypeClasses = new HashMap<>();
         shipComponentTemplates = new ArrayList<>();

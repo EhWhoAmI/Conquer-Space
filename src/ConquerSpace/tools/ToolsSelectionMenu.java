@@ -17,6 +17,8 @@
  */
 package ConquerSpace.tools;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -26,14 +28,15 @@ import javax.swing.JScrollPane;
  *
  * @author EhWhoAmI
  */
-public class ToolsSelectionMenu extends JFrame {
+public class ToolsSelectionMenu extends JFrame implements WindowListener {
 
     private DefaultListModel<String> toolsListModel;
     private JList<String> toolsList;
 
     private final String GOODS_STRING = "Goods viewer";
     private final String TECH_STRING = "Tech formatter";
-
+    private boolean selectedTools = false;
+    
     public ToolsSelectionMenu() {
         toolsListModel = new DefaultListModel<>();
         toolsListModel.addElement(GOODS_STRING);
@@ -45,10 +48,12 @@ public class ToolsSelectionMenu extends JFrame {
             switch (text) {
                 case GOODS_STRING:
                     new ResourceViewer();
+                    selectedTools = true;
                     this.dispose();
                     break;
                 case TECH_STRING:
                     new TechFormatter();
+                    selectedTools = true;
                     this.dispose();
                     break;
             }
@@ -56,6 +61,38 @@ public class ToolsSelectionMenu extends JFrame {
 
         add(new JScrollPane(toolsList));
         pack();
+        addWindowListener(this);
         setVisible(true);
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        if(!selectedTools) {
+            System.exit(0);
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
     }
 }

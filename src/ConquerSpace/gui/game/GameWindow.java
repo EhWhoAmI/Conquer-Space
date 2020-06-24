@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.ExitStarSystemAction;
@@ -116,7 +117,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         addWindowListener(this);
         init();
         
-        setTitle("Conquer Space");
+        setTitle("Conquer Space " + ConquerSpace.VERSION.getVersionCore());
 
         //Debug stuff
         //addFrame(new DegreeSetter());
