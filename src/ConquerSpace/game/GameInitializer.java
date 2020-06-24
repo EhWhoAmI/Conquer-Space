@@ -17,13 +17,13 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.government.Government;
-import ConquerSpace.game.civilization.government.GovernmentPosition;
-import ConquerSpace.game.civilization.government.HeritableGovernmentPosition;
-import ConquerSpace.game.civilization.government.PoliticalPowerSource;
-import ConquerSpace.game.civilization.government.PoliticalPowerTransitionMethod;
-import ConquerSpace.game.civilization.vision.VisionTypes;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.government.Government;
+import ConquerSpace.game.organizations.civilization.government.GovernmentPosition;
+import ConquerSpace.game.organizations.civilization.government.HeritableGovernmentPosition;
+import ConquerSpace.game.organizations.civilization.government.PoliticalPowerSource;
+import ConquerSpace.game.organizations.civilization.government.PoliticalPowerTransitionMethod;
+import ConquerSpace.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.CapitolArea;
 import ConquerSpace.game.city.area.CommercialArea;

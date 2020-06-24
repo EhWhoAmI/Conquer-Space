@@ -17,8 +17,8 @@
  */
 package ConquerSpace.game.actions;
 
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.vision.VisionPoint;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.population.jobs.Workable;

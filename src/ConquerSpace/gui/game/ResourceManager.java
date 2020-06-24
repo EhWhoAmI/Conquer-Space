@@ -17,8 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.resources.Good;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JPanel;

@@ -18,7 +18,7 @@
 package ConquerSpace.game.save;
 
 import ConquerSpace.game.StarDate;
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.hull.Hull;
 import ConquerSpace.game.ships.hull.HullMaterial;
 import ConquerSpace.game.universe.bodies.StarSystem;

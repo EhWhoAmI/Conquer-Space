@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.civilization;
+package ConquerSpace.game.organizations.civilization;
 
-import ConquerSpace.game.civilization.controllers.AIController;
-import ConquerSpace.game.civilization.controllers.CivilizationController;
-import ConquerSpace.game.civilization.government.Government;
-import ConquerSpace.game.civilization.stats.Economy;
-import ConquerSpace.game.civilization.stats.PopulationStats;
-import ConquerSpace.game.civilization.vision.VisionPoint;
+import ConquerSpace.game.organizations.civilization.controllers.AIController;
+import ConquerSpace.game.organizations.civilization.controllers.CivilizationController;
+import ConquerSpace.game.organizations.civilization.government.Government;
+import ConquerSpace.game.organizations.civilization.stats.Economy;
+import ConquerSpace.game.organizations.civilization.stats.PopulationStats;
+import ConquerSpace.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
@@ -53,7 +53,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import org.json.JSONObject;
 
 /**
  * Civilization

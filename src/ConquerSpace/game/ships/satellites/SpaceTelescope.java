@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.ships.satellites;
 
-import ConquerSpace.game.civilization.vision.VisionPoint;
+import ConquerSpace.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.game.universe.UniversePath;
 
 /**

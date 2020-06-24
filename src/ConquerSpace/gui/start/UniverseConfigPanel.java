@@ -18,7 +18,6 @@
 package ConquerSpace.gui.start;
 
 import static ConquerSpace.ConquerSpace.DEBUG;
-import ConquerSpace.Globals;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

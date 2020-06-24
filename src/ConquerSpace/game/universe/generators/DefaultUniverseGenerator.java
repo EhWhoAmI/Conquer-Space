@@ -18,10 +18,10 @@
 package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.CivilizationConfig;
-import ConquerSpace.game.civilization.controllers.AIController;
-import ConquerSpace.game.civilization.controllers.PlayerController;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.CivilizationConfig;
+import ConquerSpace.game.organizations.civilization.controllers.AIController;
+import ConquerSpace.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;

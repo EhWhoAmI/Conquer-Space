@@ -19,8 +19,8 @@ package ConquerSpace.gui.renderers;
 
 import ConquerSpace.game.actions.InterstellarTravelAction;
 import ConquerSpace.game.actions.ShipAction;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.vision.VisionTypes;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.bodies.StarSystem;
 import ConquerSpace.game.universe.bodies.StarTypes;

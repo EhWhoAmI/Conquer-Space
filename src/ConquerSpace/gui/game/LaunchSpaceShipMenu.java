@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.ShipClass;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;

@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.population;
 
-import ConquerSpace.game.StarDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 

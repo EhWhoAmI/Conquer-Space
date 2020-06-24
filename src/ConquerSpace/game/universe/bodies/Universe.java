@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.ships.SpaceShip;
@@ -25,7 +25,6 @@ import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**

@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.civilization.stats;
+package ConquerSpace.game.organizations.civilization.stats;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Politics extends Stats{
+public class Stats {
     
 }

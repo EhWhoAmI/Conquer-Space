@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.science.tech.Technology;
 import com.alee.extended.layout.VerticalFlowLayout;

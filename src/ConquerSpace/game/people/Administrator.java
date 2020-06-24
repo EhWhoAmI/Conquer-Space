@@ -17,8 +17,8 @@
  */
 package ConquerSpace.game.people;
 
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.government.GovernmentPosition;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.government.GovernmentPosition;
 
 /**
  *

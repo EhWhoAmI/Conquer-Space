@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
-import ConquerSpace.game.civilization.stats.Economy;
+import ConquerSpace.game.organizations.civilization.stats.Economy;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.people.Person;

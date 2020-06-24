@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.Calculators;
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.satellites.SatelliteTypes;
 import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.game.ships.satellites.templates.TelescopeTemplate;
@@ -42,7 +42,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**

@@ -18,8 +18,8 @@
 package ConquerSpace.game;
 
 import ConquerSpace.Globals;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.controllers.PlayerController;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;

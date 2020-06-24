@@ -18,7 +18,6 @@
 package ConquerSpace.game.city.area;
 
 import ConquerSpace.game.population.jobs.JobType;
-import ConquerSpace.game.resources.Good;
 
 /**
  *

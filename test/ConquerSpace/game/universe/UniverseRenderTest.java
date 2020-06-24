@@ -2,8 +2,8 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.CivilizationConfig;
+import ConquerSpace.game.organizations.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.game.universe.generators.UniverseGenerator;

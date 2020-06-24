@@ -17,7 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.Orbitable;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Planet;

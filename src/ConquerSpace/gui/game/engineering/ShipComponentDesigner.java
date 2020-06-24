@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game.engineering;
 
 import ConquerSpace.game.Calculators;
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.components.ShipComponentTypes;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.components.templates.EngineTemplate;
@@ -45,7 +45,6 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import org.json.JSONObject;
 
 /**
  *

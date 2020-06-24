@@ -18,7 +18,6 @@
 package ConquerSpace.game;
 
 import static ConquerSpace.game.AssetReader.*;
-import static ConquerSpace.game.GameController.satelliteTemplates;
 import static ConquerSpace.game.GameController.shipComponentTemplates;
 import static ConquerSpace.game.GameController.shipTypeClasses;
 import static ConquerSpace.game.GameController.shipTypes;
@@ -28,7 +27,6 @@ import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.resources.Element;
-import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceDistribution;
 import ConquerSpace.util.logging.CQSPLogger;

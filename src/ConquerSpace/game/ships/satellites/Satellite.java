@@ -19,7 +19,6 @@ package ConquerSpace.game.ships.satellites;
 
 import ConquerSpace.game.ships.Launchable;
 import ConquerSpace.game.ships.Orbitable;
-import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
 
 /**

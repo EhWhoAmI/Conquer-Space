@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.ships;
 
-import ConquerSpace.game.ships.components.ShipComponent;
 import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.game.ships.hull.Hull;
 import java.io.Serializable;

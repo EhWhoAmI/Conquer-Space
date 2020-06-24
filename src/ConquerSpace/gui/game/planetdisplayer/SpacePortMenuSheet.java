@@ -18,7 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.SpacePortArea;

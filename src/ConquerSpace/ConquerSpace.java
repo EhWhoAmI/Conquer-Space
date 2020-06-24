@@ -19,7 +19,7 @@ package ConquerSpace;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.civilization.CivilizationConfig;
+import ConquerSpace.game.organizations.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;

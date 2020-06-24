@@ -17,8 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
-import ConquerSpace.game.actions.Actions;
-import ConquerSpace.game.civilization.Civilization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.ships.satellites.Satellites;
@@ -32,7 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import org.json.JSONObject;
 
 /**
  *

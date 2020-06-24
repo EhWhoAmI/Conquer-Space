@@ -1,7 +1,7 @@
 package ConquerSpace.game.universe;
 
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.civilization.CivilizationConfig;
+import ConquerSpace.game.organizations.civilization.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import java.awt.Color;
 import java.util.Random;

@@ -15,51 +15,76 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.civilization.controllers;
+package ConquerSpace.game.organizations.civilization.controllers;
 
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
-import ConquerSpace.game.civilization.Civilization;
-import ConquerSpace.game.civilization.controllers.CivilizationController;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.events.Event;
+import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.gui.game.AlertDisplayer;
+import ConquerSpace.gui.game.AlertNotification;
+import ConquerSpace.gui.game.GameWindow;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Controller of the AI. Will need to link to scripts.
+ * Controller for player.
  *
  * @author EhWhoAmI
  */
-public class AIController extends CivilizationController {
-    private static final Logger LOGGER = CQSPLogger.getLogger(AIController.class.getName());
+public class PlayerController extends CivilizationController {
+
+    private Civilization c;
+    private Universe u;
+    private StarDate d;
+    private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
+    public GameWindow mainwindow;
+    public AlertDisplayer alertDisplayer;
+    public ArrayList<Ship> selectedShips = new ArrayList<>();
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
-        //For now comment it out... Until we do the ai
-        //actions = (ArrayList <Action>) script.getObject("actions");
-        ArrayList<Action> actions = new ArrayList<>();
-        return actions;
+        return null;
     }
 
     @Override
     public void alert(Alert a) {
-        //Skip for AI, at least for now.
+        alertDisplayer.addAlert(a);
+        AlertNotification notification = new AlertNotification(a.toString(), a.getDesc());
+        notification.setLocation(mainwindow.getWidth() / 2 - notification.getWidth() / 2, 0);
+        mainwindow.addFrame(notification);
+        notification.setVisible(true);
     }
 
     @Override
     public void init(Universe u, StarDate d, Civilization c) {
-        LOGGER.info("initialized the ai for " + c.getName());
+        mainwindow = new GameWindow(u, this, c, d);
+        alertDisplayer = AlertDisplayer.getInstance();
     }
 
     @Override
     public void refreshUI() {
-        //Ignore
+        //Reload all windows
+        mainwindow.dispose();
+
+        //Then reload
+        init(u, d, c);
     }
 
     @Override
     public void passEvent(Event e) {
+        mainwindow.passEvent(e);
+    }
+
+    public boolean allowTick() {
+        return mainwindow.allowTick();
+    }
+
+    public int getTickCount() {
+        return mainwindow.getTickCount();
     }
 }
