@@ -18,11 +18,24 @@
 package ConquerSpace.game.organizations.civilization;
 
 /**
- * Class of the civ preferred climate.
+ * Class of the civ preferred climate. Completely arbitrary, needs to change to
+ * better stats
+ *
  * @author EhWhoAmI
  */
-public class CivilizationPreferredClimateTypes {
-    public static final int VARIED = 0;
-    public static final int HOT = 1;
-    public static final int COLD = 2;
+public enum CivilizationPreferredClimateType {
+    Varied("Varied"),
+    Hot("Hot"),
+    Cold("Cold");
+
+    String text;
+
+    private CivilizationPreferredClimateType(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
 }

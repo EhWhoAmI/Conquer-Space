@@ -19,8 +19,9 @@ package ConquerSpace.gui.start;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.organizations.civilization.CivilizationConfig;
-import ConquerSpace.game.universe.UniverseConfig;
+import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.universe.generators.CivilizationConfig;
+import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -99,14 +100,14 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitButton) {
             setVisible(false);
-            UniverseConfig config = new UniverseConfig();
+            UniverseGenerationConfig config = new UniverseGenerationConfig();
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
-            config.setUniverseSize((String) universeConfigPanel.universeSizeBox.getSelectedItem());
-            config.setUniverseShape((String) universeConfigPanel.universeTypeComboBox.getSelectedItem());
-            config.setUniverseAge((String) universeConfigPanel.universeHistoryComboBox.getSelectedItem());
-            config.setCivilizationCount((String) universeConfigPanel.civilazitionComboBox.getSelectedItem());
-            config.setPlanetCommonality((String) universeConfigPanel.planetCommonalityComboBox.getSelectedItem());
+            config.universeSize = (UniverseGenerationConfig.UniverseSize) universeConfigPanel.universeSizeBox.getSelectedItem();
+            config.universeShape = ((UniverseGenerationConfig.UniverseShape) universeConfigPanel.universeTypeComboBox.getSelectedItem());
+            config.universeAge = ((UniverseGenerationConfig.UniverseAge) universeConfigPanel.universeHistoryComboBox.getSelectedItem());
+            config.civilizationCount = ((UniverseGenerationConfig.CivilizationCount) universeConfigPanel.civilizationCountComboBox.getSelectedItem());
+            config.planetCommonality = ((UniverseGenerationConfig.PlanetRarity) universeConfigPanel.planetCommonalityComboBox.getSelectedItem());
 
             long seed;
             LOGGER.trace("Parsing seed.");
@@ -119,24 +120,24 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             }
             LOGGER.info("Seed: " + seed);
 
-            config.setSeed(seed);
+            config.seed = seed;
 
             //Set the player Civ options
             CivilizationConfig civilizationConfig = new CivilizationConfig();
-            civilizationConfig.setCivColor(civColor);
-            civilizationConfig.setCivSymbol((String) universeConfigPanel.civSymbolSpinner.getValue());
-            civilizationConfig.setCivilizationName(universeConfigPanel.civNameTextField.getText());
-            civilizationConfig.setCivilizationPreferredClimate((String) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
-            civilizationConfig.setHomePlanetName(universeConfigPanel.civHomePlanetName.getText());
-            civilizationConfig.setSpeciesName(universeConfigPanel.speciesNameField.getText());
-            civilizationConfig.setCivCurrencyName(universeConfigPanel.currencyNameTextField.getText());
-            civilizationConfig.setCivCurrencySymbol(universeConfigPanel.currencySymbolTextField.getText());
-            config.setCivilizationConfig(civilizationConfig);
+            civilizationConfig.civColor = (civColor);
+            civilizationConfig.civSymbol = ((String) universeConfigPanel.civSymbolSpinner.getValue());
+            civilizationConfig.civilizationName = (universeConfigPanel.civNameTextField.getText());
+            civilizationConfig.civilizationPreferredClimate = ((CivilizationPreferredClimateType) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
+            civilizationConfig.homePlanetName = (universeConfigPanel.civHomePlanetName.getText());
+            civilizationConfig.speciesName = (universeConfigPanel.speciesNameField.getText());
+            civilizationConfig.civCurrencyName = (universeConfigPanel.currencyNameTextField.getText());
+            civilizationConfig.civCurrencySymbol = (universeConfigPanel.currencySymbolTextField.getText());
+            config.civConfig = civilizationConfig;
 
             //Create generator
             DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, seed);
             Globals.generator = gen;
-            
+
             //Tell main thread that game works
             menu.setLoadedUniverse(true);
         }

@@ -8,11 +8,12 @@ It has cumulative logs that are useful for checking changes and other things
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
-        <File name="log" fileName="logs/all.html" append="false">    
-            <HTMLLayout/>
-        </File> 
-        <File name="error" fileName="logs/error.html" append="false">    
-            <HTMLLayout/>
+        <File name="log" fileName="logs/all.txt" append="false">    
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+
+        </File>
+        <File name="error" fileName="logs/error.txt" append="false">    
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
         </File>
         <!--Append logs-->
         <File name="logCumulative" fileName="logs/system.log" append="true">
@@ -27,7 +28,7 @@ It has cumulative logs that are useful for checking changes and other things
     </Appenders>
     <Loggers>
         <Root level="all">
-            <AppenderRef ref="Console" level="info"/>
+            <AppenderRef ref="Console"/>
             <AppenderRef ref="log"/>
             <AppenderRef ref="error" level="error"/>
             <AppenderRef ref="logCumulative" level="info"/>

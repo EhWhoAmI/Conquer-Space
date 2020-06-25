@@ -17,6 +17,8 @@
  */
 package ConquerSpace.game.universe;
 
+import ConquerSpace.game.universe.bodies.Body;
+
 /**
  * Orbit description
  * @author EhWhoAmI
@@ -34,7 +36,8 @@ public class Orbit {
      * The tilt of the orbit, in degrees.
      */
     public double rotation;
-
+    public Body referenceBody;
+    
     public Orbit(double degrees, double semiMajorAxis, double eccentricity, double rotation) {
         this.degrees = degrees;
         this.semiMajorAxis = semiMajorAxis;

@@ -1,9 +1,10 @@
 package ConquerSpace.game.universe;
 
+import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.organizations.civilization.Civilization;
-import ConquerSpace.game.organizations.civilization.CivilizationConfig;
+import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.game.universe.generators.UniverseGenerator;
@@ -189,7 +190,7 @@ public final class UniverseRenderTest {
         try {
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
-            UniverseConfig config = new UniverseConfig();
+            UniverseGenerationConfig config = new UniverseGenerationConfig();
             config.setUniverseSize((String) universeSizeBox.getSelectedItem());
             config.setUniverseShape((String) universeTypeComboBox.getSelectedItem());
             config.setUniverseAge((String) universeHistoryComboBox.getSelectedItem());

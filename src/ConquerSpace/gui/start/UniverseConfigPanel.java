@@ -18,6 +18,8 @@
 package ConquerSpace.gui.start;
 
 import static ConquerSpace.ConquerSpace.DEBUG;
+import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -39,15 +41,15 @@ import javax.swing.border.LineBorder;
 public class UniverseConfigPanel extends JPanel implements ActionListener {
 
     JLabel universeSizeLabel;
-    JComboBox<String> universeSizeBox;
+    JComboBox<UniverseGenerationConfig.UniverseSize> universeSizeBox;
     JLabel universeTypeLabel;
-    JComboBox<String> universeTypeComboBox;
+    JComboBox<UniverseGenerationConfig.UniverseShape> universeTypeComboBox;
     JLabel universeHistoryLabel;
-    JComboBox<String> universeHistoryComboBox;
+    JComboBox<UniverseGenerationConfig.UniverseAge> universeHistoryComboBox;
     JLabel planetCommonalityLabel;
-    JComboBox<String> planetCommonalityComboBox;
-    JLabel civilizationsLabel;
-    JComboBox<String> civilazitionComboBox;
+    JComboBox<UniverseGenerationConfig.PlanetRarity> planetCommonalityComboBox;
+    JLabel civilizationCountLabel;
+    JComboBox<UniverseGenerationConfig.CivilizationCount> civilizationCountComboBox;
     JLabel seedLabel;
     JTextField seedText;
 
@@ -60,7 +62,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
     JLabel civHomePlanetNameLabel;
     JTextField civHomePlanetName;
     JLabel civTempResistanceLabel;
-    JComboBox<String> civTempResistanceComboBox;
+    JComboBox<CivilizationPreferredClimateType> civTempResistanceComboBox;
     JLabel speciesNameLabel;
     JTextField speciesNameField;
     JLabel currencyNameLabel;
@@ -78,37 +80,28 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         lsidePan.setLayout(new GridLayout(3, 4, 10, 10));
 
         universeSizeLabel = new JLabel("Universe Size");
-        universeSizeBox = new JComboBox<>();
-        universeSizeBox.addItem("Small");
-        universeSizeBox.addItem("Medium");
-        universeSizeBox.addItem("Large");
+        universeSizeLabel.setToolTipText("Determines the size of the galxy");
+        universeSizeBox = new JComboBox<>(UniverseGenerationConfig.UniverseSize.values());
 
         universeTypeLabel = new JLabel("Universe Type");
-        universeTypeComboBox = new JComboBox<>();
-        //Remove spiral and elliptical for now because it is easier
-        //universeTypeComboBox.addItem("Spiral");
-        universeTypeComboBox.addItem("Irregular");
-        //universeTypeComboBox.addItem("Elliptical");
+        universeTypeLabel.setToolTipText("<DOES NOTHING> Determines the shape of the galaxy.");
+        universeTypeComboBox = new JComboBox<>(UniverseGenerationConfig.UniverseShape.values());
 
         //Doesnt make a difference for now...
         universeHistoryLabel = new JLabel("Universe Age");
-        universeHistoryComboBox = new JComboBox<>();
-        universeHistoryComboBox.addItem("Short");
-        universeHistoryComboBox.addItem("Medium");
-        universeHistoryComboBox.addItem("Long");
-        universeHistoryComboBox.addItem("Ancient");
+        universeHistoryLabel.setToolTipText("<DOES NOTHING> Determines how old the galaxy is");
+        universeHistoryComboBox = new JComboBox<>(UniverseGenerationConfig.UniverseAge.values());
 
         planetCommonalityLabel = new JLabel("Planet Commonality");
-        planetCommonalityComboBox = new JComboBox<>();
-        planetCommonalityComboBox.addItem("Common");
-        planetCommonalityComboBox.addItem("Sparse");
+        planetCommonalityLabel.setToolTipText("<DOES NOTHING> Determines how many planets there are in the galaxy.");
+        planetCommonalityComboBox = new JComboBox<>(UniverseGenerationConfig.PlanetRarity.values());
 
-        civilizationsLabel = new JLabel("Civilization Count");
-        civilazitionComboBox = new JComboBox<>();
-        civilazitionComboBox.addItem("Sparse");
-        civilazitionComboBox.addItem("Common");
+        civilizationCountLabel = new JLabel("Civilization Count");
+        civilizationCountLabel.setToolTipText("<DOES NOTHING> Determines how many civilizations there are in the galaxy.");
+        civilizationCountComboBox = new JComboBox<>(UniverseGenerationConfig.CivilizationCount.values());
 
         seedLabel = new JLabel("Seed");
+        seedLabel.setToolTipText("Determines what the galaxy looks like.");
         seedText = new JTextField();
         if (DEBUG) {
             seedText.setText("test");
@@ -141,20 +134,17 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         civHomePlanetName = new JTextField("Earth");
 
         civTempResistanceLabel = new JLabel("Civilization Preferred Climate");
-        civTempResistanceComboBox = new JComboBox<>();
-        civTempResistanceComboBox.addItem("Varied");
-        civTempResistanceComboBox.addItem("Cold");
-        civTempResistanceComboBox.addItem("Hot");
+        civTempResistanceComboBox = new JComboBox<>(CivilizationPreferredClimateType.values());
 
         speciesNameLabel = new JLabel("Species Name");
         speciesNameField = new JTextField("Earthlings");
-        
+
         currencyNameLabel = new JLabel("Currency Name");
         currencyNameTextField = new JTextField("Money");
-        
+
         currencySymbolLabel = new JLabel("Currency Symbol");
         currencySymbolTextField = new JTextField("M");
-        
+
         lsidePan.add(universeSizeLabel);
         lsidePan.add(universeSizeBox);
         lsidePan.add(universeTypeLabel);
@@ -163,8 +153,8 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         lsidePan.add(universeHistoryComboBox);
         lsidePan.add(planetCommonalityLabel);
         lsidePan.add(planetCommonalityComboBox);
-        lsidePan.add(civilizationsLabel);
-        lsidePan.add(civilazitionComboBox);
+        lsidePan.add(civilizationCountLabel);
+        lsidePan.add(civilizationCountComboBox);
         lsidePan.add(seedLabel);
         lsidePan.add(seedText);
 
@@ -173,7 +163,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         rsidePan.add(civSymbolLabel);
         rsidePan.add(civSymbolSpinner);
         rsidePan.add(civColorLabel);
-        
+
         rsidePan.add(civColorChooserButton);
         rsidePan.add(civHomePlanetNameLabel);
         rsidePan.add(civHomePlanetName);

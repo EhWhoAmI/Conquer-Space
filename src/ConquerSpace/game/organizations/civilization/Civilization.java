@@ -59,7 +59,7 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class Civilization implements Employer{
+public class Civilization implements Employer {
 
     public static final int CIV_TECH_RESEARCH_CHANCE = 0;
     public static final int CIV_TECH_RESEARCH_AMOUNT = 1;
@@ -67,7 +67,7 @@ public class Civilization implements Employer{
 
     private Color color;
     private String name;
-    private int civilizationPreferedClimate;
+    private CivilizationPreferredClimateType civilizationPreferedClimate;
     private String civilizationSymbol;
     private String speciesName;
 
@@ -120,13 +120,12 @@ public class Civilization implements Employer{
 
     public ArrayList<Planet> habitatedPlanets;
 
-
     public ArrayList<Event> events;
-    
+
     public ArrayList<ProductionProcess> productionProcesses;
-    
+
     public ArrayList<Integer> mineableGoods;
-    
+
     public ArrayList<ScienceLab> scienceLabs;
 
     private Race foundingSpecies;
@@ -138,12 +137,12 @@ public class Civilization implements Employer{
     private int techPoints = 0; //Research months or whatever
 
     private Currency nationalCurrency;
-    
+
     //Amount of money in millions of isk of their national currency ^
     private long moneyReserves = 0;
-    
+
     public ArrayList<Civilization> contacts;
-    
+
     public Government government;
 
     public Civilization(int ID, Universe u) {
@@ -177,7 +176,7 @@ public class Civilization implements Employer{
         shipComponentList = new ArrayList<>();
 
         engineTechs = new ArrayList<>();
-        
+
         launchVehicles = new ArrayList<>();
 
         multipliers = new HashMap<>();
@@ -188,20 +187,16 @@ public class Civilization implements Employer{
         resourceList = new HashMap<>();
 
         events = new ArrayList<>();
-        
-        contacts = new ArrayList<>();
-        
-        productionProcesses = new ArrayList<>();
-        
-        mineableGoods = new ArrayList<>();
-        
-        government = new Government();
-        
-        scienceLabs = new ArrayList<>();
-    }
 
-    public void setCivilizationPrefferedClimate(int civilizationPrefferedClimate) {
-        this.civilizationPreferedClimate = civilizationPrefferedClimate;
+        contacts = new ArrayList<>();
+
+        productionProcesses = new ArrayList<>();
+
+        mineableGoods = new ArrayList<>();
+
+        government = new Government();
+
+        scienceLabs = new ArrayList<>();
     }
 
     public void setCivilizationSymbol(String civilizationSymbol) {
@@ -228,11 +223,11 @@ public class Civilization implements Employer{
         this.speciesName = speciesName;
     }
 
-    public void setCivilizationPreferredClimate(int civilizationPreferedClimate) {
+    public void setCivilizationPreferredClimate(CivilizationPreferredClimateType civilizationPreferedClimate) {
         this.civilizationPreferedClimate = civilizationPreferedClimate;
     }
 
-    public int getCivilizationPreferredClimate() {
+    public CivilizationPreferredClimateType getCivilizationPreferredClimate() {
         return civilizationPreferedClimate;
     }
 
@@ -271,17 +266,8 @@ public class Civilization implements Employer{
         builder.append(", Species Name=" + speciesName + ", Civ Symbol=" + civilizationSymbol + ", Civ Prefferred Climate=");
 
         //Get the species preferred climate in name
-        switch (civilizationPreferedClimate) {
-            case CivilizationPreferredClimateTypes.VARIED:
-                builder.append("Varied");
-                break;
-            case CivilizationPreferredClimateTypes.COLD:
-                builder.append("Cold");
-                break;
-            case CivilizationPreferredClimateTypes.HOT:
-                builder.append("Hot");
-                break;
-        }
+        builder.append(civilizationPreferedClimate.toString());
+
         builder.append(", Civ Controller=");
         if (controller instanceof AIController) {
             builder.append("AI");
@@ -454,14 +440,14 @@ public class Civilization implements Employer{
     public void changeMoney(long amount) {
         moneyReserves += amount;
     }
-    
+
     public void passEvent(Event e) {
         controller.passEvent(e);
     }
-    
+
     public void employ(Person p) {
         people.add(p);
-        if(p instanceof Administrator) {
+        if (p instanceof Administrator) {
             ((Administrator) p).employer = this;
         }
     }

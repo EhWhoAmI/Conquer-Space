@@ -19,8 +19,9 @@ package ConquerSpace;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.organizations.civilization.CivilizationConfig;
-import ConquerSpace.game.universe.UniverseConfig;
+import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.universe.generators.CivilizationConfig;
+import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.gui.music.MusicPlayer;
@@ -106,10 +107,9 @@ public class ConquerSpace {
 
     public static String codeChecksum = null;
     public static String assetChecksum = null;
-    
-    public static CommandLine commandLineArgs;
-    
-    public static boolean DEBUG = false;
+        
+    public static boolean  DEBUG = false,
+                           TOOLS = false;
 
     public static final Properties defaultProperties = new Properties();
 
@@ -120,13 +120,9 @@ public class ConquerSpace {
      */
     public static void main(String[] args) throws InterruptedException {
         initalizeCommandLineArgs(args);
-        if (commandLineArgs.hasOption('t')) {
+        if (TOOLS) {
             new ToolsSelectionMenu();
         } else {
-            if (commandLineArgs.hasOption('d')) {
-                DEBUG = true;
-            }
-
             CQSPLogger.initLoggers();
             LOGGER.info("Run started: " + new Date().toString());
             LOGGER.info("Version " + VERSION.toString());
@@ -404,7 +400,9 @@ public class ConquerSpace {
         options.addOption("t", false, "Run tool viewer");
         CommandLineParser parser = new DefaultParser();
         try {
-            commandLineArgs = parser.parse(options, args);
+            CommandLine commandLineArgs = parser.parse(options, args);
+            DEBUG = commandLineArgs.hasOption('d');
+            TOOLS = commandLineArgs.hasOption('t');
         } catch (ParseException ex) {
         }
     }
@@ -426,28 +424,28 @@ public class ConquerSpace {
     }
 
     static void setDebugUniverseGenerator() {
-        UniverseConfig config = new UniverseConfig();
+        UniverseGenerationConfig config = new UniverseGenerationConfig();
 
-        config.setUniverseSize("Medium");
-        config.setUniverseShape("Irregular");
-        config.setUniverseAge("Medium");
-        config.setCivilizationCount("Common");
-        config.setPlanetCommonality("Common");
+        config.universeSize = UniverseGenerationConfig.UniverseSize.Medium;
+        config.universeShape = UniverseGenerationConfig.UniverseShape.Irregular;
+        config.universeAge = UniverseGenerationConfig.UniverseAge.Ancient;
+        config.civilizationCount = UniverseGenerationConfig.CivilizationCount.Common;
+        config.planetCommonality = UniverseGenerationConfig.PlanetRarity.Common;
 
         //XD
-        config.setSeed(42);
+        config.seed = (42);
 
         //Set the player Civ options
         CivilizationConfig civilizationConfig = new CivilizationConfig();
-        civilizationConfig.setCivColor(Color.CYAN);
-        civilizationConfig.setCivSymbol("A");
-        civilizationConfig.setCivilizationName("Humans");
-        civilizationConfig.setCivilizationPreferredClimate("Varied");
-        civilizationConfig.setHomePlanetName("Earth");
-        civilizationConfig.setSpeciesName("Earthlings");
-        civilizationConfig.setCivCurrencyName("Money");
-        civilizationConfig.setCivCurrencySymbol("M");
-        config.setCivilizationConfig(civilizationConfig);
+        civilizationConfig.civColor = (Color.CYAN);
+        civilizationConfig.civSymbol = ("A");
+        civilizationConfig.civilizationName = ("Humans");
+        civilizationConfig.civilizationPreferredClimate = CivilizationPreferredClimateType.Varied;
+        civilizationConfig.homePlanetName = ("Earth");
+        civilizationConfig.speciesName = ("Earthlings");
+        civilizationConfig.civCurrencyName = ("Money");
+        civilizationConfig.civCurrencySymbol = ("M");
+        config.civConfig = (civilizationConfig);
 
         //Create generator
         DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);

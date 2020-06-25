@@ -19,16 +19,15 @@ package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.organizations.civilization.Civilization;
-import ConquerSpace.game.organizations.civilization.CivilizationConfig;
 import ConquerSpace.game.organizations.civilization.controllers.AIController;
 import ConquerSpace.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
+import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.PolarCoordinate;
-import ConquerSpace.game.universe.UniverseConfig;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.PlanetTypes;
@@ -57,7 +56,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     private static final Logger LOGGER = CQSPLogger.getLogger(DefaultUniverseGenerator.class.getName());
 
     public static final double G = 6.674 * Math.pow(10, -11);          //Gravitational constant, same for everything
-    
+
     public static final double AU_IN_LTYR = 63241.1;
     /**
      * Percentage that life happens on all planets. Only planets with life will
@@ -65,11 +64,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
      */
     public static final double LIFE_OCCURANCE = 1;
 
-    UniverseConfig u;
+    UniverseGenerationConfig u;
     CivilizationConfig c;
     long seed;
 
-    public DefaultUniverseGenerator(UniverseConfig u, CivilizationConfig c, long seed) {
+    public DefaultUniverseGenerator(UniverseGenerationConfig u, CivilizationConfig c, long seed) {
         this.u = u;
         this.c = c;
         this.seed = seed;
@@ -84,13 +83,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Create star systems
         int starSystemCount = 100;
         switch (u.universeSize) {
-            case "Small":
+            case Small:
                 starSystemCount = (rand.nextInt(150) + 100);
                 break;
-            case "Medium":
+            case Medium:
                 starSystemCount = (rand.nextInt(150) + 200);
                 break;
-            case "Large":
+            case Large:
                 starSystemCount = (rand.nextInt(150) + 300);
                 break;
         }
@@ -157,18 +156,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setHomePlanetName(c.homePlanetName);
         playerCiv.setName(c.civilizationName);
         playerCiv.setSpeciesName(c.speciesName);
-        int civPreferredClimate = 0;
-        switch (c.civilizationPreferredClimate) {
-            case "Varied":
-                civPreferredClimate = 0;
-                break;
-            case "Cold":
-                civPreferredClimate = 1;
-                break;
-            case "Hot":
-                civPreferredClimate = 2;
-        }
-        playerCiv.setCivilizationPreferredClimate(civPreferredClimate);
+        playerCiv.setCivilizationPreferredClimate(c.civilizationPreferredClimate);
         LOGGER.info("Creating suitable planet");
         UniversePath up = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
         LOGGER.info("Done creating suitable planet");
@@ -204,7 +192,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setHomePlanetName("");
             civ.setName("");
             civ.setSpeciesName("");
-            int civPreferredClimate1 = rand.nextInt(3);
+            CivilizationPreferredClimateType civPreferredClimate1 = CivilizationPreferredClimateType.values()[rand.nextInt(CivilizationPreferredClimateType.values().length)];
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
             starSystemCount++;

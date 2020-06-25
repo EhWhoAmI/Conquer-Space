@@ -162,18 +162,19 @@ public class GameInitializer {
     }
 
     private void initializeCities(Planet starting, Civilization c, Random selector) {
-        NameGenerator gen = null;
+        NameGenerator townNames = null;
+        NameGenerator personNames = null;
+
         try {
-            gen = NameGenerator.getNameGenerator("us.names");
+            townNames = NameGenerator.getNameGenerator("town.names");
+            personNames = NameGenerator.getNameGenerator("us.names");
         } catch (IOException ex) {
             //Ignore
         }
 
-        //Add resource miners
-        createResourceMiners(starting, c, c.getFoundingSpecies(), selector);
-        createFarms(starting, c, selector, gen);
-
-        createCities(starting, c, selector);
+        createResourceMiners(starting, c, c.getFoundingSpecies(), selector, townNames);
+        createFarms(starting, c, selector, townNames);
+        createCities(starting, c, selector, townNames);
 
         //Initialize namelists
         NameGenerator researchInstitutionGenerator = null;
@@ -189,7 +190,7 @@ public class GameInitializer {
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city);
             addPopulation(city, selector, c);
-            addGovenor(city, c, selector, gen);
+            addGovenor(city, c, selector, personNames);
         }
     }
 
@@ -216,15 +217,7 @@ public class GameInitializer {
     }
 
     //Cities whose primary industry relies on manufacturing, not mining or farming
-    private void createCities(Planet starting, Civilization c, Random selector) {
-        NameGenerator townGen = null;
-
-        try {
-            townGen = NameGenerator.getNameGenerator("town.names");
-        } catch (IOException ex) {
-            //Ignore, assume all ok
-        }
-
+    private void createCities(Planet starting, Civilization c, Random selector, NameGenerator townGen) {
         for (int i = 0; i < 10; i++) {
             City city = new City(starting.getUniversePath());
             //Add areas
@@ -253,15 +246,7 @@ public class GameInitializer {
         }
     }
 
-    private void createResourceMiners(Planet p, Civilization c, Race founding, Random selector) {
-        NameGenerator townGen = null;
-
-        try {
-            townGen = NameGenerator.getNameGenerator("town.names");
-        } catch (IOException ex) {
-            //Ignore, assume all ok
-        }
-
+    private void createResourceMiners(Planet p, Civilization c, Race founding, Random selector, NameGenerator townGen) {
         //Find if vein exists on the planet
         int minerCount = (int) (Math.random() * p.getPlanetSize());
         minerCount += 45;
@@ -341,7 +326,7 @@ public class GameInitializer {
                 FarmFieldArea field = new FarmFieldArea(potato);
                 field.setGrown(potato);
                 //30 days
-                field.setTime(30*24);
+                field.setTime(30 * 24);
                 field.grow();
                 field.setFieldSize(5000);
                 field.setOperatingJobs(10000);

@@ -14,6 +14,7 @@ Change java version from 1.12 to 1.8 for compatability
 Game runs in the main thread
 Change to references to goods
 Add identifiers to resource and production processes
+You can use the command line options -t to see the tools available, and the option -d to a debug mode which opens up the game faster, with a default seed.
 
 Graphics and UI:
 Add lighting to planet surfaces so it looks cooler
@@ -27,7 +28,8 @@ Add constructing areas UI to cities
 Gameplay:
 All buildings are resource storages now
 Planet sizes and width changed
-Areas now generate resources
+Areas now generate resources, not populations
+Cities now distribute resources to surrounding areas
 
 ~~~~~~~~~~
 0.0.2

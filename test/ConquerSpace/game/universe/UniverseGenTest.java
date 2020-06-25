@@ -1,7 +1,8 @@
 package ConquerSpace.game.universe;
 
+import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.organizations.civilization.CivilizationConfig;
+import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import java.awt.Color;
 import java.util.Random;
@@ -18,7 +19,7 @@ public class UniverseGenTest {
         long timeEnd = System.currentTimeMillis();
         System.out.println("Took " + (timeEnd - timeStart) + "ms to load assets");
 
-        UniverseConfig uc = new UniverseConfig();
+        UniverseGenerationConfig uc = new UniverseGenerationConfig();
         uc.seed = 0;
         uc.universeSize = "Medium";
         CivilizationConfig c = new CivilizationConfig();
