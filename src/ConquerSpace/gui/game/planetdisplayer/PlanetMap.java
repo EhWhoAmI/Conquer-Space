@@ -79,7 +79,7 @@ public class PlanetMap extends JPanel {
     private Universe u;
 
     private double tileSize = 8;
-    private double scale = 1;
+    private double scale = 0.5;
     private double translateX = 0;
     private double translateY = 0;
     private int mapWidth;
@@ -203,7 +203,7 @@ public class PlanetMap extends JPanel {
         viewMenu.addSeparator();
         resetViewButton = new JMenuItem("Reset View");
         resetViewButton.addActionListener(l -> {
-            scale = 1;
+            scale = 0.5;
             translateX = 0;
             translateY = 0;
             map.repaint();
@@ -224,7 +224,7 @@ public class PlanetMap extends JPanel {
         add(menuBar, BorderLayout.NORTH);
         add(map, BorderLayout.CENTER);
 
-        scale = 3;
+        scale = 0.5;
     }
 
     public void resetBuildingIndicator() {

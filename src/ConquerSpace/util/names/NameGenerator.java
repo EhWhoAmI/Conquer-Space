@@ -77,11 +77,10 @@ public class NameGenerator {
         return rules.length;
     }
     
-    public String getName(int scheme) {
+    public String getName(int scheme, Random rand) {
         String[] rule = rules[scheme].split("\\\\");
         //Get the data
         StringBuilder b = new StringBuilder();
-        Random rand = new Random();
         for (String side : rule) {
             if (side.startsWith("[")) {
                 //Counters
@@ -104,7 +103,7 @@ public class NameGenerator {
                         appending = s;
                     }
                 } else if (counterID.endsWith("/r")) {
-                    //Roman
+                    //Roman numerals
                     appending = toRoman(i);
                 }
 
@@ -121,6 +120,18 @@ public class NameGenerator {
             }
         }
         return b.toString();
+    }
+    
+    public String getName(int scheme) {
+        return getName(scheme, new Random());
+    }
+    
+    public String getName() {
+        return getName((int) (Math.random() * getRulesCount()));
+    }
+    
+    public String getName(Random random) {
+        return getName(random.nextInt(getRulesCount()), random);
     }
 
     public static String ordinal(int i) {

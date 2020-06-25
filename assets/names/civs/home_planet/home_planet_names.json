@@ -1,0 +1,8 @@
+{
+    "name": "Planet Names",
+    "rules": ["first\\space\\second"],
+    "counters": [],
+    "first":  ["Ke", "Ba", "Dam", "Ka", "Mak", "Bef", "Zen"],
+    "space": ["la", "es", "da", "eaf", "mal", "'az", "lad"],
+    "second": ["les", "", "et", "'tese", "mar", "zas", "bas"]
+}

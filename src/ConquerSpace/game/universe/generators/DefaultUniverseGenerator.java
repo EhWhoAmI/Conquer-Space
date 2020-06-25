@@ -130,7 +130,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 Planet p = generatePlanet(planetType, planetSize, k, i, rand);
                 //Set name
                 if (planetNameGenerator != null) {
-                    p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
+                    p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
                 }
                 //Set changin degrees
                 //Closer it is, the faster it is...
@@ -184,14 +184,23 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Calculate number of civs
         int civCount = starSystemCount / 50;
 
+        NameGenerator civNameGenerator = null;
+        NameGenerator homePlanetNameGenerator = null;
+
+        try {
+            civNameGenerator = NameGenerator.getNameGenerator("civ.names");
+            homePlanetNameGenerator = NameGenerator.getNameGenerator("home.planet.names");
+        } catch (Exception e) {
+        }
         for (int i = 0; i < civCount; i++) {
             //Create civ.
             Civilization civ = new Civilization(i + 1, universe);
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
             civ.setController(new AIController());
-            civ.setHomePlanetName("");
-            civ.setName("");
-            civ.setSpeciesName("");
+            civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
+            String name = civNameGenerator.getName(0, rand);
+            civ.setName(name);
+            civ.setSpeciesName(name);
             CivilizationPreferredClimateType civPreferredClimate1 = CivilizationPreferredClimateType.values()[rand.nextInt(CivilizationPreferredClimateType.values().length)];
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
@@ -275,7 +284,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             }
             //Set name
             if (planetNameGenerator != null) {
-                p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
+                p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
             }
 
             //Set changin degrees
@@ -321,7 +330,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             }
             //Set name
             if (planetNameGenerator != null) {
-                p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount())));
+                p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
             }
 
             //Set changin degrees
@@ -445,7 +454,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         }
 
         //Initialize life
-        Species micro = new Species(speciesNameGenerator.getName(0));
+        Species micro = new Species(speciesNameGenerator.getName(0, rand));
         //Set name
         //Add random trait
         LifeTrait randomLifeTrait = LifeTrait.values()[rand.nextInt(LifeTrait.values().length)];

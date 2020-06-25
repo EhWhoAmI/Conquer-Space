@@ -128,7 +128,7 @@ public class GameInitializer {
 
                 initializeCities(starting, c, selector);
 
-                nameStratumOnPlanet(starting);
+                nameStratumOnPlanet(starting, selector);
 
                 //Set ownership
                 starting.setOwnerID(c.getID());
@@ -148,9 +148,9 @@ public class GameInitializer {
                 initalizeRecruitedPeople(c, gen, selector);
 
                 //Add unrecruited people
-                createUnrecruitedPeople(c, starting, gen);
+                createUnrecruitedPeople(c, starting, gen, selector);
 
-                initializeGovernment(c, gen);
+                initializeGovernment(c, gen, selector);
 
                 //Set head of state position
                 c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
@@ -195,7 +195,7 @@ public class GameInitializer {
     }
 
     private void addGovenor(City c, Civilization civ, Random selector, NameGenerator personGenerator) {
-        String name = personGenerator.getName(selector.nextInt(personGenerator.getRulesCount()));
+        String name = personGenerator.getName(selector.nextInt(personGenerator.getRulesCount()), selector);
         Administrator admin = new Administrator(name, selector.nextInt(20) + 40);
         admin.setRole("Governing " + c.getName());
         admin.setPosition(c);
@@ -240,7 +240,7 @@ public class GameInitializer {
             }
 
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
-            city.setName(townGen.getName(0));
+            city.setName(townGen.getName(0, selector));
 
             starting.addCityDefinition(pt, city);
         }
@@ -248,8 +248,6 @@ public class GameInitializer {
 
     private void createResourceMiners(Planet p, Civilization c, Race founding, Random selector, NameGenerator townGen) {
         //Find if vein exists on the planet
-        int minerCount = (int) (Math.random() * p.getPlanetSize());
-        minerCount += 45;
         for (int k = 0; k < p.strata.size(); k++) {
             Stratum stratum = p.strata.get(k);
             for (int i = 0; i < 3; i++) {
@@ -272,8 +270,8 @@ public class GameInitializer {
                 factory.setWorkingmultiplier(1.2f);
                 miner.areas.add(factory);
 
-                double randR = (stratum.getRadius() * Math.sqrt(Math.random()));
-                double theta = (Math.random() * 2 * Math.PI);
+                double randR = (stratum.getRadius() * Math.sqrt(selector.nextDouble()));
+                double theta = (selector.nextDouble() * 2 * Math.PI);
 
                 int x = (int) (Math.cos(theta) * randR) + stratum.getX();
                 int y = (int) (Math.sin(theta) * randR) + stratum.getY();
@@ -294,7 +292,7 @@ public class GameInitializer {
 
                 p.addCityDefinition(pt, miner);
 
-                miner.setName(townGen.getName(0) + " Mines");
+                miner.setName(townGen.getName(0, selector) + " Mines");
             }
         }
     }
@@ -335,7 +333,7 @@ public class GameInitializer {
                 faceBook.addArea(field);
             }
 
-            faceBook.setName(gen.getName(0));
+            faceBook.setName(gen.getName(0, selector));
             //Add a farm
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
 
@@ -355,17 +353,17 @@ public class GameInitializer {
         }*/
     }
 
-    private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen) {
+    private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen, Random selector) {
         c.unrecruitedPeople.clear();
-        int peopleCount = (int) (Math.random() * 5) + 5;
+        int peopleCount = selector.nextInt(5) + 5;
 
         for (int peep = 0; peep < peopleCount; peep++) {
-            int age = (int) (Math.random() * 40) + 20;
+            int age = selector.nextInt(40) + 20;
             String person = "name";
-            person = gen.getName((int) Math.round(Math.random()));
+            person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
             Scientist nerd = new Scientist(person, age);
-            nerd.setSkill((int) (Math.random() * 5) + 1);
-            nerd.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+            nerd.setSkill(selector.nextInt(4) + 1);
+            nerd.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
 
             //Set location
             nerd.setPosition(c.getCapitalCity());
@@ -374,15 +372,15 @@ public class GameInitializer {
         }
 
         //Admins
-        peopleCount = (int) (Math.random() * 5) + 5;
+        peopleCount = selector.nextInt(5) + 5;
 
         for (int peep = 0; peep < peopleCount; peep++) {
-            int age = (int) (Math.random() * 40) + 20;
+            int age = selector.nextInt(40) + 20;
             String person = "name";
-            person = gen.getName((int) Math.round(Math.random()));
+            person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
             Administrator dude = new Administrator(person, age);
             //nerd.setSkill((int) (Math.random() * 5) + 1);
-            dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+            dude.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
             dude.setPosition(c.getCapitalCity());
 
             c.unrecruitedPeople.add(dude);
@@ -419,13 +417,13 @@ public class GameInitializer {
         //Only one. Testing guy
         String name = "Person";
         if (gen != null) {
-            name = gen.getName(Math.round(selector.nextFloat()));
+            name = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
         }
 
         Scientist r = new Scientist(name, 20);
         r.setSkill(5);
         //Add random trait 
-        r.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+        r.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
         PeopleProcessor.placePerson(c.getCapitalCity(), r);
 
         c.people.add(r);
@@ -449,14 +447,14 @@ public class GameInitializer {
     }
 
     //Test, will change in the future with a more robust system
-    private void initializeGovernment(Civilization c, NameGenerator gen) {
+    private void initializeGovernment(Civilization c, NameGenerator gen, Random selector) {
         //Create person
-        int age = (int) (Math.random() * 40) + 20;
+        int age = selector.nextInt(40) + 20;
         String person = "name";
-        person = gen.getName((int) Math.round(Math.random()));
+        person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
         Administrator dude = new Administrator(person, 400);
         //nerd.setSkill((int) (Math.random() * 5) + 1);
-        dude.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+        dude.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
         dude.setPosition(c.getCapitalCity());
         dude.setRole("Ruling " + c.getSpeciesName());
 
@@ -474,11 +472,11 @@ public class GameInitializer {
         dude.position = leader;
         c.employ(dude);
 
-        person = gen.getName((int) Math.round(Math.random()));
+        person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
 
         Administrator crownPrince = new Administrator(person, 0);
         //nerd.setSkill((int) (Math.random() * 5) + 1);
-        crownPrince.traits.add(GameController.personalityTraits.get((int) (GameController.personalityTraits.size() * Math.random())));
+        crownPrince.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
         crownPrince.setPosition(c.getCapitalCity());
         crownPrince.setRole("Loafing around -- Lazy brat");
         //Add heir to the throne of the GOD EMPEROR
@@ -505,7 +503,7 @@ public class GameInitializer {
         }
     }
 
-    private void nameStratumOnPlanet(Planet p) {
+    private void nameStratumOnPlanet(Planet p, Random selector) {
         NameGenerator gen = null;
         try {
             gen = NameGenerator.getNameGenerator("strata.names");
@@ -513,13 +511,13 @@ public class GameInitializer {
             //Ignore
         }
         for (Stratum strata : p.strata) {
-            strata.setName(gen.getName(0));
+            strata.setName(gen.getName(0, selector));
         }
     }
 
     private void addResearchInstitution(City city, Civilization civilization, NameGenerator gen, Random selector) {
         //Add to city
-        String name = gen.getName(0);
+        String name = gen.getName(0, selector);
         ResearchArea research = new ResearchArea();
         research.setName(name);
 
