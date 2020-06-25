@@ -131,7 +131,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
                     //Do stuff
                     Planet p = (Planet) selectedNode.getUserObject();
                     //Selected planet
-                    setSelectedPlanet(p, p.scanned.contains(c.getID()));
+                    setSelectedPlanet(p, p.scanned.contains(c.getId()));
                 }
                 //process
             }
@@ -303,7 +303,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         planetInfoSheetContainer.removeAll();
         if (toShowResources) {
             //Check if owned or not
-            if (p.getOwnerID() == (c.getID())) {
+            if (p.getOwnerID() == (c.getId())) {
                 planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
                 planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
             } else {

@@ -53,7 +53,7 @@ public class Star extends Body {
      */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Star: " + ID + "(type=");
+        builder.append("Star: " + id + "(type=");
         switch (type) {
             case StarTypes.RED:
                 builder.append("red");
@@ -89,7 +89,7 @@ public class Star extends Body {
 
     
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, ID));
+        return (new UniversePath(parentStarSystem, id));
     }
     
     public int getOwnerID(){

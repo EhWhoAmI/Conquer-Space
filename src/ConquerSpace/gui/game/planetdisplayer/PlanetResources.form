@@ -46,7 +46,7 @@
           <SubComponents>
             <Component class="javax.swing.JTable" name="planetResourceTable">
               <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="planetResourceTable.getColumnModel().getColumn(2).setCellRenderer(new PlanetResourceCellRenderer());&#xa;planetResourceTable.getTableHeader().setReorderingAllowed(false);">
                   <Connection code="planetModel" type="code"/>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -122,7 +122,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="storageResources">
                   <Properties>
-                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="storageResources.getColumnModel().getColumn(2).setCellRenderer(new StockpileResourceCellRenderer());&#xa;storageResources.getTableHeader().setReorderingAllowed(false);">
                       <Connection code="storageModel" type="code"/>
                     </Property>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">

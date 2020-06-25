@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
+import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.Race;
@@ -47,6 +48,8 @@ public class Universe extends Body {
     public DualHashBidiMap<Integer, Person> people;
     
     public HashMap<Integer, Race> species;
+    
+    public HashMap<Integer, Organization> organizations;
 
     public Universe(long seed) {
         this.seed = seed;
@@ -56,6 +59,7 @@ public class Universe extends Body {
         spaceShips = new ArrayList<>();
         species = new HashMap<>();
         people = new DualHashBidiMap<>();
+        organizations = new HashMap<>();
     }
 
     /**
@@ -130,5 +134,9 @@ public class Universe extends Body {
 
     public long getSeed() {
         return seed;
+    }
+    
+    public void addOrganization(Organization org) {
+        organizations.put(org.getId(), org);
     }
 }

@@ -314,7 +314,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 SatelliteTemplate selectedObject = c.satelliteTemplates.get(selection);
                 Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
                 //Check if it orbits a planet
-                sat.setOwner(c.getID());
+                sat.setOwner(c.getId());
                 Actions.launchSatellite(sat, p, c);
                 JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
             } else if (tab == 1) {

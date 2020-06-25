@@ -92,7 +92,6 @@ public class Planet extends Body {
     public Planet(int planetType, int planetSize, int id, int parentStarSystem) {
         this.planetType = planetType;
         this.planetSize = planetSize;
-        super.ID = id;
         this.parentStarSystem = parentStarSystem;
         //Surface area equals 4 * diameter
         //Surface area is in sectors
@@ -120,7 +119,7 @@ public class Planet extends Body {
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
         //Parse planet type.
-        builder.append("Planet " + ID + ": (Type=");
+        builder.append("Planet " + id + ": (Type=");
         switch (planetType) {
             case PlanetTypes.ROCK:
                 builder.append("rock");
@@ -181,7 +180,7 @@ public class Planet extends Body {
     }
 
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, ID));
+        return (new UniversePath(parentStarSystem, id));
     }
 
     public int getSatelliteCount() {
@@ -208,7 +207,7 @@ public class Planet extends Body {
     @Override
     public String toString() {
         if (name.isEmpty()) {
-            return (ID + "");
+            return (id + "");
         }
         return name;
     }

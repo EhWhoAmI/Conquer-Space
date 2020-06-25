@@ -26,6 +26,7 @@ import ConquerSpace.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.events.Event;
+import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.Scientist;
@@ -44,7 +45,6 @@ import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.ships.launch.LaunchVehicle;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Planet;
-import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
@@ -59,14 +59,12 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class Civilization implements Employer {
+public class Civilization extends Organization implements Employer {
 
     public static final int CIV_TECH_RESEARCH_CHANCE = 0;
     public static final int CIV_TECH_RESEARCH_AMOUNT = 1;
-    private int ID;
 
     private Color color;
-    private String name;
     private CivilizationPreferredClimateType civilizationPreferedClimate;
     private String civilizationSymbol;
     private String speciesName;
@@ -145,9 +143,8 @@ public class Civilization implements Employer {
 
     public Government government;
 
-    public Civilization(int ID, Universe u) {
-        this.ID = ID;
-
+    public Civilization(String name) {
+        super(name);
         //Set a temp starting point as in 0:0:0
         vision = new HashMap<>();
 
@@ -215,10 +212,6 @@ public class Civilization implements Employer {
         this.homePlanetName = homePlanetName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setSpeciesName(String speciesName) {
         this.speciesName = speciesName;
     }
@@ -246,23 +239,15 @@ public class Civilization implements Employer {
     public String getHomePlanetName() {
         return homePlanetName;
     }
-
-    public String getName() {
-        return name;
-    }
-
+    
     public String getSpeciesName() {
         return speciesName;
-    }
-
-    public int getID() {
-        return ID;
     }
 
     public String toReadableString() {
         //Return values...
         StringBuilder builder = new StringBuilder();
-        builder.append("<Civ " + ID + ", Name=" + name + ", Home Planet Name=" + homePlanetName);
+        builder.append("<Civ " + getId() + ", Name=" + name + ", Home Planet Name=" + homePlanetName);
         builder.append(", Species Name=" + speciesName + ", Civ Symbol=" + civilizationSymbol + ", Civ Prefferred Climate=");
 
         //Get the species preferred climate in name

@@ -25,7 +25,8 @@ import ConquerSpace.game.universe.SpacePoint;
  * @author EhWhoAmI
  */
 public class Body {
-    int ID = 0;
+    private static int idCounter = 0;
+    int id = 0;
     
     public Orbit orbit = new Orbit(0, 0, 0, 0);
     public SpacePoint point = new SpacePoint(0, 0);
@@ -97,10 +98,10 @@ public class Body {
     }
 
     public void setID(int ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
     public int getID() {
-        return ID;
+        return id;
     }
 }

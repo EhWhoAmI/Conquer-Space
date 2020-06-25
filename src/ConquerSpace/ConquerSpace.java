@@ -107,9 +107,10 @@ public class ConquerSpace {
 
     public static String codeChecksum = null;
     public static String assetChecksum = null;
-        
-    public static boolean  DEBUG = false,
-                           TOOLS = false;
+
+    public static boolean 
+            DEBUG = false,
+            TOOLS = false;
 
     public static final Properties defaultProperties = new Properties();
 
@@ -141,23 +142,10 @@ public class ConquerSpace {
 
             initLookAndFeel();
 
-            GameController.musicPlayer = new MusicPlayer();
-            if (Globals.settings.getProperty("music").equals("no")) {
-                GameController.musicPlayer.stopMusic();
-            } else {
-                GameController.musicPlayer.playMusic();
-            }
-            try {
-                GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
-            } catch (NumberFormatException nfe) {
-                GameController.musicPlayer.setVolume(1);
-            } catch (IllegalArgumentException iae) {
-                GameController.musicPlayer.setVolume(1);
-            }
+            configureMusic();
 
             //New Game Menu
             try {
-
                 //Add debug menu
                 if (DEBUG) {
                     //Debug game loader
@@ -421,6 +409,22 @@ public class ConquerSpace {
 
         defaultProperties.setProperty("laf", "default");
 
+    }
+
+    static void configureMusic() {
+        GameController.musicPlayer = new MusicPlayer();
+        if (Globals.settings.getProperty("music").equals("no")) {
+            GameController.musicPlayer.stopMusic();
+        } else {
+            GameController.musicPlayer.playMusic();
+        }
+        try {
+            GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
+        } catch (NumberFormatException nfe) {
+            GameController.musicPlayer.setVolume(1);
+        } catch (IllegalArgumentException iae) {
+            GameController.musicPlayer.setVolume(1);
+        }
     }
 
     static void setDebugUniverseGenerator() {

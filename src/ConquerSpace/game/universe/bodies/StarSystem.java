@@ -54,7 +54,7 @@ public class StarSystem extends Body {
      * Creates a new star system.
      *
      * @param id ID of this star system
-     * @param location Galatic location.
+     * @param location Galactic location.
      */
     public StarSystem(int id, PolarCoordinate location) {
         this.id = id;

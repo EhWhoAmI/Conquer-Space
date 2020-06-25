@@ -131,8 +131,8 @@ public class GameInitializer {
                 nameStratumOnPlanet(starting, selector);
 
                 //Set ownership
-                starting.setOwnerID(c.getID());
-                starting.scanned.add(c.getID());
+                starting.setOwnerID(c.getId());
+                starting.scanned.add(c.getId());
                 starting.setHabitated(true);
                 starting.setName(c.getHomePlanetName());
 

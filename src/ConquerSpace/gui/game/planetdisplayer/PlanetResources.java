@@ -21,12 +21,18 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.ResourceStockpile;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractListModel;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -100,6 +106,8 @@ public class PlanetResources extends javax.swing.JPanel {
         jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         planetResourceTable.setModel(planetModel);
+        planetResourceTable.getColumnModel().getColumn(2).setCellRenderer(new PlanetResourceCellRenderer());
+        planetResourceTable.getTableHeader().setReorderingAllowed(false);
         planetResourceTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         planetResourceTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(planetResourceTable);
@@ -118,6 +126,8 @@ public class PlanetResources extends javax.swing.JPanel {
         jPanel3.add(jScrollPane5, gridBagConstraints);
 
         storageResources.setModel(storageModel);
+        storageResources.getColumnModel().getColumn(2).setCellRenderer(new StockpileResourceCellRenderer());
+        storageResources.getTableHeader().setReorderingAllowed(false);
         storageResources.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         storageResources.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane6.setViewportView(storageResources);
@@ -162,7 +172,12 @@ public class PlanetResources extends javax.swing.JPanel {
                     case 2:
                         if (selectedStockpile instanceof City) {
                             City c = (City) selectedStockpile;
-                            return c.resourceLedger.get(selectedStockpile.storedTypes()[rowIndex]);
+                            HashMap<String, Double> ledger = c.resourceLedger.get(selectedStockpile.storedTypes()[rowIndex]);
+                            double change = 0;
+                            for (Double d : ledger.values()) {
+                                change += d;
+                            }
+                            return change;
                         }
                         return "N/A";
                 }
@@ -174,7 +189,57 @@ public class PlanetResources extends javax.swing.JPanel {
         public String getColumnName(int column) {
             return colunmNames[column];
         }
+    }
 
+    class StockpileResourceCellRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+            //Cells are by default rendered as a JLabel.
+            JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+
+            //Get the status for the current row.
+            if (col == 2) {
+
+                String stringValue = String.valueOf(value);
+                try {
+                    double doubleValue = Double.parseDouble(stringValue);
+                    if (isSelected) {
+                        if (doubleValue > 0) {
+                            //Stonks
+                            l.setForeground(Color.green);
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e7"); //Stonks!
+                        } else if (doubleValue < 0) {
+                            //Not stonks
+                            l.setForeground(Color.red);
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                        }
+                    } else {
+                        if (doubleValue > 0) {
+                            //Stonks
+                            l.setForeground(new Color(15, 157, 88));
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e7"); //Stonks!
+                        } else if (doubleValue < 0) {
+                            //Not stonks
+                            l.setForeground(new Color(230, 74, 25));
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                        }
+                    }
+                    if (selectedStockpile instanceof City) {
+                        City c = (City) selectedStockpile;
+                        l.setToolTipText(c.resourceLedger.get(selectedStockpile.storedTypes()[row]).toString());
+                    }
+                } catch (NumberFormatException nfe) {
+
+                }
+            }
+            //Return the JLabel which renders the cell.
+            return l;
+        }
     }
 
     private class PlanetResourceTableModel extends AbstractTableModel {
@@ -199,7 +264,15 @@ public class PlanetResources extends javax.swing.JPanel {
                 case 1:
                     return planetResource.get(planetResource.keySet().toArray()[rowIndex]);
                 case 2:
-                    return planetLedger.get(planetResource.keySet().toArray()[rowIndex]);
+                    //Return the stuff
+                    HashMap<String, Double> ledger = planetLedger.get(planetResource.keySet().toArray()[rowIndex]);
+                    double change = 0;
+                    for (Double d : ledger.values()) {
+                        change += d;
+                    }
+
+                    return change;
+                //+ " " + ledger.toString()
             }
             return 0;
         }
@@ -208,7 +281,55 @@ public class PlanetResources extends javax.swing.JPanel {
         public String getColumnName(int column) {
             return colunmNames[column];
         }
+    }
 
+    class PlanetResourceCellRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+            //Cells are by default rendered as a JLabel.
+            JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+
+            //Get the status for the current row.
+            if (col == 2) {
+
+                String stringValue = String.valueOf(value);
+                try {
+                    double doubleValue = Double.parseDouble(stringValue);
+                    if (isSelected) {
+                        if (doubleValue > 0) {
+                            //Stonks
+                            l.setForeground(Color.green);
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e7"); //Stonks!
+                        } else if (doubleValue < 0) {
+                            //Not stonks
+                            l.setForeground(Color.red);
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                        }
+                    } else {
+                        if (doubleValue > 0) {
+                            //Stonks
+                            l.setForeground(new Color(15, 157, 88));
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e7"); //Stonks!
+                        } else if (doubleValue < 0) {
+                            //Not stonks
+                            l.setForeground(new Color(230, 74, 25));
+                            l.setFont(l.getFont().deriveFont(Font.BOLD));
+                            l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                        }
+                    }
+
+                    l.setToolTipText(planetLedger.get(planetResource.keySet().toArray()[row]).toString());
+                } catch (NumberFormatException nfe) {
+
+                }
+            }
+            //Return the JLabel which renders the cell.
+            return l;
+        }
     }
 
     private class ResourceStorageListModel extends AbstractListModel<String> {

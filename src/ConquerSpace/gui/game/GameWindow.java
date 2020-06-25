@@ -568,7 +568,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                     //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                     //add(d);
                                     //Check if scanned
-                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.scanned.contains(c.getID()));
+                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.scanned.contains(c.getId()));
                                     mainInterfaceWindow.setSelectedTab(1);
 
                                     break;
@@ -632,7 +632,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                 Planet planet = (Planet) body;
                                 if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
                                         (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
-                                    if (planet.scanned.contains(c.getID())) {
+                                    if (planet.scanned.contains(c.getId())) {
                                         JMenuItem planetName = new JMenuItem("Planet " + planet.getID());
                                         planetName.addActionListener(a -> {
                                             mainInterfaceWindow.setSelectedPlanet(planet, true);
@@ -742,7 +742,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                     //If science ship
                     long stype = s.getHull().getShipType();
                     //Survey ship and over planet
-                    if (stype == 70 && overPlanet && !overWhat.scanned.contains(c.getID())) {
+                    if (stype == 70 && overPlanet && !overWhat.scanned.contains(c.getId())) {
                         JMenuItem surveryor = new JMenuItem("Survey planet");
                         final Planet p = overWhat;
 
@@ -755,7 +755,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             survey.setProgressPerTick(5);
                             survey.setFinishedProgress(100);
                             survey.setToSurvey(p);
-                            survey.setCivID(c.getID());
+                            survey.setCivID(c.getId());
 
                             //Also orbit planet
                             //Actions.moveShip(s, c, gotoX, gotoY, universe);

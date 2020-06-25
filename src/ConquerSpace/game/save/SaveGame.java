@@ -92,7 +92,7 @@ public class SaveGame {
                 JSONObject object = new JSONObject();
 
                 //There is a lot to add here.... halp
-                object.put("id", civilization.getID());
+                object.put("id", civilization.getId());
                 object.put("name", civilization.getName());
 
                 JSONArray materialArray = new JSONArray();

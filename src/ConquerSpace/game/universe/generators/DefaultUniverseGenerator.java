@@ -150,11 +150,10 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Do civs
         //Player civ
-        Civilization playerCiv = new Civilization(0, universe);
+        Civilization playerCiv = new Civilization(c.civilizationName);
         playerCiv.setColor(c.civColor);
         playerCiv.setController(new PlayerController());
         playerCiv.setHomePlanetName(c.homePlanetName);
-        playerCiv.setName(c.civilizationName);
         playerCiv.setSpeciesName(c.speciesName);
         playerCiv.setCivilizationPreferredClimate(c.civilizationPreferredClimate);
         LOGGER.info("Creating suitable planet");
@@ -176,6 +175,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         playerCiv.setFoundingSpecies(playerSpecies);
 
+        universe.addOrganization(playerCiv);
         universe.addCivilization(playerCiv);
         LOGGER.info("Done with player civ " + playerCiv.getName());
 
@@ -194,12 +194,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         }
         for (int i = 0; i < civCount; i++) {
             //Create civ.
-            Civilization civ = new Civilization(i + 1, universe);
+            String name = civNameGenerator.getName(0, rand);
+            Civilization civ = new Civilization(name);
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
             civ.setController(new AIController());
             civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
-            String name = civNameGenerator.getName(0, rand);
-            civ.setName(name);
             civ.setSpeciesName(name);
             CivilizationPreferredClimateType civPreferredClimate1 = CivilizationPreferredClimateType.values()[rand.nextInt(CivilizationPreferredClimateType.values().length)];
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
@@ -220,6 +219,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             LOGGER.info("Done with civ " + civ.getName());
             //universe.
             universe.addCivilization(civ);
+            universe.addOrganization(civ);
         }
         LOGGER.info("Done generating!");
         return universe;
