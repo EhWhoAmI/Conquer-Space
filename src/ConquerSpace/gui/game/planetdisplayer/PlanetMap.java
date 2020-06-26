@@ -268,19 +268,22 @@ public class PlanetMap extends JPanel {
             planetSurfaceMap = planetMap.getScaledInstance(planetMap.getWidth(null) * enlargementSize, planetMap.getHeight(null) * enlargementSize, Image.SCALE_DEFAULT);
 
             //Read images
+            //TODO: change where we read this to the start of the game.
             districtImages = new HashMap<>();
             File imagesDir = ResourceLoader.getResourceByFile("dirs.map.images");
             File[] dirs = imagesDir.listFiles();
-            for (File dirImage : dirs) {
-                ArrayList<Image> imageList = new ArrayList<>();
-                for (File imageFile : dirImage.listFiles()) {
-                    try {
-                        Image img = ImageIO.read(imageFile);
-                        imageList.add(img);
-                    } catch (IOException ex) {
+            if (dirs != null) {
+                for (File dirImage : dirs) {
+                    ArrayList<Image> imageList = new ArrayList<>();
+                    for (File imageFile : dirImage.listFiles()) {
+                        try {
+                            Image img = ImageIO.read(imageFile);
+                            imageList.add(img);
+                        } catch (IOException ex) {
+                        }
                     }
+                    districtImages.put(dirImage.getName(), Arrays.copyOf(imageList.toArray(), imageList.size(), Image[].class));
                 }
-                districtImages.put(dirImage.getName(), Arrays.copyOf(imageList.toArray(), imageList.size(), Image[].class));
             }
         }
 
@@ -339,7 +342,7 @@ public class PlanetMap extends JPanel {
                         //Draw tile color
                         mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
                         mapGraphics.fill(rect);
-                        
+
                         //Draw image
                         Image[] list = districtImages.get(c.getCityType().name());
                         if (list != null) {

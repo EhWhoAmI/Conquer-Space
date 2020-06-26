@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.universe.generators.CivilizationInitializer;
 import ConquerSpace.Globals;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.controllers.PlayerController;
@@ -68,7 +69,7 @@ public class GameController {
     public static HashMap<String, Integer> shipTypes;
     public static HashMap<String, Integer> shipTypeClasses;
     public static GameUpdater updater;
-    public static GameInitializer initer;
+    public static CivilizationInitializer initer;
     public static MusicPlayer musicPlayer;
 
     public static ArrayList<Element> elements;
@@ -93,13 +94,14 @@ public class GameController {
      * Constructor. Inits all components.
      */
     public GameController() {
-        //Init universe
+        //Init updater
         updater = new GameUpdater(Globals.universe, Globals.date, GameRefreshRate);
-        initer = new GameInitializer(Globals.universe, Globals.date, updater);
-
-        //Will need a different initializer later...
-        initer.initGame();
-
+        
+        //First run over control and stuff
+        updater.updateObjectPositions();
+        updater.calculateControl();
+        updater.calculateVision();
+        
         //Process the 0th turn and initalize the universe.
         updater.updateUniverse(Globals.universe, Globals.date, 0);
 

@@ -37,11 +37,6 @@ public class StarSystem extends Body {
     public ArrayList<Body> bodies;
 
     /**
-     * ID of this star system.
-     */
-    int id;
-
-    /**
      * Galactic location.
      */
     private PolarCoordinate location;
@@ -66,15 +61,6 @@ public class StarSystem extends Body {
 
     public int getPlanetCount() {
         return planetCount;
-    }
-    
-    /**
-     * Get this star system's id
-     *
-     * @return ID
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -129,7 +115,7 @@ public class StarSystem extends Body {
     }
     
     public void addBody(Body b){ 
-        b.setID(bodies.size());
+        b.setId(bodies.size());
         if(b instanceof Planet) {
             planetCount++;
         }

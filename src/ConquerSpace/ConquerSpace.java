@@ -108,8 +108,7 @@ public class ConquerSpace {
     public static String codeChecksum = null;
     public static String assetChecksum = null;
 
-    public static boolean 
-            DEBUG = false,
+    public static boolean DEBUG = false,
             TOOLS = false;
 
     public static final Properties defaultProperties = new Properties();
@@ -249,9 +248,7 @@ public class ConquerSpace {
             } else {
                 Properties lafProperties = new Properties();
                 File lafPropertyFile = new File(System.getProperty("user.dir") + "/assets/lookandfeels.properties");
-                FileInputStream fis;
-                try {
-                    fis = new FileInputStream(lafPropertyFile);
+                try (FileInputStream fis = new FileInputStream(lafPropertyFile);) {
                     lafProperties.load(fis);
                 } catch (FileNotFoundException ex) {
                 } catch (IOException ex) {

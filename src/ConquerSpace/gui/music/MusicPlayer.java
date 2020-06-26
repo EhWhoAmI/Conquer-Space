@@ -52,11 +52,9 @@ public class MusicPlayer implements Runnable {
 
     public MusicPlayer() {
         toPlay = false;
-        FileInputStream fis = null;
-        try {
+        File f = new File("assets/music/music_list.json");
+        try (FileInputStream fis = new FileInputStream(f);){
             //Load music
-            File f = new File("assets/music/music_list.json");
-            fis = new FileInputStream(f);
             byte[] data = new byte[(int) f.length()];
             fis.read(data);
             fis.close();
@@ -68,12 +66,6 @@ public class MusicPlayer implements Runnable {
             LOGGER.warn("No Music!", ex);
         } catch (IOException ex) {
             LOGGER.warn("No Music!", ex);
-        } finally {
-            try {
-                fis.close();
-            } catch (IOException ex) {
-
-            }
         }
     }
 

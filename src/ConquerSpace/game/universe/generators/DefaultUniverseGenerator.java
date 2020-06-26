@@ -222,6 +222,12 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             universe.addOrganization(civ);
         }
         LOGGER.info("Done generating!");
+        LOGGER.info("Going over civ initializing");
+
+        CivilizationInitializer initer = new CivilizationInitializer(universe);
+        initer.initGame();
+        LOGGER.info("Done with civ initializing");
+
         return universe;
     }
 
@@ -293,7 +299,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
             //degs *= 10;
             p.setDegreesPerTurn((float) degs);
-            //System.err.println(p.terrain.terrainColor[0][0]);
             p.modDegrees(rand.nextInt(360));
 
             //Seed life
@@ -319,15 +324,12 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Planet p = generatePlanet(planetType, planetSize, k, lastStarSystem, rand);
 
             generateResourceVeins(p, rand);
-            if (planetType == PlanetTypes.ROCK) {
-                p.setTerrainSeed(rand.nextInt());
-                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
-                //= terrainColorses;
-                living = p;
-            } else if (planetType == PlanetTypes.GAS) {
-                p.setTerrainSeed(rand.nextInt());
-                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_GASSY_COLORS));
-            }
+            
+            p.setTerrainSeed(rand.nextInt());
+            p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
+            //= terrainColorses;
+            
+
             //Set name
             if (planetNameGenerator != null) {
                 p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
@@ -347,6 +349,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 generateLocalLife(rand, p);
             }
             sys.addBody(p);
+            living = p;
         }
 
         u.addStarSystem(sys);

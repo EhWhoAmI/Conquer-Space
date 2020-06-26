@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game;
+package ConquerSpace.game.universe.generators;
 
+import ConquerSpace.game.GameController;
+import ConquerSpace.game.PeopleProcessor;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.government.Government;
 import ConquerSpace.game.organizations.civilization.government.GovernmentPosition;
@@ -66,28 +68,19 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class GameInitializer {
+public class CivilizationInitializer {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(GameInitializer.class.getName());
+    private static final Logger LOGGER = CQSPLogger.getLogger(CivilizationInitializer.class.getName());
 
     private Universe universe;
 
-    private StarDate starDate;
-
-    private GameUpdater updater;
-
     final int CIV_STARTING_TECH_PTS = 10;
 
-    public GameInitializer(Universe u, StarDate s, GameUpdater updater) {
+    public CivilizationInitializer(Universe u) {
         universe = u;
-        starDate = s;
-        this.updater = updater;
     }
 
     public void initGame() {
-        //Do calculations for system position before initing for observataries
-        updater.updateObjectPositions();
-
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random(universe.getSeed());
@@ -156,9 +149,6 @@ public class GameInitializer {
                 c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
             }
         }
-
-        updater.calculateControl();
-        updater.calculateVision();
     }
 
     private void initializeCities(Planet starting, Civilization c, Random selector) {
@@ -498,7 +488,7 @@ public class GameInitializer {
             for (int h = 0; h < s.bodies.size(); h++) {
                 Body b = s.bodies.get(h);
                 //Add planets
-                c.vision.put(new UniversePath(i, b.getID()), VisionTypes.UNDISCOVERED);
+                c.vision.put(new UniversePath(i, b.getId()), VisionTypes.UNDISCOVERED);
             }
         }
     }

@@ -48,7 +48,6 @@ public class Person {
         id = idCounter++;
         traits = new ArrayList<>();
         role = new Role();
-        Globals.universe.people.put(id, this);
     }
 
     public int getAge() {

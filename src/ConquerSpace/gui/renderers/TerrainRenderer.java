@@ -44,16 +44,25 @@ public class TerrainRenderer {
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         ConquerSpace.jLibNoise.noise.utils.Image terrainColorses = null;
 
-        if (p.getPlanetType() == PlanetTypes.ROCK) {
-            colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
-            terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
-                    6, 0.5f, 2f, 0.5f, p.getPlanetWidth() * 2, p.getPlanetHeight() * 2,
-                    -p.getPlanetWidth() / 32, p.getPlanetWidth() / 32, -p.getPlanetHeight() / 32, p.getPlanetHeight() / 32, colors);
-        } else if (p.getPlanetType() == PlanetTypes.GAS) {
-            colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
-            terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
-                    6, 0.5f, 2f, 0.5f, p.getPlanetWidth(), p.getPlanetHeight(),
-                    0, p.getPlanetWidth() / 16, 0, p.getPlanetHeight() / 4, colors);
+        switch (p.getPlanetType()) {
+            case PlanetTypes.ROCK:
+                colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
+                terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
+                        6, 0.5f, 2f, 0.5f, p.getPlanetWidth() * 2, p.getPlanetHeight() * 2,
+                        -p.getPlanetWidth() / 32, p.getPlanetWidth() / 32, -p.getPlanetHeight() / 32, p.getPlanetHeight() / 32, colors);
+                break;
+            case PlanetTypes.GAS:
+                colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
+                terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
+                        6, 0.5f, 2f, 0.5f, p.getPlanetWidth(), p.getPlanetHeight(),
+                        0, p.getPlanetWidth() / 16, 0, p.getPlanetHeight() / 4, colors);
+                break;
+            default:
+                colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
+                terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
+                        6, 0.5f, 2f, 0.5f, p.getPlanetWidth(), p.getPlanetHeight(),
+                        0, p.getPlanetWidth() / 16, 0, p.getPlanetHeight() / 4, colors);
+                break;
         }
 
         planetDisplaying = terrainColorses.toBufferedImage();
@@ -68,12 +77,20 @@ public class TerrainRenderer {
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         Color[][] terrainColorses = null;
 
-        if (p.getPlanetType() == PlanetTypes.ROCK) {
-            colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
-            terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 3, colors);
-        } else if (p.getPlanetType() == PlanetTypes.GAS) {
-            colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
-            terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 18, colors);
+        switch (p.getPlanetType()) {
+            case PlanetTypes.ROCK:
+                colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
+                terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 3, colors);
+                break;
+            case PlanetTypes.GAS:
+                colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
+                terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 18, colors);
+                break;
+            default:
+                //Default option
+                colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
+                terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 18, colors);
+                break;
         }
 
         if (terrainColorses != null) {

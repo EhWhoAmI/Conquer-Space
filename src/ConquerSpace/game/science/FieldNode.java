@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Temp thing for the general game.
+ *
  * @author EhWhoAmI
  */
 public class FieldNode {
@@ -73,7 +74,10 @@ public class FieldNode {
 
     @Override
     public boolean equals(Object obj) {
-        return (((FieldNode) obj).name.equals(this.name));
+        if (obj instanceof FieldNode) {
+            return (((FieldNode) obj).name.equals(this.name));
+        }
+        return false;
     }
 
     public FieldNode getNode(int i) {

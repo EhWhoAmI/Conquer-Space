@@ -99,6 +99,9 @@ public class InternalManual extends JInternalFrame implements ListSelectionListe
                             new String(Files.readAllBytes(Paths.get(
                                     System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
                     LOGGER.info("Loading manual " + str);
+                    
+                    getDesktopPane().add(value);
+                    value.setVisible(true);
                     break;
                 } catch (IOException ex) {
                     ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
@@ -106,7 +109,5 @@ public class InternalManual extends JInternalFrame implements ListSelectionListe
                 }
             }
         }
-        getDesktopPane().add(value);
-        value.setVisible(true);
     }
 }

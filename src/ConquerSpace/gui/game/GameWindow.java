@@ -611,7 +611,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                    if (p.getSystemID() == sys.getId()&& universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
                                         systemInfo.addActionListener(a -> {
                                             see(sys.getId());
@@ -633,7 +633,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                 if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
                                         (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
                                     if (planet.scanned.contains(c.getId())) {
-                                        JMenuItem planetName = new JMenuItem("Planet " + planet.getID());
+                                        JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
                                         planetName.addActionListener(a -> {
                                             mainInterfaceWindow.setSelectedPlanet(planet, true);
                                             mainInterfaceWindow.setSelectedTab(1);

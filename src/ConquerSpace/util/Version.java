@@ -149,7 +149,7 @@ public class Version implements Comparable<Version> {
     public boolean equals(Object obj) {
         if (obj instanceof Version) {
             Version v = (Version) obj;
-            return (v.major == this.major && v.minor == this.minor && v.patch == v.patch);
+            return (v.major == this.major && v.minor == this.minor && v.patch == this.patch);
         }
         return false;
     }

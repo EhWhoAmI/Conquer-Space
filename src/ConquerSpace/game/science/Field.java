@@ -108,7 +108,7 @@ public class Field {
         }
         return null;
     }
-    
+
     public Field findNode(String node) {
         if (this.name.toLowerCase().equals(node.toLowerCase())) {
             return this;
@@ -133,7 +133,10 @@ public class Field {
 
     @Override
     public boolean equals(Object obj) {
-        return (((Field) obj).name.equals(this.name));
+        if (obj instanceof Field) {
+            return (((Field) obj).name.equals(this.name));
+        }
+        return false;
     }
 
     public Field getNode(int i) {
@@ -142,7 +145,8 @@ public class Field {
 
     /**
      * Does include current field
-     * @param f 
+     *
+     * @param f
      */
     public void getFields(ArrayList<Field> f) {
         f.add(this);
@@ -152,10 +156,11 @@ public class Field {
             child.getFields(f);
         }
     }
-    
+
     /**
      * Does not include this field
-     * @param f 
+     *
+     * @param f
      */
     public void getFieldsExclusivse(ArrayList<Field> f) {
         for (int i = 0; i < this.getChildCount(); i++) {

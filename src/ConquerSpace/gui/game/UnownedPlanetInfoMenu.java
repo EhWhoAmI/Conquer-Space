@@ -106,7 +106,7 @@ public class UnownedPlanetInfoMenu extends JPanel {
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
         name.append("" + p.getParentStarSystem());
-        name.append(" Planet id " + p.getID());
+        name.append(" Planet id " + p.getId());
         planetPath.setText(name.toString());
 
         //Init owner

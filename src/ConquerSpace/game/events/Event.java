@@ -27,7 +27,6 @@ public class Event {
     private String text;
 
     public Event(String text) {
-        this.id = id;
         this.text = text;
     }
 

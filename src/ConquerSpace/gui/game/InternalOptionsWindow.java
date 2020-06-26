@@ -204,20 +204,14 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
         //Write
         File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
         if (settingsFile.exists()) {
-            FileOutputStream fis = null;
-            try {
+            //FileOutputStream fis = null;
+            try (FileOutputStream fis = new FileOutputStream(settingsFile);){
                 //Read from file.
-                fis = new FileOutputStream(settingsFile);
                 PrintWriter pw = new PrintWriter(fis);
                 Globals.settings.store(pw, "Created by Conquer Space version " + VERSION.toString());
                 pw.close();
             } catch (FileNotFoundException ex) {
             } catch (IOException ex) {
-            } finally {
-                try {
-                    fis.close();
-                } catch (IOException ex) {
-                }
             }
         }
     }

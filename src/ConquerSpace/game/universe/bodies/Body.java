@@ -97,11 +97,11 @@ public class Body {
         return orbit.toPolarCoordinate().getDistance();
     }
 
-    public void setID(int ID) {
+    public void setId(int ID) {
         this.id = ID;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 }

@@ -65,9 +65,7 @@ public class DebugStatsWindow extends JInternalFrame {
 //    private TimeSeriesCollection memoryInfoStats;
 //    private TimeSeries usedMemorySeries;
 //    private TimeSeries availableMemorySeries;
-
 //    private JFreeChart chart;
-
     /**
      * Universe
      */
@@ -100,7 +98,9 @@ public class DebugStatsWindow extends JInternalFrame {
                 LOGGER.error("Cannot write to file!", ex);
             } finally {
                 try {
-                    writer.close();
+                    if (writer != null) {
+                        writer.close();
+                    }
                 } catch (IOException ex) {
                     LOGGER.error("Cannot close file!", ex);
                 }
@@ -132,7 +132,9 @@ public class DebugStatsWindow extends JInternalFrame {
                 LOGGER.error("Cannot write to file!", ex);
             } finally {
                 try {
-                    writer.close();
+                    if (writer != null) {
+                        writer.close();
+                    }
                 } catch (IOException ex) {
                     LOGGER.error("Cannot close file!", ex);
                 }
@@ -165,7 +167,6 @@ public class DebugStatsWindow extends JInternalFrame {
 //        panel.setDomainZoomable(false);
 //        panel.setPopupMenu(null);
 //        panel.setRangeZoomable(false);
-
         add(memoryusedLabel);
         add(threadCountLabel);
         add(dumpUniverseButton);
