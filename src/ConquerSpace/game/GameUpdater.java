@@ -85,6 +85,7 @@ public class GameUpdater {
     private final int GameRefreshRate;
 
     private long updateTime;
+    private int ledgerClearTime;
 
     private GameIndexer indexer;
     private PeopleProcessor peopleProcessor;
@@ -95,6 +96,7 @@ public class GameUpdater {
         indexer = new GameIndexer(u);
         peopleProcessor = new PeopleProcessor(Globals.universe, Globals.date);
         this.GameRefreshRate = GameRefreshRate;
+        ledgerClearTime = GameRefreshRate * 10;
     }
 
     //Process ingame tick.
@@ -280,7 +282,7 @@ public class GameUpdater {
             CityType type = classifyDistrict(c);
             c.setCityType(type);
         }
-        
+
         distributeResources(p);
     }
 

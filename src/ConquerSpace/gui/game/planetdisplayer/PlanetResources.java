@@ -54,11 +54,14 @@ public class PlanetResources extends javax.swing.JPanel {
 
     private ResourceStockpile selectedStockpile = null;
 
+    private PlanetInfoSheet parent;
+
     /**
      * Creates new form PlanetResources
      */
-    public PlanetResources(Planet p) {
+    public PlanetResources(Planet p, PlanetInfoSheet parent) {
         this.p = p;
+        this.parent = parent;
         planetResource = new HashMap<>();
         planetLedger = new HashMap<>();
         stockpiles = new ArrayList<>();
@@ -70,7 +73,9 @@ public class PlanetResources extends javax.swing.JPanel {
         initComponents();
 
         Timer t = new Timer(1000, l -> {
-            compileResources();
+            if (this.isVisible()) {
+                compileResources();
+            }
         });
         t.setRepeats(true);
         t.start();
@@ -100,6 +105,8 @@ public class PlanetResources extends javax.swing.JPanel {
         storageJList = new javax.swing.JList<>();
         jScrollPane6 = new javax.swing.JScrollPane();
         storageResources = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        gotoCityButton = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -122,6 +129,9 @@ public class PlanetResources extends javax.swing.JPanel {
         jScrollPane5.setViewportView(storageJList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel3.add(jScrollPane5, gridBagConstraints);
 
@@ -133,19 +143,45 @@ public class PlanetResources extends javax.swing.JPanel {
         jScrollPane6.setViewportView(storageResources);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(jScrollPane6, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        gotoCityButton.setText("Goto City Info");
+        gotoCityButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gotoCityButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(gotoCityButton, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel3.add(jPanel1, gridBagConstraints);
 
         jTabbedPane1.addTab("Individual Storages", jPanel3);
 
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void gotoCityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gotoCityButtonActionPerformed
+        //Select city
+        if (selectedStockpile instanceof City) {
+            parent.population.showCity(((City) selectedStockpile));
+            parent.setSelectedTab(3);
+        }
+    }//GEN-LAST:event_gotoCityButtonActionPerformed
+
     private class StockpileStorageModel extends AbstractTableModel {
 
-        String[] colunmNames = {"Good", "Count", "Change"};
+        String[] colunmNames = {"Good", "Count", "Change over " + GameController.GameRefreshRate + " ticks"};
 
         @Override
         public int getRowCount() {
@@ -244,7 +280,7 @@ public class PlanetResources extends javax.swing.JPanel {
 
     private class PlanetResourceTableModel extends AbstractTableModel {
 
-        String[] colunmNames = {"Good", "Count", "Change"};
+        String[] colunmNames = {"Good", "Count", "Change over " + GameController.GameRefreshRate + " ticks"};
 
         @Override
         public int getRowCount() {
@@ -423,14 +459,23 @@ public class PlanetResources extends javax.swing.JPanel {
         }
     }
 
+    void selectStockpile(ResourceStockpile c) {
+        selectedStockpile = c;
+        storageJList.setSelectedIndex(stockpiles.indexOf(c));
+        //Refresh table
+        storageModel.fireTableDataChanged();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton gotoCityButton;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable planetResourceTable;
-    private javax.swing.JList<String> storageJList;
+    javax.swing.JList<String> storageJList;
     private javax.swing.JTable storageResources;
     // End of variables declaration//GEN-END:variables
 }

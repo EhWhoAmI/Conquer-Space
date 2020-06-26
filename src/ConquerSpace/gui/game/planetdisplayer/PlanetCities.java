@@ -30,10 +30,12 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -85,8 +87,6 @@ public class PlanetCities extends JPanel {
     boolean isBuildingUi = false;
 
     private City currentlySelectedCity;
-    
-    private StockpileStorageModel stockpileStorageModel;
 
     private DefaultListModel<Area> areaListModel;
     private JList<Area> areaList;
@@ -94,10 +94,13 @@ public class PlanetCities extends JPanel {
     private Universe u;
     private Civilization owner;
 
-    public PlanetCities(Universe u, Planet p, Civilization civ, int turn) {
+    private PlanetInfoSheet parent;
+
+    public PlanetCities(Universe u, Planet p, Civilization civ, int turn, PlanetInfoSheet parent) {
         this.u = u;
         this.p = p;
         this.owner = civ;
+        this.parent = parent;
         tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
 
@@ -143,15 +146,15 @@ public class PlanetCities extends JPanel {
         cityList.setSelectedIndex(0);
         cityInfoTabs = new JTabbedPane();
         cityInfoTabs.addChangeListener(c -> {
-            if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
-                citySelectedTab = cityInfoTabs.getSelectedIndex();
-            }
-            if (areaListModel != null && cityList.getSelectedValue() != null) {
-                for (Area area : cityList.getSelectedValue().areas) {
-                    areaListModel.addElement(area);
+                if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
+                    citySelectedTab = cityInfoTabs.getSelectedIndex();
                 }
+                if (areaListModel != null && cityList.getSelectedValue() != null) {
+                    for (Area area : cityList.getSelectedValue().areas) {
+                        areaListModel.addElement(area);
+                    }
 
-            }
+                }
         });
 
         //Initialize table
@@ -245,6 +248,14 @@ public class PlanetCities extends JPanel {
 
         cityData.add(new JScrollPane(tagsList));
 
+        JButton viewResourceButton = new JButton("View Resources");
+        viewResourceButton.addActionListener(l -> {
+            parent.setSelectedTab(8);
+            parent.planetResources.jTabbedPane1.setSelectedIndex(1);
+            parent.planetResources.selectStockpile(currentlySelectedCity);
+        });
+        cityData.add(viewResourceButton);
+
         JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
 
         //Areas
@@ -276,14 +287,11 @@ public class PlanetCities extends JPanel {
 
         areaConstructionPanel = new AreaConstructionPanel(p, owner, selected);
 
-        stockpileStorageModel = new StockpileStorageModel();
-        
         cityInfoTabs.removeAll();
         cityInfoTabs.add("Areas", areaInfoPanel);
         cityInfoTabs.add("Employment", new JScrollPane(jobTable));
         cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
         cityInfoTabs.add("Construction", areaConstructionPanel);
-        cityInfoTabs.add("Resources", new JScrollPane(new JTable(stockpileStorageModel)));
 
         cityInfoTabs.setSelectedIndex(citySelectedTab);
         cityData.add(cityInfoTabs);
@@ -372,49 +380,6 @@ public class PlanetCities extends JPanel {
         @Override
         public String getColumnName(int column) {
             return jobListTableColunmNames[column];
-        }
-    }
-    
-    private class StockpileStorageModel extends AbstractTableModel {
-
-        String[] colunmNames = {"Good", "Count", "Change"};
-
-        @Override
-        public int getRowCount() {
-            if (currentlySelectedCity == null) {
-                return 0;
-            } else {
-                return currentlySelectedCity.storedTypes().length;
-            }
-        }
-
-        @Override
-        public int getColumnCount() {
-            return colunmNames.length;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            if (currentlySelectedCity != null) {
-                switch (columnIndex) {
-                    case 0:
-                        return GameController.goodHashMap.get(currentlySelectedCity.storedTypes()[rowIndex]);
-                    case 1:
-                        return currentlySelectedCity.getResourceAmount(currentlySelectedCity.storedTypes()[rowIndex]);
-                    case 2:
-                        if (currentlySelectedCity instanceof City) {
-                            City c = (City) currentlySelectedCity;
-                            return c.resourceLedger.get(currentlySelectedCity.storedTypes()[rowIndex]);
-                        }
-                        return "N/A";
-                }
-            }
-            return 0;
-        }
-
-        @Override
-        public String getColumnName(int column) {
-            return colunmNames[column];
         }
     }
 }

@@ -68,7 +68,7 @@ public class PlanetInfoSheet extends JPanel {
 
         overview = new PlanetOverview(u, p, c, planetImage);
         atmosphere = new AtmosphereInfo(p, c);
-        population = new PlanetCities(u, p, c, 0);
+        population = new PlanetCities(u, p, c, 0, this);
         spacePort = new SpacePortMenuSheet(p, c);
         planetGeology = new PlanetGeology(p);
         //building = new ConstructionMenu(u, p, c);
@@ -76,7 +76,7 @@ public class PlanetInfoSheet extends JPanel {
         localLifeMenu = new LocalLifeMenu(p, c);
         planetMap = new PlanetMap(p, c, u, this, planetImage);
         planetEconomy = new PlanetEconomy();
-        planetResources = new PlanetResources(p);
+        planetResources = new PlanetResources(p, this);
 
         tpane.add("Overview", overview);
         tpane.add("Map", planetMap);
@@ -84,7 +84,6 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add("Cities", population);
         tpane.add("Space Port", spacePort);
         tpane.add("Atmosphere", atmosphere);
-        //Add satellite tabs
         tpane.add("Industry", industry);
         tpane.add("Local Life", localLifeMenu);
         tpane.add("Resources", planetResources);
@@ -145,5 +144,9 @@ public class PlanetInfoSheet extends JPanel {
             //Disable
             tpane.setEnabledAt(spacePortIndex, false);
         }
+    }
+    
+    void setSelectedTab(int tabIntex) {
+        tpane.setSelectedIndex(tabIntex);
     }
 }

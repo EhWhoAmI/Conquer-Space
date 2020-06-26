@@ -56,7 +56,8 @@ public class City implements PersonEnterable, ResourceStockpile {
     //public ArrayList<PopulationUnit> population;
     private int maxStorage;
     public ArrayList<SupplyChain> supplyChains;
-
+    
+    private int ledgerClearDelta = 0;
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     private UniversePath location;
 
@@ -261,4 +262,12 @@ public class City implements PersonEnterable, ResourceStockpile {
         return false;
     }
 
+    public void clearLedger(int delta) {
+        ledgerClearDelta = delta;
+        resourceLedger.clear();
+    }
+
+    public int getLedgerClearDelta() {
+        return ledgerClearDelta;
+    }
 }
