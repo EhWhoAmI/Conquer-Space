@@ -28,14 +28,20 @@ import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.Utilities;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -43,6 +49,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -324,32 +332,50 @@ public class PlanetMap extends JPanel {
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
-
-                if (cityMapImage == null || needRefresh) {
-                    cityMapImage = new BufferedImage((int) (p.getPlanetWidth() * tileSize), (int) (p.getPlanetHeight() * tileSize), BufferedImage.TYPE_INT_ARGB);
-
-                    Graphics2D mapGraphics = cityMapImage.createGraphics();
+                if (cityMapImage == null || needRefresh || true) {
+                    //g2d
+                    Graphics2D mapGraphics = g2d;
 
                     Iterator<GeographicPoint> distIterator = p.cityDistributions.keySet().iterator();
 
                     //for (int i = 0; i < size(); i++) {
+                    Rectangle r = g.getClipBounds();
                     while (distIterator.hasNext()) {
+
                         GeographicPoint point = distIterator.next();
                         City c = p.cityDistributions.get(point);
-                        //Draw city
-                        Rectangle2D.Double rect = new Rectangle2D.Double(point.getX() * tileSize, point.getY() * tileSize, tileSize, tileSize);
+                        int xPos = (int) (point.getX() * tileSize);
+                        int yPos = (int) (point.getY() * tileSize);
+                        if (r.contains(new Point(xPos, yPos))) {
+                            //Draw city
+                            Rectangle2D.Double rect = new Rectangle2D.Double(xPos, yPos, tileSize, tileSize);
 
-                        //Draw tile color
-                        mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
-                        mapGraphics.fill(rect);
+                            //Draw tile color
+                            mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
+                            mapGraphics.fill(rect);
 
-                        //Draw image
-                        Image[] list = districtImages.get(c.getCityType().name());
-                        if (list != null) {
-                            int listSize = list.length;
-                            //Id helps make sure that image is the same
-                            Image im = list[point.hashCode() % listSize];
-                            mapGraphics.drawImage(im, (int) (point.getX() * tileSize), (int) (point.getY() * tileSize), null);
+                            //Draw image
+                            Image[] list = districtImages.get(c.getCityType().name());
+                            if (list != null) {
+                                int listSize = list.length;
+                                //Id helps make sure that image is the same
+                                Image im = list[point.hashCode() % listSize];
+                                mapGraphics.drawImage(im, (xPos), (yPos), null);
+                            }
+                            //Draw city name
+
+                            //Draw background
+                            mapGraphics.setColor(Color.black);
+                            float fontSize = 15;
+                            Font derivedFont = getFont().deriveFont(fontSize);
+                            int width = getFontMetrics(derivedFont).stringWidth(c.getName());
+
+                            BufferedImage img = new BufferedImage(width, getFontMetrics(derivedFont).getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+
+                            //Draw fancy text
+                            paintTextWithOutline(c.getName(), img.createGraphics(), fontSize);
+
+                            mapGraphics.drawImage(img, xPos - width / 2, (yPos), null);
                         }
                     }
 
@@ -529,6 +555,49 @@ public class PlanetMap extends JPanel {
         private Point convertPoint(int x, int y) {
             return new Point((int) (((x - translateX) / scale) / tileSize),
                     (int) (((y - translateY) / scale) / tileSize));
+        }
+
+        public void paintTextWithOutline(String text, Graphics g, float fontSize) {
+            Color outlineColor = Color.black;
+            Color fillColor = Color.white;
+            BasicStroke outlineStroke = new BasicStroke(fontSize / 10);
+
+            if (g instanceof Graphics2D) {
+                Graphics2D g2 = (Graphics2D) g;
+
+                // remember original settings
+                Color originalColor = g2.getColor();
+                Stroke originalStroke = g2.getStroke();
+                RenderingHints originalHints = g2.getRenderingHints();
+
+                g2.setFont(getFont().deriveFont(fontSize));
+                // create a glyph vector from your text
+                GlyphVector glyphVector = g2.getFont().createGlyphVector(g2.getFontRenderContext(), text);
+                // get the shape object
+                Shape textShape = glyphVector.getOutline();
+
+                // activate anti aliasing for text rendering (if you want it to look nice)
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(RenderingHints.KEY_RENDERING,
+                        RenderingHints.VALUE_RENDER_QUALITY);
+                AffineTransform tx = new AffineTransform();
+
+                tx.translate(0, fontSize);
+                textShape = tx.createTransformedShape(textShape);
+
+                g2.setColor(outlineColor);
+                g2.setStroke(outlineStroke);
+                g2.draw(textShape); // draw outline
+
+                g2.setColor(fillColor);
+                g2.fill(textShape); // fill the shape
+
+                // reset to original settings after painting
+                g2.setColor(originalColor);
+                g2.setStroke(originalStroke);
+                g2.setRenderingHints(originalHints);
+            }
         }
     }
 }

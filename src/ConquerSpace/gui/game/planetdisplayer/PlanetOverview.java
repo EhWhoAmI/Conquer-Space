@@ -151,7 +151,7 @@ public class PlanetOverview extends JPanel {
         planetSectors = new JPanel(new VerticalFlowLayout());
         PlanetMinimap sectorDisplayer = new PlanetMinimap(p, c);
 
-        planetSectors.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map"));
+        planetSectors.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map overview"));
         planetSectors.setPreferredSize(
                 new Dimension(sectorDisplayer.getPreferredSize().width,
                         sectorDisplayer.getPreferredSize().height + 20));
