@@ -118,7 +118,9 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         exitGameButton.setFocusable(false);
         exitGameButton.addActionListener((e) -> {
-            GameController.musicPlayer.clean();
+            if (GameController.musicPlayer != null) {
+                GameController.musicPlayer.clean();
+            }
             System.exit(0);
         });
 

@@ -53,7 +53,6 @@ public class Timer {
         if (!runningThread.isAlive()) {
             runningThread.start();
         }
-
         running = true;
     }
     

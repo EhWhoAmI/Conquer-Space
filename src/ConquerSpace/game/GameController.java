@@ -68,8 +68,9 @@ public class GameController {
 
     public static HashMap<String, Integer> shipTypes;
     public static HashMap<String, Integer> shipTypeClasses;
-    public static GameUpdater updater;
-    public static CivilizationInitializer initer;
+    public static GameTicker updater;
+        
+    //Falls under UI, so have to change position
     public static MusicPlayer musicPlayer;
 
     public static ArrayList<Element> elements;
@@ -96,14 +97,9 @@ public class GameController {
     public GameController() {
         //Init updater
         updater = new GameUpdater(Globals.universe, Globals.date, GameRefreshRate);
-        
-        //First run over control and stuff
-        updater.updateObjectPositions();
-        updater.calculateControl();
-        updater.calculateVision();
-        
-        //Process the 0th turn and initalize the universe.
-        updater.updateUniverse(Globals.universe, Globals.date, 0);
+
+        //First run over all the game
+        updater.tick(0);
 
         //Load the players
         for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
@@ -121,7 +117,7 @@ public class GameController {
                 try {
                     ticker.setWait(playerController.getTickCount());
                     if (!playerController.allowTick()) {
-                        updater.tick();
+                        updater.tick(1);
                     }
                 } catch (Exception e) {
                     ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);

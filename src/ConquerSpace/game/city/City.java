@@ -39,7 +39,7 @@ import java.util.Iterator;
 public class City implements PersonEnterable, ResourceStockpile {
 
     private static int idCounter = 0;
-    private int id;
+    private final int id;
 
     public Population population;
     public static final String CITY_DEFAULT = "emp";

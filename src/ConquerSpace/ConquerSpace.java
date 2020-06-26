@@ -109,7 +109,8 @@ public class ConquerSpace {
     public static String assetChecksum = null;
 
     public static boolean DEBUG = false,
-            TOOLS = false;
+            TOOLS = false,
+            HEADLESS = false;
 
     public static final Properties defaultProperties = new Properties();
 
@@ -141,11 +142,13 @@ public class ConquerSpace {
 
             initLookAndFeel();
 
-            configureMusic();
-
             //New Game Menu
             try {
-                //Add debug menu
+                //Headless, no UI
+                //Turn off music for now
+                if (!HEADLESS) {
+                    configureMusic();
+                }
                 if (DEBUG) {
                     //Debug game loader
                     setDebugUniverseGenerator();
@@ -168,6 +171,7 @@ public class ConquerSpace {
             } catch (Exception e) {
                 //Catch exceptions...
                 ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
+                //Clean up, however we do that
             }
         }
     }
@@ -383,11 +387,14 @@ public class ConquerSpace {
         Options options = new Options();
         options.addOption("d", false, "Debug, default seed (42), all the menus can be skipped");
         options.addOption("t", false, "Run tool viewer");
+        options.addOption("headless", false, "Headless start");
+
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine commandLineArgs = parser.parse(options, args);
             DEBUG = commandLineArgs.hasOption('d');
             TOOLS = commandLineArgs.hasOption('t');
+            HEADLESS = commandLineArgs.hasOption("headless");
         } catch (ParseException ex) {
         }
     }
@@ -451,6 +458,10 @@ public class ConquerSpace {
         //Create generator
         DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
         Globals.generator = gen;
+    }
+    
+    public static void exitGame() {
+        
     }
 
     /**

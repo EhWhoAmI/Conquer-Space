@@ -45,7 +45,7 @@ public class GameState {
     //For evals... 
     //Rate the game refreshes buildings and stuff like that
     //Set to 5 days
-    public static int GameRefreshRate = (5 * 24);
+    public static final int GameRefreshRate = (5 * 24);
 
     //All variables...
     public ArrayList<LaunchSystem> launchSystems;
@@ -82,6 +82,4 @@ public class GameState {
     public GameState() {
         
     }
-    
-    
 }

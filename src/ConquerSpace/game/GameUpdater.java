@@ -74,7 +74,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class GameUpdater {
+public class GameUpdater extends GameTicker {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(GameUpdater.class.getName());
 
@@ -100,24 +100,29 @@ public class GameUpdater {
     }
 
     //Process ingame tick.
-    public synchronized void tick() {
+    @Override
+    public synchronized void tick(int tickIncrement) {
         //DO ticks
-        starDate.increment(1);
-        calculateVision();
+        starDate.increment(tickIncrement);
+
         updateObjectPositions();
 
         //Move ships
         moveShips();
 
-        //Check for month increase
-        if (Globals.date.bigint % GameRefreshRate == 0) {
+        calculateControl();
+        calculateVision();
+
+        //Check for month increase            
+        if (Globals.date.bigint % GameRefreshRate == 1) {
+            LOGGER.trace("Refreshing all the game objects");
             updateGame();
             for (int i = 0; i < universe.getCivilizationCount(); i++) {
                 indexer.index(universe.getCivilization(i));
             }
         }
         //Process people and generate every 1000 ticks, which is about every 41 days
-        if (Globals.date.bigint % (GameRefreshRate * 2) == 0) {
+        if (Globals.date.bigint % (GameRefreshRate * 2) == 1) {
             createPeople();
         }
     }

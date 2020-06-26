@@ -28,14 +28,14 @@ public class StarDate {
      * Ticker is in hours.
      * Is initalized to 24 for day 1.
      */
-    public long bigint = 24L;
+    public long bigint = 1L;
     
     /**
      * Increment the ticker by <code>ticks</code> amount.
      * @param ticks Amount to increment.
      */
     public void increment(long ticks) {
-        bigint++;
+        bigint+=ticks;
     }
     
     /**
