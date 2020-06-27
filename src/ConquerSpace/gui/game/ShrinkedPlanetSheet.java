@@ -183,7 +183,7 @@ public class ShrinkedPlanetSheet extends JPanel {
             addMouseListener(this);
             renderer = new TerrainRenderer(p);
 
-            img = renderer.getImage(scale);
+            img = renderer.getImage();
         }
 
         @Override
