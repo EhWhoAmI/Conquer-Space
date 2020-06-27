@@ -449,7 +449,7 @@ public class RendererImage {
                 latitudePercentage *= 2;
 
                 latitudePercentage = latitudePercentage * latitudePercentage;
-                latitudePercentage = latitudePercentage * latitudePercentage;
+                //latitudePercentage = latitudePercentage * latitudePercentage;
 
                 latitudePercentage = (latitudePercentage * poleTemperature);
 

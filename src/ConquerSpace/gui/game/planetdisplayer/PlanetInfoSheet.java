@@ -61,8 +61,8 @@ public class PlanetInfoSheet extends JPanel {
         this.p = p;
 
         TerrainRenderer renderer = new TerrainRenderer(p);
-        planetImage = renderer.getImage(2d);
-
+        planetImage = renderer.getImage();
+        //planetImage = (planetImage.getScaledInstance((int) (p.getPlanetWidth() * 2d), (int) (p.getPlanetHeight() * 2d), Image.SCALE_DEFAULT));
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
 
@@ -145,7 +145,7 @@ public class PlanetInfoSheet extends JPanel {
             tpane.setEnabledAt(spacePortIndex, false);
         }
     }
-    
+
     void setSelectedTab(int tabIntex) {
         tpane.setSelectedIndex(tabIntex);
     }

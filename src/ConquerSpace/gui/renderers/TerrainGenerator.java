@@ -130,7 +130,35 @@ public class TerrainGenerator {
         return image.toIntArray();
     }
 
-    public Image generateImage(int seed, int octaves, float frequency, float lacunarity, float persistence, int sizeX, int sizeY, float boundsX1, float boundsX2, float boundsY1, float boundsY2, HashMap<Float, Color> colors) {
+    /**
+     * 
+     * @param seed seed of the image
+     * @param octaves Number of octaves. More octaves, higher resolution of image.
+     * @param frequency Changes that occur per unit length
+     * @param lacunarity how often it repeats. Higher means less repititon, lower means more
+     * @param persistence How quickly amplitudes rise and fall
+     * @param sizeX Size of image, width
+     * @param sizeY Size of image, height
+     * @param boundsX1 Part one of the bounds
+     * @param boundsX2
+     * @param boundsY1
+     * @param boundsY2
+     * @param colors
+     * @return 
+     */
+    public Image generateImage(
+            int seed, 
+            int octaves, 
+            float frequency, 
+            float lacunarity, 
+            float persistence, 
+            int sizeX, 
+            int sizeY, 
+            float boundsX1, 
+            float boundsX2, 
+            float boundsY1,
+            float boundsY2, 
+            HashMap<Float, Color> colors) {
         Perlin perlin = new Perlin();
         perlin.setOctaveCount(octaves);
         perlin.setSeed(seed);

@@ -47,9 +47,11 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
@@ -116,7 +118,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         //Edit menu bar
         addWindowListener(this);
         init();
-        
+
         setTitle("Conquer Space " + ConquerSpace.VERSION.getVersionCore());
 
         //Debug stuff
@@ -494,6 +496,12 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         @Override
         protected void paintComponent(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+            //Turn on AA.
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
             switch (drawing) {
                 case DRAW_UNIVERSE:
                     setBackground(new Color(0, 0, 255));
@@ -547,8 +555,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             StarSystem sys = universe.getStarSystem(i);
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
-                                for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == sys.getId() && universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                for (UniversePath p : c.vision.keySet()) {
+                                    if (p.getSystemID() == sys.getId() && c.vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         see(sys.getId());
                                         repaint();
                                         break sectorit;
@@ -610,16 +618,15 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             StarSystem sys = universe.getStarSystem(i);
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
-                                for (UniversePath p : universe.getCivilization(0).vision.keySet()) {
-                                    if (p.getSystemID() == sys.getId()&& universe.getCivilization(0).vision.get(p) > VisionTypes.UNDISCOVERED) {
-                                        JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
-                                        systemInfo.addActionListener(a -> {
-                                            see(sys.getId());
-                                            repaint();
-                                        });
-                                        popupMenu.add(systemInfo);
-                                        break sectorit;
-                                    }
+                                if (c.vision.containsKey(new UniversePath(sys.getId())) && c.vision.get(new UniversePath(sys.getId())) > VisionTypes.UNDISCOVERED) {
+                                    JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
+                                    systemInfo.addActionListener(a -> {
+                                        see(sys.getId());
+                                        repaint();
+                                    });
+                                    popupMenu.add(systemInfo);
+                                    break sectorit;
+
                                 }
                             }
                         }
@@ -687,7 +694,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                 long x = (long) (slope * 10_000_000_000l);
                                 //Get distance of ship to 
                                 ShipMoveAction action = new ShipMoveAction(s);
-                                
+
                                 //TODO: FIX SHIPS
                                 action.setPosition(new SpacePoint(100l, x));
 
@@ -828,12 +835,12 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             //Limit scale
             if (newScale > 0.000001) {
                 scale = newScale;
-                double msX = ((e.getX() * scale));
-                double msY = ((e.getY() * scale));
+                double msX = (e.getX() * scale);
+                double msY = (e.getY() * scale);
                 double scaleChanged = scale - scrollBefore;
 
-                translateX += ((msX * scaleChanged)) / scale;
-                translateY += ((msY * scaleChanged)) / scale;
+                translateX += (msX * scaleChanged) / scale;
+                translateY += (msY * scaleChanged) / scale;
             }
             //Now repaint
             repaint();
