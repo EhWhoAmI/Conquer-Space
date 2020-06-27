@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.universe.generators.CivilizationInitializer;
 import ConquerSpace.Globals;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.controllers.PlayerController;

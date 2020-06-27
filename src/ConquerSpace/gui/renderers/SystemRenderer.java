@@ -81,6 +81,8 @@ public class SystemRenderer {
     private Dimension windowSize = new Dimension(1000, 1000);
 
     private double distanceRatio = 1;
+    
+    private double smallestAccuracy = 5;
 
     public SystemRenderer(StarSystem sys, Universe u, Dimension bounds) {
         this.bounds = bounds;
@@ -99,6 +101,8 @@ public class SystemRenderer {
 
                 long size = 0;
                 int k = 0;
+                
+                //Render terrain
                 for (int i = 0; i < sys.bodies.size(); i++) {
                     Body body = sys.bodies.get(i);
                     if (body instanceof Planet) {
@@ -151,6 +155,9 @@ public class SystemRenderer {
         g2d.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+        
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
         if (skybox != null) {
@@ -181,27 +188,21 @@ public class SystemRenderer {
         );
         g2d.setColor(Color.WHITE);
         g2d.draw(yline);*/
+        
+        //Draw orbit lines
         for (int i = 0; i < sys.bodies.size(); i++) {
             Body planet = sys.bodies.get(i);
-            //Draw orbit circle
-            /*Ellipse2D.Double orbitCitcle = new Ellipse2D.Double(
-                    (translateX + bounds.width / 2 - (p.getOrbitalDistance() * distanceRatio)) / scale,
-                    (translateY + bounds.height / 2 - (p.getOrbitalDistance() * distanceRatio)) / scale,
-                    (p.getOrbitalDistance()) * distanceRatio * 2 / scale,
-                    (p.getOrbitalDistance()) * distanceRatio * 2 / scale);*/
             //Change accuracy based on scale
             double accuracy = scale;
             if (accuracy < 0.1) {
                 accuracy = 0.1;
             }
-            if (accuracy > 15) {
-                accuracy = 15;
+            if (accuracy > smallestAccuracy) {
+                accuracy = smallestAccuracy;
             }
-            GeneralPath circle = createGeneralPath(planet, scale, translateX, translateY, accuracy);
+            GeneralPath orbitPath = createGeneralPath(planet, scale, translateX, translateY, accuracy);
             g2d.setColor(Color.WHITE);
-            g2d.draw(circle);
-
-            //g2d.draw(orbitCitcle);
+            g2d.draw(orbitPath);
         }
 
         int planetCount = 0;
@@ -364,6 +365,7 @@ public class SystemRenderer {
             g2d.draw(measureLine);
         }
 
+        //Debug mouse info
 //        if (mousePosition != null) {
 //            String positionText = String.format("Space Position: %.5f, %.5f, %d, %d",
 //                    (mousePosition.x * scale - translateX - bounds.width / 2) / (distanceRatio),
@@ -398,7 +400,7 @@ public class SystemRenderer {
         if (diff == 0) {
             diff = 1;
         }
-        
+
         g2d.drawString(String.format("%d", 1000 / diff) + " fps", 10, 40);
         fpsCounter = current;
 
@@ -472,7 +474,6 @@ public class SystemRenderer {
         GeneralPath circle = new GeneralPath();
 
         //Do the same thing that we do for calculating position
-        //    private RendererMath.Point calculatePoint(double smajor, double theta, double e, double rot) {
         RendererMath.Point ppt = calculatePoint(planet.getSemiMajorAxis(), 0, planet.getEccentricity(), planet.getRotation());
 
         double cx = (ppt.x * distanceRatio);

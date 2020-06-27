@@ -298,7 +298,15 @@ public class PlanetMap extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+
             Graphics2D g2d = (Graphics2D) g;
+
+            //Turn on AA.
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
+
             g2d.translate(translateX, translateY);
             g2d.scale(scale, scale);
 
@@ -313,7 +321,7 @@ public class PlanetMap extends JPanel {
                     resourceImage = new BufferedImage((int) (p.getPlanetWidth() * tileSize), (int) (p.getPlanetHeight() * tileSize), BufferedImage.TYPE_INT_ARGB);
 
                     Graphics2D resourceGraphics = resourceImage.createGraphics();
-                    resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));
+                    //resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));
 
                     for (int i = 0; i < p.strata.size(); i++) {
                         Stratum v = p.strata.get(i);
@@ -322,12 +330,21 @@ public class PlanetMap extends JPanel {
                                 (v.getY() - v.getRadius()) * tileSize,
                                 v.getRadius() * 2 * tileSize,
                                 v.getRadius() * 2 * tileSize);
-                        resourceGraphics.setColor(Color.ORANGE);
+                        resourceGraphics.setColor(new Color(Color.ORANGE.getRed(), Color.ORANGE.getBlue(), Color.ORANGE.getGreen(), 100));
                         resourceGraphics.fill(circe);
                     }
                 }
-
-                g2d.drawImage(resourceImage, 0, 0, null);
+                if (resourceImage != null) {
+                    g2d.drawImage(resourceImage, 0, 0, null);
+                }
+                for (int i = 0; i < p.strata.size(); i++) {
+                    Stratum v = p.strata.get(i);
+                    float fontSize = 35;
+                    Font derivedFont = getFont().deriveFont(fontSize);
+                    int width = getFontMetrics(derivedFont).stringWidth(v.getName());
+                    //Draw circle
+                    paintTextWithOutline(v.getName(), g2d, fontSize, v.getX() * tileSize - width / 2, v.getY() * tileSize - getFontMetrics(derivedFont).getHeight()/2);
+                }
             }
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
@@ -366,16 +383,14 @@ public class PlanetMap extends JPanel {
 
                             //Draw background
                             mapGraphics.setColor(Color.black);
-                            float fontSize = 15;
+
+                            //Get font stats
+                            float fontSize = 12;
                             Font derivedFont = getFont().deriveFont(fontSize);
                             int width = getFontMetrics(derivedFont).stringWidth(c.getName());
 
-                            BufferedImage img = new BufferedImage(width, getFontMetrics(derivedFont).getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-
                             //Draw fancy text
-                            paintTextWithOutline(c.getName(), img.createGraphics(), fontSize);
-
-                            mapGraphics.drawImage(img, xPos - width / 2, (yPos), null);
+                            paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos);
                         }
                     }
 
@@ -576,14 +591,47 @@ public class PlanetMap extends JPanel {
                 // get the shape object
                 Shape textShape = glyphVector.getOutline();
 
-                // activate anti aliasing for text rendering (if you want it to look nice)
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setRenderingHint(RenderingHints.KEY_RENDERING,
-                        RenderingHints.VALUE_RENDER_QUALITY);
                 AffineTransform tx = new AffineTransform();
 
                 tx.translate(0, fontSize);
+                textShape = tx.createTransformedShape(textShape);
+
+                g2.setColor(outlineColor);
+                g2.setStroke(outlineStroke);
+                g2.draw(textShape); // draw outline
+
+                g2.setColor(fillColor);
+                g2.fill(textShape); // fill the shape
+
+                // reset to original settings after painting
+                g2.setColor(originalColor);
+                g2.setStroke(originalStroke);
+                g2.setRenderingHints(originalHints);
+            }
+        }
+
+        public void paintTextWithOutline(String text, Graphics g, float fontSize, double x, double y) {
+            Color outlineColor = Color.black;
+            Color fillColor = Color.white;
+            BasicStroke outlineStroke = new BasicStroke(fontSize / 10);
+
+            if (g instanceof Graphics2D) {
+                Graphics2D g2 = (Graphics2D) g;
+
+                // remember original settings
+                Color originalColor = g2.getColor();
+                Stroke originalStroke = g2.getStroke();
+                RenderingHints originalHints = g2.getRenderingHints();
+
+                g2.setFont(getFont().deriveFont(fontSize));
+                // create a glyph vector from your text
+                GlyphVector glyphVector = g2.getFont().createGlyphVector(g2.getFontRenderContext(), text);
+                // get the shape object
+                Shape textShape = glyphVector.getOutline();
+
+                AffineTransform tx = new AffineTransform();
+
+                tx.translate(x, fontSize + y);
                 textShape = tx.createTransformedShape(textShape);
 
                 g2.setColor(outlineColor);
