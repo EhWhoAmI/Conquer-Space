@@ -251,7 +251,6 @@ public class PlanetMap extends JPanel {
         private BufferedImage cityMapImage = null;
         private Image planetSurfaceMap = null;
 
-        private Image farmImage;
         private HashMap<String, Image[]> districtImages;
 
         //Pre save images...
@@ -390,7 +389,7 @@ public class PlanetMap extends JPanel {
                             int width = getFontMetrics(derivedFont).stringWidth(c.getName());
 
                             //Draw fancy text
-                            paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight()/2);
+                            paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
                         }
                     }
 
@@ -420,9 +419,35 @@ public class PlanetMap extends JPanel {
         public void mouseDragged(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
                 //Move it
-                //Check if still in view
-                translateX -= (startPoint.x - e.getX()) * scale;
-                translateY -= (startPoint.y - e.getY()) * scale;
+                //Limit scroll amount
+
+                double newTranslateX = translateX - (startPoint.x - e.getX()) * scale;
+                double newTranslateY = translateY - (startPoint.y - e.getY()) * scale;
+
+                if (planetSurfaceMap != null) {
+                    int width = planetSurfaceMap.getWidth(null);
+                    int height = planetSurfaceMap.getHeight(null);
+                    if (newTranslateX > (width * 0.02 * scale)) {
+                        newTranslateX = width * 0.02 * scale;
+                    }
+
+                    double translateLimit = -width;
+
+                    if (newTranslateX < translateLimit) {
+                    newTranslateX = translateLimit;
+                    }
+                    if (newTranslateY > (height * 0.05 * scale)) {
+                        newTranslateY = height * 0.05 * scale;
+                    }
+                    
+                    //Some ratio to limit the thing
+                    translateLimit = -height;
+                    if (newTranslateY < translateLimit) {
+                        newTranslateY = translateLimit;
+                    }
+                }
+                translateX = newTranslateX;
+                translateY = newTranslateY;
                 startPoint = e.getPoint();
                 repaint();
             }
@@ -504,7 +529,7 @@ public class PlanetMap extends JPanel {
             double newScale = (Math.exp(scroll * 0.01) * scale);
 
             //Limit scale
-            if (newScale > 0.05) {
+            if (newScale > 0.1 && newScale < 2d) {
                 //Change scale
                 //double scaleChanged = newScale - scrollBefore;
                 scale = newScale;
