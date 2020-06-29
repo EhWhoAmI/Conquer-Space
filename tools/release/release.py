@@ -11,7 +11,7 @@ zip_name = 'Conquer_Space'
 if __name__ == '__main__':
     if platform == "linux" or platform== "linux2" or platform == "darwin":
         #Nix platform 
-        os.system('../proguard/bin/proguard.sh @{}proguard.txt')
+        os.system('../proguard/bin/proguard.sh @../../proguard.txt')
     elif platform == "win32" or platform == "win64":
         # Windows
         os.system('proguard')
