@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.ConquerSpace;
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.ExitStarSystemAction;
@@ -120,13 +121,12 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         addWindowListener(this);
         init();
 
-        setTitle("Conquer Space " + ConquerSpace.VERSION.getVersionCore());
+        setTitle(LOCALE_MESSAGES.getMessage("GameName") + ConquerSpace.VERSION.getVersionCore());
 
         //Debug stuff
         //addFrame(new DegreeSetter());
         //A window to greet the user
-        JOptionPane.showMessageDialog(this, "We have come to the technological stage where we can Conquer Space.\nOur destiny is with the stars.\n"
-                + "May we live and prosper in these exciting new times.");
+        JOptionPane.showMessageDialog(this, LOCALE_MESSAGES.getMessage("game.start.message"), LOCALE_MESSAGES.getMessage("game.start.message.title"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void addFrame(JInternalFrame frame) {
@@ -185,9 +185,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         addFrame(tsWindow);
 
         //addFrame(newsWindow);
-        JMenu windows = new JMenu("Windows");
-        JMenuItem timeIncrementwindow = new JMenuItem("Main Window");
-        timeIncrementwindow.addActionListener(a -> {
+        JMenu windows = new JMenu(LOCALE_MESSAGES.getMessage("game.main.windows"));
+        JMenuItem mainInterfaceWindowMenuButton = new JMenuItem(LOCALE_MESSAGES.getMessage("game.main.interface"));
+        mainInterfaceWindowMenuButton.addActionListener(a -> {
             if (mainInterfaceWindow != null) {
                 mainInterfaceWindow.setVisible(true);
             } else {
@@ -203,16 +203,16 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             //reload();
         });
 
-        windows.add(timeIncrementwindow);
+        windows.add(mainInterfaceWindowMenuButton);
         //windows.add(reloadWindows);
 
-        JMenu game = new JMenu("Game");
-        JMenuItem pauseplayButton = new JMenuItem("Paused");
+        JMenu game = new JMenu(LOCALE_MESSAGES.getMessage("game.game"));
+        JMenuItem pauseplayButton = new JMenuItem(LOCALE_MESSAGES.getMessage("game.already.paused"));
         pauseplayButton.addActionListener(a -> {
             if (tsWindow.isPaused()) {
-                pauseplayButton.setText("Pause");
+                pauseplayButton.setText(LOCALE_MESSAGES.getMessage("game.pause"));
             } else {
-                pauseplayButton.setText("Paused");
+                pauseplayButton.setText(LOCALE_MESSAGES.getMessage("game.already.paused"));
             }
             a = new ActionEvent(pauseplayButton, 0, "pauseplay");
             tsWindow.actionPerformed(a);
@@ -220,21 +220,21 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         pauseplayButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         game.add(pauseplayButton);
 
-        JMenu views = new JMenu("View");
-        JMenuItem setToUniverseView = new JMenuItem("Go to Universe View");
+        JMenu views = new JMenu(LOCALE_MESSAGES.getMessage("game.view.background.view"));
+        JMenuItem setToUniverseView = new JMenuItem(LOCALE_MESSAGES.getMessage("game.view.background.universe.view"));
         setToUniverseView.addActionListener(a -> {
             desktopPane.drawing = CQSPDesktop.DRAW_UNIVERSE;
             desktopPane.repaint();
         });
         setToUniverseView.setAccelerator(KeyStroke.getKeyStroke((int) '1', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-
-        JMenuItem seeHomePlanet = new JMenuItem("Home Planet");
+        
+        JMenuItem seeHomePlanet = new JMenuItem(LOCALE_MESSAGES.getMessage("game.view.home.planet"));
         seeHomePlanet.addActionListener(a -> {
             desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
-        JMenuItem recenter = new JMenuItem("Recenter");
+        JMenuItem recenter = new JMenuItem(LOCALE_MESSAGES.getMessage("game.view.recenter"));
         recenter.addActionListener(a -> {
             desktopPane.recenter();
             desktopPane.repaint();
@@ -244,22 +244,22 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         views.add(seeHomePlanet);
         views.add(recenter);
 
-        JMenu menu = new JMenu("Alerts");
+        JMenu menu = new JMenu(LOCALE_MESSAGES.getMessage("game.alerts"));
 
-        JMenuItem viewAlert = new JMenuItem("View Alerts");
+        JMenuItem viewAlert = new JMenuItem(LOCALE_MESSAGES.getMessage("game.alerts.view"));
         viewAlert.setAccelerator(KeyStroke.getKeyStroke('l'));
         viewAlert.addActionListener((e) -> {
             addFrame(AlertDisplayer.getInstance());
         });
         menu.add(viewAlert);
 
-        JMenu ownCivInfo = new JMenu("Civilization");
+        JMenu ownCivInfo = new JMenu(LOCALE_MESSAGES.getMessage("game.civilization"));
 
-        JMenuItem allCivInfo = new JMenuItem("My Civilization");
+        JMenuItem allCivInfo = new JMenuItem(LOCALE_MESSAGES.getMessage("game.civilization.my"));
         allCivInfo.addActionListener((e) -> {
             //addFrame(new CivInfoOverview(u.getCivilization(0), u));
         });
-        ownCivInfo.add(allCivInfo);
+        //ownCivInfo.add(allCivInfo);
 
         JMenu techonology = new JMenu("Techonology");
         JMenuItem seetechs = new JMenuItem("See Researched Techs");
@@ -273,9 +273,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             //addFrame(viewer);
         });
 
-        JMenu ships = new JMenu("Ships");
+        JMenu ships = new JMenu(LOCALE_MESSAGES.getMessage("game.ships"));
 
-        JMenuItem allShips = new JMenuItem("All Ships");
+        JMenuItem allShips = new JMenuItem(LOCALE_MESSAGES.getMessage("game.ships.all"));
         allShips.addActionListener(a -> {
             //addFrame(new ShipListManager(u, c));
         });
@@ -306,8 +306,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         //ships.add(shipComponentDesigner);
         //ships.add(satelliteDesigner);
         //ships.add(hullDesigner);
-        JMenu resources = new JMenu("Resources");
-        JMenuItem resourceIndex = new JMenuItem("Resources");
+        JMenu resources = new JMenu(LOCALE_MESSAGES.getMessage("game.resources"));
+        JMenuItem resourceIndex = new JMenuItem(LOCALE_MESSAGES.getMessage("game.resources"));
         resourceIndex.addActionListener(a -> {
             //addFrame(new ResourceManager(c));
         });
@@ -387,7 +387,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     @Override
     public void windowClosing(WindowEvent arg0) {
         if (JOptionPane.showConfirmDialog(this,
-                "Do you want to save the game before exiting?", "Save game",
+                LOCALE_MESSAGES.getMessage("game.save.query"), LOCALE_MESSAGES.getMessage("game.save"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -617,7 +617,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 if (c.vision.containsKey(new UniversePath(sys.getId())) && c.vision.get(new UniversePath(sys.getId())) > VisionTypes.UNDISCOVERED) {
-                                    JMenuItem systemInfo = new JMenuItem("Star system: " + sys.getId());
+                                    JMenuItem systemInfo = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.starsystem"), sys.getId()));
                                     systemInfo.addActionListener(a -> {
                                         see(sys.getId());
                                         repaint();
@@ -638,14 +638,14 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                 if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
                                         (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
                                     if (planet.scanned.contains(c.getId())) {
-                                        JMenuItem planetName = new JMenuItem("Planet " + planet.getId());
+                                        JMenuItem planetName = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.planet"), planet.getId()));
                                         planetName.addActionListener(a -> {
                                             mainInterfaceWindow.setSelectedPlanet(planet, true);
                                             mainInterfaceWindow.setSelectedTab(1);
                                         });
                                         popupMenu.add(planetName);
                                     } else {
-                                        JMenuItem text = new JMenuItem("Planet Unexplored");
+                                        JMenuItem text = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.planet.unexplored"));
                                         text.addActionListener(a -> {
                                             mainInterfaceWindow.setSelectedPlanet(planet, false);
                                             mainInterfaceWindow.setSelectedTab(1);
@@ -663,11 +663,11 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                     default:
                         break;
                 }
-                JMenu selectedShips = new JMenu("Selected Ships");
+                JMenu selectedShips = new JMenu(LOCALE_MESSAGES.getMessage("game.click.popup.ship.selected"));
                 //Get currently selected ships
                 for (Ship s : ((PlayerController) c.controller).selectedShips) {
                     JMenu men = new JMenu(s.toString());
-                    JMenuItem gohereMenu = new JMenuItem("Go here");
+                    JMenuItem gohereMenu = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.goto"));
                     gohereMenu.addActionListener(a -> {
                         //Move position
                         //Convert
@@ -731,7 +731,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                     //Check if orbiting a planet...
                     if (overPlanet && overWhat != null) {
                         //Orbit it! 
-                        JMenuItem orbiting = new JMenuItem("Orbit " + overWhat.getName());
+                        JMenuItem orbiting = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.ship.orbit"), overWhat.getName()));
                         final Planet p = overWhat;
                         orbiting.addActionListener(a -> {
                             //Move position
@@ -748,7 +748,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                     long stype = s.getHull().getShipType();
                     //Survey ship and over planet
                     if (stype == 70 && overPlanet && !overWhat.scanned.contains(c.getId())) {
-                        JMenuItem surveryor = new JMenuItem("Survey planet");
+                        JMenuItem surveryor = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.survey"));
                         final Planet p = overWhat;
 
                         surveryor.addActionListener(a -> {
@@ -773,7 +773,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                     }
 
                     //Add a delete ship action thing
-                    JMenuItem deleteShipAction = new JMenuItem("Delete Ship Actions");
+                    JMenuItem deleteShipAction = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.actions"));
                     deleteShipAction.addActionListener(l -> {
                         s.commands.clear();
                     });
@@ -783,7 +783,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                 }
 
                 //Add a delete all selected ships
-                JMenuItem deleteSelectedShips = new JMenuItem("Delete Selected Ships");
+                JMenuItem deleteSelectedShips = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.ships"));
                 deleteSelectedShips.addActionListener(a -> {
                     ((PlayerController) c.controller).selectedShips.clear();
                 });

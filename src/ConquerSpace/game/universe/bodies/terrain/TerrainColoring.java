@@ -32,7 +32,6 @@ public class TerrainColoring {
 
     public static HashMap<Float, Color> getRockyTerrainColoring(int i) {
         HashMap<Float, Color> colors = new HashMap<>();
-        i = 4;
         switch (i) {
             case 0:
                 colors.put(-1f, new Color(69, 24, 4));

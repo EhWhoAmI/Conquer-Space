@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.SpacePortArea;
@@ -78,15 +79,15 @@ public class PlanetInfoSheet extends JPanel {
         planetEconomy = new PlanetEconomy();
         planetResources = new PlanetResources(p, this);
 
-        tpane.add("Overview", overview);
-        tpane.add("Map", planetMap);
-        tpane.add("Geology", planetGeology);
-        tpane.add("Cities", population);
-        tpane.add("Space Port", spacePort);
-        tpane.add("Atmosphere", atmosphere);
-        tpane.add("Industry", industry);
-        tpane.add("Local Life", localLifeMenu);
-        tpane.add("Resources", planetResources);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.overview"), overview);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.map"), planetMap);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.geology"), planetGeology);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.cities"), population);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.space"), spacePort);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.atmosphere"), atmosphere);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.industry"), industry);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.locallife"), localLifeMenu);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.resources"), planetResources);
 
         ImageIcon overview = ResourceLoader.getIcon("overview.icon");
         ImageIcon map = ResourceLoader.getIcon("globe.icon");

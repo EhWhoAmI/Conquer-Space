@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
@@ -112,12 +113,12 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         });
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)), "Planetary Space Travel Capabilities"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)), LOCALE_MESSAGES.getMessage("game.planet.spaceport.spaceportcount")));
         jPanel1.setLayout(new com.alee.extended.layout.VerticalFlowLayout());
 
         jPanel3.setLayout(new com.alee.extended.layout.HorizontalFlowLayout());
 
-        jLabel1.setText("Spaceports:");
+        jLabel1.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.spaceportcount"));
         jPanel3.add(jLabel1);
         jPanel3.add(spaceportCount);
 
@@ -133,9 +134,10 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setText("What to Launch?");
+        jLabel3.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.whattolaunch"));
         jPanel4.add(jLabel3, new java.awt.GridBagConstraints());
 
+        qlSatorShipTabs.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         qlSatorShipTabs.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         java.awt.GridBagLayout jPanel6Layout = new java.awt.GridBagLayout();
@@ -159,9 +161,9 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         jPanel6.add(jScrollPane1, gridBagConstraints);
 
-        jLabel4.setText("Name:");
+        jLabel4.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.name"));
 
-        jLabel5.setText("Mass:");
+        jLabel5.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.mass"));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -175,7 +177,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(qlSatMassLabel)
                     .addComponent(qlSatNameLabel))
-                .addGap(0, 865, Short.MAX_VALUE))
+                .addGap(0, 1050, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +189,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(qlSatMassLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 96, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -199,7 +201,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         jPanel6.add(jPanel2, gridBagConstraints);
 
-        qlSatorShipTabs.addTab("Satellite", jPanel6);
+        qlSatorShipTabs.addTab(LOCALE_MESSAGES.getMessage("game.planet.spaceport.satellite"), jPanel6);
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
@@ -218,9 +220,9 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         jPanel8.add(jScrollPane2, gridBagConstraints);
 
-        jLabel8.setText("Mass");
+        jLabel8.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.mass"));
 
-        jLabel6.setText("Class Name:");
+        jLabel6.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.classname"));
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -230,7 +232,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
                 .addComponent(qlSpaceshipMass)
-                .addGap(0, 1028, Short.MAX_VALUE))
+                .addGap(0, 1205, Short.MAX_VALUE))
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -247,7 +249,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(qlSpaceshipMass))
-                .addGap(0, 96, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -259,7 +261,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         jPanel8.add(jPanel9, gridBagConstraints);
 
-        qlSatorShipTabs.addTab("Spaceship", jPanel8);
+        qlSatorShipTabs.addTab(LOCALE_MESSAGES.getMessage("game.planet.spaceport.spaceship"), jPanel8);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -267,7 +269,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel4.add(qlSatorShipTabs, gridBagConstraints);
 
-        launchButton.setText("Launch!");
+        launchButton.setText(LOCALE_MESSAGES.getMessage("game.planet.spaceport.launch"));
         launchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 launchButtonActionPerformed(evt);
@@ -281,7 +283,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(launchButton, gridBagConstraints);
 
-        parentTabs.addTab("Quick Launch", jPanel4);
+        parentTabs.addTab(LOCALE_MESSAGES.getMessage("game.planet.spaceport.quicklaunch"), jPanel4);
 
         jPanel5.setLayout(null);
 
@@ -290,7 +292,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         jPanel5.add(jLabel10);
         jLabel10.setBounds(0, 0, 565, 58);
 
-        parentTabs.addTab("Launch from specific launchpad", jPanel5);
+        parentTabs.addTab(LOCALE_MESSAGES.getMessage("game.planet.spaceport.specificpad"), jPanel5);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.IllegalFormatConversionException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.apache.logging.log4j.Logger;
@@ -90,8 +91,19 @@ public class Messages {
         }
     }
 
-    public String getMessage(String s) {
-        String content = bundle.getString(s);
+    public String getMessage(String key) {
+        String content = bundle.getString(key);
+        return (content);
+    }
+
+    public String getMessage(String key, Object... objs) {
+        String content = bundle.getString(key);
+        try {
+            content = String.format(content, objs);
+        } catch (IllegalFormatConversionException ifce) {
+            //Fail silently when there is an incorrect format
+            LOGGER.warn("Problem with formatting " + key);
+        }
         return (content);
     }
 }

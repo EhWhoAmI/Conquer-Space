@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Person;
@@ -121,7 +122,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         fieldListModel = new DefaultListModel<>();
         fieldList = new JList<>(fieldListModel);
         JScrollPane listPane = new JScrollPane(fieldList);
-        techInfoPanel.add(new JLabel("Fields:"));
+        techInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.research.fields") + ":"));
         techInfoPanel.add(listPane);
 
         personComboBoxModel = new DefaultComboBoxModel<>();
@@ -130,11 +131,11 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
                 personComboBoxModel.addElement(p);
             }
         }
-        techInfoPanel.add(new JLabel("Researcher:"));
+        techInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.research.person.researcher") + ":"));
         personComboBox = new JComboBox<>(personComboBoxModel);
         techInfoPanel.add(personComboBox);
 
-        researchButton = new JButton("Research");
+        researchButton = new JButton(LOCALE_MESSAGES.getMessage("game.research.fields"));
         researchButton.setFocusable(false);
         researchButton.addActionListener((e) -> {
             //Get first researcher to research
@@ -149,10 +150,10 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         });
         techInfoPanel.add(researchButton);
         //If has tech points
-        techPointLabel = new JLabel("Tech Points: " + c.getTechPoints());
-        techPointCount = new JLabel("Counts for 0 tech points");
-        instantReshButton = new JButton("Instantly research!");
-        instantReshButton.setToolTipText("Used to research technology instantly, so that the game is not a drag.");
+        techPointLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.research.techpointsleft", c.getTechPoints()));
+        techPointCount = new JLabel(LOCALE_MESSAGES.getMessage("game.research.techpointsworth"));
+        instantReshButton = new JButton(LOCALE_MESSAGES.getMessage("game.research.instantlyresearchbutton"));
+        instantReshButton.setToolTipText(LOCALE_MESSAGES.getMessage("game.research.instantlyresearchbutton.tooltip"));
         instantReshButton.addActionListener(l -> {
             //calculate and add
             if (!tech.isSelectionEmpty()) {
@@ -160,9 +161,9 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
                     Technology t = tech.getSelectedValue();
                     c.researchTech(t);
                     c.setTechPoints(c.getTechPoints() - t.getDifficulty());
-                    techPointLabel.setText("Tech Points: " + c.getTechPoints());
+                    techPointLabel.setText(LOCALE_MESSAGES.getMessage("game.research.techpointsleft", c.getTechPoints()));
                     list.removeElement(tech.getSelectedValue());
-                    c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " has been automatically researched!"));
+                    c.controller.alert(new Alert(0, 0, LOCALE_MESSAGES.getMessage("game.research.alert.autoresearch", t.getName())));
                 }
 
                 //Remove from list
@@ -187,7 +188,11 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         researchProgressPanel = new JPanel();
         researchProgressPanel.setLayout(new VerticalFlowLayout());
 
-        techTableModel = new DefaultTableModel(new String[]{"Tech", "Researcher", "Time left"}, 0);
+        techTableModel = new DefaultTableModel(new String[]{
+            LOCALE_MESSAGES.getMessage("game.research.table.currentlyresearchingtech"),
+            LOCALE_MESSAGES.getMessage("game.research.table.researcher"),
+            LOCALE_MESSAGES.getMessage("game.research.table.timeleft")},
+                0);
         techTable = new JTable(techTableModel);
         JScrollPane techTableContainer = new JScrollPane(techTable);
         researchProgressPanel.add(techTableContainer);
@@ -222,10 +227,10 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
 
         fieldViewer = new FieldViewer(c);
 
-        pane.addTab("Research", techResearcher);
-        pane.addTab("Researching", researchProgressPanel);
-        pane.addTab("Researched Techs", techonologyViewer);
-        pane.addTab("Fields", fieldViewer);
+        pane.addTab(LOCALE_MESSAGES.getMessage("game.research.tab.research"), techResearcher);
+        pane.addTab(LOCALE_MESSAGES.getMessage("game.research.tab.currentlyresearching"), researchProgressPanel);
+        pane.addTab(LOCALE_MESSAGES.getMessage("game.research.tab.alreadyresearched"), techonologyViewer);
+        pane.addTab(LOCALE_MESSAGES.getMessage("game.research.tab.fields"), fieldViewer);
 
         addPropertyChangeListener(this);
 
@@ -239,9 +244,9 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         for (Technology t : c.currentlyResearchingTechonologys.keySet()) {
             if ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
                 researchingTech.setText(t.getName());
-                researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
+                researcher.setText(LOCALE_MESSAGES.getMessage("game.research.researching.researcher", c.currentlyResearchingTechonologys.get(t).getName()));
                 //720 is number of ticks in a month
-                estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
+                estTimeLeft.setText(LOCALE_MESSAGES.getMessage("game.research.researching.timeleft", ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720)));
 
                 //Get the text
                 fieldListModel.clear();
@@ -292,8 +297,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         if (tech.getModel().getSize() > 0 && tech.getSelectedValue() != null) {
             Technology selected = tech.getSelectedValue();
             techName.setText(selected.getName());
-            techdifficulity.setText("Difficulty: " + selected.getDifficulty());
-            techEstTime.setText("Estimated time to completion: " + (Technologies.estFinishTime(selected) / 720) + " months");
+            techdifficulity.setText(LOCALE_MESSAGES.getMessage("game.research.difficulty", selected.getDifficulty()));
+            techEstTime.setText(LOCALE_MESSAGES.getMessage("game.research.estcompletiontime", (Technologies.estFinishTime(selected) / 720) + " months"));
 
             //Get the text
             fieldListModel.clear();
@@ -304,7 +309,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
             //check for tech points
             if (c.getTechPoints() > 0) {
                 //Set value
-                techPointCount.setText("Counts for " + selected.getDifficulty() + " tech points");
+                techPointCount.setText(LOCALE_MESSAGES.getMessage("game.research.techpointsworth",  selected.getDifficulty()));
             } else {
                 //Remove
                 techInfoPanel.remove(techPointLabel);

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -47,20 +48,32 @@ public class AreaConstructionPanel extends JPanel {
     private Planet planet;
     private City city;
 
-    private DefaultListModel<String> areaTypeListModel;
-    private JList<String> areaTypeList;
+    private DefaultListModel<AreaListNames> areaTypeListModel;
+    private JList<AreaListNames> areaTypeList;
 
     private JButton constructButton;
 
     private JPanel areaConstructionInfo;
 
-    private static final String MINE_STRING = "Mine";
-    private static final String MANUFACTURER_STRING = "Manufacturer";
-    private static final String POWER_PLANT_STRING = "Power Plant";
-    private static final String SPACE_PORT_STRING = "Space Port";
-    private static final String OBSERVARTORY_STRING = "Observatory";
+    private enum AreaListNames {
+        Mine("game.planet.construction.mine"),
+        Manufacturer("game.planet.construction.factory"),
+        PowerPlant("game.planet.construction.powerplant"),
+        SpacePort("game.planet.construction.spaceport"),
+        Observatory("game.planet.construction.observatory");
 
-    private static String[] AREA_LIST_NAMES = {MINE_STRING, MANUFACTURER_STRING, POWER_PLANT_STRING, OBSERVARTORY_STRING, SPACE_PORT_STRING};
+        //LOCALE_MESSAGES.getMessage(
+        String text;
+
+        private AreaListNames(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return LOCALE_MESSAGES.getMessage(text);
+        }
+    }
 
     private AreaDesignPanel areaDesignPanel = null;
 
@@ -68,14 +81,14 @@ public class AreaConstructionPanel extends JPanel {
         setLayout(new BorderLayout());
 
         areaTypeListModel = new DefaultListModel<>();
-        for (int i = 0; i < AREA_LIST_NAMES.length; i++) {
+        for (int i = 0; i < AreaListNames.values().length; i++) {
             //Has launch capability
-            if (AREA_LIST_NAMES[i].equals(SPACE_PORT_STRING)) {
+            if (AreaListNames.values()[i].equals(AreaListNames.SpacePort)) {
                 if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
-                    areaTypeListModel.addElement(AREA_LIST_NAMES[i]);
+                    areaTypeListModel.addElement(AreaListNames.values()[i]);
                 }
             } else {
-                areaTypeListModel.addElement(AREA_LIST_NAMES[i]);
+                areaTypeListModel.addElement(AreaListNames.values()[i]);
             }
         }
         areaTypeList = new JList<>(areaTypeListModel);
@@ -83,16 +96,16 @@ public class AreaConstructionPanel extends JPanel {
             areaConstructionInfo.removeAll();
             //Get selected area type
             switch (areaTypeList.getSelectedValue()) {
-                case MINE_STRING:
+                case Mine:
                     areaDesignPanel = new MinerAreaConstructionPanel(planet, city);
                     break;
-                case SPACE_PORT_STRING:
+                case SpacePort:
                     areaDesignPanel = new SpacePortConstructionPanel(planet, city, c);
                     break;
-                case MANUFACTURER_STRING:
+                case Manufacturer:
                     areaDesignPanel = new IndustrialFactoryConstructionPanel(planet, city, c);
                     break;
-                case OBSERVARTORY_STRING:
+                case Observatory:
                     areaDesignPanel = new ObservatoryConstructionPanel(planet, city, c);
                     break;
                 default:
@@ -104,13 +117,13 @@ public class AreaConstructionPanel extends JPanel {
 
         areaConstructionInfo = new JPanel(new BorderLayout());
 
-        constructButton = new JButton("Construct!");
+        constructButton = new JButton(LOCALE_MESSAGES.getMessage("game.planet.construction.construc"));
         constructButton.addActionListener(l -> {
             Area areaToBuild = areaDesignPanel.getAreaToConstruct();
             if (areaDesignPanel != null && areaToBuild != null) {
                 //Then construct area
                 city.addArea(new ConstructingArea(10_000, areaToBuild));
-                JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, "Created Area!");
+                JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, LOCALE_MESSAGES.getMessage("game.planet.construction.created"));
             }
         });
         constructButton.setFocusable(false);

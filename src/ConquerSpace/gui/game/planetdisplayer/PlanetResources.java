@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -119,7 +120,7 @@ public class PlanetResources extends javax.swing.JPanel {
         planetResourceTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(planetResourceTable);
 
-        jTabbedPane1.addTab("Planet Resources", jScrollPane1);
+        jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.planetresources"), jScrollPane1);
 
         jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -159,6 +160,7 @@ public class PlanetResources extends javax.swing.JPanel {
             }
         });
         jPanel1.add(gotoCityButton, java.awt.BorderLayout.CENTER);
+        gotoCityButton.getAccessibleContext().setAccessibleName(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.cityinfo"));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -166,7 +168,7 @@ public class PlanetResources extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel3.add(jPanel1, gridBagConstraints);
 
-        jTabbedPane1.addTab("Individual Storages", jPanel3);
+        jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.individual"), jPanel3);
 
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -181,7 +183,10 @@ public class PlanetResources extends javax.swing.JPanel {
 
     private class StockpileStorageModel extends AbstractTableModel {
 
-        String[] colunmNames = {"Good", "Count", "Change over " + GameController.GameRefreshRate + " ticks"};
+        String[] colunmNames = {
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"), 
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"), 
+            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", GameController.GameRefreshRate)};
 
         @Override
         public int getRowCount() {
@@ -280,7 +285,10 @@ public class PlanetResources extends javax.swing.JPanel {
 
     private class PlanetResourceTableModel extends AbstractTableModel {
 
-        String[] colunmNames = {"Good", "Count", "Change over " + GameController.GameRefreshRate + " ticks"};
+        String[] colunmNames = {
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"), 
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"), 
+            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", GameController.GameRefreshRate)};
 
         @Override
         public int getRowCount() {
@@ -379,9 +387,9 @@ public class PlanetResources extends javax.swing.JPanel {
         public String getElementAt(int index) {
             ResourceStockpile storage = stockpiles.get(index);
             if (storage instanceof City) {
-                return ("Storage at " + ((City) storage).getName());
+                return (LOCALE_MESSAGES.getMessage("game.planet.resources.table.storagedesc", ((City) storage).getName()));
             }
-            return "Storage";
+            return LOCALE_MESSAGES.getMessage("game.planet.resources.table.storage");
         }
 
     }

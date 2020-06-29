@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
@@ -47,6 +48,7 @@ public class LocalLifeMenu extends JPanel {
     
     private DefaultListModel<LifeTrait> lifeTraitListModel;
     private JList<LifeTrait> lifeTraitList;
+    
     public LocalLifeMenu(Planet p, Civilization c) {
         this.p = p;
         localLifeListModel = new DefaultListModel<>();
@@ -55,8 +57,8 @@ public class LocalLifeMenu extends JPanel {
             if(localLifeList.getSelectedValue() != null) {
                 LocalLife ll = localLifeList.getSelectedValue();
                 lifeName.setText(ll.getSpecies().getName());
-                lifeBiomass.setText(ll.getBiomass() + " tons of biomass");
-                reproductionRate.setText(ll.getSpecies().getBaseBreedingRate() + " next month");
+                lifeBiomass.setText(LOCALE_MESSAGES.getMessage("game.planet.locallife.biomass", ll.getBiomass()));
+                reproductionRate.setText(LOCALE_MESSAGES.getMessage("game.planet.locallife.reproduction", ll.getSpecies().getBaseBreedingRate()));
                 
                 lifeTraitListModel.clear();
                 for(LifeTrait lt : ll.getSpecies().lifeTraits) {

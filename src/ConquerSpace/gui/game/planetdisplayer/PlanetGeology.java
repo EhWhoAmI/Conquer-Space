@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.Stratum;
@@ -91,14 +92,14 @@ public class PlanetGeology extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         add(jScrollPane2, gridBagConstraints);
 
-        jLabel3.setText("Depth");
+        jLabel3.setText(LOCALE_MESSAGES.getMessage("game.planet.geology.depth"));
 
-        jLabel4.setText("Radius");
+        jLabel4.setText(LOCALE_MESSAGES.getMessage("game.planet.geology.radius"));
 
         resourceList.setModel(resourceListModel);
         jScrollPane3.setViewportView(resourceList);
 
-        jLabel6.setText("Resources");
+        jLabel6.setText(LOCALE_MESSAGES.getMessage("game.planet.geology.resources"));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -115,7 +116,7 @@ public class PlanetGeology extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(radiusLabel))
                     .addComponent(jLabel6))
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.population.jobs.JobType;
@@ -84,7 +85,10 @@ public class PlanetOverview extends JPanel {
     private JLabel populationCount;
     private JLabel averagePlanetPopGrowthLabel;
 
-    private final String[] jobListTableColunmNames = {"Job Name", "Count", "Percentage"};
+    private final String[] jobListTableColunmNames = {
+        LOCALE_MESSAGES.getMessage("game.planet.overview.table.jobname"),
+        LOCALE_MESSAGES.getMessage("game.planet.overview.table.count"),
+        LOCALE_MESSAGES.getMessage("game.planet.overview.table.percentage")};
     private JPanel jobListPanel;
     private JobTableModel jobListTableModel;
     private JTable jobListTable;
@@ -105,53 +109,49 @@ public class PlanetOverview extends JPanel {
         numberFormatter = NumberFormat.getInstance();
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
-        planetOverview.setBorder(new TitledBorder("Planet Info"));
+        planetOverview.setBorder(new TitledBorder(LOCALE_MESSAGES.getMessage("game.planet.overview.planetinfo")));
         //If name is nothing, then call it unnamed planet
         planetName = new JLabel();
         planetPath = new JLabel();
-        planetSize = new JLabel("Planet radius: " + p.getPlanetSize() * 100 + " km");
+        planetSize = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.radiusinfo", p.getPlanetSize() * 100));
         ownerLabel = new JLabel();
         PolarCoordinate pos = p.orbit.toPolarCoordinate();
-        orbitDistance = new JLabel("Distance: " + numberFormatter.format(pos.getDistance()) + " km, " + numberFormatter.format((double) pos.getDistance() / 149598000d) + " AU");
+        orbitDistance = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.distanceinfo", pos.getDistance(), ((double) pos.getDistance() / 149598000d)));
 
         //Init planetname
         if (p.getName().equals("")) {
-            planetName.setText("Unnamed Planet");
+            planetName.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.unnamedplanet"));
         } else {
             planetName.setText(p.getName());
         }
 
-        //Init planetPath
-        StringBuilder name = new StringBuilder();
-        name.append("Star System ");
-        name.append(p.getParentStarSystem());
-        name.append(" Planet id " + p.getId());
-        planetPath.setText(name.toString());
+        //Show planetPath
+        planetPath.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.universepath", p.getParentStarSystem(), p.getId()));
 
         //Init owner
         if (p.getOwnerID() > -1) {
-            ownerLabel.setText("Owner: " + c.getName());
+            ownerLabel.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.ownerid", c.getName()));
         } else {
-            ownerLabel.setText("No owner");
+            ownerLabel.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.noowner"));
         }
 
         currentStats = new JPanel(new VerticalFlowLayout());
 
-        currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
+        currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("game.planet.overview.populationstatstitle")));
 
         population = 0;
 
-        populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population));
+        populationCount = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.population", Utilities.longToHumanString(p.population)));
         currentStats.add(populationCount);
 
-        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + p.population + "% every now and then");
+        averagePlanetPopGrowthLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.averagegrowth", p.population));
         currentStats.add(averagePlanetPopGrowthLabel);
 
         //Map
         planetSectors = new JPanel(new VerticalFlowLayout());
         PlanetMinimap sectorDisplayer = new PlanetMinimap(p, c);
 
-        planetSectors.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Map overview"));
+        planetSectors.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("game.planet.overview.minimap.title")));
         planetSectors.setPreferredSize(
                 new Dimension(sectorDisplayer.getPreferredSize().width,
                         sectorDisplayer.getPreferredSize().height + 20));
@@ -213,7 +213,7 @@ public class PlanetOverview extends JPanel {
             addMouseListener(this);
             addMouseWheelListener(this);
             addMouseMotionListener(this);
-            setToolTipText("Use the left mouse button to move");
+            setToolTipText(LOCALE_MESSAGES.getMessage("game.planet.overview.minimap.tooltip"));
         }
 
         @Override
@@ -347,7 +347,7 @@ public class PlanetOverview extends JPanel {
             //Limit scale
             if (newScale > 0.05) {
                 if (newScale > 0) {
-                    scale = newScale;
+                    //scale = newScale;
                     double msX = ((e.getX() * scale));
                     double msY = ((e.getY() * scale));
                     double scaleChanged = scale - scrollBefore;

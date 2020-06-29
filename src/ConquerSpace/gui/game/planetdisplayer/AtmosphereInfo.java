@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.Orbitable;
 import ConquerSpace.game.ships.Ship;
@@ -53,7 +54,7 @@ public class AtmosphereInfo extends JPanel {
         //Draw panels and stuff
         //The objects in orbit
         stuffInOrbitPanel = new JPanel(new GridLayout(1, 2));
-        stuffInOrbitPanel.setBorder(new TitledBorder("In Orbit"));
+        stuffInOrbitPanel.setBorder(new TitledBorder(LOCALE_MESSAGES.getMessage("game.planet.atmosphere.orbit")));
 
         //Show all the things in orbit
         shipsInOrbitListModel = new DefaultListModel<>();

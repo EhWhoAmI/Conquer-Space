@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.CapitolArea;
@@ -49,12 +50,15 @@ public class AreaInformationPanel extends JPanel {
         if (a != null) {
             setLayout(new VerticalFlowLayout());
             if (a instanceof ResearchArea) {
-                JLabel title = new JLabel("Research Area");
+                JLabel title = new JLabel("game.planet.areas.research.title");
                 add(title);
 
                 ResearchArea research = (ResearchArea) a;
 
-                DefaultTableModel model = new DefaultTableModel(new String[]{"Field", "Value"}, 0);
+                DefaultTableModel model = new DefaultTableModel(
+                        new String[]{
+                            LOCALE_MESSAGES.getMessage("game.planet.areas.research.table.field"),
+                            LOCALE_MESSAGES.getMessage("game.planet.areas.research.table.value")}, 0);
                 for (Map.Entry<String, Integer> en : research.focusFields.entrySet()) {
                     String key = en.getKey();
                     Integer val = en.getValue();
@@ -72,93 +76,96 @@ public class AreaInformationPanel extends JPanel {
                 JScrollPane scroll = new JScrollPane(table);
                 add(scroll);
             } else if (a instanceof CapitolArea) {
-                JLabel title = new JLabel("Capitol Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.capitol.title"));
                 add(title);
             } else if (a instanceof FinancialArea) {
-                JLabel title = new JLabel("Finance Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.finance.title"));
                 add(title);
             } else if (a instanceof InfrastructureArea) {
-                JLabel title = new JLabel("Infrastructure Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.infrastructure.title"));
                 add(title);
             } else if (a instanceof ManufacturerArea) {
-                JLabel title = new JLabel("Factory Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.title"));
                 add(title);
 
                 ManufacturerArea factory = (ManufacturerArea) a;
 
                 JLabel processName = new JLabel(factory.getProcess().name);
-                String inputString = "Input: ";
+                StringBuilder inputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.input"));
 
                 for (Map.Entry<Integer, Double> entry : factory.getProcess().input.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    inputString = inputString + GameController.goodHashMap.get(key).getName();
-                    inputString = inputString + " amount " + val;
-                    inputString = inputString + ", ";
+                    inputString.append(GameController.goodHashMap.get(key).getName());
+                    inputString.append(" "
+                            + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + " ");
+                    inputString.append(val);
+                    inputString.append(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.separator"));
                 }
 
-                JLabel input = new JLabel(inputString);
+                JLabel input = new JLabel(inputString.toString());
 
-                String outputString = "Output: ";
+                StringBuilder outputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.output"));
                 for (Map.Entry<Integer, Double> entry : factory.getProcess().output.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    outputString = outputString + GameController.goodHashMap.get(key).getName();
-                    outputString = outputString + " amount " + val;
-                    outputString = outputString + ", ";
+                    outputString.append(GameController.goodHashMap.get(key).getName());
+                    outputString.append(" " + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + "");
+                    outputString.append(val);
+                    outputString.append(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.separator"));
                 }
 
-                JLabel output = new JLabel(outputString);
+                JLabel output = new JLabel(outputString.toString());
 
                 add(processName);
                 add(input);
                 add(output);
             } else if (a instanceof FarmFieldArea) {
-                JLabel title = new JLabel("Field Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.farmfield.title"));
                 add(title);
                 FarmFieldArea field = (FarmFieldArea) a;
-                JLabel fieldType = new JLabel("Growing: " + field.getGrown());
+                JLabel fieldType = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.farmfield.growing", field.getGrown()));
                 add(fieldType);
                 if (field.getQueue().size() == 1) {
-                    JLabel timeLeft = new JLabel("Time Left: " + field.getQueue().get(0).getTimeLeft());
+                    JLabel timeLeft = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.farmfield.timeleft", field.getQueue().get(0).getTimeLeft()));
                     add(timeLeft);
                 }
             } else if (a instanceof MineArea) {
-                JLabel title = new JLabel("Mine Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.title"));
                 add(title);
                 MineArea area = (MineArea) a;
-                JLabel resourceMined = new JLabel("Resource Mine: " + area.getResourceMined());
+                JLabel resourceMined = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.mined", area.getResourceMined()));
                 add(resourceMined);
             } else if (a instanceof CommercialArea) {
-                JLabel title = new JLabel("Commercial Area");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.commercial.title"));
                 add(title);
                 CommercialArea area = (CommercialArea) a;
-                JLabel tradeValue = new JLabel("Trade Value: " + area.getTradeValue());
+                JLabel tradeValue = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.commercial.value", area.getTradeValue()));
                 add(tradeValue);
             } else if (a instanceof SpacePortArea) {
-                JLabel title = new JLabel("Space Port");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.title"));
                 add(title);
                 SpacePortArea area = (SpacePortArea) a;
-                JLabel launchSystemLabel = new JLabel("Launch System: " + area.getLaunchSystem().getName());
+                JLabel launchSystemLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.launchsystem", area.getLaunchSystem().getName()));
                 add(launchSystemLabel);
-                JLabel launchPadLabel = new JLabel("Launch Pads: " + area.launchPads.size());
+                JLabel launchPadLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.pads", area.launchPads.size()));
                 add(launchPadLabel);
             } else if (a instanceof ConstructingArea) {
-                JLabel title = new JLabel("Area Under Construction");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.title"));
                 add(title);
                 ConstructingArea area = (ConstructingArea) a;
-                JLabel constructingArea = new JLabel("Building: " + area.getToBuild().toString());
+                JLabel constructingArea = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.what", area.getToBuild().toString()));
                 add(constructingArea);
-                JLabel timeLeft = new JLabel("Time Left: " + area.getTicksLeft());
+                JLabel timeLeft = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getTicksLeft()));
                 add(timeLeft);
             }
 
-            JLabel currentJobs = new JLabel("Current Manpower: " + a.getCurrentlyManningJobs());
-            JLabel minimumJobs = new JLabel("Minimum Jobs Needed: " + a.operatingJobsNeeded());
-            JLabel maximumJobs = new JLabel("Maximum Jobs supportable: " + a.getMaxJobsProvided());
+            JLabel currentJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.current", a.getCurrentlyManningJobs()));
+            JLabel minimumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.minimum", a.operatingJobsNeeded()));
+            JLabel maximumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.maximum", a.getMaxJobsProvided()));
             if (a.getCurrentlyManningJobs() < a.operatingJobsNeeded()) {
                 currentJobs.setForeground(Color.red);
-                currentJobs.setToolTipText("Insufficient manpower to operate this area!");
+                currentJobs.setToolTipText(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.tooltip"));
             }
             add(currentJobs);
             add(minimumJobs);

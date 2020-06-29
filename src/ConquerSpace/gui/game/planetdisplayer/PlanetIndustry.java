@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -61,7 +62,7 @@ public class PlanetIndustry extends JPanel {
     public PlanetIndustry(Planet p, Civilization c) {
         this.p = p;
         setLayout(new VerticalFlowLayout());
-        add(new JLabel("Industry"));
+        add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.industry.title")));
         tabs = new JTabbedPane();
         //Industry stuff includes:
         //Labs, Foundry, Ship yard, Production line, Mill, Etc... 
@@ -98,7 +99,7 @@ public class PlanetIndustry extends JPanel {
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
         areaContainer.add(areaInfoPanel, constraints);
-        tabs.add(areaContainer, "Areas");
+        tabs.add(areaContainer, LOCALE_MESSAGES.getMessage("game.planet.industry.areas"));
         jobSortingOutPanel = new JPanel(new HorizontalFlowLayout());
 
         industryListModel = new DefaultListModel<>();
@@ -118,7 +119,7 @@ public class PlanetIndustry extends JPanel {
         jobSortingOutPanel.add(new JScrollPane(industryList));
         jobSortingOutPanel.add(industryInfoContainer);
 
-        tabs.add(jobSortingOutPanel, "Industries");
+        tabs.add(jobSortingOutPanel, LOCALE_MESSAGES.getMessage("game.planet.industry.industries"));
 
         //availableJobs = new JPanel();
         //availableJobListModel = new JobListModel(p.planetJobs);

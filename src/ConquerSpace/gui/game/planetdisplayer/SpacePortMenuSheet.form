@@ -25,12 +25,13 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Planetary Space Travel Capabilities">
+            <TitledBorder title="&lt;User Code&gt;">
               <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
                   <Color PropertyName="color" blue="cc" green="cc" red="cc" type="rgb"/>
                 </LineBorder>
               </Border>
+              <Connection PropertyName="titleX" code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.spaceportcount&quot;)" type="code"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -45,7 +46,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Spaceports:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.spaceportcount&quot;)" type="code"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="spaceportCount">
@@ -155,8 +158,10 @@
         <Container class="javax.swing.JPanel" name="jPanel4">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Quick Launch">
-                <Property name="tabTitle" type="java.lang.String" value="Quick Launch"/>
+              <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.quicklaunch&quot;)" type="code"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -165,7 +170,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="What to Launch?"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.whattolaunch&quot;)" type="code"/>
+                </Property>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -175,6 +182,7 @@
             </Component>
             <Container class="javax.swing.JTabbedPane" name="qlSatorShipTabs">
               <Properties>
+                <Property name="tabLayoutPolicy" type="int" value="1"/>
                 <Property name="tabPlacement" type="int" value="2"/>
               </Properties>
               <Constraints>
@@ -186,10 +194,15 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="jPanel6">
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel()"/>
+                  </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                      <JTabbedPaneConstraints tabName="Satellite">
-                        <Property name="tabTitle" type="java.lang.String" value="Satellite"/>
+                      <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                        <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.satellite&quot;)" type="code"/>
+                        </Property>
                       </JTabbedPaneConstraints>
                     </Constraint>
                   </Constraints>
@@ -241,7 +254,7 @@
                                       <Component id="qlSatMassLabel" min="-2" max="-2" attributes="0"/>
                                       <Component id="qlSatNameLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="865" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="1050" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -257,7 +270,7 @@
                                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="qlSatMassLabel" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="96" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -265,12 +278,16 @@
                       <SubComponents>
                         <Component class="javax.swing.JLabel" name="jLabel4">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Name:"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.name&quot;)" type="code"/>
+                            </Property>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel5">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Mass:"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.mass&quot;)" type="code"/>
+                            </Property>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="qlSatNameLabel">
@@ -548,8 +565,10 @@
                 <Container class="javax.swing.JPanel" name="jPanel8">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                      <JTabbedPaneConstraints tabName="Spaceship">
-                        <Property name="tabTitle" type="java.lang.String" value="Spaceship"/>
+                      <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                        <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.spaceship&quot;)" type="code"/>
+                        </Property>
                       </JTabbedPaneConstraints>
                     </Constraint>
                   </Constraints>
@@ -597,7 +616,7 @@
                                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="qlSpaceshipMass" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="1028" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="1205" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
@@ -619,7 +638,7 @@
                                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="qlSpaceshipMass" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="96" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -629,12 +648,16 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel8">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Mass"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.mass&quot;)" type="code"/>
+                            </Property>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel6">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Class Name:"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.classname&quot;)" type="code"/>
+                            </Property>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="qlSpaceshipMass">
@@ -647,7 +670,9 @@
             </Container>
             <Component class="javax.swing.JButton" name="launchButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Launch!"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.launch&quot;)" type="code"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="launchButtonActionPerformed"/>
@@ -663,8 +688,10 @@
         <Container class="javax.swing.JPanel" name="jPanel5">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Launch from specific launchpad">
-                <Property name="tabTitle" type="java.lang.String" value="Launch from specific launchpad"/>
+              <JTabbedPaneConstraints tabName="&lt;User Code&gt;">
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="LOCALE_MESSAGES.getMessage(&quot;game.planet.spaceport.specificpad&quot;)" type="code"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.CityType;
@@ -144,7 +145,7 @@ public class PlanetMap extends JPanel {
 
         menuBar = new JMenuBar();
 
-        viewMenu = new JMenu("View");
+        viewMenu = new JMenu(LOCALE_MESSAGES.getMessage("game.planet.map.view"));
 
         ActionListener viewActionListener = (e) -> {
             //Get button pressed..
@@ -182,35 +183,35 @@ public class PlanetMap extends JPanel {
             map.repaint();
         };
 
-        buildingViewButton = new JCheckBoxMenuItem("Building View", true);
+        buildingViewButton = new JCheckBoxMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.building"), true);
         buildingViewButton.addActionListener(viewActionListener);
         //viewMenuButtonGroup.add(normalViewButton);
         viewMenu.add(buildingViewButton);
 
-        showResourceButton = new JCheckBoxMenuItem("Resource View");
+        showResourceButton = new JCheckBoxMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.resource"));
         //viewMenuButtonGroup.add(showResourceButton);
         showResourceButton.addActionListener(viewActionListener);
         viewMenu.add(showResourceButton);
 
         viewMenu.addSeparator();
 
-        showOnlyBuildings = new JMenuItem("Only show buildings");
+        showOnlyBuildings = new JMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.only.building"));
         showOnlyBuildings.addActionListener(viewActionListener);
         viewMenu.add(showOnlyBuildings);
 
-        showOnlyResources = new JMenuItem("Only show resources");
+        showOnlyResources = new JMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.only.resource"));
         showOnlyResources.addActionListener(viewActionListener);
         viewMenu.add(showOnlyResources);
 
         viewMenu.addSeparator();
 
-        buildMenuButton = new JCheckBoxMenuItem("Create New City");
+        buildMenuButton = new JCheckBoxMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.newcity"));
         //viewMenuButtonGroup.add(buildMenuButton);
         buildMenuButton.addActionListener(viewActionListener);
         viewMenu.add(buildMenuButton);
 
         viewMenu.addSeparator();
-        resetViewButton = new JMenuItem("Reset View");
+        resetViewButton = new JMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.reset"));
         resetViewButton.addActionListener(l -> {
             scale = 0.5;
             translateX = 0;
@@ -220,7 +221,7 @@ public class PlanetMap extends JPanel {
 
         viewMenu.add(resetViewButton);
 
-        hideTerrainButton = new JMenuItem("Show/Hide terrain");
+        hideTerrainButton = new JMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.terrain.change"));
         hideTerrainButton.addActionListener(l -> {
             showTerrain = !showTerrain;
         });
@@ -559,9 +560,9 @@ public class PlanetMap extends JPanel {
             if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
                 City b = p.cityDistributions.get(new GeographicPoint(mapX, mapY));
                 if (b != null) {
-                    String cityName = "No City";
+                    String cityName = "game.planet.map.view.nocity";
                     cityName = b.getName();
-                    String text = ("<html>&nbsp;&nbsp;&nbsp;City: " + cityName + "<br/>Type: " + b.getCityType() + "<br/>Position: " + mapX + ", " + mapY + "<br/></html>");
+                    String text = ("<html>&nbsp;&nbsp;&nbsp;" + LOCALE_MESSAGES.getMessage("game.planet.map.view.city", cityName) + "<br/>" + LOCALE_MESSAGES.getMessage("game.planet.map.view.citytype", b.getCityType()) + "<br/>" + LOCALE_MESSAGES.getMessage("game.planet.map.view.position", mapX, mapY) + "<br/></html>");
 
                     toolTip.setTipText(text);
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
@@ -578,7 +579,7 @@ public class PlanetMap extends JPanel {
                 }
 
                 if (!strataToShow.isEmpty()) {
-                    toolTip.setTipText("<html>&nbsp;Layers: " + strataToShow.toString());
+                    toolTip.setTipText("<html>&nbsp;" + LOCALE_MESSAGES.getMessage("game.planet.map.view.layers", strataToShow.toString()));
                     popup = popupFactory.getPopup(this, toolTip, e.getXOnScreen(), e.getYOnScreen());
                     popup.show();
                 }

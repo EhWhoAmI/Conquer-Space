@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameSpeeds;
 import ConquerSpace.game.StarDate;
@@ -63,13 +64,13 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     private JButton optionsWindowButton;
 
     private String[] speeds = {
-        "Slowest",
-        "Slower",
-        "Slow",
-        "Normal",
-        "Fast",
-        "Faster",
-        "Fastest"
+        LOCALE_MESSAGES.getMessage("game.speed.slowest"),
+        LOCALE_MESSAGES.getMessage("game.speed.slower"),
+        LOCALE_MESSAGES.getMessage("game.speed.slow"),
+        LOCALE_MESSAGES.getMessage("game.speed.normal"),
+        LOCALE_MESSAGES.getMessage("game.speed.fast"),
+        LOCALE_MESSAGES.getMessage("game.speed.faster"),
+        LOCALE_MESSAGES.getMessage("game.speed.fastest")
     };
     private boolean isPaused = true;
     private StarDate date;
@@ -83,17 +84,17 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         //Init components
         turnLabel = new JLabel();
         statusProgressBar = new JProgressBar();
-        pausePlayButton = new JButton("Paused");
+        pausePlayButton = new JButton(LOCALE_MESSAGES.getMessage("game.already.paused"));
         speedComboBox = new JComboBox<>(speeds);
-        alertsButton = new JButton("Alerts");
-        manualButton = new JButton("Manual");
-        saveGameButton = new JButton("Save Game");
-        exitGameButton = new JButton("Exit Game");
+        alertsButton = new JButton(LOCALE_MESSAGES.getMessage("game.alerts"));
+        manualButton = new JButton(LOCALE_MESSAGES.getMessage("manual.title"));
+        saveGameButton = new JButton(LOCALE_MESSAGES.getMessage("game.save"));
+        exitGameButton = new JButton(LOCALE_MESSAGES.getMessage("game.exit"));
         //Copy youtube's
-        runningstatsButton = new JButton("Stats for Nerds");
-        optionsWindowButton = new JButton("Options");
+        runningstatsButton = new JButton(LOCALE_MESSAGES.getMessage("game.debug"));
+        optionsWindowButton = new JButton(LOCALE_MESSAGES.getMessage("options.title"));
 
-        turnLabel.setText("Year " + date.getYears() + " Month " + date.getMonthNumber() + " Day " + date.getDays());
+        turnLabel.setText(String.format(LOCALE_MESSAGES.getMessage("game.date.display"), date.getYears(), date.getMonthNumber(), date.getDays()));
 
         statusProgressBar.setIndeterminate(false);
 
@@ -107,7 +108,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         });
         pausePlayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
 
-        speedComboBox.setSelectedItem("Normal");
+        speedComboBox.setSelectedItem(LOCALE_MESSAGES.getMessage("game.speed.normal"));
         speedComboBox.setFocusable(false);
 
         alertsButton.setFocusable(false);
@@ -180,7 +181,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             }
         });
         Timer updater = new Timer(100, (e) -> {
-            turnLabel.setText("Year " + date.getYears() + " Month " + date.getMonthNumber() + " Day " + date.getDays());
+            turnLabel.setText(String.format(LOCALE_MESSAGES.getMessage("game.date.display"), date.getYears(), date.getMonthNumber(), date.getDays()));
         });
         updater.start();
 
@@ -196,11 +197,11 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("pauseplay") || e.getSource() == pausePlayButton) {
             if (isPaused) {
-                (pausePlayButton).setText("Pause");
+                (pausePlayButton).setText(LOCALE_MESSAGES.getMessage("game.pause"));
                 (pausePlayButton).setForeground(Color.green);
                 statusProgressBar.setIndeterminate(true);
             } else {
-                (pausePlayButton).setText("Paused");
+                (pausePlayButton).setText(LOCALE_MESSAGES.getMessage("game.already.paused"));
                 (pausePlayButton).setForeground(Color.red);
                 statusProgressBar.setIndeterminate(false);
             }

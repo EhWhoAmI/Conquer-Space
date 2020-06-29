@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -112,14 +113,14 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         Dimension d = getToolkit().getScreenSize();
         setSize(d.width - 100, d.height - 100);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
-        setTitle("Main Window");
+        setTitle(LOCALE_MESSAGES.getMessage("game.mainwindow.title"));
     }
 
     public void init() {
         setLayout(new BorderLayout());
         tabs = new JTabbedPane();
 
-        universeBreakdownTreeModel = new DefaultMutableTreeNode("Owned Star Systems");
+        universeBreakdownTreeModel = new DefaultMutableTreeNode(LOCALE_MESSAGES.getMessage("game.breakdown.ownedstarsystems"));
         universeBreakdown = new JTree(universeBreakdownTreeModel);
 
         universeBreakdown.addTreeSelectionListener(new TreeSelectionListener() {
@@ -151,18 +152,18 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         shipsComponentsOverviewPanel = new JTabbedPane();
 
         buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(c);
-        shipsComponentsOverviewPanel.add("Design Ship", buildSpaceShipAutomationMenu);
+        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipdesign"), buildSpaceShipAutomationMenu);
 
         satelliteDesigner = new SatelliteDesigner(c);
-        shipsComponentsOverviewPanel.add("Design Satellite", satelliteDesigner);
-        ImageIcon map = new ImageIcon("assets/img/icons/satellite.png");
+        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.satellite"), satelliteDesigner);
+        ImageIcon map = ResourceLoader.getIcon("satellite.icon");
 
         shipsComponentsOverviewPanel.setIconAt(1, map);
         launchSystemDesigner = new LaunchSystemDesigner(c);
         JPanel launchWrapper = new JPanel();
         launchWrapper.setLayout(new VerticalFlowLayout());
         launchWrapper.add(launchSystemDesigner);
-        shipsComponentsOverviewPanel.add("Design Launch System", launchWrapper);
+        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.launchsystem"), launchWrapper);
 
         updateComponents();
 
@@ -185,19 +186,19 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         });
 
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(c);
-        shipsComponentsOverviewPanel.add("Ship Components", shipComponentDesigner);
+        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipcomponent"), shipComponentDesigner);
 
         hullCreator = new HullCreator(c);
-        shipsComponentsOverviewPanel.add("Hulls", hullCreator);
+        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.hulls"), hullCreator);
 
         shipComponentsOverview.add(shipsComponentsOverviewPanel, BorderLayout.CENTER);
 
         JTabbedPane peopleTabs = new JTabbedPane();
         personWindow = new PersonWindow(c, u);
-        peopleTabs.add("Person List", personWindow);
+        peopleTabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.people.list"), personWindow);
 
         recruitingPerson = new RecruitingPerson(c, u);
-        peopleTabs.add("Recruitment", recruitingPerson);
+        peopleTabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.people.recruitment"), recruitingPerson);
 
         civInfoOverview = new CivInfoOverview(c, u);
 
@@ -206,15 +207,15 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         economyWindow = new EconomyWindow(c, u);
 
         eventViewer = new EventViewer();
-        tabs.add("Research and Science", researchViewer);
-        tabs.add("Planet", planetInfoSheetContainer);
-        tabs.add("Ships", spaceShipOverview);
-        tabs.add("Engineering", shipComponentsOverview);
-        tabs.add("People", peopleTabs);
-        tabs.add("My Civilization", civInfoOverview);
-        tabs.add("Resources", resourceManager);
-        tabs.add("Economy", economyWindow);
-        tabs.add("Events", eventViewer);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.research"), researchViewer);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.planet"), planetInfoSheetContainer);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.ships"), spaceShipOverview);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.engineering"), shipComponentsOverview);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.people"), peopleTabs);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.civilization"), civInfoOverview);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.resources"), resourceManager);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.economy"), economyWindow);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.events"), eventViewer);
 
         ImageIcon tab1Icon = ResourceLoader.getIcon("science.icon");
         ImageIcon econ = ResourceLoader.getIcon("economy.icon");

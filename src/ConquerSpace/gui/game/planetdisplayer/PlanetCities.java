@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.planetdisplayer;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
@@ -30,7 +31,6 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -68,11 +68,16 @@ public class PlanetCities extends JPanel {
 
     private JTable jobTable;
     private JobTableModel jobTableModel;
-    private final String[] jobListTableColunmNames = {"Job Name", "Count", "Percentage"};
+    private final String[] jobListTableColunmNames = {
+        LOCALE_MESSAGES.getMessage("game.planet.cities.table.jobname"),
+        LOCALE_MESSAGES.getMessage("game.planet.cities.table.count"),
+        LOCALE_MESSAGES.getMessage("game.planet.cities.table.percentage")};
 
     private JTable availableJobTable;
     private DefaultTableModel availableJobModel;
-    private final String[] availableJobColunmNames = {"Job name", "Count"};
+    private final String[] availableJobColunmNames = {
+        LOCALE_MESSAGES.getMessage("game.planet.cities.table.jobname"),
+        LOCALE_MESSAGES.getMessage("game.planet.cities.table.count")};
 
     private JPanel cityData;
 
@@ -108,7 +113,10 @@ public class PlanetCities extends JPanel {
         growthPanel.setLayout(new VerticalFlowLayout());
         currentStats = new JPanel(new VerticalFlowLayout());
 
-        currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Current population stats"));
+        currentStats.setBorder(
+                BorderFactory.createTitledBorder(
+                        new LineBorder(Color.GRAY),
+                        LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.currentstats")));
         long pop = 0;
         //Get average growth
         float averageGrowthSum = 0;
@@ -129,11 +137,13 @@ public class PlanetCities extends JPanel {
 //            averageGrowthSum += increment;
 //        }
 
-        populationCount = new JLabel("Population: " + Utilities.longToHumanString(p.population));
+        populationCount = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.population", Utilities.longToHumanString(p.population)));
         currentStats.add(populationCount);
 
         averageGrowthSum /= p.cities.size();
-        averagePlanetPopGrowthLabel = new JLabel("Average Growth: " + p.populationIncrease + "% every 40 days");
+        averagePlanetPopGrowthLabel = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.averagegrowth", p.populationIncrease));
 
         cityListPanel = new JPanel();
         cityListPanel.setLayout(new BorderLayout());
@@ -146,15 +156,15 @@ public class PlanetCities extends JPanel {
         cityList.setSelectedIndex(0);
         cityInfoTabs = new JTabbedPane();
         cityInfoTabs.addChangeListener(c -> {
-                if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
-                    citySelectedTab = cityInfoTabs.getSelectedIndex();
+            if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
+                citySelectedTab = cityInfoTabs.getSelectedIndex();
+            }
+            if (areaListModel != null && cityList.getSelectedValue() != null) {
+                for (Area area : cityList.getSelectedValue().areas) {
+                    areaListModel.addElement(area);
                 }
-                if (areaListModel != null && cityList.getSelectedValue() != null) {
-                    for (Area area : cityList.getSelectedValue().areas) {
-                        areaListModel.addElement(area);
-                    }
 
-                }
+            }
         });
 
         //Initialize table
@@ -168,7 +178,10 @@ public class PlanetCities extends JPanel {
         cityList.setVisibleRowCount(50);
 
         cityListPanel.add(scrollPane, BorderLayout.WEST);
-        cityListPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Cities"));
+        cityListPanel.setBorder(
+                BorderFactory.createTitledBorder(
+                        new LineBorder(Color.GRAY),
+                        LOCALE_MESSAGES.getMessage("game.planet.cities.citytitle")));
 
         //City info
         cityData = new JPanel();
@@ -204,33 +217,39 @@ public class PlanetCities extends JPanel {
         //Check if capital city
         for (int i = 0; i < u.getCivilizationCount(); i++) {
             if (u.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
-                JLabel isCapital = new JLabel("Capital City of " + u.getCivilization(i).getName());
+                JLabel isCapital = new JLabel(
+                        LOCALE_MESSAGES.getMessage("game.planet.cities.capital", u.getCivilization(i).getName()));
                 cityData.add(isCapital);
                 break;
             }
         }
 
         //Population
-        JLabel popCount = new JLabel("Population: " + Utilities.longToHumanString(selected.population.getPopulationSize()));
+        JLabel popCount = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(selected.population.getPopulationSize())));
         cityData.add(popCount);
 
         //Get the number of powerplants leading to it
         //Energy usage
-        JLabel energyUsageLabel = new JLabel("Energy Usage (used/provided): " + energyUsage + "/" + energyProvided);
+        JLabel energyUsageLabel = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.energyusage", energyUsage, energyProvided));
         cityData.add(energyUsageLabel);
 
         //Growth
-        JLabel growthAmount = new JLabel("Growth: " + 0 + "%");//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
+        JLabel growthAmount = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.growth", 0));//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
         cityData.add(growthAmount);
 
         //JLabel unemployment = new JLabel("Unemployment: " + );
         //Max population
-        JLabel maxPopulation = new JLabel("Population cap: " + Utilities.longToHumanString(maxPop) + " people");
+        JLabel maxPopulation = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
         cityData.add(maxPopulation);
 
         //Check for govenor
         if (cityList.getSelectedValue().getGovernor() != null) {
-            JLabel governorLabel = new JLabel("Governor: " + selected.getGovernor().getName());
+            JLabel governorLabel = new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.governor", selected.getGovernor().getName()));
             cityData.add(governorLabel);
         }
 
@@ -248,7 +267,8 @@ public class PlanetCities extends JPanel {
 
         cityData.add(new JScrollPane(tagsList));
 
-        JButton viewResourceButton = new JButton("View Resources");
+        JButton viewResourceButton = new JButton(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.viewresources"));
         viewResourceButton.addActionListener(l -> {
             parent.setSelectedTab(8);
             parent.planetResources.jTabbedPane1.setSelectedIndex(1);
@@ -288,11 +308,11 @@ public class PlanetCities extends JPanel {
         areaConstructionPanel = new AreaConstructionPanel(p, owner, selected);
 
         cityInfoTabs.removeAll();
-        cityInfoTabs.add("Areas", areaInfoPanel);
-        cityInfoTabs.add("Employment", new JScrollPane(jobTable));
-        cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
-        cityInfoTabs.add("Construction", areaConstructionPanel);
-        cityInfoTabs.add("Required Resources", new JScrollPane(new JTable(new StockpileStorageModel())));
+        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.areas"), areaInfoPanel);
+        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.employment"), new JScrollPane(jobTable));
+        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.jobs"), new JScrollPane(availableJobTable));
+        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.construction"), areaConstructionPanel);
+        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.resourcedemand"), new JScrollPane(new JTable(new StockpileStorageModel())));
 
         cityInfoTabs.setSelectedIndex(citySelectedTab);
         cityData.add(cityInfoTabs);
@@ -371,7 +391,7 @@ public class PlanetCities extends JPanel {
                 case 0:
                     return jobType.getName();
                 case 1:
-                    return Utilities.longToHumanString(i) + " people";
+                    return LOCALE_MESSAGES.getMessage("game.planet.cities.table.personcounter", Utilities.longToHumanString(i));
                 case 2:
                     return String.format("%.2f%%", (((double) i / (double) population) * 100));
             }
@@ -383,10 +403,12 @@ public class PlanetCities extends JPanel {
             return jobListTableColunmNames[column];
         }
     }
-    
+
     private class StockpileStorageModel extends AbstractTableModel {
 
-        String[] colunmNames = {"Good", "Count"};
+        String[] colunmNames = {
+            LOCALE_MESSAGES.getMessage("game.planet.cities.table.good"),
+            LOCALE_MESSAGES.getMessage("game.planet.cities.table.count")};
 
         @Override
         public int getRowCount() {
