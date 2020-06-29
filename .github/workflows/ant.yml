@@ -25,7 +25,7 @@ jobs:
     - name: Copy libraries
       run: mkdir dist/lib && cp -R lib dist
     - name: Compress Jar
-      run: chmod tools/proguard/bin/*.sh 777 && cd tools/release && python release.py
+      run: chmod 777 tools/proguard/bin/*.sh && cd tools/release && python release.py
     - name: Upload Build
       uses: actions/upload-artifact@v2
       with:
