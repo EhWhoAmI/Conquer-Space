@@ -292,6 +292,7 @@ public class PlanetCities extends JPanel {
         cityInfoTabs.add("Employment", new JScrollPane(jobTable));
         cityInfoTabs.add("Jobs", new JScrollPane(availableJobTable));
         cityInfoTabs.add("Construction", areaConstructionPanel);
+        cityInfoTabs.add("Required Resources", new JScrollPane(new JTable(new StockpileStorageModel())));
 
         cityInfoTabs.setSelectedIndex(citySelectedTab);
         cityData.add(cityInfoTabs);
@@ -380,6 +381,43 @@ public class PlanetCities extends JPanel {
         @Override
         public String getColumnName(int column) {
             return jobListTableColunmNames[column];
+        }
+    }
+    
+    private class StockpileStorageModel extends AbstractTableModel {
+
+        String[] colunmNames = {"Good", "Count"};
+
+        @Override
+        public int getRowCount() {
+            if (currentlySelectedCity == null) {
+                return 0;
+            } else {
+                return currentlySelectedCity.resourceDemands.size();
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunmNames.length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            if (currentlySelectedCity != null) {
+                switch (columnIndex) {
+                    case 0:
+                        return GameController.goodHashMap.get(currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex]);
+                    case 1:
+                        return (currentlySelectedCity.resourceDemands.values().toArray()[rowIndex]);
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunmNames[column];
         }
     }
 }

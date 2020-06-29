@@ -21,6 +21,8 @@ import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.logging.SwingMessageAppender;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,6 +30,7 @@ import java.math.BigInteger;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +64,8 @@ public class DebugStatsWindow extends JInternalFrame {
     private JButton deviceInfo;
 
     private JButton logger;
+
+    private JButton throwException;
 
 //    private TimeSeriesCollection memoryInfoStats;
 //    private TimeSeries usedMemorySeries;
@@ -142,16 +147,27 @@ public class DebugStatsWindow extends JInternalFrame {
         });
 
         logger.addActionListener(l -> {
-            JInternalFrame frame = new JInternalFrame();
-            frame.add(SwingMessageAppender.panel);
-            frame.pack();
-            frame.setResizable(true);
-            frame.setClosable(true);
-            frame.setVisible(true);
+            if (SwingMessageAppender.panel != null) {
+                JInternalFrame frame = new JInternalFrame();
+                frame.add(SwingMessageAppender.panel);
+                frame.pack();
+                frame.setResizable(true);
+                frame.setClosable(true);
+                frame.setVisible(true);
 
-            getDesktopPane().add(frame);
+                getDesktopPane().add(frame);
+            } else {
+                JOptionPane.showMessageDialog(this, "We had an issue opening the log panel", "Could not open log panel", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
+        throwException = new JButton("Exception Roulette");
+        throwException.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent l) {
+                throw new ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything("No u. Seriously, though, you can just press don\'t exit, and nothing will happen.");
+            }
+        });
 //        memoryInfoStats = new TimeSeriesCollection();
 //
 //        usedMemorySeries = new TimeSeries("Used Memory");
@@ -173,6 +189,7 @@ public class DebugStatsWindow extends JInternalFrame {
         add(runTrashCompactor);
         add(openConsole);
         add(logger);
+        add(throwException);
 
         pack();
 
@@ -342,5 +359,17 @@ public class DebugStatsWindow extends JInternalFrame {
 
     public static String byteCountToDisplaySize(final long size) {
         return byteCountToDisplaySize(BigInteger.valueOf(size));
+    }
+
+    //Runtime exception so that it doesn't have to be caught
+    public static class ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything extends RuntimeException {
+
+        public ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything() {
+            super();
+        }
+
+        public ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything(String text) {
+            super(text);
+        }
     }
 }

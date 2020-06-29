@@ -21,11 +21,18 @@ import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.localeMessages;
 import ConquerSpace.Globals;
 import static ConquerSpace.gui.game.DebugStatsWindow.byteCountToDisplaySize;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * The one class I hope no one sees.
@@ -45,25 +52,37 @@ public class ExceptionHandling {
         int exit = 1;
         String header = getHeaderText(what);
 
-        exit = JOptionPane.showConfirmDialog(null,
-                String.format(localeMessages.getMessage("errorhandlingheader"),
-                        ConquerSpace.VERSION,
-                        ConquerSpace.VERSION)
-                + "\n\n" + what + "\n\nDo you want to quit the game?",
-                ex.getClass().getName() + ": " + ex.getMessage(),
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);            //Create dump file
-        writeErrorLog(ex, header);
+        JPanel optionPanel = new JPanel(new VerticalFlowLayout());
 
+        String text = String.format(localeMessages.getMessage("errorhandlingheader"),
+                ConquerSpace.VERSION,
+                ConquerSpace.VERSION)
+                + "\n\n" + what + "\n\nDo you want to quit the game?";
+        String[] content = text.split("\n");
+        for (String s : content) {
+            optionPanel.add(new JLabel(s));
+        }
+
+        StringWriter sw = new StringWriter();
+        ex.printStackTrace(new PrintWriter(sw));
+        String exceptionAsString = sw.toString();
+        optionPanel.add(new JScrollPane(new JTextArea(exceptionAsString)));
+
+        exit = JOptionPane.showConfirmDialog(null,
+                optionPanel,
+                ex.getClass().getName() + ": " + ex.getMessage(),
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);//Create dump file
+
+        writeErrorLog(ex, header);
         if (exit == 0) {
             System.exit(1);
         }
     }
 
     private static void writeErrorLog(Throwable ex, String header) {
-
         PrintWriter writer = null;
         Runtime runtime = Runtime.getRuntime();
-        
+
         File file = new File("crashlog.txt");
         try {
             if (!file.exists()) {
@@ -86,11 +105,11 @@ public class ExceptionHandling {
             } else {
                 writer.println("Asset checksum: not generated yet");
             }
-            
-            if(Globals.universe != null) {
+
+            if (Globals.universe != null) {
                 writer.println("Universe seed: " + Globals.universe.getSeed());
             }
-            
+
             writer.println("Java version: " + System.getProperty("java.version") + " running on " + System.getProperty("os.name"));
             writer.println("Threads running: " + Thread.getAllStackTraces().size());
             writer.println("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()));

@@ -303,10 +303,6 @@ public class AssetReader {
         return trait;
     }
 
-    public static Object processUncompleteGood(JSONObject obj) {
-        return null;
-    }
-
     //Lol the name
     public static Object processProcess(JSONObject obj) {
         String name = obj.getString("name");

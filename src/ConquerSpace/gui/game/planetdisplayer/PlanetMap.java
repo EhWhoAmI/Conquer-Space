@@ -436,6 +436,7 @@ public class PlanetMap extends JPanel {
                     if (newTranslateX < translateLimit) {
                     newTranslateX = translateLimit;
                     }
+                    
                     if (newTranslateY > (height * 0.05 * scale)) {
                         newTranslateY = height * 0.05 * scale;
                     }

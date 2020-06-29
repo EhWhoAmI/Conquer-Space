@@ -459,9 +459,9 @@ public class ConquerSpace {
         DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
         Globals.generator = gen;
     }
-    
+
     public static void exitGame() {
-        
+
     }
 
     /**
