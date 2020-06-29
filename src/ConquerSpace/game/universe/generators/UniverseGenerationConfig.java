@@ -17,6 +17,8 @@
  */
 package ConquerSpace.game.universe.generators;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+
 /**
  * Config of the Universe to be passed on to the scripts.
  *
@@ -33,9 +35,9 @@ public class UniverseGenerationConfig {
     public UniverseSize universeSize;
 
     public static enum UniverseSize {
-        Small("Small"),
-        Medium("Medium"),
-        Large("Large");
+        Small("universe.size.small"),
+        Medium("universe.size.medium"),
+        Large("universe.size.large");
 
         String text;
 
@@ -45,7 +47,7 @@ public class UniverseGenerationConfig {
 
         @Override
         public String toString() {
-            return text;
+            return LOCALE_MESSAGES.getMessage(text);
         }
     }
     /**
@@ -55,7 +57,7 @@ public class UniverseGenerationConfig {
 
     public static enum UniverseShape {
         //Remove spiral and elliptical for now because it is easier
-        Irregular("Irregular");
+        Irregular("universe.shape.irregular");
         String text;
 
         private UniverseShape(String text) {
@@ -64,7 +66,7 @@ public class UniverseGenerationConfig {
 
         @Override
         public String toString() {
-            return text;
+            return LOCALE_MESSAGES.getMessage(text);
         }
     }
 
@@ -74,10 +76,10 @@ public class UniverseGenerationConfig {
     public UniverseAge universeAge;
 
     public static enum UniverseAge {
-        Short("Short"),
-        Medium("Medium"),
-        Long("Long"),
-        Ancient("Ancient");
+        Short("universe.age.short"),
+        Medium("universe.age.medium"),
+        Long("universe.age.long"),
+        Ancient("universe.age.ancient");
 
         String text;
 
@@ -87,7 +89,7 @@ public class UniverseGenerationConfig {
 
         @Override
         public String toString() {
-            return text;
+            return LOCALE_MESSAGES.getMessage(text);
         }
     }
 
@@ -97,8 +99,8 @@ public class UniverseGenerationConfig {
     public PlanetRarity planetCommonality;
 
     public static enum PlanetRarity {
-        Common("Common"),
-        Sparse("Sparse");
+        Common("univerese.planet.rarity.common"),
+        Sparse("univerese.planet.rarity.sparse");
 
         String text;
 
@@ -108,7 +110,7 @@ public class UniverseGenerationConfig {
 
         @Override
         public String toString() {
-            return text;
+            return LOCALE_MESSAGES.getMessage(text);
         }
     }
 
@@ -118,8 +120,8 @@ public class UniverseGenerationConfig {
     public CivilizationCount civilizationCount;
 
     public static enum CivilizationCount {
-        Common("Common"),
-        Sparse("Sparse");
+        Common("universe.civilization.count.common"),
+        Sparse("universe.civilization.count.sparse");
 
         String text;
 
@@ -129,7 +131,7 @@ public class UniverseGenerationConfig {
 
         @Override
         public String toString() {
-            return text;
+            return LOCALE_MESSAGES.getMessage(text);
         }
     }
 

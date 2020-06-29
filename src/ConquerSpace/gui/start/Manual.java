@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.Dimension;
@@ -53,7 +54,7 @@ public class Manual extends JFrame implements ListSelectionListener {
     private JList<String> list;
 
     private Manual() {
-        setTitle("Manual");
+        setTitle(LOCALE_MESSAGES.getMessage("manual.title"));
         DefaultListModel<String> model = new DefaultListModel<>();
         // Open property file
 

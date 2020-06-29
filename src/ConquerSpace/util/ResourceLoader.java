@@ -17,32 +17,48 @@
  */
 package ConquerSpace.util;
 
+import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import javax.swing.ImageIcon;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author EhWhoAmI
  */
 public class ResourceLoader {
-    static Properties prop = new Properties();
+
+    private static final Logger LOGGER = CQSPLogger.getLogger(ResourceLoader.class.getName());
+
+    static final Properties prop = new Properties();
+
     static {
         try {
-            prop.load(new FileInputStream(System.getProperty("user.dir") + "/assets/assets.properties"));
+            String resource = "/assets/assets.properties";
+            InputStream in = ResourceLoader.class.getResourceAsStream(resource);
+            if (in == null) {
+                in = ResourceLoader.class.getClassLoader().getResourceAsStream(resource);
+            }
+            prop.load(in);
         } catch (FileNotFoundException ex) {
+            //Fatal, can't live without it...
+            LOGGER.error(ex);
+            ExceptionHandling.FatalExceptionMessageBox("Failed to load asset properties!", ex);
         } catch (IOException ex) {
+            LOGGER.error(ex);
+            ExceptionHandling.FatalExceptionMessageBox("Failed to load asset properties!", ex);
         }
     }
-    
+
     public static String loadResourceString(String key) {
         return (System.getProperty("user.dir") + "/assets/" + prop.getProperty(key));
     }
-    
+
     public static FileReader silentLoadResourceReader(String key) {
         try {
             return (new FileReader(loadResourceString(key)));
@@ -50,11 +66,11 @@ public class ResourceLoader {
         }
         return null;
     }
-    
+
     public static ImageIcon getIcon(String key) {
         return new ImageIcon(loadResourceString(key));
     }
-    
+
     public static File getResourceByFile(String key) {
         return (new File(loadResourceString(key)));
     }

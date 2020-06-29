@@ -24,6 +24,7 @@ import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.resources.Stratum;
+import ConquerSpace.gui.GraphicsUtil;
 import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.Utilities;
 import ConquerSpace.util.logging.CQSPLogger;
@@ -342,7 +343,7 @@ public class PlanetMap extends JPanel {
                     Font derivedFont = getFont().deriveFont(fontSize);
                     int width = getFontMetrics(derivedFont).stringWidth(v.getName());
                     //Draw circle
-                    paintTextWithOutline(v.getName(), g2d, fontSize, v.getX() * tileSize - width / 2, v.getY() * tileSize - getFontMetrics(derivedFont).getHeight() / 2);
+                    GraphicsUtil.paintTextWithOutline(v.getName(), g2d, fontSize, v.getX() * tileSize - width / 2, v.getY() * tileSize - getFontMetrics(derivedFont).getHeight() / 2);
                 }
             }
             //Normal view 
@@ -389,7 +390,7 @@ public class PlanetMap extends JPanel {
                             int width = getFontMetrics(derivedFont).stringWidth(c.getName());
 
                             //Draw fancy text
-                            paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
+                            GraphicsUtil.paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
                         }
                     }
 
@@ -608,44 +609,6 @@ public class PlanetMap extends JPanel {
         private Point convertPoint(int x, int y) {
             return new Point((int) (((x * scale - translateX)) / tileSize),
                     (int) (((y * scale - translateY)) / tileSize));
-        }
-
-        public void paintTextWithOutline(String text, Graphics g, float fontSize, double x, double y) {
-            Color outlineColor = Color.black;
-            Color fillColor = Color.white;
-            BasicStroke outlineStroke = new BasicStroke(fontSize / 10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-
-            if (g instanceof Graphics2D) {
-                Graphics2D g2 = (Graphics2D) g;
-
-                // remember original settings
-                Color originalColor = g2.getColor();
-                Stroke originalStroke = g2.getStroke();
-                RenderingHints originalHints = g2.getRenderingHints();
-
-                g2.setFont(getFont().deriveFont(fontSize));
-                // create a glyph vector from your text
-                GlyphVector glyphVector = g2.getFont().createGlyphVector(g2.getFontRenderContext(), text);
-                // get the shape object
-                Shape textShape = glyphVector.getOutline();
-
-                AffineTransform tx = new AffineTransform();
-
-                tx.translate(x, fontSize + y);
-                textShape = tx.createTransformedShape(textShape);
-
-                g2.setColor(outlineColor);
-                g2.setStroke(outlineStroke);
-                g2.draw(textShape); // draw outline
-
-                g2.setColor(fillColor);
-                g2.fill(textShape); // fill the shape
-
-                // reset to original settings after painting
-                g2.setColor(originalColor);
-                g2.setStroke(originalStroke);
-                g2.setRenderingHints(originalHints);
-            }
         }
     }
 }

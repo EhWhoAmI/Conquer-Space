@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
@@ -24,6 +25,7 @@ import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
+import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
@@ -66,7 +68,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
         this.menu = menu;
 
         setSize(500, 400);
-        setTitle("New Game");
+        setTitle(LOCALE_MESSAGES.getMessage("newgame.title"));
         setLayout(new VerticalFlowLayout(10, 10));
         //Add components
 
@@ -75,8 +77,8 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
         JPanel bottomContainer = new JPanel();
         bottomContainer.setLayout(new GridLayout(1, 2));
 
-        quoteLabel = new JLabel("Good luck -- Have Fun!");
-        exitButton = new JButton("Done!");
+        quoteLabel = new JLabel(LOCALE_MESSAGES.getMessage("newgame.glhf"));
+        exitButton = new JButton(LOCALE_MESSAGES.getMessage("newgame.done"));
         exitButton.addActionListener(this);
         bottomContainer.add(quoteLabel);
         bottomContainer.add(exitButton);
@@ -86,10 +88,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
         addWindowListener(this);
 
-        try {
-            setIconImage(ImageIO.read(new File("assets/img/icon.png")));
-        } catch (IOException ioe) {
-        }
+        setIconImage(ResourceLoader.getIcon("game.icon").getImage());
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();

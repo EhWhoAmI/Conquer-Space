@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import static ConquerSpace.ConquerSpace.VERSION;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
@@ -77,14 +78,12 @@ public class OptionsWindow extends JFrame implements WindowListener {
     Properties lafProperties = new Properties();
 
     private OptionsWindow() {
-        setTitle("Options");
+        setTitle(LOCALE_MESSAGES.getMessage("options.title"));
         setLayout(new VerticalFlowLayout());
-        logsPanel = new JPanel();
-        logsPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Logs"));
 
         musicPanel = new JPanel();
-        musicPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Music"));
-        musicOnButton = new JCheckBox("Music");
+        musicPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("options.music")));
+        musicOnButton = new JCheckBox(LOCALE_MESSAGES.getMessage("options.music"));
         if (Globals.settings.get("music").equals("yes")) {
             musicOnButton.setSelected(true);
         }
@@ -116,7 +115,7 @@ public class OptionsWindow extends JFrame implements WindowListener {
         DefaultComboBoxModel<String> lafComboBoxModel = new DefaultComboBoxModel<>();
 
         lafPanel = new JPanel();
-        lookAndFeelLabel = new JLabel("Look and feel: ");
+        lookAndFeelLabel = new JLabel(LOCALE_MESSAGES.getMessage("options.laf"));
         lookAndFeelComboBox = new JComboBox<>(lafComboBoxModel);
 
         //Fill with text
@@ -178,7 +177,7 @@ public class OptionsWindow extends JFrame implements WindowListener {
 
         musicPanel.setLayout(new VerticalFlowLayout());
         musicPanel.add(musicOnButton);
-        musicPanel.add(new JLabel("Volume"));
+        musicPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("options.volume")));
         musicPanel.add(musicVolumeSlider);
         addWindowListener(this);
 

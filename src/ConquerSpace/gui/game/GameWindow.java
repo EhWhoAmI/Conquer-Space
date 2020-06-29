@@ -41,6 +41,7 @@ import ConquerSpace.gui.GUI;
 import ConquerSpace.gui.renderers.SystemRenderer;
 import ConquerSpace.gui.renderers.UniverseRenderer;
 import ConquerSpace.util.ExceptionHandling;
+import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
@@ -353,11 +354,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
         setSize(rect.width, rect.height);
 
-        //Set Icon6
-        try {
-            setIconImage(ImageIO.read(new File("assets/img/icon.png")));
-        } catch (IOException ioe) {
-        }
+        //Set Icon
+        setIconImage(ResourceLoader.getIcon("game.icon").getImage());
 
         setVisible(true);
 

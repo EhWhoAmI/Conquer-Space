@@ -53,8 +53,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.logging.log4j.Logger;
 
 /*
@@ -103,14 +105,17 @@ public class ConquerSpace {
     /**
      * Localization.
      */
-    public static Messages localeMessages;
+    public static Messages LOCALE_MESSAGES;
+    public static Locale locale = null;
+    public static final Locale DEFAULT_LOCALE = new Locale("en", "us");
 
     public static String codeChecksum = null;
     public static String assetChecksum = null;
 
     public static boolean DEBUG = false,
             TOOLS = false,
-            HEADLESS = false;
+            HEADLESS = false,
+            TRANSLATE_TEST = false;
 
     public static final Properties defaultProperties = new Properties();
 
@@ -137,16 +142,18 @@ public class ConquerSpace {
             setDefaultOptions();
             configureSettings();
 
-            //Set catch all exceptions in game thread
-            Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
-
-            initLookAndFeel();
+            //Set language
+            LOCALE_MESSAGES = new Messages(ConquerSpace.locale);
 
             //New Game Menu
             try {
                 //Headless, no UI
                 //Turn off music for now
                 if (!HEADLESS) {
+                    //Set catch all exceptions in game thread
+                    Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
+
+                    initLookAndFeel();
                     configureMusic();
                 }
                 if (DEBUG) {
@@ -340,15 +347,23 @@ public class ConquerSpace {
 
         //Get settings
         String locale = Globals.settings.getProperty("locale");
-        String[] locales = locale.split("-");
-        localeMessages = new Messages(new Locale(locales[0], locales[1]));
+        if (ConquerSpace.locale == null) {
+            try {
+                ConquerSpace.locale = LocaleUtils.toLocale(locale);
+            } catch (IllegalArgumentException ar) {
+                LOGGER.warn("Invalid locale " + locale + " using default: " + ConquerSpace.DEFAULT_LOCALE.toString());
+                ConquerSpace.locale = DEFAULT_LOCALE;
+            }
+        }
 
         //get version
         String version = Globals.settings.getProperty("version");
         //Do something
-        Version v = new Version(version);
+        if (version != null) {
+            Version v = new Version(version);
+        }
         //Check if not equal
-        //if(v.)
+
         //Music
     }
 
@@ -375,7 +390,7 @@ public class ConquerSpace {
                 LOGGER.info("Code checksum: " + codeChecksum);
                 LOGGER.info("Asset checksum: " + assetChecksum);
                 long end = System.currentTimeMillis();
-                LOGGER.info("Time needed to calculate checksum: " + (end - start));
+                LOGGER.info("Time needed to calculate checksum: " + (end - start) + "ms");
             }
         };
         Thread checksumThread = new Thread(runnable);
@@ -389,20 +404,43 @@ public class ConquerSpace {
         options.addOption("t", false, "Run tool viewer");
         options.addOption("headless", false, "Headless start");
 
+        Option translateOption = Option.builder("translate")
+                .optionalArg(true)
+                .numberOfArgs(1)
+                .desc("Debug translations")
+                .build();
+        options.addOption(translateOption);
+
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine commandLineArgs = parser.parse(options, args);
             DEBUG = commandLineArgs.hasOption('d');
             TOOLS = commandLineArgs.hasOption('t');
             HEADLESS = commandLineArgs.hasOption("headless");
+            TRANSLATE_TEST = commandLineArgs.hasOption("translate");
+
+            //Deal with locale
+            String translateLocale = commandLineArgs.getOptionValue("translate");
+            LOGGER.info("Loading Locale " + translateLocale);
+            if (translateLocale != null) {
+                //Set locale to test, later
+                try {
+                    ConquerSpace.locale = LocaleUtils.toLocale(translateLocale);
+                } catch (IllegalArgumentException iae) {
+                    LOGGER.warn("Invalid locale " + translateLocale + " using default: " + ConquerSpace.DEFAULT_LOCALE.toString());
+                    ConquerSpace.locale = DEFAULT_LOCALE;
+                }
+            }
+
         } catch (ParseException ex) {
+            LOGGER.warn(ex);
         }
     }
 
     static void setDefaultOptions() {
         //The default and required options that exist for backward compatability
         //Default settings
-        defaultProperties.setProperty("locale", "en-US");
+        defaultProperties.setProperty("locale", "en_US");
 
         //Version
         defaultProperties.setProperty("version", VERSION.toString());

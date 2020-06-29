@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.start;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.event.WindowAdapter;
@@ -75,10 +76,10 @@ public class ManualContent extends JFrame {
             file = e.toXML();
         } catch (ParsingException ex) {
             LOGGER.warn("Parsing exception:" + ex.toString(), ex);
-            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
+            ExceptionHandling.ExceptionMessageBox(LOCALE_MESSAGES.getMessage("manual.open.fail"), ex);
         } catch (IOException ex) {
             LOGGER.warn("IO Exception:" + ex.getMessage(), ex);
-            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
+            ExceptionHandling.ExceptionMessageBox(LOCALE_MESSAGES.getMessage("manual.open.fail"), ex);
         }
         instance.setText(file);
         return instance;

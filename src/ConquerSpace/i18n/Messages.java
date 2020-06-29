@@ -17,8 +17,14 @@
  */
 package ConquerSpace.i18n;
 
+import ConquerSpace.ConquerSpace;
+import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -45,39 +51,47 @@ public class Messages {
             URL[] urls = {resourcesFolder.toURI().toURL()};
             ClassLoader loader = new URLClassLoader(urls);
             bundle = ResourceBundle.getBundle(("ApplicationMessages").replace("/", "."), Locale.getDefault(), loader);
+            return;
         } catch (MalformedURLException ex) {
             LOGGER.error(ex);
         }
+
+        loadDefaultbundle();
     }
 
     public Messages(Locale l) {
-        for (Locale loc : SUPPORTED_LOCALES) {
-            if (loc.equals(l)) {
-                try {
-                    File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
-                    URL[] urls = {resourcesFolder.toURI().toURL()};
-                    ClassLoader loader = new URLClassLoader(urls);
-                    bundle = ResourceBundle.getBundle(("ApplicationMessages").replace("/", "."), l, loader);
-                } catch (MalformedURLException ex) {
-                    LOGGER.error(ex);
-                }
-                return;
-            }
-        }
+        //Load resource file
+        LOGGER.warn("Loading locale " + l.toString());
 
-        LOGGER.warn("Can't find locale!");
+        File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/ApplicationMessages_" + l.toString() + ".properties");
         try {
-            File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
-            URL[] urls = {resourcesFolder.toURI().toURL()};
-            ClassLoader loader = new URLClassLoader(urls);
-            bundle = ResourceBundle.getBundle(("ApplicationMessages").replace("/", "."), new Locale("en", "us"), loader);
-        } catch (MalformedURLException ex) {
-            LOGGER.error(ex);
+            FileInputStream is = new FileInputStream(resourcesFolder);
+            bundle = new IncompleteResourceBundle(is);
+            return;
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
         }
 
+        LOGGER.warn("Can't find locale " + l.toString());
+
+        loadDefaultbundle();
+    }
+
+    private void loadDefaultbundle() {
+        try {
+            LOGGER.info("Loading default bundle " + ConquerSpace.DEFAULT_LOCALE);
+            //Default bundle is in assets, so we don't meet any issues, unless they mess with the jar itself
+            InputStream in = getClass().getResourceAsStream("/assets/i18n/ApplicationMessages_" + ConquerSpace.DEFAULT_LOCALE.toString() + ".properties");
+
+            bundle = new IncompleteResourceBundle(in);
+        } catch (Exception ex) {
+            LOGGER.error(ex);
+            ExceptionHandling.FatalExceptionMessageBox("Failed to load backup application messages!", ex);
+        }
     }
 
     public String getMessage(String s) {
-        return (bundle.getString(s));
+        String content = bundle.getString(s);
+        return (content);
     }
 }

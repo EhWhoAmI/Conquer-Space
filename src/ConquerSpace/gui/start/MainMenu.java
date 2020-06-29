@@ -18,8 +18,9 @@
 package ConquerSpace.gui.start;
 
 import ConquerSpace.ConquerSpace;
-import static ConquerSpace.ConquerSpace.localeMessages;
 import ConquerSpace.game.GameController;
+import ConquerSpace.gui.GraphicsUtil;
+import ConquerSpace.util.ResourceLoader;
 import ConquerSpace.util.logging.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,6 +30,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -47,6 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 
 /**
  * Main menu.
@@ -59,12 +62,12 @@ public class MainMenu extends JFrame implements WindowListener {
     private static final Logger LOGGER = CQSPLogger.getLogger(MainMenu.class.getName());
 
     private boolean loadedUniverse = false;
-    
+
     /**
      * Constructor, show main menu.
      */
     public MainMenu() {
-        setTitle(localeMessages.getMessage("GameName"));
+        setTitle(LOCALE_MESSAGES.getMessage("GameName"));
         setLayout(new BorderLayout());
 
         TopBanner topBanner = new TopBanner();
@@ -75,10 +78,8 @@ public class MainMenu extends JFrame implements WindowListener {
         add(topBanner, BorderLayout.NORTH);
         add(new BottomMenu(), BorderLayout.SOUTH);
 
-        try {
-            setIconImage(ImageIO.read(new File("assets/img/icon.png")));
-        } catch (IOException ioe) {
-        }
+        setIconImage(ResourceLoader.getIcon("game.icon").getImage());
+        
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addWindowListener(this);
@@ -132,15 +133,15 @@ public class MainMenu extends JFrame implements WindowListener {
         Font f = new Font(getFont().getFontName(), Font.BOLD, 28);
 
         public TopBanner() {
-            File dir = new File(System.getProperty("user.dir")
-                    + "/assets/img/banners");
+            File dir = ResourceLoader.getResourceByFile("image.titlebanner.dir");
             File[] files = dir.listFiles();
             //Select random file
             selectedImage = (int) (Math.random() * (files.length));
             try {
                 image = ImageIO.read(files[selectedImage]);
             } catch (IOException ex) {
-
+                //No image, so F
+                LOGGER.warn("Unable to open image!", ex);
             }
         }
 
@@ -152,11 +153,28 @@ public class MainMenu extends JFrame implements WindowListener {
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
+            //Turn on AA.
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
+
             g2d.setColor(Color.BLUE);
             g2d.fillRect(0, 0, getWidth(), getHeight());
 
             //Image is a bit small though.
-            g2d.drawImage(image, null, 0, 0);
+            if (image != null) {
+                g2d.drawImage(image, null, 0, 0);
+            } else {
+                g2d.setColor(Color.WHITE);
+                Font f = g2d.getFont().deriveFont(40f);
+                String cqspString = LOCALE_MESSAGES.getMessage("GameName");
+                int height = getFontMetrics(f).getHeight();
+                GraphicsUtil.paintTextWithOutline(cqspString, g2d, 60f, 0, 0);
+
+                String secondString = LOCALE_MESSAGES.getMessage("start.gui.MainMenu.nobanner");
+                g2d.drawString(secondString, 0, height * 2);
+            }
         }
     }
 
@@ -179,12 +197,12 @@ public class MainMenu extends JFrame implements WindowListener {
         public BottomMenu() {
             setLayout(new GridLayout(2, 3, 5, 5));
 
-            startGame = new JButton(localeMessages.getMessage("start.gui.MainMenu.startgame"));
-            resumeGame = new JButton(localeMessages.getMessage("start.gui.MainMenu.resumegame"));
-            about = new JButton(localeMessages.getMessage("start.gui.MainMenu.about"));
-            manual = new JButton(localeMessages.getMessage("start.gui.MainMenu.manual"));
-            credits = new JButton(localeMessages.getMessage("start.gui.MainMenu.credits"));
-            options = new JButton(localeMessages.getMessage("start.gui.MainMenu.options"));
+            startGame = new JButton(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.startgame"));
+            resumeGame = new JButton(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.resumegame"));
+            about = new JButton(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.about"));
+            manual = new JButton(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.manual"));
+            credits = new JButton(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.credits"));
+            options = new JButton(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.options"));
 
             //Action Listeners
             startGame.addActionListener(e -> {
@@ -194,11 +212,11 @@ public class MainMenu extends JFrame implements WindowListener {
             });
 
             resumeGame.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, localeMessages.getMessage("start.gui.MainMenu.notimplemented"), localeMessages.getMessage("start.gui.MainMenu.oops"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, LOCALE_MESSAGES.getMessage("start.gui.MainMenu.notimplemented"), LOCALE_MESSAGES.getMessage("start.gui.MainMenu.oops"), JOptionPane.INFORMATION_MESSAGE);
             });
 
             about.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, String.format(localeMessages.getMessage("start.gui.MainMenu.versiontext"), ConquerSpace.VERSION.toString(), System.getProperty("java.version")), localeMessages.getMessage("start.gui.MainMenu.about"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, String.format(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.versiontext"), ConquerSpace.VERSION.toString(), System.getProperty("java.version")), LOCALE_MESSAGES.getMessage("start.gui.MainMenu.about"), JOptionPane.INFORMATION_MESSAGE);
             });
 
             manual.addActionListener(e -> {
@@ -243,7 +261,7 @@ public class MainMenu extends JFrame implements WindowListener {
                     JFrame frame = new JFrame();
                     frame.add(scroll);
                     frame.setSize(300, 500);
-                    frame.setTitle(localeMessages.getMessage("start.gui.MainMenu.credits"));
+                    frame.setTitle(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.credits"));
                     frame.setVisible(true);
                 } catch (FileNotFoundException ex) {
                     LOGGER.warn("", ex);

@@ -17,6 +17,8 @@
  */
 package ConquerSpace.game.organizations.civilization;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+
 /**
  * Class of the civ preferred climate. Completely arbitrary, needs to change to
  * better stats
@@ -24,9 +26,9 @@ package ConquerSpace.game.organizations.civilization;
  * @author EhWhoAmI
  */
 public enum CivilizationPreferredClimateType {
-    Varied("Varied"),
-    Hot("Hot"),
-    Cold("Cold");
+    Varied("civ.climate.varied"),
+    Hot("civ.climate.hot"),
+    Cold("civ.climate.cold");
 
     String text;
 
@@ -36,6 +38,6 @@ public enum CivilizationPreferredClimateType {
 
     @Override
     public String toString() {
-        return text;
+        return LOCALE_MESSAGES.getMessage(text);
     }
 }

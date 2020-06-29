@@ -89,8 +89,6 @@
         
         <buildnumber file="assets/BUILDNO"/>
         <echo message="Changing build number"/>
-        <!--Uncomment for release, because netbeans is dumb and does not allow different build configurations-->
-        <!--<antcall target="compress"/>-->
     </target>
     
     <target name="compress">

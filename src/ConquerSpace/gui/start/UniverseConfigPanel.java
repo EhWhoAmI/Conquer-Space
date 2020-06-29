@@ -18,6 +18,7 @@
 package ConquerSpace.gui.start;
 
 import static ConquerSpace.ConquerSpace.DEBUG;
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import java.awt.Color;
@@ -79,29 +80,29 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         lsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));
         lsidePan.setLayout(new GridLayout(3, 4, 10, 10));
 
-        universeSizeLabel = new JLabel("Universe Size");
-        universeSizeLabel.setToolTipText("Determines the size of the galxy");
+        universeSizeLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.config.size"));
+        universeSizeLabel.setToolTipText(LOCALE_MESSAGES.getMessage("universe.config.size.tooltip"));
         universeSizeBox = new JComboBox<>(UniverseGenerationConfig.UniverseSize.values());
 
-        universeTypeLabel = new JLabel("Universe Type");
-        universeTypeLabel.setToolTipText("<DOES NOTHING> Determines the shape of the galaxy.");
+        universeTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.config.shape"));
+        universeTypeLabel.setToolTipText(LOCALE_MESSAGES.getMessage("universe.config.tooltip.useless") + LOCALE_MESSAGES.getMessage("universe.config.shape"));
         universeTypeComboBox = new JComboBox<>(UniverseGenerationConfig.UniverseShape.values());
 
         //Doesnt make a difference for now...
-        universeHistoryLabel = new JLabel("Universe Age");
-        universeHistoryLabel.setToolTipText("<DOES NOTHING> Determines how old the galaxy is");
+        universeHistoryLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.config.age"));
+        universeHistoryLabel.setToolTipText(LOCALE_MESSAGES.getMessage("universe.config.tooltip.useless") + LOCALE_MESSAGES.getMessage("universe.config.age.tooltip"));
         universeHistoryComboBox = new JComboBox<>(UniverseGenerationConfig.UniverseAge.values());
 
-        planetCommonalityLabel = new JLabel("Planet Commonality");
-        planetCommonalityLabel.setToolTipText("<DOES NOTHING> Determines how many planets there are in the galaxy.");
+        planetCommonalityLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.config.planets"));
+        planetCommonalityLabel.setToolTipText(LOCALE_MESSAGES.getMessage("universe.config.tooltip.useless") + LOCALE_MESSAGES.getMessage("universe.config.planets.tooltip"));
         planetCommonalityComboBox = new JComboBox<>(UniverseGenerationConfig.PlanetRarity.values());
 
-        civilizationCountLabel = new JLabel("Civilization Count");
-        civilizationCountLabel.setToolTipText("<DOES NOTHING> Determines how many civilizations there are in the galaxy.");
+        civilizationCountLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.config.civilization.count"));
+        civilizationCountLabel.setToolTipText(LOCALE_MESSAGES.getMessage("universe.config.tooltip.useless") + LOCALE_MESSAGES.getMessage("universe.config.civilization.count.tooltip"));
         civilizationCountComboBox = new JComboBox<>(UniverseGenerationConfig.CivilizationCount.values());
 
-        seedLabel = new JLabel("Seed");
-        seedLabel.setToolTipText("Determines what the galaxy looks like.");
+        seedLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.config.seed"));
+        seedLabel.setToolTipText(LOCALE_MESSAGES.getMessage("universe.config.seed.tooltip"));
         seedText = new JTextField();
         if (DEBUG) {
             seedText.setText("test");
@@ -113,10 +114,10 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         rsidePan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Universe Options"));
         rsidePan.setLayout(new GridLayout(4, 4, 10, 10));
 
-        civNameLabel = new JLabel("Civilization Name");
+        civNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name"));
         civNameTextField = new JTextField("Humans");
 
-        civSymbolLabel = new JLabel("Civilization Symbol");
+        civSymbolLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.symbol"));
         //symbol list (Alphabet)
         String[] list = new String[26];
         for (int i = 0; i < list.length; i++) {
@@ -125,24 +126,24 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         SpinnerListModel mod = new SpinnerListModel(list);
         civSymbolSpinner = new JSpinner(mod);
 
-        civColorLabel = new JLabel("Civilization Color");
-        civColorChooserButton = new JButton("Choose");
+        civColorLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.color"));
+        civColorChooserButton = new JButton(LOCALE_MESSAGES.getMessage("universe.civ.config.color.choose"));
         civColorChooserButton.setBackground(civColor);
         civColorChooserButton.addActionListener(this);
 
-        civHomePlanetNameLabel = new JLabel("Home Planet Name");
+        civHomePlanetNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.planet"));
         civHomePlanetName = new JTextField("Earth");
 
-        civTempResistanceLabel = new JLabel("Civilization Preferred Climate");
+        civTempResistanceLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.climate"));
         civTempResistanceComboBox = new JComboBox<>(CivilizationPreferredClimateType.values());
 
-        speciesNameLabel = new JLabel("Species Name");
+        speciesNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.species"));
         speciesNameField = new JTextField("Earthlings");
 
-        currencyNameLabel = new JLabel("Currency Name");
+        currencyNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.currency"));
         currencyNameTextField = new JTextField("Money");
 
-        currencySymbolLabel = new JLabel("Currency Symbol");
+        currencySymbolLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.symbol.currency"));
         currencySymbolTextField = new JTextField("M");
 
         lsidePan.add(universeSizeLabel);
@@ -184,7 +185,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == civColorChooserButton) {
             //Show the civ color chooser
-            civColor = JColorChooser.showDialog(null, "Choose Civilization Color", civColor);
+            civColor = JColorChooser.showDialog(null, LOCALE_MESSAGES.getMessage("Choose Civilization Color"), civColor);
             civColorChooserButton.setBackground(civColor);
         }
     }

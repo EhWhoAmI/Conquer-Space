@@ -18,7 +18,6 @@
 package ConquerSpace.util;
 
 import ConquerSpace.ConquerSpace;
-import static ConquerSpace.ConquerSpace.localeMessages;
 import ConquerSpace.Globals;
 import static ConquerSpace.gui.game.DebugStatsWindow.byteCountToDisplaySize;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -32,7 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 
 /**
  * The one class I hope no one sees.
@@ -50,14 +49,35 @@ public class ExceptionHandling {
      */
     public static void ExceptionMessageBox(String what, Throwable ex) {
         int exit = 1;
-        String header = getHeaderText(what);
 
+        JPanel optionPanel = createOptionPanel(what, ex);
+
+        exit = JOptionPane.showConfirmDialog(null,
+                optionPanel,
+                String.format(LOCALE_MESSAGES.getMessage("errorhandlingtitle"), ex.getClass().getName() ,ex.getMessage()),
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);//Create dump file
+
+        writeErrorLog(ex, what);
+        if (exit == 0) {
+            System.exit(1);
+        }
+    }
+
+    public static void FatalExceptionMessageBox(String what, Throwable ex) {
+        JPanel optionPanel = createOptionPanel(what, ex);
+
+        JOptionPane.showMessageDialog(null,
+                optionPanel,
+                String.format(LOCALE_MESSAGES.getMessage("fatalhandlingtitle"), ex.getClass().getName() ,ex.getMessage()), JOptionPane.ERROR_MESSAGE);//Create dump file
+        writeErrorLog(ex, what);
+        System.exit(1);
+    }
+
+    private static JPanel createOptionPanel(String what, Throwable ex) {
         JPanel optionPanel = new JPanel(new VerticalFlowLayout());
-
-        String text = String.format(localeMessages.getMessage("errorhandlingheader"),
+        String text = String.format(LOCALE_MESSAGES.getMessage("errorhandlingheader"),
                 ConquerSpace.VERSION,
-                ConquerSpace.VERSION)
-                + "\n\n" + what + "\n\nDo you want to quit the game?";
+                ConquerSpace.VERSION);
         String[] content = text.split("\n");
         for (String s : content) {
             optionPanel.add(new JLabel(s));
@@ -66,19 +86,12 @@ public class ExceptionHandling {
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));
         String exceptionAsString = sw.toString();
-        optionPanel.add(new JScrollPane(new JTextArea(exceptionAsString)));
-
-        exit = JOptionPane.showConfirmDialog(null,
-                optionPanel,
-                ex.getClass().getName() + ": " + ex.getMessage(),
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);//Create dump file
-
-        writeErrorLog(ex, header);
-        if (exit == 0) {
-            System.exit(1);
-        }
+        JTextArea area = new JTextArea(exceptionAsString);
+        area.setRows(16);
+        area.setEditable(false);
+        optionPanel.add(new JScrollPane(area));
+        return optionPanel;
     }
-
     private static void writeErrorLog(Throwable ex, String header) {
         PrintWriter writer = null;
         Runtime runtime = Runtime.getRuntime();
@@ -134,15 +147,4 @@ public class ExceptionHandling {
             }
         }
     }
-
-    private static String getHeaderText(String what) {
-        String header = "Something has gone wrong with Conquer Space\n"
-                + "We are sorry for the inconvinence.\n"
-                + "Restarting could help.\n"
-                + "Here's some information for the developers.\n\n"
-                + "Conquer Space v " + ConquerSpace.VERSION.toString() + "\n"
-                + "Build: " + ConquerSpace.BUILD_NUMBER + "\n\n" + what;
-        return what;
-    }
-
 }
