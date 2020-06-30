@@ -1,2 +1,2 @@
 @echo off
-..\proguard\bin\proguard @../../proguard.txt
+..\proguard\bin\proguard @%1

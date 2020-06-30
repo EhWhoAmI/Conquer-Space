@@ -298,7 +298,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
             Technology selected = tech.getSelectedValue();
             techName.setText(selected.getName());
             techdifficulity.setText(LOCALE_MESSAGES.getMessage("game.research.difficulty", selected.getDifficulty()));
-            techEstTime.setText(LOCALE_MESSAGES.getMessage("game.research.estcompletiontime", (Technologies.estFinishTime(selected) / 720) + " months"));
+            techEstTime.setText(LOCALE_MESSAGES.getMessage("game.research.estcompletiontime", (Technologies.estFinishTime(selected) / 720)));
 
             //Get the text
             fieldListModel.clear();

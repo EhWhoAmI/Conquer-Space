@@ -31,6 +31,7 @@ import java.net.URLClassLoader;
 import java.util.IllegalFormatConversionException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.UnknownFormatConversionException;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -102,7 +103,9 @@ public class Messages {
             content = String.format(content, objs);
         } catch (IllegalFormatConversionException ifce) {
             //Fail silently when there is an incorrect format
-            LOGGER.warn("Problem with formatting " + key);
+            LOGGER.warn("Problem with formatting " + key + " " + ifce.getMessage(), ifce);
+        } catch(UnknownFormatConversionException ufce) {
+            LOGGER.warn("Problem with formatting " + key + " " + ufce.getMessage() + " format " + ufce.getConversion(), ufce);
         }
         return (content);
     }

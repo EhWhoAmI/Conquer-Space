@@ -31,3 +31,4 @@ settings.properties
 
 # Mapping files
 mapping.txt
+__pycache__
