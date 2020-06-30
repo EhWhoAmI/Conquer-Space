@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game.engineering;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.ShipClass;
@@ -143,9 +144,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         }
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu newStuff = new JMenu("Classes");
-        JMenuItem newShipClass = new JMenuItem("New Ship Class");
-        JMenuItem saveShipClass = new JMenuItem("Design components, make hull, create ship class");
+        JMenu newStuff = new JMenu(LOCALE_MESSAGES.getMessage("game.engineering.ship.classes"));
+        JMenuItem newShipClass = new JMenuItem(LOCALE_MESSAGES.getMessage("game.engineering.ship.newclass"));
+        JMenuItem saveShipClass = new JMenuItem(LOCALE_MESSAGES.getMessage("game.engineering.ship.design"));
 
         newShipClass.addActionListener(l -> {
             //Empty all components
@@ -158,6 +159,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //Create ship class...
             if (selectedHull == null) {
                 //Autogenerate...
+                //Need to make hull material...
                 selectedHull = new Hull(100, 100,
                         new HullMaterial("Test Hull Material", 10, 10, 10),
                         shipTypeComboBox.getSelectedIndex(), 100, "name");
@@ -193,19 +195,19 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         JPanel shipDetailsContainer = new JPanel(new VerticalFlowLayout());
         {
             shipDetailsPanel.setLayout(new GridBagLayout());
-            shipNameLabel = new JLabel("Ship Name");
+            shipNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shipname"));
             shipNameField = new JTextField();
             shipNameField.setColumns(16);
-            randomShipNameButton = new JButton("Choose random name");
+            randomShipNameButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.randomname"));
             randomShipNameButton.addActionListener(l -> {
                 shipNameField.setText(nameGenerator.getName(0));
             });
 
-            massLabel = new JLabel("Mass");
+            massLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.mass"));
             massText = new JLabel("0");
             massUnit = new JLabel("kg");
 
-            shipTypeLabel = new JLabel("Ship Type");
+            shipTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shiptype"));
             Vector<String> v = new Vector<>((GameController.shipTypes.keySet()));
             shipTypeComboBox = new JComboBox<String>(v);
             shipTypeComboBox.addActionListener(l -> {
@@ -225,12 +227,12 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 }
             });
 
-            shipSpeedLabel = new JLabel("Speed");
+            shipSpeedLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.speed"));
             shipSpeedUnit = new JLabel("<html>m/s<sup>2</sup></html");
             shipSpeedSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 1000000, 10));
 
-            hullLabel = new JLabel("Hull");
-            toDesignHullOrNotToDesign = new JCheckBox("Auto-Design hull");
+            hullLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.hull"));
+            toDesignHullOrNotToDesign = new JCheckBox(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign"));
             toDesignHullOrNotToDesign.setSelected(true);
             toDesignHullOrNotToDesign.addActionListener(l -> {
                 if (toDesignHullOrNotToDesign.isSelected()) {
@@ -240,7 +242,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                     chooseHullButton.setEnabled(true);
                 }
             });
-            chooseHullButton = new JButton("Choose...");
+            chooseHullButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.choose"));
             chooseHullButton.addActionListener(l -> {
                 //Close and recreate
                 if (hullChooserDialog != null) {
@@ -264,9 +266,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             });
             chooseHullButton.setEnabled(false);
 
-            hullNameLabel = new JLabel("Hull name: Autodesigning");
-            hullSpaceLabel = new JLabel("Hull volume: Autodesigning");
-            hullMaterialLabel = new JLabel("Hull Material: Autodesigning");
+            hullNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign.name"));
+            hullSpaceLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign.volume"));
+            hullMaterialLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign.material"));
 
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.gridx = 0;
@@ -404,12 +406,12 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         {
             GridBagConstraints constraints = new GridBagConstraints();
 
-            shipArmorLabel = new JLabel("Armor");
+            shipArmorLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.armor.label"));
 
-            shipShieldLabel = new JLabel("Shields");
+            shipShieldLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shields.label"));
 
-            engineTypeLabel = new JLabel("Engines:");
-            setEngineButton = new JButton("Configure Engines");
+            engineTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.label"));
+            setEngineButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.button"));
             setEngineButton.addActionListener(l -> {
                 //Close and recreate
                 if (engineConfigWindow != null) {
@@ -431,12 +433,12 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 engineConfigWindow.setVisible(true);
                 //Add the thing...
             });
-            engineTypeNotificationLabel = new JLabel("None!");
+            engineTypeNotificationLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
 
-            fuelCapacityLabel = new JLabel("Fuel capacity:");
+            fuelCapacityLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.label"));
             fuelCapacityValue = new JLabel("0");
             fuelCapacityUnit = new JLabel("<html>m<sup>3</sup></html");
-            fuelCapicityConfig = new JButton("Configure fuel tanks");
+            fuelCapicityConfig = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.configure"));
 
             constraints.gridx = 0;
             constraints.gridy = 0;
@@ -449,7 +451,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 0;
             //constraints.weighty = 1;
-            shipChangablePanel.add(new JLabel("TODO, because no combat"), constraints);
+            shipChangablePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.nocombat")), constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 1;
@@ -463,7 +465,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 0;
             //constraints.weighty = 1;
-            shipChangablePanel.add(new JLabel("TODO, because no combat"), constraints);
+            shipChangablePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.nocombat")), constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 2;
@@ -526,14 +528,13 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             componentRoughDesignPanel.setLayout(new GridBagLayout());
             JPanel grandContainer = new JPanel(new GridBagLayout());
 
-            shipSensorsLabel = new JLabel("Ship Sensors");
-            shipSensorButton = new JButton("Configure Sensors");
+            shipSensorsLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.sensors"));
+            shipSensorButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.sensors.configure"));
 
-            shipScienceLabel = new JLabel("Science");
-            shipScienceButton = new JButton("Configure Science modules");
+            shipScienceLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.science"));
+            shipScienceButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.science.configure"));
             shipScienceButton.setEnabled(false);
 
-            //
             GridBagConstraints constraints = new GridBagConstraints();
 
             constraints.gridx = 0;
@@ -591,8 +592,8 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         shipInformationPanel.add(shipDetailsContainer);
         shipInformationPanel.add(shipChangablePanelContainer);
 
-        mainTabs.add("Ship info", shipInformationPanel);
-        mainTabs.add("Components", componentRoughDesignPanel);
+        mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.info"), shipInformationPanel);
+        mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.components"), componentRoughDesignPanel);
         add(mainTabs, BorderLayout.CENTER);
     }
 
@@ -619,21 +620,21 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         public EngineConfigWindow() {
             setLayout(new VerticalFlowLayout());
-            setTitle("Engine Designer");
+            setTitle(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine"));
             setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-            add(new JLabel("Engine Designer"));
-            toDesignOrNotToDesign = new JCheckBox("Currently Autodesigning Engines");
+            add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine")));
+            toDesignOrNotToDesign = new JCheckBox(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.autodesign"));
             toDesignOrNotToDesign.setSelected(true);
 
             toDesignOrNotToDesign.addItemListener(l -> {
                 //l.getStateChange() == 1 means checked
                 if (l.getStateChange() == 1) {
                     cardLayout.show(mainEngineEventPanel, "autodesign");
-                    toDesignOrNotToDesign.setText("Currently Autodesigning Engines");
+                    toDesignOrNotToDesign.setText(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.autodesign.yes"));
                 } else {
                     cardLayout.show(mainEngineEventPanel, "no");
-                    toDesignOrNotToDesign.setText("Manually creating engines");
+                    toDesignOrNotToDesign.setText(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.autodesign.no"));
                 }
             });
             add(toDesignOrNotToDesign);
@@ -644,7 +645,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             add(mainEngineEventPanel);
 
             createEnginePanel = new JPanel(new VerticalFlowLayout());
-            createEnginePanel.add(new JLabel("Design Engine"));
+            createEnginePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.designer")));
             mainEngineEventPanel.add("autodesign", createEnginePanel);
 
             //Just type of engine, and thrust power i guess
@@ -655,14 +656,14 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 engineTechBoxModel.addElement(t);
             }
             engineTechComboBox = new JComboBox<>(engineTechBoxModel);
-            createEnginePanel.add(new JLabel("Engine tech:"));
+            createEnginePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.tech")));
             createEnginePanel.add(engineTechComboBox);
 
             //Select engine....
             chooseEnginePanel = new JPanel();
             mainEngineEventPanel.add("no", chooseEnginePanel);
             chooseEnginePanel.setLayout(new VerticalFlowLayout());
-            chooseEnginePanel.add(new JLabel("Choose Engine"));
+            chooseEnginePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.choose")));
 
             JPanel engineSelectionPanel = new JPanel();
             engineListModel = new DefaultListModel<>();
@@ -682,10 +683,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                     engineInfoPanel.removeAll();
                     //Add info
                     engineInfoPanel.setLayout(new VerticalFlowLayout());
-                    engineInfoPanel.add(new JLabel("Name: " + engineTemplate.getName()));
-                    engineInfoPanel.add(new JLabel("Engine tech: " + engineTemplate.getEngineTechnology().getName()));
-                    engineInfoPanel.add(new JLabel("Power: " + engineTemplate.getThrust() + " kn"));
-                    engineInfoPanel.add(new JLabel("Mass: " + engineTemplate.getMass() + " kg"));
+                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.name", engineTemplate.getName())));
+                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.tech", engineTemplate.getEngineTechnology().getName())));
+                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.power", engineTemplate.getThrust())));
+                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.mass", engineTemplate.getMass())));
 
                     engineInfoPanel.validate();
                     engineInfoPanel.repaint();
@@ -704,10 +705,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //End Self design
 
             //Other panel...
-            closeButton = new JButton("Close");
+            closeButton = new JButton(LOCALE_MESSAGES.getMessage("gui.close"));
             closeButton.addActionListener(l -> {
                 if (toDesignOrNotToDesign.isSelected()) {
-                    engineTypeNotificationLabel.setText("Self designed");
+                    engineTypeNotificationLabel.setText(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.seldesign"));
                     engineTypeNotificationLabel.repaint();
                 } else {
                     if (engineList.getSelectedValue() != null) {
@@ -746,7 +747,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         private JPanel hullInfoPanel;
 
         private HullChooserDialog() {
-            setTitle("Choose Hull");
+            setTitle(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.choose"));
             setLayout(new GridLayout(1, 2));
             hullListModel = new DefaultListModel<>();
             for (Hull h : civ.hulls) {
@@ -760,9 +761,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
                 Hull h = hullList.getSelectedValue();
                 hullInfoPanel.add(new JLabel(h.getName()));
-                hullInfoPanel.add(new JLabel("Material: " + h.getMaterial().getName()));
-                hullInfoPanel.add(new JLabel("Mass: " + h.getMass()));
-                hullInfoPanel.add(new JLabel("Rated thrust: " + h.getThrust()));
+                hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.material", h.getMaterial().getName())));
+                hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.mass", h.getMass())));
+                hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.rated", h.getThrust())));
                 //hullInfoPanel.add(new JLabel(h()));
                 hullInfoPanel.validate();
                 hullInfoPanel.repaint();

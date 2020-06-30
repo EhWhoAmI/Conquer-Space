@@ -61,7 +61,7 @@ public class IncompleteResourceBundle extends ResourceBundle {
         } else {
             String content = key;
             if (ConquerSpace.TRANSLATE_TEST) {
-                return "Translate Non-existant:(" + content + ")";
+                return "Translate Non-existent:(" + content + ")";
             }
             return content;
         }
