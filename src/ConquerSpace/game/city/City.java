@@ -50,7 +50,7 @@ public class City implements PersonEnterable, ResourceStockpile {
     public ArrayList<Person> peopleAtCity;
 
     public HashMap<Integer, Double> resources;
-    public HashMap<Integer, Double> resourceDemands;
+    public DoubleHashMap<Integer> resourceDemands;
 
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
@@ -85,7 +85,7 @@ public class City implements PersonEnterable, ResourceStockpile {
         peopleAtCity = new ArrayList<>();
         population = new Population();
         resourceLedger = new HashMap<>();
-        resourceDemands = new HashMap<>();
+        resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityType = CityType.Generic;
         size = 0;

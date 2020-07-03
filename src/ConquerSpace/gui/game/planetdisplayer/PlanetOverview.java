@@ -52,6 +52,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
@@ -64,14 +65,14 @@ import javax.swing.table.AbstractTableModel;
  * @author EhWhoAmI
  */
 public class PlanetOverview extends JPanel {
-
+    
     private Planet p;
-
+    
     private static final int TILE_SIZE = 7;
-
+    
     private JPanel overviewPanel1;
     private JPanel overviewPanel2;
-
+    
     private JPanel planetOverview;
     private JPanel planetSectors;
     //private JList<Orbitable> satelliteList;
@@ -80,11 +81,11 @@ public class PlanetOverview extends JPanel {
     private JLabel planetSize;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
-
+    
     private JPanel currentStats;
     private JLabel populationCount;
     private JLabel averagePlanetPopGrowthLabel;
-
+    
     private final String[] jobListTableColunmNames = {
         LOCALE_MESSAGES.getMessage("game.planet.overview.table.jobname"),
         LOCALE_MESSAGES.getMessage("game.planet.overview.table.count"),
@@ -92,19 +93,19 @@ public class PlanetOverview extends JPanel {
     private JPanel jobListPanel;
     private JobTableModel jobListTableModel;
     private JTable jobListTable;
-
+    
     private boolean showPlanetTerrain = true;
     private NumberFormat numberFormatter;
-
+    
     private int population;
-
+    
     private Image planetMap;
-
+    
     public PlanetOverview(Universe u, Planet p, Civilization c, Image planetMap) {
         this.planetMap = planetMap;
         this.p = p;
         setLayout(new GridLayout(1, 2));
-
+        
         overviewPanel1 = new JPanel(new VerticalFlowLayout());
         numberFormatter = NumberFormat.getInstance();
         planetOverview = new JPanel();
@@ -134,23 +135,23 @@ public class PlanetOverview extends JPanel {
         } else {
             ownerLabel.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.noowner"));
         }
-
+        
         currentStats = new JPanel(new VerticalFlowLayout());
-
+        
         currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("game.planet.overview.populationstatstitle")));
-
+        
         population = 0;
-
+        
         populationCount = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.population", Utilities.longToHumanString(p.population)));
         currentStats.add(populationCount);
-
+        
         averagePlanetPopGrowthLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.averagegrowth", p.population));
         currentStats.add(averagePlanetPopGrowthLabel);
 
         //Map
         planetSectors = new JPanel(new VerticalFlowLayout());
         PlanetMinimap sectorDisplayer = new PlanetMinimap(p, c);
-
+        
         planetSectors.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("game.planet.overview.minimap.title")));
         planetSectors.setPreferredSize(
                 new Dimension(sectorDisplayer.getPreferredSize().width,
@@ -163,29 +164,29 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(planetSize);
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
-
+        
         overviewPanel1.add(planetOverview);
         overviewPanel1.add(currentStats);
         overviewPanel1.add(planetSectors);
-
+        
         overviewPanel2 = new JPanel();
-
+        
         jobListPanel = new JPanel();
         jobListTableModel = new JobTableModel();
         jobListTable = new JTable(jobListTableModel);
         jobListPanel.add(new JScrollPane(jobListTable));
-
+        
         overviewPanel2.add(jobListPanel);
-
+        
         add(overviewPanel1);
         add(overviewPanel2);
     }
-
+    
     private class PlanetMinimap extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
-
+        
         private final int SHOW_ALL = -1;
         int resourceToShow = SHOW_ALL;
-
+        
         private int whatToShow = PLANET_BUILDINGS;
         static final int PLANET_BUILDINGS = 0;
         static final int PLANET_RESOURCES = 1;
@@ -204,7 +205,7 @@ public class PlanetOverview extends JPanel {
         double translateY = 0;
         private Point startPoint = new Point();
         private boolean isDragging = false;
-
+        
         public PlanetMinimap(Planet p, Civilization c) {
             this.c = c;
             setPreferredSize(
@@ -215,7 +216,7 @@ public class PlanetOverview extends JPanel {
             addMouseMotionListener(this);
             setToolTipText(LOCALE_MESSAGES.getMessage("game.planet.overview.minimap.tooltip"));
         }
-
+        
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -290,11 +291,11 @@ public class PlanetOverview extends JPanel {
                 g2d.fill(rect);
             }
         }
-
+        
         @Override
         public void mouseClicked(MouseEvent e) {
         }
-
+        
         @Override
         public void mousePressed(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -303,7 +304,7 @@ public class PlanetOverview extends JPanel {
                 isDragging = true;
             }
         }
-
+        
         @Override
         public void mouseReleased(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -311,33 +312,33 @@ public class PlanetOverview extends JPanel {
                 isDragging = false;
             }
         }
-
+        
         @Override
         public void mouseEntered(MouseEvent e) {
         }
-
+        
         @Override
         public void mouseExited(MouseEvent e) {
         }
-
+        
         public void setWhatToShow(int what) {
             whatToShow = what;
             repaint();
         }
-
+        
         public void setResourceViewing(int wat) {
             resourceToShow = wat;
         }
-
+        
         public Point getLastClicked() {
             return lastClicked;
         }
-
+        
         public void showLocation(Point pt, Color c) {
             point = pt;
             color = c;
         }
-
+        
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             //Scroll in
@@ -359,7 +360,7 @@ public class PlanetOverview extends JPanel {
             //Now repaint
             repaint();
         }
-
+        
         @Override
         public void mouseDragged(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -371,16 +372,16 @@ public class PlanetOverview extends JPanel {
                 repaint();
             }
         }
-
+        
         @Override
         public void mouseMoved(MouseEvent arg0) {
         }
     }
-
+    
     private class JobTableModel extends AbstractTableModel {
-
+        
         HashMap<JobType, Integer> populationCount;
-
+        
         public JobTableModel() {
             populationCount = new HashMap<>();
             //Process the things
@@ -401,17 +402,17 @@ public class PlanetOverview extends JPanel {
 //                }
 //            }
         }
-
+        
         @Override
         public int getRowCount() {
             return populationCount.size();
         }
-
+        
         @Override
         public int getColumnCount() {
             return jobListTableColunmNames.length;
         }
-
+        
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             //Get the colunm index text and stuff
@@ -424,9 +425,9 @@ public class PlanetOverview extends JPanel {
                     break;
                 }
                 i++;
-
+                
             }
-
+            
             switch (columnIndex) {
                 case 0:
                     return jobType.getName();
@@ -437,7 +438,7 @@ public class PlanetOverview extends JPanel {
             }
             return "";
         }
-
+        
         @Override
         public String getColumnName(int column) {
             return jobListTableColunmNames[column];

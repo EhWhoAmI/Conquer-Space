@@ -471,16 +471,19 @@ public class GameUpdater extends GameTicker {
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
-                storeResource(powerPlant.getUsedResource(), Double.valueOf(-powerPlant.getMaxVolume()), 0, c);
+                removeResource(powerPlant.getUsedResource(), Double.valueOf(powerPlant.getMaxVolume()), 0, c);
             }
         } else if (a instanceof ManufacturerArea) {
             //Process resources used
             ProductionProcess process = ((ManufacturerArea) a).getProcess();
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
+                //Query resources
                 for (Map.Entry<Integer, Double> entry : process.input.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
+                    Double amount = c.resources.get(key);
                     removeResource(key, val * delta, 0, c);
+                    c.resourceDemands.addValue(key, val);
                 }
 
                 for (Map.Entry<Integer, Double> entry : process.output.entrySet()) {
@@ -772,6 +775,10 @@ public class GameUpdater extends GameTicker {
                 removeResource(resourceType, amount, owner, from.getUniversePath());
             }
         }
+        return false;
+    }
+    
+    private boolean hasSufficientResources(Integer resourceType, Double amount, City from) {
         return false;
     }
 

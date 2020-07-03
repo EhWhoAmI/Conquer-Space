@@ -106,6 +106,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
     private MainInterfaceWindow mainInterfaceWindow;
 
+    private Encyclopedia encyclopedia;
+
     private Universe u;
 
     private Timer gameTickTimer;
@@ -121,7 +123,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         addWindowListener(this);
         init();
 
-        setTitle(LOCALE_MESSAGES.getMessage("GameName") + ConquerSpace.VERSION.getVersionCore());
+        setTitle(LOCALE_MESSAGES.getMessage("GameName") + " " + ConquerSpace.VERSION.getVersionCore());
 
         //Debug stuff
         //addFrame(new DegreeSetter());
@@ -198,12 +200,28 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             }
         });
 
+        JMenuItem encyclopediaWindowMenuButton = new JMenuItem(LOCALE_MESSAGES.getMessage("game.encyclopedia.title"));
+        encyclopediaWindowMenuButton.addActionListener(l -> {
+            if (encyclopedia != null) {
+                if (!encyclopedia.isVisible()) {
+                    encyclopedia.setVisible(true);
+                }
+                encyclopedia.toFront();;
+            } else {
+                encyclopedia = new Encyclopedia();
+                addFrame(encyclopedia);
+                encyclopedia.setVisible(true);
+                System.out.println("fajf");
+            }
+        });
+
         JMenuItem reloadWindows = new JMenuItem("Reload Windows");
         reloadWindows.addActionListener(a -> {
             //reload();
         });
 
         windows.add(mainInterfaceWindowMenuButton);
+        windows.add(encyclopediaWindowMenuButton);
         //windows.add(reloadWindows);
 
         JMenu game = new JMenu(LOCALE_MESSAGES.getMessage("game.game"));
@@ -227,7 +245,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             desktopPane.repaint();
         });
         setToUniverseView.setAccelerator(KeyStroke.getKeyStroke((int) '1', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        
+
         JMenuItem seeHomePlanet = new JMenuItem(LOCALE_MESSAGES.getMessage("game.view.home.planet"));
         seeHomePlanet.addActionListener(a -> {
             desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());

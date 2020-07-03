@@ -50,6 +50,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import javax.swing.UIManager;
 
 /**
  * Main menu.
@@ -79,7 +80,7 @@ public class MainMenu extends JFrame implements WindowListener {
         add(new BottomMenu(), BorderLayout.SOUTH);
 
         setIconImage(ResourceLoader.getIcon("game.icon").getImage());
-        
+
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addWindowListener(this);
@@ -256,8 +257,11 @@ public class MainMenu extends JFrame implements WindowListener {
                                 }
                             }
                         }
-
                     });
+                    pane.setBackground(UIManager.getDefaults().getColor("Panel.background"));
+                    
+                    pane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+                    pane.setFont(UIManager.getDefaults().getFont("Label.font"));
                     JFrame frame = new JFrame();
                     frame.add(scroll);
                     frame.setSize(300, 500);

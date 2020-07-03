@@ -138,7 +138,7 @@ public class ConquerSpace {
             if (!DEBUG) {
                 generateChecksum();
             }
-
+            
             setDefaultOptions();
             configureSettings();
 

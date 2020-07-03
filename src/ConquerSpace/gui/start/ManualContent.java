@@ -93,7 +93,7 @@ public class ManualContent extends JFrame {
         text.setEditable(false);
 
         JScrollPane pane = new JScrollPane(text);
-
+        
         add(pane);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent arg0) {
