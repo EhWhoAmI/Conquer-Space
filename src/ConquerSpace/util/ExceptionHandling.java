@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.game.GameController;
 
 /**
  * The one class I hope no one sees.
@@ -119,8 +120,8 @@ public class ExceptionHandling {
                 writer.println("Asset checksum: not generated yet");
             }
 
-            if (Globals.universe != null) {
-                writer.println("Universe seed: " + Globals.universe.getSeed());
+            if (GameController.universe != null) {
+                writer.println("Universe seed: " + GameController.universe.getSeed());
             }
 
             writer.println("Java version: " + System.getProperty("java.version") + " running on " + System.getProperty("os.name"));

@@ -30,6 +30,7 @@ import ConquerSpace.game.resources.Element;
 import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceDistribution;
+import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Timer;
@@ -55,6 +56,17 @@ public class GameController {
 
     //All variables...
     public static ArrayList<LaunchSystem> launchSystems;
+    
+    /**
+     * This is the whole universe.
+     */
+    public static Universe universe;
+    
+    /**
+     * Date in the stars. Game timer.
+     */
+    public static StarDate date = new StarDate();
+    
     private Timer ticker;
     public static ArrayList<Satellite> satellites;
     public static ArrayList<JSONObject> satelliteTemplates;
@@ -95,14 +107,14 @@ public class GameController {
      */
     public GameController() {
         //Init updater
-        updater = new GameUpdater(Globals.universe, Globals.date, GameRefreshRate);
+        updater = new GameUpdater(universe, date, GameRefreshRate);
 
         //First run over all the game
         updater.tick(0);
 
         //Load the players
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Globals.universe.getCivilization(i).controller.init(Globals.universe, Globals.date, Globals.universe.getCivilization(i));
+        for (int i = 0; i < universe.getCivilizationCount(); i++) {
+            universe.getCivilization(i).controller.init(universe, date, universe.getCivilization(i));
         }
 
         int tickerSpeed = 10;

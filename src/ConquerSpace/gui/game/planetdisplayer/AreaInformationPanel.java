@@ -30,6 +30,8 @@ import ConquerSpace.game.city.area.ManufacturerArea;
 import ConquerSpace.game.city.area.MineArea;
 import ConquerSpace.game.city.area.ResearchArea;
 import ConquerSpace.game.city.area.SpacePortArea;
+import ConquerSpace.game.organizations.Organization;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -50,7 +52,7 @@ public class AreaInformationPanel extends JPanel {
         if (a != null) {
             setLayout(new VerticalFlowLayout());
             if (a instanceof ResearchArea) {
-                JLabel title = new JLabel("game.planet.areas.research.title");
+                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.research.title"));
                 add(title);
 
                 ResearchArea research = (ResearchArea) a;
@@ -159,6 +161,16 @@ public class AreaInformationPanel extends JPanel {
                 JLabel timeLeft = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getTicksLeft()));
                 add(timeLeft);
             }
+            JLabel owner = new JLabel("Owner: None");
+
+            Organization org = GameController.universe.organizations.get(a.getOwner());
+            if (org != null) {
+                if (org instanceof Civilization) {
+                    owner.setText("Owner: State owned by " + org.getName());
+                } else {
+                    owner.setText("Owner: " + org.getName());
+                }
+            }
 
             JLabel currentJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.current", a.getCurrentlyManningJobs()));
             JLabel minimumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.minimum", a.operatingJobsNeeded()));
@@ -167,6 +179,7 @@ public class AreaInformationPanel extends JPanel {
                 currentJobs.setForeground(Color.red);
                 currentJobs.setToolTipText(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.tooltip"));
             }
+            add(owner);
             add(currentJobs);
             add(minimumJobs);
             add(maximumJobs);

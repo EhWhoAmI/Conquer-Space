@@ -18,6 +18,7 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.StarSystem;
@@ -40,15 +41,15 @@ public class ExitStarSystemAction extends ShipAction {
         //Get out of star system
         int id = ship.getLocation().getSystemID();
         if (id > -1) {
-            StarSystem sys = Globals.universe.getStarSystem(id);
+            StarSystem sys = GameController.universe.getStarSystem(id);
             //Set location
             ship.setLocation(new UniversePath());
 
             sys.spaceShips.remove(ship);
             ship.setX(sys.getX());
             ship.setY(sys.getY());
-            if (!Globals.universe.spaceShips.contains(ship)) {
-                Globals.universe.spaceShips.add(ship);
+            if (!GameController.universe.spaceShips.contains(ship)) {
+                GameController.universe.spaceShips.add(ship);
             }
         }
         done = true;

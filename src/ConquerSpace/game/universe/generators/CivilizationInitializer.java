@@ -178,7 +178,7 @@ public class CivilizationInitializer {
             City city = starting.cities.get(i);
             addInfrastructure(city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
-            addCommercialArea(city);
+            addCommercialArea(city, c);
             addPopulation(city, selector, c);
             addGovenor(city, c, selector, personNames);
         }
@@ -203,6 +203,7 @@ public class CivilizationInitializer {
         c.population.addSegment(seg);
 
         ResidentialArea residentialArea = new ResidentialArea();
+        residentialArea.setOwner(c.getId());
         c.addArea(residentialArea);
     }
 
@@ -214,6 +215,7 @@ public class CivilizationInitializer {
             if (i == 0) {
                 c.setCapitalCity(city);
                 CapitolArea area = new CapitolArea();
+                area.setOwner(c.getId());
                 city.addArea(area);
             }
 
@@ -222,6 +224,7 @@ public class CivilizationInitializer {
                 ProductionProcess proc = c.productionProcesses.get(k);
                 //Add new factory
                 ManufacturerArea factory = new ManufacturerArea(proc, 1);
+                factory.setOwner(c.getId());
 
                 factory.setMaxJobs(proc.diff * 10000);
                 factory.setOperatingJobs(proc.diff * 5000);
@@ -247,6 +250,7 @@ public class CivilizationInitializer {
                     mineArea.setWorkingmultiplier(1.5f);
                     mineArea.setOperatingJobs(50_000);
                     mineArea.setMaxJobs(100_000);
+                    mineArea.setOwner(c.getId());
                     miner.addArea(mineArea);
                 }
 
@@ -319,6 +323,7 @@ public class CivilizationInitializer {
                 field.setFieldSize(5000);
                 field.setOperatingJobs(10000);
                 field.setMaxJobs(30000);
+                field.setOwner(c.getId());
 
                 faceBook.addArea(field);
             }
@@ -525,16 +530,18 @@ public class CivilizationInitializer {
         research.focusFields.put(toAdd.getName(), 1);
 
         civilization.scienceLabs.add(research);
+        research.setOwner(civilization.getId());
 
         //Choose random fields
         city.addArea(research);
     }
 
-    private void addCommercialArea(City c) {
+    private void addCommercialArea(City c, Civilization civ) {
         CommercialArea area = new CommercialArea();
         area.setMaxJobs(100_000);
         area.setOperatingJobs(1_000);
         area.setTradeValue(50_000);
+        area.setOwner(civ.getId());
         c.addArea(area);
     }
 
@@ -551,6 +558,7 @@ public class CivilizationInitializer {
                         }
                     }
                 }*/
+        powerPlant.setOwner(c.getId());
         c.addArea(powerPlant);
     }
 

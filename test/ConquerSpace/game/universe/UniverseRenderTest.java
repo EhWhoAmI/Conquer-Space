@@ -2,6 +2,7 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.Globals;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
@@ -219,7 +220,7 @@ public final class UniverseRenderTest {
             UniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, seed);
             GameLoader.load();
             Universe main = gen.generate();
-            Globals.universe = main;
+            GameController.universe = main;
             long loadingEnd = System.currentTimeMillis();
 
         } finally {
@@ -237,7 +238,7 @@ public final class UniverseRenderTest {
         frame.setTitle("Conquer Space");
         frame.setLayout(new BorderLayout());
         //Create universe renderer
-        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), Globals.universe, new Civilization(0, universe));
+        UniverseRenderer renderer = new UniverseRenderer(new Dimension(1500, 1500), GameController.universe, new Civilization(0, universe));
         
         JPanel panel = new JPanel() {
             @Override

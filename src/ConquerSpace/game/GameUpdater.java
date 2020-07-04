@@ -94,7 +94,7 @@ public class GameUpdater extends GameTicker {
         universe = u;
         starDate = s;
         indexer = new GameIndexer(u);
-        peopleProcessor = new PeopleProcessor(Globals.universe, Globals.date);
+        peopleProcessor = new PeopleProcessor(GameController.universe, GameController.date);
         this.GameRefreshRate = GameRefreshRate;
         ledgerClearTime = GameRefreshRate * 10;
     }
@@ -114,7 +114,7 @@ public class GameUpdater extends GameTicker {
         calculateVision();
 
         //Check for month increase            
-        if (Globals.date.bigint % GameRefreshRate == 1) {
+        if (GameController.date.bigint % GameRefreshRate == 1) {
             LOGGER.trace("Refreshing all the game objects");
             updateGame();
             for (int i = 0; i < universe.getCivilizationCount(); i++) {
@@ -122,19 +122,19 @@ public class GameUpdater extends GameTicker {
             }
         }
         //Process people and generate every 1000 ticks, which is about every 41 days
-        if (Globals.date.bigint % (GameRefreshRate * 2) == 1) {
+        if (GameController.date.bigint % (GameRefreshRate * 2) == 1) {
             createPeople();
         }
     }
 
     public synchronized void updateGame() {
         long start = System.currentTimeMillis();
-        updateUniverse(Globals.universe, Globals.date, GameRefreshRate);
+        updateUniverse(GameController.universe, GameController.date, GameRefreshRate);
 
         //Increment tech
         processResearch(GameRefreshRate);
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Globals.universe.getCivilization(i).calculateTechLevel();
+        for (int i = 0; i < GameController.universe.getCivilizationCount(); i++) {
+            GameController.universe.getCivilization(i).calculateTechLevel();
         }
 
         //Increment resources
@@ -522,8 +522,8 @@ public class GameUpdater extends GameTicker {
         } else if (a instanceof ObservatoryArea) {
             ObservatoryArea area = (ObservatoryArea) a;
             //Just slightly inelagant code to get the vision points
-            if (!Globals.universe.civs.get(area.getCivilization()).visionPoints.contains(area)) {
-                Globals.universe.civs.get(area.getCivilization()).visionPoints.add(area);
+            if (!GameController.universe.civs.get(area.getCivilization()).visionPoints.contains(area)) {
+                GameController.universe.civs.get(area.getCivilization()).visionPoints.add(area);
             }
         }
 
@@ -547,8 +547,8 @@ public class GameUpdater extends GameTicker {
     }
 
     private void processResearch(int delta) {
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Civilization c = Globals.universe.getCivilization(i);
+        for (int i = 0; i < GameController.universe.getCivilizationCount(); i++) {
+            Civilization c = GameController.universe.getCivilization(i);
 
             Iterator<Technology> tech = c.currentlyResearchingTechonologys.keySet().iterator();
 
@@ -584,8 +584,8 @@ public class GameUpdater extends GameTicker {
     }
 
     private void processResources() {
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Civilization c = Globals.universe.getCivilization(i);
+        for (int i = 0; i < GameController.universe.getCivilizationCount(); i++) {
+            Civilization c = GameController.universe.getCivilization(i);
             for (Map.Entry<Integer, Double> entry : c.resourceList.entrySet()) {
                 c.resourceList.put(entry.getKey(), 0d);
             }
@@ -653,8 +653,8 @@ public class GameUpdater extends GameTicker {
     }
 
     private void moveShips() {
-        for (int sys = 0; sys < Globals.universe.getCivilizationCount(); sys++) {
-            Civilization c = Globals.universe.getCivilization(sys);
+        for (int sys = 0; sys < GameController.universe.getCivilizationCount(); sys++) {
+            Civilization c = GameController.universe.getCivilization(sys);
             //Process ship actions
             for (Ship ship : c.spaceships) {
                 ShipAction sa = ship.getActionAndPopIfDone();
@@ -688,8 +688,8 @@ public class GameUpdater extends GameTicker {
     }
 
     private void createPeople() {
-        for (int i = 0; i < Globals.universe.getCivilizationCount(); i++) {
-            Civilization c = Globals.universe.getCivilization(i);
+        for (int i = 0; i < GameController.universe.getCivilizationCount(); i++) {
+            Civilization c = GameController.universe.getCivilization(i);
             NameGenerator gen = null;
             try {
                 gen = NameGenerator.getNameGenerator("us.names");

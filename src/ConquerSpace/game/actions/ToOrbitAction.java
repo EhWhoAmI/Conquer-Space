@@ -18,6 +18,7 @@
 package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
+import ConquerSpace.game.GameController;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -61,7 +62,7 @@ public class ToOrbitAction extends ShipAction {
             ship.setIsOrbiting(true);
             ship.setLocation(position.getUniversePath());
             //Remove...
-            Globals.universe.getStarSystem(position.getParentStarSystem()).spaceShips.remove(ship);
+            GameController.universe.getStarSystem(position.getParentStarSystem()).spaceShips.remove(ship);
             position.putShipInOrbit(ship);
         } else {
             ship.translate((long) (objX), (long) (objY));
@@ -77,7 +78,7 @@ public class ToOrbitAction extends ShipAction {
     public void initAction() {
         if (ship.isOrbiting()) {
             //Exit orbit
-            Body object = Globals.universe.getSpaceObject(ship.getOrbiting());
+            Body object = GameController.universe.getSpaceObject(ship.getOrbiting());
             if (object instanceof Planet) {
                 Planet p = (Planet) object;
                 //Remove from orbit
@@ -88,7 +89,7 @@ public class ToOrbitAction extends ShipAction {
                 ship.setIsOrbiting(false);
 
                 //Add
-                Globals.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
+                GameController.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
             }   
         }
         //Predict going to location...

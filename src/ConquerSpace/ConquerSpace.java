@@ -282,7 +282,7 @@ public class ConquerSpace {
         long loadingStart = System.currentTimeMillis();
         GameLoader.load();
         Universe universe = Globals.generator.generate();
-        Globals.universe = universe;
+        GameController.universe = universe;
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
     }

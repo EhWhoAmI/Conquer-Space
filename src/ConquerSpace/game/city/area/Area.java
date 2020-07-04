@@ -33,6 +33,9 @@ public class Area implements Workable, Comparable<Area> {
     private int maxJobs;
     private int powerUsage;
     
+    //The org owning the thing
+    private int owner = -1;
+    
     protected int priority = Integer.MAX_VALUE;
 
     /**
@@ -94,5 +97,13 @@ public class Area implements Workable, Comparable<Area> {
     @Override
     public int compareTo(Area o) {
         return Integer.compare(priority, o.priority);
+    }
+
+    public void setOwner(int owner) {
+        this.owner = owner;
+    }
+
+    public int getOwner() {
+        return owner;
     }
 }
