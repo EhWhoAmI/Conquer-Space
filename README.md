@@ -27,7 +27,7 @@ This uses [Netbeans](https://netbeans.org/) to compile, but [Apache Ant](http://
 | Jlibnoise    | Terrain data | <https://github.com/RoyAwesome/jlibnoise> |
 | Easyogg      | Music        | Link broken for some reason |
 | XML Object Model | XML Parsing | <https://xom.nu/> |
-| Commons Lang | Utilities | <https://commons.apache.org/proper/commons-lang/>|
+| Apache Commons | Utilities | <https://commons.apache.org/>|
 
 ### Helping
 If you are excited to help, you need to know Java. If you know both, great!

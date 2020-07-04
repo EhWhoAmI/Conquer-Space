@@ -24,6 +24,7 @@ Better music
  - Music can be toggled better
 Available job list
 Add constructing areas UI to cities
+Add ticker to see the difference of resources over time
 
 Gameplay:
 All buildings are resource storages now
