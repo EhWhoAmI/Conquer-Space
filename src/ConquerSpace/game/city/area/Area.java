@@ -35,6 +35,7 @@ public class Area implements Workable, Comparable<Area> {
     
     //The org owning the thing
     private int owner = -1;
+    //Resource request
     
     protected int priority = Integer.MAX_VALUE;
 

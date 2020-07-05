@@ -52,15 +52,21 @@ public class Utilities {
         "quintillion"};
 
     public static String longToHumanString(long number) {
-        if(number < 10000) {
+        if (number < 10000) {
             return "" + number;
         }
         for (int i = NUMBER_NAMES.length; i > 0; i--) {
             if (Math.pow(1000, i) < number) {
-                return (Math.round((number/Math.pow(1000, i))*100d)/100d) + " " + NUMBER_NAMES[i - 1];
+                return (Math.round((number / Math.pow(1000, i)) * 100d) / 100d) + " " + NUMBER_NAMES[i - 1];
             }
         }
         return "";
     }
 
+    /**
+     * Utility to convert boolean to int
+     */
+    public static int boolToInt(boolean bool) {
+        return (bool ? 1 : 0);
+    }
 }

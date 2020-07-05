@@ -74,7 +74,7 @@ public class Civilization extends Organization implements Employer {
     /**
      * The controller of this civ.
      */
-    public CivilizationController controller;
+    public transient CivilizationController controller;
 
     public PopulationStats pop;
     public Economy economy;
