@@ -18,6 +18,7 @@
 package ConquerSpace.gui;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import javax.swing.AbstractListModel;
 
 /**
@@ -26,7 +27,7 @@ import javax.swing.AbstractListModel;
  */
 public class ObjectListModel<E> extends AbstractListModel<String> {
 
-    private ObjectListModelHandler handler = ObjectListModel::defaultHandler;
+    private ObjectListModelHandler<E> handler = ObjectListModel::defaultHandler;
     private ArrayList<E> elements;
 
     public ObjectListModel() {
@@ -51,7 +52,7 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
         return (handler.toString(elements.get(index)));
     }
 
-    public void setHandler(ObjectListModelHandler handler) {
+    public void setHandler(ObjectListModelHandler<E> handler) {
         this.handler = handler;
     }
     
@@ -60,11 +61,10 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
     }
 
     private static String defaultHandler(Object object) {
-        return "";
+        return object.toString();
     }
 
-    public interface ObjectListModelHandler {
-
-        public String toString(Object object);
+    public interface ObjectListModelHandler<E> {
+        public String toString(E object);
     }
 }

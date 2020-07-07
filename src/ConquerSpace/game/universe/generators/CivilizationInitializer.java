@@ -38,6 +38,7 @@ import ConquerSpace.game.city.area.ResidentialArea;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
+import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.Culture;
@@ -117,6 +118,10 @@ public class CivilizationInitializer {
 
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
+
+                //init orgs
+                initializeOrgs(c, starting);
+
                 c.setCapitalPlanet(starting);
 
                 initializeCities(starting, c, selector);
@@ -422,6 +427,11 @@ public class CivilizationInitializer {
         PeopleProcessor.placePerson(c.getCapitalCity(), r);
 
         c.people.add(r);
+    }
+
+    private void initializeOrgs(Civilization c, Planet planet) {
+        Organization org = new Organization("Ministry of Economic Planning");
+        c.addChild(org);
     }
 
     private void initalizeCivValues(Civilization c) {

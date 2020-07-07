@@ -17,26 +17,16 @@
  */
 package ConquerSpace.game.actions;
 
-import ConquerSpace.game.universe.UniversePath;
-
 /**
- * Action of a turn.
+ * Action of a tick.
+ *
  * @author EhWhoAmI
  */
 public abstract class Action {
-    /**
-     * The selected object
-     */
-    private UniversePath selected;
 
-    public Action(UniversePath selected) {
-        this.selected = selected;
+    public Action() {
     }
 
-    public UniversePath getSelected() {
-        return selected;
-    } 
-    
     /**
      * Do the action
      */

@@ -17,11 +17,15 @@
  */
 package ConquerSpace.game.organizations;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class Organization {
+    private ArrayList<Organization> children;
     private static int idCounter = 0;
     private int id = 0;
     protected String name;
@@ -29,6 +33,7 @@ public class Organization {
     public Organization(String name) {
         this.id = idCounter++;
         this.name = name;
+        children = new ArrayList<>();
     }
 
     public String getName() {
@@ -37,5 +42,17 @@ public class Organization {
 
     public int getId() {
         return id;
+    }
+    
+    public Organization[] getChildren() {
+        return Arrays.copyOf(children.toArray(), children.size(), Organization[].class);
+    }
+    
+    public int getChildrenCount() {
+        return children.size(); 
+    }
+    
+    public void addChild(Organization org) {
+        children.add(org);
     }
 }

@@ -77,6 +77,8 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     private RecruitingPerson recruitingPerson;
 
     private EventViewer eventViewer;
+    
+    private OrganizationsOrganizer organizationsOrganizer;
 
     private ResourceManager resourceManager;
 
@@ -207,6 +209,9 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         economyWindow = new EconomyWindow(c, u);
 
         eventViewer = new EventViewer();
+        
+        organizationsOrganizer = new OrganizationsOrganizer(c);
+        
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.research"), researchViewer);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.planet"), planetInfoSheetContainer);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.ships"), spaceShipOverview);
@@ -216,6 +221,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.resources"), resourceManager);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.economy"), economyWindow);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.events"), eventViewer);
+        tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.orgs"), organizationsOrganizer);
 
         ImageIcon tab1Icon = ResourceLoader.getIcon("science.icon");
         ImageIcon econ = ResourceLoader.getIcon("economy.icon");
@@ -226,6 +232,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         ImageIcon civ = ResourceLoader.getIcon("people.icon");
         ImageIcon goods = ResourceLoader.getIcon("goods.icon");
         ImageIcon events = ResourceLoader.getIcon("alert.icon");
+        ImageIcon orgs = ResourceLoader.getIcon("org.icon");
 
         tabs.setIconAt(0, tab1Icon);
         tabs.setIconAt(1, planet);
@@ -236,6 +243,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.setIconAt(6, goods);
         tabs.setIconAt(7, econ);
         tabs.setIconAt(8, events);
+        tabs.setIconAt(9, orgs);    
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
@@ -245,7 +253,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
             public void mouseEntered(MouseEvent e) {
                 update();
             }
-
         });
     }
 
