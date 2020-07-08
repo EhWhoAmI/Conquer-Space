@@ -22,6 +22,7 @@ import ConquerSpace.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.population.jobs.Workable;
+import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.ships.Launchable;
 import ConquerSpace.game.ships.Ship;
@@ -103,5 +104,41 @@ public class Actions {
         }
         what.setGoingToX(x);
         what.setGoingToY(y);
+    }
+    
+    public static void storeResource(Integer resourceType, Double amount, ResourceStockpile from) {
+        if (resourceType != null && amount > 0) {
+            if (from.canStore(resourceType)) {
+                //Store resource
+                from.addResource(resourceType, amount);
+            } else {
+                //Do something
+            }
+        }
+    }
+
+    public static boolean removeResource(Integer resourceType, Double amount, ResourceStockpile from) {
+        if (resourceType != null && amount != 0) {
+            if (from.canStore(resourceType)) {
+                //Store resource
+                return from.removeResource(resourceType, amount);
+            } else {
+                //Store somewhere else
+                //removeResource(resourceType, amount, owner, from.getUniversePath());
+            }
+        }
+        return false;
+    }
+    
+    public static boolean hasSufficientResources(Integer resourceType, Double amount, ResourceStockpile from) {
+        return false;
+    }
+
+    public static boolean sendResources(Integer resourceType, Double amount, ResourceStockpile from, ResourceStockpile to) {
+        if (removeResource(resourceType, amount, from)) {
+            storeResource(resourceType, amount, to);
+            return true;
+        }
+        return false;
     }
 }

@@ -78,4 +78,16 @@
 
         ]
     }
+    {
+        name: Uncraftable Mysterious Goo
+        identifier: goo_test
+        volume: 1
+        //Extra dense, so no one can move it
+        mass: 500000000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
 ]

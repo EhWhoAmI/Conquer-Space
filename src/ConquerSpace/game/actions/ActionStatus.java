@@ -18,17 +18,10 @@
 package ConquerSpace.game.actions;
 
 /**
- * Action of a tick.
  *
  * @author EhWhoAmI
  */
-public abstract class Action {
-
-    public Action() {
-    }
-
-    /**
-     * Do the action
-     */
-    abstract public ActionStatus doAction();
+public enum ActionStatus {
+    Success,
+    Failure
 }

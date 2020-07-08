@@ -77,7 +77,7 @@ public class PlanetInfoSheet extends JPanel {
         localLifeMenu = new LocalLifeMenu(p, c);
         planetMap = new PlanetMap(p, c, u, this, planetImage);
         planetEconomy = new PlanetEconomy();
-        planetResources = new PlanetResources(p, this);
+        planetResources = new PlanetResources(p, c, this);
 
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.overview"), overview);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.map"), planetMap);

@@ -178,7 +178,7 @@ public class CivilizationInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-
+        
         for (int i = 0; i < starting.cities.size(); i++) {
             City city = starting.cities.get(i);
             addInfrastructure(city);

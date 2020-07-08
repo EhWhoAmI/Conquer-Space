@@ -17,8 +17,12 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.Globals;
+import ConquerSpace.game.actions.Action;
+import ConquerSpace.game.actions.ActionStatus;
 import ConquerSpace.game.actions.Actions;
+import static ConquerSpace.game.actions.Actions.removeResource;
+import static ConquerSpace.game.actions.Actions.sendResources;
+import static ConquerSpace.game.actions.Actions.storeResource;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.organizations.civilization.Civilization;
@@ -38,6 +42,7 @@ import ConquerSpace.game.city.area.ResearchArea;
 import ConquerSpace.game.city.area.SpacePortArea;
 import ConquerSpace.game.city.area.TimedManufacturerArea;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.PopulationSegment;
@@ -47,7 +52,6 @@ import ConquerSpace.game.science.tech.Technologies;
 import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.ships.launch.SpacePortLaunchPad;
-import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.ControlTypes;
@@ -59,6 +63,7 @@ import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.universe.SpacePoint;
 import static ConquerSpace.game.universe.generators.DefaultUniverseGenerator.AU_IN_LTYR;
+import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.names.NameGenerator;
 import java.io.IOException;
@@ -107,6 +112,8 @@ public class GameUpdater extends GameTicker {
 
         updateObjectPositions();
 
+        performActions();
+
         //Move ships
         moveShips();
 
@@ -145,6 +152,23 @@ public class GameUpdater extends GameTicker {
         long end = System.currentTimeMillis();
 
         updateTime = (end - start);
+    }
+
+    //Will have to check for actions that contradict each other or something in the future..
+    public void performActions() {
+        for (Map.Entry<Integer, Organization> entry : universe.organizations.entrySet()) {
+            Integer key = entry.getKey();
+            Organization org = entry.getValue();
+            for (int k = 0; k < org.actionList.size(); k++) {
+                try {
+                    Action act = org.actionList.get(k);
+                    ActionStatus status = act.doAction(); //???
+                } catch (Exception e) {
+                    ExceptionHandling.ExceptionMessageBox("Exception while executing actions!", e);
+                }
+            }
+            org.actionList.clear();
+        }
     }
 
     public void calculateControl() {
@@ -188,7 +212,6 @@ public class GameUpdater extends GameTicker {
             }
         }
 
-        int looping = 0;
         //Loop through all the vision points in the universe
         for (int civ = 0; civ < universe.getCivilizationCount(); civ++) {
             Civilization civil = universe.getCivilization(civ);
@@ -210,7 +233,6 @@ public class GameUpdater extends GameTicker {
                             universe.getCivilization(civ).vision.put(universe.getStarSystem(g).getUniversePath(),
                                     (amount > 100) ? 100 : (amount));
                         }
-                        looping++;
                     }
                 }
             }
@@ -365,7 +387,7 @@ public class GameUpdater extends GameTicker {
                 city.resourceDemands.put(universe.species.get(seg.species).food, consume);
             }
 
-            boolean success = removeResource(universe.species.get(seg.species).food, consume, 0, city);
+            boolean success = removeResource(universe.species.get(seg.species).food, consume, city);
             //Not enough food
             boolean starving = false;
             if (!success) {
@@ -428,11 +450,11 @@ public class GameUpdater extends GameTicker {
                             if (val > 0 && toSpendAmount > 0) {
                                 if (val > toSpendAmount) {
                                     //Send the resources
-                                    sendResources(key, toSpendAmount, 0, c, cit);
+                                    sendResources(key, toSpendAmount, c, cit);
                                     //Subtract resources
                                     resourcesToSpend.put(key, 0d);
                                 } else {
-                                    sendResources(key, val, 0, c, cit);
+                                    sendResources(key, val, c, cit);
                                     resourcesToSpend.put(key, (toSpendAmount - val));
                                 }
                             }
@@ -449,7 +471,7 @@ public class GameUpdater extends GameTicker {
             int removed = area.tick(delta);
             if (removed > 0 && area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
                 //Calculate percentage
-                storeResource(area.getGrown().getFoodGood(), (removed * (double) area.getFieldSize()), 0, c);
+                storeResource(area.getGrown().getFoodGood(), (removed * (double) area.getFieldSize()), c);
 
                 area.grow();
             }
@@ -464,14 +486,14 @@ public class GameUpdater extends GameTicker {
                     Double val = entry.getValue();
 
                     //Get percentage
-                    storeResource(key, val * removed, 0, c);
+                    storeResource(key, val * removed, c);
                 }
             }
         }
         if (a instanceof PowerPlantArea) {
             PowerPlantArea powerPlant = (PowerPlantArea) a;
             if (a.operatingJobsNeeded() < a.getCurrentlyManningJobs()) {
-                removeResource(powerPlant.getUsedResource(), Double.valueOf(powerPlant.getMaxVolume()), 0, c);
+                removeResource(powerPlant.getUsedResource(), Double.valueOf(powerPlant.getMaxVolume()), c);
             }
         } else if (a instanceof ManufacturerArea) {
             //Process resources used
@@ -482,7 +504,7 @@ public class GameUpdater extends GameTicker {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
                     Double amount = c.resources.get(key);
-                    removeResource(key, val * delta, 0, c);
+                    removeResource(key, val * delta, c);
                     c.resourceDemands.addValue(key, val);
                 }
 
@@ -490,7 +512,7 @@ public class GameUpdater extends GameTicker {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
 
-                    storeResource(key, val * delta, 0, c);
+                    storeResource(key, val * delta, c);
                 }
             }
         } else if (a instanceof ResearchArea) {
@@ -501,12 +523,12 @@ public class GameUpdater extends GameTicker {
                 for (Map.Entry<Integer, Double> entry : area.getNecessaryGoods().entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    removeResource(key, val * delta, 0, c);
+                    removeResource(key, val * delta, c);
                 }
 
                 double multiplier = getMultiplier(a);
 
-                storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * delta) * multiplier, 0, c);
+                storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * delta) * multiplier, c);
             }
         } else if (a instanceof SpacePortArea) {
             SpacePortArea area = (SpacePortArea) a;
@@ -726,87 +748,6 @@ public class GameUpdater extends GameTicker {
                 c.unrecruitedPeople.add(dude);
             }
         }
-    }
-
-    /**
-     * Stores goods in the closest resource storage from <code>from</code>
-     *
-     * @param resourceType
-     * @param amount
-     * @param owner
-     * @param from
-     */
-    private void storeResource(Integer resourceType, Double amount, int owner, UniversePath from) {
-        //Get closest resources storage
-        //No matter their alleigence, they will store resource to the closest resource storage...
-        //Search planet, because we don't have space storages for now.
-        if (resourceType != null && amount > 0) {
-            Body body = universe.getSpaceObject(from);
-            if (body instanceof Planet) {
-                Planet planet = (Planet) body;
-                for (Map.Entry<GeographicPoint, City> entry : planet.cityDistributions.entrySet()) {
-                    City val = entry.getValue();
-                    if (val.canStore(resourceType)) {
-                        val.addResource(resourceType, amount);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private void storeResource(Integer resourceType, Double amount, int owner, City from) {
-        if (resourceType != null && amount > 0) {
-            if (from.canStore(resourceType)) {
-                //Store resource
-                from.addResource(resourceType, amount);
-            } else {
-                storeResource(resourceType, amount, owner, from.getUniversePath());
-            }
-        }
-    }
-
-    private boolean removeResource(Integer resourceType, Double amount, int owner, City from) {
-        if (resourceType != null && amount != 0) {
-            if (from.canStore(resourceType)) {
-                //Store resource
-                return from.removeResource(resourceType, amount);
-            } else {
-                removeResource(resourceType, amount, owner, from.getUniversePath());
-            }
-        }
-        return false;
-    }
-    
-    private boolean hasSufficientResources(Integer resourceType, Double amount, City from) {
-        return false;
-    }
-
-    private boolean removeResource(Integer resourceType, Double amount, int owner, UniversePath from) {
-        //Get closest resources storage
-        //No matter their alleigence, they will store resource to the closest resource storage...
-        //Search planet, because we don't have space storages for now.
-        Body body = universe.getSpaceObject(from);
-        if (body instanceof Planet) {
-            Planet planet = (Planet) body;
-            for (Map.Entry<GeographicPoint, City> entry : planet.cityDistributions.entrySet()) {
-                City val = entry.getValue();
-                //Get by positon...
-                //For now, we process only if it is on the planet or not.
-                if (val.canStore(resourceType) && val.removeResource(resourceType, amount)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean sendResources(Integer resourceType, Double amount, int owner, City from, City to) {
-        if (removeResource(resourceType, amount, owner, from)) {
-            storeResource(resourceType, amount, owner, to);
-            return true;
-        }
-        return false;
     }
 
     private double getMultiplier(Area area) {

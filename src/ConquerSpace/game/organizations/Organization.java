@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.organizations;
 
+import ConquerSpace.game.actions.Action;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -26,6 +27,7 @@ import java.util.Arrays;
  */
 public class Organization {
     private ArrayList<Organization> children;
+    public ArrayList<Action> actionList;
     private static int idCounter = 0;
     private int id = 0;
     protected String name;
@@ -34,6 +36,7 @@ public class Organization {
         this.id = idCounter++;
         this.name = name;
         children = new ArrayList<>();
+        actionList = new ArrayList<>();
     }
 
     public String getName() {

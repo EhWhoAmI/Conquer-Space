@@ -19,10 +19,14 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.actions.Actions;
+import ConquerSpace.game.actions.ResourceTransportAction;
 import ConquerSpace.game.city.City;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.ResourceStockpile;
+import ConquerSpace.util.DoubleHashMap;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -47,6 +51,8 @@ import org.apache.commons.lang3.ArrayUtils;
 public class PlanetResources extends javax.swing.JPanel {
 
     private Planet p;
+    private Civilization c;
+
     private HashMap<Integer, Double> planetResource;
     private HashMap<Integer, HashMap<String, Double>> planetLedger;
 
@@ -65,8 +71,9 @@ public class PlanetResources extends javax.swing.JPanel {
     /**
      * Creates new form PlanetResources
      */
-    public PlanetResources(Planet p, PlanetInfoSheet parent) {
+    public PlanetResources(Planet p, Civilization c, PlanetInfoSheet parent) {
         this.p = p;
+        this.c = c;
         this.parent = parent;
         planetResource = new HashMap<>();
         planetLedger = new HashMap<>();
@@ -77,6 +84,9 @@ public class PlanetResources extends javax.swing.JPanel {
         storageList = new ResourceStorageListModel();
 
         initComponents();
+
+        //Initialize stockpile selection so that it selects something
+        loadSelectedResourceStockpile();
 
         Timer t = new Timer(1000, l -> {
             if (this.isVisible()) {
@@ -299,6 +309,11 @@ public class PlanetResources extends javax.swing.JPanel {
         jPanel2.add(resourceInputLabel, gridBagConstraints);
 
         transferResourceButton.setText("Transfer!");
+        transferResourceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transferResourceButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -314,16 +329,16 @@ public class PlanetResources extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 284, Short.MAX_VALUE))
+                .addGap(0, 292, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 422, Short.MAX_VALUE))
+                .addGap(0, 397, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab4", jPanel4);
+        jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.transfer"), jPanel4);
 
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -359,13 +374,29 @@ public class PlanetResources extends javax.swing.JPanel {
     }//GEN-LAST:event_resourceToTakeComboBoxActionPerformed
 
     private void resourceSendCityFromComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resourceSendCityFromComboBoxActionPerformed
-        ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
-        ResourceValueComboBoxModel valueComboBoxModel = new ResourceValueComboBoxModel(pile.storedTypes(), pile);
-
-        resourceToTakeComboBox.removeAllItems();
-        resourceToTakeComboBox.setModel(valueComboBoxModel);
-        resourceToTakeComboBox.setSelectedIndex(0);
+        loadSelectedResourceStockpile();
     }//GEN-LAST:event_resourceSendCityFromComboBoxActionPerformed
+
+    private void transferResourceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferResourceButtonActionPerformed
+        //Send resources
+        ComboBoxModel<String> comboBoxModel = resourceToTakeComboBox.getModel();
+        if (comboBoxModel instanceof ResourceValueComboBoxModel) {
+            int resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
+            //ResourceTransportAction act = new ResourceTransportAction(
+            //stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex()),
+            //stockpiles.get(resourceSendCityToComboBox.getSelectedIndex()),
+            //resourceId,
+            //(Double) resourcesToTransferSpinner.getValue());
+            //c.actionList.add(act);
+            Actions.sendResources(
+                    resourceId,
+                    (Double) resourcesToTransferSpinner.getValue(), 
+                    stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex()),
+                    stockpiles.get(resourceSendCityToComboBox.getSelectedIndex()));
+            //Reload things
+            loadSelectedResourceStockpile();
+        }
+    }//GEN-LAST:event_transferResourceButtonActionPerformed
 
     private class ResourceValueComboBoxModel extends DefaultComboBoxModel<String> {
 
@@ -422,8 +453,10 @@ public class PlanetResources extends javax.swing.JPanel {
                             City c = (City) selectedStockpile;
                             HashMap<String, Double> ledger = c.resourceLedger.get(selectedStockpile.storedTypes()[rowIndex]);
                             double change = 0;
-                            for (Double d : ledger.values()) {
-                                change += d;
+                            if (ledger != null) {
+                                for (Double d : ledger.values()) {
+                                    change += d;
+                                }
                             }
                             return change;
                         }
@@ -478,7 +511,10 @@ public class PlanetResources extends javax.swing.JPanel {
                     }
                     if (selectedStockpile instanceof City) {
                         City c = (City) selectedStockpile;
-                        l.setToolTipText(c.resourceLedger.get(selectedStockpile.storedTypes()[row]).toString());
+                        DoubleHashMap map = c.resourceLedger.get(selectedStockpile.storedTypes()[row]);
+                        if (map != null) {
+                            l.setToolTipText(map.toString());
+                        }
                     }
                 } catch (NumberFormatException nfe) {
 
@@ -708,6 +744,19 @@ public class PlanetResources extends javax.swing.JPanel {
         storageJList.setSelectedIndex(stockpiles.indexOf(c));
         //Refresh table
         storageModel.fireTableDataChanged();
+    }
+    
+    private void loadSelectedResourceStockpile() {
+        ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
+        ResourceValueComboBoxModel valueComboBoxModel = new ResourceValueComboBoxModel(pile.storedTypes(), pile);
+
+        int preselected = resourceToTakeComboBox.getSelectedIndex();
+        resourceToTakeComboBox.removeAllItems();
+        resourceToTakeComboBox.setModel(valueComboBoxModel);
+        resourceToTakeComboBox.setSelectedIndex(0);
+        if(preselected != -1) {
+            resourceToTakeComboBox.setSelectedIndex(preselected);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
