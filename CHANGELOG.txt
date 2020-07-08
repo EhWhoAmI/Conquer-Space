@@ -1,6 +1,7 @@
 Changelog:
 
-0.0.3
+0.0.3 (TBD)
+------------------------------------------------------------------------
 Total Overhauls:
 Removed district systems, replaced with cities being defined by a series of points, 
 	- probably better for performance
@@ -32,8 +33,9 @@ Planet sizes and width changed
 Areas now generate resources, not populations
 Cities now distribute resources to surrounding areas
 
-~~~~~~~~~~
-0.0.2
+
+0.0.2 (March 22, 2020)
+------------------------------------------------------------------------
 Total Overhauls:
 Resources are changed into goods, that can be processed into different resources
 Mining is changed into strata, that are similar to veins, just that they have multiple resources
@@ -52,8 +54,9 @@ Add console to see logs without the need to open files up
 Bug Fixes:
 Pressing the console button twice will not lead to an exception
 
-~~~~~~~~~~
-0.0.1
+
+0.0.1 (July 14, 2019)
+------------------------------------------------------------------------
 Massive changes:
 We removed the planet sector system, and replaced it with terrain.
 Buildings have been shaken up also

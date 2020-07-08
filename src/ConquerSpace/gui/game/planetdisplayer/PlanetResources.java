@@ -23,7 +23,6 @@ import ConquerSpace.game.city.City;
 import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.ResourceStockpile;
-import ConquerSpace.util.ResourceLoader;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -31,11 +30,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  *
@@ -110,6 +113,21 @@ public class PlanetResources extends javax.swing.JPanel {
         storageResources = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         gotoCityButton = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        resourceToTakeComboBox = new javax.swing.JComboBox<>();
+        resourceSendCityFromComboBox = new javax.swing.JComboBox<>();
+        resourceSendCityToComboBox = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        resourcesToTransferSpinner = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        to = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        resourceInputLabel = new javax.swing.JLabel();
+        transferResourceButton = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -174,6 +192,139 @@ public class PlanetResources extends javax.swing.JPanel {
 
         jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.individual"), jPanel3);
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        resourceToTakeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Empty!"}));
+        resourceToTakeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resourceToTakeComboBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel2.add(resourceToTakeComboBox, gridBagConstraints);
+
+        resourceSendCityFromComboBox.setModel(new ResourceStorageComboBoxModel());
+        if(resourceSendCityFromComboBox.getItemCount() > 1) {
+            resourceSendCityFromComboBox.setSelectedIndex(0);
+        }
+        resourceSendCityFromComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resourceSendCityFromComboBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(resourceSendCityFromComboBox, gridBagConstraints);
+
+        resourceSendCityToComboBox.setModel(new ResourceStorageComboBoxModel());
+        if(resourceSendCityToComboBox.getItemCount() > 2) {
+            resourceSendCityToComboBox.setSelectedIndex(1);
+        }
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(resourceSendCityToComboBox, gridBagConstraints);
+
+        jLabel3.setText("Amount");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel2.add(jLabel3, gridBagConstraints);
+
+        resourcesToTransferSpinner.setModel(new javax.swing.SpinnerNumberModel());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(resourcesToTransferSpinner, gridBagConstraints);
+
+        jLabel4.setText("Resource");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel2.add(jLabel4, gridBagConstraints);
+
+        to.setText("to");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 11, 0, 12);
+        jPanel2.add(to, gridBagConstraints);
+
+        jLabel1.setText("City");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel2.add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Resource");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel2.add(jLabel2, gridBagConstraints);
+
+        jLabel5.setText("City");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel2.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        jPanel2.add(resourceInputLabel, gridBagConstraints);
+
+        transferResourceButton.setText("Transfer!");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel2.add(transferResourceButton, gridBagConstraints);
+
+        jPanel5.add(jPanel2);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 284, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 422, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("tab4", jPanel4);
+
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -184,6 +335,58 @@ public class PlanetResources extends javax.swing.JPanel {
             parent.setSelectedTab(3);
         }
     }//GEN-LAST:event_gotoCityButtonActionPerformed
+
+    private void resourceToTakeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resourceToTakeComboBoxActionPerformed
+        //Resource to...
+        if (resourceSendCityToComboBox.getSelectedIndex() >= 0) {
+            ResourceStockpile pileTo = stockpiles.get(resourceSendCityToComboBox.getSelectedIndex());
+            ComboBoxModel<String> comboBoxModel = resourceToTakeComboBox.getModel();
+            if (comboBoxModel instanceof ResourceValueComboBoxModel) {
+                int resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
+                if (ArrayUtils.contains(pileTo.storedTypes(), resourceId)) {
+                    resourceInputLabel.setText(GameController.goodHashMap.get(resourceId) + " " + pileTo.getResourceAmount(resourceId));
+                } else {
+                    resourceInputLabel.setText("Does not contain " + GameController.goodHashMap.get(resourceId));
+                }
+                //Set the spinner
+                ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
+                double maxValue = pile.getResourceAmount(((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()]);
+                SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0d, 0d, maxValue, 1d);
+
+                resourcesToTransferSpinner.setModel(spinnerModel);
+            }
+        }
+    }//GEN-LAST:event_resourceToTakeComboBoxActionPerformed
+
+    private void resourceSendCityFromComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resourceSendCityFromComboBoxActionPerformed
+        ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
+        ResourceValueComboBoxModel valueComboBoxModel = new ResourceValueComboBoxModel(pile.storedTypes(), pile);
+
+        resourceToTakeComboBox.removeAllItems();
+        resourceToTakeComboBox.setModel(valueComboBoxModel);
+        resourceToTakeComboBox.setSelectedIndex(0);
+    }//GEN-LAST:event_resourceSendCityFromComboBoxActionPerformed
+
+    private class ResourceValueComboBoxModel extends DefaultComboBoxModel<String> {
+
+        ResourceStockpile pile;
+        Integer[] list;
+
+        public ResourceValueComboBoxModel(Integer[] list, ResourceStockpile pile) {
+            this.list = list;
+            this.pile = pile;
+        }
+
+        @Override
+        public String getElementAt(int index) {
+            return GameController.goodHashMap.get(list[index]).getName() + " " + pile.getResourceAmount(list[index]);
+        }
+
+        @Override
+        public int getSize() {
+            return list.length;
+        }
+    }
 
     private class StockpileStorageModel extends AbstractTableModel {
 
@@ -408,7 +611,23 @@ public class PlanetResources extends javax.swing.JPanel {
             }
             return LOCALE_MESSAGES.getMessage("game.planet.resources.table.storage");
         }
+    }
 
+    private class ResourceStorageComboBoxModel extends DefaultComboBoxModel<String> {
+
+        @Override
+        public int getSize() {
+            return stockpiles.size();
+        }
+
+        @Override
+        public String getElementAt(int index) {
+            ResourceStockpile storage = stockpiles.get(index);
+            if (storage instanceof City) {
+                return (LOCALE_MESSAGES.getMessage("game.planet.resources.table.storagedesc", ((City) storage).getName()));
+            }
+            return LOCALE_MESSAGES.getMessage("game.planet.resources.table.storage");
+        }
     }
 
     private void compileResources() {
@@ -493,14 +712,29 @@ public class PlanetResources extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton gotoCityButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable planetResourceTable;
+    private javax.swing.JLabel resourceInputLabel;
+    private javax.swing.JComboBox<String> resourceSendCityFromComboBox;
+    private javax.swing.JComboBox<String> resourceSendCityToComboBox;
+    private javax.swing.JComboBox<String> resourceToTakeComboBox;
+    private javax.swing.JSpinner resourcesToTransferSpinner;
     javax.swing.JList<String> storageJList;
     private javax.swing.JTable storageResources;
+    private javax.swing.JLabel to;
+    private javax.swing.JButton transferResourceButton;
     // End of variables declaration//GEN-END:variables
 }
