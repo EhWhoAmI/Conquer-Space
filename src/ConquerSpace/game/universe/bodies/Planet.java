@@ -20,6 +20,7 @@ package ConquerSpace.game.universe.bodies;
 import ConquerSpace.game.organizations.civilization.stats.Economy;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.life.LocalLife;
+import ConquerSpace.game.organizations.Administrable;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.ships.Orbitable;
@@ -35,7 +36,7 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class Planet extends Body {
+public class Planet extends Body implements Administrable{
 
     private int planetType;
 

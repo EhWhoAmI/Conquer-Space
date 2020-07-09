@@ -25,7 +25,7 @@ import ConquerSpace.game.economy.Currency;
 import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
-import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.population.Race;
 import ConquerSpace.game.universe.PolarCoordinate;
 import ConquerSpace.game.universe.UniversePath;
@@ -200,7 +200,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setController(new AIController());
             civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
             civ.setSpeciesName(name);
-            CivilizationPreferredClimateType civPreferredClimate1 = CivilizationPreferredClimateType.values()[rand.nextInt(CivilizationPreferredClimateType.values().length)];
+            RacePreferredClimateTpe civPreferredClimate1 = RacePreferredClimateTpe.values()[rand.nextInt(RacePreferredClimateTpe.values().length)];
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
             starSystemCount++;

@@ -47,6 +47,10 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
         return elements.size();
     }
 
+    public void setElements(ArrayList<E> elements) {
+        this.elements = elements;
+    }
+
     @Override
     public String getElementAt(int index) {
         return (handler.toString(elements.get(index)));

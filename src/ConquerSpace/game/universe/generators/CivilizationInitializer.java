@@ -39,6 +39,7 @@ import ConquerSpace.game.life.LifeTrait;
 import ConquerSpace.game.life.LocalLife;
 import ConquerSpace.game.life.Species;
 import ConquerSpace.game.organizations.Organization;
+import ConquerSpace.game.organizations.behavior.ResourceManagerBehavior;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.Culture;
@@ -119,9 +120,6 @@ public class CivilizationInitializer {
             if (universe.getSpaceObject(p) instanceof Planet) {
                 Planet starting = (Planet) universe.getSpaceObject(p);
 
-                //init orgs
-                initializeOrgs(c, starting);
-
                 c.setCapitalPlanet(starting);
 
                 initializeCities(starting, c, selector);
@@ -149,6 +147,9 @@ public class CivilizationInitializer {
                 createUnrecruitedPeople(c, starting, gen, selector);
 
                 initializeGovernment(c, gen, selector);
+
+                //init orgs
+                initializeOrgs(c, starting);
 
                 //Set head of state position
                 c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
@@ -178,7 +179,7 @@ public class CivilizationInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-        
+
         for (int i = 0; i < starting.cities.size(); i++) {
             City city = starting.cities.get(i);
             addInfrastructure(city);
@@ -429,8 +430,15 @@ public class CivilizationInitializer {
         c.people.add(r);
     }
 
+    //Governmental orgs...
     private void initializeOrgs(Civilization c, Planet planet) {
         Organization org = new Organization("Ministry of Economic Planning");
+        org.setBehavior(new ResourceManagerBehavior());
+        //Sort through city
+        for(City city : planet.cities){
+            org.region.bodies.add(city);
+        }
+        
         c.addChild(org);
     }
 

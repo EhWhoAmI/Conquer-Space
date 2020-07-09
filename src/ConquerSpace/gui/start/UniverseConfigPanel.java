@@ -19,7 +19,7 @@ package ConquerSpace.gui.start;
 
 import static ConquerSpace.ConquerSpace.DEBUG;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -63,7 +63,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
     JLabel civHomePlanetNameLabel;
     JTextField civHomePlanetName;
     JLabel civTempResistanceLabel;
-    JComboBox<CivilizationPreferredClimateType> civTempResistanceComboBox;
+    JComboBox<RacePreferredClimateTpe> civTempResistanceComboBox;
     JLabel speciesNameLabel;
     JTextField speciesNameField;
     JLabel currencyNameLabel;
@@ -135,7 +135,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         civHomePlanetName = new JTextField("Earth");
 
         civTempResistanceLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.climate"));
-        civTempResistanceComboBox = new JComboBox<>(CivilizationPreferredClimateType.values());
+        civTempResistanceComboBox = new JComboBox<>(RacePreferredClimateTpe.values());
 
         speciesNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.species"));
         speciesNameField = new JTextField("Earthlings");

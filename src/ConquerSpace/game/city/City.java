@@ -20,6 +20,7 @@ package ConquerSpace.game.city;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.logistics.SupplyChain;
+import ConquerSpace.game.organizations.Administrable;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
 import ConquerSpace.game.population.Population;
@@ -36,7 +37,7 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
-public class City implements PersonEnterable, ResourceStockpile {
+public class City implements PersonEnterable, ResourceStockpile, Administrable {
 
     private static int idCounter = 0;
     private final int id;

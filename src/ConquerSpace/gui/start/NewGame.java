@@ -20,7 +20,7 @@ package ConquerSpace.gui.start;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
-import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -126,7 +126,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             civilizationConfig.civColor = (civColor);
             civilizationConfig.civSymbol = ((String) universeConfigPanel.civSymbolSpinner.getValue());
             civilizationConfig.civilizationName = (universeConfigPanel.civNameTextField.getText());
-            civilizationConfig.civilizationPreferredClimate = ((CivilizationPreferredClimateType) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
+            civilizationConfig.civilizationPreferredClimate = ((RacePreferredClimateTpe) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
             civilizationConfig.homePlanetName = (universeConfigPanel.civHomePlanetName.getText());
             civilizationConfig.speciesName = (universeConfigPanel.speciesNameField.getText());
             civilizationConfig.civCurrencyName = (universeConfigPanel.currencyNameTextField.getText());

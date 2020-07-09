@@ -19,7 +19,7 @@ package ConquerSpace;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.organizations.civilization.CivilizationPreferredClimateType;
+import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -373,26 +373,24 @@ public class ConquerSpace {
                 .getProtectionDomain().getCodeSource()
                 .getLocation().getPath());
         File assetFolder = new File("assets/data");
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                long start = System.currentTimeMillis();
-                try {
-                    codeChecksum = Checksum.hashFolder(codeFile);
-                    LOGGER.info("Done with code checksum");
-                    assetChecksum = Checksum.hashFolder(assetFolder);
-                    LOGGER.info("Done with asset checksum");
-                } catch (NoSuchAlgorithmException ex) {
-                    LOGGER.warn("", ex);
-                } catch (IOException ex) {
-                    LOGGER.warn("", ex);
-                }
-                LOGGER.info("Code checksum: " + codeChecksum);
-                LOGGER.info("Asset checksum: " + assetChecksum);
-                long end = System.currentTimeMillis();
-                LOGGER.info("Time needed to calculate checksum: " + (end - start) + "ms");
+        Runnable runnable = () -> {
+            long start = System.currentTimeMillis();
+            try {
+                codeChecksum = Checksum.hashFolder(codeFile);
+                LOGGER.info("Done with code checksum");
+                assetChecksum = Checksum.hashFolder(assetFolder);
+                LOGGER.info("Done with asset checksum");
+            } catch (NoSuchAlgorithmException ex) {
+                LOGGER.warn("", ex);
+            } catch (IOException ex) {
+                LOGGER.warn("", ex);
             }
+            LOGGER.info("Code checksum: " + codeChecksum);
+            LOGGER.info("Asset checksum: " + assetChecksum);
+            long end = System.currentTimeMillis();
+            LOGGER.info("Time needed to calculate checksum: " + (end - start) + "ms");
         };
+        
         Thread checksumThread = new Thread(runnable);
         checksumThread.setName("checksum");
         checksumThread.start();
@@ -486,7 +484,7 @@ public class ConquerSpace {
         civilizationConfig.civColor = (Color.CYAN);
         civilizationConfig.civSymbol = ("A");
         civilizationConfig.civilizationName = ("Humans");
-        civilizationConfig.civilizationPreferredClimate = CivilizationPreferredClimateType.Varied;
+        civilizationConfig.civilizationPreferredClimate = RacePreferredClimateTpe.Varied;
         civilizationConfig.homePlanetName = ("Earth");
         civilizationConfig.speciesName = ("Earthlings");
         civilizationConfig.civCurrencyName = ("Money");

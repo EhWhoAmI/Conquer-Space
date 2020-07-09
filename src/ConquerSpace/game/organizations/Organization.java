@@ -18,6 +18,8 @@
 package ConquerSpace.game.organizations;
 
 import ConquerSpace.game.actions.Action;
+import ConquerSpace.game.organizations.behavior.Behavior;
+import ConquerSpace.game.organizations.behavior.EmptyBehavior;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,15 +30,19 @@ import java.util.Arrays;
 public class Organization {
     private ArrayList<Organization> children;
     public ArrayList<Action> actionList;
+    public AdministrativeRegion region;
     private static int idCounter = 0;
     private int id = 0;
     protected String name;
+    protected Behavior behavior;
 
     public Organization(String name) {
         this.id = idCounter++;
         this.name = name;
         children = new ArrayList<>();
         actionList = new ArrayList<>();
+        region = new AdministrativeRegion();
+        behavior = new EmptyBehavior();
     }
 
     public String getName() {
@@ -57,5 +63,13 @@ public class Organization {
     
     public void addChild(Organization org) {
         children.add(org);
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
+    }
+
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

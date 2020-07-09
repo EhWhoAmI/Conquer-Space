@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.organizations.civilization;
+package ConquerSpace.game.population;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 
@@ -25,14 +25,14 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
  *
  * @author EhWhoAmI
  */
-public enum CivilizationPreferredClimateType {
+public enum RacePreferredClimateTpe {
     Varied("civ.climate.varied"),
     Hot("civ.climate.hot"),
     Cold("civ.climate.cold");
 
     String text;
 
-    private CivilizationPreferredClimateType(String text) {
+    private RacePreferredClimateTpe(String text) {
         this.text = text;
     }
 

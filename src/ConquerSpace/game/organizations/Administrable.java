@@ -15,23 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.generators;
-
-import ConquerSpace.game.population.RacePreferredClimateTpe;
-import java.awt.Color;
+package ConquerSpace.game.organizations;
 
 /**
- * Configuration of the civilization.
+ * A place that an org can control.
  * @author EhWhoAmI
  */
-public class CivilizationConfig {
-    public Color civColor;
-    public String civSymbol;
-    public String homePlanetName;
-    public String speciesName;
-    public String civilizationName;
-    public RacePreferredClimateTpe civilizationPreferredClimate;
+public interface Administrable {
     
-    public String civCurrencyName;
-    public String civCurrencySymbol;
 }

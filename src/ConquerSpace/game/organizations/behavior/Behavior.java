@@ -15,23 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.generators;
-
-import ConquerSpace.game.population.RacePreferredClimateTpe;
-import java.awt.Color;
+package ConquerSpace.game.organizations.behavior;
 
 /**
- * Configuration of the civilization.
+ * Behavior for orgs, what they do. Probably have to change to a class in the future, but no idea on how to implement.
  * @author EhWhoAmI
  */
-public class CivilizationConfig {
-    public Color civColor;
-    public String civSymbol;
-    public String homePlanetName;
-    public String speciesName;
-    public String civilizationName;
-    public RacePreferredClimateTpe civilizationPreferredClimate;
-    
-    public String civCurrencyName;
-    public String civCurrencySymbol;
+public abstract class Behavior {
+    public abstract void doBehavior();
 }

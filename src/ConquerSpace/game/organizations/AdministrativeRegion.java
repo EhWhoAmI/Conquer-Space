@@ -15,23 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.universe.generators;
+package ConquerSpace.game.organizations;
 
-import ConquerSpace.game.population.RacePreferredClimateTpe;
-import java.awt.Color;
+import java.util.ArrayList;
 
 /**
- * Configuration of the civilization.
+ *
  * @author EhWhoAmI
  */
-public class CivilizationConfig {
-    public Color civColor;
-    public String civSymbol;
-    public String homePlanetName;
-    public String speciesName;
-    public String civilizationName;
-    public RacePreferredClimateTpe civilizationPreferredClimate;
-    
-    public String civCurrencyName;
-    public String civCurrencySymbol;
+public class AdministrativeRegion {
+    public ArrayList<Administrable> bodies;
+
+    public AdministrativeRegion() {
+        bodies = new ArrayList<>();
+    }
 }

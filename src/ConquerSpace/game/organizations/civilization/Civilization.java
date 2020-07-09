@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.organizations.civilization;
 
+import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.organizations.civilization.controllers.AIController;
 import ConquerSpace.game.organizations.civilization.controllers.CivilizationController;
 import ConquerSpace.game.organizations.civilization.government.Government;
@@ -65,7 +66,7 @@ public class Civilization extends Organization implements Employer {
     public static final int CIV_TECH_RESEARCH_AMOUNT = 1;
 
     private Color color;
-    private CivilizationPreferredClimateType civilizationPreferedClimate;
+    private RacePreferredClimateTpe civilizationPreferedClimate;
     private String civilizationSymbol;
     private String speciesName;
 
@@ -216,11 +217,11 @@ public class Civilization extends Organization implements Employer {
         this.speciesName = speciesName;
     }
 
-    public void setCivilizationPreferredClimate(CivilizationPreferredClimateType civilizationPreferedClimate) {
+    public void setCivilizationPreferredClimate(RacePreferredClimateTpe civilizationPreferedClimate) {
         this.civilizationPreferedClimate = civilizationPreferedClimate;
     }
 
-    public CivilizationPreferredClimateType getCivilizationPreferredClimate() {
+    public RacePreferredClimateTpe getCivilizationPreferredClimate() {
         return civilizationPreferedClimate;
     }
 

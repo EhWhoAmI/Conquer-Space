@@ -17,9 +17,13 @@
  */
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.organizations.Administrable;
 import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.gui.ObjectListModel;
+import com.alee.extended.layout.HorizontalFlowLayout;
+import com.alee.extended.layout.VerticalFlowLayout;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,17 +37,39 @@ public class OrganizationsOrganizer extends JPanel {
     private JList<String> orgList;
     private ObjectListModel<Organization> orgListModel;
 
+    private JPanel orgInfoPanel;
+    
+    private JList<String> controlList;
+    private ObjectListModel<Administrable> adminstratableListModel;
+    
     public OrganizationsOrganizer(Civilization c) {
+        //Lazy for now...
+        setLayout(new HorizontalFlowLayout());
+        
         orgListModel = new ObjectListModel<>();
         for (Organization o : c.getChildren()) {
             orgListModel.addElement(o);
         }
+        
         orgListModel.setHandler(l -> {
             return l.getName();
         });
 
         orgList = new JList<>(orgListModel);
+        
+        orgList.addListSelectionListener(l -> {
+            adminstratableListModel.setElements(orgListModel.getObject(orgList.getSelectedIndex()).region.bodies);
+            controlList.updateUI();
+        });
 
+        orgInfoPanel = new JPanel(new VerticalFlowLayout());
+        
+        adminstratableListModel = new ObjectListModel<>();
+        controlList = new JList<>(adminstratableListModel);
+        orgInfoPanel.add(new JLabel("Area under jurisdiction"));
+        orgInfoPanel.add(new JScrollPane(controlList));
+        
         add(new JScrollPane(orgList));
+        add(orgInfoPanel);
     }
 }
