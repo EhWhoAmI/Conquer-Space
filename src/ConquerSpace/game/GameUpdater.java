@@ -112,6 +112,7 @@ public class GameUpdater extends GameTicker {
 
         updateObjectPositions();
 
+        //Execute org actions
         performActions();
 
         //Move ships
@@ -159,6 +160,9 @@ public class GameUpdater extends GameTicker {
         for (Map.Entry<Integer, Organization> entry : universe.organizations.entrySet()) {
             Integer key = entry.getKey();
             Organization org = entry.getValue();
+
+            //Run code...
+            org.getBehavior().doBehavior();
             for (int k = 0; k < org.actionList.size(); k++) {
                 try {
                     Action act = org.actionList.get(k);
@@ -310,7 +314,7 @@ public class GameUpdater extends GameTicker {
             c.setCityType(type);
         }
 
-        distributeResources(p);
+        //distributeResources(p);
     }
 
     /**
@@ -381,11 +385,7 @@ public class GameUpdater extends GameTicker {
 
             //Request food
             //Append resources
-            if (city.resourceDemands.containsKey(universe.species.get(seg.species).food)) {
-                city.resourceDemands.put(universe.species.get(seg.species).food, city.resourceDemands.get(universe.species.get(seg.species).food) + consume);
-            } else {
-                city.resourceDemands.put(universe.species.get(seg.species).food, consume);
-            }
+            city.resourceDemands.addValue(universe.species.get(seg.species).food, consume);
 
             boolean success = removeResource(universe.species.get(seg.species).food, consume, city);
             //Not enough food

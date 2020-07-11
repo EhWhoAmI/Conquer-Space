@@ -228,6 +228,10 @@ public class PlanetCities extends JPanel {
         JLabel popCount = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(selected.population.getPopulationSize())));
         cityData.add(popCount);
+        
+        JLabel priindustry = new JLabel(
+                LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selected.getCityType()));
+        cityData.add(priindustry);
 
         //Get the number of powerplants leading to it
         //Energy usage

@@ -17,11 +17,17 @@
  */
 package ConquerSpace.game.organizations.behavior;
 
+import ConquerSpace.game.organizations.Organization;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class EmptyBehavior extends Behavior{
+
+    public EmptyBehavior(Organization org) {
+        super(org);
+    }
     @Override
     public void doBehavior(){
         //Do nothing

@@ -42,7 +42,7 @@ public class Organization {
         children = new ArrayList<>();
         actionList = new ArrayList<>();
         region = new AdministrativeRegion();
-        behavior = new EmptyBehavior();
+        behavior = new EmptyBehavior(this);
     }
 
     public String getName() {

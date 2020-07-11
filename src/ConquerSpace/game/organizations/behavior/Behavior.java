@@ -17,10 +17,19 @@
  */
 package ConquerSpace.game.organizations.behavior;
 
+import ConquerSpace.game.organizations.Organization;
+
 /**
  * Behavior for orgs, what they do. Probably have to change to a class in the future, but no idea on how to implement.
  * @author EhWhoAmI
  */
 public abstract class Behavior {
+    
+    Organization org;
+
+    public Behavior(Organization org) {
+        this.org = org;
+    }
+    
     public abstract void doBehavior();
 }

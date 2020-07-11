@@ -149,7 +149,7 @@ public class CivilizationInitializer {
                 initializeGovernment(c, gen, selector);
 
                 //init orgs
-                initializeOrgs(c, starting);
+                initializeOrgs(universe, c, starting);
 
                 //Set head of state position
                 c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
@@ -431,15 +431,16 @@ public class CivilizationInitializer {
     }
 
     //Governmental orgs...
-    private void initializeOrgs(Civilization c, Planet planet) {
+    private void initializeOrgs(Universe u, Civilization c, Planet planet) {
         Organization org = new Organization("Ministry of Economic Planning");
-        org.setBehavior(new ResourceManagerBehavior());
+        org.setBehavior(new ResourceManagerBehavior(org));
         //Sort through city
         for(City city : planet.cities){
             org.region.bodies.add(city);
         }
         
         c.addChild(org);
+        u.addOrganization(org);
     }
 
     private void initalizeCivValues(Civilization c) {
