@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -83,7 +84,7 @@ public class PlanetCities extends JPanel {
 
     private AreaConstructionPanel areaConstructionPanel;
 
-    private Planet p;
+    private Planet planet;
 
     private int population = 1;
 
@@ -96,14 +97,16 @@ public class PlanetCities extends JPanel {
     private DefaultListModel<Area> areaListModel;
     private JList<Area> areaList;
 
-    private Universe u;
+    private Universe universe;
     private Civilization owner;
 
     private PlanetInfoSheet parent;
+    private GameState gameState;
 
-    public PlanetCities(Universe u, Planet p, Civilization civ, int turn, PlanetInfoSheet parent) {
-        this.u = u;
-        this.p = p;
+    public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent) {
+        this.universe = gameState.universe;
+        this.gameState = gameState;
+        this.planet = p;
         this.owner = civ;
         this.parent = parent;
         tabs = new JTabbedPane();
@@ -215,10 +218,10 @@ public class PlanetCities extends JPanel {
         cityData.add(cityName);
 
         //Check if capital city
-        for (int i = 0; i < u.getCivilizationCount(); i++) {
-            if (u.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
+        for (int i = 0; i < universe.getCivilizationCount(); i++) {
+            if (universe.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
                 JLabel isCapital = new JLabel(
-                        LOCALE_MESSAGES.getMessage("game.planet.cities.capital", u.getCivilization(i).getName()));
+                        LOCALE_MESSAGES.getMessage("game.planet.cities.capital", universe.getCivilization(i).getName()));
                 cityData.add(isCapital);
                 break;
             }
@@ -295,7 +298,7 @@ public class PlanetCities extends JPanel {
 
         areaList.addListSelectionListener(o -> {
             areaInfoContainerPanel.removeAll();
-            areaInfoContainerPanel.add(new AreaInformationPanel(areaList.getSelectedValue()));
+            areaInfoContainerPanel.add(new AreaInformationPanel(gameState, areaList.getSelectedValue()));
         });
 
         areaInfoPanel.add(areascrollPane);
@@ -309,7 +312,7 @@ public class PlanetCities extends JPanel {
         //Fill up
         availableJobTable = new JTable(availableJobModel);
 
-        areaConstructionPanel = new AreaConstructionPanel(p, owner, selected);
+        areaConstructionPanel = new AreaConstructionPanel(gameState, planet, owner, selected);
 
         cityInfoTabs.removeAll();
         cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.areas"), areaInfoPanel);
@@ -430,10 +433,14 @@ public class PlanetCities extends JPanel {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
+            int demandId = 0;
+            if(currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex] instanceof Integer) {
+                demandId = (Integer) currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex];
+            }
             if (currentlySelectedCity != null) {
                 switch (columnIndex) {
                     case 0:
-                        return GameController.goodHashMap.get(currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex]);
+                        return gameState.goodHashMap.get(demandId).getName();
                     case 1:
                         return (currentlySelectedCity.resourceDemands.values().toArray()[rowIndex]);
                 }

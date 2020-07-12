@@ -26,7 +26,6 @@ import java.util.Calendar;
 public class StarDate {
     /**
      * Ticker is in hours.
-     * Is initalized to 24 for day 1.
      */
     public long bigint = 1L;
     

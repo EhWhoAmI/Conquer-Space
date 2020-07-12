@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.SpacePortArea;
@@ -52,14 +53,14 @@ public class PlanetInfoSheet extends JPanel {
 
     private Image planetImage;
 
-    private Civilization c;
-    private Planet p;
+    private Civilization civilization;
+    private Planet planet;
 
     private final int spacePortIndex = 4;
 
-    public PlanetInfoSheet(Universe u, Planet p, Civilization c) {
-        this.c = c;
-        this.p = p;
+    public PlanetInfoSheet(GameState gameState, Planet p, Civilization c) {
+        this.civilization = c;
+        this.planet = p;
 
         TerrainRenderer renderer = new TerrainRenderer(p);
         planetImage = renderer.getImage();
@@ -67,17 +68,17 @@ public class PlanetInfoSheet extends JPanel {
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
 
-        overview = new PlanetOverview(u, p, c, planetImage);
+        overview = new PlanetOverview(gameState, p, c, planetImage);
         atmosphere = new AtmosphereInfo(p, c);
-        population = new PlanetCities(u, p, c, 0, this);
+        population = new PlanetCities(gameState, p, c, this);
         spacePort = new SpacePortMenuSheet(p, c);
-        planetGeology = new PlanetGeology(p);
+        planetGeology = new PlanetGeology(gameState, p);
         //building = new ConstructionMenu(u, p, c);
-        industry = new PlanetIndustry(p, c);
+        industry = new PlanetIndustry(gameState, p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
-        planetMap = new PlanetMap(p, c, u, this, planetImage);
+        planetMap = new PlanetMap(p, c, gameState.universe, this, planetImage);
         planetEconomy = new PlanetEconomy();
-        planetResources = new PlanetResources(p, c, this);
+        planetResources = new PlanetResources(gameState, p, c, this);
 
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.overview"), overview);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.map"), planetMap);
@@ -131,7 +132,7 @@ public class PlanetInfoSheet extends JPanel {
 
         //Check if planet contains space port
         cityloop:
-        for (City c : p.cities) {
+        for (City c : planet.cities) {
             for (Area a : c.areas) {
                 if (a instanceof SpacePortArea) {
                     tpane.setEnabledAt(spacePortIndex, true);
@@ -140,7 +141,7 @@ public class PlanetInfoSheet extends JPanel {
             }
         }
         //Check if civ has launch capability
-        if (c.values.get("haslaunch") != 1) {
+        if (civilization.values.get("haslaunch") != 1) {
 
             //Disable
             tpane.setEnabledAt(spacePortIndex, false);

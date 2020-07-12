@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.organizations.civilization.controllers;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
@@ -45,6 +46,8 @@ public class PlayerController extends CivilizationController {
     public GameWindow mainwindow;
     public AlertDisplayer alertDisplayer;
     public ArrayList<Ship> selectedShips = new ArrayList<>();
+    
+    private GameState state;
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {
@@ -61,8 +64,9 @@ public class PlayerController extends CivilizationController {
     }
 
     @Override
-    public void init(Universe u, StarDate d, Civilization c) {
-        mainwindow = new GameWindow(u, this, c, d);
+    public void init(GameState state, Civilization civ) {
+        this.state = state;
+        mainwindow = new GameWindow(state, this, civ);
         alertDisplayer = AlertDisplayer.getInstance();
     }
 
@@ -72,7 +76,7 @@ public class PlayerController extends CivilizationController {
         mainwindow.dispose();
 
         //Then reload
-        init(u, d, c);
+        init(state, c);
     }
 
     @Override

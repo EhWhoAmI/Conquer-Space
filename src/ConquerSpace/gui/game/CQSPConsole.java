@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.actions.Alert;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.science.tech.Technologies;
@@ -44,7 +45,7 @@ public class CQSPConsole extends JInternalFrame {
     JTextField text;
 
     @SuppressWarnings("unchecked")
-    public CQSPConsole(Universe u, Civilization c) {
+    public CQSPConsole(Universe u, Civilization c, GameState state) {
         setLayout(new VerticalFlowLayout());
         model = new DefaultListModel<>();
         list = new JList<>(model);
@@ -74,8 +75,8 @@ public class CQSPConsole extends JInternalFrame {
                     model.addElement("You need the id of the tech");
                 } else if (StringUtils.isNumeric(command[1])) {
 
-                    Technology t = Technologies.getTechByID(Integer.parseInt(command[1]));
-                    c.researchTech(t);
+                    Technology t = Technologies.getTechByID(state, Integer.parseInt(command[1]));
+                    c.researchTech(state, t);
                     model.addElement("Researched " + t.getName() + " for " + c.getName());
                     //Alert civ
                     c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));

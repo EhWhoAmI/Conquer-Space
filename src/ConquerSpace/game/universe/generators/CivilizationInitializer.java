@@ -18,6 +18,7 @@
 package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.PeopleProcessor;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.government.Government;
@@ -41,6 +42,7 @@ import ConquerSpace.game.life.Species;
 import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.organizations.behavior.ResourceManagerBehavior;
 import ConquerSpace.game.people.Administrator;
+import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.people.Scientist;
 import ConquerSpace.game.population.Culture;
 import ConquerSpace.game.population.PopulationSegment;
@@ -78,8 +80,11 @@ public class CivilizationInitializer {
 
     final int CIV_STARTING_TECH_PTS = 10;
 
-    public CivilizationInitializer(Universe u) {
-        universe = u;
+    private GameState gameState;
+
+    public CivilizationInitializer(GameState state) {
+        universe = state.universe;
+        this.gameState = state;
     }
 
     public void initGame() {
@@ -99,60 +104,60 @@ public class CivilizationInitializer {
         universe.starSystems.trimToSize();
 
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
-            Civilization c = universe.getCivilization(i);
+            Civilization civilization = universe.getCivilization(i);
             //Add templates
-            initVision(c, universe);
+            initVision(civilization, universe);
 
             //Science
-            initializeTech(c, selector);
+            initializeTech(civilization, selector);
 
             //Init templates
-            initializeSpaceships(c);
+            initializeSpaceships(civilization);
 
-            initalizeCivValues(c);
+            initalizeCivValues(civilization);
 
             HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
             material.setId(0);
-            c.hullMaterials.add(material);
+            civilization.hullMaterials.add(material);
 
-            UniversePath p = c.getStartingPlanet();
+            UniversePath path = civilization.getStartingPlanet();
 
-            if (universe.getSpaceObject(p) instanceof Planet) {
-                Planet starting = (Planet) universe.getSpaceObject(p);
+            if (universe.getSpaceObject(path) instanceof Planet) {
+                Planet startingPlanet = (Planet) universe.getSpaceObject(path);
 
-                c.setCapitalPlanet(starting);
+                civilization.setCapitalPlanet(startingPlanet);
 
-                initializeCities(starting, c, selector);
+                initializeCities(startingPlanet, civilization, selector);
 
-                nameStratumOnPlanet(starting, selector);
+                nameStratumOnPlanet(startingPlanet, selector);
 
                 //Set ownership
-                starting.setOwnerID(c.getId());
-                starting.scanned.add(c.getId());
-                starting.setHabitated(true);
-                starting.setName(c.getHomePlanetName());
+                startingPlanet.setOwnerID(civilization.getId());
+                startingPlanet.scanned.add(civilization.getId());
+                startingPlanet.setHabitated(true);
+                startingPlanet.setName(civilization.getHomePlanetName());
 
-                c.habitatedPlanets.add(starting);
+                civilization.habitatedPlanets.add(startingPlanet);
 
                 //Add resources
 //                for (Good res : GameController.ores) {
 //                    c.resourceList.put(res, 0);
 //                }
-                LOGGER.info("Civ " + c.getName() + " Starting planet: " + starting.getUniversePath());
+                LOGGER.info("Civ " + civilization.getName() + " Starting planet: " + startingPlanet.getUniversePath());
 
                 //Deal with people
-                initalizeRecruitedPeople(c, gen, selector);
+                initalizeRecruitedPeople(civilization, gen, selector);
 
                 //Add unrecruited people
-                createUnrecruitedPeople(c, starting, gen, selector);
+                createUnrecruitedPeople(civilization, startingPlanet, gen, selector);
 
-                initializeGovernment(c, gen, selector);
+                initializeGovernment(civilization, gen, selector);
 
                 //init orgs
-                initializeOrgs(universe, c, starting);
+                initializeOrgs(civilization, startingPlanet);
 
                 //Set head of state position
-                c.government.officials.get(c.government.headofState).setPosition(c.getCapitalCity());
+                civilization.government.officials.get(civilization.government.headofState).setPosition(civilization.getCapitalCity());
             }
         }
     }
@@ -305,6 +310,7 @@ public class CivilizationInitializer {
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
+        gameState.addSpecies(potato);
 
         //Set food good
         c.getFoundingSpecies().food = potato.getFoodGood();
@@ -364,7 +370,7 @@ public class CivilizationInitializer {
             person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
             Scientist nerd = new Scientist(person, age);
             nerd.setSkill(selector.nextInt(4) + 1);
-            nerd.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
+            nerd.traits.add(getRandomPersonalityTrait(selector));
 
             //Set location
             nerd.setPosition(c.getCapitalCity());
@@ -381,29 +387,33 @@ public class CivilizationInitializer {
             person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
             Administrator dude = new Administrator(person, age);
             //nerd.setSkill((int) (Math.random() * 5) + 1);
-            dude.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
+            dude.traits.add(getRandomPersonalityTrait(selector));
             dude.setPosition(c.getCapitalCity());
 
             c.unrecruitedPeople.add(dude);
         }
     }
 
+    private PersonalityTrait getRandomPersonalityTrait(Random selector) {
+        return gameState.personalityTraits.get((selector.nextInt(gameState.personalityTraits.size())));
+    }
+
     private void initializeTech(Civilization c, Random selector) {
         //Add fields
-        c.fields = (Fields.toField(Fields.fieldNodeRoot));
+        c.fields = (Fields.toField(gameState.fieldNodeRoot));
         //Add all starting techs            
-        for (Technology tech : Technologies.getTechsByTag("Starting")) {
-            c.researchTech(tech);
+        for (Technology tech : Technologies.getTechsByTag(gameState, "Starting")) {
+            c.researchTech(gameState, tech);
         }
 
         //Select one of the space travel sciences
-        Technology[] teks = Technologies.getTechsByTag("space travel base");
+        Technology[] teks = Technologies.getTechsByTag(gameState, "space travel base");
 
         //To research this
         c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
 
         //Propulsion
-        teks = Technologies.getTechsByTag("Propulsion");
+        teks = Technologies.getTechsByTag(gameState, "Propulsion");
         //To research this
         c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
 
@@ -424,23 +434,23 @@ public class CivilizationInitializer {
         Scientist r = new Scientist(name, 20);
         r.setSkill(5);
         //Add random trait 
-        r.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
+        r.traits.add(getRandomPersonalityTrait(selector));
         PeopleProcessor.placePerson(c.getCapitalCity(), r);
 
         c.people.add(r);
     }
 
     //Governmental orgs...
-    private void initializeOrgs(Universe u, Civilization c, Planet planet) {
+    private void initializeOrgs(Civilization c, Planet planet) {
         Organization org = new Organization("Ministry of Economic Planning");
         org.setBehavior(new ResourceManagerBehavior(org));
         //Sort through city
-        for(City city : planet.cities){
+        for (City city : planet.cities) {
             org.region.bodies.add(city);
         }
-        
+
         c.addChild(org);
-        u.addOrganization(org);
+        universe.addOrganization(org);
     }
 
     private void initalizeCivValues(Civilization c) {
@@ -468,7 +478,7 @@ public class CivilizationInitializer {
         person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
         Administrator dude = new Administrator(person, 400);
         //nerd.setSkill((int) (Math.random() * 5) + 1);
-        dude.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
+        dude.traits.add(getRandomPersonalityTrait(selector));
         dude.setPosition(c.getCapitalCity());
         dude.setRole("Ruling " + c.getSpeciesName());
 
@@ -490,7 +500,7 @@ public class CivilizationInitializer {
 
         Administrator crownPrince = new Administrator(person, 0);
         //nerd.setSkill((int) (Math.random() * 5) + 1);
-        crownPrince.traits.add(GameController.personalityTraits.get((selector.nextInt(GameController.personalityTraits.size()))));
+        crownPrince.traits.add(getRandomPersonalityTrait(selector));
         crownPrince.setPosition(c.getCapitalCity());
         crownPrince.setRole("Loafing around -- Lazy brat");
         //Add heir to the throne of the GOD EMPEROR

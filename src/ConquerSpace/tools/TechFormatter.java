@@ -66,7 +66,7 @@ public class TechFormatter extends JFrame {
         setLayout(new HorizontalFlowLayout());
         Technologies.readTech();
 
-        technologys = Technologies.techonologies;
+        technologys = new ArrayList<>();//Technologies.techonologies;
         JPanel techPanel = new JPanel(new VerticalFlowLayout());
         JTextField searchField = new JTextField(16);
         searchField.addActionListener(l -> {
@@ -80,9 +80,9 @@ public class TechFormatter extends JFrame {
         techPanel.add(searchField);
 
         technologyListModel = new DefaultListModel<>();
-        for (Technology tech : Technologies.techonologies) {
-            technologyListModel.addElement(tech);
-        }
+//        for (Technology tech : Technologies.techonologies) {
+//            technologyListModel.addElement(tech);
+//        }
 
         technologyList = new JList<>(technologyListModel);
         technologyList.setVisibleRowCount(36);

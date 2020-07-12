@@ -30,13 +30,17 @@ import ConquerSpace.game.resources.Element;
 import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceDistribution;
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Timer;
 import ConquerSpace.util.logging.CQSPLogger;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
@@ -49,52 +53,12 @@ public class GameController {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(GameController.class.getName());
 
-    //For evals... 
-    //Rate the game refreshes buildings and stuff like that
-    //Set to 5 days
-    public static int GameRefreshRate = (5 * 24);
-
-    //All variables...
-    public static ArrayList<LaunchSystem> launchSystems;
-    
     /**
      * This is the whole universe.
      */
-    public static Universe universe;
-    
-    /**
-     * Date in the stars. Game timer.
-     */
-    public static StarDate date = new StarDate();
-    
-    private Timer ticker;
-    public static ArrayList<Satellite> satellites;
-    public static ArrayList<JSONObject> satelliteTemplates;
-    public static ArrayList<JSONObject> shipComponentTemplates;
-    //public static Resource foodResource = null;
-    public static ArrayList<EngineTechnology> engineTechnologys;
-    public static ArrayList<JSONObject> events;
-    public static ArrayList<PersonalityTrait> personalityTraits;
-    public static ArrayList<Person> people = new ArrayList<>();
+    public Universe universe;
 
-    public static HashMap<String, Integer> shipTypes;
-    public static HashMap<String, Integer> shipTypeClasses;
     public static GameTicker updater;
-        
-    //Falls under UI, so have to change position
-    public static MusicPlayer musicPlayer;
-
-    public static ArrayList<Element> elements;
-    public static HashMap<Integer, ResourceDistribution> ores = new HashMap<>();
-
-    public static HashMap<Integer, Good> goodHashMap;
-    public static HashMap<String, Integer> goodIdentifiers;
-
-    public static ArrayList<Good> goods;
-
-    public static ArrayList<SupplyChain> supplyChains = new ArrayList<>();
-
-    public static HashMap<String, ProductionProcess> prodProcesses;
 
     public static Civilization playerCiv = null;
 
@@ -102,19 +66,28 @@ public class GameController {
 
     private PlayerController playerController;
 
+    private GameState gameState;
+
+    //Falls under UI, so have to change position
+    public static MusicPlayer musicPlayer;
+    
+    private Timer ticker;
+
     /**
      * Constructor. Inits all components.
      */
-    public GameController() {
+    public GameController(GameState gs) {
+        gameState = gs;
+        universe = gs.universe;
         //Init updater
-        updater = new GameUpdater(universe, date, GameRefreshRate);
+        updater = new GameUpdater(gameState);
 
         //First run over all the game
         updater.tick(0);
 
         //Load the players
-        for (int i = 0; i < universe.getCivilizationCount(); i++) {
-            universe.getCivilization(i).controller.init(universe, date, universe.getCivilization(i));
+        for (int i = 0; i < gameState.universe.getCivilizationCount(); i++) {
+            gameState.universe.getCivilization(i).controller.init(gameState, gameState.universe.getCivilization(i));
         }
 
         int tickerSpeed = 10;

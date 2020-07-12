@@ -90,16 +90,16 @@ public class Actions {
         if (what.isOrbiting()) {
             //Exit orbit
             if (u.getSpaceObject(what.getOrbiting()) instanceof Planet) {
-                Planet p = (Planet) u.getSpaceObject(what.getOrbiting());
+                Planet planet = (Planet) u.getSpaceObject(what.getOrbiting());
                 //Remove from orbit
-                p.getSatellites().remove(what);
+                planet.getSatellites().remove(what);
 
-                what.setX(p.getX());
-                what.setY(p.getY());
+                what.setX(planet.getX());
+                what.setY(planet.getY());
                 what.setIsOrbiting(false);
 
                 //Add
-                u.getStarSystem(p.getParentStarSystem()).addSpaceShip(what);
+                u.getStarSystem(planet.getParentStarSystem()).addSpaceShip(what);
             }
         }
         what.setGoingToX(x);

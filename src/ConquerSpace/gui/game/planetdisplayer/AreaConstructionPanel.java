@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -77,7 +78,10 @@ public class AreaConstructionPanel extends JPanel {
 
     private AreaDesignPanel areaDesignPanel = null;
 
-    public AreaConstructionPanel(Planet planet, Civilization c, City city) {
+    public AreaConstructionPanel(GameState gameState, 
+            Planet planet, 
+            Civilization c, 
+            City city) {
         setLayout(new BorderLayout());
 
         areaTypeListModel = new DefaultListModel<>();
@@ -97,13 +101,13 @@ public class AreaConstructionPanel extends JPanel {
             //Get selected area type
             switch (areaTypeList.getSelectedValue()) {
                 case Mine:
-                    areaDesignPanel = new MinerAreaConstructionPanel(planet, city);
+                    areaDesignPanel = new MinerAreaConstructionPanel(gameState, planet, city);
                     break;
                 case SpacePort:
                     areaDesignPanel = new SpacePortConstructionPanel(planet, city, c);
                     break;
                 case Manufacturer:
-                    areaDesignPanel = new IndustrialFactoryConstructionPanel(planet, city, c);
+                    areaDesignPanel = new IndustrialFactoryConstructionPanel(gameState, planet, city, c);
                     break;
                 case Observatory:
                     areaDesignPanel = new ObservatoryConstructionPanel(planet, city, c);

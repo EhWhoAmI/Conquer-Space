@@ -17,8 +17,7 @@
  */
 package ConquerSpace;
 
-import ConquerSpace.game.StarDate;
-import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.universe.generators.UniverseGenerator;
 import java.util.Properties;
 
@@ -35,4 +34,6 @@ public class Globals {
 
     
     public static UniverseGenerator generator;
+    
+    public static GameState gameState;
 }

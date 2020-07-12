@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -59,7 +60,7 @@ public class PlanetIndustry extends JPanel {
 
     private Planet p;
 
-    public PlanetIndustry(Planet p, Civilization c) {
+    public PlanetIndustry(GameState gameState, Planet p, Civilization c) {
         this.p = p;
         setLayout(new VerticalFlowLayout());
         add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.industry.title")));
@@ -80,7 +81,7 @@ public class PlanetIndustry extends JPanel {
 
         areaList.addListSelectionListener(l -> {
             areaInfoPanel.removeAll();
-            areaInfoPanel.add(new AreaInformationPanel(areaList.getSelectedValue()));
+            areaInfoPanel.add(new AreaInformationPanel(gameState, areaList.getSelectedValue()));
         });
 
         JScrollPane scrollPane = new JScrollPane(areaList);

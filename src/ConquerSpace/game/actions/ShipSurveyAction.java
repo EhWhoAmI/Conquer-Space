@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.actions;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.bodies.Planet;
 
@@ -24,14 +25,15 @@ import ConquerSpace.game.universe.bodies.Planet;
  *
  * @author EhWhoAmI
  */
-public class ShipSurveyAction extends ShipAction{
+public class ShipSurveyAction extends ShipAction {
+
     //Progress
     private int progress = 0;
     private int finishedProgress;
     private int perTick;
-    
+
     private int civID = -1;
-    
+
     private Planet toSurvey;
 
     public ShipSurveyAction(SpaceShip ship) {
@@ -50,7 +52,6 @@ public class ShipSurveyAction extends ShipAction{
         this.civID = civID;
     }
 
-    
     public void setFinishedProgress(int finishedProgress) {
         this.finishedProgress = finishedProgress;
     }
@@ -78,14 +79,14 @@ public class ShipSurveyAction extends ShipAction{
     public Planet getToSurvey() {
         return toSurvey;
     }
-    
+
     @Override
-    public void doAction() {
+    public void doAction(GameState gameState) {
         //Check if orbiting planet...
         if (ship.isOrbiting() && ship.getOrbiting().equals(toSurvey.getUniversePath())) {
             //Subtract
-            progress+=perTick;
-            if(checkIfDone()) {
+            progress += perTick;
+            if (checkIfDone(gameState)) {
                 //Add to the planet
                 toSurvey.scanned.add(civID);
             }
@@ -93,7 +94,7 @@ public class ShipSurveyAction extends ShipAction{
     }
 
     @Override
-    public boolean checkIfDone() {
-        return progress>=finishedProgress;
+    public boolean checkIfDone(GameState gameState) {
+        return progress >= finishedProgress;
     }
 }

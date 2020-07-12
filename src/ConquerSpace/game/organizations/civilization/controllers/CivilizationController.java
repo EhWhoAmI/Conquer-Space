@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.organizations.civilization.controllers;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 public abstract class CivilizationController{
     public abstract ArrayList<Action> doTurn(Civilization c);
     public abstract void alert(Alert a);
-    public abstract void init(Universe u, StarDate d, Civilization c);
+    public abstract void init(GameState state, Civilization c);
     public abstract void refreshUI();
     public abstract void passEvent(Event e);
 }

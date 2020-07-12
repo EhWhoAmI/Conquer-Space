@@ -17,6 +17,8 @@
  */
 package ConquerSpace.game.ships;
 
+import ConquerSpace.game.GameState;
+import ConquerSpace.game.actions.EmptyShipAction;
 import ConquerSpace.game.actions.ShipAction;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.Vector;
@@ -57,10 +59,10 @@ public abstract class SpaceShip implements Orbitable{
         return commands.remove(0);
     }
 
-    public final ShipAction getActionAndPopIfDone() {
+    public final ShipAction getActionAndPopIfDone(GameState gameState) {
         if (commands.size() > 0) {
             ShipAction act = commands.get(0);
-            if (act.checkIfDone()) {
+            if (act.checkIfDone(gameState)) {
                 return commands.remove(0);
                 //return act;
             } else {
@@ -68,13 +70,13 @@ public abstract class SpaceShip implements Orbitable{
             }
         }
         //Return no action
-        return new ShipAction(this);
+        return new EmptyShipAction(this);
     }
 
-    public void addAction(ShipAction act) {
+    public void addAction(GameState gameState, ShipAction act) {
         //If empty, init
         if(commands.isEmpty()) {
-            act.initAction();
+            act.initAction(gameState);
         }
         commands.add(act);
     }

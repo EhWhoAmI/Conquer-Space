@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.organizations.civilization;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.organizations.civilization.controllers.AIController;
 import ConquerSpace.game.organizations.civilization.controllers.CivilizationController;
@@ -291,10 +292,10 @@ public class Civilization extends Organization implements Employer {
         return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
 
-    public void researchTech(Technology t) {
+    public void researchTech(GameState gameState, Technology t) {
         //Parse actions.
         for (String act : t.getActions()) {
-            Technologies.parseAction(act, this);
+            Technologies.parseAction(act, gameState, this);
         }
         civTechs.put(t, Technologies.RESEARCHED);
         //Delete the tech because it has been researhed

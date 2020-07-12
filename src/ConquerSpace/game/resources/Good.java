@@ -51,6 +51,10 @@ public abstract class Good implements Comparable<Good>{
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public double getMass() {
         return mass;
     }

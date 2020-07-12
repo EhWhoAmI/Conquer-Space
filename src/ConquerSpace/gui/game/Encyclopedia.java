@@ -19,6 +19,7 @@ package ConquerSpace.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.encyclopedia.EncyclopediaParagraph;
 import ConquerSpace.game.encyclopedia.EncyclopediaSeparator;
 import ConquerSpace.game.resources.Good;
@@ -43,14 +44,14 @@ public class Encyclopedia extends JInternalFrame {
     private JList infoList;
 
     @SuppressWarnings("unchecked")
-    public Encyclopedia() {
+    public Encyclopedia(GameState gameState) {
         setTitle(LOCALE_MESSAGES.getMessage("game.encyclopedia.title"));
         //XD
         if ((int) (Math.random() * 42000) == 0) {
             setTitle(LOCALE_MESSAGES.getMessage("game.encyclopedia.backup"));
         }
         
-        infoList = new JList(new Vector(GameController.goodHashMap.values()));
+        infoList = new JList(new Vector(gameState.goodHashMap.values()));
         infoList.addListSelectionListener(l -> {
             Good g = (Good) infoList.getSelectedValue();
             HtmlEncyclopediaBuilder builder = new HtmlEncyclopediaBuilder();

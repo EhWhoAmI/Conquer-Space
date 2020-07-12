@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.actions;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.ships.Ship;
 
 /**
@@ -53,7 +54,7 @@ public class InterstellarTravelAction extends ShipAction {
     }
 
     @Override
-    public void doAction() {
+    public void doAction(GameState gameState) {
 
         double x = positionX - ship.getX();
         double y = positionY - ship.getY();
@@ -81,12 +82,12 @@ public class InterstellarTravelAction extends ShipAction {
     }
 
     @Override
-    public boolean checkIfDone() {
+    public boolean checkIfDone(GameState gameState) {
         return (ship.getX() == positionX && ship.getY() == positionY);
     }
 
     @Override
-    public void initAction() {
+    public void initAction(GameState gameState) {
     }
 
     public void setStarSystem(int starSystem) {

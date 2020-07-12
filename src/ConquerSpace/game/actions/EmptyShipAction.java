@@ -17,20 +17,16 @@
  */
 package ConquerSpace.game.actions;
 
-import ConquerSpace.game.GameState;
+import ConquerSpace.game.ships.SpaceShip;
 
 /**
- * Action of a tick.
  *
  * @author EhWhoAmI
  */
-public abstract class Action {
-
-    public Action() {
+public class EmptyShipAction extends ShipAction{
+    
+    public EmptyShipAction(SpaceShip ship) {
+        super(ship);
     }
-
-    /**
-     * Do the action
-     */
-    abstract public ActionStatus doAction(GameState gameState);
+    
 }

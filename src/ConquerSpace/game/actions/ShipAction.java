@@ -17,13 +17,14 @@
  */
 package ConquerSpace.game.actions;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.ships.SpaceShip;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipAction {
+public abstract class ShipAction {
 
     protected SpaceShip ship;
     
@@ -34,14 +35,14 @@ public class ShipAction {
         this.ship = ship;
     }
 
-    public void doAction() {
+    public void doAction(GameState gameState) {
     }
     
-    public boolean checkIfDone() {
+    public boolean checkIfDone(GameState gameState) {
         return true;
     }
     
-    public void initAction() {
+    public void initAction(GameState gameState) {
         
     }
 }

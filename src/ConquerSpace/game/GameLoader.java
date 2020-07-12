@@ -18,9 +18,6 @@
 package ConquerSpace.game;
 
 import static ConquerSpace.game.AssetReader.*;
-import static ConquerSpace.game.GameController.shipComponentTemplates;
-import static ConquerSpace.game.GameController.shipTypeClasses;
-import static ConquerSpace.game.GameController.shipTypes;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.science.Fields;
 import ConquerSpace.game.science.tech.Technologies;
@@ -46,58 +43,66 @@ public class GameLoader {
     /**
      * Load all resources.
      */
-    public static void load() {
+    public static void load(GameState state) {
         long start = System.currentTimeMillis();
-        shipTypes = new HashMap<>();
-        shipTypeClasses = new HashMap<>();
-        shipComponentTemplates = new ArrayList<>();
+        state.shipTypes = new HashMap<>();
+        state.shipTypeClasses = new HashMap<>();
 
         //Init tech and fields
-        Fields.readFields();
-        Technologies.readTech();
+        state.fieldNodeRoot = Fields.readFields();
+        state.techonologies = Technologies.readTech();
 
         //All things to load go here!!!
-        GameController.launchSystems = readHjsonFromDirInArray("dirs.launch",
-                LaunchSystem.class, AssetReader::processLaunchSystem);
+        state.launchSystems = readHjsonFromDirInArray("dirs.launch",
+                LaunchSystem.class, state, AssetReader::processLaunchSystem);
 
-        GameController.satelliteTemplates = readHjsonFromDirInArray("dirs.satellite.types",
+        state.satelliteTemplates = readHjsonFromDirInArray("dirs.satellite.types",
                 JSONObject.class, AssetReader::processSatellite);
 
-        readShipTypes();
-        readShipComponents();
+        readShipTypes(state);
 
-        GameController.personalityTraits = readHjsonFromDirInArray("dirs.traits",
+        state.personalityTraits = readHjsonFromDirInArray("dirs.traits",
                 PersonalityTrait.class, AssetReader::processPersonalityTraits);
 
-        GameController.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",
+        state.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",
                 EngineTechnology.class, AssetReader::processEngineTech);
 
-
         //Init all resource references
-        GameController.goodIdentifiers = new HashMap<>();
-        GameController.goodHashMap = new HashMap<>();
-        
+        state.goodIdentifiers = new HashMap<>();
+        state.goodHashMap = new HashMap<>();
+
         //Read elements
-        GameController.elements = readHjsonFromDirInArray("dirs.elements",
+        ArrayList<Element> elements = readHjsonFromDirInArray("dirs.elements",
                 Element.class, AssetReader::processElement);
 
-        processGoods();
-        
-        //Everything is compiled into the resource references, no need for extra loading
+        //Have to insert to places...
+        for (Element e : elements) {
+            state.addGood(e);
+        }
 
+        processGoods(state);
+
+        //Everything is compiled into the resource references, no need for extra loading
         //Resource distributions
         ArrayList<ResourceDistribution> res = readHjsonFromDirInArray("dirs.distributions", ResourceDistribution.class, AssetReader::processDistributions);
 
+        state.ores = new HashMap<>();
+
         //Sort through the list
         for (ResourceDistribution dist : res) {
-            Integer identifier = GameController.goodIdentifiers.get(dist.resourceName);
-            GameController.ores.put(identifier, dist);
+            Integer identifier = state.goodIdentifiers.get(dist.resourceName);
+            state.ores.put(identifier, dist);
         }
-        GameController.prodProcesses = new HashMap<>();
-        readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, AssetReader::processProcess);
+        state.prodProcesses = new HashMap<>();
+        
+        ArrayList<ProductionProcess> processes = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, state, AssetReader::processProcess);
+        for (ProductionProcess process : processes) {
+            state.prodProcesses.put(process.identifier, process);
+        }
 
         //Events
-        readPopulationEvents();
+        //Skip for now...
+        //readPopulationEvents();
         long end = System.currentTimeMillis();
         LOGGER.info("Inited all resources: " + (end - start) + "ms");
     }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.science;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.util.ResourceLoader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +41,7 @@ public class Fields {
 
     }
 
-    public static void readFields() {
+    public static FieldNode readFields() {
         try {
             File fieldFile = ResourceLoader.getResourceByFile("text.tech.fields");
 
@@ -58,6 +59,7 @@ public class Fields {
         } catch (IOException ex) {
             Logger.getLogger(Fields.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return fieldNodeRoot;
     }
 
     public static FieldNode getNode(Element n) {

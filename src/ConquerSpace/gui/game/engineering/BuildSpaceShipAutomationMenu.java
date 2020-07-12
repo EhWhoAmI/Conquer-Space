@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.engineering;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.ShipClass;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
@@ -134,7 +135,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
     private EngineTemplate selectedEngine;
 
-    public BuildSpaceShipAutomationMenu(Civilization c) {
+    public BuildSpaceShipAutomationMenu(GameState gameState, Civilization c) {
         this.civ = c;
         setLayout(new BorderLayout());
 
@@ -208,17 +209,17 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             massUnit = new JLabel("kg");
 
             shipTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shiptype"));
-            Vector<String> v = new Vector<>((GameController.shipTypes.keySet()));
+            Vector<String> v = new Vector<>((gameState.shipTypes.keySet()));
             shipTypeComboBox = new JComboBox<String>(v);
             shipTypeComboBox.addActionListener(l -> {
                 //Get selected thing
                 String text = (String) shipTypeComboBox.getSelectedItem();
-                int id = GameController.shipTypes.get(text);
+                int id = gameState.shipTypes.get(text);
                 id = ((id / 100));
                 shipScienceButton.setEnabled(false);
 
-                for (String s : GameController.shipTypeClasses.keySet()) {
-                    if (GameController.shipTypeClasses.get(s) == id) {
+                for (String s : gameState.shipTypeClasses.keySet()) {
+                    if (gameState.shipTypeClasses.get(s) == id) {
                         //It is something!
                         if (s.equals("Science")) {
                             shipScienceButton.setEnabled(true);
@@ -575,12 +576,12 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         //Init all final stuff to init. 
         {
             String text = (String) shipTypeComboBox.getSelectedItem();
-            int id = GameController.shipTypes.get(text);
+            int id = gameState.shipTypes.get(text);
             id = ((id / 100));
             shipScienceButton.setEnabled(false);
 
-            for (String s : GameController.shipTypeClasses.keySet()) {
-                if (GameController.shipTypeClasses.get(s) == id) {
+            for (String s : gameState.shipTypeClasses.keySet()) {
+                if (gameState.shipTypeClasses.get(s) == id) {
                     //It is something!
                     if (s.equals("Science")) {
                         shipScienceButton.setEnabled(true);

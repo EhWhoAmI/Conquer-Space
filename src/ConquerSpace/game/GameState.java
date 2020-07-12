@@ -17,43 +17,52 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.game.universe.generators.CivilizationInitializer;
+import ConquerSpace.game.life.Species;
 import ConquerSpace.game.logistics.SupplyChain;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
 import ConquerSpace.game.resources.Element;
+import ConquerSpace.game.resources.FoodGood;
 import ConquerSpace.game.resources.Good;
+import ConquerSpace.game.resources.LiveGood;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceDistribution;
+import ConquerSpace.game.save.Serialize;
+import ConquerSpace.game.science.FieldNode;
+import ConquerSpace.game.science.tech.Technology;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.gui.music.MusicPlayer;
-import ConquerSpace.util.Timer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.JSONObject;
 
 /**
  * Game object.
+ *
  * @author EhWhoAmI
  */
 public class GameState {
-    public Universe u;
-   
+
+    @Serialize(key = "universe")
+    public Universe universe;
+
+    public StarDate date;
+
     //For evals... 
     //Rate the game refreshes buildings and stuff like that
     //Set to 5 days
-    public static final int GameRefreshRate = (5 * 24);
+    public final int GameRefreshRate = (5 * 24);
 
     //All variables...
     public ArrayList<LaunchSystem> launchSystems;
-    private Timer ticker;
+
     public ArrayList<Satellite> satellites;
     public ArrayList<JSONObject> satelliteTemplates;
     public ArrayList<JSONObject> shipComponentTemplates;
-    //public static Resource foodResource = null;
+
     public ArrayList<EngineTechnology> engineTechnologys;
     public ArrayList<JSONObject> events;
     public ArrayList<PersonalityTrait> personalityTraits;
@@ -61,9 +70,6 @@ public class GameState {
 
     public HashMap<String, Integer> shipTypes;
     public HashMap<String, Integer> shipTypeClasses;
-    public GameUpdater updater;
-    public CivilizationInitializer initer;
-    public MusicPlayer musicPlayer;
 
     public ArrayList<Element> elements;
     public HashMap<Integer, ResourceDistribution> ores = new HashMap<>();
@@ -76,10 +82,40 @@ public class GameState {
     public ArrayList<SupplyChain> supplyChains = new ArrayList<>();
 
     public HashMap<String, ProductionProcess> prodProcesses;
-    
-    //private GameUpdater updater;
 
+    public Civilization playerCiv;
+    public FieldNode fieldNodeRoot;
+    public ArrayList<Technology> techonologies = new ArrayList<>();
+
+    //private GameUpdater updater;
     public GameState() {
+        //Init all stuff
+        goods = new ArrayList<>();
         
+        date = new StarDate();
+    }
+
+    public void addGood(Good good) {
+        int newId = goods.size();
+        good.setId(newId);
+        goods.add(good);
+
+        //Add the other stuff
+        goodHashMap.put(newId, good);
+        goodIdentifiers.put(good.getIdentifier(), newId);
+    }
+
+    public void addSpecies(Species species) {
+        //Add food stuff
+        
+        //Nice
+        FoodGood foodGoodResource = new FoodGood(species, 1, 420);
+        LiveGood speciesGoodResource = new LiveGood(species, 1, 420);
+        addGood(foodGoodResource);
+        addGood(speciesGoodResource);
+        
+        species.setFoodGood(foodGoodResource.getId());
+        species.setSpeciesGood(speciesGoodResource.getId());
     }
 }
+ 

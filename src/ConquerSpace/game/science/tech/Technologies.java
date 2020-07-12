@@ -17,7 +17,7 @@
  */
 package ConquerSpace.game.science.tech;
 
-import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.science.FieldNode;
 import ConquerSpace.game.ships.components.engine.EngineTechnology;
@@ -44,28 +44,30 @@ import org.json.JSONObject;
 public class Technologies {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Technologies.class.getName());
-    public static ArrayList<Technology> techonologies = new ArrayList<>();
 
     public static final int RESEARCHED = 101;
     public static final int REVEALED = 100;
 
-    public static void readTech() {
+    public static ArrayList<Technology> readTech() {
+        ArrayList<Technology> techs = new ArrayList<>();
+
         File techFolder = ResourceLoader.getResourceByFile("text.tech.techs");
 
         File[] tempFiles = techFolder.listFiles();
         for (File f : tempFiles) {
             if (!f.getName().equals("readme.txt")) {
                 try {
-                    readTechFromFile(f);
+                    readTechFromFile(f, techs);
                 } catch (IOException ex) {
                     LOGGER.warn("IOException", ex);
                 } catch (JSONException jsone) {
                 }
             }
         }
+        return techs;
     }
 
-    public static void readTechFromFile(File file) throws FileNotFoundException, IOException, JSONException {
+    public static void readTechFromFile(File file, ArrayList<Technology> techs) throws FileNotFoundException, IOException, JSONException {
         FileInputStream fis = new FileInputStream(file);
         byte[] data = new byte[(int) file.length()];
         fis.read(data);
@@ -129,24 +131,24 @@ public class Technologies {
             //ID
             int id = techonology.getInt("id");
             Technology t = new Technology(name, id, deps, type, level, fields, tags, actions, floor, difficulty);
-            techonologies.add(t);
+            techs.add(t);
         }
     }
 
-    public static Technology getTechByName(String s) {
-        return (techonologies.stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
+    public static Technology getTechByName(GameState state, String s) {
+        return (state.techonologies.stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
     }
 
-    public static Technology[] getTechsByTag(String tag) {
-        Object[] techList = techonologies.stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray();
+    public static Technology[] getTechsByTag(GameState state, String tag) {
+        Object[] techList = state.techonologies.stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).toArray();
         return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
 
-    public static Technology getTechByID(int id) {
-        return (techonologies.stream().filter(e -> e.getId() == id).findFirst().get());
+    public static Technology getTechByID(GameState state, int id) {
+        return (state.techonologies.stream().filter(e -> e.getId() == id).findFirst().get());
     }
 
-    public static void parseAction(String action, Civilization c) {
+    public static void parseAction(String action, GameState gameState, Civilization c) {
         if (action.startsWith("tech")) {
             //Is boosting chance for tech
             //action = action.replace("tech(", "");
@@ -155,7 +157,7 @@ public class Technologies {
             //Get tech to boost
             String techtoboost = splitAction[1];
             int amount = Integer.parseInt(splitAction[2]);
-            Technology tech = getTechByName(techtoboost);
+            Technology tech = getTechByName(gameState, techtoboost);
             if (c.civTechs.containsKey(tech)) {
                 if (!(c.civTechs.get(tech) > 100)) {
                     //Then add
@@ -195,7 +197,7 @@ public class Technologies {
             //Remove trailing white space.
             String launchName = (text[1].trim());
 
-            LaunchSystem sys = GameController.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
+            LaunchSystem sys = gameState.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
             if (sys != null) {
                 c.launchSystems.add(sys);
             }
@@ -211,7 +213,7 @@ public class Technologies {
             //Split it
             String[] orbitSplit = orbitName.split(":");
             int satelliteID = Integer.parseInt(orbitSplit[1]);
-            
+
             //TODO, preinitialized satellites
 //            JSONObject s = GameController.satelliteTemplates.stream().
 //                    filter(e -> e.getInt("id") == satelliteID).findFirst().orElseGet(null);
@@ -228,12 +230,10 @@ public class Technologies {
 
             String compName = (new String(dst).trim());
 
-            JSONObject s = GameController.shipComponentTemplates.stream().
-                    filter(e -> e.getString("id").equals(compName)).findFirst().orElseGet(null);
-            if (s != null) {
+            //if (s != null) {
                 //TODO add preinstalled templates
                 //c.addShipComponent(s);
-            }
+            //}
         } else if (action.startsWith("thrust")) {
             //Do component
             String[] content = action.split(":");
@@ -241,7 +241,7 @@ public class Technologies {
             String compName = (content[1].trim());
             int id = Integer.parseInt(compName);
 
-            EngineTechnology t = GameController.engineTechnologys.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
+            EngineTechnology t = gameState.engineTechnologys.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
             if (t != null) {
                 c.engineTechs.add(t);
             }
@@ -249,7 +249,7 @@ public class Technologies {
             String[] text = action.split(":");
             String content = text[1].trim();
 
-            ProductionProcess process = GameController.prodProcesses.get(content);
+            ProductionProcess process = gameState.prodProcesses.get(content);
             if (process != null) {
                 c.productionProcesses.add(process);
             } else {
@@ -259,7 +259,7 @@ public class Technologies {
             String[] text = action.split(":");
             String content = text[1].trim();
 
-            Integer goodId = GameController.goodIdentifiers.get(content);
+            Integer goodId = gameState.goodIdentifiers.get(content);
             if (goodId != null) {
                 c.mineableGoods.add(goodId);
             }

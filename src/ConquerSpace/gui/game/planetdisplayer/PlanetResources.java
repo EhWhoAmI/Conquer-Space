@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.actions.Actions;
 import ConquerSpace.game.actions.ResourceTransportAction;
 import ConquerSpace.game.city.City;
@@ -68,10 +69,13 @@ public class PlanetResources extends javax.swing.JPanel {
 
     private PlanetInfoSheet parent;
 
+    private GameState gameState;
+
     /**
      * Creates new form PlanetResources
      */
-    public PlanetResources(Planet p, Civilization c, PlanetInfoSheet parent) {
+    public PlanetResources(GameState gameState, Planet p, Civilization c, PlanetInfoSheet parent) {
+        this.gameState = gameState;
         this.p = p;
         this.c = c;
         this.parent = parent;
@@ -359,9 +363,9 @@ public class PlanetResources extends javax.swing.JPanel {
             if (comboBoxModel instanceof ResourceValueComboBoxModel) {
                 int resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
                 if (ArrayUtils.contains(pileTo.storedTypes(), resourceId)) {
-                    resourceInputLabel.setText(GameController.goodHashMap.get(resourceId) + " " + pileTo.getResourceAmount(resourceId));
+                    resourceInputLabel.setText(gameState.goodHashMap.get(resourceId) + " " + pileTo.getResourceAmount(resourceId));
                 } else {
-                    resourceInputLabel.setText("Does not contain " + GameController.goodHashMap.get(resourceId));
+                    resourceInputLabel.setText("Does not contain " + gameState.goodHashMap.get(resourceId));
                 }
                 //Set the spinner
                 ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
@@ -390,7 +394,7 @@ public class PlanetResources extends javax.swing.JPanel {
             //c.actionList.add(act);
             Actions.sendResources(
                     resourceId,
-                    (Double) resourcesToTransferSpinner.getValue(), 
+                    (Double) resourcesToTransferSpinner.getValue(),
                     stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex()),
                     stockpiles.get(resourceSendCityToComboBox.getSelectedIndex()));
             //Reload things
@@ -410,7 +414,7 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public String getElementAt(int index) {
-            return GameController.goodHashMap.get(list[index]).getName() + " " + pile.getResourceAmount(list[index]);
+            return gameState.goodHashMap.get(list[index]).getName() + " " + pile.getResourceAmount(list[index]);
         }
 
         @Override
@@ -424,7 +428,7 @@ public class PlanetResources extends javax.swing.JPanel {
         String[] colunmNames = {
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"),
-            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", GameController.GameRefreshRate)};
+            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", gameState.GameRefreshRate)};
 
         @Override
         public int getRowCount() {
@@ -442,16 +446,22 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
+            int storedValue = selectedStockpile.storedTypes()[rowIndex];
+
             if (selectedStockpile != null) {
                 switch (columnIndex) {
                     case 0:
-                        return GameController.goodHashMap.get(selectedStockpile.storedTypes()[rowIndex]);
+                        return gameState.goodHashMap.get(storedValue);
                     case 1:
-                        return selectedStockpile.getResourceAmount(selectedStockpile.storedTypes()[rowIndex]) + ", or " + (selectedStockpile.getResourceAmount(selectedStockpile.storedTypes()[rowIndex]) * GameController.goodHashMap.get(selectedStockpile.storedTypes()[rowIndex]).getMass()) + " kg";
+                        return selectedStockpile.getResourceAmount(storedValue)
+                                + ", or "
+                                //Get mass in kg...
+                                + (selectedStockpile.getResourceAmount(storedValue) * gameState.goodHashMap.get(storedValue).getMass())
+                                + " kg";
                     case 2:
                         if (selectedStockpile instanceof City) {
                             City c = (City) selectedStockpile;
-                            HashMap<String, Double> ledger = c.resourceLedger.get(selectedStockpile.storedTypes()[rowIndex]);
+                            HashMap<String, Double> ledger = c.resourceLedger.get(storedValue);
                             double change = 0;
                             if (ledger != null) {
                                 for (Double d : ledger.values()) {
@@ -545,7 +555,7 @@ public class PlanetResources extends javax.swing.JPanel {
         String[] colunmNames = {
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"),
-            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", GameController.GameRefreshRate)};
+            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", gameState.GameRefreshRate)};
 
         @Override
         public int getRowCount() {
@@ -559,14 +569,20 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
+            int planetResourceId = 0;
+            if (planetResource.keySet().toArray()[rowIndex] instanceof Integer) {
+                planetResourceId = (Integer) planetResource.keySet().toArray()[rowIndex];
+            }
+
             switch (columnIndex) {
                 case 0:
-                    return GameController.goodHashMap.get(planetResource.keySet().toArray()[rowIndex]);
+                    return gameState.goodHashMap.get(planetResourceId);
                 case 1:
-                    return planetResource.get(planetResource.keySet().toArray()[rowIndex]) + ", or " + (planetResource.get(planetResource.keySet().toArray()[rowIndex]) * GameController.goodHashMap.get(planetResource.keySet().toArray()[rowIndex]).getMass()) + " kg";
+                    return planetResource.get(planetResourceId) + ", or " + 
+                            (planetResource.get(planetResourceId) * gameState.goodHashMap.get(planetResourceId).getMass()) + " kg";
                 case 2:
                     //Return the stuff
-                    HashMap<String, Double> ledger = planetLedger.get(planetResource.keySet().toArray()[rowIndex]);
+                    HashMap<String, Double> ledger = planetLedger.get(planetResourceId);
                     double change = 0;
                     for (Double d : ledger.values()) {
                         change += d;
@@ -745,7 +761,7 @@ public class PlanetResources extends javax.swing.JPanel {
         //Refresh table
         storageModel.fireTableDataChanged();
     }
-    
+
     private void loadSelectedResourceStockpile() {
         ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
         ResourceValueComboBoxModel valueComboBoxModel = new ResourceValueComboBoxModel(pile.storedTypes(), pile);
@@ -754,7 +770,7 @@ public class PlanetResources extends javax.swing.JPanel {
         resourceToTakeComboBox.removeAllItems();
         resourceToTakeComboBox.setModel(valueComboBoxModel);
         resourceToTakeComboBox.setSelectedIndex(0);
-        if(preselected != -1) {
+        if (preselected != -1) {
             resourceToTakeComboBox.setSelectedIndex(preselected);
         }
     }

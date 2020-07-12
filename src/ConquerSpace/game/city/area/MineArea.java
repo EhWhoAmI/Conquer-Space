@@ -57,10 +57,6 @@ public class MineArea extends Area {
     public HashMap<Integer, Double> getNecessaryGoods() {
         return necessaryGoods;
     }
-
-    public Good getResourceMined() {
-        return GameController.goodHashMap.get(resourceMined);
-    }
     
     public Integer getResourceMinedId() {
         return resourceMined;
@@ -68,7 +64,7 @@ public class MineArea extends Area {
 
     @Override
     public String toString() {
-        return GameController.goodHashMap.get(resourceMined).getName() + " Mine";
+        return "Mine";
     }
 
     @Override

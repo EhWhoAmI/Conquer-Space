@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.population.jobs.JobType;
@@ -101,7 +102,7 @@ public class PlanetOverview extends JPanel {
     
     private Image planetMap;
     
-    public PlanetOverview(Universe u, Planet p, Civilization c, Image planetMap) {
+    public PlanetOverview(GameState gameState, Planet p, Civilization c, Image planetMap) {
         this.planetMap = planetMap;
         this.p = p;
         setLayout(new GridLayout(1, 2));

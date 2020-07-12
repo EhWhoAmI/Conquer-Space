@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.MineArea;
@@ -50,7 +51,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     private Stratum miningStratum = null;
     private float amountMining = 10;
 
-    public MinerAreaConstructionPanel(Planet p, City c) {
+    public MinerAreaConstructionPanel(GameState gameState, Planet p, City c) {
         super(p, c);
         setLayout(new HorizontalFlowLayout());
 
@@ -80,7 +81,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
                 Integer key = en.getKey();
                 Integer val = en.getValue();
 
-                resourceListTableModel.addRow(new Object[]{GameController.goodHashMap.get(key).getName(), val});
+                resourceListTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
             }
 
             if (resourceListTableModel.getRowCount() > 0) {

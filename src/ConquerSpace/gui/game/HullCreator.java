@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.ships.hull.Hull;
 import ConquerSpace.game.ships.hull.HullMaterial;
@@ -87,10 +88,13 @@ public class HullCreator extends JPanel {
     private JLabel emptyLabel;
 
     private Civilization c;
+    
+    private GameState gameState;
 
     @SuppressWarnings("unchecked")
-    public HullCreator(Civilization c) {
+    public HullCreator(GameState gameState, Civilization c) {
         this.c = c;
+        this.gameState = gameState;
         //setTitle("Create Hull");
         setLayout(new BorderLayout());
         //Set menubar
@@ -144,7 +148,7 @@ public class HullCreator extends JPanel {
             massTextField.setText("" + h.getMass());
             spaceBox.setText("" + h.getSpace());
             estThrustField.setText("" + h.getThrust());
-            for (Map.Entry<String, Integer> entry : GameController.shipTypes.entrySet()) {
+            for (Map.Entry<String, Integer> entry : gameState.shipTypes.entrySet()) {
                 String key = entry.getKey();
                 Integer value = entry.getValue();
                 //Compare
@@ -188,7 +192,7 @@ public class HullCreator extends JPanel {
         massUnitText = new JLabel("kg");
 
         hullComboBoxLabel = new JLabel("Hull for type: ");
-        Vector v = new Vector((GameController.shipTypes.keySet()));
+        Vector v = new Vector((gameState.shipTypes.keySet()));
         v.sort(Comparator.naturalOrder());
         hullComboBox = new JComboBox<>(v);
         hullComboBox.setFocusable(false);
@@ -244,7 +248,7 @@ public class HullCreator extends JPanel {
         long mass = Long.parseLong(massTextField.getText().replaceAll(",", ""));
         long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
         long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
-        int shipType = GameController.shipTypes.get((String) hullComboBox.getSelectedItem());
+        int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
         HullMaterial material = (HullMaterial) hullMaterialComboBox.getSelectedItem();
 
         Hull hull = new Hull(mass, space, material, shipType, thrust, className.getText());

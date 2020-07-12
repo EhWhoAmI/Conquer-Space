@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.events.Event;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -77,13 +78,14 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     private RecruitingPerson recruitingPerson;
 
     private EventViewer eventViewer;
-    
+
     private OrganizationsOrganizer organizationsOrganizer;
 
     private ResourceManager resourceManager;
 
-    private Civilization c;
-    private Universe u;
+    private Civilization civilization;
+    private Universe universe;
+    private GameState gameState;
 
     private JTree universeBreakdown;
     private DefaultMutableTreeNode universeBreakdownTreeModel;
@@ -94,9 +96,11 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     private final int planetinfotab = 1;
 
-    public MainInterfaceWindow(Civilization c, Universe u) {
-        this.c = c;
-        this.u = u;
+    public MainInterfaceWindow(GameState gameState, Civilization c) {
+        this.civilization = c;
+        this.universe = gameState.universe;
+        this.gameState = gameState;
+        
         init();
 
         //Set selected planet
@@ -134,34 +138,34 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
                     //Do stuff
                     Planet p = (Planet) selectedNode.getUserObject();
                     //Selected planet
-                    setSelectedPlanet(p, p.scanned.contains(c.getId()));
+                    setSelectedPlanet(p, p.scanned.contains(civilization.getId()));
                 }
                 //process
             }
         });
 
-        researchViewer = new ResearchViewer(c);
+        researchViewer = new ResearchViewer(gameState, civilization);
 
         planetInfoSheetContainer = new JPanel();
         planetInfoSheetContainer.setLayout(new BorderLayout());
 
         //Space ship tabs
-        spaceShipOverview = new SpaceShipOverview(c, u);
+        spaceShipOverview = new SpaceShipOverview(civilization, universe);
 
         //Engineering tabs
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
 
         shipsComponentsOverviewPanel = new JTabbedPane();
 
-        buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(c);
+        buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipdesign"), buildSpaceShipAutomationMenu);
 
-        satelliteDesigner = new SatelliteDesigner(c);
+        satelliteDesigner = new SatelliteDesigner(civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.satellite"), satelliteDesigner);
         ImageIcon map = ResourceLoader.getIcon("satellite.icon");
 
         shipsComponentsOverviewPanel.setIconAt(1, map);
-        launchSystemDesigner = new LaunchSystemDesigner(c);
+        launchSystemDesigner = new LaunchSystemDesigner(civilization);
         JPanel launchWrapper = new JPanel();
         launchWrapper.setLayout(new VerticalFlowLayout());
         launchWrapper.add(launchSystemDesigner);
@@ -187,31 +191,31 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
             updateComponents();
         });
 
-        ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(c);
+        ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipcomponent"), shipComponentDesigner);
 
-        hullCreator = new HullCreator(c);
+        hullCreator = new HullCreator(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.hulls"), hullCreator);
 
         shipComponentsOverview.add(shipsComponentsOverviewPanel, BorderLayout.CENTER);
 
         JTabbedPane peopleTabs = new JTabbedPane();
-        personWindow = new PersonWindow(c, u);
+        personWindow = new PersonWindow(civilization, universe);
         peopleTabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.people.list"), personWindow);
 
-        recruitingPerson = new RecruitingPerson(c, u);
+        recruitingPerson = new RecruitingPerson(civilization, universe);
         peopleTabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.people.recruitment"), recruitingPerson);
 
-        civInfoOverview = new CivInfoOverview(c, u);
+        civInfoOverview = new CivInfoOverview(civilization, universe);
 
-        resourceManager = new ResourceManager(c);
+        resourceManager = new ResourceManager(civilization);
 
-        economyWindow = new EconomyWindow(c, u);
+        economyWindow = new EconomyWindow(civilization, universe);
 
         eventViewer = new EventViewer();
-        
-        organizationsOrganizer = new OrganizationsOrganizer(c);
-        
+
+        organizationsOrganizer = new OrganizationsOrganizer(civilization);
+
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.research"), researchViewer);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.planet"), planetInfoSheetContainer);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.ships"), spaceShipOverview);
@@ -243,7 +247,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.setIconAt(6, goods);
         tabs.setIconAt(7, econ);
         tabs.setIconAt(8, events);
-        tabs.setIconAt(9, orgs);    
+        tabs.setIconAt(9, orgs);
 
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
@@ -261,7 +265,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         universeBreakdownTreeModel.removeAllChildren();
         //get owned star systems
 
-        for (Planet p : c.habitatedPlanets) {
+        for (Planet p : civilization.habitatedPlanets) {
             DefaultMutableTreeNode system = new DefaultMutableTreeNode(p.getParentStarSystem() + "");
             DefaultMutableTreeNode dm = new DefaultMutableTreeNode(p);
             system.add(dm);
@@ -311,15 +315,15 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         planetInfoSheetContainer.removeAll();
         if (toShowResources) {
             //Check if owned or not
-            if (p.getOwnerID() == (c.getId())) {
-                planetInfoSheet = new PlanetInfoSheet(u, selectedPlanet, c);
+            if (p.getOwnerID() == (civilization.getId())) {
+                planetInfoSheet = new PlanetInfoSheet(gameState, selectedPlanet, civilization);
                 planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
             } else {
-                unownedPlanetInfoMenu = new UnownedPlanetInfoMenu(u, selectedPlanet, c);
+                unownedPlanetInfoMenu = new UnownedPlanetInfoMenu(universe, selectedPlanet, civilization);
                 planetInfoSheetContainer.add(unownedPlanetInfoMenu, BorderLayout.CENTER);
             }
         } else {
-            shrinkedPlanetSheet = new ShrinkedPlanetSheet(u, p, c);
+            shrinkedPlanetSheet = new ShrinkedPlanetSheet(universe, p, civilization);
             planetInfoSheetContainer.add(shrinkedPlanetSheet, BorderLayout.CENTER);
         }
         setSelectedTab(planetinfotab);
@@ -334,7 +338,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     private void updateComponents() {
         shipsComponentsOverviewPanel.setEnabledAt(2, false);
         shipsComponentsOverviewPanel.setToolTipTextAt(2, "You need to research a launch system in the Research Tab!");
-        if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
+        if (civilization.values.containsKey("haslaunch") && civilization.values.get("haslaunch") == 1) {
             shipsComponentsOverviewPanel.setEnabledAt(2, true);
             shipsComponentsOverviewPanel.setToolTipText("");
         }

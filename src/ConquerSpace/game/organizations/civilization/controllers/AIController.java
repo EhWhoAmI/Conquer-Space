@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.organizations.civilization.controllers;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.actions.Alert;
@@ -49,7 +50,7 @@ public class AIController extends CivilizationController {
     }
 
     @Override
-    public void init(Universe u, StarDate d, Civilization c) {
+    public void init(GameState state, Civilization c) {
         LOGGER.info("initialized the ai for " + c.getName());
     }
 

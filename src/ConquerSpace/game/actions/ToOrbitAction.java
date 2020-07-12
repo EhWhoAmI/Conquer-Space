@@ -19,6 +19,7 @@ package ConquerSpace.game.actions;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.ships.Ship;
 import ConquerSpace.game.universe.bodies.Body;
 import ConquerSpace.game.universe.bodies.Planet;
@@ -40,7 +41,7 @@ public class ToOrbitAction extends ShipAction {
     }
 
     @Override
-    public void doAction() {
+    public void doAction(GameState gameState) {
         double x = position.getX() - ship.getX();
         double y = position.getY() - ship.getY();
 
@@ -62,7 +63,7 @@ public class ToOrbitAction extends ShipAction {
             ship.setIsOrbiting(true);
             ship.setLocation(position.getUniversePath());
             //Remove...
-            GameController.universe.getStarSystem(position.getParentStarSystem()).spaceShips.remove(ship);
+            gameState.universe.getStarSystem(position.getParentStarSystem()).spaceShips.remove(ship);
             position.putShipInOrbit(ship);
         } else {
             ship.translate((long) (objX), (long) (objY));
@@ -70,15 +71,15 @@ public class ToOrbitAction extends ShipAction {
     }
 
     @Override
-    public boolean checkIfDone() {
+    public boolean checkIfDone(GameState gameState) {
         return (ship.getX() == position.getX() && ship.getY() == position.getY() && ship.getOrbiting().equals(position.getUniversePath()));
     }
 
     @Override
-    public void initAction() {
+    public void initAction(GameState gameState) {
         if (ship.isOrbiting()) {
             //Exit orbit
-            Body object = GameController.universe.getSpaceObject(ship.getOrbiting());
+            Body object = gameState.universe.getSpaceObject(ship.getOrbiting());
             if (object instanceof Planet) {
                 Planet p = (Planet) object;
                 //Remove from orbit
@@ -89,7 +90,7 @@ public class ToOrbitAction extends ShipAction {
                 ship.setIsOrbiting(false);
 
                 //Add
-                GameController.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
+                gameState.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
             }   
         }
         //Predict going to location...

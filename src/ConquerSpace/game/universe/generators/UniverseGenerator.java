@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.universe.generators;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.universe.bodies.Universe;
 
 /**
@@ -24,5 +25,5 @@ import ConquerSpace.game.universe.bodies.Universe;
  * @author User
  */
 public abstract class UniverseGenerator {  
-    public abstract Universe generate();
+    public abstract Universe generate(GameState gameState);
 }

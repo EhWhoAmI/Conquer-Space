@@ -19,6 +19,7 @@ package ConquerSpace.tools;
 
 import ConquerSpace.game.AssetReader;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.resources.Element;
 import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.NonElement;
@@ -101,7 +102,7 @@ public class ResourceViewer extends JFrame {
 
     private JSONArray currentlySelectedArray;
 
-    public ResourceViewer() {
+    public ResourceViewer(GameState gameState) {
         setTitle("Resource Config");
 
         //Open resource file
@@ -154,7 +155,7 @@ public class ResourceViewer extends JFrame {
                     for (Map.Entry<Integer, Double> entry : ne.recipie.entrySet()) {
                         Integer key = entry.getKey();
                         Double val = entry.getValue();
-                        forumlaTableModel.addRow(new Object[]{GameController.goodHashMap.get(key).getName(), val});
+                        //forumlaTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
                     }
                     
                 }
@@ -494,16 +495,17 @@ public class ResourceViewer extends JFrame {
     }
 
     private void resetLoadedGoods() {
-        GameController.goodIdentifiers = new HashMap<>();
-        GameController.goodHashMap = new HashMap<>();
+        //GameController.goodIdentifiers = new HashMap<>();
+        //GameController.goodHashMap = new HashMap<>();
 
         //Read elements
-        GameController.elements = AssetReader.readHjsonFromDirInArray("dirs.elements",
-                Element.class, AssetReader::processElement);
+        //Deal with later...
+//        GameController.elements = AssetReader.readHjsonFromDirInArray("dirs.elements",
+//                Element.class, AssetReader::processElement);
 
-        AssetReader.processGoods();
+        //AssetReader.processGoods();
 
-        resources = new ArrayList<Good>(GameController.goodHashMap.values());
+        resources = new ArrayList<Good>();//GameController.goodHashMap.values());
     }
 
     private void loadGoodsFromList() {

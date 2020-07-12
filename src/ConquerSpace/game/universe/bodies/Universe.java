@@ -21,6 +21,7 @@ import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.population.Race;
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.UniversePath;
 import java.util.ArrayList;
@@ -33,8 +34,9 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
  *
  * @author EhWhoAmI
  */
-public class Universe extends Body {
+public class Universe {
 
+    @Serialize(key = "seed")
     private final long seed;
 
     public ArrayList<Civilization> civs;
@@ -47,7 +49,7 @@ public class Universe extends Body {
     
     public DualHashBidiMap<Integer, Person> people;
     
-    public HashMap<Integer, Race> species;
+    public HashMap<Integer, Race> races;
     
     public HashMap<Integer, Organization> organizations;
 
@@ -57,7 +59,7 @@ public class Universe extends Body {
         control = new HashMap<>();
         starSystems = new ArrayList<>();
         spaceShips = new ArrayList<>();
-        species = new HashMap<>();
+        races = new HashMap<>();
         people = new DualHashBidiMap<>();
         organizations = new HashMap<>();
     }

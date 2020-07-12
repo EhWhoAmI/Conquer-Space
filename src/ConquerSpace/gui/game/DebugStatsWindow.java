@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.util.logging.CQSPLogger;
 import ConquerSpace.util.logging.SwingMessageAppender;
@@ -79,8 +80,8 @@ public class DebugStatsWindow extends JInternalFrame {
     /**
      * Creates the window, and adds all things.
      */
-    private DebugStatsWindow(Universe u) {
-        universe = u;
+    private DebugStatsWindow(GameState state) {
+        universe = state.universe;
 
         setTitle("Stats for Nerds");
         setLayout(new VerticalFlowLayout(5, 4));
@@ -121,7 +122,7 @@ public class DebugStatsWindow extends JInternalFrame {
         openConsole = new JButton("Open Console");
         openConsole.setFocusable(false);
         openConsole.addActionListener((e) -> {
-            CQSPConsole con = new CQSPConsole(u, u.getCivilization(0));
+            CQSPConsole con = new CQSPConsole(universe, state.playerCiv, state);
             getDesktopPane().add(con);
         });
 
@@ -224,9 +225,9 @@ public class DebugStatsWindow extends JInternalFrame {
      * @param u Universe
      * @return An instance of a debug stats window.
      */
-    public static DebugStatsWindow getInstance(Universe u) {
+    public static DebugStatsWindow getInstance(GameState state) {
         if (instance == null) {
-            instance = new DebugStatsWindow(u);
+            instance = new DebugStatsWindow(state);
         }
         instance.setVisible(true);
         return instance;

@@ -45,13 +45,6 @@ public class Species {
         id = idCounter++;
         lifeTraits = new ArrayList<>();
         this.name = name;
-        //Nice
-        FoodGood foodGoodResource = new FoodGood(this, 1, 420);
-        LiveGood speciesGoodResource = new LiveGood(this, 1, 420);
-        GameController.goodHashMap.put(foodGoodResource.getId(), foodGoodResource);
-        GameController.goodHashMap.put(speciesGoodResource.getId(), speciesGoodResource);
-        speciesGood = speciesGoodResource.getId();
-        foodGood = foodGoodResource.getId();
     }
 
     public void setName(String name) {
@@ -76,6 +69,14 @@ public class Species {
 
     public int getLiveSpeciesGood() {
         return speciesGood;
+    }
+
+    public void setFoodGood(int foodGood) {
+        this.foodGood = foodGood;
+    }
+
+    public void setSpeciesGood(int speciesGood) {
+        this.speciesGood = speciesGood;
     }
 
     @Override

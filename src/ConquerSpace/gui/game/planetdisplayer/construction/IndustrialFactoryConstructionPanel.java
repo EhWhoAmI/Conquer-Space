@@ -18,6 +18,7 @@
 package ConquerSpace.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.city.City;
 import ConquerSpace.game.city.area.Area;
@@ -44,7 +45,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
     JList<ProductionProcess> list;
 
     @SuppressWarnings("unchecked")
-    public IndustrialFactoryConstructionPanel(Planet p, City c, Civilization civ) {
+    public IndustrialFactoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(p, c);
         setLayout(new GridBagLayout());
         productionProcessListModel = new DefaultListModel<>();
@@ -64,7 +65,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             for (Map.Entry<Integer, Double> entry : ((ProductionProcess) list.getSelectedValue()).input.entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
-                inputString = inputString + GameController.goodHashMap.get(key).getName();
+                inputString = inputString + gameState.goodHashMap.get(key).getName();
                 inputString = inputString + " amount " + val;
                 inputString = inputString + ", ";
             }
@@ -74,7 +75,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             for (Map.Entry<Integer, Double> entry : ((ProductionProcess) list.getSelectedValue()).output.entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
-                outputString = outputString + GameController.goodHashMap.get(key).getName();
+                outputString = outputString + gameState.goodHashMap.get(key).getName();
                 outputString = outputString + " amount " + val;
                 outputString = outputString + ", ";
             }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.tools;
 
+import ConquerSpace.game.GameState;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
@@ -37,7 +38,7 @@ public class ToolsSelectionMenu extends JFrame implements WindowListener {
     private final String TECH_STRING = "Tech formatter";
     private boolean selectedTools = false;
     
-    public ToolsSelectionMenu() {
+    public ToolsSelectionMenu(GameState state) {
         toolsListModel = new DefaultListModel<>();
         toolsListModel.addElement(GOODS_STRING);
         toolsListModel.addElement(TECH_STRING);
@@ -47,7 +48,7 @@ public class ToolsSelectionMenu extends JFrame implements WindowListener {
             String text = toolsList.getSelectedValue();
             switch (text) {
                 case GOODS_STRING:
-                    new ResourceViewer();
+                    new ResourceViewer(state);
                     selectedTools = true;
                     this.dispose();
                     break;

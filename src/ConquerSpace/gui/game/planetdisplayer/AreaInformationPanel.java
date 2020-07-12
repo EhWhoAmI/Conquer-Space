@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.city.area.Area;
 import ConquerSpace.game.city.area.CapitolArea;
 import ConquerSpace.game.city.area.CommercialArea;
@@ -48,7 +49,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AreaInformationPanel extends JPanel {
 
-    public AreaInformationPanel(Area a) {
+    public AreaInformationPanel(GameState gameState, Area a) {
         if (a != null) {
             setLayout(new VerticalFlowLayout());
             if (a instanceof ResearchArea) {
@@ -98,7 +99,7 @@ public class AreaInformationPanel extends JPanel {
                 for (Map.Entry<Integer, Double> entry : factory.getProcess().input.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    inputString.append(GameController.goodHashMap.get(key).getName());
+                    inputString.append(gameState.goodHashMap.get(key).getName());
                     inputString.append(" "
                             + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + " ");
                     inputString.append(val);
@@ -111,7 +112,7 @@ public class AreaInformationPanel extends JPanel {
                 for (Map.Entry<Integer, Double> entry : factory.getProcess().output.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    outputString.append(GameController.goodHashMap.get(key).getName());
+                    outputString.append(gameState.goodHashMap.get(key).getName());
                     outputString.append(" " + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + "");
                     outputString.append(val);
                     outputString.append(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.separator"));
@@ -136,7 +137,7 @@ public class AreaInformationPanel extends JPanel {
                 JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.title"));
                 add(title);
                 MineArea area = (MineArea) a;
-                JLabel resourceMined = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.mined", area.getResourceMined()));
+                JLabel resourceMined = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.mined", gameState.goodHashMap.get(area.getResourceMinedId())));
                 add(resourceMined);
             } else if (a instanceof CommercialArea) {
                 JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.commercial.title"));
@@ -163,7 +164,7 @@ public class AreaInformationPanel extends JPanel {
             }
             JLabel owner = new JLabel("Owner: None");
 
-            Organization org = GameController.universe.organizations.get(a.getOwner());
+            Organization org = gameState.universe.organizations.get(a.getOwner());
             if (org != null) {
                 if (org instanceof Civilization) {
                     owner.setText("Owner: State owned by " + org.getName());

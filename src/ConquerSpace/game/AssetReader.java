@@ -102,38 +102,45 @@ public class AssetReader {
         }
         return elements;
     }
-
-    public static void readPopulationEvents() {
-        ArrayList<JSONObject> events = new ArrayList<>();
-        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.events.population");
-
-        File[] files = launchSystemsFolder.listFiles();
+    
+    @SuppressWarnings("unchecked")
+    public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, GameState state, AssetPasserWithGameState assetReader) {
+        ArrayList<T> elements = new ArrayList<>();
+        //Get the launch systems folder
+        File resourceFolder = ResourceLoader.getResourceByFile(dir);
+        File[] files = resourceFolder.listFiles();
         for (File f : files) {
             FileInputStream fis = null;
             try {
                 //If it is readme, continue
-                if (f.getName().endsWith(".txt")) {
+                if (f.getName().endsWith("readme.txt")) {
                     continue;
-                }   //Read, there is only one object
+                }
                 fis = new FileInputStream(f);
                 byte[] data = new byte[(int) f.length()];
                 fis.read(data);
                 fis.close();
                 String text = new String(data);
+                text = JsonValue.readHjson(text).toString();
                 JSONArray root = new JSONArray(text);
                 for (int i = 0; i < root.length(); i++) {
-                    JSONObject obj = root.getJSONObject(i);
-                    //int id = obj.getInt("id");
-                    //String eventText = obj.getString("text");
-                    //events.add(new PopulationEvent(id, eventText));
-                    events.add(obj);
+                    try {
+                        JSONObject obj = root.getJSONObject(i);
+                        elements.add((T) assetReader.parseJSONObject(obj, state));
+                    } catch (ClassCastException e) {
+                        LOGGER.error("CCE while reading file" + f.getAbsolutePath(), e);
+                    } catch (JSONException exception) {
+                        LOGGER.error("JSONException while reading file" + f.getAbsolutePath(), exception);
+                    } catch (IllegalArgumentException ile) {
+                        LOGGER.error("IllegalArgumentException while reading file" + f.getAbsolutePath(), ile);
+                    }
                 }
             } catch (FileNotFoundException ex) {
-                LOGGER.error("File not found!", ex);
+                LOGGER.error("File not found while reading file" + f.getAbsolutePath(), ex);
             } catch (IOException ex) {
-                LOGGER.error("IO exception!", ex);
+                LOGGER.error("IO exception while reading file " + f.getAbsolutePath(), ex);
             } catch (JSONException ex) {
-                LOGGER.warn("JSON EXCEPTION!", ex);
+                LOGGER.warn("JSON EXCEPTION while reading file " + f.getAbsolutePath(), ex);
             } finally {
                 try {
                     //Because continue stat
@@ -144,11 +151,11 @@ public class AssetReader {
                 }
             }
         }
-        GameController.events = events;
+        return elements;
     }
 
     //This one is a little different...
-    public static void readShipTypes() {
+    public static void readShipTypes(GameState state) {
         try {
             //Open file
             Scanner s = new Scanner(ResourceLoader.getResourceByFile("text.ship.types.types"));
@@ -165,7 +172,7 @@ public class AssetReader {
                     }
                     //Get number
                     int number = Integer.parseInt(st.substring(i + 2));
-                    GameController.shipTypes.put(sb.toString(), number);
+                    state.shipTypes.put(sb.toString(), number);
                 }
             }
             //Open file
@@ -183,49 +190,11 @@ public class AssetReader {
                     }
                     //Get number
                     int number = Integer.parseInt(st.substring(i + 2));
-                    GameController.shipTypeClasses.put(sb.toString(), number);
+                    state.shipTypeClasses.put(sb.toString(), number);
                 }
             }
         } catch (FileNotFoundException ex) {
             LOGGER.warn("Cannot open ship types", ex);
-        }
-    }
-
-    public static void readShipComponents() {
-        File launchSystemsFolder = ResourceLoader.getResourceByFile("dirs.ship.components");
-        File[] files = launchSystemsFolder.listFiles();
-        for (File f : files) {
-            FileInputStream fis = null;
-            try {
-                //If it is readme, continue
-                if (!f.getName().endsWith(".json")) {
-                    continue;
-                }   //Read, there is only one object
-                fis = new FileInputStream(f);
-                byte[] data = new byte[(int) f.length()];
-                fis.read(data);
-                fis.close();
-                String text = new String(data);
-                JSONArray root = new JSONArray(text);
-                for (int i = 0; i < root.length(); i++) {
-                    GameController.shipComponentTemplates.add(root.getJSONObject(i));
-                }
-
-            } catch (FileNotFoundException ex) {
-                LOGGER.error("File not found!", ex);
-            } catch (IOException ex) {
-                LOGGER.error("IO exception!", ex);
-            } catch (JSONException ex) {
-                LOGGER.warn("JSON EXCEPTION!", ex);
-            } finally {
-                try {
-                    //Because continue stat
-                    if (fis != null) {
-                        fis.close();
-                    }
-                } catch (IOException ex) {
-                }
-            }
         }
     }
 
@@ -243,9 +212,6 @@ public class AssetReader {
         e.setElementNumber(id);
         //Set tags
         e.tags = new String[0];
-
-        GameController.goodIdentifiers.put(e.getIdentifier(), e.getId());
-        GameController.goodHashMap.put(e.getId(), e);
         return e;
     }
 
@@ -259,7 +225,7 @@ public class AssetReader {
         return tech;
     }
 
-    public static Object processLaunchSystem(JSONObject obj) {
+    public static Object processLaunchSystem(JSONObject obj, GameState state) {
         String name = obj.getString("name");
 
         String techName = obj.getString("tech").split(":")[0];
@@ -285,9 +251,9 @@ public class AssetReader {
         int maxCargo = obj.getInt("cargo");
 
         if (reusable) {
-            return new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, reuseCost, maxCargo);
+            return new LaunchSystem(name, Technologies.getTechByID(state, id), size, safety, cost, constructCost, reuseCost, maxCargo);
         } else {
-            return new LaunchSystem(name, Technologies.getTechByID(id), size, safety, cost, constructCost, maxCargo);
+            return new LaunchSystem(name, Technologies.getTechByID(state, id), size, safety, cost, constructCost, maxCargo);
         }
     }
 
@@ -304,7 +270,7 @@ public class AssetReader {
     }
 
     //Lol the name
-    public static Object processProcess(JSONObject obj) {
+    public static Object processProcess(JSONObject obj, GameState state) {
         String name = obj.getString("name");
         String identifier = obj.getString("identifier");
 
@@ -316,7 +282,7 @@ public class AssetReader {
             String s = inputArray.getString(i);
             String[] content = s.split(":");
 
-            Integer resourceId = GameController.goodIdentifiers.get(content[0]);
+            Integer resourceId = state.goodIdentifiers.get(content[0]);
 
             if (resourceId != null) {
                 //Parse things
@@ -333,7 +299,7 @@ public class AssetReader {
             String s = outputArray.getString(i);
             String[] content = s.split(":");
 
-            Integer resourceId = GameController.goodIdentifiers.get(content[0]);
+            Integer resourceId = state.goodIdentifiers.get(content[0]);
             if (resourceId != null) {
                 //Parse things
                 Double value = Double.parseDouble(content[1]);
@@ -349,8 +315,6 @@ public class AssetReader {
         process.input = input;
         process.output = output;
         process.diff = diff;
-
-        GameController.prodProcesses.put(identifier, process);
         return process;
     }
 
@@ -383,7 +347,7 @@ public class AssetReader {
      * We need a separate function for reading goods, because you need to
      * iterate through it twice.
      */
-    public static void processGoods() {
+    public static void processGoods(GameState state) {
         ArrayList<Good> goods = new ArrayList<>();
         HashMap<String, JSONObject> recipieInfo = new HashMap<>();
 
@@ -418,8 +382,7 @@ public class AssetReader {
                     goods.add(goodElement);
                     recipieInfo.put(identifier, obj);
 
-                    GameController.goodIdentifiers.put(identifier, goodElement.getId());
-                    GameController.goodHashMap.put(goodElement.getId(), goodElement);
+                    state.addGood(goodElement);
                 }
             } catch (FileNotFoundException ex) {
                 LOGGER.error("File not found: " + f.getAbsolutePath() + "!", ex);
@@ -455,7 +418,7 @@ public class AssetReader {
                         String amount = text[1];
 
                         double goodAmount = Double.parseDouble(amount);
-                        int goodId = GameController.goodIdentifiers.get(goodIdentifier);
+                        int goodId = state.goodIdentifiers.get(goodIdentifier);
                         resource.recipie.put(goodId, goodAmount);
                     }
                 }
@@ -466,7 +429,10 @@ public class AssetReader {
     }
 
     public static interface AssetPasser {
-
         public Object parseJSONObject(JSONObject obj);
+    }
+    
+    public static interface AssetPasserWithGameState {
+        public Object parseJSONObject(JSONObject obj, GameState gameState);
     }
 }

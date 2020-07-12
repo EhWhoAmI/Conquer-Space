@@ -19,6 +19,7 @@ package ConquerSpace.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.Stratum;
 import java.util.Map;
@@ -30,15 +31,17 @@ import javax.swing.DefaultListModel;
  */
 public class PlanetGeology extends javax.swing.JPanel {
 
-    private Planet p;
+    private Planet planet;
     private DefaultListModel<Stratum> stratumListModel;
     private DefaultListModel<String> resourceListModel;
-
+    
+    private GameState gameState;
     /**
      * Creates new form PlanetGeology
      */
-    public PlanetGeology(Planet p) {
-        this.p = p;
+    public PlanetGeology(GameState gameState, Planet p) {
+        this.gameState =  gameState;
+        this.planet = p;
         stratumListModel = new DefaultListModel<>();
         for (Stratum stratum : p.strata) {
             stratumListModel.addElement(stratum);
@@ -162,7 +165,7 @@ public class PlanetGeology extends javax.swing.JPanel {
                 Integer key = en.getKey();
                 Integer val = en.getValue();
                 
-                resourceListModel.addElement(GameController.goodHashMap.get(key).getName() + " " + val);
+                resourceListModel.addElement(gameState.goodHashMap.get(key).getName() + " " + val);
             }
            
         }

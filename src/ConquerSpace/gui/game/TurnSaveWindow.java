@@ -20,6 +20,7 @@ package ConquerSpace.gui.game;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameSpeeds;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.StarDate;
 import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -76,9 +77,9 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     private StarDate date;
     private Universe universe;
 
-    public TurnSaveWindow(StarDate date, Universe u) {
-        universe = u;
-        this.date = date;
+    public TurnSaveWindow(GameState state) {
+        universe = state.universe;
+        this.date = state.date;
         JPanel pan = new JPanel();
 
         //Init components
@@ -137,7 +138,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             SaveGame game = new SaveGame(SaveGame.getSaveFolder());
             long before = System.currentTimeMillis();
             try {
-                game.save(u, date);
+                game.save(universe, date);
             } catch (IOException ex) {
                 ExceptionHandling.ExceptionMessageBox("IO EXCEPTION!", ex);
             }
@@ -147,7 +148,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         runningstatsButton.setFocusable(false);
         runningstatsButton.addActionListener((e) -> {
-            DebugStatsWindow win = DebugStatsWindow.getInstance(universe);
+            DebugStatsWindow win = DebugStatsWindow.getInstance(state);
             if (!win.isShowing()) {
                 getDesktopPane().add(win);
             }

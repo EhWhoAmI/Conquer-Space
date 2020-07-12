@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.actions;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.resources.ResourceStockpile;
 
 /**
@@ -38,7 +39,7 @@ public class ResourceTransportAction extends Action {
     }
 
     @Override
-    public ActionStatus doAction() {
+    public ActionStatus doAction(GameState gameState) {
         //public static boolean sendResources(Integer resourceType, Double amount, int owner, City from, City to) {
         return Actions.sendResources(good, amount, from, to) ? ActionStatus.Success : ActionStatus.Failure;
     }

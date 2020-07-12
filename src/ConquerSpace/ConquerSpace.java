@@ -19,6 +19,7 @@ package ConquerSpace;
 
 import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.population.RacePreferredClimateTpe;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
@@ -127,7 +128,7 @@ public class ConquerSpace {
     public static void main(String[] args) throws InterruptedException {
         initalizeCommandLineArgs(args);
         if (TOOLS) {
-            new ToolsSelectionMenu();
+            new ToolsSelectionMenu(null);
         } else {
             CQSPLogger.initLoggers();
             LOGGER.info("Run started: " + new Date().toString());
@@ -278,18 +279,18 @@ public class ConquerSpace {
     }
 
     public static void loadUniverse() {
+        Globals.gameState = new GameState();
         //Load universe
         long loadingStart = System.currentTimeMillis();
-        GameLoader.load();
-        Universe universe = Globals.generator.generate();
-        GameController.universe = universe;
+        GameLoader.load(Globals.gameState);
+        Globals.gameState.universe = Globals.generator.generate(Globals.gameState);
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
     }
 
     public static void runGame() {
         //Start game
-        new GameController();
+        new GameController(Globals.gameState);
     }
 
     public static void configureSettings() {

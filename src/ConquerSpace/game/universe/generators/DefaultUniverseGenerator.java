@@ -18,6 +18,7 @@
 package ConquerSpace.game.universe.generators;
 
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.controllers.AIController;
 import ConquerSpace.game.organizations.civilization.controllers.PlayerController;
@@ -67,6 +68,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     UniverseGenerationConfig u;
     CivilizationConfig c;
     long seed;
+    private GameState gameState;
 
     public DefaultUniverseGenerator(UniverseGenerationConfig u, CivilizationConfig c, long seed) {
         this.u = u;
@@ -75,8 +77,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     }
 
     @Override
-    public Universe generate() {
+    public Universe generate(GameState state) {
+        gameState = state;
+        
         Universe universe = new Universe(seed);
+
+        gameState.universe = universe;
+
         //Create random 
         Random rand = new Random(seed);
 
@@ -163,7 +170,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setStartingPlanet(up);
         //Generate Species
         Race playerSpecies = new Race(1, 0.01f, c.speciesName);
-        universe.species.put(playerSpecies.getId(), playerSpecies);
+        universe.races.put(playerSpecies.getId(), playerSpecies);
         playerSpecies.setUpkeep(0.05f);
 
         //Set currency
@@ -206,7 +213,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             starSystemCount++;
             civ.setStartingPlanet(up1);
             Race civSpecies = new Race(1, 0.01f, "Race " + i);
-            universe.species.put(civSpecies.getId(), civSpecies);
+            universe.races.put(civSpecies.getId(), civSpecies);
             civ.setFoundingSpecies(civSpecies);
 
             //Create currency
@@ -224,7 +231,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         LOGGER.info("Done generating!");
         LOGGER.info("Going over civ initializing");
 
-        CivilizationInitializer initer = new CivilizationInitializer(universe);
+        CivilizationInitializer initer = new CivilizationInitializer(state);
         initer.initGame();
         LOGGER.info("Done with civ initializing");
 
@@ -324,11 +331,10 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Planet p = generatePlanet(planetType, planetSize, k, lastStarSystem, rand);
 
             generateResourceVeins(p, rand);
-            
+
             p.setTerrainSeed(rand.nextInt());
             p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
             //= terrainColorses;
-            
 
             //Set name
             if (planetNameGenerator != null) {
@@ -412,7 +418,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Find the amount of resources to add...
         //Sort through resources, and find suitable
         ArrayList<Integer> toAdd = new ArrayList<>();
-        for (Map.Entry<Integer, ResourceDistribution> entry : GameController.ores.entrySet()) {
+        for (Map.Entry<Integer, ResourceDistribution> entry : gameState.ores.entrySet()) {
             Integer key = entry.getKey();
             ResourceDistribution val = entry.getValue();
             double rarity = val.rarity;

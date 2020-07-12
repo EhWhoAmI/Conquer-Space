@@ -15,22 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.game.actions;
+package ConquerSpace.game.save;
 
-import ConquerSpace.game.GameState;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Action of a tick.
  *
  * @author EhWhoAmI
  */
-public abstract class Action {
-
-    public Action() {
-    }
-
-    /**
-     * Do the action
-     */
-    abstract public ActionStatus doAction(GameState gameState);
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Serialize {
+    public String key();
 }

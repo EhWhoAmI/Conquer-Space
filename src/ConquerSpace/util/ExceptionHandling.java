@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.game.GameController;
+import ConquerSpace.game.GameState;
 
 /**
  * The one class I hope no one sees.
@@ -41,6 +42,9 @@ import ConquerSpace.game.GameController;
  */
 public class ExceptionHandling {
 
+    public static void ExceptionMessageBox(String what, Throwable ex) {
+        ExceptionMessageBox(what, ex, null);
+    }
     /**
      * Takes in a string and exception. Has a message box for the user and makes
      * a crash dump.
@@ -48,7 +52,7 @@ public class ExceptionHandling {
      * @param what Your own message.
      * @param ex Exception that caused it.
      */
-    public static void ExceptionMessageBox(String what, Throwable ex) {
+    public static void ExceptionMessageBox(String what, Throwable ex, GameState gameState) {
         int exit = 1;
 
         JPanel optionPanel = createOptionPanel(what, ex);
@@ -58,19 +62,23 @@ public class ExceptionHandling {
                 String.format(LOCALE_MESSAGES.getMessage("errorhandlingtitle"), ex.getClass().getName() ,ex.getMessage()),
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);//Create dump file
 
-        writeErrorLog(ex, what);
+        writeErrorLog(ex, what, gameState);
         if (exit == 0) {
             System.exit(1);
         }
     }
 
     public static void FatalExceptionMessageBox(String what, Throwable ex) {
+        FatalExceptionMessageBox(what, ex, null);
+    }
+    
+    public static void FatalExceptionMessageBox(String what, Throwable ex, GameState gameState) {
         JPanel optionPanel = createOptionPanel(what, ex);
 
         JOptionPane.showMessageDialog(null,
                 optionPanel,
                 String.format(LOCALE_MESSAGES.getMessage("fatalhandlingtitle"), ex.getClass().getName() ,ex.getMessage()), JOptionPane.ERROR_MESSAGE);//Create dump file
-        writeErrorLog(ex, what);
+        writeErrorLog(ex, what, gameState);
         System.exit(1);
     }
 
@@ -93,7 +101,12 @@ public class ExceptionHandling {
         optionPanel.add(new JScrollPane(area));
         return optionPanel;
     }
+    
     private static void writeErrorLog(Throwable ex, String header) {
+        writeErrorLog(ex, header, null);
+    }
+    
+    private static void writeErrorLog(Throwable ex, String header, GameState gameState) {
         PrintWriter writer = null;
         Runtime runtime = Runtime.getRuntime();
 
@@ -119,9 +132,9 @@ public class ExceptionHandling {
             } else {
                 writer.println("Asset checksum: not generated yet");
             }
-
-            if (GameController.universe != null) {
-                writer.println("Universe seed: " + GameController.universe.getSeed());
+            
+            if (gameState != null && gameState.universe != null) {
+                writer.println("Universe seed: " + gameState.universe.getSeed());
             }
 
             writer.println("Java version: " + System.getProperty("java.version") + " running on " + System.getProperty("os.name"));
