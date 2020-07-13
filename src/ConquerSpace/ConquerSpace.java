@@ -21,6 +21,7 @@ import ConquerSpace.game.GameController;
 import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.GameState;
 import ConquerSpace.game.population.RacePreferredClimateTpe;
+import ConquerSpace.game.save.SaveGame;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
@@ -139,7 +140,7 @@ public class ConquerSpace {
             if (!DEBUG) {
                 generateChecksum();
             }
-            
+
             setDefaultOptions();
             configureSettings();
 
@@ -174,8 +175,20 @@ public class ConquerSpace {
                 Loading load = new Loading();
                 loadUniverse();
                 load.setVisible(false);
-
-                runGame();
+                SaveGame game = new SaveGame(SaveGame.getSaveFolder());
+                long before = System.currentTimeMillis();
+                try {
+                    game.save(Globals.gameState);
+                } catch (IOException ex) {
+                    ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
+                } catch (IllegalArgumentException ex) {
+                    ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
+                } catch (IllegalAccessException ex) {
+                    ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
+                }
+                LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
+                //runGame();
+                System.exit(0);
             } catch (Exception e) {
                 //Catch exceptions...
                 ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
@@ -391,7 +404,7 @@ public class ConquerSpace {
             long end = System.currentTimeMillis();
             LOGGER.info("Time needed to calculate checksum: " + (end - start) + "ms");
         };
-        
+
         Thread checksumThread = new Thread(runnable);
         checksumThread.setName("checksum");
         checksumThread.start();

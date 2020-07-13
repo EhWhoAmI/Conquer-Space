@@ -112,7 +112,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             // 100 light years
             int dist = rand.nextInt((int) (AU_IN_LTYR * 100));
             float degrees = (rand.nextFloat() * 360);
-            StarSystem sys = new StarSystem(i, new PolarCoordinate(degrees, dist));
+            StarSystem sys = new StarSystem(new PolarCoordinate(degrees, dist));
 
             //Add stars
             Star star = generateStar(rand);
@@ -254,7 +254,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //
         int dist = rand.nextInt((int) (AU_IN_LTYR * 100));
         float degrees = (rand.nextFloat() * 360);
-        StarSystem sys = new StarSystem(lastStarSystem, new PolarCoordinate(degrees, dist));
+        StarSystem sys = new StarSystem(new PolarCoordinate(degrees, dist));
 
         //Add stars
         Star star = generateStar(rand);

@@ -28,6 +28,7 @@ import ConquerSpace.game.population.jobs.Workable;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.resources.ResourceStockpile;
 import ConquerSpace.game.resources.StorageNeeds;
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,19 +41,33 @@ import java.util.Iterator;
 public class City implements PersonEnterable, ResourceStockpile, Administrable {
 
     private static int idCounter = 0;
+    
+    @Serialize(key = "id")
     private final int id;
 
+    @Serialize(key = "population")
     public Population population;
     public static final String CITY_DEFAULT = "emp";
     private Person governor;
+    
+    @Serialize(key = "name")
     private String name;
+    
+    @Serialize(key = "areas")
     public ArrayList<Area> areas;
+    
     public ArrayList<Workable> workableFor;
+    
+    @Serialize(key = "people")
     public ArrayList<Person> peopleAtCity;
 
+    @Serialize(key = "resources")
     public HashMap<Integer, Double> resources;
+    
+    @Serialize(key = "demands")
     public DoubleHashMap<Integer> resourceDemands;
 
+    @Serialize(key = "storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
     private int maxStorage;
@@ -62,9 +77,11 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     private UniversePath location;
 
+    @Serialize(key = "tags")
     public HashMap<String, Integer> tags;
 
     //% to completing a unit
+    @Serialize(key = "population-completion")
     private float populationUnitPercentage = 0;
 
     //Growth rates of the species...
@@ -74,6 +91,7 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     private CityType cityType;
 
     //Size in tiles
+    @Serialize(key = "tiles")
     private int size;
 
     public City(UniversePath location) {

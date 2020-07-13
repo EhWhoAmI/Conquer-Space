@@ -39,18 +39,25 @@ public class Universe {
     @Serialize(key = "seed")
     private final long seed;
 
+    @Serialize(key = "civilizations")
     public ArrayList<Civilization> civs;
 
+    @Serialize(key = "systems")
     public ArrayList<StarSystem> starSystems;
 
+    @Serialize(key = "control")
     public HashMap<UniversePath, Integer> control;
 
+    @Serialize(key = "ships")
     public ArrayList<SpaceShip> spaceShips;
     
+    @Serialize(key = "people")
     public DualHashBidiMap<Integer, Person> people;
     
+    @Serialize(key = "races")
     public HashMap<Integer, Race> races;
     
+    @Serialize(key = "orgs")
     public HashMap<Integer, Organization> organizations;
 
     public Universe(long seed) {

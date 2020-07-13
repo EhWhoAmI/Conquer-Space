@@ -70,6 +70,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -114,7 +115,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     private Timer gameTickTimer;
 
     private StarDate date;
-    
+
     private GameState gameState;
 
     public GameWindow(GameState gameState, PlayerController controller, Civilization c) {
@@ -123,7 +124,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         this.universe = gameState.universe;
         this.date = gameState.date;
         this.gameState = gameState;
-        
+
         //Edit menu bar
         addWindowListener(this);
         init();
@@ -417,9 +418,13 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             SaveGame game = new SaveGame(SaveGame.getSaveFolder());
             long before = System.currentTimeMillis();
             try {
-                game.save(universe, date);
+                game.save(gameState);
             } catch (IOException ex) {
-                ExceptionHandling.ExceptionMessageBox("IO EXCEPTION!", ex);
+                ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
+            } catch (IllegalArgumentException ex) {
+                ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
+            } catch (IllegalAccessException ex) {
+                ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
             }
             LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

@@ -127,7 +127,7 @@ public class GameUpdater extends GameTicker {
         calculateVision();
 
         //Check for month increase            
-        if (starDate.bigint % GameRefreshRate == 1) {
+        if (starDate.date % GameRefreshRate == 1) {
             LOGGER.trace("Refreshing all the game objects");
             updateGame();
             for (int i = 0; i < universe.getCivilizationCount(); i++) {
@@ -135,7 +135,7 @@ public class GameUpdater extends GameTicker {
             }
         }
         //Process people and generate every 1000 ticks, which is about every 41 days
-        if (starDate.bigint % (GameRefreshRate * 2) == 1) {
+        if (starDate.date % (GameRefreshRate * 2) == 1) {
             createPeople();
         }
     }

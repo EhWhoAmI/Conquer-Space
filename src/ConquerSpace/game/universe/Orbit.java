@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.universe;
 
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.universe.bodies.Body;
 
 /**
@@ -27,15 +28,21 @@ public class Orbit {
     /**
      * The degrees
      */
+    @Serialize(key = "degrees")
     public double degrees;
 
+    @Serialize(key = "sma")
     public double semiMajorAxis;
+    
+    @Serialize(key = "eccentricity")
     public double eccentricity;
 
     /**
      * The tilt of the orbit, in degrees.
      */
+    @Serialize(key = "rotation")
     public double rotation;
+    
     public Body referenceBody;
     
     public Orbit(double degrees, double semiMajorAxis, double eccentricity, double rotation) {

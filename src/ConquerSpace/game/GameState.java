@@ -35,6 +35,7 @@ import ConquerSpace.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.game.ships.launch.LaunchSystem;
 import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.universe.bodies.Universe;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.JSONObject;
@@ -49,6 +50,7 @@ public class GameState {
     @Serialize(key = "universe")
     public Universe universe;
 
+    @Serialize(key = "date")
     public StarDate date;
 
     //For evals... 
@@ -87,11 +89,12 @@ public class GameState {
     public FieldNode fieldNodeRoot;
     public ArrayList<Technology> techonologies = new ArrayList<>();
 
+    public File saveFile;
+
     //private GameUpdater updater;
     public GameState() {
         //Init all stuff
         goods = new ArrayList<>();
-        
         date = new StarDate();
     }
 
@@ -107,15 +110,14 @@ public class GameState {
 
     public void addSpecies(Species species) {
         //Add food stuff
-        
+
         //Nice
         FoodGood foodGoodResource = new FoodGood(species, 1, 420);
         LiveGood speciesGoodResource = new LiveGood(species, 1, 420);
         addGood(foodGoodResource);
         addGood(speciesGoodResource);
-        
+
         species.setFoodGood(foodGoodResource.getId());
         species.setSpeciesGood(speciesGoodResource.getId());
     }
 }
- 

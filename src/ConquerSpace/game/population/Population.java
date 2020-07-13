@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.population;
 
+import ConquerSpace.game.save.Serialize;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -26,6 +27,7 @@ import java.util.Iterator;
  */
 public class Population {
 
+    @Serialize(key = "segments")
     public final ArrayList<PopulationSegment> populations;
 
     private long populationSize = 0;

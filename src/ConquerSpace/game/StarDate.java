@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game;
 
+import ConquerSpace.game.save.Serialize;
 import java.util.Calendar;
 
 /**
@@ -27,14 +28,15 @@ public class StarDate {
     /**
      * Ticker is in hours.
      */
-    public long bigint = 1L;
+    @Serialize(key = "value")
+    public long date = 1L;
     
     /**
      * Increment the ticker by <code>ticks</code> amount.
      * @param ticks Amount to increment.
      */
     public void increment(long ticks) {
-        bigint+=ticks;
+        date+=ticks;
     }
     
     /**
@@ -42,7 +44,7 @@ public class StarDate {
      * @return Days from start of month.
      */
     public int getDays() {
-        long days = bigint/24;
+        long days = date/24;
         days = days % 365L;
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_YEAR, (int)days);
@@ -57,7 +59,7 @@ public class StarDate {
      * @return Days from start of year.
      */
     public int getDaysOfYear() {
-        long days = bigint/24L;
+        long days = date/24L;
         days = days % 365L;
         return (int) days;
     }
@@ -67,7 +69,7 @@ public class StarDate {
      * @return Years from star date 1
      */
     public int getYears() {
-        long days = bigint/24L;
+        long days = date/24L;
         long years = days/356L;
         return (int) years;
     }

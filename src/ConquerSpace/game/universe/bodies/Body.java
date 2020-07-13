@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.universe.Orbit;
 import ConquerSpace.game.universe.SpacePoint;
 
@@ -26,12 +27,19 @@ import ConquerSpace.game.universe.SpacePoint;
  */
 public class Body {
     private static int idCounter = 0;
+
+    @Serialize(key = "id")
     int id = 0;
-    
+
+    @Serialize(key = "orbit")
     public Orbit orbit = new Orbit(0, 0, 0, 0);
+
+    //Not serialized because it's based on orbit
     public SpacePoint point = new SpacePoint(0, 0);
-    
-    Body referenceBody;
+
+    public Body() {
+        id = idCounter++;
+    }
 
     public Orbit getOrbit() {
         return orbit;
@@ -92,7 +100,7 @@ public class Body {
     public double getY() {
         return point.getY();
     }
-    
+
     public double getOrbitalDistance() {
         return orbit.toPolarCoordinate().getDistance();
     }

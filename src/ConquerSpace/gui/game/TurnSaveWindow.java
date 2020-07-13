@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -138,9 +139,13 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             SaveGame game = new SaveGame(SaveGame.getSaveFolder());
             long before = System.currentTimeMillis();
             try {
-                game.save(universe, date);
+                game.save(state);
             } catch (IOException ex) {
-                ExceptionHandling.ExceptionMessageBox("IO EXCEPTION!", ex);
+                ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
+            } catch (IllegalArgumentException ex) {
+                ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
+            } catch (IllegalAccessException ex) {
+                ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
             }
             LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
             this.getTopLevelAncestor().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

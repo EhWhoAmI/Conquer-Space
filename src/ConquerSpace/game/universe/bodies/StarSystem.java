@@ -17,6 +17,7 @@
  */
 package ConquerSpace.game.universe.bodies;
 
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.Orbit;
 import ConquerSpace.game.universe.PolarCoordinate;
@@ -34,15 +35,13 @@ public class StarSystem extends Body {
     
     public int planetCount = 0;
     
+    @Serialize(key = "bodies")
     public ArrayList<Body> bodies;
 
-    /**
-     * Galactic location.
-     */
-    private PolarCoordinate location;
-
+    @Serialize(key = "ships")
     public ArrayList<SpaceShip> spaceShips;
     
+    @Serialize(key = "name")
     private String name = "";
 
     /**
@@ -51,9 +50,7 @@ public class StarSystem extends Body {
      * @param id ID of this star system
      * @param location Galactic location.
      */
-    public StarSystem(int id, PolarCoordinate location) {
-        this.id = id;
-        this.location = location;
+    public StarSystem(PolarCoordinate location) {
         orbit = new Orbit(location.getDegrees(), location.getDistance(), 0, 0);
         spaceShips = new ArrayList<>();
         bodies = new ArrayList<>();
@@ -64,22 +61,13 @@ public class StarSystem extends Body {
     }
 
     /**
-     * Get galatic location of this star system
-     *
-     * @return Galatic location of this star system
-     */
-    public PolarCoordinate getGalaticLocation() {
-        return location;
-    }
-
-    /**
      * Get readable string of the star system, stars and planets.
      *
      * @return a readable string
      */
     public String toReadableString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Star system " + this.id + " Location-" + location.toString() + " Rectangular pos"
+        builder.append("Star system " + this.id + " Rectangular pos"
                 + getX() + ", " + getY() + ": [\n");
         builder.append(">\n");
         return (builder.toString());

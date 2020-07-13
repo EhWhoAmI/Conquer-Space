@@ -17,16 +17,21 @@
  */
 package ConquerSpace.game.save;
 
-import ConquerSpace.game.StarDate;
-import ConquerSpace.game.organizations.civilization.Civilization;
-import ConquerSpace.game.ships.hull.Hull;
-import ConquerSpace.game.ships.hull.HullMaterial;
-import ConquerSpace.game.universe.bodies.StarSystem;
-import ConquerSpace.game.universe.bodies.Universe;
+import ConquerSpace.ConquerSpace;
+import ConquerSpace.game.GameState;
 import ConquerSpace.util.Utilities;
+import ConquerSpace.util.Version;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import org.hjson.JsonValue;
+import org.hjson.Stringify;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,17 +41,25 @@ import org.json.JSONObject;
  */
 public class SaveGame {
 
+    private Version earliestCompatableVersion = new Version(0, 0, 3);
+
     private File folder;
+
+    private Class[] primitives = new Class[]{Integer.class, Double.class, Float.class, Long.class, String.class, List.class, Map.class};
+
+    private JSONObject saveData;
 
     public SaveGame(File file) {
         this.folder = file;
+
+        saveData = new JSONObject();
     }
 
     public SaveGame(String s) {
-        folder = new File(s);
+        this(new File(s));
     }
 
-    public void save(Universe u, StarDate date) throws IOException {
+    public void save(GameState gameState) throws IOException, IllegalArgumentException, IllegalAccessException {
         //Get the file
         if (!folder.exists()) {
             folder.mkdirs();
@@ -57,79 +70,86 @@ public class SaveGame {
             Utilities.deleteFolder(folder);
         }
 
-        //Now create items
-        //Create info file 
-        MetaFactory metaFactory = new MetaFactory(u, date);
-        metaFactory.create(folder);
+        //Save metadata...
+        JSONObject meta = new JSONObject();
+        meta.put("version", ConquerSpace.VERSION.getVersionCore());
+        meta.put("date", gameState.date.date);
 
-        {
-            File systemFile = new File(folder, "systems");
-            //Add content
-            systemFile.createNewFile();
-
-            JSONArray systemArray = new JSONArray();
-            //Do the universe
-            for (int sys = 0; sys < u.getStarSystemCount(); sys++) {
-                StarSystem system = u.getStarSystem(sys);
-
-                StarSystemSaveHandler starSystemSaveHandler = new StarSystemSaveHandler(system);
-                JSONObject obj = starSystemSaveHandler.getJSONObject();
-                systemArray.put(obj);
-            }
-            PrintWriter pw = new PrintWriter(systemFile);
-            pw.print(systemArray.toString(2).replace("\n", System.getProperty("line.separator")));
-            pw.close();
+        try {
+            saveObject(saveData, gameState);
+        } catch (StackOverflowError soe) {
+            soe.printStackTrace();
         }
+        System.out.println(meta);
+        BufferedWriter writer = new BufferedWriter(new FileWriter("save.json"));
+        String text = JsonValue.readHjson(saveData.toString()).toString(Stringify.HJSON);
+        System.out.println(text.length());
+        writer.write(text);
+        writer.flush();
+    }
 
-        {
-            File civFile = new File(folder, "civ");
-            civFile.createNewFile();
-            JSONArray civArray = new JSONArray();
+    private void saveObject(JSONObject saveObject, Object obj) throws IllegalArgumentException, IllegalAccessException {
+        //Check if primitive
+        List<Field> fields = getAllFields(new ArrayList<>(), obj.getClass());
+        //Loop through stuff
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (field.isAnnotationPresent(Serialize.class)) {
+                Serialize s = field.getAnnotation(Serialize.class);
+                String key = s.key();
+                if (isSaveable(field.get(obj))) {
+                    save(saveObject, key, field.get(obj));
+                } else {
+                    //Serialize children
+                    JSONObject childObject = new JSONObject();
+                    saveObject(childObject, field.get(obj));
 
-            //Civs
-            for (int civ = 0; civ < u.getCivilizationCount(); civ++) {
-                Civilization civilization = u.getCivilization(civ);
-                JSONObject object = new JSONObject();
-
-                //There is a lot to add here.... halp
-                object.put("id", civilization.getId());
-                object.put("name", civilization.getName());
-
-                JSONArray materialArray = new JSONArray();
-                for (HullMaterial mat : civilization.hullMaterials) {
-                    JSONObject materialObject = new JSONObject();
-                    materialObject.put("id", mat.getId());
-                    materialObject.put("cost", mat.getCost());
-                    materialObject.put("density", mat.getDensity());
-                    materialObject.put("name", mat.getName());
-                    materialObject.put("strength", mat.getStrength());
-                    materialArray.put(materialObject);
+                    //Put the stuff
+                    saveObject.put(key, childObject);
                 }
-                object.put("hull-materials", materialArray);
-
-                JSONArray hullArray = new JSONArray();
-                for (Hull h : civilization.hulls) {
-                    JSONObject hullObject = new JSONObject();
-                    hullObject.put("mass", h.getMass());
-                    hullObject.put("material", h.getMaterial().getId());
-                    hullObject.put("space", h.getSpace());
-                    hullObject.put("type", h.getShipType());
-                    hullObject.put("thrust", h.getThrust());
-                    hullObject.put("strength", h.getStrength());
-                    hullArray.put(hullObject);
-                }
-                object.put("hulls", hullArray);
-
-                civArray.put(object);
             }
-            PrintWriter pw = new PrintWriter(civFile);
-            pw.print(civArray.toString(2).replace("\n", System.getProperty("line.separator")));
-            pw.close();
         }
+    }
 
-        {
-            //Politics and relations
+    private void save(JSONObject saveObject, String key, Object obj) throws IllegalArgumentException, IllegalAccessException {
+        if (obj instanceof List) {
+            //Go through list
+            List list = (List) obj;
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < list.size(); i++) {
+                JSONObject objectInArray = new JSONObject();
+                saveObject(objectInArray, list.get(i));
+                array.put(objectInArray);
+            }
+            saveObject.put(key, array);
+        } else if (obj instanceof Map) {
+
+        } else {
+            saveObject.put(key, obj);
         }
+    }
+
+    private boolean isSaveable(Object object) {
+        if (object instanceof Long) {
+            System.out.println(object.getClass().isInstance(Long.class));
+        }
+        for (int i = 0; i < primitives.length; i++) {
+            //System.out.println("passing " + primitives[i].toString());
+            //System.out.println(object.getClass().isInstance(java.lang.Long.class));
+            Class<?> c = primitives[i];
+            if (c.isInstance(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<Field> getAllFields(List<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+        if (type.getSuperclass() != null) {
+            getAllFields(fields, type.getSuperclass());
+        }
+        return fields;
     }
 
     public static String getSaveFolder() {
@@ -143,7 +163,7 @@ public class SaveGame {
         } else if (!baseSaveFile.exists() || baseSaveFile.listFiles().length <= 0) {
             return (baseSave + "/save0");
         }
-        
+
         String[] fileList = baseSaveFile.list();
         int highest = 0;
         for (String folder : fileList) {
@@ -152,7 +172,7 @@ public class SaveGame {
                 //Get the number
                 String number = folder.substring(4);
                 int saveCount = Integer.parseInt(number);
-                if(saveCount > highest) {
+                if (saveCount > highest) {
                     highest = saveCount;
                 }
             }

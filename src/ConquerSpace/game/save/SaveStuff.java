@@ -17,18 +17,12 @@
  */
 package ConquerSpace.game.save;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- *
+ * Enum to see if the thing needs to be handled specially
  * @author EhWhoAmI
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Serialize {
-    public String key();
-    public SaveStuff special() default SaveStuff.No;
+public enum SaveStuff {
+    No,
+    Good,
+    Counter;
 }

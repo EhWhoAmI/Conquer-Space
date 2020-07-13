@@ -19,6 +19,7 @@ package ConquerSpace.game.city.area;
 
 import ConquerSpace.game.population.jobs.JobType;
 import ConquerSpace.game.population.jobs.Workable;
+import ConquerSpace.game.save.Serialize;
 
 /**
  * Works as a modifier to the district
@@ -28,20 +29,27 @@ public class Area implements Workable, Comparable<Area> {
     /**
      * The number of people currently manning the place.
      */
+    @Serialize(key = "manning")
     private int currentlyManningJobs;
+    @Serialize(key = "operating")
     private int operatingJobs;
+    @Serialize(key = "max")
     private int maxJobs;
+    @Serialize(key = "power")
     private int powerUsage;
     
     //The org owning the thing
+    @Serialize(key = "owner")
     private int owner = -1;
-    //Resource request
     
+    //Resource request
+    @Serialize(key = "resource-priority")
     protected int priority = Integer.MAX_VALUE;
 
     /**
      * This is how productive the area is when it is at only <code> currentlyManningJobs</code>.
      */
+    @Serialize(key = "productivity")
     private float workingmultiplier = 1;
 
     public AreaClassification getAreaType() {

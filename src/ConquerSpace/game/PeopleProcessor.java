@@ -96,7 +96,7 @@ public class PeopleProcessor {
 
     private void resetDate() {
         before = new StarDate();
-        before.bigint = date.bigint;
+        before.date = date.date;
     }
 
     public static void placePerson(PersonEnterable enter, Person who) {

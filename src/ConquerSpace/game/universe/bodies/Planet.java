@@ -28,6 +28,7 @@ import ConquerSpace.game.ships.satellites.Satellite;
 import ConquerSpace.game.universe.GeographicPoint;
 import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.resources.Stratum;
+import ConquerSpace.game.save.Serialize;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,42 +37,59 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class Planet extends Body implements Administrable{
+public class Planet extends Body implements Administrable {
 
+    @Serialize(key = "type")
     private int planetType;
 
     //Radius in hundreds of kilometers, which means that one tile is 100x100 km
+    @Serialize(key = "size")
     private int planetSize;
 
+    @Serialize(key = "strata")
     public ArrayList<Stratum> strata;
 
+    @Serialize(key = "owner")
     private int ownerID = ControlTypes.NONE_CONTROLLED;
+
     //Empty as default -- undiscovered
+    @Serialize(key = "name")
     private String name = "";
     //public PlanetSector[] planetSectors;
 
+    @Serialize(key = "parent")
     private int parentStarSystem;
 
     public Economy economy;
 
+    @Serialize(key = "satellites")
     private ArrayList<Orbitable> satellites;
 
+    @Serialize(key = "city-positions")
     public HashMap<GeographicPoint, City> cityDistributions;
 
+    //Civs that have scanned this
+    @Serialize(key = "scanned")
     public ArrayList<Integer> scanned;
 
+    @Serialize(key = "terrain-seed")
     private int terrainSeed;
 
+    @Serialize(key = "coloringIndex")
     private int terrainColoringIndex;
 
+    @Serialize(key = "lived")
     private boolean habitated = false;
 
+    @Serialize(key = "delta")
     private float degreesPerTurn = 0.0f;
 
+    @Serialize(key = "cities")
     public ArrayList<City> cities;
 
     private Person governor;
 
+    @Serialize(key = "providers")
     public ArrayList<Workable> jobProviders;
 
     /**
@@ -258,21 +276,20 @@ public class Planet extends Body implements Administrable{
         if (cityDistributions.containsKey(pt)) {
             //City exists in that place already
             cityDistributions.remove(pt);
-        }
-        else {
+        } else {
             b.incrementSize();
         }
-        
-        if(!cityDistributions.containsValue(b)) {
+
+        if (!cityDistributions.containsValue(b)) {
             cities.add(b);
         }
-        
+
         cityDistributions.put(pt, b);
     }
 
     /*
     How the height of planet works
-    */
+     */
     //Height of planet on map
     public int getPlanetHeight() {
         return (2 * planetSize);
