@@ -17,7 +17,7 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.game.GameState;
+import ConquerSpace.common.GameState;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;

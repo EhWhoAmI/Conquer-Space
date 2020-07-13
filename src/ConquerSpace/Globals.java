@@ -17,8 +17,8 @@
  */
 package ConquerSpace;
 
-import ConquerSpace.game.GameState;
-import ConquerSpace.game.universe.generators.UniverseGenerator;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.universe.generators.UniverseGenerator;
 import java.util.Properties;
 
 /**

@@ -17,8 +17,8 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.game.science.tech.Technologies;
-import ConquerSpace.game.science.tech.Technology;
+import ConquerSpace.common.game.science.tech.Technologies;
+import ConquerSpace.common.game.science.tech.Technology;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridBagConstraints;
