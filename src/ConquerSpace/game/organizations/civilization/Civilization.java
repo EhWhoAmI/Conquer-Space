@@ -49,6 +49,7 @@ import ConquerSpace.game.universe.UniversePath;
 import ConquerSpace.game.universe.bodies.Planet;
 import ConquerSpace.game.resources.ProductionProcess;
 import ConquerSpace.game.resources.ResourceStockpile;
+import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.game.ships.satellites.templates.SatelliteTemplate;
 import java.awt.Color;
@@ -69,8 +70,10 @@ public class Civilization extends Organization implements Employer {
     private Color color;
     private RacePreferredClimateTpe civilizationPreferedClimate;
     private String civilizationSymbol;
+    
+    @Serialize(key = "speciesName")
     private String speciesName;
-
+    
     private String homePlanetName;
 
     /**

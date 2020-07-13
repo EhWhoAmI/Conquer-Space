@@ -361,37 +361,39 @@ public class PlanetMap extends JPanel {
                     while (distIterator.hasNext()) {
 
                         GeographicPoint point = distIterator.next();
-                        City c = p.cityDistributions.get(point);
-                        int xPos = (int) (point.getX() * tileSize);
-                        int yPos = (int) (point.getY() * tileSize);
-                        if (r.contains(new Point(xPos, yPos))) {
-                            //Draw city
-                            Rectangle2D.Double rect = new Rectangle2D.Double(xPos, yPos, tileSize, tileSize);
+                        City c = p.getCity(point);
+                        if (c != null) {
+                            int xPos = (int) (point.getX() * tileSize);
+                            int yPos = (int) (point.getY() * tileSize);
+                            if (r.contains(new Point(xPos, yPos))) {
+                                //Draw city
+                                Rectangle2D.Double rect = new Rectangle2D.Double(xPos, yPos, tileSize, tileSize);
 
-                            //Draw tile color
-                            mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
-                            mapGraphics.fill(rect);
+                                //Draw tile color
+                                mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
+                                mapGraphics.fill(rect);
 
-                            //Draw image
-                            Image[] list = districtImages.get(c.getCityType().name());
-                            if (list != null) {
-                                int listSize = list.length;
-                                //Id helps make sure that image is the same
-                                Image im = list[point.hashCode() % listSize];
-                                mapGraphics.drawImage(im, (xPos), (yPos), null);
+                                //Draw image
+                                Image[] list = districtImages.get(c.getCityType().name());
+                                if (list != null) {
+                                    int listSize = list.length;
+                                    //Id helps make sure that image is the same
+                                    Image im = list[point.hashCode() % listSize];
+                                    mapGraphics.drawImage(im, (xPos), (yPos), null);
+                                }
+                                //Draw city name
+
+                                //Draw background
+                                mapGraphics.setColor(Color.black);
+
+                                //Get font stats
+                                float fontSize = 12;
+                                Font derivedFont = getFont().deriveFont(fontSize);
+                                int width = getFontMetrics(derivedFont).stringWidth(c.getName());
+
+                                //Draw fancy text
+                                GraphicsUtil.paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
                             }
-                            //Draw city name
-
-                            //Draw background
-                            mapGraphics.setColor(Color.black);
-
-                            //Get font stats
-                            float fontSize = 12;
-                            Font derivedFont = getFont().deriveFont(fontSize);
-                            int width = getFontMetrics(derivedFont).stringWidth(c.getName());
-
-                            //Draw fancy text
-                            GraphicsUtil.paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
                         }
                     }
 
@@ -436,13 +438,13 @@ public class PlanetMap extends JPanel {
                     double translateLimit = -width;
 
                     if (newTranslateX < translateLimit) {
-                    newTranslateX = translateLimit;
+                        newTranslateX = translateLimit;
                     }
-                    
+
                     if (newTranslateY > (height * 0.05 * scale)) {
                         newTranslateY = height * 0.05 * scale;
                     }
-                    
+
                     //Some ratio to limit the thing
                     translateLimit = -height;
                     if (newTranslateY < translateLimit) {
@@ -478,7 +480,7 @@ public class PlanetMap extends JPanel {
                 int mapX = pt.x;
                 int mapY = pt.y;
 
-                City b = p.cityDistributions.get(new GeographicPoint(mapX, mapY));
+                City b = p.getCity(new GeographicPoint(mapX, mapY));
                 if (b != null) {
                     showBuildingInfo(b);
                 }
@@ -558,7 +560,7 @@ public class PlanetMap extends JPanel {
             int mapY = pt.y;
 
             if (displayedView == NORMAL_VIEW || displayedView == BOTH_VIEW) {
-                City b = p.cityDistributions.get(new GeographicPoint(mapX, mapY));
+                City b = p.getCity(new GeographicPoint(mapX, mapY));
                 if (b != null) {
                     String cityName = "game.planet.map.view.nocity";
                     cityName = b.getName();

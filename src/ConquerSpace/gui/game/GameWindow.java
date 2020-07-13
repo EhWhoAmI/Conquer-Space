@@ -602,7 +602,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                     //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                     //add(d);
                                     //Check if scanned
-                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.scanned.contains(civ.getId()));
+                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.hasScanned(civ.getId()));
                                     mainInterfaceWindow.setSelectedTab(1);
 
                                     break;
@@ -665,7 +665,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                                 Planet planet = (Planet) body;
                                 if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
                                         (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
-                                    if (planet.scanned.contains(civ.getId())) {
+                                    if (planet.hasScanned(civ.getId())) {
                                         JMenuItem planetName = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.planet"), planet.getId()));
                                         planetName.addActionListener(a -> {
                                             mainInterfaceWindow.setSelectedPlanet(planet, true);
@@ -775,7 +775,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                     //If science ship
                     long stype = s.getHull().getShipType();
                     //Survey ship and over planet
-                    if (stype == 70 && overPlanet && !overWhat.scanned.contains(civ.getId())) {
+                    if (stype == 70 && overPlanet && !overWhat.hasScanned(civ.getId())) {
                         JMenuItem surveryor = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.survey"));
                         final Planet p = overWhat;
 

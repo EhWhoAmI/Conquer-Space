@@ -72,11 +72,14 @@ public class PlanetIndustry extends JPanel {
         areaContainer = new JPanel();
         areaContainer.setLayout(new GridBagLayout());
         areaDefaultListModel = new DefaultListModel<>();
-        for (City city : p.cityDistributions.values()) {
+
+        for (int i = 0; i < p.cities.size(); i++) {
+            City city = p.cities.get(i);
             for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }
         }
+
         areaList = new JList<>(areaDefaultListModel);
 
         areaList.addListSelectionListener(l -> {
@@ -133,10 +136,9 @@ public class PlanetIndustry extends JPanel {
     public void update() {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
-        for (City city : p.cityDistributions.values()) {
-            Iterator<Area> it = city.areas.iterator();
-            while (it.hasNext()) {
-                Area a = it.next();
+        for (int i = 0; i < p.cities.size(); i++) {
+            City city = p.cities.get(i);
+            for (Area a : city.areas) {
                 areaDefaultListModel.addElement(a);
             }
         }

@@ -19,6 +19,7 @@ package ConquerSpace.game.people;
 
 import ConquerSpace.Globals;
 import ConquerSpace.game.population.jobs.Employer;
+import ConquerSpace.game.save.Serialize;
 import java.util.ArrayList;
 
 /**
@@ -27,14 +28,30 @@ import java.util.ArrayList;
  */
 public class Person {
     private static int idCounter = 0;
+    
+    @Serialize(key = "id")
     private int id;
+    
+    @Serialize(key = "name")
     private String name;
+    
+    @Serialize(key = "age")
     public int age;
-    private PersonEnterable position;
+    
+    //@Serialize(key = "location")
+    //How to serialize person enterable
+    private PersonEnterable location;
+    
+    @Serialize(key = "traits")
     public ArrayList<PersonalityTrait> traits;
+    
     private final Role role;
+    
+    @Serialize(key = "wealth")
     private int wealth;
     public Employer employer;
+    
+    @Serialize(key = "dead")
     private boolean dead;
     
     //Not sure what to add to this for now
@@ -79,11 +96,11 @@ public class Person {
     }
 
     public PersonEnterable getPosition() {
-        return position;
+        return location;
     }
 
     public void setPosition(PersonEnterable position) {
-        this.position = position;
+        this.location = position;
     }
     
     public void setRole(String text) {

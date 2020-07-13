@@ -213,11 +213,12 @@ public class ShrinkedPlanetSheet extends JPanel {
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, City> en : p.cityDistributions.entrySet()) {
-                    GeographicPoint p = en.getKey();
-                    City Building = en.getValue();
+                
+                for (Map.Entry<GeographicPoint, Integer> en : p.cityDistributions.entrySet()) {
+                    GeographicPoint point = en.getKey();
+
                     //Draw
-                    Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);
+                    Rectangle2D.Float rect = new Rectangle2D.Float(point.getX() * 2, point.getY() * 2, 2, 2);
                     g2d.setColor(Color.red);
                     g2d.fill(rect);
                 }

@@ -18,6 +18,7 @@
 package ConquerSpace.game;
 
 import ConquerSpace.game.save.Serialize;
+import com.google.gson.annotations.Expose;
 import java.util.Calendar;
 
 /**

@@ -30,6 +30,8 @@ public class Body {
 
     @Serialize(key = "id")
     int id = 0;
+    
+    int index = 0;
 
     @Serialize(key = "orbit")
     public Orbit orbit = new Orbit(0, 0, 0, 0);
@@ -38,7 +40,7 @@ public class Body {
     public SpacePoint point = new SpacePoint(0, 0);
 
     public Body() {
-        id = idCounter++;
+        index = idCounter++;
     }
 
     public Orbit getOrbit() {
@@ -111,5 +113,9 @@ public class Body {
 
     public int getId() {
         return id;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

@@ -219,9 +219,11 @@ public class PlanetCities extends JPanel {
 
         //Check if capital city
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
-            if (universe.getCivilization(i).getCapitalCity().equals(cityList.getSelectedValue())) {
+            int civid = gameState.universe.getCivilization(i);
+            Civilization civilization = ((Civilization) universe.organizations.get(civid));
+            if (civilization.getCapitalCity().equals(cityList.getSelectedValue())) {
                 JLabel isCapital = new JLabel(
-                        LOCALE_MESSAGES.getMessage("game.planet.cities.capital", universe.getCivilization(i).getName()));
+                        LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName()));
                 cityData.add(isCapital);
                 break;
             }

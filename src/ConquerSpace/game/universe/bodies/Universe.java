@@ -24,6 +24,7 @@ import ConquerSpace.game.population.Race;
 import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.ships.SpaceShip;
 import ConquerSpace.game.universe.UniversePath;
+import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +41,7 @@ public class Universe {
     private final long seed;
 
     @Serialize(key = "civilizations")
-    public ArrayList<Civilization> civs;
+    public ArrayList<Integer> civs;
 
     @Serialize(key = "systems")
     public ArrayList<StarSystem> starSystems;
@@ -83,8 +84,8 @@ public class Universe {
         for (StarSystem s : starSystems) {
             builder.append(s.toReadableString());
         }
-        for (Civilization c : civs) {
-            builder.append(c.toReadableString());
+        for (Integer c : civs) {
+            builder.append(c);
         }
         return (builder.toString());
     }
@@ -109,14 +110,15 @@ public class Universe {
     }
 
     public void addCivilization(Civilization c) {
-        civs.add(c);
+        addOrganization(c);
+        civs.add(c.getId());
     }
 
     public int getCivilizationCount() {
         return (civs.size());
     }
 
-    public Civilization getCivilization(int i) {
+    public Integer getCivilization(int i) {
         return (civs.get(i));
     }
 
@@ -146,6 +148,7 @@ public class Universe {
     }
     
     public void addOrganization(Organization org) {
+        org.setId(organizations.size());
         organizations.put(org.getId(), org);
     }
 }

@@ -17,32 +17,14 @@
  */
 package ConquerSpace.game;
 
-import ConquerSpace.Globals;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.controllers.PlayerController;
-import ConquerSpace.game.logistics.SupplyChain;
-import ConquerSpace.game.people.Person;
-import ConquerSpace.game.people.PersonalityTrait;
-import ConquerSpace.game.ships.components.engine.EngineTechnology;
-import ConquerSpace.game.ships.launch.LaunchSystem;
-import ConquerSpace.game.ships.satellites.Satellite;
-import ConquerSpace.game.resources.Element;
-import ConquerSpace.game.resources.Good;
-import ConquerSpace.game.resources.ProductionProcess;
-import ConquerSpace.game.resources.ResourceDistribution;
-import ConquerSpace.game.save.Serialize;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.gui.music.MusicPlayer;
 import ConquerSpace.util.ExceptionHandling;
 import ConquerSpace.util.Timer;
 import ConquerSpace.util.logging.CQSPLogger;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 /**
  * The controller of the game, says when to tick, initializes everything.
@@ -87,7 +69,9 @@ public class GameController {
 
         //Load the players
         for (int i = 0; i < gameState.universe.getCivilizationCount(); i++) {
-            gameState.universe.getCivilization(i).controller.init(gameState, gameState.universe.getCivilization(i));
+            int civid = gameState.universe.getCivilization(i);
+            Civilization civilization = ((Civilization) universe.organizations.get(civid));
+            civilization.controller.init(gameState, civilization);
         }
 
         int tickerSpeed = 10;

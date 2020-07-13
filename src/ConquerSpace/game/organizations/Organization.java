@@ -20,6 +20,7 @@ package ConquerSpace.game.organizations;
 import ConquerSpace.game.actions.Action;
 import ConquerSpace.game.organizations.behavior.Behavior;
 import ConquerSpace.game.organizations.behavior.EmptyBehavior;
+import ConquerSpace.game.save.Serialize;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,16 +29,18 @@ import java.util.Arrays;
  * @author EhWhoAmI
  */
 public class Organization {
-    private ArrayList<Organization> children;
+    
+    @Serialize(key = "children")
+    private ArrayList<Integer> children;
     public ArrayList<Action> actionList;
     public AdministrativeRegion region;
-    private static int idCounter = 0;
     private int id = 0;
+    
+    @Serialize(key = "name")
     protected String name;
     protected Behavior behavior;
 
     public Organization(String name) {
-        this.id = idCounter++;
         this.name = name;
         children = new ArrayList<>();
         actionList = new ArrayList<>();
@@ -53,15 +56,15 @@ public class Organization {
         return id;
     }
     
-    public Organization[] getChildren() {
-        return Arrays.copyOf(children.toArray(), children.size(), Organization[].class);
+    public Integer[] getChildren() {
+        return Arrays.copyOf(children.toArray(), children.size(), Integer[].class);
     }
     
     public int getChildrenCount() {
         return children.size(); 
     }
     
-    public void addChild(Organization org) {
+    public void addChild(Integer org) {
         children.add(org);
     }
 
@@ -71,5 +74,9 @@ public class Organization {
 
     public Behavior getBehavior() {
         return behavior;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

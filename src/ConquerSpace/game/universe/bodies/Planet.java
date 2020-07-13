@@ -66,11 +66,11 @@ public class Planet extends Body implements Administrable {
     private ArrayList<Orbitable> satellites;
 
     @Serialize(key = "city-positions")
-    public HashMap<GeographicPoint, City> cityDistributions;
+    public HashMap<GeographicPoint, Integer> cityDistributions;
 
     //Civs that have scanned this
     @Serialize(key = "scanned")
-    public ArrayList<Integer> scanned;
+    private ArrayList<Integer> scanned;
 
     @Serialize(key = "terrain-seed")
     private int terrainSeed;
@@ -284,7 +284,7 @@ public class Planet extends Body implements Administrable {
             cities.add(b);
         }
 
-        cityDistributions.put(pt, b);
+        cityDistributions.put(pt, b.getId());
     }
 
     /*
@@ -299,5 +299,26 @@ public class Planet extends Body implements Administrable {
     public int getPlanetWidth() {
         int value = (int) (2 * planetSize * Math.PI);
         return value;
+    }
+
+    public City getCity(GeographicPoint pt) {
+        if (cityDistributions.containsKey(pt)) {
+            int id = cityDistributions.get(pt);
+
+            for (int i = 0; i < cities.size(); i++) {
+                if(cities.get(i).getId() == id) {
+                    return cities.get(i);
+                }
+            }
+        }
+        return null;
+    }
+    
+    public boolean hasScanned(int id) {
+        return scanned.contains(id);
+    }
+    
+    public void scan(int id) {
+        scanned.add(id);
     }
 }

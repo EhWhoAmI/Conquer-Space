@@ -17,7 +17,6 @@
  */
 package ConquerSpace.game.people;
 
-import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.organizations.civilization.government.GovernmentPosition;
 
 /**
@@ -25,8 +24,7 @@ import ConquerSpace.game.organizations.civilization.government.GovernmentPositio
  * @author
  */
 public class Administrator extends Person {
-    public GovernmentPosition position;
-    public Civilization employer;
+    public GovernmentPosition governmentPosition;
     
     public Administrator(String name, int age) {
         super(name, age);

@@ -88,7 +88,7 @@ public class ShipSurveyAction extends ShipAction {
             progress += perTick;
             if (checkIfDone(gameState)) {
                 //Add to the planet
-                toSurvey.scanned.add(civID);
+                toSurvey.scan(civID);
             }
         }
     }

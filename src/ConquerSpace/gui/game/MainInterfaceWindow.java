@@ -138,7 +138,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
                     //Do stuff
                     Planet p = (Planet) selectedNode.getUserObject();
                     //Selected planet
-                    setSelectedPlanet(p, p.scanned.contains(civilization.getId()));
+                    setSelectedPlanet(p, p.hasScanned(civilization.getId()));
                 }
                 //process
             }
@@ -214,7 +214,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
         eventViewer = new EventViewer();
 
-        organizationsOrganizer = new OrganizationsOrganizer(civilization);
+        organizationsOrganizer = new OrganizationsOrganizer(gameState, civilization);
 
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.research"), researchViewer);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.planet"), planetInfoSheetContainer);

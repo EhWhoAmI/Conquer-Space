@@ -182,8 +182,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         playerCiv.setFoundingSpecies(playerSpecies);
 
-        universe.addOrganization(playerCiv);
         universe.addCivilization(playerCiv);
+        
         LOGGER.info("Done with player civ " + playerCiv.getName());
 
         GameController.playerCiv = playerCiv;
@@ -226,7 +226,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             LOGGER.info("Done with civ " + civ.getName());
             //universe.
             universe.addCivilization(civ);
-            universe.addOrganization(civ);
         }
         LOGGER.info("Done generating!");
         LOGGER.info("Going over civ initializing");

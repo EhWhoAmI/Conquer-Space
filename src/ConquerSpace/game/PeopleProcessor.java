@@ -20,6 +20,7 @@ package ConquerSpace.game;
 import ConquerSpace.game.organizations.civilization.government.GovernmentPosition;
 import ConquerSpace.game.organizations.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.game.city.City;
+import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Administrator;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonEnterable;
@@ -109,12 +110,13 @@ public class PeopleProcessor {
         //Remove from everywhere
         p.setDead(true);
         if (p instanceof Administrator) {
-            if (((Administrator) p).position instanceof HeritableGovernmentPosition) {
-                HeritableGovernmentPosition pos = (HeritableGovernmentPosition) ((Administrator) p).position;
+            Administrator admin = (Administrator) p;
+            if (admin.governmentPosition instanceof HeritableGovernmentPosition) {
+                HeritableGovernmentPosition pos = (HeritableGovernmentPosition) admin.governmentPosition;
                 GovernmentPosition nextPosition = pos.nextInLine;
                 //Get person
-                Person next = ((Administrator) p).employer.government.officials.get(nextPosition);
-                ((Administrator) p).employer.government.officials.put(pos, next);
+                Person next = ((Civilization)admin.employer).government.officials.get(nextPosition);
+                ((Civilization)admin.employer).government.officials.put(pos, next);
                 next.setRole("GOT EM");
             }
         }

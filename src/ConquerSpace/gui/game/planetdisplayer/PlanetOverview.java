@@ -269,9 +269,9 @@ public class PlanetOverview extends JPanel {
                 }
 
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, City> en : p.cityDistributions.entrySet()) {
+                for (Map.Entry<GeographicPoint, Integer> en : p.cityDistributions.entrySet()) {
                     GeographicPoint p = en.getKey();
-                    City Building = en.getValue();
+
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);
                     g2d.setColor(Color.red);

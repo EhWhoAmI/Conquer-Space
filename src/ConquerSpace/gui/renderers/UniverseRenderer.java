@@ -115,13 +115,15 @@ public class UniverseRenderer {
             if (c.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
                 //Control
                 if (universe.control.get(sys.getUniversePath()) > -1) {
-                    switch (universe.getCivilization(0).vision.
+                    switch (c.vision.
                             get(sys.getUniversePath())) {
                         case VisionTypes.EXISTS:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            g2d.setColor(universe.getCivilization(universe.control.get(sys.getUniversePath())).getColor());
+                            int civid = universe.getCivilization(i);
+                            Civilization civilization = (Civilization) (universe.organizations.get(universe.control.get(sys.getUniversePath())));
+                            g2d.setColor(civilization.getColor());
                     }
                     //Control, if any...
                     Ellipse2D.Double control = new Ellipse2D.Double(

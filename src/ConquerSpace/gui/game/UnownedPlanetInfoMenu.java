@@ -66,7 +66,7 @@ public class UnownedPlanetInfoMenu extends JPanel {
     private JLabel ownerLabel;
     private JLabel orbitDistance;
     private JLabel disclaimerLabel;
-    private Planet p;
+    private Planet planet;
     //private ButtonGroup resourceButtonGroup;
     //private JRadioButton[] showResources;
 
@@ -76,7 +76,7 @@ public class UnownedPlanetInfoMenu extends JPanel {
     private NumberFormat numberFormatter;
 
     public UnownedPlanetInfoMenu(Universe u, Planet p, Civilization c) {
-        this.p = p;
+        this.planet = p;
         infoPane = new JTabbedPane();
 
         JPanel planetOverviewPanel = new JPanel();
@@ -203,7 +203,7 @@ public class UnownedPlanetInfoMenu extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (Stratum v : p.strata) {
+                for (Stratum v : planet.strata) {
                     //Draw...
                     if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);
@@ -214,11 +214,10 @@ public class UnownedPlanetInfoMenu extends JPanel {
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, City> en : p.cityDistributions.entrySet()) {
-                    GeographicPoint p = en.getKey();
-                    City Building = en.getValue();
+                for (Map.Entry<GeographicPoint, Integer> en : planet.cityDistributions.entrySet()) {
+                    GeographicPoint point = en.getKey();
                     //Draw
-                    Rectangle2D.Float rect = new Rectangle2D.Float(p.getX() * 2, p.getY() * 2, 2, 2);
+                    Rectangle2D.Float rect = new Rectangle2D.Float(point.getX() * 2, point.getY() * 2, 2, 2);
                     g2d.setColor(Color.red);
                     g2d.fill(rect);
                 }

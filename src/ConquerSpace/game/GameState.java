@@ -22,7 +22,6 @@ import ConquerSpace.game.logistics.SupplyChain;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.people.Person;
 import ConquerSpace.game.people.PersonalityTrait;
-import ConquerSpace.game.resources.Element;
 import ConquerSpace.game.resources.FoodGood;
 import ConquerSpace.game.resources.Good;
 import ConquerSpace.game.resources.LiveGood;
@@ -60,20 +59,22 @@ public class GameState {
 
     //All variables...
     public ArrayList<LaunchSystem> launchSystems;
-
+    
+    //S
+    public HashMap<Integer, Object> entityManager;
+    
     public ArrayList<Satellite> satellites;
-    public ArrayList<JSONObject> satelliteTemplates;
-    public ArrayList<JSONObject> shipComponentTemplates;
+    public transient ArrayList<JSONObject> satelliteTemplates;
+    public transient ArrayList<JSONObject> shipComponentTemplates;
 
-    public ArrayList<EngineTechnology> engineTechnologys;
-    public ArrayList<JSONObject> events;
+    public transient ArrayList<EngineTechnology> engineTechnologys;
+    public transient ArrayList<JSONObject> events;
     public ArrayList<PersonalityTrait> personalityTraits;
     public ArrayList<Person> people = new ArrayList<>();
 
     public HashMap<String, Integer> shipTypes;
     public HashMap<String, Integer> shipTypeClasses;
 
-    public ArrayList<Element> elements;
     public HashMap<Integer, ResourceDistribution> ores = new HashMap<>();
 
     public HashMap<Integer, Good> goodHashMap;

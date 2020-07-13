@@ -21,6 +21,10 @@ import ConquerSpace.ConquerSpace;
 import ConquerSpace.game.GameState;
 import ConquerSpace.util.Utilities;
 import ConquerSpace.util.Version;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hjson.JsonValue;
 import org.hjson.Stringify;
 import org.json.JSONArray;
@@ -74,16 +81,11 @@ public class SaveGame {
         JSONObject meta = new JSONObject();
         meta.put("version", ConquerSpace.VERSION.getVersionCore());
         meta.put("date", gameState.date.date);
-
-        try {
-            saveObject(saveData, gameState);
-        } catch (StackOverflowError soe) {
-            soe.printStackTrace();
-        }
-        System.out.println(meta);
-        BufferedWriter writer = new BufferedWriter(new FileWriter("save.json"));
-        String text = JsonValue.readHjson(saveData.toString()).toString(Stringify.HJSON);
+        
+        saveObject(saveData, gameState);
+        String text = saveData.toString(4);//JsonValue.readHjson().toString(Stringify.HJSON);
         System.out.println(text.length());
+        FileWriter writer = new FileWriter("save.json");
         writer.write(text);
         writer.flush();
     }
@@ -117,13 +119,44 @@ public class SaveGame {
             List list = (List) obj;
             JSONArray array = new JSONArray();
             for (int i = 0; i < list.size(); i++) {
-                JSONObject objectInArray = new JSONObject();
-                saveObject(objectInArray, list.get(i));
-                array.put(objectInArray);
+                if (isSaveable(list.get(i))) {
+                    array.put(list.get(i));
+                } else {
+                    JSONObject objectInArray = new JSONObject();
+                    saveObject(objectInArray, list.get(i));
+                    array.put(objectInArray);
+                }
             }
             saveObject.put(key, array);
         } else if (obj instanceof Map) {
+            //
+            JSONObject mapSave = new JSONObject();
+            JSONObject mapData = new JSONObject();
+            //Go through map 
+            Map map = (Map) obj;
+            JSONArray ar = new JSONArray();
 
+            map.forEach(new BiConsumer() {
+                @Override
+                public void accept(Object k, Object v) {
+                    if (isSaveable(v)) {
+                        mapData.put(k.toString(), v);
+                    } else {
+                        try {
+                            JSONObject objectInArray = new JSONObject();
+                            saveObject(objectInArray, v);
+                            mapData.put(k.toString(), objectInArray);
+                        } catch (IllegalArgumentException ex) {
+                            Logger.getLogger(SaveGame.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalAccessException ex) {
+                            Logger.getLogger(SaveGame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            });
+            
+            mapSave.put("map", mapData);
+            saveObject.put(key, mapSave);
         } else {
             saveObject.put(key, obj);
         }

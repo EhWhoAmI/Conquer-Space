@@ -17,6 +17,7 @@
  */
 package ConquerSpace.gui.game;
 
+import ConquerSpace.game.GameState;
 import ConquerSpace.game.organizations.Administrable;
 import ConquerSpace.game.organizations.Organization;
 import ConquerSpace.game.organizations.civilization.Civilization;
@@ -42,13 +43,13 @@ public class OrganizationsOrganizer extends JPanel {
     private JList<String> controlList;
     private ObjectListModel<Administrable> adminstratableListModel;
     
-    public OrganizationsOrganizer(Civilization c) {
+    public OrganizationsOrganizer(GameState state, Civilization c) {
         //Lazy for now...
         setLayout(new HorizontalFlowLayout());
         
         orgListModel = new ObjectListModel<>();
-        for (Organization o : c.getChildren()) {
-            orgListModel.addElement(o);
+        for (Integer o : c.getChildren()) {
+            orgListModel.addElement(state.universe.organizations.get(o));
         }
         
         orgListModel.setHandler(l -> {

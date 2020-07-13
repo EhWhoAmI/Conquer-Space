@@ -17,6 +17,8 @@
  */
 package ConquerSpace.game.universe;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Path of an object in a universe. To write path: "sectorid:star
  * systemid:planet id" for a planet "sectorid" for a sector "sectorid:star

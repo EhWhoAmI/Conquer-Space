@@ -104,7 +104,7 @@ public class CivilizationInitializer {
         universe.starSystems.trimToSize();
 
         for (int i = 0; i < universe.getCivilizationCount(); i++) {
-            Civilization civilization = universe.getCivilization(i);
+            Civilization civilization = (Civilization) universe.organizations.get(universe.getCivilization(i));
             //Add templates
             initVision(civilization, universe);
 
@@ -133,7 +133,7 @@ public class CivilizationInitializer {
 
                 //Set ownership
                 startingPlanet.setOwnerID(civilization.getId());
-                startingPlanet.scanned.add(civilization.getId());
+                startingPlanet.scan(civilization.getId());
                 startingPlanet.setHabitated(true);
                 startingPlanet.setName(civilization.getHomePlanetName());
 
@@ -449,8 +449,8 @@ public class CivilizationInitializer {
             org.region.bodies.add(city);
         }
 
-        c.addChild(org);
         universe.addOrganization(org);
+        c.addChild(org.getId());
     }
 
     private void initalizeCivValues(Civilization c) {
@@ -493,7 +493,7 @@ public class CivilizationInitializer {
         c.government.headofGovernment = leader;
         c.government.headofState = leader;
         PeopleProcessor.placePerson(c.getCapitalCity(), dude);
-        dude.position = leader;
+        dude.governmentPosition = leader;
         c.employ(dude);
 
         person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
@@ -509,7 +509,7 @@ public class CivilizationInitializer {
         c.government.officials.put(crownPrincePosition, crownPrince);
         crownPrincePosition.setName("Crown Prince");
         leader.nextInLine = crownPrincePosition;
-        crownPrince.position = crownPrincePosition;
+        crownPrince.governmentPosition = crownPrincePosition;
 
         PeopleProcessor.placePerson(c.getCapitalCity(), crownPrince);
         c.employ(crownPrince);

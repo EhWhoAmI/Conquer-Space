@@ -31,4 +31,5 @@ import java.lang.annotation.Target;
 public @interface Serialize {
     public String key();
     public SaveStuff special() default SaveStuff.No;
+    public Class<?> stuff() default Class.class;
 }

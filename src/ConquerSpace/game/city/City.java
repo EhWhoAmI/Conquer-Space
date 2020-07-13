@@ -39,7 +39,6 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 public class City implements PersonEnterable, ResourceStockpile, Administrable {
-
     private static int idCounter = 0;
     
     @Serialize(key = "id")
@@ -70,11 +69,16 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     @Serialize(key = "storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
+    
+    @Serialize(key = "max-storage")
     private int maxStorage;
+    
     public ArrayList<SupplyChain> supplyChains;
     
     private int ledgerClearDelta = 0;
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
+    
+    @Serialize(key = "location")
     private UniversePath location;
 
     @Serialize(key = "tags")
@@ -88,6 +92,7 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     //private HashMap<Race, Float> speciesRates;
     private boolean resetJobs = false;
 
+    @Serialize(key = "city-type")
     private CityType cityType;
 
     //Size in tiles
