@@ -17,24 +17,23 @@
  */
 package ConquerSpace;
 
-import ConquerSpace.game.GameController;
-import ConquerSpace.game.GameLoader;
-import ConquerSpace.game.GameState;
-import ConquerSpace.game.population.RacePreferredClimateTpe;
-import ConquerSpace.game.save.SaveGame;
-import ConquerSpace.game.universe.generators.CivilizationConfig;
-import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
-import ConquerSpace.game.universe.bodies.Universe;
-import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
-import ConquerSpace.gui.music.MusicPlayer;
-import ConquerSpace.gui.start.Loading;
-import ConquerSpace.gui.start.MainMenu;
-import ConquerSpace.i18n.Messages;
+import ConquerSpace.server.GameController;
+import ConquerSpace.common.GameLoader;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.save.SaveGame;
+import ConquerSpace.server.generators.CivilizationConfig;
+import ConquerSpace.server.generators.UniverseGenerationConfig;
+import ConquerSpace.server.generators.DefaultUniverseGenerator;
+import ConquerSpace.client.gui.music.MusicPlayer;
+import ConquerSpace.client.gui.start.Loading;
+import ConquerSpace.client.gui.start.MainMenu;
+import ConquerSpace.client.i18n.Messages;
 import ConquerSpace.tools.ToolsSelectionMenu;
-import ConquerSpace.util.Checksum;
-import ConquerSpace.util.ExceptionHandling;
-import ConquerSpace.util.Version;
-import ConquerSpace.util.logging.CQSPLogger;
+import ConquerSpace.common.util.Checksum;
+import ConquerSpace.common.util.ExceptionHandling;
+import ConquerSpace.common.util.Version;
+import ConquerSpace.common.util.logging.CQSPLogger;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -75,7 +74,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class ConquerSpace {
+public final class ConquerSpace {
 
     /**
      * Logger for the class.
@@ -175,6 +174,7 @@ public class ConquerSpace {
                 Loading load = new Loading();
                 loadUniverse();
                 load.setVisible(false);
+                //Save test...
                 SaveGame game = new SaveGame(SaveGame.getSaveFolder());
                 long before = System.currentTimeMillis();
                 try {
@@ -292,11 +292,11 @@ public class ConquerSpace {
     }
 
     public static void loadUniverse() {
-        Globals.gameState = new GameState();
+        Globals.gameState = new GameState(0);
         //Load universe
         long loadingStart = System.currentTimeMillis();
         GameLoader.load(Globals.gameState);
-        Globals.gameState.universe = Globals.generator.generate(Globals.gameState);
+        Globals.generator.generate(Globals.gameState);
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
     }

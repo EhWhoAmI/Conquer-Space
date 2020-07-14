@@ -17,13 +17,13 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.game.AssetReader;
-import ConquerSpace.game.GameController;
-import ConquerSpace.game.GameState;
-import ConquerSpace.game.resources.Element;
-import ConquerSpace.game.resources.Good;
-import ConquerSpace.game.resources.NonElement;
-import ConquerSpace.util.ResourceLoader;
+import ConquerSpace.common.AssetReader;
+import ConquerSpace.server.GameController;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.resources.Element;
+import ConquerSpace.common.game.resources.Good;
+import ConquerSpace.common.game.resources.NonElement;
+import ConquerSpace.common.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridBagConstraints;
