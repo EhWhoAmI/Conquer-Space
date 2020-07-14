@@ -17,13 +17,15 @@
  */
 package ConquerSpace.common.game.ships.launch;
 
-import ConquerSpace.common.game.science.tech.Technology;
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.science.Technology;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class LaunchSystem {
+public class LaunchSystem extends ConquerSpaceGameObject {
 
     private String name;
     private Technology tech;
@@ -34,9 +36,6 @@ public class LaunchSystem {
     private int reusabilityCost;
     private int maxCargo;
     private int constructCost;
-    private int id;
-    
-    private static int idcounter = 0;
 
     /**
      * For reusable launch system.
@@ -50,7 +49,8 @@ public class LaunchSystem {
      * @param reusabilityCost
      * @param maxCargo
      */
-    public LaunchSystem(String name, Technology tech, int size, int safety, int cost, int constructCost, int reusabilityCost, int maxCargo) {
+    public LaunchSystem(GameState gameState, String name, Technology tech, int size, int safety, int cost, int constructCost, int reusabilityCost, int maxCargo) {
+        super(gameState);
         this.name = name;
         this.tech = tech;
         this.size = size;
@@ -60,10 +60,10 @@ public class LaunchSystem {
         this.reusability = true;
         this.reusabilityCost = reusabilityCost;
         this.maxCargo = maxCargo;
-        id = idcounter++;
     }
 
-    public LaunchSystem(String name, Technology tech, int size, int safety, int cost, int constructCost, int maxCargo) {
+    public LaunchSystem(GameState gameState, String name, Technology tech, int size, int safety, int cost, int constructCost, int maxCargo) {
+        super(gameState);
         this.name = name;
         this.tech = tech;
         this.size = size;
@@ -72,10 +72,8 @@ public class LaunchSystem {
         this.constructCost = constructCost;
         this.reusability = false;
         this.maxCargo = maxCargo;
-        id = idcounter++;
     }
 
-    
     public int getLaunchCost() {
         return launchCost;
     }
@@ -106,10 +104,6 @@ public class LaunchSystem {
 
     public int getConstructCost() {
         return constructCost;
-    }
-
-    public int getId() {
-        return id;
     }
 
     @Override

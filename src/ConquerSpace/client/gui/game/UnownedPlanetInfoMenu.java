@@ -23,10 +23,11 @@ import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.PlanetTypes;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.client.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
+import ConquerSpace.common.GameState;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -66,7 +67,10 @@ public class UnownedPlanetInfoMenu extends JPanel {
     private JLabel ownerLabel;
     private JLabel orbitDistance;
     private JLabel disclaimerLabel;
+    
     private Planet planet;
+    private Galaxy u;
+    private GameState gameState;
     //private ButtonGroup resourceButtonGroup;
     //private JRadioButton[] showResources;
 
@@ -75,8 +79,10 @@ public class UnownedPlanetInfoMenu extends JPanel {
     private AtmosphereInfo atmosphereInfo;
     private NumberFormat numberFormatter;
 
-    public UnownedPlanetInfoMenu(Universe u, Planet p, Civilization c) {
+    public UnownedPlanetInfoMenu(GameState gameState, Planet p, Civilization c) {
         this.planet = p;
+        this.gameState = gameState;
+        this.u = gameState.universe;
         infoPane = new JTabbedPane();
 
         JPanel planetOverviewPanel = new JPanel();
@@ -164,25 +170,27 @@ public class UnownedPlanetInfoMenu extends JPanel {
         static final int PLANET_RESOURCES = 1;
         static final int SHOW_ALL_RESOURCES = 2;
         private JPopupMenu menu;
-        private Civilization c;
+        private Civilization civilization;
         private Color color;
         private Point point;
         private Image img;
         private Point lastClicked;
         private TerrainRenderer renderer;
+        private Planet planet;
 
-        public PlanetSectorDisplayer(Planet p, Civilization c) {
+        public PlanetSectorDisplayer(Planet planet, Civilization civilization) {
+            this.planet = planet;
             double scale = 2;
 
-            this.c = c;
-            if (p.getPlanetType() == PlanetTypes.GAS) {
+            this.civilization = civilization;
+            if (planet.getPlanetType() == PlanetTypes.GAS) {
                 scale = .5;
             }
             setPreferredSize(
-                    new Dimension((int) (p.getPlanetSize() * 2 * scale), (int) (p.getPlanetSize() * scale)));
+                    new Dimension((int) (planet.getPlanetSize() * 2 * scale), (int) (planet.getPlanetSize() * scale)));
             menu = new JPopupMenu();
             addMouseListener(this);
-            renderer = new TerrainRenderer(p);
+            renderer = new TerrainRenderer(planet);
 
             img = renderer.getImage();
         }
@@ -203,7 +211,8 @@ public class UnownedPlanetInfoMenu extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (Stratum v : planet.strata) {
+                for (Integer strataId : planet.strata) {
+                    Stratum v = gameState.getObject(strataId, Stratum.class);
                     //Draw...
                     if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);

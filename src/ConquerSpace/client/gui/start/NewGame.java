@@ -21,10 +21,10 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.Globals;
 import ConquerSpace.server.GameController;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
-import ConquerSpace.common.game.universe.generators.CivilizationConfig;
-import ConquerSpace.common.game.universe.generators.UniverseGenerationConfig;
-import ConquerSpace.common.game.universe.bodies.Universe;
-import ConquerSpace.common.game.universe.generators.DefaultUniverseGenerator;
+import ConquerSpace.server.generators.CivilizationConfig;
+import ConquerSpace.server.generators.UniverseGenerationConfig;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.server.generators.DefaultUniverseGenerator;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -34,9 +34,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,7 +52,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
     private JLabel quoteLabel;
     private JButton exitButton;
 
-    private Universe universe = null;
+    private Galaxy universe = null;
     private Color civColor = Color.CYAN;
 
     private MainMenu menu;
@@ -142,7 +139,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
         }
     }
 
-    public Universe getUniverse() {
+    public Galaxy getUniverse() {
         return universe;
     }
 

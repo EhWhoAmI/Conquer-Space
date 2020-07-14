@@ -17,9 +17,10 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JDesktopPane;
@@ -42,9 +43,13 @@ public class ShipListManager extends JPanel {
     private ShipDetailsSideWindow shipDetailsSideWindow = null;
 
     private Civilization c;
+    
+    private GameState gameState;
 
-    public ShipListManager(Universe u, Civilization c) {
+    public ShipListManager(GameState gameState, Civilization c) {
         this.c = c;
+        this.gameState = gameState;
+        
         //setTitle("All Ships");
         setLayout(new BorderLayout());
         model = new ShipTableModel();
@@ -83,7 +88,8 @@ public class ShipListManager extends JPanel {
         //Populate table
         int selected = table.getSelectedRow();
         //model.empty();
-        for (Ship s : c.spaceships) {
+        for (Integer shipId : c.spaceships) {
+            Ship s = gameState.getObject(shipId, Ship.class);
             //process
             if(!model.objects.contains(s)) {
                 model.add(s);

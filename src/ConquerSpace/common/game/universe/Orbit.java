@@ -17,7 +17,7 @@
  */
 package ConquerSpace.common.game.universe;
 
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.bodies.Body;
 
 /**

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.ships;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.components.ShipComponent;
 import ConquerSpace.common.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.common.game.ships.hull.Hull;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 public class Ship extends SpaceShip {
-    private static int ticker = 0;
     String sclass;
 
     private Hull hull;
@@ -37,7 +37,8 @@ public class Ship extends SpaceShip {
     
     private ShipClass shipClass;
 
-    public Ship(ShipClass sclass, double X, double Y, Vector v, UniversePath location) {
+    public Ship(GameState gameState, ShipClass sclass, double X, double Y, Vector v, UniversePath location) {
+        super(gameState);
         this.X = X;
         this.Y = Y;
         goingToX = X;
@@ -46,7 +47,6 @@ public class Ship extends SpaceShip {
         this.location = location;
         shipClass = sclass;
         //Set ship's id
-        id = ticker++;
 
         components = new ArrayList<>();
         //Get components
@@ -103,11 +103,7 @@ public class Ship extends SpaceShip {
     public String getShipClassName() {
         return sclass;
     }
-
-    public int getId() {
-        return id;
-    }
-
+    
     public ShipClass getShipClass() {
         return shipClass;
     }

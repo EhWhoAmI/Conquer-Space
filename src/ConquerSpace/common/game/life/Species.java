@@ -17,9 +17,8 @@
  */
 package ConquerSpace.common.game.life;
 
-import ConquerSpace.server.GameController;
-import ConquerSpace.common.game.resources.FoodGood;
-import ConquerSpace.common.game.resources.LiveGood;
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import java.util.ArrayList;
 
 /**
@@ -27,10 +26,7 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class Species {
-
-    private static int idCounter = 0;
-    private int id = 0;
+public class Species extends ConquerSpaceGameObject{
     public ArrayList<LifeTrait> lifeTraits;
 
     private int speciesGood;
@@ -41,8 +37,9 @@ public class Species {
     //Etc...
     private String name;
 
-    public Species(String name) {
-        id = idCounter++;
+    public Species(GameState gameState, String name) {
+        super(gameState);
+        //Add all the food goods...
         lifeTraits = new ArrayList<>();
         this.name = name;
     }
@@ -82,9 +79,5 @@ public class Species {
     @Override
     public String toString() {
         return name;
-    }
-
-    public int getId() {
-        return id;
     }
 }

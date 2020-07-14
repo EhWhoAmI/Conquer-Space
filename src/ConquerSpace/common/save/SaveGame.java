@@ -17,17 +17,10 @@
  */
 package ConquerSpace.common.save;
 
-import ConquerSpace.common.game.Serialize;
-import ConquerSpace.common.game.SaveGame;
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.util.Utilities;
 import ConquerSpace.common.util.Version;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,8 +32,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hjson.JsonValue;
-import org.hjson.Stringify;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -82,7 +73,7 @@ public class SaveGame {
         //Save metadata...
         JSONObject meta = new JSONObject();
         meta.put("version", ConquerSpace.VERSION.getVersionCore());
-        meta.put("date", gameState.date.date);
+        meta.put("date", gameState.date.getDate());
         
         saveObject(saveData, gameState);
         String text = saveData.toString(4);//JsonValue.readHjson().toString(Stringify.HJSON);
@@ -115,6 +106,7 @@ public class SaveGame {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void save(JSONObject saveObject, String key, Object obj) throws IllegalArgumentException, IllegalAccessException {
         if (obj instanceof List) {
             //Go through list

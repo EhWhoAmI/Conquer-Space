@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.ships.satellites;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.common.game.ships.satellites.templates.TelescopeTemplate;
 import ConquerSpace.common.util.MultiplierProcessor;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
  * @author EhWhoAmI
  */
 public class Satellites {
-    public static Satellite parseSatellite(JSONObject object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {
+    public static Satellite parseSatellite(GameState gameState, JSONObject object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {
         //Parse
         Satellite satellite;
         String name = object.getString("name");
@@ -38,12 +39,12 @@ public class Satellites {
         int id = object.getInt("id");
         switch(getSatelliteTypeFromString(type)) {
             case SatelliteTypes.NONE:
-                satellite = new NoneSatellite();
+                satellite = new NoneSatellite(gameState);
                 satellite.setId(id);
                 satellite.setName(name);
                 break;
             case SatelliteTypes.TELESCOPE:
-                satellite = new SpaceTelescope();
+                satellite = new SpaceTelescope(gameState);
                 satellite.setId(id);
                 satellite.setName(name);
                 //Range...
@@ -59,23 +60,23 @@ public class Satellites {
                 break;
             default:
                 //Just a none satellite then
-                satellite = new NoneSatellite();
+                satellite = new NoneSatellite(gameState);
                 satellite.setId(-1);
                 satellite.setName("Unknown satellite");
         }
         return satellite;
     }
     
-    public static Satellite parseSatellite(SatelliteTemplate object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {
+    public static Satellite parseSatellite(GameState gameState, SatelliteTemplate object, HashMap<String, Double> multipliers, HashMap<String, Integer> values) {
         //Parse
-        Satellite satellite = new NoneSatellite();
+        Satellite satellite = new NoneSatellite(gameState);
         String name = object.getName();
         int mass = object.getMass();
         int id = object.getId();
         
         if(object instanceof TelescopeTemplate) {
             TelescopeTemplate template = (TelescopeTemplate) object;
-            satellite = new SpaceTelescope();
+            satellite = new SpaceTelescope(gameState);
             
             ((SpaceTelescope)satellite).setRange(template.getRange());
         }

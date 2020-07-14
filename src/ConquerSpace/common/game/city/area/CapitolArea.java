@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
+
 /**
  * Capital of city
  *
@@ -24,7 +26,8 @@ package ConquerSpace.common.game.city.area;
  */
 public class CapitolArea extends ConsumerArea {
 
-    public CapitolArea() {
+    public CapitolArea(GameState gameState) {
+        super(gameState);
         priority = 1;
     }
 

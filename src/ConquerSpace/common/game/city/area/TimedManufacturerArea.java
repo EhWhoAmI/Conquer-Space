@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +37,8 @@ public class TimedManufacturerArea extends Area {
     
     float productivity = 0;
 
-    public TimedManufacturerArea(ProductionProcess process) {
+    public TimedManufacturerArea(GameState gameState, ProductionProcess process) {
+        super(gameState);
         queue = new ArrayList<>();
         this.process = process;
     }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;
 import java.util.ArrayList;
@@ -27,9 +28,10 @@ import java.util.ArrayList;
  */
 public class SpacePortArea extends Area{
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
-    private LaunchSystem system;
+    private Integer system;
 
-    public SpacePortArea(LaunchSystem system, int amount) {
+    public SpacePortArea(GameState gameState, Integer system, int amount) {
+        super(gameState);
         this.system = system;
         launchPads = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
@@ -37,7 +39,7 @@ public class SpacePortArea extends Area{
         }
     }
     
-    public LaunchSystem getLaunchSystem() {
+    public Integer getLaunchSystem() {
         return system;
     }
 

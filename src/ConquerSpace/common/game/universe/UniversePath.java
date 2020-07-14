@@ -48,6 +48,7 @@ public class UniversePath {
      * Creates a new UniversePath object
      *
      * @param systemID ID of system
+     * @param bodyId id of the body
      */
     public UniversePath(int systemID, int bodyId) {
         this.systemID = systemID;

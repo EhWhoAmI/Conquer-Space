@@ -17,14 +17,16 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.save.Serialize;
 
 /**
  * Works as a modifier to the district
  */
-public class Area implements Workable, Comparable<Area> {
+public class Area extends ConquerSpaceGameObject implements Workable, Comparable<Area> {
 
     /**
      * The number of people currently manning the place.
@@ -51,6 +53,10 @@ public class Area implements Workable, Comparable<Area> {
      */
     @Serialize(key = "productivity")
     private float workingmultiplier = 1;
+
+    public Area(GameState gameState) {
+        super(gameState);
+    }
 
     public AreaClassification getAreaType() {
         return AreaClassification.Generic;

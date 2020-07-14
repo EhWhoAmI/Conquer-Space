@@ -17,24 +17,36 @@
  */
 package ConquerSpace.common.game.population;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class PopulationSegment {
+public class PopulationSegment extends ConquerSpaceGameObject{
     public long size = 0;
+    
     public int species;
-    public Culture culture;
+    
+    public int culture;
+    
     //Placeholder value for now...
     public int tier;
+    
+    /**
+     * Population increase every tick
+     */
     public float populationIncrease;
 
-    public PopulationSegment(int species, Culture culture) {
+    
+    public PopulationSegment(GameState gameState, int species, int culture) {
+        super(gameState);
         this.species = species;
         this.culture = culture;
     }
 
-    public Culture getCulture() {
+    public int getCulture() {
         return culture;
     }
 

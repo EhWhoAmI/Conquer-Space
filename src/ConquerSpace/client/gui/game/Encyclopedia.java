@@ -41,7 +41,7 @@ import javax.swing.UIManager;
 public class Encyclopedia extends JInternalFrame {
 
     private JEditorPane pane;
-    private JList infoList;
+    private JList<Good> infoList;
 
     @SuppressWarnings("unchecked")
     public Encyclopedia(GameState gameState) {
@@ -51,7 +51,7 @@ public class Encyclopedia extends JInternalFrame {
             setTitle(LOCALE_MESSAGES.getMessage("game.encyclopedia.backup"));
         }
         
-        infoList = new JList(new Vector(gameState.goodHashMap.values()));
+        infoList = new JList(gameState.getGoodList());
         infoList.addListSelectionListener(l -> {
             Good g = (Good) infoList.getSelectedValue();
             HtmlEncyclopediaBuilder builder = new HtmlEncyclopediaBuilder();

@@ -42,7 +42,7 @@ public class TerrainRenderer {
         //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors;// = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
-        ConquerSpace.common.game.jLibNoise.noise.utils.Image terrainColorses = null;
+        ConquerSpace.common.jLibNoise.noise.utils.Image terrainColorses = null;
         
         int imageRes = 2;
         int mapRes = 2;

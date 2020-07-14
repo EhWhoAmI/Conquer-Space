@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.logistics.ResourcePermissions;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
@@ -42,7 +43,8 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     public UniversePath path;
     
-    public ResourceStockpileArea() {
+    public ResourceStockpileArea(GameState gameState) {
+        super(gameState);
         allPermissions = new HashMap<>();
         defaultPermissions = new ResourcePermissions(false, false, false);
         resourceLedger = new HashMap<>();

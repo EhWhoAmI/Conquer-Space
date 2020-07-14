@@ -17,42 +17,46 @@
  */
 package ConquerSpace.common.game.population;
 
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.Serialize;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *
+ * Represents the population in a place.
  * @author EhWhoAmI
  */
-public class Population {
+public class Population extends ConquerSpaceGameObject{
 
     @Serialize(key = "segments")
-    public final ArrayList<PopulationSegment> populations;
+    public final ArrayList<Integer> populations;
 
     private long populationSize = 0;
 
-    public Population() {
+    public Population(GameState gameState) {
+        super(gameState);
         populations = new ArrayList<>();
     }
 
-    public PopulationSegment getSegment(int id) {
-        return populations.get(id);
+    public Integer getSegment(int index) {
+        return populations.get(index);
     }
 
-    public void addSegment(PopulationSegment seg) {
+    public void addSegment(Integer seg) {
         populations.add(seg);
     }
 
     public long getPopulationSize() {
         populationSize = 0;
-        for (PopulationSegment seg : populations) {
-            populationSize += seg.size;
+        for (Integer seg : populations) {
+            populationSize += 
+                    gameState.getObject(seg, PopulationSegment.class).getSize();
         }
         return populationSize;
     }
 
-    public Iterator<PopulationSegment> getIterator() {
+    public Iterator<Integer> getIterator() {
         return populations.iterator();
     }
 }

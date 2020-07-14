@@ -17,11 +17,12 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.people.Person;
-import ConquerSpace.common.game.people.PersonalityTrait;
-import ConquerSpace.common.game.people.Scientist;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.characters.PersonalityTrait;
+import ConquerSpace.common.game.characters.Scientist;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.util.ArrayList;
@@ -53,8 +54,14 @@ public class RecruitingPerson extends JPanel {
     private JPanel container;
 
     private Civilization c;
+    
+    private GameState gameState;
+    
+    private Galaxy galaxy;
 
-    public RecruitingPerson(Civilization c, Universe u) {
+    public RecruitingPerson(GameState gameState, Civilization c) {
+        this.gameState = gameState;
+        this.galaxy = gameState.universe;
         this.c = c;
         setLayout(new HorizontalFlowLayout());
         //Generate people and things like that
@@ -79,7 +86,7 @@ public class RecruitingPerson extends JPanel {
                     container.add(skillLabel);
                 }
 
-                positionLabel.setText("Location: " + probablePersonList.getSelectedValue().getPosition().getName() + ", " + u.getSpaceObject(probablePersonList.getSelectedValue().getPosition().getUniversePath()));
+                positionLabel.setText("Location: " + probablePersonList.getSelectedValue().getPosition().getName() + ", " + galaxy.getSpaceObject(probablePersonList.getSelectedValue().getPosition().getUniversePath()));
                 container.add(positionLabel);
 
                 personalityListModel.clear();
@@ -109,8 +116,8 @@ public class RecruitingPerson extends JPanel {
                 int previousSelection = probablePersonList.getSelectedIndex();
                 
                 Person p = probablePersonList.getSelectedValue();
-                c.unrecruitedPeople.remove(p);
-                c.people.add(p);
+                c.unrecruitedPeople.remove(p.getId());
+                c.people.add(p.getId());
                 //Set selected value
                 probablePersonList.setSelectedIndex(previousSelection);
             }
@@ -139,10 +146,10 @@ public class RecruitingPerson extends JPanel {
 
     private class PersonListModel extends AbstractListModel<Person> {
 
-        ArrayList<Person> person;
+        ArrayList<Integer> person;
         long before = 0, after = System.currentTimeMillis();
 
-        public PersonListModel(ArrayList<Person> person) {
+        public PersonListModel(ArrayList<Integer> person) {
             this.person = person;
         }
 
@@ -154,7 +161,7 @@ public class RecruitingPerson extends JPanel {
         @Override
         public Person getElementAt(int index) {
             if (person.size() > 0) {
-                return person.get(index);
+                return gameState.getObject(person.get(index), Person.class);
             }
             return null;
         }

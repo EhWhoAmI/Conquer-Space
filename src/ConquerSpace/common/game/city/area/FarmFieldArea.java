@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
@@ -32,8 +33,8 @@ public class FarmFieldArea extends TimedManufacturerArea {
     private int time;
     private int fieldSize;
 
-    public FarmFieldArea(Species grownSpecies) {
-        super(new ProductionProcess(grownSpecies.getId()));
+    public FarmFieldArea(GameState gameState, Species grownSpecies) {
+        super(gameState, new ProductionProcess(grownSpecies.getId()));
         grown = grownSpecies;
         //Because you can only grow one.
         setLimit(1);

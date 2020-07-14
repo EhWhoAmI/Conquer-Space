@@ -17,8 +17,10 @@
  */
 package ConquerSpace.common.game.organizations.corp;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.economy.Currency;
+import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.game.universe.bodies.Planet;
 
@@ -26,14 +28,16 @@ import ConquerSpace.common.game.universe.bodies.Planet;
  *
  * @author EhWhoAmI
  */
-public class Company implements Employer{
+public class Company extends Organization implements Employer{
     private String name;
     private int affiliation;
     private City cityBasedIn;
     private Planet planetBasedIn;
 
-    public Company() {
+    public Company(GameState gameState, String name) {
+        super(gameState, name);
     }
+    
 
     public String getName() {
         return name;

@@ -23,9 +23,10 @@ import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.SpaceShip;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
-import ConquerSpace.common.game.universe.bodies.StarTypes;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.StarType;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.game.GameWindow;
+import ConquerSpace.common.GameState;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -44,18 +45,21 @@ public class UniverseRenderer {
     public double sizeOfLTYR = 1;
     private Dimension bounds;
 
-    Universe universe;
+    Galaxy universe;
     public int universeDrawnSize;
     private Civilization c;
 
-    public UniverseRenderer(Dimension bounds, Universe universe, Civilization c) {
+    GameState gameState;
+
+    public UniverseRenderer(GameState gameState, Dimension bounds, Civilization c) {
+        this.gameState = gameState;
         this.bounds = bounds;
-        this.universe = universe;
+        this.universe = gameState.getUniverse();
         this.c = c;
         long universeRadius = 0;
         //Check for size of universe
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
-            StarSystem s = universe.getStarSystem(i);
+            StarSystem s = universe.getStarSystemObject(i);
 //            if (s.getGalaticLocation().getDistance() > universeRadius) {
 //                universeRadius = (long) s.getGalaticLocation().getDistance();
 //            }
@@ -107,22 +111,23 @@ public class UniverseRenderer {
         g2d.draw(yline);*/
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             //Check vision
-            StarSystem sys = universe.getStarSystem(i);
+            StarSystem sys = universe.getStarSystemObject(i);
             // Draw star systems   
             //Check vision...
-            //System.out.println(sys);
             if (c.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
                 //Control
-                if (universe.control.get(sys.getUniversePath()) > -1) {
+                if (universe.control.get(sys.getId()) > -1) {
                     switch (c.vision.
                             get(sys.getUniversePath())) {
                         case VisionTypes.EXISTS:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            int civid = universe.getCivilization(i);
-                            Civilization civilization = (Civilization) (universe.organizations.get(universe.control.get(sys.getUniversePath())));
-                            g2d.setColor(civilization.getColor());
+                            int id = universe.control.get(sys.getId());
+                            Civilization civ = gameState.getObject(id, Civilization.class);
+                            if (civ != null) {
+                                g2d.setColor(civ.getColor());
+                            }
                     }
                     //Control, if any...
                     Ellipse2D.Double control = new Ellipse2D.Double(
@@ -134,26 +139,26 @@ public class UniverseRenderer {
                 }
                 //End of control
                 Color c;
-                switch (StarTypes.TYPE_G) {
-                    case StarTypes.TYPE_A:
+                switch (StarType.TYPE_G) {
+                    case TYPE_A:
                         c = Color.decode("#D5E0FF");
                         break;
-                    case StarTypes.TYPE_B:
+                    case TYPE_B:
                         c = Color.decode("#A2C0FF");
                         break;
-                    case StarTypes.TYPE_O:
+                    case TYPE_O:
                         c = Color.decode("#92B5FF");
                         break;
-                    case StarTypes.TYPE_F:
+                    case TYPE_F:
                         c = Color.decode("#F9F5FF");
                         break;
-                    case StarTypes.TYPE_G:
+                    case TYPE_G:
                         c = Color.decode("#fff4ea");
                         break;
-                    case StarTypes.TYPE_K:
+                    case TYPE_K:
                         c = Color.decode("#FFDAB5");
                         break;
-                    case StarTypes.TYPE_M:
+                    case TYPE_M:
                         c = Color.decode("#FFB56C");
                         break;
                     default:
@@ -182,7 +187,8 @@ public class UniverseRenderer {
 
         //Spaceships
         //draw spaceships
-        for (SpaceShip ship : universe.spaceShips) {
+        for (Integer shipId : universe.spaceShips) {
+            SpaceShip ship = gameState.getObject(shipId, SpaceShip.class);
             double x = (ship.getX());
             double y = (ship.getY());
             //Draw dot

@@ -17,11 +17,14 @@
  */
 package ConquerSpace.common.game.ships.launch;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
  * Class of launch vehicle 
  * @author EhWhoAmI
  */
-public class LaunchVehicle {
+public class LaunchVehicle extends ConquerSpaceGameObject{
     public LaunchSystem systemType;
     public int costPerLaunch;
     public boolean reusability;
@@ -30,7 +33,8 @@ public class LaunchVehicle {
     public float reliability;
     public int maximumMass;
 
-    public LaunchVehicle() {
+    public LaunchVehicle(GameState gameState) {
+        super(gameState);
     }
 
     public void setCostPerLaunch(int costPerLaunch) {

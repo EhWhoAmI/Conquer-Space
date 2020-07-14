@@ -17,12 +17,11 @@
  */
 package ConquerSpace.common.actions;
 
-import ConquerSpace.Globals;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.game.universe.bodies.StarSystem;
 
 /**
  *
@@ -63,7 +62,8 @@ public class ToOrbitAction extends ShipAction {
             ship.setIsOrbiting(true);
             ship.setLocation(position.getUniversePath());
             //Remove...
-            gameState.universe.getStarSystem(position.getParentStarSystem()).spaceShips.remove(ship);
+            StarSystem body = gameState.getObject(gameState.universe.getStarSystem(position.getParentStarSystem()), StarSystem.class);
+            body.spaceShips.remove(ship.getId());
             position.putShipInOrbit(ship);
         } else {
             ship.translate((long) (objX), (long) (objY));
@@ -79,7 +79,7 @@ public class ToOrbitAction extends ShipAction {
     public void initAction(GameState gameState) {
         if (ship.isOrbiting()) {
             //Exit orbit
-            Body object = gameState.universe.getSpaceObject(ship.getOrbiting());
+            Body object =  gameState.getObject(gameState.universe.getSpaceObject(ship.getOrbiting()), Body.class);
             if (object instanceof Planet) {
                 Planet p = (Planet) object;
                 //Remove from orbit
@@ -90,7 +90,7 @@ public class ToOrbitAction extends ShipAction {
                 ship.setIsOrbiting(false);
 
                 //Add
-                gameState.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
+                //gameState.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
             }   
         }
         //Predict going to location...

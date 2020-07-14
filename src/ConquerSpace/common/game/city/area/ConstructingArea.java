@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
@@ -25,7 +27,8 @@ public class ConstructingArea extends Area{
     private int ticksLeft;
     private Area toBuild;
 
-    public ConstructingArea(int ticks, Area toBuild) {
+    public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
+        super(gameState);
         this.ticksLeft = ticks;
         this.toBuild = toBuild;
     }

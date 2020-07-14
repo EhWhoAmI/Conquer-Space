@@ -34,16 +34,21 @@ public class PlanetGeology extends javax.swing.JPanel {
     private Planet planet;
     private DefaultListModel<Stratum> stratumListModel;
     private DefaultListModel<String> resourceListModel;
-    
-    private GameState gameState;
+
+    private final GameState gameState;
+
     /**
      * Creates new form PlanetGeology
+     * @param gameState
+     * @param p
      */
     public PlanetGeology(GameState gameState, Planet p) {
-        this.gameState =  gameState;
+        this.gameState = gameState;
         this.planet = p;
         stratumListModel = new DefaultListModel<>();
-        for (Stratum stratum : p.strata) {
+        for (Integer stratumId : p.strata) {
+            Stratum stratum = gameState.getObject(stratumId, Stratum.class);
+
             stratumListModel.addElement(stratum);
         }
         resourceListModel = new DefaultListModel<>();
@@ -158,16 +163,16 @@ public class PlanetGeology extends javax.swing.JPanel {
         if (stratum != null) {
             radiusLabel.setText(stratum.getRadius() + " km");
             depthLabel.setText(stratum.getDepth() + " km");
-            
+
             //Set the stuff
             resourceListModel.clear();
             for (Map.Entry<Integer, Integer> en : stratum.minerals.entrySet()) {
                 Integer key = en.getKey();
                 Integer val = en.getValue();
-                
-                resourceListModel.addElement(gameState.goodHashMap.get(key).getName() + " " + val);
+
+                resourceListModel.addElement(gameState.getGood(key).getName() + " " + val);
             }
-           
+
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

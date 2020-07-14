@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.science.ScienceLab;
 import java.util.HashMap;
@@ -30,7 +31,8 @@ public class ResearchArea extends ConsumerArea implements ScienceLab {
 
     public HashMap<String, Integer> focusFields;
 
-    public ResearchArea() {
+    public ResearchArea(GameState gameState) {
+        super(gameState);
         focusFields = new HashMap<>();
     }
 

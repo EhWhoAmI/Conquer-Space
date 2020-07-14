@@ -27,9 +27,9 @@ import ConquerSpace.common.game.ships.Launchable;
 public class SpacePortLaunchPad {
     public int ticks;
     private Launchable launching = null;
-    private LaunchSystem type;
+    private Integer type;
 
-    public SpacePortLaunchPad(LaunchSystem type) {
+    public SpacePortLaunchPad(Integer type) {
         this.type = type;
     }
     
@@ -45,13 +45,13 @@ public class SpacePortLaunchPad {
         return false;
     }
 
-    public LaunchSystem getType() {
+    public Integer getType() {
         return type;
     }
 
     @Override
     public String toString() {
-        return type.getName();
+        return type.toString();
     }
 
     public Launchable getLaunching() {

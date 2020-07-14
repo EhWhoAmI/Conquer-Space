@@ -17,7 +17,7 @@
  */
 package ConquerSpace.common;
 
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.save.Serialize;
 import java.util.Calendar;
 
 /**

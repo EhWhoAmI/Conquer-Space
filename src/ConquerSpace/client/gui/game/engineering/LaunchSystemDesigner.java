@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game.engineering;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.LaunchVehicle;
@@ -32,10 +33,13 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
 
     private LaunchVehicleListModel launchVehicleListModel;
 
+    private GameState gameState;
+
     /**
      * Creates new form LaunchSystemDesignerSheet
      */
-    public LaunchSystemDesigner(Civilization c) {
+    public LaunchSystemDesigner(GameState gameState, Civilization c) {
+        this.gameState = gameState;
         this.c = c;
         launchVehicleListModel = new LaunchVehicleListModel();
         initComponents();
@@ -282,20 +286,21 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
     private void saveLaunchSystemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveLaunchSystemButtonActionPerformed
         //Do the things
         if (!nameField.getText().isEmpty()) {
-            LaunchVehicle vehicle = new LaunchVehicle();
+            LaunchVehicle vehicle = new LaunchVehicle(gameState);
             vehicle.setName(nameField.getText());
             vehicle.setSystemType((LaunchSystem) launchTypesValue.getSelectedItem());
             vehicle.setMaximumMass((Integer) payloadmassSpinner.getValue());
             vehicle.setReusability(reusabilityCheckbox.isSelected());
-            c.launchVehicles.add(vehicle);
+            c.launchVehicles.add(vehicle.getId());
             launchVehicleListModel.fireEvent();
         }
     }//GEN-LAST:event_saveLaunchSystemButtonActionPerformed
 
     private void updateComponent() {
         launchTypesValue.removeAllItems();
-        for (LaunchSystem t : c.launchSystems) {
-            launchTypesValue.addItem(t);
+        for (Integer obj : c.launchSystems) {
+            LaunchSystem launch = gameState.getObject(obj, LaunchSystem.class);
+            launchTypesValue.addItem(launch);
         }
     }
 
@@ -328,7 +333,7 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
 
         @Override
         public LaunchVehicle getElementAt(int index) {
-            return c.launchVehicles.get(index);
+            return gameState.getObject(c.launchVehicles.get(index), LaunchVehicle.class);
         }
 
         public void fireEvent() {

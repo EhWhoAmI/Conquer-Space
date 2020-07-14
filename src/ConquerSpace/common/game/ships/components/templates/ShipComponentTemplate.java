@@ -17,40 +17,37 @@
  */
 package ConquerSpace.common.game.ships.components.templates;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.components.ShipComponentTypes;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipComponentTemplate {
+public class ShipComponentTemplate extends ConquerSpaceGameObject{
 
-    private static int idCounter = 0;
     //Mass in KG
     protected int mass;
     //Cost in credits
     protected int cost;
     protected String name;
-    protected int id;
+
     protected ShipComponentTypes type;
 
-    public ShipComponentTemplate() {
-        id = idCounter++;
+    public ShipComponentTemplate(GameState gameState) {
+        super(gameState);
     }
 
-    public ShipComponentTemplate(int mass, int cost, String name) {
+    public ShipComponentTemplate(GameState gameState, int mass, int cost, String name) {
+        super(gameState);
         this.mass = mass;
         this.cost = cost;
         this.name = name;
-        id = idCounter++;
     }
 
     public String getName() {
         return name;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getCost() {

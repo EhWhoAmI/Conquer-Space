@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.ships;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.EmptyShipAction;
 import ConquerSpace.common.actions.ShipAction;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public abstract class SpaceShip implements Orbitable{
+public abstract class SpaceShip extends ConquerSpaceGameObject implements Orbitable{
 
     private static int ticker = 0;
     protected String name = "";
@@ -43,13 +44,16 @@ public abstract class SpaceShip implements Orbitable{
     protected double goingToX;
     protected double goingToY;
 
-    protected int id;
     protected long maxSpeed = 1_0000_000;
     protected int throttle = 0;
 
     protected long estimatedThrust = 0;
 
     public ArrayList<ShipAction> commands = new ArrayList<ShipAction>();
+
+    public SpaceShip(GameState gameState) {
+        super(gameState);
+    }
 
     public abstract UniversePath getLocation();
 
@@ -105,11 +109,6 @@ public abstract class SpaceShip implements Orbitable{
         this.goingToY = goingToY;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof Ship && ((SpaceShip) obj).id == this.id);
-    }
-
     public void setMaxSpeed(long maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
@@ -141,10 +140,6 @@ public abstract class SpaceShip implements Orbitable{
 
     public long getEstimatedThrust() {
         return estimatedThrust;
-    }
-
-    public int getId() {
-        return id;
     }
     
     public void setX(double X) {

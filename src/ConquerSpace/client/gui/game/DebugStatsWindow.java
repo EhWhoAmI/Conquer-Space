@@ -18,9 +18,10 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.client.gui.logging.SwingMessageAppender;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,7 +74,7 @@ public class DebugStatsWindow extends JInternalFrame {
     /**
      * Universe
      */
-    private Universe universe;
+    private Galaxy universe;
 
     /**
      * Creates the window, and adds all things.
@@ -100,7 +101,7 @@ public class DebugStatsWindow extends JInternalFrame {
         openConsole = new JButton("Open Console");
         openConsole.setFocusable(false);
         openConsole.addActionListener((e) -> {
-            CQSPConsole con = new CQSPConsole(universe, state.playerCiv, state);
+            CQSPConsole con = new CQSPConsole(state, state.getObject(state.playerCiv, Civilization.class));
             getDesktopPane().add(con);
         });
 

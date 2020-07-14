@@ -104,13 +104,13 @@ public class AreaConstructionPanel extends JPanel {
                     areaDesignPanel = new MinerAreaConstructionPanel(gameState, planet, city);
                     break;
                 case SpacePort:
-                    areaDesignPanel = new SpacePortConstructionPanel(planet, city, c);
+                    areaDesignPanel = new SpacePortConstructionPanel(gameState, planet, city, c);
                     break;
                 case Manufacturer:
                     areaDesignPanel = new IndustrialFactoryConstructionPanel(gameState, planet, city, c);
                     break;
                 case Observatory:
-                    areaDesignPanel = new ObservatoryConstructionPanel(planet, city, c);
+                    areaDesignPanel = new ObservatoryConstructionPanel(gameState, planet, city, c);
                     break;
                 default:
                     areaDesignPanel = new AreaDesignPanel(planet, city);
@@ -126,7 +126,7 @@ public class AreaConstructionPanel extends JPanel {
             Area areaToBuild = areaDesignPanel.getAreaToConstruct();
             if (areaDesignPanel != null && areaToBuild != null) {
                 //Then construct area
-                city.addArea(new ConstructingArea(10_000, areaToBuild));
+                city.addArea(new ConstructingArea(gameState, 10_000, areaToBuild).getId());
                 JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, LOCALE_MESSAGES.getMessage("game.planet.construction.created"));
             }
         });

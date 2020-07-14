@@ -21,10 +21,10 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.people.Person;
-import ConquerSpace.common.game.people.Scientist;
-import ConquerSpace.common.game.science.tech.Technologies;
-import ConquerSpace.common.game.science.tech.Technology;
+import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.characters.Scientist;
+import ConquerSpace.common.game.science.Technologies;
+import ConquerSpace.common.game.science.Technology;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -80,7 +80,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
 
     private FieldViewer fieldViewer;
     private Civilization civilization;
-    
+
     private GameState gameState;
 
     public ResearchViewer(GameState gameState, Civilization c) {
@@ -130,7 +130,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         techInfoPanel.add(listPane);
 
         personComboBoxModel = new DefaultComboBoxModel<>();
-        for (Person p : civilization.people) {
+        for (Integer id : civilization.people) {
+            Person p = gameState.getObject(id, Person.class);
             if (p instanceof Scientist) {
                 personComboBoxModel.addElement(p);
             }
@@ -221,7 +222,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
                 techTableModel.addRow(new String[]{t.getName(), civilization.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
             }
             personComboBoxModel.removeAllElements();
-            for (Person p : civilization.people) {
+            for (Integer id : civilization.people) {
+                Person p = gameState.getObject(id, Person.class);
                 if (p instanceof Scientist) {
                     personComboBoxModel.addElement(p);
                 }
@@ -287,7 +289,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         int selected = personComboBox.getSelectedIndex();
         if (!personComboBox.isPopupVisible()) {
             personComboBoxModel.removeAllElements();
-            for (Person p : civilization.people) {
+            for (Integer id : civilization.people) {
+                Person p = gameState.getObject(id, Person.class);
                 if (p instanceof Scientist) {
                     personComboBoxModel.addElement(p);
                 }
@@ -313,7 +316,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
             //check for tech points
             if (civilization.getTechPoints() > 0) {
                 //Set value
-                techPointCount.setText(LOCALE_MESSAGES.getMessage("game.research.techpointsworth",  selected.getDifficulty()));
+                techPointCount.setText(LOCALE_MESSAGES.getMessage("game.research.techpointsworth", selected.getDifficulty()));
             } else {
                 //Remove
                 techInfoPanel.remove(techPointLabel);

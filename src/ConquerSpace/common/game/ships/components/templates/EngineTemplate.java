@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.ships.components.templates;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.components.ShipComponentTypes;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 
@@ -30,12 +31,12 @@ public class EngineTemplate extends ShipComponentTemplate{
     private EngineTechnology engineTechnology;
     //Fuel
 
-    public EngineTemplate() {
-        super();
+    public EngineTemplate(GameState gameState) {
+        super(gameState);
     }
     
-    public EngineTemplate(int mass, int cost, String name) {
-        super(mass, cost, name);
+    public EngineTemplate(GameState gameState, int mass, int cost, String name) {
+        super(gameState, mass, cost, name);
     }
 
     public void setThrust(int thrust) {

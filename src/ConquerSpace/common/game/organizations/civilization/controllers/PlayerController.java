@@ -24,7 +24,7 @@ import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.ships.Ship;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.game.AlertDisplayer;
 import ConquerSpace.client.gui.game.AlertNotification;
 import ConquerSpace.client.gui.game.GameWindow;
@@ -40,7 +40,7 @@ import org.apache.logging.log4j.Logger;
 public class PlayerController extends CivilizationController {
 
     private Civilization c;
-    private Universe u;
+    private Galaxy u;
     private StarDate d;
     private static final Logger LOGGER = CQSPLogger.getLogger(PlayerController.class.getName());
     public GameWindow mainwindow;

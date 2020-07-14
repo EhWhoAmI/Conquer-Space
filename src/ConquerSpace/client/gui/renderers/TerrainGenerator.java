@@ -17,11 +17,11 @@
  */
 package ConquerSpace.client.gui.renderers;
 
-import ConquerSpace.common.game.jLibNoise.noise.module.Perlin;
-import ConquerSpace.common.game.jLibNoise.noise.utils.Image;
-import ConquerSpace.common.game.jLibNoise.noise.utils.NoiseMap;
-import ConquerSpace.common.game.jLibNoise.noise.utils.NoiseMapBuilderPlane;
-import ConquerSpace.common.game.jLibNoise.noise.utils.RendererImage;
+import ConquerSpace.common.jLibNoise.noise.module.Perlin;
+import ConquerSpace.common.jLibNoise.noise.utils.Image;
+import ConquerSpace.common.jLibNoise.noise.utils.NoiseMap;
+import ConquerSpace.common.jLibNoise.noise.utils.NoiseMapBuilderPlane;
+import ConquerSpace.common.jLibNoise.noise.utils.RendererImage;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class TerrainGenerator {
         for (Map.Entry<Float, Color> entry : colors.entrySet()) {
             Float key = entry.getKey();
             Color value = entry.getValue();
-            renderer.addGradientPoint(key, new ConquerSpace.common.game.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
+            renderer.addGradientPoint(key, new ConquerSpace.common.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
         }
         renderer.enableLight();
         renderer.setLightContrast(1);
@@ -70,7 +70,7 @@ public class TerrainGenerator {
         Color[][] array = new Color[sizeX][sizeY];
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
-                ConquerSpace.common.game.jLibNoise.noise.utils.Color col = image.getConstSlabPtr(x, y).get();
+                ConquerSpace.common.jLibNoise.noise.utils.Color col = image.getConstSlabPtr(x, y).get();
                 array[x][y] = new Color(col.red, col.green, col.blue, col.alpha);
             }
         }
@@ -184,7 +184,7 @@ public class TerrainGenerator {
             Float key = entry.getKey();
             Color value = entry.getValue();
 
-            renderer.addGradientPoint(key, new ConquerSpace.common.game.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
+            renderer.addGradientPoint(key, new ConquerSpace.common.jLibNoise.noise.utils.Color(value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha()));
         }
         renderer.enableLight();
         renderer.enablePoleTemperature();

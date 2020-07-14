@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.engineering;
 
 import ConquerSpace.common.Calculators;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.components.ShipComponentTypes;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
@@ -99,8 +100,11 @@ public class ShipComponentDesigner extends JPanel {
 
     private NameGenerator componentGenerator;
 
+    private GameState gameState;
+
     @SuppressWarnings("unchecked")
-    public ShipComponentDesigner(Civilization c) {
+    public ShipComponentDesigner(GameState gameState, Civilization c) {
+        this.gameState = gameState;
         setLayout(new BorderLayout());
 
         try {
@@ -115,7 +119,7 @@ public class ShipComponentDesigner extends JPanel {
         saveShipComponents.addActionListener(a -> {
             //Create object
             if (!nameTextField.getText().equals("")) {
-                ShipComponentTemplate obj = new ShipComponentTemplate();
+                ShipComponentTemplate obj = new ShipComponentTemplate(gameState);
 
                 String type = "";
                 int rating = 0;
@@ -129,7 +133,7 @@ public class ShipComponentDesigner extends JPanel {
                         type = "science";
                         break;
                     case Engine:
-                        obj = new EngineTemplate();
+                        obj = new EngineTemplate(gameState);
                         EngineTechnology tech = (EngineTechnology) engineTechBox.getSelectedItem();
                         ((EngineTemplate) obj).setEngineTechnology(tech);
                         rating = ((int) thrustRatingSpinner.getValue());
@@ -143,7 +147,7 @@ public class ShipComponentDesigner extends JPanel {
                 //obj.put("id", c.shipComponentList.size());
 
                 obj.setMass(mass);
-                c.shipComponentList.add(obj);
+                c.shipComponentList.add(obj.getId());
                 componentsListModel.addElement(new ShipComponentContainer(obj));
             }
         });
@@ -153,8 +157,9 @@ public class ShipComponentDesigner extends JPanel {
         add(menuBar, BorderLayout.NORTH);
 
         componentsListModel = new DefaultListModel<>();
-        for (ShipComponentTemplate obj : c.shipComponentList) {
-            componentsListModel.addElement(new ShipComponentContainer(obj));
+        for (Integer obj : c.shipComponentList) {
+            ShipComponentTemplate template = gameState.getObject(obj, ShipComponentTemplate.class);
+            componentsListModel.addElement(new ShipComponentContainer(template));
         }
         componentsList = new JList(componentsListModel);
         componentsList.isSelectedIndex(0);
@@ -185,8 +190,9 @@ public class ShipComponentDesigner extends JPanel {
                     engineTechBox.setSelectedItem(engt);
 
                     engineTechBoxModel.removeAllElements();
-                    for (EngineTechnology t : c.engineTechs) {
-                        engineTechBoxModel.addElement(t);
+                    for (Integer techs : c.engineTechs) {
+                        EngineTechnology tech = gameState.getObject(techs, EngineTechnology.class);
+                        engineTechBoxModel.addElement(tech);
                     }
 
                     if (engineTechBox.getSelectedItem() != null) {
@@ -203,8 +209,9 @@ public class ShipComponentDesigner extends JPanel {
             massText.setText("" + mass);
         });
 
-        for (ShipComponentTemplate obj : c.shipComponentList) {
-            componentsListModel.addElement(new ShipComponentContainer(obj));
+        for (Integer obj : c.shipComponentList) {
+            ShipComponentTemplate template = gameState.getObject(obj, ShipComponentTemplate.class);
+            componentsListModel.addElement(new ShipComponentContainer(template));
         }
 
         componentPanel = new JPanel();
@@ -259,8 +266,9 @@ public class ShipComponentDesigner extends JPanel {
             engineTechnologyLabel = new JLabel("Engine Tech:");
             engineTechBoxModel = new DefaultComboBoxModel<>();
             //Add the civ info
-            for (EngineTechnology t : c.engineTechs) {
-                engineTechBoxModel.addElement(t);
+            for (Integer techs : c.engineTechs) {
+                EngineTechnology tech = gameState.getObject(techs, EngineTechnology.class);
+                engineTechBoxModel.addElement(tech);
             }
             engineTechBox = new JComboBox<>(engineTechBoxModel);
             engineComponent.add(engineTechnologyLabel);
@@ -318,8 +326,9 @@ public class ShipComponentDesigner extends JPanel {
                     case Engine:
                         //Update components
                         engineTechBoxModel.removeAllElements();
-                        for (EngineTechnology t : c.engineTechs) {
-                            engineTechBoxModel.addElement(t);
+                        for (Integer techs : c.engineTechs) {
+                            EngineTechnology tech = gameState.getObject(techs, EngineTechnology.class);
+                            engineTechBoxModel.addElement(tech);
                         }
 
                         if (engineTechBox.getSelectedItem() != null) {

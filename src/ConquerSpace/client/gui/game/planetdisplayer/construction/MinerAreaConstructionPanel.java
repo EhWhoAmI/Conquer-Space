@@ -50,20 +50,25 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     private Good miningGood = null;
     private Stratum miningStratum = null;
     private float amountMining = 10;
+    
+    private GameState gameState;
 
     public MinerAreaConstructionPanel(GameState gameState, Planet planet, City c) {
         super(planet, c);
+        this.gameState = gameState;
+        
         setLayout(new HorizontalFlowLayout());
 
         Iterator<GeographicPoint> cityDist = planet.cityDistributions.keySet().iterator();
-        DefaultListModel<Stratum> strataListModel = new DefaultListModel<Stratum>();
+        DefaultListModel<Stratum> strataListModel = new DefaultListModel<>();
         while (cityDist.hasNext()) {
             GeographicPoint nextElement = cityDist.next();
             City city = planet.getCity(nextElement);
             if (city != null && city.equals(c)) {
                 //Get point, search area
                 for (int k = 0; k < planet.strata.size(); k++) {
-                    Stratum stratum = planet.strata.get(k);
+                    
+                    Stratum stratum = gameState.getObject(planet.strata.get(k), Stratum.class);
                     if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), nextElement.getX(), nextElement.getY())) {
                         //Is inside
                         if (!strataListModel.contains(stratum)) {
@@ -82,7 +87,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
                 Integer key = en.getKey();
                 Integer val = en.getValue();
 
-                resourceListTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
+                resourceListTableModel.addRow(new Object[]{gameState.getGood(key).getName(), val});
             }
 
             if (resourceListTableModel.getRowCount() > 0) {
@@ -140,7 +145,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     @Override
     public Area getAreaToConstruct() {
         if (miningStratum != null && miningGood != null) {
-            return new MineArea(miningStratum, miningGood.getId(), amountMining);
+            return new MineArea(gameState, miningStratum.getId(), miningGood.getId(), amountMining);
         }
         return null;
     }

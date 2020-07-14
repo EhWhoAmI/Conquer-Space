@@ -17,18 +17,15 @@
  */
 package ConquerSpace.common.game.population;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
- * Defines the culture of the species, and its behaviour
+ * Defines the culture of the species, and its behavior
  * @author EhWhoAmI
  */
-public class Culture {
-    private static int idCounter = 0;
-    private int id;
-    public Culture() {
-        this.id = idCounter++;
-    }
-
-    public int getId() {
-        return id;
+public class Culture extends ConquerSpaceGameObject {    
+    public Culture(GameState gameState) {
+        super(gameState);
     }
 }

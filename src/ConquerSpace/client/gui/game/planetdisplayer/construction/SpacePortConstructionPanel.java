@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
@@ -41,8 +42,11 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
     private JLabel launchTypes;
     private JComboBox<LaunchSystem> launchTypesValue;
 
-    public SpacePortConstructionPanel(Planet p, City c, Civilization civ) {
+    private GameState gameState;
+
+    public SpacePortConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(p, c);
+        this.gameState = gameState;
 
         setLayout(new GridBagLayout());
         amount = new JLabel("Amount of launch ports");
@@ -56,8 +60,8 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
 
         launchTypesValue = new JComboBox<LaunchSystem>();
 
-        for (LaunchSystem t : civ.launchSystems) {
-            launchTypesValue.addItem(t);
+        for (Integer id : civ.launchSystems) {
+            launchTypesValue.addItem(gameState.getObject(id, LaunchSystem.class));
         }
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -86,7 +90,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
     public Area getAreaToConstruct() {
         if (launchTypesValue.getSelectedItem() != null && launchTypesValue.getSelectedItem() instanceof LaunchSystem) {
             LaunchSystem ls = (LaunchSystem) launchTypesValue.getSelectedItem();
-            return new SpacePortArea(ls, (Integer) maxLaunchTubes.getValue());
+            return new SpacePortArea(gameState, ls.getId(), (Integer) maxLaunchTubes.getValue());
         }
         return null;
     }

@@ -17,13 +17,12 @@
  */
 package ConquerSpace.common.game.universe.bodies;
 
-import ConquerSpace.common.game.Serialize;
-import ConquerSpace.common.game.ships.SpaceShip;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
  * A star system.
@@ -31,15 +30,15 @@ import java.util.stream.Stream;
  * @author EhWhoAmI
  */
 public class StarSystem extends Body {
-    private static final long serialVersionUID = 1L;
+    private int index;
     
     public int planetCount = 0;
     
     @Serialize(key = "bodies")
-    public ArrayList<Body> bodies;
+    private ArrayList<Integer> bodies;
 
     @Serialize(key = "ships")
-    public ArrayList<SpaceShip> spaceShips;
+    public ArrayList<Integer> spaceShips;
     
     @Serialize(key = "name")
     private String name = "";
@@ -47,10 +46,12 @@ public class StarSystem extends Body {
     /**
      * Creates a new star system.
      *
-     * @param id ID of this star system
-     * @param location Galactic location.
+     * @param gameState
+     * @param location Galactic location
      */
-    public StarSystem(PolarCoordinate location) {
+    public StarSystem(GameState gameState, PolarCoordinate location) {
+        super(gameState);
+        
         orbit = new Orbit(location.getDegrees(), location.getDistance(), 0, 0);
         spaceShips = new ArrayList<>();
         bodies = new ArrayList<>();
@@ -60,16 +61,12 @@ public class StarSystem extends Body {
         return planetCount;
     }
     
-    public void addSpaceShip(SpaceShip ship) {
+    public void addSpaceShip(Integer ship) {
         spaceShips.add(ship);
     }
 
-    public SpaceShip getSpaceShip(int id) {
-        return spaceShips.get(id);
-    }
-
-    public Stream<SpaceShip> getSpaceShipStream() {
-        return spaceShips.stream();
+    public ArrayList<Integer> getSpaceShips() {
+        return spaceShips;
     }
 
     /**
@@ -78,7 +75,7 @@ public class StarSystem extends Body {
      * @return The path of this star system
      */
     public UniversePath getUniversePath() {
-        return (new UniversePath(id));
+        return (new UniversePath(index));
     }
 
     public void setName(String name) {
@@ -89,11 +86,33 @@ public class StarSystem extends Body {
         return name;
     }
     
-    public void addBody(Body b){ 
-        b.setId(bodies.size());
+    public void addBody(StarSystemBody b){ 
+        b.setIndex(bodies.size());
+        b.setParent(this.index);
+        
         if(b instanceof Planet) {
             planetCount++;
         }
-        bodies.add(b);
+        bodies.add(b.getId());
+    }
+    
+    public Integer getBody(int id) {
+        return bodies.get(id);
+    }
+    
+    public Body getBodyObject(int id) {
+        return gameState.getObject(getBody(id), Body.class);
+    }
+    
+    public int getBodyCount() {
+        return bodies.size();
+    }
+
+    void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

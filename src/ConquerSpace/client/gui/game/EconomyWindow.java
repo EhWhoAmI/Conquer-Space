@@ -18,7 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -44,9 +44,9 @@ public class EconomyWindow extends JPanel {
     private JLabel currencyInflationRate;
 
     private Civilization c;
-    private Universe u;
+    private Galaxy u;
 
-    public EconomyWindow(Civilization c, Universe u) {
+    public EconomyWindow(Civilization c, Galaxy u) {
         setLayout(new BorderLayout());
         this.c = c;
         this.u = u;

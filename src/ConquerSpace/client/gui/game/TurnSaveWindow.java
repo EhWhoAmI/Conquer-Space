@@ -22,8 +22,8 @@ import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameSpeeds;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
-import ConquerSpace.common.game.SaveGame;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.save.SaveGame;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -76,7 +76,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     };
     private boolean isPaused = true;
     private StarDate date;
-    private Universe universe;
+    private Galaxy universe;
 
     public TurnSaveWindow(GameState state) {
         universe = state.universe;

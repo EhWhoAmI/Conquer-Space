@@ -18,20 +18,25 @@
 package ConquerSpace.common;
 
 import ConquerSpace.common.game.life.Species;
-import ConquerSpace.common.game.people.PersonalityTrait;
+import ConquerSpace.common.game.characters.PersonalityTrait;
+import ConquerSpace.common.game.organizations.Organization;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.FoodGood;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.LiveGood;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.science.FieldNode;
-import ConquerSpace.common.game.science.tech.Technology;
+import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -39,14 +44,14 @@ import java.util.Random;
  *
  * @author EhWhoAmI
  */
-public class GameState {
+public final class GameState {
+
+    private long seed;
 
     //May need to be thread safe in the future
-    protected final HashMap<Integer, Object> gameObjects;
+    protected final HashMap<Integer, ConquerSpaceGameObject> gameObjects;
 
-    //Id of universe
-    @Serialize(key = "universe")
-    public Integer universe;
+    public Galaxy universe;
 
     @Serialize(key = "date")
     public StarDate date;
@@ -59,12 +64,12 @@ public class GameState {
     //Variables read from 
     public ArrayList<LaunchSystem> launchSystems;
 
-    private ArrayList<Integer> civilizations;
-    private ArrayList<Integer> organizations;
-    
+    private final ArrayList<Integer> civilizations;
+    private final ArrayList<Integer> organizations;
+
     public ArrayList<EngineTechnology> engineTechnologys;
     public ArrayList<PersonalityTrait> personalityTraits;
-    
+
     public ArrayList<Integer> species;
 
     public HashMap<String, Integer> shipTypes;
@@ -82,25 +87,33 @@ public class GameState {
     public Integer playerCiv;
     public FieldNode fieldNodeRoot;
     public ArrayList<Technology> techonologies = new ArrayList<>();
-    
+
     private Random random;
 
     public File saveFile;
 
     //private GameUpdater updater;
     public GameState(int seed) {
+        this.seed = seed;
+
         //Init all stuff
         gameObjects = new HashMap<>();
 
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
-        
+
         goodIdentifiers = new HashMap<>();
         goodHashMap = new HashMap<>();
 
         date = new StarDate(1l);
-        
+
         random = new Random(seed);
+
+        universe = new Galaxy(this);
+    }
+
+    public Galaxy getUniverse() {
+        return universe;
     }
 
     public void addGood(Good good) {
@@ -112,9 +125,10 @@ public class GameState {
     }
 
     public void addSpecies(Species species) {
-        //Add food stuff
+        addGameObject(species);
 
         //Nice
+        //Other stats...
         FoodGood foodGoodResource = new FoodGood(species, 1, 420);
         LiveGood speciesGoodResource = new LiveGood(species, 1, 420);
         addGood(foodGoodResource);
@@ -124,19 +138,99 @@ public class GameState {
         species.setSpeciesGood(speciesGoodResource.getId());
     }
 
-    public void addObject(Object object) {
-        gameObjects.put(gameObjects.size(), object);
-    }
-
-    public Object getObject(int id) {
-        return gameObjects.get(id);
-    }
-
     public Good getGood(int id) {
         return goodHashMap.get(id);
     }
 
     public Good getGood(String identifier) {
         return goodHashMap.get(goodIdentifiers.get(identifier));
+    }
+
+    public Good[] getGoodList() {
+        Object[] goods = goodHashMap.values().toArray();
+        return Arrays.copyOf(goods, goods.length, Good[].class);
+    }
+
+    /**
+     * Adds the object to the index
+     *
+     * @param object object to add
+     * @return the id of the added object
+     */
+    public int addGameObject(ConquerSpaceGameObject object) {
+        int id = gameObjects.size();
+        gameObjects.put(id, object);
+        return id;
+    }
+
+    public ConquerSpaceGameObject getObject(int id) {
+        return gameObjects.get(id);
+    }
+
+    public Integer getGoodId(String identifier) {
+        return goodIdentifiers.get(identifier);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getObject(int id, Class<T> expectedClass) {
+        ConquerSpaceGameObject o = gameObjects.get(id);
+        if (expectedClass.isInstance(o)) {
+            return (T) o;
+        }
+        return null;
+    }
+
+    public void addOrganization(Organization org) {
+        organizations.add(org.getId());
+    }
+    
+    public int getOrganizationCount() {
+        return organizations.size();
+    }
+    
+    public Integer getOrganization(int id) {
+        return organizations.get(id);
+    }
+    
+    public Organization getOrganizationObject(int id) {
+        return getObject(getOrganization(id), Organization.class);
+    }
+
+    public void addCivilization(Civilization civ) {
+        civilizations.add(civ.getId());
+    }
+    
+    public int getCivilizationCount() {
+        return civilizations.size();
+    }
+    
+    public Integer getCivilization(int id) {
+        return civilizations.get(id);
+    }
+    
+    public Civilization getCivilizationObject(int id) {
+        return getObject(getCivilization(id), Civilization.class);
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
+        random.setSeed(seed);
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+    
+    public void dumpEverything() {
+        for (Map.Entry<Integer, ConquerSpaceGameObject> entry : gameObjects.entrySet()) {
+            Object key = entry.getKey();
+            Object val = entry.getValue();
+            System.out.println(key + " " + val);
+        }
+        
     }
 }

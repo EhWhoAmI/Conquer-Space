@@ -134,7 +134,7 @@ public class ExceptionHandling {
             }
             
             if (gameState != null && gameState.universe != null) {
-                writer.println("Universe seed: " + gameState.universe.getSeed());
+                writer.println("Universe seed: " + gameState.getSeed());
             }
 
             writer.println("Java version: " + System.getProperty("java.version") + " running on " + System.getProperty("os.name"));

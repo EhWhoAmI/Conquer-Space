@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.universe.bodies;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.universe.UniversePath;
 
 /**
@@ -24,9 +25,9 @@ import ConquerSpace.common.game.universe.UniversePath;
  *
  * @author EhWhoAmI
  */
-public class Star extends Body {
+public class Star extends StarSystemBody {
 
-    public int type;
+    public StarType type;
     /**
      * Radius of star in kilometers.
      * Largest star can be about 1.7k solar radii, where the sun is about 695,700km.
@@ -38,11 +39,13 @@ public class Star extends Body {
     private int ownerID = -1;
 
     /**
+     * @param state
      * @see StarTypes
      * @param type type of star
      * @param starSize size of star
      */
-    public Star(int type, int starSize) {
+    public Star(GameState state, StarType type, int starSize) {
+        super(state);
         this.type = type;
         this.starSize = starSize;
     }
@@ -65,7 +68,7 @@ public class Star extends Body {
 
     
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, id));
+        return (new UniversePath(parentStarSystem, getIndex()));
     }
     
     public int getOwnerID(){

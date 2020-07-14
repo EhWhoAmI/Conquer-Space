@@ -24,7 +24,6 @@ import ConquerSpace.common.game.city.area.CapitolArea;
 import ConquerSpace.common.game.city.area.CommercialArea;
 import ConquerSpace.common.game.city.area.ConstructingArea;
 import ConquerSpace.common.game.city.area.FarmFieldArea;
-import ConquerSpace.common.game.city.area.FinancialArea;
 import ConquerSpace.common.game.city.area.InfrastructureArea;
 import ConquerSpace.common.game.city.area.ManufacturerArea;
 import ConquerSpace.common.game.city.area.MineArea;
@@ -32,6 +31,7 @@ import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -79,9 +79,6 @@ public class AreaInformationPanel extends JPanel {
                 add(scroll);
             } else if (a instanceof CapitolArea) {
                 JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.capitol.title"));
-                add(title);
-            } else if (a instanceof FinancialArea) {
-                JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.finance.title"));
                 add(title);
             } else if (a instanceof InfrastructureArea) {
                 JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.infrastructure.title"));
@@ -148,7 +145,7 @@ public class AreaInformationPanel extends JPanel {
                 JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.title"));
                 add(title);
                 SpacePortArea area = (SpacePortArea) a;
-                JLabel launchSystemLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.launchsystem", area.getLaunchSystem().getName()));
+                JLabel launchSystemLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.launchsystem", gameState.getObject(area.getLaunchSystem(), LaunchSystem.class).getName()));
                 add(launchSystemLabel);
                 JLabel launchPadLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.pads", area.launchPads.size()));
                 add(launchPadLabel);
@@ -163,7 +160,7 @@ public class AreaInformationPanel extends JPanel {
             }
             JLabel owner = new JLabel("Owner: None");
 
-            Organization org = gameState.organizations.get(a.getOwner());
+            Organization org = gameState.getOrganizationObject(a.getOwner());
             if (org != null) {
                 if (org instanceof Civilization) {
                     owner.setText("Owner: State owned by " + org.getName());

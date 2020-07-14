@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
@@ -49,15 +50,19 @@ public class LaunchSpaceShipMenu extends JPanel {
     private JLabel massLabel;
     private JButton launchButton;
 
+    private GameState gameState;
+    
     @SuppressWarnings("unchecked")
-    public LaunchSpaceShipMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
+    public LaunchSpaceShipMenu(GameState gameState, SpacePortLaunchPad pad, Civilization c, Planet p) {
+        this.gameState = gameState;
         setLayout(new GridLayout(1, 3));
 
         spaceShipListModel = new DefaultListModel<>();
         spaceShipList = new JList(spaceShipListModel);
 
-        for (ShipClass sc : c.shipClasses) {
-            spaceShipListModel.addElement(sc);
+        for (Integer sc : c.shipClasses) {
+            ShipClass shipClass = gameState.getObject(sc, ShipClass.class);
+            spaceShipListModel.addElement(shipClass);
         }
 
         spaceShipList.addMouseListener(new MouseAdapter() {
@@ -81,7 +86,7 @@ public class LaunchSpaceShipMenu extends JPanel {
             //Create ship and launch
             //get ship
             if (p != null && !spaceShipList.isSelectionEmpty()) {
-                Ship ship = new Ship(spaceShipList.getSelectedValue(),
+                Ship ship = new Ship(gameState, spaceShipList.getSelectedValue(),
                         0, 0, new Vector(0, 0),
                         p.getUniversePath());
                 ship.setEstimatedThrust(spaceShipList.getSelectedValue().getEstimatedThrust());

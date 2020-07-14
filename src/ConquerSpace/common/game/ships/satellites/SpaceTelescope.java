@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.ships.satellites;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 
@@ -29,8 +30,8 @@ public class SpaceTelescope extends Satellite implements VisionPoint{
     private int civilization = -1;
     private int range = 0;
 
-    public SpaceTelescope() {
-        super();
+    public SpaceTelescope(GameState gameState) {
+        super(gameState);
     }
 
     public void setCivilization(int civ) {

@@ -17,19 +17,21 @@
  */
 package ConquerSpace.common.actions;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.science.tech.Technology;
+import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.satellites.Satellite;
 import ConquerSpace.common.game.ships.satellites.SpaceTelescope;
+import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 
 /**
  * This is like a driver to do all the actions. All methods must be static.
@@ -45,7 +47,7 @@ public class Actions {
     }
 
     public static void addArea(Planet on, City city, Area a) {
-        city.areas.add(a);
+        city.areas.add(a.getId());
         if (a instanceof Workable) {
             on.jobProviders.add(a);
         }
@@ -59,7 +61,7 @@ public class Actions {
         if (what instanceof VisionPoint) {
             SpaceTelescope obs = ((SpaceTelescope) what);
             obs.setPosition(whichPlanet.getUniversePath());
-            c.visionPoints.add((VisionPoint) what);
+            c.visionPoints.add(what.getId());
 
         }
         what.setOrbiting(whichPlanet.getUniversePath());
@@ -71,7 +73,7 @@ public class Actions {
         what.setLocation(planet.getUniversePath());
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
-        civ.spaceships.add(what);
+        civ.spaceships.add(what.getId());
     }
 
     public static void launchLaunchable(Launchable launch, Planet planet) {
@@ -86,11 +88,12 @@ public class Actions {
         }
     }
 
-    public static void moveShip(Ship what, Civilization civ, long x, long y, Universe u) {
+    public static void moveShip(GameState gameState, Ship what, Civilization civ, long x, long y, Galaxy u) {
         if (what.isOrbiting()) {
             //Exit orbit
-            if (u.getSpaceObject(what.getOrbiting()) instanceof Planet) {
-                Planet planet = (Planet) u.getSpaceObject(what.getOrbiting());
+            Body body = gameState.getObject(u.getSpaceObject(what.getOrbiting()), Body.class);
+            if (body instanceof Planet) {
+                Planet planet = (Planet) body;
                 //Remove from orbit
                 planet.getSatellites().remove(what);
 
@@ -99,7 +102,7 @@ public class Actions {
                 what.setIsOrbiting(false);
 
                 //Add
-                u.getStarSystem(planet.getParentStarSystem()).addSpaceShip(what);
+                //u.get(planet.getParentStarSystem()).addSpaceShip(what);
             }
         }
         what.setGoingToX(x);

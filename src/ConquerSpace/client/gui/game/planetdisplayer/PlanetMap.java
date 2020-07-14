@@ -23,9 +23,10 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.client.gui.music.GraphicsUtil;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.Utilities;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -86,7 +87,7 @@ public class PlanetMap extends JPanel {
 
     private Planet p;
     private Civilization c;
-    private Universe u;
+    private Galaxy u;
 
     private double tileSize = 8;
     private double scale = 0.5;
@@ -128,10 +129,13 @@ public class PlanetMap extends JPanel {
     private boolean showTerrain = true;
     private Image planetMap;
 
-    public PlanetMap(Planet p, Civilization c, Universe u, PlanetInfoSheet parent, Image planetMap) {
+    private GameState gameState;
+
+    public PlanetMap(GameState gameState, Planet p, Civilization c, PlanetInfoSheet parent, Image planetMap) {
+        this.gameState = gameState;
         this.p = p;
         this.c = c;
-        this.u = u;
+        this.u = gameState.universe;
         this.planetMap = planetMap;
 
         this.parent = parent;
@@ -325,7 +329,7 @@ public class PlanetMap extends JPanel {
                     //resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));
 
                     for (int i = 0; i < p.strata.size(); i++) {
-                        Stratum v = p.strata.get(i);
+                        Stratum v = gameState.getObject(p.strata.get(i), Stratum.class);
                         //Draw stratum
                         Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * tileSize,
                                 (v.getY() - v.getRadius()) * tileSize,
@@ -339,7 +343,7 @@ public class PlanetMap extends JPanel {
                     g2d.drawImage(resourceImage, 0, 0, null);
                 }
                 for (int i = 0; i < p.strata.size(); i++) {
-                    Stratum v = p.strata.get(i);
+                    Stratum v = gameState.getObject(p.strata.get(i), Stratum.class);
                     float fontSize = 35;
                     Font derivedFont = getFont().deriveFont(fontSize);
                     int width = getFontMetrics(derivedFont).stringWidth(v.getName());
@@ -574,7 +578,7 @@ public class PlanetMap extends JPanel {
                 //Check if lying on strata
                 ArrayList<Stratum> strataToShow = new ArrayList<>();
                 for (int i = 0; i < p.strata.size(); i++) {
-                    Stratum stratum = p.strata.get(i);
+                    Stratum stratum = gameState.getObject(p.strata.get(i), Stratum.class);
                     if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), mapX, mapY)) {
                         strataToShow.add(stratum);
                     }

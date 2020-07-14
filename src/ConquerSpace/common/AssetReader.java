@@ -17,8 +17,8 @@
  */
 package ConquerSpace.common;
 
-import ConquerSpace.common.game.people.PersonalityTrait;
-import ConquerSpace.common.game.science.tech.Technologies;
+import ConquerSpace.common.game.characters.PersonalityTrait;
+import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.resources.Element;
@@ -215,13 +215,12 @@ public class AssetReader {
         return e;
     }
 
-    public static Object processEngineTech(JSONObject obj) {
+    public static Object processEngineTech(JSONObject obj, GameState state) {
         String name = obj.getString("name");
         int id = obj.getInt("id");
         float efficiency = obj.getFloat("efficiency");
         float power = obj.getFloat("thrust_multiplier");
-        EngineTechnology tech = new EngineTechnology(name, efficiency, power);
-        tech.setId(id);
+        EngineTechnology tech = new EngineTechnology(state, name, efficiency, power);
         return tech;
     }
 
@@ -251,9 +250,9 @@ public class AssetReader {
         int maxCargo = obj.getInt("cargo");
 
         if (reusable) {
-            return new LaunchSystem(name, Technologies.getTechByID(state, id), size, safety, cost, constructCost, reuseCost, maxCargo);
+            return new LaunchSystem(state, name, Technologies.getTechByID(state, id), size, safety, cost, constructCost, reuseCost, maxCargo);
         } else {
-            return new LaunchSystem(name, Technologies.getTechByID(state, id), size, safety, cost, constructCost, maxCargo);
+            return new LaunchSystem(state, name, Technologies.getTechByID(state, id), size, safety, cost, constructCost, maxCargo);
         }
     }
 
@@ -282,7 +281,7 @@ public class AssetReader {
             String s = inputArray.getString(i);
             String[] content = s.split(":");
 
-            Integer resourceId = state.goodIdentifiers.get(content[0]);
+            Integer resourceId = state.getGoodId(content[0]);
 
             if (resourceId != null) {
                 //Parse things
@@ -298,8 +297,8 @@ public class AssetReader {
         for (int i = 0; i < outputArray.length(); i++) {
             String s = outputArray.getString(i);
             String[] content = s.split(":");
-
-            Integer resourceId = state.goodIdentifiers.get(content[0]);
+            
+            Integer resourceId = state.getGoodId(content[0]);
             if (resourceId != null) {
                 //Parse things
                 Double value = Double.parseDouble(content[1]);
@@ -418,7 +417,7 @@ public class AssetReader {
                         String amount = text[1];
 
                         double goodAmount = Double.parseDouble(amount);
-                        int goodId = state.goodIdentifiers.get(goodIdentifier);
+                        int goodId = state.getGoodId(goodIdentifier);
                         resource.recipie.put(goodId, goodAmount);
                     }
                 }

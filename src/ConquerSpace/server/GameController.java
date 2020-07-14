@@ -19,7 +19,7 @@ package ConquerSpace.server;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.music.MusicPlayer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.GameTicker;
@@ -40,7 +40,7 @@ public class GameController {
     /**
      * This is the whole universe.
      */
-    public Universe universe;
+    public Galaxy universe;
 
     public static GameTicker updater;
 
@@ -70,9 +70,8 @@ public class GameController {
         updater.tick(0);
 
         //Load the players
-        for (int i = 0; i < gameState.universe.getCivilizationCount(); i++) {
-            int civid = gameState.universe.getCivilization(i);
-            Civilization civilization = ((Civilization) universe.organizations.get(civid));
+        for (int i = 0; i < gameState.getCivilizationCount(); i++) {
+            Civilization civilization = gameState.getCivilizationObject(i);
             civilization.controller.init(gameState, civilization);
         }
 

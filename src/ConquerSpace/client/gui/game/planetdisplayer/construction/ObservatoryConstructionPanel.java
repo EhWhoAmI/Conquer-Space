@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.common.Calculators;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.ObservatoryArea;
@@ -42,11 +43,14 @@ public class ObservatoryConstructionPanel extends AreaDesignPanel {
 
     Planet p;
     Civilization civ;
+    
+    private GameState gameState;
 
-    public ObservatoryConstructionPanel(Planet p, City c, Civilization civ) {
+    public ObservatoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(p, c);
         this.p = p;
         this.civ = civ;
+        this.gameState = gameState;
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
@@ -102,6 +106,6 @@ public class ObservatoryConstructionPanel extends AreaDesignPanel {
 
     @Override
     public Area getAreaToConstruct() {
-        return new ObservatoryArea(civ.getId(), Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()), p.getUniversePath());
+        return new ObservatoryArea(gameState, civ.getId(), Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()), p.getUniversePath());
     }
 }

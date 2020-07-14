@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.start;
 import static ConquerSpace.ConquerSpace.DEBUG;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
-import ConquerSpace.common.game.universe.generators.UniverseGenerationConfig;
+import ConquerSpace.server.generators.UniverseGenerationConfig;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

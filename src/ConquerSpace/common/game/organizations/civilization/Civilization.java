@@ -23,27 +23,19 @@ import ConquerSpace.common.game.organizations.civilization.controllers.Civilizat
 import ConquerSpace.common.game.organizations.civilization.government.Government;
 import ConquerSpace.common.game.organizations.civilization.stats.Economy;
 import ConquerSpace.common.game.organizations.civilization.stats.PopulationStats;
-import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.Organization;
-import ConquerSpace.common.game.people.Administrator;
-import ConquerSpace.common.game.people.Person;
-import ConquerSpace.common.game.people.Scientist;
+import ConquerSpace.common.game.characters.Administrator;
+import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.characters.Scientist;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.game.science.Field;
-import ConquerSpace.common.game.science.ScienceLab;
-import ConquerSpace.common.game.science.tech.Technologies;
-import ConquerSpace.common.game.science.tech.Technology;
-import ConquerSpace.common.game.ships.Ship;
-import ConquerSpace.common.game.ships.ShipClass;
-import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
-import ConquerSpace.common.game.ships.hull.Hull;
-import ConquerSpace.common.game.ships.hull.HullMaterial;
+import ConquerSpace.common.game.science.Technologies;
+import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
-import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.resources.ProductionProcess;
@@ -69,10 +61,10 @@ public class Civilization extends Organization implements Employer {
     private Color color;
     private RacePreferredClimateTpe civilizationPreferedClimate;
     private String civilizationSymbol;
-    
+
     @Serialize(key = "speciesName")
     private String speciesName;
-    
+
     private String homePlanetName;
 
     /**
@@ -96,31 +88,31 @@ public class Civilization extends Organization implements Employer {
 
     private int techLevel = 0;
 
-    public ArrayList<Person> people;
-    public ArrayList<Person> unrecruitedPeople;
+    public ArrayList<Integer> people;
+    public ArrayList<Integer> unrecruitedPeople;
 
-    public ArrayList<LaunchSystem> launchSystems;
+    public ArrayList<Integer> launchSystems;
 
     public ArrayList<SatelliteTemplate> satelliteTemplates;
-a
-    public ArrayList<VisionPoint> visionPoints;
-    public ArrayList<ResourceStockpile> resourceStorages;
 
-    public ArrayList<Ship> spaceships;
-    public ArrayList<ShipClass> shipClasses;
-    public ArrayList<HullMaterial> hullMaterials;
-    public ArrayList<Hull> hulls;
+    public ArrayList<Integer> visionPoints;
+    public ArrayList<Integer> resourceStorages;
+
+    public ArrayList<Integer> spaceships;
+    public ArrayList<Integer> shipClasses;
+    public ArrayList<Integer> hullMaterials;
+    public ArrayList<Integer> hulls;
     public Field fields;
-    public ArrayList<ShipComponentTemplate> shipComponentList;
-    public ArrayList<EngineTechnology> engineTechs;
-    public ArrayList<LaunchVehicle> launchVehicles;
+    public ArrayList<Integer> shipComponentList;
+    public ArrayList<Integer> engineTechs;
+    public ArrayList<Integer> launchVehicles;
 
     /**
      * Resources that they possess.
      */
     public HashMap<Integer, Double> resourceList;
 
-    public ArrayList<Planet> habitatedPlanets;
+    public ArrayList<Integer> habitatedPlanets;
 
     public ArrayList<Event> events;
 
@@ -128,7 +120,9 @@ a
 
     public ArrayList<Integer> mineableGoods;
 
-    public ArrayList<ScienceLab> scienceLabs;
+    public ArrayList<Integer> scienceLabs;
+
+    private ArrayList<Integer> cities;
 
     private Race foundingSpecies;
 
@@ -143,12 +137,13 @@ a
     //Amount of money in millions of isk of their national currency ^
     private long moneyReserves = 0;
 
-    public ArrayList<Civilization> contacts;
+    public ArrayList<Integer> contacts;
 
     public Government government;
 
-    public Civilization(String name) {
-        super(name);
+    public Civilization(GameState gameState, String name) {
+        super(gameState, name);
+
         //Set a temp starting point as in 0:0:0
         vision = new HashMap<>();
 
@@ -198,6 +193,8 @@ a
         government = new Government();
 
         scienceLabs = new ArrayList<>();
+
+        cities = new ArrayList<>();
     }
 
     public void setCivilizationSymbol(String civilizationSymbol) {
@@ -243,7 +240,7 @@ a
     public String getHomePlanetName() {
         return homePlanetName;
     }
-    
+
     public String getSpeciesName() {
         return speciesName;
     }
@@ -309,7 +306,7 @@ a
         satelliteTemplates.add(s);
     }
 
-    public void addShipComponent(ShipComponentTemplate s) {
+    public void addShipComponent(Integer s) {
         shipComponentList.add(s);
     }
 
@@ -414,10 +411,20 @@ a
         controller.passEvent(e);
     }
 
-    public void employ(Person p) {
+    public void employ(Integer p) {
         people.add(p);
-        if (p instanceof Administrator) {
-            ((Administrator) p).employer = this;
+        gameState.getObject(p, Person.class).employer = this;
+    }
+
+    public ArrayList<ResourceStockpile> getResourceStorages() {
+        ArrayList<ResourceStockpile> resourceStockpiles = new ArrayList<>();
+        
+        for (int i = 0; i < resourceStorages.size(); i++) {
+            ResourceStockpile pile = gameState.getObject(resourceStorages.get(i), ResourceStockpile.class);
+            if(pile != null) {
+                resourceStockpiles.add(pile);
+            }
         }
+        return resourceStockpiles;
     }
 }

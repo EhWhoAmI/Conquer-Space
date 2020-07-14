@@ -18,8 +18,8 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.people.Person;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
@@ -43,7 +43,7 @@ public class CivInfoOverview extends JPanel {
     private JPanel governmentPanel;
     private JTabbedPane mainTabs;
 
-    public CivInfoOverview(Civilization c, Universe u) {
+    public CivInfoOverview(Civilization c, Galaxy u) {
         setLayout(new BorderLayout());
         //Civ name
         mainTabs = new JTabbedPane(JTabbedPane.BOTTOM);

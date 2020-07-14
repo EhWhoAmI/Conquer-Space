@@ -23,10 +23,11 @@ import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.PlanetTypes;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.client.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
+import ConquerSpace.common.GameState;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -64,7 +65,10 @@ public class ShrinkedPlanetSheet extends JPanel {
     private JLabel ownerLabel;
     private JLabel orbitDistance;
     private JLabel disclaimerLabel;
+    
     private Planet p;
+    private GameState gameState;
+    private Galaxy u;
     //private ButtonGroup resourceButtonGroup;
     //private JRadioButton[] showResources;
 
@@ -72,7 +76,9 @@ public class ShrinkedPlanetSheet extends JPanel {
 
     private AtmosphereInfo atmosphereInfo;
 
-    public ShrinkedPlanetSheet(Universe u, Planet p, Civilization c) {
+    public ShrinkedPlanetSheet(GameState gameState, Planet p, Civilization c) {
+        this.gameState = gameState;
+        this.u = gameState.universe;
         this.p = p;
         infoPane = new JTabbedPane();
 
@@ -202,7 +208,8 @@ public class ShrinkedPlanetSheet extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (Stratum v : p.strata) {
+                for (Integer strataId : p.strata) {
+                    Stratum v = gameState.getObject(strataId, Stratum.class);
                     //Draw...
                     if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);

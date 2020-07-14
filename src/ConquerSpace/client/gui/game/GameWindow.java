@@ -31,17 +31,17 @@ import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.events.Event;
-import ConquerSpace.common.game.SaveGame;
+import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.SpacePoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.GUI;
 import ConquerSpace.client.gui.renderers.SystemRenderer;
-import ConquerSpace.client.UniverseRenderer;
+import ConquerSpace.client.gui.renderers.UniverseRenderer;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -110,7 +110,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
     private Encyclopedia encyclopedia;
 
-    private Universe universe;
+    private Galaxy universe;
 
     private Timer gameTickTimer;
 
@@ -148,7 +148,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     @SuppressWarnings("deprecation")
     @Override
     public void init() {
-        desktopPane = new CQSPDesktop(universe);
+        desktopPane = new CQSPDesktop();
         menuBar = new JMenuBar();
         SwingWorker<MainInterfaceWindow, Void> interfaceWorker = new SwingWorker<MainInterfaceWindow, Void>() {
             @Override
@@ -500,7 +500,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         static final int DRAW_STAR_SYSTEM = 1;
         int drawing = DRAW_UNIVERSE;
         private int drawingStarSystem = 0;
-        private Universe universe;
+        private Galaxy universe;
         SystemRenderer systemRenderer;
         public static final int BOUNDS_SIZE = 1500;
 
@@ -512,9 +512,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
          */
         private double scale = 1.0f;
 
-        public CQSPDesktop(Universe u) {
-            universe = u;
-            universeRenderer = new UniverseRenderer(new Dimension(1500, 1500), u, civ);
+        public CQSPDesktop() {
+            universe = gameState.universe;
+            universeRenderer = new UniverseRenderer(gameState, new Dimension(1500, 1500), civ);
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
@@ -578,7 +578,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         sectorit:
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
-                            StarSystem sys = universe.getStarSystem(i);
+                            StarSystem sys = universe.getStarSystemObject(i);
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : civ.vision.keySet()) {
@@ -592,9 +592,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        StarSystem selected = universe.getStarSystem(drawingStarSystem);
-                        for (int i = 0; i < selected.bodies.size(); i++) {
-                            Body body = selected.bodies.get(i);
+                        StarSystem selected = universe.getStarSystemObject(drawingStarSystem);
+                        for (int i = 0; i < selected.getBodyCount(); i++) {
+                            Body body = selected.getBodyObject(i);
                             if (body instanceof Planet) {
                                 Planet planet = (Planet) body;
                                 if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
@@ -641,7 +641,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         sectorit:
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
-                            StarSystem sys = universe.getStarSystem(i);
+                            StarSystem sys = universe.getStarSystemObject(i);
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 if (civ.vision.containsKey(new UniversePath(sys.getId())) && civ.vision.get(new UniversePath(sys.getId())) > VisionTypes.UNDISCOVERED) {
@@ -658,9 +658,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        StarSystem selected = universe.getStarSystem(drawingStarSystem);
-                        for (int i = 0; i < selected.bodies.size(); i++) {
-                            Body body = selected.bodies.get(i);
+                        StarSystem selected = universe.getStarSystemObject(drawingStarSystem);
+                        for (int i = 0; i < selected.getBodyCount(); i++) {
+                            Body body = selected.getBodyObject(i);
                             if (body instanceof Planet) {
                                 Planet planet = (Planet) body;
                                 if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
@@ -710,7 +710,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             if (s.getLocation().getSystemID() > -1) {
                                 //Then get quickest route to out of system, and do the things
                                 //Ah well, get slope because the path can be direct...
-                                StarSystem system = universe.getStarSystem(s.getLocation().getSystemID());
+                                StarSystem system = universe.getStarSystemObject(s.getLocation().getSystemID());
                                 double slopeX = gotoX - system.getX();
                                 double slopeY = gotoY - system.getY();
                                 double slope = (slopeY / slopeX);
@@ -747,7 +747,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             s.addAction(gameState, action);
 
                             //Add an extra action to move...
-                            StarSystem sys = universe.getStarSystem(drawingStarSystem);
+                            StarSystem sys = universe.getStarSystemObject(drawingStarSystem);
                             //if (Math.hypot(gotoX, gotoY) > (sys.getPlanet(sys.getPlanetCount() - 1).getOrbitalDistance() + 10 * 10_000_000)) {
                             // ExitStarSystemAction act = new ExitStarSystemAction(s);
                             //s.addAction(act);
@@ -840,7 +840,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         void see(int system) {
             drawingStarSystem = system;
             drawing = DRAW_STAR_SYSTEM;
-            systemRenderer = new SystemRenderer(universe.getStarSystem(drawingStarSystem), universe, new Dimension(1500, 1500));
+            systemRenderer = new SystemRenderer(gameState, universe.getStarSystemObject(drawingStarSystem), universe, new Dimension(1500, 1500));
             currentStarSystemSizeOfAU = systemRenderer.sizeofAU;
             scale = 1;
             //Get Star position and position it like that...
@@ -915,9 +915,9 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         }
 
         private void setAngle() {
-            StarSystem sys = universe.getStarSystem(desktopPane.drawingStarSystem);
-            for (int i = 0; i < sys.bodies.size(); i++) {
-                Body planet = sys.bodies.get(i);
+            StarSystem sys = universe.getStarSystemObject(desktopPane.drawingStarSystem);
+            for (int i = 0; i < sys.getBodyCount(); i++) {
+                Body planet = sys.getBodyObject(i);
                 planet.orbit.setDegrees(degree);
                 planet.setPoint(planet.orbit.toSpacePoint());
             }

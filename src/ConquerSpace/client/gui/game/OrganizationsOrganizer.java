@@ -49,7 +49,7 @@ public class OrganizationsOrganizer extends JPanel {
         
         orgListModel = new ObjectListModel<>();
         for (Integer o : c.getChildren()) {
-            orgListModel.addElement(state.universe.organizations.get(o));
+            orgListModel.addElement(state.getObject(o, Organization.class));
         }
         
         orgListModel.setHandler(l -> {

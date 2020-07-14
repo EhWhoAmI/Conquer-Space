@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.Good;
 import java.util.HashMap;
 
@@ -30,7 +31,8 @@ public class ConsumerArea extends Area{
      */
     public HashMap<Good, Double> consumed;
     
-    public ConsumerArea() {
+    public ConsumerArea(GameState gameState) {
+        super(gameState);
         consumed = new HashMap<>();
     }
 }

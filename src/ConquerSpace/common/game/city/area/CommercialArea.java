@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.economy.Currency;
 
 /**
@@ -27,7 +28,8 @@ public class CommercialArea extends Area{
     private int tradeValue;
     private Currency currency;
 
-    public CommercialArea() {
+    public CommercialArea(GameState gameState) {
+        super(gameState);
         priority = 10;
     }
     

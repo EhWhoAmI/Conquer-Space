@@ -17,11 +17,12 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.people.Person;
-import ConquerSpace.common.game.people.PersonalityTrait;
-import ConquerSpace.common.game.people.Scientist;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.characters.PersonalityTrait;
+import ConquerSpace.common.game.characters.Scientist;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -57,12 +58,16 @@ public class PersonWindow extends JPanel {
     private int previouslySelected = 0;
     private Civilization c;
 
-    public PersonWindow(Civilization c, Universe u) {
+    private GameState gameState;
+    
+    public PersonWindow(GameState gameState, Civilization c) {
         this.c = c;
+        this.gameState = gameState;
         setLayout(new HorizontalFlowLayout());
         listModel = new DefaultListModel<>();
-        for (Person p : c.people) {
-            listModel.addElement(p);
+        for (Integer id : c.people) {
+            Person person = gameState.getObject(id, Person.class);
+            listModel.addElement(person);
         }
         personList = new JList<>(listModel);
         personList.setSelectedIndex(0);
@@ -138,8 +143,9 @@ public class PersonWindow extends JPanel {
     public void update() {
         previouslySelected = personList.getSelectedIndex();
         listModel.clear();
-        for (Person p : c.people) {
-            listModel.addElement(p);
+        for (Integer id : c.people) {
+            Person person = gameState.getObject(id, Person.class);
+            listModel.addElement(person);
         }
         personList.setSelectedIndex(previouslySelected);
     }

@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game;
 import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.game.ships.hull.HullMaterial;
 import com.alee.extended.layout.HorizontalFlowLayout;
@@ -88,7 +89,7 @@ public class HullCreator extends JPanel {
     private JLabel emptyLabel;
 
     private Civilization c;
-    
+
     private GameState gameState;
 
     @SuppressWarnings("unchecked")
@@ -135,8 +136,10 @@ public class HullCreator extends JPanel {
         hullListContainer.setLayout(new VerticalFlowLayout());
         hullListModel = new DefaultListModel<>();
 
-        for (Hull sc : c.hulls) {
-            hullListModel.addElement(sc);
+        for (Integer sc : c.hulls) {
+            Hull shipClass = gameState.getObject(sc, Hull.class);
+
+            hullListModel.addElement(shipClass);
         }
         shipHullList = new JList<>(hullListModel);
         shipHullList.setVisibleRowCount(16);
@@ -251,8 +254,8 @@ public class HullCreator extends JPanel {
         int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
         HullMaterial material = (HullMaterial) hullMaterialComboBox.getSelectedItem();
 
-        Hull hull = new Hull(mass, space, material, shipType, thrust, className.getText());
+        Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);
-        c.hulls.add(hull);
+        c.hulls.add(hull.getId());
     }
 }

@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.ships.satellites;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -25,7 +27,7 @@ import ConquerSpace.common.game.universe.UniversePath;
  *
  * @author EhWhoAmI
  */
-public class Satellite implements Launchable, Orbitable{
+public class Satellite extends ConquerSpaceGameObject implements Launchable, Orbitable{
     
     protected int mass;
     protected String name = "";
@@ -33,7 +35,8 @@ public class Satellite implements Launchable, Orbitable{
     protected int owner = -1;
     protected UniversePath orbiting = null;
         
-    public Satellite() {
+    public Satellite(GameState gameState) {
+        super(gameState);
     }
 
     public int getMass() {
@@ -50,10 +53,6 @@ public class Satellite implements Launchable, Orbitable{
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     @Override

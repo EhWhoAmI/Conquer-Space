@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 
 /**
@@ -33,6 +34,10 @@ public class PowerPlantArea extends ConsumerArea {
     
     //In megawatts
     private int production;
+
+    public PowerPlantArea(GameState gameState) {
+        super(gameState);
+    }
     
     @Override
     public String toString() {

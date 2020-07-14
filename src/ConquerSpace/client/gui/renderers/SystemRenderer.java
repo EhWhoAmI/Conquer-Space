@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.renderers;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.actions.ShipMoveAction;
 import ConquerSpace.common.actions.ToOrbitAction;
@@ -25,8 +26,8 @@ import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
-import ConquerSpace.common.game.universe.bodies.StarTypes;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.StarType;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -59,7 +60,7 @@ public class SystemRenderer {
     public static final int PLANET_DIVISOR = 27;
     private Dimension bounds;
 
-    private Universe universe;
+    private Galaxy universe;
     private StarSystem sys;
     public int sizeofAU;
 
@@ -81,10 +82,13 @@ public class SystemRenderer {
     private Dimension windowSize = new Dimension(1000, 1000);
 
     private double distanceRatio = 1;
-    
+
     private double smallestAccuracy = 5;
 
-    public SystemRenderer(StarSystem sys, Universe u, Dimension bounds) {
+    private GameState gameState;
+    
+    public SystemRenderer(GameState gameState, StarSystem sys, Galaxy u, Dimension bounds) {
+        this.gameState = gameState;
         this.bounds = bounds;
         universe = u;
         this.sys = sys;
@@ -101,10 +105,10 @@ public class SystemRenderer {
 
                 long size = 0;
                 int k = 0;
-                
+
                 //Render terrain
-                for (int i = 0; i < sys.bodies.size(); i++) {
-                    Body body = sys.bodies.get(i);
+                for (int i = 0; i < sys.getBodyCount(); i++) {
+                    Body body = sys.getBodyObject(i);
                     if (body instanceof Planet) {
                         Planet planet = (Planet) body;
                         //render terrain
@@ -157,7 +161,7 @@ public class SystemRenderer {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
-        
+
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
         if (skybox != null) {
@@ -188,10 +192,9 @@ public class SystemRenderer {
         );
         g2d.setColor(Color.WHITE);
         g2d.draw(yline);*/
-        
         //Draw orbit lines
-        for (int i = 0; i < sys.bodies.size(); i++) {
-            Body planet = sys.bodies.get(i);
+        for (int i = 0; i < sys.getBodyCount(); i++) {
+            Body planet = sys.getBodyObject(i);
             //Change accuracy based on scale
             double accuracy = scale;
             if (accuracy < 0.1) {
@@ -206,8 +209,8 @@ public class SystemRenderer {
         }
 
         int planetCount = 0;
-        for (int i = 0; i < sys.bodies.size(); i++) {
-            Body body = sys.bodies.get(i);
+        for (int i = 0; i < sys.getBodyCount(); i++) {
+            Body body = sys.getBodyObject(i);
 
             //Check if out of bounds
             int bodyX = (int) ((translateX + (body.getX()) * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
@@ -265,25 +268,25 @@ public class SystemRenderer {
                         star.starSize / 50000, star.starSize / 50000);
                 Color c;
                 switch (star.type) {
-                    case StarTypes.TYPE_A:
+                    case TYPE_A:
                         c = Color.decode("#D5E0FF");
                         break;
-                    case StarTypes.TYPE_B:
+                    case TYPE_B:
                         c = Color.decode("#A2C0FF");
                         break;
-                    case StarTypes.TYPE_O:
+                    case TYPE_O:
                         c = Color.decode("#92B5FF");
                         break;
-                    case StarTypes.TYPE_F:
+                    case TYPE_F:
                         c = Color.decode("#F9F5FF");
                         break;
-                    case StarTypes.TYPE_G:
+                    case TYPE_G:
                         c = Color.decode("#fff4ea");
                         break;
-                    case StarTypes.TYPE_K:
+                    case TYPE_K:
                         c = Color.decode("#FFDAB5");
                         break;
-                    case StarTypes.TYPE_M:
+                    case TYPE_M:
                         c = Color.decode("#FFB56C");
                         break;
                     default:
@@ -305,7 +308,9 @@ public class SystemRenderer {
         g2d.setColor(new Color(0, 127, 255));
         g2d.draw(boundaryCircle);*/
         //draw spaceships
-        for (SpaceShip ship : sys.spaceShips) {
+        for (Integer id : sys.spaceShips) {
+            SpaceShip ship = gameState.getObject(id, SpaceShip.class);
+            
             double x = (ship.getX());
             double y = (ship.getY());
             //Draw dot

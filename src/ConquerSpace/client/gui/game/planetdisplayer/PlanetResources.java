@@ -363,9 +363,9 @@ public class PlanetResources extends javax.swing.JPanel {
             if (comboBoxModel instanceof ResourceValueComboBoxModel) {
                 int resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
                 if (ArrayUtils.contains(pileTo.storedTypes(), resourceId)) {
-                    resourceInputLabel.setText(gameState.goodHashMap.get(resourceId) + " " + pileTo.getResourceAmount(resourceId));
+                    resourceInputLabel.setText(gameState.getGood(resourceId) + " " + pileTo.getResourceAmount(resourceId));
                 } else {
-                    resourceInputLabel.setText("Does not contain " + gameState.goodHashMap.get(resourceId));
+                    resourceInputLabel.setText("Does not contain " + gameState.getGood(resourceId));
                 }
                 //Set the spinner
                 ResourceStockpile pile = stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex());
@@ -414,7 +414,7 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public String getElementAt(int index) {
-            return gameState.goodHashMap.get(list[index]).getName() + " " + pile.getResourceAmount(list[index]);
+            return gameState.getGood(list[index]).getName() + " " + pile.getResourceAmount(list[index]);
         }
 
         @Override
@@ -451,12 +451,12 @@ public class PlanetResources extends javax.swing.JPanel {
             if (selectedStockpile != null) {
                 switch (columnIndex) {
                     case 0:
-                        return gameState.goodHashMap.get(storedValue);
+                        return gameState.getGood(storedValue);
                     case 1:
                         return selectedStockpile.getResourceAmount(storedValue)
                                 + ", or "
                                 //Get mass in kg...
-                                + (selectedStockpile.getResourceAmount(storedValue) * gameState.goodHashMap.get(storedValue).getMass())
+                                + (selectedStockpile.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass())
                                 + " kg";
                     case 2:
                         if (selectedStockpile instanceof City) {
@@ -576,10 +576,10 @@ public class PlanetResources extends javax.swing.JPanel {
 
             switch (columnIndex) {
                 case 0:
-                    return gameState.goodHashMap.get(planetResourceId);
+                    return gameState.getGood(planetResourceId);
                 case 1:
                     return planetResource.get(planetResourceId) + ", or " + 
-                            (planetResource.get(planetResourceId) * gameState.goodHashMap.get(planetResourceId).getMass()) + " kg";
+                            (planetResource.get(planetResourceId) * gameState.getGood(planetResourceId).getMass()) + " kg";
                 case 2:
                     //Return the stuff
                     HashMap<String, Double> ledger = planetLedger.get(planetResourceId);
@@ -699,7 +699,8 @@ public class PlanetResources extends javax.swing.JPanel {
             stockpileRow = storageResources.getSelectedRow();
             stockpileColunm = storageResources.getSelectedColumn();
         }
-        for (City city : p.cities) {
+        for (Integer cityId : p.cities) {
+            City city = gameState.getObject(cityId, City.class);
             Integer[] goods = city.storedTypes();
             //Sort through stuff
             for (Integer g : goods) {

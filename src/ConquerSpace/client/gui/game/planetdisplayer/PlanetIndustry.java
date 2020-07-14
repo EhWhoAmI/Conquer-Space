@@ -59,9 +59,12 @@ public class PlanetIndustry extends JPanel {
     private CardLayout industryInfoCardLayout;
 
     private Planet p;
+    
+    private GameState gameState;
 
     public PlanetIndustry(GameState gameState, Planet p, Civilization c) {
         this.p = p;
+        this.gameState = gameState;
         setLayout(new VerticalFlowLayout());
         add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.industry.title")));
         tabs = new JTabbedPane();
@@ -74,9 +77,10 @@ public class PlanetIndustry extends JPanel {
         areaDefaultListModel = new DefaultListModel<>();
 
         for (int i = 0; i < p.cities.size(); i++) {
-            City city = p.cities.get(i);
-            for (Area a : city.areas) {
-                areaDefaultListModel.addElement(a);
+            City city = gameState.getObject(p.cities.get(i), City.class);
+            for (Integer areaId : city.areas) {
+                Area area = gameState.getObject(areaId, Area.class);
+                areaDefaultListModel.addElement(area);
             }
         }
 
@@ -137,9 +141,10 @@ public class PlanetIndustry extends JPanel {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
         for (int i = 0; i < p.cities.size(); i++) {
-            City city = p.cities.get(i);
-            for (Area a : city.areas) {
-                areaDefaultListModel.addElement(a);
+            City city = gameState.getObject(p.cities.get(i), City.class);
+            for (Integer areaId : city.areas) {
+                Area area = gameState.getObject(areaId, Area.class);
+                areaDefaultListModel.addElement(area);
             }
         }
         areaList.setSelectedIndex(selectedArea);

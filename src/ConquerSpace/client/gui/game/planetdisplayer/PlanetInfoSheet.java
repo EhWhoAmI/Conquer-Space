@@ -24,7 +24,7 @@ import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.util.ResourceLoader;
 import java.awt.BorderLayout;
@@ -57,8 +57,11 @@ public class PlanetInfoSheet extends JPanel {
     private Planet planet;
 
     private final int spacePortIndex = 4;
+    
+    private GameState gameState;
 
     public PlanetInfoSheet(GameState gameState, Planet p, Civilization c) {
+        this.gameState = gameState;
         this.civilization = c;
         this.planet = p;
 
@@ -71,12 +74,12 @@ public class PlanetInfoSheet extends JPanel {
         overview = new PlanetOverview(gameState, p, c, planetImage);
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetCities(gameState, p, c, this);
-        spacePort = new SpacePortMenuSheet(p, c);
+        spacePort = new SpacePortMenuSheet(gameState, p.getId(), c.getId());
         planetGeology = new PlanetGeology(gameState, p);
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(gameState, p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
-        planetMap = new PlanetMap(p, c, gameState.universe, this, planetImage);
+        planetMap = new PlanetMap(gameState, p, c, this, planetImage);
         planetEconomy = new PlanetEconomy();
         planetResources = new PlanetResources(gameState, p, c, this);
 
@@ -132,9 +135,12 @@ public class PlanetInfoSheet extends JPanel {
 
         //Check if planet contains space port
         cityloop:
-        for (City c : planet.cities) {
-            for (Area a : c.areas) {
-                if (a instanceof SpacePortArea) {
+        for (Integer cityId : planet.cities) {
+            City city = gameState.getObject(cityId, City.class);
+            for (Integer areaId : city.areas) {            
+                Area areaObject = gameState.getObject(areaId, Area.class);
+
+                if (areaObject instanceof SpacePortArea) {
                     tpane.setEnabledAt(spacePortIndex, true);
                     break cityloop;
                 }

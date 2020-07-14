@@ -19,16 +19,16 @@ package ConquerSpace.common;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 
 /**
  *
  * @author EhWhoAmI
  */
 public class GameIndexer {
-    Universe u;
+    Galaxy u;
 
-    public GameIndexer(Universe u) {
+    public GameIndexer(Galaxy u) {
         this.u = u;
     }
     
@@ -38,9 +38,9 @@ public class GameIndexer {
     
     public void compileResourceStorages(Civilization c) {
         c.resourceStorages.clear();
-        for(Planet p : c.habitatedPlanets) {
-            p.cities.stream().forEach(cty -> {c.resourceStorages.add(cty);});
-        }
+        //for(Planet p : c.habitatedPlanets) {
+            //p.cities.stream().forEach(cty -> {c.resourceStorages.add(cty);});
+        //}
     }
     
     /**

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import javax.swing.JInternalFrame;
 
 /**
@@ -28,9 +28,9 @@ public class UniverseBreakdown extends JInternalFrame {
 
     private static UniverseBreakdown instance;
 
-    private Universe universe;
+    private Galaxy universe;
     //Hide constructor
-    private UniverseBreakdown(Universe u) {
+    private UniverseBreakdown(Galaxy u) {
         
     }
 
@@ -40,7 +40,7 @@ public class UniverseBreakdown extends JInternalFrame {
      * @param u Universe
      * @return Instance of universe breakdown class.
      */
-    private static UniverseBreakdown getInstance(Universe u) {
+    private static UniverseBreakdown getInstance(Galaxy u) {
         if (instance == null) {
             instance = new UniverseBreakdown(u);
         }

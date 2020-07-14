@@ -17,13 +17,15 @@
  */
 package ConquerSpace.common.game.ships.satellites;
 
+import ConquerSpace.common.GameState;
+
 /**
  * A satellite that poses no purpose
  * @author EhWhoAmI
  */
 public class NoneSatellite extends Satellite{
     
-    public NoneSatellite() {
-        super();
+    public NoneSatellite(GameState gameState) {
+        super(gameState);
     }
 }

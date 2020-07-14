@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
@@ -24,6 +26,10 @@ package ConquerSpace.common.game.city.area;
 public class ResidentialArea extends ConsumerArea {
 
     int maxPopulation;
+
+    public ResidentialArea(GameState gameState) {
+        super(gameState);
+    }
 
     public AreaClassification getAreaType() {
         return AreaClassification.Residential;

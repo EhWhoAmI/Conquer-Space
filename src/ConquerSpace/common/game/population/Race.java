@@ -17,16 +17,17 @@
  */
 package ConquerSpace.common.game.population;
 
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.life.Species;
+
 /**
- * Sentient Species or race
+ * Sentient Species that can become a population.
  *
  * @author EhWhoAmI
  */
-public class Race {
+public class Race extends Species{
     public Integer food;
-    private static int idCounter = 0;
-
-    private int id;
+    
     //Usage of food per month
     private int foodPerMonth;
     //Base increase in population per year. Will be incremented per every couple of ticks
@@ -37,9 +38,10 @@ public class Race {
     //The amount of support a pop unit needs (as in pop)
     private float upkeep = 0;
 
-    public Race(int foodPerMonth, float breedingRate, String name) {
+    public Race(GameState state, int foodPerMonth, float breedingRate, String name) {
+        super(state, name);
+        
         //Set id
-        id = idCounter++;
         this.foodPerMonth = foodPerMonth;
         this.breedingRate = breedingRate;
         this.name = name;
@@ -75,17 +77,5 @@ public class Race {
 
     public void setUpkeep(float upkeep) {
         this.upkeep = upkeep;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Race) {
-            return (((Race) obj).id == this.id);
-        }
-        return false;
     }
 }

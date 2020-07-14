@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.common.game.ships.satellites.Satellite;
@@ -49,7 +50,7 @@ public class LaunchSatelliteMenu extends JPanel {
     private JButton buildAndLaunchButton;
 
     @SuppressWarnings("unchecked")
-    public LaunchSatelliteMenu(SpacePortLaunchPad pad, Civilization c, Planet p) {
+    public LaunchSatelliteMenu(GameState gameState, SpacePortLaunchPad pad, Civilization c, Planet p) {
         //The launch pad type and stuff as title
         //title = new JLabel("Launch Satellite");
         setLayout(new GridLayout(1, 2));
@@ -114,7 +115,7 @@ public class LaunchSatelliteMenu extends JPanel {
                     //Process satellite
                     if (id == s.getId()) {
                         selectedObject = s;
-                        Satellite sat = Satellites.parseSatellite(selectedObject, c.multipliers, c.values);
+                        Satellite sat = Satellites.parseSatellite(gameState, selectedObject, c.multipliers, c.values);
                         //Check if it orbits a planet
                         //if(sat instanceof SpaceTelescope) {
                         //((SpaceTelescope) sat).setPosition(new Point(sys.getX(), sys.getY()));

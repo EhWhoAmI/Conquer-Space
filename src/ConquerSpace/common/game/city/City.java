@@ -17,18 +17,21 @@
  */
 package ConquerSpace.common.game.city;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.logistics.SupplyChain;
 import ConquerSpace.common.game.organizations.Administrable;
-import ConquerSpace.common.game.people.Person;
-import ConquerSpace.common.game.people.PersonEnterable;
+import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.game.universe.bodies.Body;
+import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,14 +41,9 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
-public class City implements PersonEnterable, ResourceStockpile, Administrable {
-    private static int idCounter = 0;
-    
-    @Serialize(key = "id")
-    private final int id;
-
+public class City extends ConquerSpaceGameObject implements PersonEnterable, ResourceStockpile, Administrable {
     @Serialize(key = "population")
-    public Population population;
+    public Integer population;
     
     public static final String CITY_DEFAULT = "emp";
     
@@ -55,9 +53,9 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     private String name;
     
     @Serialize(key = "areas")
-    public ArrayList<Area> areas;
+    public ArrayList<Integer> areas;
     
-    public ArrayList<Workable> workableFor;
+    public ArrayList<Integer> workableFor;
     
     @Serialize(key = "people")
     public ArrayList<Person> peopleAtCity;
@@ -75,13 +73,13 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     @Serialize(key = "max-storage")
     private int maxStorage;
     
-    public ArrayList<SupplyChain> supplyChains;
+    public ArrayList<Integer> supplyChains;
     
     private int ledgerClearDelta = 0;
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     
     @Serialize(key = "location")
-    private UniversePath location;
+    private Integer location;
 
     @Serialize(key = "tags")
     public HashMap<String, Integer> tags;
@@ -101,7 +99,8 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
     @Serialize(key = "tiles")
     private int size;
 
-    public City(UniversePath location) {
+    public City(GameState gameState, Integer location) {
+        super(gameState);
         workableFor = new ArrayList<>();
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
@@ -109,13 +108,15 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
-        population = new Population();
+        
+        Population population = new Population(gameState);
+        this.population = population.getId();
+        
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityType = CityType.Generic;
         size = 0;
-        this.id = idCounter++;
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
@@ -142,7 +143,7 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
 
     @Override
     public UniversePath getUniversePath() {
-        return location;
+        return gameState.getObject(location, Planet.class).getUniversePath();
     }
 
     public Person getGovernor() {
@@ -173,7 +174,7 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
 
     @Override
     public ArrayList<Person> getPeopleArrayList() {
-        return peopleAtCity;
+        return new ArrayList();
     }
 
     public void incrementPopulation(StarDate date, long delta) {
@@ -252,10 +253,6 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
         return true;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public int getSize() {
         return size;
     }
@@ -268,7 +265,7 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
         size++;
     }
 
-    public void addArea(Area a) {
+    public void addArea(Integer a) {
         areas.add(a);
     }
 
@@ -278,14 +275,6 @@ public class City implements PersonEnterable, ResourceStockpile, Administrable {
 
     public void setCityType(CityType cityType) {
         this.cityType = cityType;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof City) {
-            return (((City) obj).id == this.id);
-        }
-        return false;
     }
 
     public void clearLedger(int delta) {

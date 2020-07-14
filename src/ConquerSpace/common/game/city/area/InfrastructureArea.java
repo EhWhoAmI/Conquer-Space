@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 
 /**
@@ -28,6 +29,10 @@ public class InfrastructureArea extends ConsumerArea {
     //The jobs provided
     private int jobsProvided;
     private int effectiveness;
+
+    public InfrastructureArea(GameState gameState) {
+        super(gameState);
+    }
 
     public int getEffectiveness() {
         return effectiveness;

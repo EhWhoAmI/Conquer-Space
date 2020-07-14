@@ -42,10 +42,14 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
 
     DefaultListModel<ProductionProcess> productionProcessListModel;
     JList<ProductionProcess> list;
+    
+    private GameState gameState;
 
     @SuppressWarnings("unchecked")
     public IndustrialFactoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(p, c);
+        this.gameState = gameState;
+        
         setLayout(new GridBagLayout());
         productionProcessListModel = new DefaultListModel<>();
         for (int i = 0; i < civ.productionProcesses.size(); i++) {
@@ -64,7 +68,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             for (Map.Entry<Integer, Double> entry : ((ProductionProcess) list.getSelectedValue()).input.entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
-                inputString = inputString + gameState.goodHashMap.get(key).getName();
+                inputString = inputString + gameState.getGood(key).getName();
                 inputString = inputString + " amount " + val;
                 inputString = inputString + ", ";
             }
@@ -74,7 +78,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             for (Map.Entry<Integer, Double> entry : ((ProductionProcess) list.getSelectedValue()).output.entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
-                outputString = outputString + gameState.goodHashMap.get(key).getName();
+                outputString = outputString + gameState.getGood(key).getName();
                 outputString = outputString + " amount " + val;
                 outputString = outputString + ", ";
             }
@@ -105,7 +109,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
     @Override
     public Area getAreaToConstruct() {
         if (list.getSelectedIndex() > -1) {
-            return new ManufacturerArea(list.getSelectedValue(), 1);
+            return new ManufacturerArea(gameState, list.getSelectedValue(), 1);
         }
         return null;
     }

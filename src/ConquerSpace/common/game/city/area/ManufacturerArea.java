@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
 
@@ -30,7 +31,8 @@ public class ManufacturerArea extends Area {
     //How much of that production process per round...
     float productivity;
 
-    public ManufacturerArea(ProductionProcess process, float productivity) {
+    public ManufacturerArea(GameState gameState, ProductionProcess process, float productivity) {
+        super(gameState);
         this.process = process;
         this.productivity = productivity;
     }

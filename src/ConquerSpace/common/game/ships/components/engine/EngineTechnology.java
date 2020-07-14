@@ -17,20 +17,25 @@
  */
 package ConquerSpace.common.game.ships.components.engine;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class EngineTechnology {
+public class EngineTechnology extends ConquerSpaceGameObject{
+    
     private String name;
-    private int id;
+
     /**
     * Efficiency: m/s per kg of propellant
     */
     private float efficiency;
     private float thrust_multiplier;
 
-    public EngineTechnology(String name, float efficiency, float thrust_multiplier) {
+    public EngineTechnology(GameState gameState, String name, float efficiency, float thrust_multiplier) {
+        super(gameState);
         this.name = name;
         this.efficiency = efficiency;
         this.thrust_multiplier = thrust_multiplier;
@@ -58,14 +63,6 @@ public class EngineTechnology {
 
     public void setThrust_multiplier(float thrust_multiplier) {
         this.thrust_multiplier = thrust_multiplier;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     @Override

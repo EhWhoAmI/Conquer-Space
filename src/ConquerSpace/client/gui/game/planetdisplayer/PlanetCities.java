@@ -23,10 +23,12 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
+import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -97,7 +99,7 @@ public class PlanetCities extends JPanel {
     private DefaultListModel<Area> areaListModel;
     private JList<Area> areaList;
 
-    private Universe universe;
+    private Galaxy universe;
     private Civilization owner;
 
     private PlanetInfoSheet parent;
@@ -152,7 +154,9 @@ public class PlanetCities extends JPanel {
         cityListPanel.setLayout(new BorderLayout());
 
         cityListModel = new DefaultListModel<>();
-        for (City city : p.cities) {
+        for (Integer cityId : p.cities) {
+            City city = gameState.getObject(cityId, City.class);
+
             cityListModel.addElement(city);
         }
         cityList = new JList<>(cityListModel);
@@ -163,7 +167,8 @@ public class PlanetCities extends JPanel {
                 citySelectedTab = cityInfoTabs.getSelectedIndex();
             }
             if (areaListModel != null && cityList.getSelectedValue() != null) {
-                for (Area area : cityList.getSelectedValue().areas) {
+                for (Integer areaId : cityList.getSelectedValue().areas) {
+                    Area area = gameState.getObject(areaId, Area.class);
                     areaListModel.addElement(area);
                 }
 
@@ -218,9 +223,8 @@ public class PlanetCities extends JPanel {
         cityData.add(cityName);
 
         //Check if capital city
-        for (int i = 0; i < universe.getCivilizationCount(); i++) {
-            int civid = gameState.universe.getCivilization(i);
-            Civilization civilization = ((Civilization) universe.organizations.get(civid));
+        for (int i = 0; i < gameState.getCivilizationCount(); i++) {
+            Civilization civilization = gameState.getCivilizationObject(i);
             if (civilization.getCapitalCity().equals(cityList.getSelectedValue())) {
                 JLabel isCapital = new JLabel(
                         LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName()));
@@ -231,9 +235,9 @@ public class PlanetCities extends JPanel {
 
         //Population
         JLabel popCount = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(selected.population.getPopulationSize())));
+                LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(gameState.getObject(selected.population, Population.class).getPopulationSize())));
         cityData.add(popCount);
-        
+
         JLabel priindustry = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selected.getCityType()));
         cityData.add(priindustry);
@@ -289,7 +293,8 @@ public class PlanetCities extends JPanel {
 
         //Areas
         areaListModel = new DefaultListModel<>();
-        for (Area area : selected.areas) {
+        for (Integer areaId : selected.areas) {
+            Area area = gameState.getObject(selected.population, Area.class);
             areaListModel.addElement(area);
         }
 
@@ -359,7 +364,8 @@ public class PlanetCities extends JPanel {
             populationCount.clear();
             population = 0;
             //Get population job
-            for (Area area : currentlySelectedCity.areas) {
+            for (Integer areaId : currentlySelectedCity.areas) {
+                Area area = gameState.getObject(areaId, Area.class);
                 if (area instanceof Workable) {
                     if (!populationCount.containsKey(area.getJobClassification())) {
                         populationCount.put(area.getJobClassification(), area.getMaxJobsProvided());
@@ -436,13 +442,13 @@ public class PlanetCities extends JPanel {
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             int demandId = 0;
-            if(currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex] instanceof Integer) {
+            if (currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex] instanceof Integer) {
                 demandId = (Integer) currentlySelectedCity.resourceDemands.keySet().toArray()[rowIndex];
             }
             if (currentlySelectedCity != null) {
                 switch (columnIndex) {
                     case 0:
-                        return gameState.goodHashMap.get(demandId).getName();
+                        return gameState.getGood(demandId).getName();
                     case 1:
                         return (currentlySelectedCity.resourceDemands.values().toArray()[rowIndex]);
                 }

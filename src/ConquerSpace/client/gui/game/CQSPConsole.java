@@ -20,9 +20,9 @@ package ConquerSpace.client.gui.game;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.science.tech.Technologies;
-import ConquerSpace.common.game.science.tech.Technology;
-import ConquerSpace.common.game.universe.bodies.Universe;
+import ConquerSpace.common.game.science.Technologies;
+import ConquerSpace.common.game.science.Technology;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,7 +45,7 @@ public class CQSPConsole extends JInternalFrame {
     JTextField text;
 
     @SuppressWarnings("unchecked")
-    public CQSPConsole(Universe u, Civilization c, GameState state) {
+    public CQSPConsole(GameState state, Civilization c) {
         setLayout(new VerticalFlowLayout());
         model = new DefaultListModel<>();
         list = new JList<>(model);

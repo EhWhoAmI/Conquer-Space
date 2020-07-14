@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 
@@ -30,7 +31,8 @@ public class ObservatoryArea extends Area implements VisionPoint {
     private int range;
     private UniversePath position;
 
-    public ObservatoryArea(int civilization, int range, UniversePath position) {
+    public ObservatoryArea(GameState gameState, int civilization, int range, UniversePath position) {
+        super(gameState);
         this.civilization = civilization;
         this.range = range;
         this.position = position;

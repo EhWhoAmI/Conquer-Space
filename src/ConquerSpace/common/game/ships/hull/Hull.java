@@ -17,11 +17,14 @@
  */
 package ConquerSpace.common.game.ships.hull;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class Hull {
+public class Hull extends ConquerSpaceGameObject{
     //KGS
     //Also determines hull hp and strength
     private long mass;
@@ -37,7 +40,8 @@ public class Hull {
     
     private String name;
 
-    public Hull(long mass, long space, HullMaterial material, int shipType, long thrust, String name) {
+    public Hull(GameState gameState, long mass, long space, HullMaterial material, int shipType, long thrust, String name) {
+        super(gameState);
         this.mass = mass;
         this.space = space;
         this.material = material;
@@ -121,7 +125,7 @@ public class Hull {
 
     @Override
     public Object clone() {
-        return new Hull(mass, space, material, shipType, thrust, name);
+        return new Hull(gameState, mass, space, material, shipType, thrust, name);
     }
     
     

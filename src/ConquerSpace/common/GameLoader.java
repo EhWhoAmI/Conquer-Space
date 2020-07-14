@@ -1,4 +1,4 @@
-c/*
+/*
  * Conquer Space - Conquer Space!
  * Copyright (C) 2019 EhWhoAmI
  * 
@@ -18,9 +18,9 @@ c/*
 package ConquerSpace.common;
 
 import static ConquerSpace.common.AssetReader.*;
-import ConquerSpace.common.game.people.PersonalityTrait;
+import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.science.Fields;
-import ConquerSpace.common.game.science.tech.Technologies;
+import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.resources.Element;
@@ -43,26 +43,26 @@ public class GameLoader {
     /**
      * Load all resources.
      */
-    public static void load(GameState state) {
+    public static void load(GameState gameState) {
         long start = System.currentTimeMillis();
-        state.shipTypes = new HashMap<>();
-        state.shipTypeClasses = new HashMap<>();
+        gameState.shipTypes = new HashMap<>();
+        gameState.shipTypeClasses = new HashMap<>();
 
         //Init tech and fields
-        state.fieldNodeRoot = Fields.readFields();
-        state.techonologies = Technologies.readTech();
+        gameState.fieldNodeRoot = Fields.readFields();
+        gameState.techonologies = Technologies.readTech();
 
         //All things to load go here!!!
-        state.launchSystems = readHjsonFromDirInArray("dirs.launch",
-                LaunchSystem.class, state, AssetReader::processLaunchSystem);
+        gameState.launchSystems = readHjsonFromDirInArray("dirs.launch",
+                LaunchSystem.class, gameState, AssetReader::processLaunchSystem);
 
-        readShipTypes(state);
+        readShipTypes(gameState);
 
-        state.personalityTraits = readHjsonFromDirInArray("dirs.traits",
+        gameState.personalityTraits = readHjsonFromDirInArray("dirs.traits",
                 PersonalityTrait.class, AssetReader::processPersonalityTraits);
 
-        state.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",
-                EngineTechnology.class, AssetReader::processEngineTech);
+        gameState.engineTechnologys = readHjsonFromDirInArray("dirs.ship.engine.tech",
+                EngineTechnology.class, gameState, AssetReader::processEngineTech);
 
         //Read elements
         ArrayList<Element> elements = readHjsonFromDirInArray("dirs.elements",
@@ -70,27 +70,27 @@ public class GameLoader {
 
         //Have to insert to places...
         for (Element e : elements) {
-            state.addGood(e);
+            gameState.addGood(e);
         }
 
-        processGoods(state);
+        processGoods(gameState);
 
         //Everything is compiled into the resource references, no need for extra loading
         //Resource distributions
         ArrayList<ResourceDistribution> res = readHjsonFromDirInArray("dirs.distributions", ResourceDistribution.class, AssetReader::processDistributions);
 
-        state.oreDistributions = new HashMap<>();
+        gameState.oreDistributions = new HashMap<>();
 
         //Sort through the list
         for (ResourceDistribution dist : res) {
-            Integer identifier = state.goodIdentifiers.get(dist.resourceName);
-            state.oreDistributions.put(identifier, dist);
+            Integer identifier = gameState.getGoodId(dist.resourceName);
+            gameState.oreDistributions.put(identifier, dist);
         }
-        state.prodProcesses = new HashMap<>();
+        gameState.prodProcesses = new HashMap<>();
         
-        ArrayList<ProductionProcess> processes = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, state, AssetReader::processProcess);
+        ArrayList<ProductionProcess> processes = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, gameState, AssetReader::processProcess);
         for (ProductionProcess process : processes) {
-            state.prodProcesses.put(process.identifier, process);
+            gameState.prodProcesses.put(process.identifier, process);
         }
 
         //Events

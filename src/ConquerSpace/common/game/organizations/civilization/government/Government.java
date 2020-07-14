@@ -17,7 +17,7 @@
  */
 package ConquerSpace.common.game.organizations.civilization.government;
 
-import ConquerSpace.common.game.people.Person;
+import ConquerSpace.common.game.characters.Person;
 import java.util.HashMap;
 
 /**

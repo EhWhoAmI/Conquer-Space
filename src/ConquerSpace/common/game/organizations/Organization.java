@@ -17,10 +17,12 @@
  */
 package ConquerSpace.common.game.organizations;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.Action;
 import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.behavior.EmptyBehavior;
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.save.Serialize;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,19 +30,20 @@ import java.util.Arrays;
  *
  * @author EhWhoAmI
  */
-public class Organization {
-    
+public class Organization extends ConquerSpaceGameObject {
+
     @Serialize(key = "children")
     private ArrayList<Integer> children;
     public ArrayList<Action> actionList;
     public AdministrativeRegion region;
-    private int id = 0;
-    
+
     @Serialize(key = "name")
     protected String name;
     protected Behavior behavior;
 
-    public Organization(String name) {
+    public Organization(GameState gameState, String name) {
+        super(gameState);
+        
         this.name = name;
         children = new ArrayList<>();
         actionList = new ArrayList<>();
@@ -52,18 +55,14 @@ public class Organization {
         return name;
     }
 
-    public int getId() {
-        return id;
-    }
-    
     public Integer[] getChildren() {
         return Arrays.copyOf(children.toArray(), children.size(), Integer[].class);
     }
-    
+
     public int getChildrenCount() {
-        return children.size(); 
+        return children.size();
     }
-    
+
     public void addChild(Integer org) {
         children.add(org);
     }
@@ -74,9 +73,5 @@ public class Organization {
 
     public Behavior getBehavior() {
         return behavior;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

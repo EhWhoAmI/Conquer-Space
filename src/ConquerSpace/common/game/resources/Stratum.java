@@ -17,15 +17,17 @@
  */
 package ConquerSpace.common.game.resources;
 
-import ConquerSpace.common.game.SaveStuff;
-import ConquerSpace.common.game.Serialize;
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SaveStuff;
+import ConquerSpace.common.save.Serialize;
 import java.util.HashMap;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Stratum {
+public class Stratum extends ConquerSpaceGameObject{
     @Serialize(key = "depth")
     //Depth in kilometers
     private int depth = 0;
@@ -41,7 +43,8 @@ public class Stratum {
     @Serialize(key = "minerals", special = SaveStuff.Good)
     public HashMap<Integer, Integer> minerals;
 
-    public Stratum() {
+    public Stratum(GameState gameState) {
+        super(gameState);
         minerals = new HashMap<>();
     }
 

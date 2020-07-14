@@ -22,7 +22,7 @@ package ConquerSpace.common.game.universe.bodies;
  * @author EhWhoAmI
  */
 public class ControlTypes {
-    //All are negative because positive will be for civilizations
+    //All are negative because positive will be for orgs
     public static final int NONE_CONTROLLED = -1;
     public static final int DISPUTED = -2;
 }

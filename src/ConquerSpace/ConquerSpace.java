@@ -21,10 +21,10 @@ import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameLoader;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
-import ConquerSpace.common.game.SaveGame;
-import ConquerSpace.common.game.universe.generators.CivilizationConfig;
-import ConquerSpace.common.game.universe.generators.UniverseGenerationConfig;
-import ConquerSpace.common.game.universe.generators.DefaultUniverseGenerator;
+import ConquerSpace.common.save.SaveGame;
+import ConquerSpace.server.generators.CivilizationConfig;
+import ConquerSpace.server.generators.UniverseGenerationConfig;
+import ConquerSpace.server.generators.DefaultUniverseGenerator;
 import ConquerSpace.client.gui.music.MusicPlayer;
 import ConquerSpace.client.gui.start.Loading;
 import ConquerSpace.client.gui.start.MainMenu;
@@ -74,7 +74,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author EhWhoAmI
  */
-public class ConquerSpace {
+public final class ConquerSpace {
 
     /**
      * Logger for the class.
@@ -174,7 +174,8 @@ public class ConquerSpace {
                 Loading load = new Loading();
                 loadUniverse();
                 load.setVisible(false);
-                SaveGame game = new SaveGame(SaveGame.getSaveFolder());
+                //Save test...
+                /*SaveGame game = new SaveGame(SaveGame.getSaveFolder());
                 long before = System.currentTimeMillis();
                 try {
                     game.save(Globals.gameState);
@@ -185,9 +186,9 @@ public class ConquerSpace {
                 } catch (IllegalAccessException ex) {
                     ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
                 }
-                LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
-                //runGame();
-                System.exit(0);
+                LOGGER.info("Time to save " + (System.currentTimeMillis() - before));*/
+                runGame();
+                //System.exit(0);
             } catch (Exception e) {
                 //Catch exceptions...
                 ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);

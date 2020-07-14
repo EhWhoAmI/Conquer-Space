@@ -18,8 +18,8 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.science.tech.Technologies;
-import ConquerSpace.common.game.science.tech.Technology;
+import ConquerSpace.common.game.science.Technologies;
+import ConquerSpace.common.game.science.Technology;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import javax.swing.DefaultListModel;
