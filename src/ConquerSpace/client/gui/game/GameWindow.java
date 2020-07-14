@@ -121,7 +121,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     public GameWindow(GameState gameState, PlayerController controller, Civilization c) {
         this.controller = controller;
         this.civ = c;
-        this.universe = gameState.universe;
+        this.universe = gameState.getUniverse();
         this.date = gameState.date;
         this.gameState = gameState;
 
@@ -513,7 +513,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         private double scale = 1.0f;
 
         public CQSPDesktop() {
-            universe = gameState.universe;
+            universe = gameState.getUniverse();
             universeRenderer = new UniverseRenderer(gameState, new Dimension(1500, 1500), civ);
             addMouseListener(this);
             addMouseMotionListener(this);

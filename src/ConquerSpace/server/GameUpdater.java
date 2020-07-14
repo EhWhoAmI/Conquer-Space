@@ -106,10 +106,10 @@ public class GameUpdater extends GameTicker {
     private PeopleProcessor peopleProcessor;
 
     public GameUpdater(GameState gameState) {
-        universe = gameState.universe;
+        universe = gameState.getUniverse();
         starDate = gameState.date;
         this.gameState = gameState;
-        indexer = new GameIndexer(gameState.universe);
+        indexer = new GameIndexer(gameState.getUniverse());
         peopleProcessor = new PeopleProcessor(gameState);
         this.GameRefreshRate = gameState.GameRefreshRate;
         ledgerClearTime = GameRefreshRate * 10;

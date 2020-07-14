@@ -84,7 +84,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         gameState.setSeed(seed);
         random = gameState.getRandom();
         
-        Galaxy universe = gameState.universe;
+        Galaxy universe = gameState.getUniverse();
         
         //Create random 
         Random rand = new Random(seed);

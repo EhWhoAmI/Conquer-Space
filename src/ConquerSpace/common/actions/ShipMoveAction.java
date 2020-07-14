@@ -75,7 +75,7 @@ public class ShipMoveAction extends ShipAction {
     @Override
     public boolean checkIfDone(GameState gameState) {
         //if out of star system
-        StarSystem sys = gameState.getObject(gameState.universe.getStarSystem(ship.getLocation().getSystemID()), StarSystem.class);
+        StarSystem sys = gameState.getObject(gameState.getUniverse().getStarSystem(ship.getLocation().getSystemID()), StarSystem.class);
         if (Math.sqrt(Math.pow(ship.getX(), 2) + Math.pow(ship.getY(), 2)) >= (sys.getBodyObject(sys.getBodyCount()- 1).orbit.toPolarCoordinate().getDistance() + 10)) {
             return true;
         }
@@ -90,7 +90,7 @@ public class ShipMoveAction extends ShipAction {
     public void initAction(GameState gameState) {
         if (ship.isOrbiting()) {
             //Exit orbit
-            Body body = gameState.getObject(gameState.universe.getSpaceObject(ship.getOrbiting()), Body.class);
+            Body body = gameState.getObject(gameState.getUniverse().getSpaceObject(ship.getOrbiting()), Body.class);
             if (body instanceof Planet) {
                 Planet p = (Planet) body;
                 //Remove from orbit
@@ -101,7 +101,7 @@ public class ShipMoveAction extends ShipAction {
                 ship.setIsOrbiting(false);
 
                 //Add
-                gameState.universe.getStarSystemObject(p.getParentStarSystem()).addSpaceShip(ship.getId());
+                gameState.getUniverse().getStarSystemObject(p.getParentStarSystem()).addSpaceShip(ship.getId());
             }
         }
         ship.setGoingToX(position.getX());

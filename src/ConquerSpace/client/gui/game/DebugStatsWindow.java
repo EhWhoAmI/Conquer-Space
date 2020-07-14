@@ -80,7 +80,7 @@ public class DebugStatsWindow extends JInternalFrame {
      * Creates the window, and adds all things.
      */
     private DebugStatsWindow(GameState state) {
-        universe = state.universe;
+        universe = state.getUniverse();
 
         setTitle("Stats for Nerds");
         setLayout(new VerticalFlowLayout(5, 4));

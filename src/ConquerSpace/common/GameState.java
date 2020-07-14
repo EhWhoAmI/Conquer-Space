@@ -46,15 +46,20 @@ import java.util.Random;
  */
 public final class GameState {
 
+    @Serialize(key = "seed")
     private long seed;
 
     //May need to be thread safe in the future
+    @Serialize(key = "objects")
     protected final HashMap<Integer, ConquerSpaceGameObject> gameObjects;
 
-    public Galaxy universe;
+    private final Galaxy universe;
+
+    @Serialize(key = "universe")
+    private final Integer universeId;
 
     @Serialize(key = "date")
-    public StarDate date;
+    public final StarDate date;
 
     //For evals
     //Rate the game refreshes buildings and stuff like that
@@ -110,10 +115,8 @@ public final class GameState {
         random = new Random(seed);
 
         universe = new Galaxy(this);
-    }
-
-    public Galaxy getUniverse() {
-        return universe;
+        
+        universeId = universe.getId();
     }
 
     public void addGood(Good good) {
@@ -183,31 +186,35 @@ public final class GameState {
     public void addOrganization(Organization org) {
         organizations.add(org.getId());
     }
-    
+
     public int getOrganizationCount() {
         return organizations.size();
     }
-    
+
     public Integer getOrganization(int id) {
         return organizations.get(id);
     }
-    
+
     public Organization getOrganizationObject(int id) {
         return getObject(getOrganization(id), Organization.class);
+    }
+
+    public Organization getOrganizationObjectByIndex(int id) {
+        return getObject(id, Organization.class);
     }
 
     public void addCivilization(Civilization civ) {
         civilizations.add(civ.getId());
     }
-    
+
     public int getCivilizationCount() {
         return civilizations.size();
     }
-    
+
     public Integer getCivilization(int id) {
         return civilizations.get(id);
     }
-    
+
     public Civilization getCivilizationObject(int id) {
         return getObject(getCivilization(id), Civilization.class);
     }
@@ -224,13 +231,20 @@ public final class GameState {
     public long getSeed() {
         return seed;
     }
-    
+
     public void dumpEverything() {
         for (Map.Entry<Integer, ConquerSpaceGameObject> entry : gameObjects.entrySet()) {
             Object key = entry.getKey();
             Object val = entry.getValue();
             System.out.println(key + " " + val);
         }
-        
+    }
+    
+    public Galaxy getUniverse() {
+        return universe;
+    }
+
+    public Integer getUniverseId() {
+        return universeId;
     }
 }

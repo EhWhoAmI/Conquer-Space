@@ -95,7 +95,7 @@ public class PeopleProcessor {
     }
 
     public PeopleProcessor(GameState gameState) {
-        this.universe = gameState.universe;
+        this.universe = gameState.getUniverse();
         this.date = gameState.date;
         this.gameState = gameState;
         resetDate();

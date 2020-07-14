@@ -78,7 +78,7 @@ public class ShrinkedPlanetSheet extends JPanel {
 
     public ShrinkedPlanetSheet(GameState gameState, Planet p, Civilization c) {
         this.gameState = gameState;
-        this.u = gameState.universe;
+        this.u = gameState.getUniverse();
         this.p = p;
         infoPane = new JTabbedPane();
 

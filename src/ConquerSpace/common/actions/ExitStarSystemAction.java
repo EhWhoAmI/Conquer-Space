@@ -42,7 +42,7 @@ public class ExitStarSystemAction extends ShipAction {
         //Get out of star system
         int id = ship.getLocation().getSystemID();
         if (id > -1) {
-            Integer systemId = gameState.universe.getStarSystem(id);
+            Integer systemId = gameState.getUniverse().getStarSystem(id);
             StarSystem sys = gameState.getObject(systemId, StarSystem.class);
             //Set location
             ship.setLocation(new UniversePath());
@@ -50,8 +50,8 @@ public class ExitStarSystemAction extends ShipAction {
             sys.spaceShips.remove(ship.getId());
             ship.setX(sys.getX());
             ship.setY(sys.getY());
-            if (!gameState.universe.spaceShips.contains(ship.getId())) {
-                gameState.universe.spaceShips.add(ship.getId());
+            if (!gameState.getUniverse().spaceShips.contains(ship.getId())) {
+                gameState.getUniverse().spaceShips.add(ship.getId());
             }
         }
         done = true;

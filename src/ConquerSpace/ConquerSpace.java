@@ -175,7 +175,7 @@ public final class ConquerSpace {
                 loadUniverse();
                 load.setVisible(false);
                 //Save test...
-                /*SaveGame game = new SaveGame(SaveGame.getSaveFolder());
+                SaveGame game = new SaveGame(SaveGame.getSaveFolder());
                 long before = System.currentTimeMillis();
                 try {
                     game.save(Globals.gameState);
@@ -186,9 +186,9 @@ public final class ConquerSpace {
                 } catch (IllegalAccessException ex) {
                     ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
                 }
-                LOGGER.info("Time to save " + (System.currentTimeMillis() - before));*/
-                runGame();
-                //System.exit(0);
+                LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
+                //runGame();
+                System.exit(0);
             } catch (Exception e) {
                 //Catch exceptions...
                 ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);

@@ -62,7 +62,7 @@ public class GameController {
      */
     public GameController(GameState gs) {
         gameState = gs;
-        universe = gs.universe;
+        universe = gs.getUniverse();
         //Init updater
         updater = new GameUpdater(gameState);
 

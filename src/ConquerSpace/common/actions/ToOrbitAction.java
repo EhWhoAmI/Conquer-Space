@@ -62,7 +62,7 @@ public class ToOrbitAction extends ShipAction {
             ship.setIsOrbiting(true);
             ship.setLocation(position.getUniversePath());
             //Remove...
-            StarSystem body = gameState.getObject(gameState.universe.getStarSystem(position.getParentStarSystem()), StarSystem.class);
+            StarSystem body = gameState.getObject(gameState.getUniverse().getStarSystem(position.getParentStarSystem()), StarSystem.class);
             body.spaceShips.remove(ship.getId());
             position.putShipInOrbit(ship);
         } else {
@@ -79,7 +79,7 @@ public class ToOrbitAction extends ShipAction {
     public void initAction(GameState gameState) {
         if (ship.isOrbiting()) {
             //Exit orbit
-            Body object =  gameState.getObject(gameState.universe.getSpaceObject(ship.getOrbiting()), Body.class);
+            Body object =  gameState.getObject(gameState.getUniverse().getSpaceObject(ship.getOrbiting()), Body.class);
             if (object instanceof Planet) {
                 Planet p = (Planet) object;
                 //Remove from orbit

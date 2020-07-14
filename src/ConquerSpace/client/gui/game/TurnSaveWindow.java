@@ -79,7 +79,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     private Galaxy universe;
 
     public TurnSaveWindow(GameState state) {
-        universe = state.universe;
+        universe = state.getUniverse();
         this.date = state.date;
         JPanel pan = new JPanel();
 

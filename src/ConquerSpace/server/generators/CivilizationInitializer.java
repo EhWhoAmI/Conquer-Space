@@ -83,7 +83,7 @@ public class CivilizationInitializer {
     private GameState gameState;
 
     public CivilizationInitializer(GameState state) {
-        universe = state.universe;
+        universe = state.getUniverse();
         this.gameState = state;
     }
 

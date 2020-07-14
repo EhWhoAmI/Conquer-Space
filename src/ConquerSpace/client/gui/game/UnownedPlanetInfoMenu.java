@@ -82,7 +82,7 @@ public class UnownedPlanetInfoMenu extends JPanel {
     public UnownedPlanetInfoMenu(GameState gameState, Planet p, Civilization c) {
         this.planet = p;
         this.gameState = gameState;
-        this.u = gameState.universe;
+        this.u = gameState.getUniverse();
         infoPane = new JTabbedPane();
 
         JPanel planetOverviewPanel = new JPanel();

@@ -106,7 +106,7 @@ public class PlanetCities extends JPanel {
     private GameState gameState;
 
     public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent) {
-        this.universe = gameState.universe;
+        this.universe = gameState.getUniverse();
         this.gameState = gameState;
         this.planet = p;
         this.owner = civ;

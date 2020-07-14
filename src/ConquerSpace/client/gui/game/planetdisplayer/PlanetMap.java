@@ -135,7 +135,7 @@ public class PlanetMap extends JPanel {
         this.gameState = gameState;
         this.p = p;
         this.c = c;
-        this.u = gameState.universe;
+        this.u = gameState.getUniverse();
         this.planetMap = planetMap;
 
         this.parent = parent;

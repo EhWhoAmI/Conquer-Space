@@ -133,7 +133,7 @@ public class ExceptionHandling {
                 writer.println("Asset checksum: not generated yet");
             }
             
-            if (gameState != null && gameState.universe != null) {
+            if (gameState != null && gameState.getUniverse() != null) {
                 writer.println("Universe seed: " + gameState.getSeed());
             }
 

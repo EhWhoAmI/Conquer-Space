@@ -98,7 +98,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     public MainInterfaceWindow(GameState gameState, Civilization c) {
         this.civilization = c;
-        this.universe = gameState.universe;
+        this.universe = gameState.getUniverse();
         this.gameState = gameState;
         
         init();
