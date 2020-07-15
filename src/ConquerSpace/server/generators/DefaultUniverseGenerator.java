@@ -69,7 +69,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     CivilizationConfig c;
     long seed;
     private GameState gameState;
-    
+
     private Random random;
 
     public DefaultUniverseGenerator(UniverseGenerationConfig u, CivilizationConfig c, long seed) {
@@ -83,9 +83,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         gameState = state;
         gameState.setSeed(seed);
         random = gameState.getRandom();
-        
+
         Galaxy universe = gameState.getUniverse();
-        
+
         //Create random 
         Random rand = new Random(seed);
 
@@ -151,7 +151,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 p.modDegrees(rand.nextInt(360));
                 sys.addBody(p);
             }
-            
+
             universe.addStarSystem(sys);
         }
         LOGGER.info("Done with universe generation");
@@ -171,8 +171,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setStartingPlanet(up);
         //Generate Species
         Race playerSpecies = new Race(gameState, 1, 0.01f, c.speciesName);
-        gameState.addSpecies(playerSpecies);
         playerSpecies.setUpkeep(0.05f);
+
+        gameState.addSpecies(playerSpecies);
 
         //Set currency
         Currency nationCurrency = new Currency();
@@ -182,9 +183,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         nationCurrency.setController(playerCiv);
 
         playerCiv.setFoundingSpecies(playerSpecies);
-
+        gameState.playerCiv = playerCiv.getId();
         gameState.addCivilization(playerCiv);
-        
+
         LOGGER.info("Done with player civ " + playerCiv.getName());
 
         GameController.playerCiv = playerCiv;

@@ -111,15 +111,11 @@ public class CivilizationInitializer {
 
             initalizeCivValues(civilization);
 
-            HullMaterial material = new HullMaterial("Testing Hull Material", 100, 5, 12);
-            material.setId(0);
+            HullMaterial material = new HullMaterial(gameState, "Testing Hull Material", 100, 5, 12);
             civilization.hullMaterials.add(material.getId());
 
             UniversePath path = civilization.getStartingPlanet();
-            
-            //gameState.dumpEverything();
-            System.out.println(universe.getStarSystemCount());
-            
+                        
             Integer id = universe.getSpaceObject(path);
             Planet startingPlanet = gameState.getObject(id, Planet.class);
 

@@ -17,11 +17,14 @@
  */
 package ConquerSpace.common.game.ships.hull;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class HullMaterial {
+public class HullMaterial extends ConquerSpaceGameObject{
     private String name;
     private int strength;
     //Kg per m3
@@ -30,8 +33,6 @@ public class HullMaterial {
     //cost per kg
     private int cost;
     
-    private int id;
-
     public int getCost() {
         return cost;
     }
@@ -53,18 +54,11 @@ public class HullMaterial {
         return name;
     }
 
-    public HullMaterial(String name, int strength, float density, int cost) {
+    public HullMaterial(GameState gameState, String name, int strength, float density, int cost) {
+        super(gameState);
         this.name = name;
         this.strength = strength;
         this.density = density;
         this.cost = cost;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 }

@@ -21,7 +21,6 @@ import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameLoader;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
-import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.server.generators.CivilizationConfig;
 import ConquerSpace.server.generators.UniverseGenerationConfig;
 import ConquerSpace.server.generators.DefaultUniverseGenerator;
@@ -29,6 +28,7 @@ import ConquerSpace.client.gui.music.MusicPlayer;
 import ConquerSpace.client.gui.start.Loading;
 import ConquerSpace.client.gui.start.MainMenu;
 import ConquerSpace.client.i18n.Messages;
+import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.tools.ToolsSelectionMenu;
 import ConquerSpace.common.util.Checksum;
 import ConquerSpace.common.util.ExceptionHandling;
@@ -175,20 +175,8 @@ public final class ConquerSpace {
                 loadUniverse();
                 load.setVisible(false);
                 //Save test...
-                SaveGame game = new SaveGame(SaveGame.getSaveFolder());
-                long before = System.currentTimeMillis();
-                try {
-                    game.save(Globals.gameState);
-                } catch (IOException ex) {
-                    ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
-                } catch (IllegalArgumentException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
-                } catch (IllegalAccessException ex) {
-                    ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
-                }
-                LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
-                //runGame();
-                System.exit(0);
+                saveGame();
+                runGame();
             } catch (Exception e) {
                 //Catch exceptions...
                 ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
@@ -508,6 +496,22 @@ public final class ConquerSpace {
         //Create generator
         DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
         Globals.generator = gen;
+    }
+
+    private static void saveGame() {
+        SaveGame game = new SaveGame(SaveGame.getSaveFolder());
+        long before = System.currentTimeMillis();
+        try {
+            game.save(Globals.gameState);
+        } catch (IOException ex) {
+            ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
+        } catch (IllegalArgumentException ex) {
+            ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
+        } catch (IllegalAccessException ex) {
+            ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
+        }
+        LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
+        System.exit(0);
     }
 
     public static void exitGame() {

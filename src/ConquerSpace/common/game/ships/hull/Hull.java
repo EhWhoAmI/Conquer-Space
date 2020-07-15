@@ -31,7 +31,7 @@ public class Hull extends ConquerSpaceGameObject{
     //Meters cube
     private long space;
     
-    private HullMaterial material;
+    private Integer material;
     
     private int shipType;
     
@@ -44,7 +44,7 @@ public class Hull extends ConquerSpaceGameObject{
         super(gameState);
         this.mass = mass;
         this.space = space;
-        this.material = material;
+        this.material = material.getId();
         this.shipType = shipType;
         this.thrust = thrust;
         this.name = name;
@@ -67,7 +67,7 @@ public class Hull extends ConquerSpaceGameObject{
     }
 
     public HullMaterial getMaterial() {
-        return material;
+        return gameState.getObject(material, HullMaterial.class);
     }
     
     public float getMassToSpaceRatio() {
@@ -75,7 +75,7 @@ public class Hull extends ConquerSpaceGameObject{
     }
     
     public float getStrength() {
-        return (getMassToSpaceRatio() * material.getStrength());
+        return (getMassToSpaceRatio() * getMaterial().getStrength());
     }
     
     public boolean isValid() {
@@ -98,7 +98,7 @@ public class Hull extends ConquerSpaceGameObject{
         this.thrust = thrust;
     }
 
-    public void setMaterial(HullMaterial material) {
+    public void setMaterial(Integer material) {
         this.material = material;
     }
 
@@ -125,7 +125,7 @@ public class Hull extends ConquerSpaceGameObject{
 
     @Override
     public Object clone() {
-        return new Hull(gameState, mass, space, material, shipType, thrust, name);
+        return new Hull(gameState, mass, space, getMaterial(), shipType, thrust, name);
     }
     
     

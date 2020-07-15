@@ -165,7 +165,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 //Autogenerate...
                 //Need to make hull material...
                 selectedHull = new Hull(gameState, 100, 100,
-                        new HullMaterial("Test Hull Material", 10, 10, 10),
+                        new HullMaterial(gameState, "Test Hull Material", 10, 10, 10),
                         shipTypeComboBox.getSelectedIndex(), 100, "name");
             }
             //Add hull

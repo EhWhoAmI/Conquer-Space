@@ -74,10 +74,9 @@ public class SaveGame {
         JSONObject meta = new JSONObject();
         meta.put("version", ConquerSpace.VERSION.getVersionCore());
         meta.put("date", gameState.date.getDate());
-        
+
         saveObject(saveData, gameState);
         String text = saveData.toString(4);//JsonValue.readHjson().toString(Stringify.HJSON);
-        System.out.println(text.length());
         FileWriter writer = new FileWriter("save.json");
         writer.write(text);
         writer.flush();
@@ -85,22 +84,25 @@ public class SaveGame {
 
     private void saveObject(JSONObject saveObject, Object obj) throws IllegalArgumentException, IllegalAccessException {
         //Check if primitive
-        List<Field> fields = getAllFields(new ArrayList<>(), obj.getClass());
-        //Loop through stuff
-        for (Field field : fields) {
-            field.setAccessible(true);
-            if (field.isAnnotationPresent(Serialize.class)) {
-                Serialize s = field.getAnnotation(Serialize.class);
-                String key = s.key();
-                if (isSaveable(field.get(obj))) {
-                    save(saveObject, key, field.get(obj));
-                } else {
-                    //Serialize children
-                    JSONObject childObject = new JSONObject();
-                    saveObject(childObject, field.get(obj));
+        if (obj != null) {
+            List<Field> fields = getAllFields(new ArrayList<>(), obj.getClass());
 
-                    //Put the stuff
-                    saveObject.put(key, childObject);
+            //Loop through stuff
+            for (Field field : fields) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(Serialize.class)) {
+                    Serialize s = field.getAnnotation(Serialize.class);
+                    String key = s.key();
+                    if (isSaveable(field.get(obj))) {
+                        save(saveObject, key, field.get(obj));
+                    } else {
+                        //Serialize children
+                        JSONObject childObject = new JSONObject();
+                        saveObject(childObject, field.get(obj));
+
+                        //Put the stuff
+                        saveObject.put(key, childObject);
+                    }
                 }
             }
         }
@@ -133,13 +135,17 @@ public class SaveGame {
             map.forEach(new BiConsumer() {
                 @Override
                 public void accept(Object k, Object v) {
+                    String keyText = k.toString();
+                    if (k instanceof CustomSerializer) {
+                        keyText = ((CustomSerializer) k).getString();
+                    }
                     if (isSaveable(v)) {
-                        mapData.put(k.toString(), v);
+                        mapData.put(keyText, v);
                     } else {
                         try {
                             JSONObject objectInArray = new JSONObject();
                             saveObject(objectInArray, v);
-                            mapData.put(k.toString(), objectInArray);
+                            mapData.put(keyText, objectInArray);
                         } catch (IllegalArgumentException ex) {
                             Logger.getLogger(SaveGame.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IllegalAccessException ex) {
@@ -148,7 +154,7 @@ public class SaveGame {
                     }
                 }
             });
-            
+
             mapSave.put("map", mapData);
             saveObject.put(key, mapSave);
         } else {
@@ -157,9 +163,6 @@ public class SaveGame {
     }
 
     private boolean isSaveable(Object object) {
-        if (object instanceof Long) {
-            System.out.println(object.getClass().isInstance(Long.class));
-        }
         for (int i = 0; i < primitives.length; i++) {
             //System.out.println("passing " + primitives[i].toString());
             //System.out.println(object.getClass().isInstance(java.lang.Long.class));
@@ -206,5 +209,9 @@ public class SaveGame {
         }
         highest++;
         return baseSave + "/save" + highest;
+    }
+
+    public static String defaultSerialize(Object obj) {
+        return obj.toString();
     }
 }

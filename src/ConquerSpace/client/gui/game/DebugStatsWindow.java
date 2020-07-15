@@ -56,6 +56,8 @@ public class DebugStatsWindow extends JInternalFrame {
     private JLabel memoryusedLabel;
 
     private JLabel threadCountLabel;
+    
+    private JLabel objectCountLabel;
 
     private JButton runTrashCompactor;
 
@@ -87,6 +89,7 @@ public class DebugStatsWindow extends JInternalFrame {
         Runtime runtime = Runtime.getRuntime();
         memoryusedLabel = new JLabel("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
         threadCountLabel = new JLabel("Threads currently running: " + Thread.getAllStackTraces().size());
+        objectCountLabel = new JLabel("Game Objects: " + state.getObjectCount());
         deviceInfo = new JButton("Current runtime stats");
         logger = new JButton("Show Logs");
 
@@ -165,6 +168,7 @@ public class DebugStatsWindow extends JInternalFrame {
 //        panel.setRangeZoomable(false);
         add(memoryusedLabel);
         add(threadCountLabel);
+        add(objectCountLabel);
         add(runTrashCompactor);
         add(openConsole);
         add(logger);
@@ -184,6 +188,7 @@ public class DebugStatsWindow extends JInternalFrame {
 //            availableMemorySeries.removeAgedItems(true);
 //            chart.fireChartChanged();
             threadCountLabel.setText("Threads currently running: " + Thread.getAllStackTraces().size());
+            objectCountLabel.setText("Game Objects: " + state.getObjectCount());
             repaint();
         });
         //Every 1 second, update. make it update ever so often, but not so that it

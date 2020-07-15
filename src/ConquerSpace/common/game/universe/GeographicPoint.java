@@ -17,11 +17,13 @@
  */
 package ConquerSpace.common.game.universe;
 
+import ConquerSpace.common.save.CustomSerializer;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class GeographicPoint {
+public class GeographicPoint implements CustomSerializer {
 
     private int X;
     private int Y;
@@ -80,5 +82,10 @@ public class GeographicPoint {
 
     public GeographicPoint getWest() {
         return (new GeographicPoint(X - 1, Y));
+    }
+
+    @Override
+    public String getString() {
+        return X + "-" + Y;
     }
 }

@@ -69,12 +69,16 @@ public final class GameState {
     //Variables read from 
     public ArrayList<LaunchSystem> launchSystems;
 
+    @Serialize(key = "civs")
     private final ArrayList<Integer> civilizations;
+
+    @Serialize(key = "orgs")
     private final ArrayList<Integer> organizations;
 
     public ArrayList<EngineTechnology> engineTechnologys;
     public ArrayList<PersonalityTrait> personalityTraits;
 
+    @Serialize(key = "species")
     public ArrayList<Integer> species;
 
     public HashMap<String, Integer> shipTypes;
@@ -89,7 +93,9 @@ public final class GameState {
 
     public HashMap<String, ProductionProcess> prodProcesses;
 
+    @Serialize(key = "player")
     public Integer playerCiv;
+
     public FieldNode fieldNodeRoot;
     public ArrayList<Technology> techonologies = new ArrayList<>();
 
@@ -107,6 +113,8 @@ public final class GameState {
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
 
+        species = new ArrayList<>();
+
         goodIdentifiers = new HashMap<>();
         goodHashMap = new HashMap<>();
 
@@ -115,7 +123,7 @@ public final class GameState {
         random = new Random(seed);
 
         universe = new Galaxy(this);
-        
+
         universeId = universe.getId();
     }
 
@@ -127,18 +135,18 @@ public final class GameState {
         goodIdentifiers.put(good.getIdentifier(), newId);
     }
 
-    public void addSpecies(Species species) {
-        addGameObject(species);
-
+    public void addSpecies(Species speciesToAdd) {
         //Nice
         //Other stats...
-        FoodGood foodGoodResource = new FoodGood(species, 1, 420);
-        LiveGood speciesGoodResource = new LiveGood(species, 1, 420);
+        FoodGood foodGoodResource = new FoodGood(speciesToAdd, 1, 420);
+        LiveGood speciesGoodResource = new LiveGood(speciesToAdd, 1, 420);
         addGood(foodGoodResource);
         addGood(speciesGoodResource);
 
-        species.setFoodGood(foodGoodResource.getId());
-        species.setSpeciesGood(speciesGoodResource.getId());
+        speciesToAdd.setFoodGood(foodGoodResource.getId());
+        speciesToAdd.setSpeciesGood(speciesGoodResource.getId());
+
+        species.add(speciesToAdd.getId());
     }
 
     public Good getGood(int id) {
@@ -181,6 +189,10 @@ public final class GameState {
             return (T) o;
         }
         return null;
+    }
+
+    public int getObjectCount() {
+        return gameObjects.size();
     }
 
     public void addOrganization(Organization org) {
@@ -236,10 +248,9 @@ public final class GameState {
         for (Map.Entry<Integer, ConquerSpaceGameObject> entry : gameObjects.entrySet()) {
             Object key = entry.getKey();
             Object val = entry.getValue();
-            System.out.println(key + " " + val);
         }
     }
-    
+
     public Galaxy getUniverse() {
         return universe;
     }

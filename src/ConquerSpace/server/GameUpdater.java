@@ -639,7 +639,7 @@ public class GameUpdater extends GameTicker {
             for (ResourceStockpile s : civilization.getResourceStorages()) {
                 //Get resource types allowed, and do stuff
                 //c.resourceList.
-                
+
                 for (Integer type : s.storedTypes()) {
                     //add to index
                     if (!civilization.resourceList.containsKey(type)) {
@@ -748,36 +748,40 @@ public class GameUpdater extends GameTicker {
                 //Ignore
             }
             //Create 5-10 random scientists
-            civ.unrecruitedPeople.clear();
-            int peopleCount = (int) (Math.random() * 5) + 5;
-            for (int peep = 0; peep < peopleCount; peep++) {
-                int age = (int) (Math.random() * 40) + 20;
-                String person = "name";
-                person = gen.getName((int) Math.round(Math.random()));
-                Scientist nerd = new Scientist(gameState, person, age);
-                nerd.setSkill((int) (Math.random() * 5) + 1);
-                nerd.traits.add(getRandomPersonalityTrait());
-                nerd.setPosition(civ.getCapitalCity());
-
-                civ.unrecruitedPeople.add(nerd.getId());
-                //Generate personality
-            }
+            //Swap out random people
+//            civ.unrecruitedPeople.clear();
+//            int peopleCount = (int) (Math.random() * 5) + 5;
+//            for (int peep = 0; peep < peopleCount; peep++) {
+//                int age = (int) (Math.random() * 40) + 20;
+//                String person = "name";
+//                person = gen.getName((int) Math.round(Math.random()));
+//                Scientist nerd = new Scientist(gameState, person, age);
+//                nerd.setSkill((int) (Math.random() * 5) + 1);
+//                nerd.traits.add(getRandomPersonalityTrait());
+//                nerd.setPosition(civ.getCapitalCity());
+//
+//                civ.unrecruitedPeople.add(nerd.getId());
+//                //Generate personality
+//            }
             //Admins
-            peopleCount = (int) (Math.random() * 5) + 5;
-
-            for (int peep = 0; peep < peopleCount; peep++) {
-                int age = (int) (Math.random() * 40) + 20;
-                String person = "name";
-                person = gen.getName((int) Math.round(Math.random()));
-                Administrator dude = new Administrator(gameState, person, age);
-                dude.traits.add(getRandomPersonalityTrait());
-                dude.setPosition(civ.getCapitalCity());
-
-                //nerd.setSkill((int) (Math.random() * 5) + 1);
-                civ.unrecruitedPeople.add(dude.getId());
-            }
+//            peopleCount = (int) (Math.random() * 5) + 5;
+//
+//            for (int peep = 0; peep < peopleCount; peep++) {
+//                int age = (int) (Math.random() * 40) + 20;
+//                String person = "name";
+//                person = gen.getName((int) Math.round(Math.random()));
+//                Administrator dude = new Administrator(gameState, person, age);
+//                dude.traits.add(getRandomPersonalityTrait());
+//                dude.setPosition(civ.getCapitalCity());
+//
+//                //nerd.setSkill((int) (Math.random() * 5) + 1);
+//                civ.unrecruitedPeople.add(dude.getId());
+//            }
+//        }
         }
     }
+
+    
 
     private PersonalityTrait getRandomPersonalityTrait() {
         return gameState.personalityTraits.get((int) (gameState.personalityTraits.size() * Math.random()));

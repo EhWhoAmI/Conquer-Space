@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.universe;
 
+import ConquerSpace.common.save.CustomSerializer;
+
 
 /**
  * Galactic location. In a nutshell, this is a polar coordinate.
