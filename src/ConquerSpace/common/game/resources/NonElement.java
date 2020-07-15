@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.resources;
 
+import ConquerSpace.common.save.SaveStuff;
+import ConquerSpace.common.save.Serialize;
 import java.util.HashMap;
 
 /**
@@ -24,6 +26,8 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class NonElement extends Good{
+    
+    @Serialize(key = "recipie", special = SaveStuff.Good)
     public HashMap<Integer, Double> recipie;
 
     public NonElement(String name, String identifier, double volume, double mass) {

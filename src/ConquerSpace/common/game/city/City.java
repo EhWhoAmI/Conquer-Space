@@ -20,17 +20,15 @@ package ConquerSpace.common.game.city;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
-import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
-import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
@@ -55,15 +53,16 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     @Serialize(key = "areas")
     public ArrayList<Integer> areas;
     
+    @Serialize(key = "working-for")
     public ArrayList<Integer> workableFor;
     
     @Serialize(key = "people")
     public ArrayList<Person> peopleAtCity;
 
-    @Serialize(key = "resources")
+    @Serialize(key = "resources", special = SaveStuff.Good)
     public HashMap<Integer, Double> resources;
     
-    @Serialize(key = "demands")
+    @Serialize(key = "demands", special = SaveStuff.Good)
     public DoubleHashMap<Integer> resourceDemands;
 
     @Serialize(key = "storage-needs")

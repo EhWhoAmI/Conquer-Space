@@ -19,19 +19,24 @@ package ConquerSpace.common.save;
 
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.util.Utilities;
 import ConquerSpace.common.util.Version;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -49,10 +54,10 @@ public class SaveGame {
 
     private JSONObject saveData;
 
+    private GameState gameState;
+
     public SaveGame(File file) {
         this.folder = file;
-
-        saveData = new JSONObject();
     }
 
     public SaveGame(String s) {
@@ -60,6 +65,7 @@ public class SaveGame {
     }
 
     public void save(GameState gameState) throws IOException, IllegalArgumentException, IllegalAccessException {
+        this.gameState = gameState;
         //Get the file
         if (!folder.exists()) {
             folder.mkdirs();
@@ -75,11 +81,51 @@ public class SaveGame {
         meta.put("version", ConquerSpace.VERSION.getVersionCore());
         meta.put("date", gameState.date.getDate());
 
+        saveData = new JSONObject();
+
+        //Save version
+        saveData.put("version", ConquerSpace.VERSION.getVersionCore());
+
+        //Save gameobject
         saveObject(saveData, gameState);
+        
+        //Save Goods
+        Iterator<String> set = gameState.goodIdentifiers.keySet().iterator();
+        JSONObject goodObjects = new JSONObject();
+        while (set.hasNext()) {
+            String text = set.next();
+            Good good = gameState.getGood(text);
+            JSONObject goodObject = new JSONObject();
+            saveObject(goodObject, good);
+            goodObjects.put(text, goodObject);
+        }
+        
+        saveData.put("goods", goodObjects);
+
         String text = saveData.toString(4);//JsonValue.readHjson().toString(Stringify.HJSON);
         FileWriter writer = new FileWriter("save.json");
         writer.write(text);
         writer.flush();
+
+        //Zip
+        String zipFileName = "save.zip";//folder.getName() + "/save.zip";
+
+        FileOutputStream fos = new FileOutputStream(zipFileName);
+        ZipOutputStream zos = new ZipOutputStream(fos);
+
+        //Meta
+        zos.putNextEntry(new ZipEntry("meta"));
+
+        byte[] bytes = meta.toString().getBytes();
+        zos.write(bytes, 0, bytes.length);
+        zos.closeEntry();
+        
+        zos.putNextEntry(new ZipEntry("data"));
+
+        bytes = saveData.toString().getBytes();
+        zos.write(bytes, 0, bytes.length);
+        zos.closeEntry();
+        zos.close();
     }
 
     private void saveObject(JSONObject saveObject, Object obj) throws IllegalArgumentException, IllegalAccessException {
@@ -93,8 +139,20 @@ public class SaveGame {
                 if (field.isAnnotationPresent(Serialize.class)) {
                     Serialize s = field.getAnnotation(Serialize.class);
                     String key = s.key();
+
+                    Object object = field.get(obj);
+                    boolean isGoodIdentifier = false;
                     if (isSaveable(field.get(obj))) {
-                        save(saveObject, key, field.get(obj));
+                        if (s.special() == SaveStuff.Good) {
+                            isGoodIdentifier = true;
+                            if (object instanceof Integer) {
+                                //Has to be an int...
+                                Integer val = (Integer) object;
+                                String stringIdentifier = gameState.goodIdentifiers.getKey(val);
+                                object = stringIdentifier;
+                            }
+                        }
+                        save(saveObject, key, object, isGoodIdentifier);
                     } else {
                         //Serialize children
                         JSONObject childObject = new JSONObject();
@@ -109,7 +167,7 @@ public class SaveGame {
     }
 
     @SuppressWarnings("unchecked")
-    private void save(JSONObject saveObject, String key, Object obj) throws IllegalArgumentException, IllegalAccessException {
+    private void save(JSONObject saveObject, String key, Object obj, boolean isGood) throws IllegalArgumentException, IllegalAccessException {
         if (obj instanceof List) {
             //Go through list
             List list = (List) obj;
@@ -139,6 +197,9 @@ public class SaveGame {
                     if (k instanceof CustomSerializer) {
                         keyText = ((CustomSerializer) k).getString();
                     }
+                    if (isGood && k instanceof Integer) {
+                        keyText = gameState.goodIdentifiers.getKey((Integer) k);
+                    }
                     if (isSaveable(v)) {
                         mapData.put(keyText, v);
                     } else {
@@ -155,8 +216,8 @@ public class SaveGame {
                 }
             });
 
-            mapSave.put("map", mapData);
-            saveObject.put(key, mapSave);
+            //mapSave.put("map", mapData);
+            saveObject.put(key, mapData);
         } else {
             saveObject.put(key, obj);
         }

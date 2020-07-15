@@ -18,15 +18,18 @@
 package ConquerSpace.common.game.resources;
 
 import ConquerSpace.common.game.life.Species;
+import ConquerSpace.common.save.Serialize;
 
 /**
  * Consumable
  * @author EhWhoAmI
  */
 public class FoodGood extends Good{
-    Species species;
+    
+    @Serialize(key = "species")
+    Integer species;
     public FoodGood(Species s, double volume, double mass) {
         super(s.getName(), "f_" + s.getName() + "_" + s.getId(), volume, mass);
-        this.species = s;
+        this.species = s.getId();
     }
 }

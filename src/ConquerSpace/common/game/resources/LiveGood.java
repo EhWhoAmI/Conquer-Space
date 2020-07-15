@@ -18,15 +18,17 @@
 package ConquerSpace.common.game.resources;
 
 import ConquerSpace.common.game.life.Species;
+import ConquerSpace.common.save.Serialize;
 
 /**
  *
  * @author EhWhoAmI
  */
 public class LiveGood extends Good{
-    Species species;
+    @Serialize(key = "species")
+    Integer species;
     public LiveGood(Species s, double volume, double mass) {
         super(s.getName(), "l_" + s.getName() + "_" + s.getId(), volume, mass);
-        this.species = s;
+        this.species = s.getId();
     }
 }

@@ -17,20 +17,30 @@
  */
 package ConquerSpace.common.game.resources;
 
+import ConquerSpace.common.save.Serialize;
+
 /**
  * Type of good that can be transported
  * @author EhWhoAmI
  */
 public abstract class Good implements Comparable<Good>{
+    private static int idCounter = 0;
     
+    @Serialize(key = "id")
+    int id;
     //On Screen name
+    @Serialize(key = "name")
     String name;
     //Unique identifier for human readable things
+    @Serialize(key = "identifier")
     String identifier;
-    int id;
+    @Serialize(key = "volume")
     double volume; // volume, m^3
+    @Serialize(key = "mass")
     double mass; //mass, kg
+    @Serialize(key = "tags")
     public String[] tags = new String[0];
+    @Serialize(key = "fractionable")
     private boolean fractionable;
 
     public Good(String name, String identifier, double volume, double mass) {
@@ -39,6 +49,7 @@ public abstract class Good implements Comparable<Good>{
         this.mass = mass;
         this.identifier = identifier;
         fractionable = false;
+        id = idCounter++;
     }
 
     public String getName() {
@@ -48,11 +59,7 @@ public abstract class Good implements Comparable<Good>{
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public double getMass() {
         return mass;
     }

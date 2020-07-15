@@ -18,7 +18,7 @@
 package ConquerSpace.common.game.resources;
 
 /**
- *
+ * Is only needed on the generation of a universe.
  * @author EhWhoAmI
  */
 public class ResourceDistribution {

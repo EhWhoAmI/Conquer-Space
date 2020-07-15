@@ -23,6 +23,5 @@ package ConquerSpace.common.save;
  */
 public enum SaveStuff {
     No,
-    Good,
-    Counter;
+    Good;
 }

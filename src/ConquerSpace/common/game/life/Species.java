@@ -19,6 +19,7 @@ package ConquerSpace.common.game.life;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import java.util.ArrayList;
 
@@ -31,13 +32,13 @@ public class Species extends ConquerSpaceGameObject{
     @Serialize(key = "traits")
     public ArrayList<LifeTrait> lifeTraits;
 
-    @Serialize(key = "live-good")
+    @Serialize(key = "live-good", special = SaveStuff.Good)
     private int speciesGood;
     
     /**
      * Id of the food when it's dead
      */
-    @Serialize(key = "food-good")
+    @Serialize(key = "food-good", special = SaveStuff.Good)
     private int foodGood;
     //Breeding rate
     

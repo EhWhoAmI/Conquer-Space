@@ -38,6 +38,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**
  * Game object.
@@ -89,7 +91,7 @@ public final class GameState {
 
     //Handles goods
     private HashMap<Integer, Good> goodHashMap;
-    private HashMap<String, Integer> goodIdentifiers;
+    public DualHashBidiMap<String, Integer> goodIdentifiers;
 
     public HashMap<String, ProductionProcess> prodProcesses;
 
@@ -115,7 +117,7 @@ public final class GameState {
 
         species = new ArrayList<>();
 
-        goodIdentifiers = new HashMap<>();
+        goodIdentifiers = new DualHashBidiMap<>();
         goodHashMap = new HashMap<>();
 
         date = new StarDate(1l);
@@ -128,11 +130,9 @@ public final class GameState {
     }
 
     public void addGood(Good good) {
-        int newId = goodHashMap.size();
-        good.setId(newId);
         //Add the other stuff
-        goodHashMap.put(newId, good);
-        goodIdentifiers.put(good.getIdentifier(), newId);
+        goodHashMap.put(good.getId(), good);
+        goodIdentifiers.put(good.getIdentifier(), good.getId());
     }
 
     public void addSpecies(Species speciesToAdd) {

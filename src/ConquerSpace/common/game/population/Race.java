@@ -19,6 +19,7 @@ package ConquerSpace.common.game.population;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.life.Species;
+import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 
 /**
@@ -27,7 +28,7 @@ import ConquerSpace.common.save.Serialize;
  * @author EhWhoAmI
  */
 public class Race extends Species{
-    @Serialize(key = "food-id")
+    @Serialize(key = "food-id", special = SaveStuff.Good)
     public Integer food;
     
     //Usage of food per month

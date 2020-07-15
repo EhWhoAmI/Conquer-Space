@@ -17,11 +17,15 @@
  */
 package ConquerSpace.common.game.resources;
 
+import ConquerSpace.common.save.Serialize;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class Element extends Good{
+    
+    @Serialize(key = "element-no")
     private int elementNumber;
     public Element(String name, double volume, double mass) {
         super(name, "e_" + name.toLowerCase(), volume, mass);
