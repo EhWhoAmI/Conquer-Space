@@ -54,7 +54,7 @@ public class GameController {
 
     //Falls under UI, so have to change position
     public static MusicPlayer musicPlayer;
-    
+
     private Timer ticker;
 
     /**
@@ -68,6 +68,8 @@ public class GameController {
 
         //First run over all the game
         updater.tick(0);
+
+        playerCiv = gs.getObject(gs.playerCiv, Civilization.class);
 
         //Load the players
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {

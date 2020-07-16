@@ -23,6 +23,7 @@ import ConquerSpace.common.actions.EmptyShipAction;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.Vector;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +31,7 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("space-ship")
 public abstract class SpaceShip extends ConquerSpaceGameObject implements Orbitable{
 
     private static int ticker = 0;

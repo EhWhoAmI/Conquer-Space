@@ -20,11 +20,13 @@ package ConquerSpace.common.game.ships.components.templates;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.components.ShipComponentTypes;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("ship-component-template")
 public class ShipComponentTemplate extends ConquerSpaceGameObject{
 
     //Mass in KG

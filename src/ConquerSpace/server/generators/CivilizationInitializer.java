@@ -443,7 +443,7 @@ public class CivilizationInitializer {
         for (Integer cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
 
-            org.region.bodies.add(city);
+            org.region.bodies.add(city.getId());
         }
 
         gameState.addOrganization(org);

@@ -22,13 +22,15 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.SpacePoint;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("body")
 public class Body extends ConquerSpaceGameObject{
-    @Serialize(key = "orbit")
+    @Serialize("orbit")
     public Orbit orbit = new Orbit(0, 0, 0, 0);
 
     //Not serialized because it's based on orbit

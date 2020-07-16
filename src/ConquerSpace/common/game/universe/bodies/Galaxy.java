@@ -21,6 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,16 +31,17 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("galaxy")
 public class Galaxy extends ConquerSpaceGameObject {
 
-    @Serialize(key = "systems")
+    @Serialize("systems")
     private ArrayList<Integer> starSystems;
 
-    @Serialize(key = "control")
+    @Serialize("control")
     public HashMap<Integer, Integer> control;
 
     //Spaceships in orbit in the galaxy
-    @Serialize(key = "ships")
+    @Serialize("ships")
     public ArrayList<Integer> spaceShips;
 
     public Galaxy(GameState gameState) {
@@ -67,7 +69,12 @@ public class Galaxy extends ConquerSpaceGameObject {
     }
 
     public StarSystem getStarSystemObject(int i) {
-        return (gameState.getObject(starSystems.get(i), StarSystem.class));
+        if (starSystems == null || gameState == null) {
+            System.out.println(starSystems + " \n" + gameState);
+        }
+        return (gameState.getObject(
+                starSystems.get(i),
+                StarSystem.class));
     }
 
     public Iterator<Integer> getStarSystemIterator() {

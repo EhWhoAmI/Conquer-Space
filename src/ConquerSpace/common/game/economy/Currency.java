@@ -18,29 +18,30 @@
 package ConquerSpace.common.game.economy;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
+import java.io.Serializable;
 
 /**
  * A nations currency
  *
  * @author EhWhoAmI
  */
-public class Currency {
+public class Currency implements Serializable {
 
     //Amount of isk you print
     private float inflation;
 
     //Total amount in circulation of that currency, all over the galaxy
     private long inCirculation;
-    
+
     private String name;
-    
+
     private String symbol;
-    
+
     /**
      * The people who print the money...
      */
     private Civilization controller;
-   
+
     public long getInCirculation() {
         return inCirculation;
     }

@@ -17,13 +17,7 @@
  */
 package ConquerSpace.common.game.organizations.behavior;
 
-import static ConquerSpace.common.actions.Actions.sendResources;
-import ConquerSpace.common.actions.ResourceTransportAction;
-import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.organizations.Organization;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -38,51 +32,52 @@ public class ResourceManagerBehavior extends Behavior {
     @Override
     public void doBehavior() {
         //Find stuff
-        for (Administrable ad : org.region.bodies) {
-            if (ad instanceof City) {
-                City fromCity = (City) ad;
-                //Resources needed, keep
-                HashMap<Integer, Double> resourcesToSpend = new HashMap<>();
-                for (Map.Entry<Integer, Double> entry : fromCity.resourceDemands.entrySet()) {
-                    Integer key = entry.getKey();
-                    Double val = entry.getValue();
-                    if (fromCity.resources.containsKey(key)) {
-                        double amount = fromCity.resources.get(key) - val;
-                        if (amount > 0) {
-                            resourcesToSpend.put(key, amount);
-                        }
-                    }
-                }
-
-                //Then, distribute resources
-                for (Administrable ad2 : org.region.bodies) {
-                    if (ad2 instanceof City && !ad2.equals(fromCity)) {
-                        City candidateResourceCity = (City) ad2;
-                        //Send the resources to other places
-                        for (Map.Entry<Integer, Double> entry : candidateResourceCity.resourceDemands.entrySet()) {
-                            Integer key = entry.getKey();
-                            Double val = entry.getValue();
-                            //If have enough resources to put in
-                            if (resourcesToSpend.containsKey(key)) {
-                                double toSpendAmount = resourcesToSpend.get(key);
-                                if (val > 0 && toSpendAmount > 0) {
-                                    if (val > toSpendAmount) {
-                                        //Send the resources
-                                        ResourceTransportAction act = new ResourceTransportAction(key, toSpendAmount, fromCity, candidateResourceCity);
-                                        org.actionList.add(act);
-                                        //Subtract resources
-                                        resourcesToSpend.put(key, 0d);
-                                    } else {
-                                        ResourceTransportAction act = new ResourceTransportAction(key, val, fromCity, candidateResourceCity);
-                                        org.actionList.add(act);
-                                        resourcesToSpend.put(key, (toSpendAmount - val));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        for (Integer ad : org.region.bodies) {
+            //Administrable ad = gameStaaa
+//            if (ad instanceof City) {
+//                City fromCity = (City) ad;
+//                //Resources needed, keep
+//                HashMap<Integer, Double> resourcesToSpend = new HashMap<>();
+//                for (Map.Entry<Integer, Double> entry : fromCity.resourceDemands.entrySet()) {
+//                    Integer key = entry.getKey();
+//                    Double val = entry.getValue();
+//                    if (fromCity.resources.containsKey(key)) {
+//                        double amount = fromCity.resources.get(key) - val;
+//                        if (amount > 0) {
+//                            resourcesToSpend.put(key, amount);
+//                        }
+//                    }
+//                }
+//
+//                //Then, distribute resources
+//                for (Administrable ad2 : org.region.bodies) {
+//                    if (ad2 instanceof City && !ad2.equals(fromCity)) {
+//                        City candidateResourceCity = (City) ad2;
+//                        //Send the resources to other places
+//                        for (Map.Entry<Integer, Double> entry : candidateResourceCity.resourceDemands.entrySet()) {
+//                            Integer key = entry.getKey();
+//                            Double val = entry.getValue();
+//                            //If have enough resources to put in
+//                            if (resourcesToSpend.containsKey(key)) {
+//                                double toSpendAmount = resourcesToSpend.get(key);
+//                                if (val > 0 && toSpendAmount > 0) {
+//                                    if (val > toSpendAmount) {
+//                                        //Send the resources
+//                                        ResourceTransportAction act = new ResourceTransportAction(key, toSpendAmount, fromCity, candidateResourceCity);
+//                                        org.actionList.add(act);
+//                                        //Subtract resources
+//                                        resourcesToSpend.put(key, 0d);
+//                                    } else {
+//                                        ResourceTransportAction act = new ResourceTransportAction(key, val, fromCity, candidateResourceCity);
+//                                        org.actionList.add(act);
+//                                        resourcesToSpend.put(key, (toSpendAmount - val));
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
         //Done
     }

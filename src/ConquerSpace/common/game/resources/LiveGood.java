@@ -25,7 +25,7 @@ import ConquerSpace.common.save.Serialize;
  * @author EhWhoAmI
  */
 public class LiveGood extends Good{
-    @Serialize(key = "species")
+    @Serialize("species")
     Integer species;
     public LiveGood(Species s, double volume, double mass) {
         super(s.getName(), "l_" + s.getName() + "_" + s.getId(), volume, mass);

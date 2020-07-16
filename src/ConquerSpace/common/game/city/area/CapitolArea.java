@@ -18,12 +18,14 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * Capital of city
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("capitol-area")
 public class CapitolArea extends ConsumerArea {
 
     public CapitolArea(GameState gameState) {

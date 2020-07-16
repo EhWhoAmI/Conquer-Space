@@ -17,44 +17,45 @@
  */
 package ConquerSpace.common.game.characters;
 
-import ConquerSpace.Globals;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Person extends ConquerSpaceGameObject{
-    @Serialize(key = "name")
+@SerializeClassName("person")
+public class Person extends ConquerSpaceGameObject {
+
+    @Serialize("name")
     private String name;
-    
-    @Serialize(key = "age")
+
+    @Serialize("age")
     public int age;
-    
+
     //@Serialize(key = "location")
     //How to serialize person enterable
-    private PersonEnterable location;
-    
-    @Serialize(key = "traits")
+    private Integer location;
+
+    @Serialize("traits")
     public ArrayList<PersonalityTrait> traits;
-    
+
     private final Role role;
-    
-    @Serialize(key = "wealth")
+
+    @Serialize("wealth")
     private int wealth;
     public Employer employer;
-    
-    @Serialize(key = "dead")
+
+    @Serialize("dead")
     private boolean dead;
-    
+
     //Not sure what to add to this for now
     //private ArrayList<?> multipliers;
     //Job??
-
     public Person(GameState gameState, String name, int age) {
         super(gameState);
         this.name = name;
@@ -75,7 +76,7 @@ public class Person extends ConquerSpaceGameObject{
     public void setAge(int age) {
         this.age = age;
     }
-    
+
     /**
      * Basically become older.
      */
@@ -87,23 +88,25 @@ public class Person extends ConquerSpaceGameObject{
     public String toString() {
         return getName();
     }
-    
+
     public String getJobName() {
         return "None";
     }
 
     public PersonEnterable getPosition() {
-        return location;
+        return (PersonEnterable) gameState.getObject(location);
     }
 
     public void setPosition(PersonEnterable position) {
-        this.location = position;
+        if (position instanceof ConquerSpaceGameObject) {
+            this.location = ((ConquerSpaceGameObject) position).getId();
+        }
     }
-    
+
     public void setRole(String text) {
         role.setText(text);
     }
-    
+
     public String roleText() {
         return role.getText();
     }

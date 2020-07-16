@@ -21,6 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
@@ -28,26 +29,27 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("species")
 public class Species extends ConquerSpaceGameObject{
-    @Serialize(key = "traits")
+    @Serialize("traits")
     public ArrayList<LifeTrait> lifeTraits;
 
-    @Serialize(key = "live-good", special = SaveStuff.Good)
+    @Serialize(value = "live-good", special = SaveStuff.Good)
     private int speciesGood;
     
     /**
      * Id of the food when it's dead
      */
-    @Serialize(key = "food-good", special = SaveStuff.Good)
+    @Serialize(value = "food-good", special = SaveStuff.Good)
     private int foodGood;
     //Breeding rate
     
-    @Serialize(key = "breeding-rate")
+    @Serialize("breeding-rate")
     private float baseBreedingRate = 0;
     //Breeding method
     //Etc...
     
-    @Serialize(key = "name")
+    @Serialize("name")
     private String name;
 
     public Species(GameState gameState, String name) {

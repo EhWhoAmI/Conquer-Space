@@ -18,11 +18,13 @@
 package ConquerSpace.common.game.characters;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("scientist")
 public class Scientist extends Person{
     //Skill increments per tick.
     private int skill;

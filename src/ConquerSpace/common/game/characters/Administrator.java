@@ -19,11 +19,13 @@ package ConquerSpace.common.game.characters;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.government.GovernmentPosition;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author
  */
+@SerializeClassName("administrator")
 public class Administrator extends Person {
     public GovernmentPosition governmentPosition;
     

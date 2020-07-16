@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.universe;
 
 import ConquerSpace.common.save.CustomSerializer;
+import java.io.Serializable;
 
 
 /**
@@ -25,7 +26,7 @@ import ConquerSpace.common.save.CustomSerializer;
  *
  * @author EhWhoAmI
  */
-public class PolarCoordinate {
+public class PolarCoordinate implements Serializable{
 
     private double degrees;
     private double distance;

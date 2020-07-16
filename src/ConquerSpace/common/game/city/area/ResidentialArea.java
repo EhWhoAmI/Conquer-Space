@@ -18,11 +18,13 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("residential-area")
 public class ResidentialArea extends ConsumerArea {
 
     int maxPopulation;

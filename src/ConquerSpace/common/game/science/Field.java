@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.science;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class Field {
+public class Field implements Serializable{
 
     private String name;
     private int level;

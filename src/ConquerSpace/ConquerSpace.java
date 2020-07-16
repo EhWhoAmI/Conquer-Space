@@ -48,6 +48,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -174,8 +175,6 @@ public final class ConquerSpace {
                 Loading load = new Loading();
                 loadUniverse();
                 load.setVisible(false);
-                //Save test...
-                saveGame();
                 runGame();
             } catch (Exception e) {
                 //Catch exceptions...
@@ -503,15 +502,23 @@ public final class ConquerSpace {
         long before = System.currentTimeMillis();
         try {
             game.save(Globals.gameState);
+
+            game.read(Globals.gameState);
+        } catch (FileNotFoundException ex) {
+            ExceptionHandling.ExceptionMessageBox("FileNotFoundException exception while saving!", ex);
         } catch (IOException ex) {
             ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
+        } catch (ClassNotFoundException cnfe) {
+            ExceptionHandling.ExceptionMessageBox("ClassNotFoundException exception while saving!", cnfe);
         } catch (IllegalArgumentException ex) {
-            ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
+            ExceptionHandling.ExceptionMessageBox("IllegalArgumentException exception while saving!", ex);
         } catch (IllegalAccessException ex) {
-            ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
+            ExceptionHandling.ExceptionMessageBox("IllegalAccessException exception while saving!", ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ConquerSpace.class.getName()).log(Level.SEVERE, null, ex);
         }
         LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
-        System.exit(0);
+        //System.exit(0);
     }
 
     public static void exitGame() {

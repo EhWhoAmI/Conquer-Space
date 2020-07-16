@@ -19,11 +19,13 @@ package ConquerSpace.common.game.ships.hull;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("hull")
 public class Hull extends ConquerSpaceGameObject{
     //KGS
     //Also determines hull hp and strength

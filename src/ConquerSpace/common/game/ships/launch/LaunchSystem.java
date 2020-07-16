@@ -20,11 +20,13 @@ package ConquerSpace.common.game.ships.launch;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.science.Technology;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("launch-system")
 public class LaunchSystem extends ConquerSpaceGameObject {
 
     private String name;

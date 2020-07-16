@@ -21,26 +21,28 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("stratum")
 public class Stratum extends ConquerSpaceGameObject{
-    @Serialize(key = "depth")
+    @Serialize("depth")
     //Depth in kilometers
     private int depth = 0;
-    @Serialize(key = "x")
+    @Serialize("x")
     private int x;
-    @Serialize(key = "y")
+    @Serialize("y")
     private int y;
-    @Serialize(key = "radius")
+    @Serialize("radius")
     private int radius;
-    @Serialize(key = "name")
+    @Serialize("name")
     private String name = "layer";
     
-    @Serialize(key = "minerals", special = SaveStuff.Good)
+    @Serialize(value = "minerals", special = SaveStuff.Good)
     public HashMap<Integer, Integer> minerals;
 
     public Stratum(GameState gameState) {

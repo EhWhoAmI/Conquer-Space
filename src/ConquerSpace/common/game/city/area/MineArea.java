@@ -20,12 +20,14 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.Stratum;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("mine-area")
 public class MineArea extends Area {
 
     private Integer mining;

@@ -17,11 +17,13 @@
  */
 package ConquerSpace.common.game.resources;
 
+import java.io.Serializable;
+
 /**
  * Is only needed on the generation of a universe.
  * @author EhWhoAmI
  */
-public class ResourceDistribution {
+public class ResourceDistribution  implements Serializable{
     public String resourceName;
     
     public int resourceId;

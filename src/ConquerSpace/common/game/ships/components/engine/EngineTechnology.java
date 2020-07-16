@@ -19,11 +19,13 @@ package ConquerSpace.common.game.ships.components.engine;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("engine-technology")
 public class EngineTechnology extends ConquerSpaceGameObject{
     
     private String name;

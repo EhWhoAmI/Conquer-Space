@@ -59,7 +59,7 @@ public class OrganizationsOrganizer extends JPanel {
         orgList = new JList<>(orgListModel);
         
         orgList.addListSelectionListener(l -> {
-            adminstratableListModel.setElements(orgListModel.getObject(orgList.getSelectedIndex()).region.bodies);
+            //adminstratableListModel.setElements(orgListModel.getObject(orgList.getSelectedIndex()).region.bodies);
             controlList.updateUI();
         });
 

@@ -17,14 +17,15 @@
  */
 package ConquerSpace.common.game.organizations;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class AdministrativeRegion {
-    public ArrayList<Administrable> bodies;
+public class AdministrativeRegion implements Serializable{
+    public ArrayList<Integer> bodies;
 
     public AdministrativeRegion() {
         bodies = new ArrayList<>();

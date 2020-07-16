@@ -20,6 +20,7 @@ package ConquerSpace.common.game.population;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -27,9 +28,10 @@ import java.util.Iterator;
  * Represents the population in a place.
  * @author EhWhoAmI
  */
+@SerializeClassName("population")
 public class Population extends ConquerSpaceGameObject{
 
-    @Serialize(key = "segments")
+    @Serialize("segments")
     public final ArrayList<Integer> populations;
 
     private long populationSize = 0;

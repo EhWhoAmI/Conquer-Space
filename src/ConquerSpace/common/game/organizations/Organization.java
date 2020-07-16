@@ -23,6 +23,7 @@ import ConquerSpace.common.actions.Action;
 import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.behavior.EmptyBehavior;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,14 +31,15 @@ import java.util.Arrays;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("organization")
 public class Organization extends ConquerSpaceGameObject {
 
-    @Serialize(key = "children")
+    @Serialize("children")
     private ArrayList<Integer> children;
     public ArrayList<Action> actionList;
     public AdministrativeRegion region;
 
-    @Serialize(key = "name")
+    @Serialize("name")
     protected String name;
     protected Behavior behavior;
 

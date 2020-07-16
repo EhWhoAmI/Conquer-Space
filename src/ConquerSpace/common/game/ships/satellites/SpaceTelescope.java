@@ -20,11 +20,13 @@ package ConquerSpace.common.game.ships.satellites;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("space-telescope")
 public class SpaceTelescope extends Satellite implements VisionPoint{
 
     private int civilization = -1;

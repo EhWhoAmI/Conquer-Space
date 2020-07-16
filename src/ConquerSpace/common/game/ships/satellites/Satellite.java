@@ -22,11 +22,13 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("satellite")
 public class Satellite extends ConquerSpaceGameObject implements Launchable, Orbitable{
     
     protected int mass;

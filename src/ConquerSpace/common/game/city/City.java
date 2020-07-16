@@ -30,6 +30,7 @@ import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,37 +40,38 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("city")
 public class City extends ConquerSpaceGameObject implements PersonEnterable, ResourceStockpile, Administrable {
-    @Serialize(key = "population")
+    @Serialize("population")
     public Integer population;
     
     public static final String CITY_DEFAULT = "emp";
     
-    private Person governor;
+    private Integer governor;
     
-    @Serialize(key = "name")
+    @Serialize("name")
     private String name;
     
-    @Serialize(key = "areas")
+    @Serialize("areas")
     public ArrayList<Integer> areas;
     
-    @Serialize(key = "working-for")
+    @Serialize("working-for")
     public ArrayList<Integer> workableFor;
     
-    @Serialize(key = "people")
+    @Serialize("people")
     public ArrayList<Person> peopleAtCity;
 
-    @Serialize(key = "resources", special = SaveStuff.Good)
+    @Serialize(value = "resources", special = SaveStuff.Good)
     public HashMap<Integer, Double> resources;
     
-    @Serialize(key = "demands", special = SaveStuff.Good)
+    @Serialize(value = "demands", special = SaveStuff.Good)
     public DoubleHashMap<Integer> resourceDemands;
 
-    @Serialize(key = "storage-needs")
+    @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
     
-    @Serialize(key = "max-storage")
+    @Serialize("max-storage")
     private int maxStorage;
     
     public ArrayList<Integer> supplyChains;
@@ -77,25 +79,25 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     private int ledgerClearDelta = 0;
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     
-    @Serialize(key = "location")
+    @Serialize("location")
     private Integer location;
 
-    @Serialize(key = "tags")
+    @Serialize("tags")
     public HashMap<String, Integer> tags;
 
     //% to completing a unit
-    @Serialize(key = "population-completion")
+    @Serialize("population-completion")
     private float populationUnitPercentage = 0;
 
     //Growth rates of the species...
     //private HashMap<Race, Float> speciesRates;
     private boolean resetJobs = false;
 
-    @Serialize(key = "city-type")
+    @Serialize("city-type")
     private CityType cityType;
 
     //Size in tiles
-    @Serialize(key = "tiles")
+    @Serialize("tiles")
     private int size;
 
     public City(GameState gameState, Integer location) {
@@ -146,12 +148,12 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     }
 
     public Person getGovernor() {
-        return governor;
+        return gameState.getObject(governor, Person.class);
     }
 
     public void setGovernor(Person governor) {
         governor.setRole("Governing " + name);
-        this.governor = governor;
+        this.governor = governor.getId();
     }
 
     public boolean toResetJobs() {

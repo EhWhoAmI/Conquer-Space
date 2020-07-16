@@ -40,6 +40,7 @@ import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;
+import ConquerSpace.common.save.SerializeClassName;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("civilization")
 public class Civilization extends Organization implements Employer {
 
     public static final int CIV_TECH_RESEARCH_CHANCE = 0;
@@ -59,7 +61,7 @@ public class Civilization extends Organization implements Employer {
     private RacePreferredClimateTpe civilizationPreferedClimate;
     private String civilizationSymbol;
 
-    @Serialize(key = "speciesName")
+    @Serialize("speciesName")
     private String speciesName;
 
     private String homePlanetName;

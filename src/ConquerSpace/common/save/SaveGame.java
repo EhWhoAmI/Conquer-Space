@@ -19,23 +19,40 @@ package ConquerSpace.common.save;
 
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.civilization.controllers.AIController;
+import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.util.Utilities;
 import ConquerSpace.common.util.Version;
+import com.google.gson.Gson;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,7 +67,7 @@ public class SaveGame {
 
     private File folder;
 
-    private Class[] primitives = new Class[]{Integer.class, Double.class, Float.class, Long.class, String.class, List.class, Map.class};
+    private Class[] primitives = new Class[]{Integer.class, Boolean.class, Double.class, Float.class, Long.class, String.class, List.class, Map.class};
 
     private JSONObject saveData;
 
@@ -85,28 +102,7 @@ public class SaveGame {
 
         //Save version
         saveData.put("version", ConquerSpace.VERSION.getVersionCore());
-
-        //Save gameobject
-        saveObject(saveData, gameState);
-        
-        //Save Goods
-        Iterator<String> set = gameState.goodIdentifiers.keySet().iterator();
-        JSONObject goodObjects = new JSONObject();
-        while (set.hasNext()) {
-            String text = set.next();
-            Good good = gameState.getGood(text);
-            JSONObject goodObject = new JSONObject();
-            saveObject(goodObject, good);
-            goodObjects.put(text, goodObject);
-        }
-        
-        saveData.put("goods", goodObjects);
-
-        String text = saveData.toString(4);//JsonValue.readHjson().toString(Stringify.HJSON);
-        FileWriter writer = new FileWriter("save.json");
-        writer.write(text);
-        writer.flush();
-
+                
         //Zip
         String zipFileName = "save.zip";//folder.getName() + "/save.zip";
 
@@ -119,45 +115,92 @@ public class SaveGame {
         byte[] bytes = meta.toString().getBytes();
         zos.write(bytes, 0, bytes.length);
         zos.closeEntry();
-        
+
         zos.putNextEntry(new ZipEntry("data"));
 
-        bytes = saveData.toString().getBytes();
-        zos.write(bytes, 0, bytes.length);
+        ObjectOutputStream out = new ObjectOutputStream(zos);
+        
+        out.writeObject(gameState);
+        
+        //bytes = saveData.toString().getBytes();
         zos.closeEntry();
+        out.close();
         zos.close();
     }
 
+    public void read(GameState gameState) throws FileNotFoundException, IOException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InstantiationException {
+        String zipFileName = "save.zip";//
+        ZipFile zipFile = new ZipFile(zipFileName);
+
+        StringBuilder builder = new StringBuilder();
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = entries.nextElement();
+            if (entry.getName().equals("data")) {
+                InputStream stream = zipFile.getInputStream(entry);
+                ObjectInputStream ois = new ObjectInputStream(stream);
+                Object getted = ois.readObject();
+                gameState.convert((GameState) getted);
+            }
+        }
+        zipFile.close();
+
+        //Other initialization actions
+        Integer playerCiv = gameState.playerCiv;
+        for(int i = 0; i < gameState.getCivilizationCount(); i++) {
+            Integer civId = gameState.getCivilization(i);
+            Civilization civ = gameState.getObject(civId, Civilization.class);
+            if(civId.equals(playerCiv)) {
+                //Put in playerCiv
+                civ.controller = new PlayerController();
+            } else {
+                civ.controller = new AIController();
+            }
+        }
+
+        //loop through the object
+        //readObject(json, gameState);
+        //Get goods
+    }
+
     private void saveObject(JSONObject saveObject, Object obj) throws IllegalArgumentException, IllegalAccessException {
+        System.out.println("Parsing " + obj.getClass().getName());
         //Check if primitive
         if (obj != null) {
+            //Add class things
+            if (obj.getClass().isAnnotationPresent(SerializeClassName.class)) {
+                SerializeClassName serializeName = obj.getClass().getAnnotation(SerializeClassName.class);
+                saveObject.put("class", serializeName.value());
+            }
+
             List<Field> fields = getAllFields(new ArrayList<>(), obj.getClass());
 
             //Loop through stuff
             for (Field field : fields) {
+                System.out.println(field.toString() + " " + field.getName());
                 field.setAccessible(true);
-                if (field.isAnnotationPresent(Serialize.class)) {
-                    Serialize s = field.getAnnotation(Serialize.class);
-                    String key = s.key();
+                if (!Modifier.isTransient(field.getModifiers())) {//isAnnotationPresent(Serialize.class)) {
+                    //Serialize s = field.getAnnotation(Serialize.class);
+                    String key = UUID.randomUUID().toString();
 
                     Object object = field.get(obj);
                     boolean isGoodIdentifier = false;
                     if (isSaveable(field.get(obj))) {
-                        if (s.special() == SaveStuff.Good) {
-                            isGoodIdentifier = true;
-                            if (object instanceof Integer) {
-                                //Has to be an int...
-                                Integer val = (Integer) object;
-                                String stringIdentifier = gameState.goodIdentifiers.getKey(val);
-                                object = stringIdentifier;
-                            }
-                        }
+//                        //if (s.special() == SaveStuff.Good) {
+//                            isGoodIdentifier = true;
+//                            if (object instanceof Integer) {
+//                                //Has to be an int...
+//                                Integer val = (Integer) object;
+//                                String stringIdentifier = gameState.goodIdentifiers.getKey(val);
+//                                object = stringIdentifier;
+//                            }
+//                        }
                         save(saveObject, key, object, isGoodIdentifier);
                     } else {
                         //Serialize children
                         JSONObject childObject = new JSONObject();
                         saveObject(childObject, field.get(obj));
-
                         //Put the stuff
                         saveObject.put(key, childObject);
                     }
@@ -221,6 +264,130 @@ public class SaveGame {
         } else {
             saveObject.put(key, obj);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readObject(JSONObject data, Object obj) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InstantiationException {
+        if (obj != null) {
+            List<Field> fields = getAllFields(new ArrayList<>(), obj.getClass());
+            //Loop through stuff
+            for (Field field : fields) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(Serialize.class)) {
+                    Serialize s = field.getAnnotation(Serialize.class);
+                    String key = s.value();
+
+                    if (data.has(key)) {
+                        if (isSaveable(field.getType())) {
+                            Class<?> ct = field.getType();
+                            //Save the thing
+                            field.setAccessible(true);
+                            if (ct.isAssignableFrom(Number.class)) {
+                                Number val = (Number) data.getInt(key);
+                                field.set(obj, val);
+                            } else if (List.class.isAssignableFrom(ct)) {
+                                JSONArray arr = data.getJSONArray(key);
+                                List list = (List) field.getType().newInstance();
+                                //Loop through
+                                //Most arrays are number references
+                                for (int i = 0; i < arr.length(); i++) {
+                                    Object arrayValue = arr.get(i);
+                                    list.add(arrayValue);
+                                }
+                                field.set(obj, list);
+                            } else if (Map.class.isAssignableFrom(ct)) {
+                                System.out.println(key);
+                                JSONObject dataObject = data.getJSONObject(key);
+                                Map map = (Map) field.getType().newInstance();
+
+                                //Loop through
+                                //Most arrays are number references
+                                Iterator it = dataObject.keys();
+                                while (it.hasNext()) {
+                                    String text = (String) it.next();
+                                    JSONObject object = dataObject.getJSONObject(text);
+                                    //Parse object
+                                    //readObject(object, )
+                                    //Have to read the class...
+                                    if (key.equals("objects")) {
+                                        int value = Integer.parseInt(text);
+                                        //Parse the object...
+                                        String className = object.getString("class");
+                                        Class ckClass = getClassFromString(className);
+                                        System.out.println(ckClass.newInstance());
+                                        map.put(value, dataObject.get(text));
+                                    } else {
+                                        map.put(text, dataObject.get(text));
+                                    }
+                                }
+                                System.out.println(map.size());
+                                FileWriter fw;
+                                try {
+                                    fw = new FileWriter("texting.txt");
+                                    fw.write(map.toString());
+                                } catch (IOException ex) {
+                                    Logger.getLogger(SaveGame.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        } else {
+                            //Do something else
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private Class getClassFromString(String s) {
+        for (int i = 0; i < ClassList.classes.length; i++) {
+            Class<?> c = ClassList.classes[i];
+            if (c.isAnnotationPresent(SerializeClassName.class)) {
+                if (c.getAnnotation(SerializeClassName.class).value().equals(s)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void loadObject(JSONObject input, Object output, Field field) {
+        Type generic = field.getGenericType();
+
+        if (generic instanceof ParameterizedType) {
+            ParameterizedType pType = (ParameterizedType) generic;
+            //System.out.println(isSaveable(pType.getActualTypeArguments()[0].getTypeName()));
+
+            //System.out.print("Raw type: " + pType.getRawType() + " - ");
+            //System.out.println("Type args: " + Arrays.toString(pType.getActualTypeArguments()));
+        } else {
+
+            //System.out.println("Type: " + field.getType());
+        }
+    }
+
+    private boolean isSaveable(String object) throws ClassNotFoundException {
+        //Check if the thing...
+        for (int i = 0; i < primitives.length; i++) {
+            //System.out.println("passing " + primitives[i].toString());
+            //System.out.println(object.getClass().isInstance(java.lang.Long.class));
+            Class<?> c = primitives[i];
+            if (Class.forName(object).isAssignableFrom(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSaveable(Class<?> object) {
+        for (int i = 0; i < primitives.length; i++) {
+            //System.out.println("passing " + primitives[i].toString());
+            //System.out.println(object.getClass().isInstance(java.lang.Long.class));
+            Class<?> c = primitives[i];
+            if (c.isAssignableFrom(object)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isSaveable(Object object) {

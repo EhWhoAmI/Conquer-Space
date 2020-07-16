@@ -21,21 +21,23 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * A farm field
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("farm-field")
 public class FarmFieldArea extends TimedManufacturerArea {
 
-    private Species grown;
+    private Integer grown;
     private int time;
     private int fieldSize;
 
     public FarmFieldArea(GameState gameState, Species grownSpecies) {
         super(gameState, new ProductionProcess(grownSpecies.getId()));
-        grown = grownSpecies;
+        grown = grownSpecies.getId();
         //Because you can only grow one.
         setLimit(1);
     }
@@ -49,11 +51,11 @@ public class FarmFieldArea extends TimedManufacturerArea {
     }
 
     public Species getGrown() {
-        return grown;
+        return gameState.getObject(grown, Species.class);
     }
 
     public void setGrown(Species grown) {
-        this.grown = grown;
+        this.grown = grown.getId();
     }
 
     public void setTime(int time) {

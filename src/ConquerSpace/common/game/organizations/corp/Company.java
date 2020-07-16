@@ -23,16 +23,18 @@ import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("company")
 public class Company extends Organization implements Employer{
     private String name;
     private int affiliation;
-    private City cityBasedIn;
-    private Planet planetBasedIn;
+    private Integer cityBasedIn;
+    private Integer planetBasedIn;
 
     public Company(GameState gameState, String name) {
         super(gameState, name);
@@ -48,11 +50,11 @@ public class Company extends Organization implements Employer{
     }
 
     public City getCityBasedIn() {
-        return cityBasedIn;
+        return gameState.getObject(cityBasedIn, City.class);
     }
 
     public Planet getPlanetBasedIn() {
-        return planetBasedIn;
+        return gameState.getObject(planetBasedIn, Planet.class);
     }
 
     public void setAffiliation(int affiliation) {
@@ -60,7 +62,7 @@ public class Company extends Organization implements Employer{
     }
 
     public void setCityBasedIn(City cityBasedIn) {
-        this.cityBasedIn = cityBasedIn;
+        this.cityBasedIn = cityBasedIn.getId();
     }
 
     public void setName(String name) {
@@ -68,7 +70,7 @@ public class Company extends Organization implements Employer{
     }
 
     public void setPlanetBasedIn(Planet planetBasedIn) {
-        this.planetBasedIn = planetBasedIn;
+        this.planetBasedIn = planetBasedIn.getId();
     }
 
     @Override

@@ -17,15 +17,20 @@
  */
 package ConquerSpace.common;
 
+import ConquerSpace.common.save.Serialize;
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public abstract class ConquerSpaceGameObject {
+public abstract class ConquerSpaceGameObject implements Serializable {
+
     protected final GameState gameState;
-    
+
+    @Serialize("id")
     private final int id;
-    
+
     public ConquerSpaceGameObject(GameState gameState) {
         this.gameState = gameState;
         id = gameState.addGameObject(this);

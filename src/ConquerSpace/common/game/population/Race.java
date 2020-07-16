@@ -21,26 +21,28 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * Sentient Species that can become a population.
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("race")
 public class Race extends Species{
-    @Serialize(key = "food-id", special = SaveStuff.Good)
+    @Serialize(value = "food-id", special = SaveStuff.Good)
     public Integer food;
     
     //Usage of food per month
-    @Serialize(key = "food")
+    @Serialize("food")
     private int foodPerMonth;
     //Base increase in population per year. Will be incremented per every couple of ticks
     
-    @Serialize(key = "breeding-rate")
+    @Serialize("breeding-rate")
     private float breedingRate;
 
     //The amount of support a pop unit needs (as in pop)
-    @Serialize(key = "upkeep")
+    @Serialize("upkeep")
     private float upkeep = 0;
 
     public Race(GameState state, int foodPerMonth, float breedingRate, String name) {

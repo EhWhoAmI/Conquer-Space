@@ -20,15 +20,17 @@ package ConquerSpace.common.game.ships.components.templates;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.components.ShipComponentTypes;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("engine-template")
 public class EngineTemplate extends ShipComponentTemplate{
     
     private int thrust;
-    private EngineTechnology engineTechnology;
+    private Integer engineTechnology;
     //Fuel
 
     public EngineTemplate(GameState gameState) {
@@ -48,11 +50,11 @@ public class EngineTemplate extends ShipComponentTemplate{
     }
 
     public EngineTechnology getEngineTechnology() {
-        return engineTechnology;
+        return gameState.getObject(engineTechnology, EngineTechnology.class);
     }
 
     public void setEngineTechnology(EngineTechnology engineTechnology) {
-        this.engineTechnology = engineTechnology;
+        this.engineTechnology = engineTechnology.getId();
     }
 
     @Override

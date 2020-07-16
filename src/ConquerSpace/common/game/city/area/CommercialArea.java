@@ -19,11 +19,13 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.economy.Currency;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * Symbolizes all the smaller businesses and normal day to day trade in 
  * @author EhWhoAmI
  */
+@SerializeClassName("commercial-area")
 public class CommercialArea extends Area{
     private int tradeValue;
     private Currency currency;

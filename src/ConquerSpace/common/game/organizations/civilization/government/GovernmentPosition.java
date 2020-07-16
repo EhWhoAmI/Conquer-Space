@@ -17,11 +17,13 @@
  */
 package ConquerSpace.common.game.organizations.civilization.government;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class GovernmentPosition {
+public class GovernmentPosition implements Serializable{
     private static int idCounter = 0;
     int id;
     

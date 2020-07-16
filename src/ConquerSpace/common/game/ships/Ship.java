@@ -23,12 +23,14 @@ import ConquerSpace.common.game.ships.components.templates.ShipComponentTemplate
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.Vector;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("ship")
 public class Ship extends SpaceShip {
     String sclass;
 
@@ -51,9 +53,7 @@ public class Ship extends SpaceShip {
         components = new ArrayList<>();
         //Get components
         if (!sclass.components.isEmpty()) {
-            for (ShipComponentTemplate s : sclass.components) {
-                //components.add((ShipComponent) s.clone());
-            }
+            
         }
         this.hull = (Hull) sclass.getHull().clone();
         this.mass = sclass.getMass();

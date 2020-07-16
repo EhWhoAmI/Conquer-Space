@@ -26,7 +26,7 @@ import ConquerSpace.common.save.Serialize;
  */
 public class FoodGood extends Good{
     
-    @Serialize(key = "species")
+    @Serialize("species")
     Integer species;
     public FoodGood(Species s, double volume, double mass) {
         super(s.getName(), "f_" + s.getName() + "_" + s.getId(), volume, mass);

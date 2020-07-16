@@ -22,6 +22,7 @@ import ConquerSpace.common.util.ResourceLoader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nu.xom.Builder;
@@ -33,7 +34,7 @@ import nu.xom.ParsingException;
  *
  * @author EhWhoAmI
  */
-public class Fields {
+public class Fields implements Serializable{
 
     public static FieldNode fieldNodeRoot;
 

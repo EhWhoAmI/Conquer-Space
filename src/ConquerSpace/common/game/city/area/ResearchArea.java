@@ -20,11 +20,13 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.science.ScienceLab;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
 /**
  * For science labs and stuff
  */
+@SerializeClassName("research-area")
 public class ResearchArea extends ConsumerArea implements ScienceLab {
 
     private String name;

@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.universe;
 
 import com.google.gson.annotations.Expose;
+import java.io.Serializable;
 
 /**
  * Path of an object in a universe. To write path: "sectorid:star
@@ -27,7 +28,7 @@ import com.google.gson.annotations.Expose;
  *
  * @author EhWhoAmI
  */
-public class UniversePath {
+public class UniversePath implements Serializable{
     /**
      * ID of system
      */

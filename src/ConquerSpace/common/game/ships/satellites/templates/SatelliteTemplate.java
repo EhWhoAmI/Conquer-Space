@@ -17,12 +17,14 @@
  */
 package ConquerSpace.common.game.ships.satellites.templates;
 
+import java.io.Serializable;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class SatelliteTemplate {
+public class SatelliteTemplate implements Serializable {
+
     protected static int idCounter = 0;
     protected int mass;
     protected String name = "";

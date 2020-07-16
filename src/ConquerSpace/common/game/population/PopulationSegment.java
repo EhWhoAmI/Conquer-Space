@@ -19,11 +19,13 @@ package ConquerSpace.common.game.population;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("population-segment")
 public class PopulationSegment extends ConquerSpaceGameObject{
     public long size = 0;
     

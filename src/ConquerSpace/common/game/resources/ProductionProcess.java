@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,10 +25,10 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class ProductionProcess {
+public class ProductionProcess implements Serializable {
 
     private static int idCounter = 0;
-    
+
     private int id;
     public String name;
     public String identifier;
@@ -43,8 +44,7 @@ public class ProductionProcess {
         catalyst = new ArrayList<>();
         id = idCounter++;
     }
-    
-    
+
     public ProductionProcess(Integer outputGood) {
         input = new HashMap<>();
         output = new HashMap<>();

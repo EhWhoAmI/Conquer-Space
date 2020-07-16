@@ -18,13 +18,14 @@
 package ConquerSpace.common.game.organizations.civilization.government;
 
 import ConquerSpace.common.game.characters.Person;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Government {
+public class Government implements Serializable{
     public HashMap<GovernmentPosition, Person> officials;
     public PoliticalPowerSource politicalPowerSource;
     Person leader;

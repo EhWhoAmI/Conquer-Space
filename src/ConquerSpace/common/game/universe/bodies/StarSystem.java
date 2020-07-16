@@ -22,6 +22,7 @@ import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
@@ -29,18 +30,19 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("star-system")
 public class StarSystem extends Body {
     private int index;
     
     public int planetCount = 0;
     
-    @Serialize(key = "bodies")
+    @Serialize("bodies")
     private ArrayList<Integer> bodies;
 
-    @Serialize(key = "ships")
+    @Serialize("ships")
     public ArrayList<Integer> spaceShips;
     
-    @Serialize(key = "name")
+    @Serialize("name")
     private String name = "";
 
     /**

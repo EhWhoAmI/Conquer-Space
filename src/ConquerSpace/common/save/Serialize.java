@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Serialize {
-    public String key();
+    public String value();
     public SaveStuff special() default SaveStuff.No;
     public Class<?> stuff() default Class.class;
 }

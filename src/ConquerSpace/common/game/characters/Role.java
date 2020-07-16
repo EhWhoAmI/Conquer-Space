@@ -17,12 +17,14 @@
  */
 package ConquerSpace.common.game.characters;
 
+import java.io.Serializable;
+
 /**
  * The role the person is playing in society.
  *
  * @author EhWhoAmI
  */
-public class Role {
+public class Role implements Serializable{
 
     private String text;
 

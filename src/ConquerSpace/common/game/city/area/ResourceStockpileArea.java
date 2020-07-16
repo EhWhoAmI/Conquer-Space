@@ -22,6 +22,7 @@ import ConquerSpace.common.game.logistics.ResourcePermissions;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("stockpile-area")
 public class ResourceStockpileArea extends Area implements ResourceStockpile {
 
     private ResourcePermissions defaultPermissions;

@@ -17,10 +17,12 @@
  */
 package ConquerSpace.common.game.organizations.civilization.stats;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class Stats {
+public class Stats implements Serializable{
     
 }

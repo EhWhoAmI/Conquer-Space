@@ -19,32 +19,35 @@ package ConquerSpace.common.game.universe;
 
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.bodies.Body;
+import java.io.Serializable;
 
 /**
  * Orbit description
+ *
  * @author EhWhoAmI
  */
-public class Orbit {
+public class Orbit implements Serializable {
+
     /**
      * The degrees
      */
-    @Serialize(key = "degrees")
+    @Serialize("degrees")
     public double degrees;
 
-    @Serialize(key = "sma")
+    @Serialize("sma")
     public double semiMajorAxis;
-    
-    @Serialize(key = "eccentricity")
+
+    @Serialize("eccentricity")
     public double eccentricity;
 
     /**
      * The tilt of the orbit, in degrees.
      */
-    @Serialize(key = "rotation")
+    @Serialize("rotation")
     public double rotation;
-    
+
     public Body referenceBody;
-    
+
     public Orbit(double degrees, double semiMajorAxis, double eccentricity, double rotation) {
         this.degrees = degrees;
         this.semiMajorAxis = semiMajorAxis;
@@ -96,7 +99,7 @@ public class Orbit {
     public void setSemiMajorAxis(double semiMajorAxis) {
         this.semiMajorAxis = semiMajorAxis;
     }
-    
+
     public void modDegrees(float degs) {
         degrees += degs;
         degrees %= 360;

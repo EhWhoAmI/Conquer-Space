@@ -17,12 +17,14 @@
  */
 package ConquerSpace.common.game.science;
 
+import java.io.Serializable;
+
 /**
  * Class for tech.
  *
  * @author EhWhoAmI
  */
-public class Technology {
+public class Technology implements Serializable{
 
     private String name;
     private String[] deps;

@@ -19,17 +19,19 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.Good;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
 /**
  * An area that does not generate resources, and only has resource intake.
  * @author EhWhoAmI
  */
+@SerializeClassName("consumer-area")
 public class ConsumerArea extends Area{
     /**
      * Consumed per tick
      */
-    public HashMap<Good, Double> consumed;
+    public HashMap<Integer, Double> consumed;
     
     public ConsumerArea(GameState gameState) {
         super(gameState);

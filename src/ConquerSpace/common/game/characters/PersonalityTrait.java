@@ -17,11 +17,13 @@
  */
 package ConquerSpace.common.game.characters;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class PersonalityTrait {
+public class PersonalityTrait  implements Serializable{
     private String name;  
 
     public void setName(String name) {

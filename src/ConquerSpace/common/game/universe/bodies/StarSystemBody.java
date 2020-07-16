@@ -18,11 +18,13 @@
 package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("system-body")
 public class StarSystemBody extends Body{
     private int index;
     

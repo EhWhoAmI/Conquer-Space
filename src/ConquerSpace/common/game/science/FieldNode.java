@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.science;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -24,9 +25,9 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class FieldNode {
+public class FieldNode implements Serializable{
 
-    private FieldNode parent;
+    private transient FieldNode parent;
     private ArrayList<FieldNode> fieldNodes;
     private String name;
 

@@ -22,36 +22,38 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * Works as a modifier to the district
  */
+@SerializeClassName("area")
 public class Area extends ConquerSpaceGameObject implements Workable, Comparable<Area> {
 
     /**
      * The number of people currently manning the place.
      */
-    @Serialize(key = "manning")
+    @Serialize("manning")
     private int currentlyManningJobs;
-    @Serialize(key = "operating")
+    @Serialize("operating")
     private int operatingJobs;
-    @Serialize(key = "max")
+    @Serialize("max")
     private int maxJobs;
-    @Serialize(key = "power")
+    @Serialize("power")
     private int powerUsage;
     
     //The org owning the thing
-    @Serialize(key = "owner")
+    @Serialize("owner")
     private int owner = -1;
     
     //Resource request
-    @Serialize(key = "resource-priority")
+    @Serialize("resource-priority")
     protected int priority = Integer.MAX_VALUE;
 
     /**
      * This is how productive the area is when it is at only <code> currentlyManningJobs</code>.
      */
-    @Serialize(key = "productivity")
+    @Serialize("productivity")
     private float workingmultiplier = 1;
 
     public Area(GameState gameState) {

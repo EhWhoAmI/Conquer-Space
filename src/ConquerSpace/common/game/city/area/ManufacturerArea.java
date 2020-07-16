@@ -20,12 +20,14 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * Resources in and out, quickly.
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("manufacturer-area")
 public class ManufacturerArea extends Area {
     protected ProductionProcess process;
     //How much of that production process per round...

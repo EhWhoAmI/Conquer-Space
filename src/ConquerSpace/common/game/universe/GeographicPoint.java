@@ -18,12 +18,13 @@
 package ConquerSpace.common.game.universe;
 
 import ConquerSpace.common.save.CustomSerializer;
+import java.io.Serializable;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class GeographicPoint implements CustomSerializer {
+public class GeographicPoint implements Serializable, CustomSerializer {
 
     private int X;
     private int Y;

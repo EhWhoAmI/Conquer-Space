@@ -20,11 +20,13 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("observatory-area")
 public class ObservatoryArea extends Area implements VisionPoint {
 
     private int civilization;

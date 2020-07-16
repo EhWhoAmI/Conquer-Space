@@ -19,6 +19,8 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.save.SerializeClassName;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -27,14 +29,16 @@ import java.util.Iterator;
  *
  * @author EhWhoAmI
  */
-public class TimedManufacturerArea extends Area {    
+@SerializeClassName("timed-manufacturer-area")
+public class TimedManufacturerArea extends Area {
+
     /**
      * Limit of number of processes.
      */
     private int limit = 0;
     protected ArrayList<ProductionTimer> queue;
     private ProductionProcess process;
-    
+
     float productivity = 0;
 
     public TimedManufacturerArea(GameState gameState, ProductionProcess process) {
@@ -79,7 +83,7 @@ public class TimedManufacturerArea extends Area {
         this.limit = limit;
     }
 
-    public static class ProductionTimer {
+    public static class ProductionTimer implements Serializable {
 
         int timeLeft;
 

@@ -25,7 +25,7 @@ import ConquerSpace.common.save.Serialize;
  */
 public class Element extends Good{
     
-    @Serialize(key = "element-no")
+    @Serialize("element-no")
     private int elementNumber;
     public Element(String name, double volume, double mass) {
         super(name, "e_" + name.toLowerCase(), volume, mass);

@@ -21,6 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.save.SerializeClassName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -28,13 +29,14 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("ship-class")
 public class ShipClass extends ConquerSpaceGameObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String name;
     private Hull hull;
-    public ArrayList<ShipComponentTemplate> components;
+    public ArrayList<Integer> components;
     private int mass = 1;
     private long estimatedThrust = 0;
 

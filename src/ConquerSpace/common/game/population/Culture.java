@@ -19,11 +19,13 @@ package ConquerSpace.common.game.population;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * Defines the culture of the species, and its behavior
  * @author EhWhoAmI
  */
+@SerializeClassName("culture")
 public class Culture extends ConquerSpaceGameObject {    
     public Culture(GameState gameState) {
         super(gameState);

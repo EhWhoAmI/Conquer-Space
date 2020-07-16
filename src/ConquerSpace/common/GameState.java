@@ -33,6 +33,7 @@ import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,22 +47,21 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
  *
  * @author EhWhoAmI
  */
-public final class GameState {
+public final class GameState implements Serializable {
 
-    @Serialize(key = "seed")
+    @Serialize("seed")
     private long seed;
 
     //May need to be thread safe in the future
-    @Serialize(key = "objects")
-    protected final HashMap<Integer, ConquerSpaceGameObject> gameObjects;
+    @Serialize("objects")
+    protected HashMap<Integer, ConquerSpaceGameObject> gameObjects;
+    private Galaxy universe;
 
-    private final Galaxy universe;
+    @Serialize("universe")
+    private Integer universeId;
 
-    @Serialize(key = "universe")
-    private final Integer universeId;
-
-    @Serialize(key = "date")
-    public final StarDate date;
+    @Serialize("date")
+    public StarDate date;
 
     //For evals
     //Rate the game refreshes buildings and stuff like that
@@ -71,16 +71,16 @@ public final class GameState {
     //Variables read from 
     public ArrayList<LaunchSystem> launchSystems;
 
-    @Serialize(key = "civs")
-    private final ArrayList<Integer> civilizations;
+    @Serialize("civs")
+    private ArrayList<Integer> civilizations;
 
-    @Serialize(key = "orgs")
-    private final ArrayList<Integer> organizations;
+    @Serialize("orgs")
+    private ArrayList<Integer> organizations;
 
     public ArrayList<EngineTechnology> engineTechnologys;
     public ArrayList<PersonalityTrait> personalityTraits;
 
-    @Serialize(key = "species")
+    @Serialize("species")
     public ArrayList<Integer> species;
 
     public HashMap<String, Integer> shipTypes;
@@ -95,7 +95,7 @@ public final class GameState {
 
     public HashMap<String, ProductionProcess> prodProcesses;
 
-    @Serialize(key = "player")
+    @Serialize("player")
     public Integer playerCiv;
 
     public FieldNode fieldNodeRoot;
@@ -103,7 +103,7 @@ public final class GameState {
 
     private Random random;
 
-    public File saveFile;
+    public transient File saveFile;
 
     //private GameUpdater updater;
     public GameState(int seed) {
@@ -257,5 +257,48 @@ public final class GameState {
 
     public Integer getUniverseId() {
         return universeId;
+    }
+
+    /**
+     * Set itself to the gamestate
+     *
+     * @param gameState
+     */
+    public void convert(GameState gameState) {
+        seed = gameState.seed;
+
+        gameObjects = gameState.gameObjects;
+
+        universe = gameState.universe;
+
+        universeId = gameState.universeId;
+
+        date = gameState.date;
+        launchSystems = gameState.launchSystems;
+        civilizations = gameState.civilizations;
+        organizations = gameState.organizations;
+
+        engineTechnologys = gameState.engineTechnologys;
+        personalityTraits = gameState.personalityTraits;
+        species = gameState.species;
+
+        shipTypes = gameState.shipTypes;
+        shipTypeClasses = gameState.shipTypeClasses;
+
+        //Can theoratically delete this after universe generation is finished. Only needed for generating a star system
+        oreDistributions = gameState.oreDistributions;
+
+        //Handles goods
+        goodHashMap = gameState.goodHashMap;
+        goodIdentifiers = gameState.goodIdentifiers;
+
+        prodProcesses = gameState.prodProcesses;
+
+        playerCiv = gameState.playerCiv;
+
+        fieldNodeRoot = gameState.fieldNodeRoot;
+        techonologies = gameState.techonologies;
+
+        random = gameState.random;
     }
 }

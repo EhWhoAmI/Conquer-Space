@@ -18,23 +18,25 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("construction-area")
 public class ConstructingArea extends Area{
     private int ticksLeft;
-    private Area toBuild;
+    private Integer toBuild;
 
     public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
         super(gameState);
         this.ticksLeft = ticks;
-        this.toBuild = toBuild;
+        this.toBuild = toBuild.getId();
     }
 
     public Area getToBuild() {
-        return toBuild;
+        return gameState.getObject(toBuild, Area.class);
     }
 
     public int getTicksLeft() {

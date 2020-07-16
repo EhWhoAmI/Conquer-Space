@@ -18,11 +18,13 @@
 package ConquerSpace.common.game.ships.satellites;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  * A satellite that poses no purpose
  * @author EhWhoAmI
  */
+@SerializeClassName("none-satellite")
 public class NoneSatellite extends Satellite{
     
     public NoneSatellite(GameState gameState) {

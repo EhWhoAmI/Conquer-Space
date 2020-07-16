@@ -18,18 +18,19 @@
 package ConquerSpace.common;
 
 import ConquerSpace.common.save.Serialize;
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class StarDate {
+public class StarDate implements Serializable{
 
     /**
      * Ticker is in hours.
      */
-    @Serialize(key = "value")
+    @Serialize("value")
     private long date;
 
     public StarDate() {

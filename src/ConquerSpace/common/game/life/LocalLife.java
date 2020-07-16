@@ -17,19 +17,21 @@
  */
 package ConquerSpace.common.game.life;
 
+import java.io.Serializable;
+
 /**
  * Life on a planet.
  *
  * @author EhWhoAmI
  */
-public class LocalLife {
+public class LocalLife implements Serializable {
 
     private int biomass = 0;
-    
+
     private Species species;
 
     public LocalLife() {
-    }   
+    }
 
     public void setBiomass(int biomass) {
         this.biomass = biomass;

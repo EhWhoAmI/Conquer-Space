@@ -15,48 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.universe;
+package ConquerSpace.common.save;
 
-import java.io.Serializable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class SpacePoint implements Serializable{
-
-    private double x;
-    private double y;
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public SpacePoint(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public int hashCode() {
-        return (("" + x + y).hashCode());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof SpacePoint) {
-            SpacePoint ither = (SpacePoint) obj;
-            return ((ither.x == x) && (ither.y == y));
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return (x + ", " + y);
-    }
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SerializeClassName {
+    public String value();
 }

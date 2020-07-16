@@ -18,12 +18,13 @@
 package ConquerSpace.common.game.organizations.behavior;
 
 import ConquerSpace.common.game.organizations.Organization;
+import java.io.Serializable;
 
 /**
  * Behavior for orgs, what they do. Probably have to change to a class in the future, but no idea on how to implement.
  * @author EhWhoAmI
  */
-public abstract class Behavior {
+public abstract class Behavior implements Serializable{
     
     Organization org;
 

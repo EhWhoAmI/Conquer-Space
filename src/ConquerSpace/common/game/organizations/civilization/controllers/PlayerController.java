@@ -47,7 +47,7 @@ public class PlayerController extends CivilizationController {
     public AlertDisplayer alertDisplayer;
     public ArrayList<Ship> selectedShips = new ArrayList<>();
     
-    private GameState state;
+    private transient GameState state;
 
     @Override
     public ArrayList<Action> doTurn(Civilization c) {

@@ -20,12 +20,14 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
  * A place where you can start to Conquer Space!
  * @author EhWhoAmI
  */
+@SerializeClassName("space-port-area")
 public class SpacePortArea extends Area{
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
     private Integer system;

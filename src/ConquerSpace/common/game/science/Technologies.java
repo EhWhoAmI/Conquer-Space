@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author EhWhoAmI
  */
-public class Technologies {
+public class Technologies implements Serializable{
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Technologies.class.getName());
 

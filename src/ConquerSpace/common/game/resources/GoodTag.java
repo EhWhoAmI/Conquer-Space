@@ -17,10 +17,12 @@
  */
 package ConquerSpace.common.game.resources;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class GoodTag {
-    
+public class GoodTag implements Serializable {
+
 }

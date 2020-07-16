@@ -19,11 +19,13 @@ package ConquerSpace.common.game.ships.hull;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("hullmaterial")
 public class HullMaterial extends ConquerSpaceGameObject{
     private String name;
     private int strength;

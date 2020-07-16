@@ -30,6 +30,7 @@ import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,59 +39,60 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
+@SerializeClassName("planet")
 public class Planet extends StarSystemBody implements Administrable {
 
-    @Serialize(key = "type")
+    @Serialize("type")
     private int planetType;
 
     //Radius in hundreds of kilometers, which means that one tile is 100x100 km
-    @Serialize(key = "size")
+    @Serialize("size")
     private int planetSize;
 
-    @Serialize(key = "strata")
+    @Serialize("strata")
     public ArrayList<Integer> strata;
 
-    @Serialize(key = "owner")
+    @Serialize("owner")
     private int ownerID = ControlTypes.NONE_CONTROLLED;
 
     //Empty as default -- undiscovered
-    @Serialize(key = "name")
+    @Serialize("name")
     private String name = "";
     //public PlanetSector[] planetSectors;
 
-    @Serialize(key = "parent")
+    @Serialize("parent")
     private int parentStarSystem;
 
     public Economy economy;
 
-    @Serialize(key = "satellites")
+    @Serialize("satellites")
     private ArrayList<Orbitable> satellites;
 
-    @Serialize(key = "city-positions")
+    @Serialize("city-positions")
     public HashMap<GeographicPoint, Integer> cityDistributions;
 
     //Civs that have scanned this
-    @Serialize(key = "scanned")
+    @Serialize("scanned")
     private ArrayList<Integer> scanned;
 
-    @Serialize(key = "terrain-seed")
+    @Serialize("terrain-seed")
     private int terrainSeed;
 
-    @Serialize(key = "coloringIndex")
+    @Serialize("coloringIndex")
     private int terrainColoringIndex;
 
-    @Serialize(key = "lived")
+    @Serialize("lived")
     private boolean habitated = false;
 
-    @Serialize(key = "delta")
+    @Serialize("delta")
     private float degreesPerTurn = 0.0f;
 
-    @Serialize(key = "cities")
+    @Serialize("cities")
     public ArrayList<Integer> cities;
 
     private Person governor;
 
-    @Serialize(key = "providers")
+    @Serialize("providers")
     public ArrayList<Workable> jobProviders;
 
     /**
