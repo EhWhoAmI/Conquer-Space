@@ -2,14 +2,14 @@ package ConquerSpace.game.universe;
 
 import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.Globals;
-import ConquerSpace.game.GameController;
+import ConquerSpace.server.GameController;
 import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.organizations.civilization.Civilization;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.bodies.Universe;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
 import ConquerSpace.game.universe.generators.UniverseGenerator;
-import ConquerSpace.gui.renderers.UniverseRenderer;
+import ConquerSpace.client.UniverseRenderer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
