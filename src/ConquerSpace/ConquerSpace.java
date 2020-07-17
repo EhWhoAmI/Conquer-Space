@@ -280,10 +280,15 @@ public final class ConquerSpace {
 
     public static void loadUniverse() {
         Globals.gameState = new GameState(0);
+        Globals.gameState.saveFile = new File(SaveGame.getSaveFolder());
         //Load universe
         long loadingStart = System.currentTimeMillis();
         GameLoader.load(Globals.gameState);
-        Globals.generator.generate(Globals.gameState);
+        try {
+            Globals.generator.generate(Globals.gameState);
+        } catch (Exception ex) {
+            ExceptionHandling.ExceptionMessageBox(ex.getClass().toString() + " while loading universe!", ex);
+        }
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
     }
@@ -495,30 +500,6 @@ public final class ConquerSpace {
         //Create generator
         DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
         Globals.generator = gen;
-    }
-
-    private static void saveGame() {
-        SaveGame game = new SaveGame(SaveGame.getSaveFolder());
-        long before = System.currentTimeMillis();
-        try {
-            game.save(Globals.gameState);
-
-            game.read(Globals.gameState);
-        } catch (FileNotFoundException ex) {
-            ExceptionHandling.ExceptionMessageBox("FileNotFoundException exception while saving!", ex);
-        } catch (IOException ex) {
-            ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
-        } catch (ClassNotFoundException cnfe) {
-            ExceptionHandling.ExceptionMessageBox("ClassNotFoundException exception while saving!", cnfe);
-        } catch (IllegalArgumentException ex) {
-            ExceptionHandling.ExceptionMessageBox("IllegalArgumentException exception while saving!", ex);
-        } catch (IllegalAccessException ex) {
-            ExceptionHandling.ExceptionMessageBox("IllegalAccessException exception while saving!", ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConquerSpace.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
-        //System.exit(0);
     }
 
     public static void exitGame() {

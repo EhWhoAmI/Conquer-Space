@@ -50,7 +50,11 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Logger;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.Globals;
+import ConquerSpace.server.generators.SaveGameUniverseGenerator;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Main menu.
@@ -213,7 +217,16 @@ public class MainMenu extends JFrame implements WindowListener {
             });
 
             resumeGame.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, LOCALE_MESSAGES.getMessage("start.gui.MainMenu.notimplemented"), LOCALE_MESSAGES.getMessage("start.gui.MainMenu.oops"), JOptionPane.INFORMATION_MESSAGE);
+                JFileChooser chooser = new JFileChooser("./save");
+                chooser.setFileFilter(new FileNameExtensionFilter("Zip File", "zip"));
+                chooser.showOpenDialog(null);
+                File save = chooser.getSelectedFile();
+                //Then load the universe
+                if (save != null) {
+                    Globals.generator = new SaveGameUniverseGenerator(save);
+                    setLoadedUniverse(true);
+                    dispose();
+                }
             });
 
             about.addActionListener(e -> {
@@ -259,7 +272,7 @@ public class MainMenu extends JFrame implements WindowListener {
                         }
                     });
                     pane.setBackground(UIManager.getDefaults().getColor("Panel.background"));
-                    
+
                     pane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
                     pane.setFont(UIManager.getDefaults().getFont("Label.font"));
                     JFrame frame = new JFrame();

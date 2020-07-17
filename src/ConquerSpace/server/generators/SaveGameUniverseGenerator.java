@@ -19,11 +19,27 @@ package ConquerSpace.server.generators;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.save.SaveGame;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author User
+ * @author EhWhoAmI
  */
-public abstract class UniverseGenerator {  
-    public abstract Galaxy generate(GameState gameState) throws Exception;
+public class SaveGameUniverseGenerator extends UniverseGenerator {
+
+    private SaveGame save;
+
+    public SaveGameUniverseGenerator(File file) {
+        save = new SaveGame(file);
+    }
+
+    @Override
+    public Galaxy generate(GameState gameState) throws Exception {
+        save.read(gameState);
+        return null;
+    }
 }

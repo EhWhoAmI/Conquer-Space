@@ -84,16 +84,6 @@ public class SaveGame {
     public void save(GameState gameState) throws IOException, IllegalArgumentException, IllegalAccessException {
         this.gameState = gameState;
         //Get the file
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        //Check for files, and delete
-        if (folder.listFiles().length > 0) {
-            Utilities.deleteFolder(folder);
-        }
-
-        //Save metadata...
         JSONObject meta = new JSONObject();
         meta.put("version", ConquerSpace.VERSION.getVersionCore());
         meta.put("date", gameState.date.getDate());
@@ -102,10 +92,9 @@ public class SaveGame {
 
         //Save version
         saveData.put("version", ConquerSpace.VERSION.getVersionCore());
-                
-        //Zip
-        String zipFileName = "save.zip";//folder.getName() + "/save.zip";
 
+        //Zip
+        String zipFileName = folder.getPath();//folder.getName() + "/save.zip";
         FileOutputStream fos = new FileOutputStream(zipFileName);
         ZipOutputStream zos = new ZipOutputStream(fos);
 
@@ -119,9 +108,9 @@ public class SaveGame {
         zos.putNextEntry(new ZipEntry("data"));
 
         ObjectOutputStream out = new ObjectOutputStream(zos);
-        
+
         out.writeObject(gameState);
-        
+
         //bytes = saveData.toString().getBytes();
         zos.closeEntry();
         out.close();
@@ -129,7 +118,7 @@ public class SaveGame {
     }
 
     public void read(GameState gameState) throws FileNotFoundException, IOException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InstantiationException {
-        String zipFileName = "save.zip";//
+        String zipFileName = folder.getPath();//
         ZipFile zipFile = new ZipFile(zipFileName);
 
         StringBuilder builder = new StringBuilder();
@@ -148,10 +137,10 @@ public class SaveGame {
 
         //Other initialization actions
         Integer playerCiv = gameState.playerCiv;
-        for(int i = 0; i < gameState.getCivilizationCount(); i++) {
+        for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Integer civId = gameState.getCivilization(i);
             Civilization civ = gameState.getObject(civId, Civilization.class);
-            if(civId.equals(playerCiv)) {
+            if (civId.equals(playerCiv)) {
                 //Put in playerCiv
                 civ.controller = new PlayerController();
             } else {
@@ -165,7 +154,6 @@ public class SaveGame {
     }
 
     private void saveObject(JSONObject saveObject, Object obj) throws IllegalArgumentException, IllegalAccessException {
-        System.out.println("Parsing " + obj.getClass().getName());
         //Check if primitive
         if (obj != null) {
             //Add class things
@@ -178,7 +166,6 @@ public class SaveGame {
 
             //Loop through stuff
             for (Field field : fields) {
-                System.out.println(field.toString() + " " + field.getName());
                 field.setAccessible(true);
                 if (!Modifier.isTransient(field.getModifiers())) {//isAnnotationPresent(Serialize.class)) {
                     //Serialize s = field.getAnnotation(Serialize.class);
@@ -296,7 +283,6 @@ public class SaveGame {
                                 }
                                 field.set(obj, list);
                             } else if (Map.class.isAssignableFrom(ct)) {
-                                System.out.println(key);
                                 JSONObject dataObject = data.getJSONObject(key);
                                 Map map = (Map) field.getType().newInstance();
 
@@ -355,21 +341,13 @@ public class SaveGame {
 
         if (generic instanceof ParameterizedType) {
             ParameterizedType pType = (ParameterizedType) generic;
-            //System.out.println(isSaveable(pType.getActualTypeArguments()[0].getTypeName()));
-
-            //System.out.print("Raw type: " + pType.getRawType() + " - ");
-            //System.out.println("Type args: " + Arrays.toString(pType.getActualTypeArguments()));
         } else {
-
-            //System.out.println("Type: " + field.getType());
         }
     }
 
     private boolean isSaveable(String object) throws ClassNotFoundException {
         //Check if the thing...
         for (int i = 0; i < primitives.length; i++) {
-            //System.out.println("passing " + primitives[i].toString());
-            //System.out.println(object.getClass().isInstance(java.lang.Long.class));
             Class<?> c = primitives[i];
             if (Class.forName(object).isAssignableFrom(c)) {
                 return true;
@@ -429,9 +407,13 @@ public class SaveGame {
             if (folder.startsWith("save")) {
                 //Get the number
                 String number = folder.substring(4);
-                int saveCount = Integer.parseInt(number);
-                if (saveCount > highest) {
-                    highest = saveCount;
+                try {
+                    int saveCount = Integer.parseInt(number);
+                    if (saveCount > highest) {
+                        highest = saveCount;
+                    }
+                } catch (NumberFormatException nfe) {
+
                 }
             }
         }

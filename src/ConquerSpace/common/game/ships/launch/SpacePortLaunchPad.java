@@ -18,13 +18,14 @@
 package ConquerSpace.common.game.ships.launch;
 
 import ConquerSpace.common.game.ships.Launchable;
+import java.io.Serializable;
 
 /**
  * Used for building a rocket and launching it. It will remain full throughout
  * the duration.
  * @author EhWhoAmI
  */
-public class SpacePortLaunchPad {
+public class SpacePortLaunchPad implements Serializable{
     public int ticks;
     private Launchable launching = null;
     private Integer type;
