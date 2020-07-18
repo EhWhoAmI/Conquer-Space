@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.organizations.behavior;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Organization;
 import java.io.Serializable;
 
@@ -24,11 +26,12 @@ import java.io.Serializable;
  * Behavior for orgs, what they do. Probably have to change to a class in the future, but no idea on how to implement.
  * @author EhWhoAmI
  */
-public abstract class Behavior implements Serializable{
+public abstract class Behavior extends ConquerSpaceGameObject implements Serializable{
     
     Organization org;
 
-    public Behavior(Organization org) {
+    public Behavior(GameState gameState, Organization org) {
+        super(gameState);
         this.org = org;
     }
     

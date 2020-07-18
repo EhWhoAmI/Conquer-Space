@@ -51,6 +51,7 @@ import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.characters.Administrator;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.characters.Scientist;
+import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
@@ -170,10 +171,14 @@ public class GameUpdater extends GameTicker {
     //Will have to check for actions that contradict each other or something in the future..
     public void performActions() {
         for (int i = 0; i < gameState.getOrganizationCount(); i++) {
-            Organization org = gameState.getCivilizationObject(i);
+            Organization org = gameState.getOrganizationObject(i);
 
             //Run code...
-            org.getBehavior().doBehavior();
+            Behavior be = org.getBehavior();
+
+            if(be != null) {
+                be.doBehavior();
+            }
             for (int k = 0; k < org.actionList.size(); k++) {
                 try {
                     Action act = org.actionList.get(k);

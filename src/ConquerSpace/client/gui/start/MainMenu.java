@@ -224,6 +224,7 @@ public class MainMenu extends JFrame implements WindowListener {
                 //Then load the universe
                 if (save != null) {
                     Globals.generator = new SaveGameUniverseGenerator(save);
+                    Globals.gameState.saveFile = save;
                     setLoadedUniverse(true);
                     dispose();
                 }

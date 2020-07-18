@@ -41,7 +41,7 @@ public class Organization extends ConquerSpaceGameObject {
 
     @Serialize("name")
     protected String name;
-    protected Behavior behavior;
+    protected Integer behavior;
 
     public Organization(GameState gameState, String name) {
         super(gameState);
@@ -50,7 +50,7 @@ public class Organization extends ConquerSpaceGameObject {
         children = new ArrayList<>();
         actionList = new ArrayList<>();
         region = new AdministrativeRegion();
-        behavior = new EmptyBehavior(this);
+        behavior = new EmptyBehavior(gameState, this).getId();
     }
 
     public String getName() {
@@ -70,10 +70,14 @@ public class Organization extends ConquerSpaceGameObject {
     }
 
     public void setBehavior(Behavior behavior) {
-        this.behavior = behavior;
+        this.behavior = behavior.getId();
     }
 
     public Behavior getBehavior() {
-        return behavior;
+        return gameState.getObject(behavior, Behavior.class);
+    }
+    
+    public Integer getBehaviorId(){
+        return 0;
     }
 }

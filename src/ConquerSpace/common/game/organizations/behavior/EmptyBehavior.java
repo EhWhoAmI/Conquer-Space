@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.organizations.behavior;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Organization;
 
 /**
@@ -25,9 +26,10 @@ import ConquerSpace.common.game.organizations.Organization;
  */
 public class EmptyBehavior extends Behavior{
 
-    public EmptyBehavior(Organization org) {
-        super(org);
+    public EmptyBehavior(GameState gameState, Organization org) {
+        super(gameState, org);
     }
+    
     @Override
     public void doBehavior(){
         //Do nothing

@@ -268,7 +268,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         for (Integer p : civilization.habitatedPlanets) {
             Planet planet = gameState.getObject(p, Planet.class);
             DefaultMutableTreeNode system = new DefaultMutableTreeNode(Integer.toString(planet.getParentStarSystem()));
-            DefaultMutableTreeNode dm = new DefaultMutableTreeNode(planet.getName());
+            DefaultMutableTreeNode dm = new DefaultMutableTreeNode(planet);
             system.add(dm);
             universeBreakdownTreeModel.add(system);
         }
