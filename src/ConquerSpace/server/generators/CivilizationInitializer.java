@@ -438,7 +438,7 @@ public class CivilizationInitializer {
     //Governmental orgs...
     private void initializeOrgs(Civilization c, Planet planet) {
         Organization org = new Organization(gameState, "Ministry of Economic Planning");
-        org.setBehavior(new ResourceManagerBehavior(org));
+        org.setBehavior(new ResourceManagerBehavior(gameState, org));
         //Sort through city
         for (Integer cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);

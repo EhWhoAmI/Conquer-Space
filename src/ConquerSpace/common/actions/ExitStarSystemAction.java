@@ -17,8 +17,6 @@
  */
 package ConquerSpace.common.actions;
 
-import ConquerSpace.Globals;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.UniversePath;
