@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 

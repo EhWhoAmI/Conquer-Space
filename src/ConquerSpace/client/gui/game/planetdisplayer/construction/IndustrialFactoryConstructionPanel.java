@@ -18,12 +18,12 @@
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.ManufacturerArea;
-import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

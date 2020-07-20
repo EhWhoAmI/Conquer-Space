@@ -18,10 +18,10 @@
 package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
@@ -91,6 +91,7 @@ public class StarSystem extends Body {
     public void addBody(StarSystemBody b){ 
         b.setIndex(bodies.size());
         b.setParent(this.index);
+        b.setParentId(this.getId());
         
         if(b instanceof Planet) {
             planetCount++;

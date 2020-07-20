@@ -18,15 +18,13 @@
 package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.server.GameController;
-import ConquerSpace.common.GameState;
 import ConquerSpace.client.gui.encyclopedia.EncyclopediaParagraph;
 import ConquerSpace.client.gui.encyclopedia.EncyclopediaSeparator;
-import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.client.gui.encyclopedia.HtmlEncyclopediaBuilder;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.resources.Good;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
-import java.util.Vector;
 import javax.swing.JEditorPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;

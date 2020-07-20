@@ -17,17 +17,16 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.universe.GeographicPoint;
-import ConquerSpace.common.game.universe.PolarCoordinate;
-import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.PlanetTypes;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.client.gui.game.planetdisplayer.AtmosphereInfo;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.resources.Stratum;
+import ConquerSpace.common.game.universe.GeographicPoint;
+import ConquerSpace.common.game.universe.PolarCoordinate;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.game.universe.bodies.PlanetTypes;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -109,8 +108,9 @@ public class ShrinkedPlanetSheet extends JPanel {
         //Init planetPath
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
-        name.append("" + p.getParentStarSystem());
-        name.append(" Planet id " + p.getId());
+        name.append(Integer.toString(p.getParent()));
+        name.append(" Planet id ");
+        name.append(p.getId());
         planetPath.setText(name.toString());
 
         //Init owner

@@ -17,11 +17,11 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.client.gui.ObjectListModel;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.JLabel;

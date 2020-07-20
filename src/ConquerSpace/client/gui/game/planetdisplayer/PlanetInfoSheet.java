@@ -18,14 +18,13 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.util.ResourceLoader;
 import java.awt.BorderLayout;
 import java.awt.Image;

@@ -18,17 +18,15 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
-import ConquerSpace.common.game.resources.Stratum;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;

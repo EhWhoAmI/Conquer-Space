@@ -55,7 +55,6 @@ public class InterstellarTravelAction extends ShipAction {
 
     @Override
     public void doAction(GameState gameState) {
-
         double x = positionX - ship.getX();
         double y = positionY - ship.getY();
 

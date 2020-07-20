@@ -19,14 +19,14 @@ package ConquerSpace.client.gui.start;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.Globals;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
-import ConquerSpace.server.generators.CivilizationConfig;
-import ConquerSpace.server.generators.UniverseGenerationConfig;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.server.generators.DefaultUniverseGenerator;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.server.GameController;
+import ConquerSpace.server.generators.CivilizationConfig;
+import ConquerSpace.server.generators.DefaultUniverseGenerator;
+import ConquerSpace.server.generators.UniverseGenerationConfig;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.GridLayout;

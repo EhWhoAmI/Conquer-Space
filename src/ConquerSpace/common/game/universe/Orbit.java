@@ -17,8 +17,8 @@
  */
 package ConquerSpace.common.game.universe;
 
-import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.universe.bodies.Body;
+import ConquerSpace.common.save.Serialize;
 import java.io.Serializable;
 
 /**

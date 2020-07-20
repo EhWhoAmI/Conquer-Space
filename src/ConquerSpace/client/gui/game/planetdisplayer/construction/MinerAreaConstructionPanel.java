@@ -17,15 +17,14 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.MineArea;
-import ConquerSpace.common.game.universe.GeographicPoint;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.Stratum;
+import ConquerSpace.common.game.universe.GeographicPoint;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import java.awt.GridBagConstraints;

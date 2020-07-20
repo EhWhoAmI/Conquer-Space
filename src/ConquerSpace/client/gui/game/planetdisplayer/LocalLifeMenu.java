@@ -18,9 +18,9 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;

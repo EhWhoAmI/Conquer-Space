@@ -18,17 +18,16 @@
 package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.stats.Economy;
+import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Administrable;
-import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.organizations.civilization.stats.Economy;
 import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.ships.satellites.Satellite;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
-import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
@@ -59,10 +58,7 @@ public class Planet extends StarSystemBody implements Administrable {
     @Serialize("name")
     private String name = "";
     //public PlanetSector[] planetSectors;
-
-    @Serialize("parent")
-    private int parentStarSystem;
-
+    
     public Economy economy;
 
     @Serialize("satellites")
@@ -110,14 +106,11 @@ public class Planet extends StarSystemBody implements Administrable {
      * @param planetType Type of planet. See <code>PlanetTypes</code>
      * @param planetSize size of planet
      * @param id planet id
-     * @param parentStarSystem parent star system
      */
-    public Planet(GameState gameState, int planetType, int planetSize, int id, int parentStarSystem) {
+    public Planet(GameState gameState, int planetType, int planetSize, int id) {
         super(gameState);
-
         this.planetType = planetType;
         this.planetSize = planetSize;
-        this.parentStarSystem = parentStarSystem;
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
@@ -156,10 +149,6 @@ public class Planet extends StarSystemBody implements Administrable {
         this.ownerID = ownerID;
     }
 
-    public int getParentStarSystem() {
-        return parentStarSystem;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -168,12 +157,8 @@ public class Planet extends StarSystemBody implements Administrable {
         return name;
     }
 
-    void setParentStarSystem(int parentStarSystem) {
-        this.parentStarSystem = parentStarSystem;
-    }
-
     public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, getIndex()));
+        return (new UniversePath(getParent(), getIndex()));
     }
 
     public int getSatelliteCount() {
@@ -254,7 +239,7 @@ public class Planet extends StarSystemBody implements Administrable {
             b.incrementSize();
         }
 
-        if (!cityDistributions.containsValue(b)) {
+        if (!cityDistributions.containsValue(b.getId())) {
             cities.add(b.getId());
         }
 

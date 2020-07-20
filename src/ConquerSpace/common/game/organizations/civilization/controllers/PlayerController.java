@@ -17,17 +17,17 @@
  */
 package ConquerSpace.common.game.organizations.civilization.controllers;
 
+import ConquerSpace.client.gui.game.AlertDisplayer;
+import ConquerSpace.client.gui.game.AlertNotification;
+import ConquerSpace.client.gui.game.GameWindow;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.actions.Action;
 import ConquerSpace.common.actions.Alert;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.events.Event;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.client.gui.game.AlertDisplayer;
-import ConquerSpace.client.gui.game.AlertNotification;
-import ConquerSpace.client.gui.game.GameWindow;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;

@@ -17,11 +17,11 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.client.gui.logging.SwingMessageAppender;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.logging.CQSPLogger;
-import ConquerSpace.client.gui.logging.SwingMessageAppender;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

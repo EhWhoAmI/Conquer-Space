@@ -17,7 +17,6 @@
  */
 package ConquerSpace.common.actions;
 
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.SpacePoint;
@@ -101,7 +100,7 @@ public class ShipMoveAction extends ShipAction {
                 ship.setIsOrbiting(false);
 
                 //Add
-                gameState.getUniverse().getStarSystemObject(p.getParentStarSystem()).addSpaceShip(ship.getId());
+                gameState.getUniverse().getStarSystemObject(p.getParent()).addSpaceShip(ship.getId());
             }
         }
         ship.setGoingToX(position.getX());

@@ -18,14 +18,14 @@
 package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameSpeeds;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
-import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.server.GameController;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -33,7 +33,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;

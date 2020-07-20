@@ -18,14 +18,14 @@
 package ConquerSpace.common;
 
 import ConquerSpace.common.game.characters.PersonalityTrait;
-import ConquerSpace.common.game.science.Technologies;
-import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
-import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.NonElement;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
+import ConquerSpace.common.game.science.Technologies;
+import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
+import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;

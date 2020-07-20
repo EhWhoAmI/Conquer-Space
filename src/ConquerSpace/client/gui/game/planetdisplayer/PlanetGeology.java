@@ -18,10 +18,9 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.resources.Stratum;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 

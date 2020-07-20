@@ -17,16 +17,16 @@
  */
 package ConquerSpace.client.gui.renderers;
 
+import ConquerSpace.client.gui.game.GameWindow;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.InterstellarTravelAction;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.SpaceShip;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.game.universe.bodies.StarType;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.client.gui.game.GameWindow;
-import ConquerSpace.common.GameState;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

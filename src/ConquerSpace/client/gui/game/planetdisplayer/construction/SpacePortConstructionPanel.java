@@ -18,10 +18,10 @@
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.GridBagConstraints;

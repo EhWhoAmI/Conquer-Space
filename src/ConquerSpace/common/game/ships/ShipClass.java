@@ -19,7 +19,6 @@ package ConquerSpace.common.game.ships;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.ships.components.templates.ShipComponentTemplate;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.save.SerializeClassName;
 import java.io.Serializable;

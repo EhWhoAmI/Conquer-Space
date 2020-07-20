@@ -18,9 +18,6 @@
 package ConquerSpace.client.gui.encyclopedia;
 
 import java.util.ArrayList;
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 /**
  *

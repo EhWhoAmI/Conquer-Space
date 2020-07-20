@@ -17,7 +17,6 @@
  */
 package ConquerSpace.common.game.universe;
 
-import ConquerSpace.common.save.CustomSerializer;
 import java.io.Serializable;
 
 

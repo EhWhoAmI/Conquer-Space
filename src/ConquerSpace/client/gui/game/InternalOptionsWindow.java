@@ -19,9 +19,9 @@ package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.VERSION;
 import ConquerSpace.Globals;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.server.GameController;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;

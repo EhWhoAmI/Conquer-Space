@@ -18,16 +18,16 @@
 package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.events.Event;
-import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.LaunchSystemDesigner;
 import ConquerSpace.client.gui.game.engineering.SatelliteDesigner;
 import ConquerSpace.client.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.events.Event;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.ResourceLoader;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -267,7 +267,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
         for (Integer p : civilization.habitatedPlanets) {
             Planet planet = gameState.getObject(p, Planet.class);
-            DefaultMutableTreeNode system = new DefaultMutableTreeNode(Integer.toString(planet.getParentStarSystem()));
+            DefaultMutableTreeNode system = new DefaultMutableTreeNode(Integer.toString(planet.getParent()));
             DefaultMutableTreeNode dm = new DefaultMutableTreeNode(planet);
             system.add(dm);
             universeBreakdownTreeModel.add(system);

@@ -1,9 +1,9 @@
 package ConquerSpace.game.universe;
 
-import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import ConquerSpace.game.GameLoader;
 import ConquerSpace.game.universe.generators.CivilizationConfig;
 import ConquerSpace.game.universe.generators.DefaultUniverseGenerator;
+import ConquerSpace.game.universe.generators.UniverseGenerationConfig;
 import java.awt.Color;
 import java.util.Random;
 

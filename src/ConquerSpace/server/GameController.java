@@ -17,12 +17,12 @@
  */
 package ConquerSpace.server;
 
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.client.gui.music.MusicPlayer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.GameTicker;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.Timer;
 import ConquerSpace.common.util.logging.CQSPLogger;

@@ -29,6 +29,8 @@ public class StarSystemBody extends Body{
     private int index;
     
     private int parent;
+    
+    private int parentId;
 
     public StarSystemBody(GameState gameState) {
         super(gameState);
@@ -52,5 +54,13 @@ public class StarSystemBody extends Body{
 
     void setParent(int parent) {
         this.parent = parent;
+    }
+
+    public int getParentId() {
+        return parentId;
+    }
+
+    void setParentId(int parentId) {
+        this.parentId = parentId;
     }
 }

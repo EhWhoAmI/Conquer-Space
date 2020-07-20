@@ -18,16 +18,14 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.common.game.resources.Stratum;
-import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.AlphaComposite;
@@ -53,7 +51,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
@@ -131,7 +128,7 @@ public class PlanetOverview extends JPanel {
         }
 
         //Show planetPath
-        planetPath.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.universepath", p.getParentStarSystem(), p.getId()));
+        planetPath.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.universepath", p.getParent(), p.getId()));
 
         //Init owner
         if (p.getOwnerID() > -1) {

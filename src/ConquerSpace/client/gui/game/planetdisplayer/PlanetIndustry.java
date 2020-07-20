@@ -19,16 +19,15 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;

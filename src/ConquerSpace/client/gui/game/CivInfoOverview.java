@@ -17,8 +17,8 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;

@@ -17,8 +17,6 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.common.AssetReader;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.Good;
@@ -37,7 +35,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;

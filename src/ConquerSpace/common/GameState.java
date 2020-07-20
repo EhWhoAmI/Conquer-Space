@@ -17,8 +17,8 @@
  */
 package ConquerSpace.common;
 
-import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.characters.PersonalityTrait;
+import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.FoodGood;
@@ -26,12 +26,12 @@ import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.LiveGood;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.game.science.FieldNode;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.save.Serialize;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**

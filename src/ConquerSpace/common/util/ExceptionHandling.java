@@ -18,8 +18,9 @@
 package ConquerSpace.common.util;
 
 import ConquerSpace.ConquerSpace;
-import ConquerSpace.Globals;
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import static ConquerSpace.client.gui.game.DebugStatsWindow.byteCountToDisplaySize;
+import ConquerSpace.common.GameState;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,9 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.server.GameController;
-import ConquerSpace.common.GameState;
 
 /**
  * The one class I hope no one sees.

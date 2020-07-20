@@ -17,10 +17,8 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.game.ships.hull.HullMaterial;
 import com.alee.extended.layout.HorizontalFlowLayout;

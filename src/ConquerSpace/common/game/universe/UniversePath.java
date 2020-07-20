@@ -17,7 +17,6 @@
  */
 package ConquerSpace.common.game.universe;
 
-import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 
 /**

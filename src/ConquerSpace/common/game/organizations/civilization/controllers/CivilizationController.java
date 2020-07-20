@@ -18,12 +18,10 @@
 package ConquerSpace.common.game.organizations.civilization.controllers;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.StarDate;
 import ConquerSpace.common.actions.Action;
 import ConquerSpace.common.actions.Alert;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.events.Event;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import java.util.ArrayList;
 
 /**

@@ -18,10 +18,10 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.characters.Scientist;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;

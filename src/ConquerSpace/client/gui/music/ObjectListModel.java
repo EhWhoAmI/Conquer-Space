@@ -18,7 +18,6 @@
 package ConquerSpace.client.gui.music;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import javax.swing.AbstractListModel;
 
 /**

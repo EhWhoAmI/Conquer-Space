@@ -22,7 +22,6 @@ import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;
 import java.io.FileNotFoundException;

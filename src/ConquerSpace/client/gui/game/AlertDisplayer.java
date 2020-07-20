@@ -17,8 +17,8 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.actions.Alert;
 import ConquerSpace.client.gui.GUI;
+import ConquerSpace.common.actions.Alert;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;

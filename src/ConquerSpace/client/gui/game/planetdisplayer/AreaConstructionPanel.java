@@ -18,17 +18,17 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.city.area.ConstructingArea;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.client.gui.game.planetdisplayer.construction.AreaDesignPanel;
 import ConquerSpace.client.gui.game.planetdisplayer.construction.IndustrialFactoryConstructionPanel;
 import ConquerSpace.client.gui.game.planetdisplayer.construction.MinerAreaConstructionPanel;
 import ConquerSpace.client.gui.game.planetdisplayer.construction.ObservatoryConstructionPanel;
 import ConquerSpace.client.gui.game.planetdisplayer.construction.SpacePortConstructionPanel;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.city.City;
+import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.city.area.ConstructingArea;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;

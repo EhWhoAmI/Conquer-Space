@@ -17,7 +17,6 @@
  */
 package ConquerSpace.common.game.science;
 
-import ConquerSpace.common.GameState;
 import ConquerSpace.common.util.ResourceLoader;
 import java.io.File;
 import java.io.FileNotFoundException;

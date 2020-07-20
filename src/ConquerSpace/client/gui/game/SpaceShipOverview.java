@@ -19,7 +19,6 @@ package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;

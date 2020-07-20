@@ -18,7 +18,6 @@
 package ConquerSpace.client.gui.game.engineering;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.ShipClass;

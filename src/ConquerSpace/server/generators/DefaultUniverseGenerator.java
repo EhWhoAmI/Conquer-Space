@@ -17,30 +17,30 @@
  */
 package ConquerSpace.server.generators;
 
-import ConquerSpace.server.GameController;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.AIController;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.civilization.controllers.AIController;
+import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.population.Race;
+import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.resources.ResourceDistribution;
+import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.PlanetTypes;
 import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.game.universe.bodies.StarType;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.terrain.TerrainColoring;
-import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.common.util.names.NameGenerator;
+import ConquerSpace.server.GameController;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -397,7 +397,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
     }
 
     private Planet generatePlanet(int planetType, int planetSize, int id, int systemID) {
-        Planet p = new Planet(gameState, planetType, planetSize, id, systemID);
+        Planet p = new Planet(gameState, planetType, planetSize, id);
 
         generateResourceVeins(p);
         if (planetType == PlanetTypes.ROCK) {

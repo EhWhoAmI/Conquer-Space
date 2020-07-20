@@ -62,7 +62,7 @@ public class ToOrbitAction extends ShipAction {
             ship.setIsOrbiting(true);
             ship.setLocation(position.getUniversePath());
             //Remove...
-            StarSystem body = gameState.getObject(gameState.getUniverse().getStarSystem(position.getParentStarSystem()), StarSystem.class);
+            StarSystem body = gameState.getObject(gameState.getUniverse().getStarSystem(position.getParent()), StarSystem.class);
             body.spaceShips.remove(ship.getId());
             position.putShipInOrbit(ship);
         } else {
@@ -89,8 +89,8 @@ public class ToOrbitAction extends ShipAction {
                 ship.setY(p.getY());
                 ship.setIsOrbiting(false);
 
-                //Add
-                //gameState.universe.getStarSystem(p.getParentStarSystem()).addSpaceShip(ship);
+                //Add to star system
+                gameState.getObject(gameState.getUniverse().getStarSystem(p.getParent()), StarSystem.class).addSpaceShip(ship.getId());
             }   
         }
         //Predict going to location...

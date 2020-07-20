@@ -18,10 +18,13 @@
 package ConquerSpace.client.gui.start;
 
 import ConquerSpace.ConquerSpace;
-import ConquerSpace.server.GameController;
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.Globals;
 import ConquerSpace.client.gui.music.GraphicsUtil;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.server.GameController;
+import ConquerSpace.server.generators.SaveGameUniverseGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -43,18 +46,15 @@ import java.net.URISyntaxException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import org.apache.logging.log4j.Logger;
-import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.Globals;
-import ConquerSpace.server.generators.SaveGameUniverseGenerator;
-import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Main menu.
@@ -132,7 +132,6 @@ public class MainMenu extends JFrame implements WindowListener {
      * Top banner of the main menu. Drawings.
      */
     private class TopBanner extends JPanel {
-
         int selectedImage;
         BufferedImage image;
         Font f = new Font(getFont().getFontName(), Font.BOLD, 28);

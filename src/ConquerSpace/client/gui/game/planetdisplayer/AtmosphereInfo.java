@@ -18,11 +18,11 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.game.ShipInformationMenu;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.client.gui.game.ShipInformationMenu;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ComponentEvent;
