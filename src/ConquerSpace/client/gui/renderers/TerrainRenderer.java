@@ -39,7 +39,6 @@ public class TerrainRenderer {
 
     public Image getImage() {
         BufferedImage planetDisplaying;
-        //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors;// = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         ConquerSpace.common.jLibNoise.noise.utils.Image terrainColorses = null;
@@ -73,7 +72,6 @@ public class TerrainRenderer {
     //A small image for the map
     public Image getSquareImage(double scale) {
         BufferedImage planetDisplaying = new BufferedImage(p.getPlanetHeight(), p.getPlanetHeight(), BufferedImage.TYPE_INT_ARGB);
-        //System.out.println(planetDisplaying);
         HashMap<Float, Color> colors;// = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         Color[][] terrainColorses = null;

@@ -57,7 +57,6 @@ public class CQSPConsole extends JInternalFrame {
             //Split it and split it into argc and argv
             String[] command = text.getText().split(" ");
             //Search it
-            //System.out.println("\"" + command[0] + "\"");
             if (command[0].toLowerCase().equals("help")) {
                 try {
                     //Display console help text

@@ -138,7 +138,6 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
     @Override
     public void mousePressed(MouseEvent e) {
         //Started
-        //System.out.println(MouseEvent.BUTTON1);
         isDragging = true;
         startPoint = e.getPoint();
     }

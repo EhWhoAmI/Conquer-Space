@@ -611,7 +611,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                 }
             }
             if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
-                System.out.println("popup");
                 JPopupMenu popupMenu = generatePopupMenu(e);
                 popupMenu.show(this, e.getX(), e.getY());
             }
