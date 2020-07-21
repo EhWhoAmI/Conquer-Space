@@ -45,6 +45,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.Logger;
 
@@ -67,7 +68,7 @@ public class SystemRenderer {
 
     double previousScale;
 //Background skybox
-    private BufferedImage skybox;
+
     private Thread rendererThread;
     boolean processedRenders = false;
     double scaleSize = 20;
@@ -85,7 +86,13 @@ public class SystemRenderer {
     private double smallestAccuracy = 5;
 
     private GameState gameState;
-    
+
+    private int[] starX;
+    private int[] starY;
+    private int[] starRadius;
+
+    private final int starCount = 1500;
+
     public SystemRenderer(GameState gameState, StarSystem sys, Galaxy u, Dimension bounds) {
         this.gameState = gameState;
         this.bounds = bounds;
@@ -141,14 +148,20 @@ public class SystemRenderer {
             }
         };
 
-        try {
-            skybox = ImageIO.read(new File("assets/img/bg.png"));
-        } catch (IOException ex) {
-        }
         rendererThread = new Thread(r);
         rendererThread.setName("system " + sys.getId() + " renderer");
         sizeofAU = 15;
         distanceRatio = sizeofAU / 10_000_000d;
+
+        starX = new int[starCount];
+        starY = new int[starCount];
+        starRadius = new int[starCount];
+        Random rand = new Random(sys.getIndex());
+        for (int i = 0; i < starCount; i++) {
+            starX[i] = (rand.nextInt(4000));
+            starY[i] = (rand.nextInt(4000));
+            starRadius[i] = (rand.nextInt(3));
+        }
     }
 
     long fpsCounter = System.currentTimeMillis();
@@ -163,8 +176,16 @@ public class SystemRenderer {
 
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
-        if (skybox != null) {
-            g2d.drawImage(skybox, (int) ((translateX / scale) * 0.020) - 30, (int) ((translateY / scale) * 0.020) - 30, null);
+        g2d.draw(bg);
+
+        //Draw stars
+        int imageX = (int) ((translateX / scale) * 0.020) - 500;
+        int imageY = (int) ((translateY / scale) * 0.020) - 500;
+        
+        for (int i = 0; i < starCount; i++) {
+            Ellipse2D.Double star = new Ellipse2D.Double(starX[i] + imageX, starY[i] + imageY, starRadius[i], starRadius[i]);
+            g2d.setColor(Color.white);
+            g2d.fill(star);
         }
         //Render bg image
         //g2d.fill(bg);
@@ -214,7 +235,7 @@ public class SystemRenderer {
             //Check if out of bounds
             int bodyX = (int) ((translateX + body.getX() * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
             int bodyY = (int) ((translateY - body.getY() * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
-            
+
             //Draw terrain
             if (body instanceof Planet) {
                 Planet p = (Planet) body;
@@ -224,6 +245,18 @@ public class SystemRenderer {
                                 bodyX - (p.getPlanetHeight() / PLANET_DIVISOR / 2),
                                 bodyY - (p.getPlanetHeight() / PLANET_DIVISOR / 2), null);
                     }
+                    //Draw real size
+                    //p.getPlanetSize() * 100 * scale * 10_000_000 / sizeofAU
+                    double planetSize = p.getPlanetSize() * 100 * sizeofAU / ( scale * 10_000_000);
+                    //distance * scale * 10_000_000 / sizeofAU = space
+                    //space * sizeofau / ( scale * 10_000_000)
+                    System.out.println("planetSize " + planetSize);
+                    g2d.setColor(Color.red);
+                    g2d.fill(new Ellipse2D.Double(
+                            bodyX - (planetSize / 2),
+                            bodyY - (planetSize / 2),
+                            planetSize, planetSize
+                    ));
 
 //            g2d.drawString(String.format("Planet position: %.5f, %.5f", p.getX(), p.getY()),
 //                    planetX,
@@ -309,7 +342,7 @@ public class SystemRenderer {
         //draw spaceships
         for (Integer id : sys.spaceShips) {
             SpaceShip ship = gameState.getObject(id, SpaceShip.class);
-            
+
             double x = (ship.getX());
             double y = (ship.getY());
             //Draw dot
