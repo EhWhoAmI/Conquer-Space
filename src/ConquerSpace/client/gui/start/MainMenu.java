@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.start;
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.Globals;
-import ConquerSpace.client.gui.music.GraphicsUtil;
+import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.server.GameController;
@@ -264,7 +264,6 @@ public class MainMenu extends JFrame implements WindowListener {
                             if (SwingUtilities.isLeftMouseButton(me)) {
                                 try {
                                     Desktop.getDesktop().browse(s.getURL().toURI());
-
                                 } catch (IOException ex) {
                                 } catch (URISyntaxException ex) {
                                 }

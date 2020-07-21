@@ -18,7 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.client.gui.music.GraphicsUtil;
+import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;

@@ -174,6 +174,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     }
 
     @Override
+    @SuppressWarnings("all")
     public ArrayList<Person> getPeopleArrayList() {
         return new ArrayList();
     }
