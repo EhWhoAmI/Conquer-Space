@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game;
+package ConquerSpace.client.gui.game.planetdisplayer;
 
 import ConquerSpace.client.gui.game.planetdisplayer.AtmosphereInfo;
+import ConquerSpace.client.gui.game.planetdisplayer.PlanetMapProvider;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -40,6 +41,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.text.NumberFormat;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,10 +51,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
 /**
- * A planet that has not been surveyed yet.
+ * Window for the planet that is unowned, but surveyed
+ *
  * @author EhWhoAmI
  */
-public class ShrinkedPlanetSheet extends JPanel {
+public class UnownedPlanetInfoMenu extends JPanel {
 
     private static final int TILE_SIZE = 7;
     private JPanel planetOverview;
@@ -64,39 +67,39 @@ public class ShrinkedPlanetSheet extends JPanel {
     private JLabel ownerLabel;
     private JLabel orbitDistance;
     private JLabel disclaimerLabel;
-    
-    private Planet p;
-    private GameState gameState;
+
+    private Planet planet;
     private Galaxy u;
+    private GameState gameState;
     //private ButtonGroup resourceButtonGroup;
     //private JRadioButton[] showResources;
 
     private JTabbedPane infoPane;
 
     private AtmosphereInfo atmosphereInfo;
+    private NumberFormat numberFormatter;
 
-    public ShrinkedPlanetSheet(GameState gameState, Planet p, Civilization c) {
+    public UnownedPlanetInfoMenu(GameState gameState, Planet p, Civilization c) {
+        this.planet = p;
         this.gameState = gameState;
         this.u = gameState.getUniverse();
-        this.p = p;
         infoPane = new JTabbedPane();
 
         JPanel planetOverviewPanel = new JPanel();
 
         planetOverviewPanel.setLayout(new GridLayout(2, 1));
+        numberFormatter = NumberFormat.getInstance();
 
         planetOverview = new JPanel();
         planetOverview.setLayout(new VerticalFlowLayout(5, 3));
         planetOverview.setBorder(new TitledBorder("Planet Info"));
         //If name is nothing, then call it unnamed planet
-        disclaimerLabel = new JLabel("You need to survey this planet before you can see the resources!");
         planetName = new JLabel();
         planetPath = new JLabel();
         planetType = new JLabel("Planet type: " + p.getPlanetType());
         ownerLabel = new JLabel();
         PolarCoordinate pos = p.orbit.toPolarCoordinate();
-        orbitDistance = new JLabel("Distance: " + (pos.getDistance()) + " km, " + ((double) pos.getDistance() / 149598000d) + " AU");
-
+        orbitDistance = new JLabel("Distance: " + numberFormatter.format(pos.getDistance()) + " km, " + numberFormatter.format((double) pos.getDistance() / 149598000d) + " AU");
 
         //Init planetname
         if (p.getName().equals("")) {
@@ -109,8 +112,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
         name.append(Integer.toString(p.getParent()));
-        name.append(" Planet id ");
-        name.append(p.getId());
+        name.append(" Planet id " + p.getId());
         planetPath.setText(name.toString());
 
         //Init owner
@@ -140,7 +142,6 @@ public class ShrinkedPlanetSheet extends JPanel {
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
         planetSectors.add(sectorsScrollPane);
         //Add components
-        planetOverview.add(disclaimerLabel);
         planetOverview.add(planetName);
         planetOverview.add(planetPath);
         planetOverview.add(planetType);
@@ -169,27 +170,27 @@ public class ShrinkedPlanetSheet extends JPanel {
         static final int PLANET_RESOURCES = 1;
         static final int SHOW_ALL_RESOURCES = 2;
         private JPopupMenu menu;
-        private Civilization c;
+        private Civilization civilization;
         private Color color;
         private Point point;
-        private Image img;
-        private Point lastClicked;
-        private TerrainRenderer renderer;
 
-        public PlanetSectorDisplayer(Planet p, Civilization c) {
+        private Point lastClicked;
+        private PlanetMapProvider planetMapProvider;
+        private Planet planet;
+
+        public PlanetSectorDisplayer(Planet planet, Civilization civilization) {
+            this.planet = planet;
             double scale = 2;
 
-            this.c = c;
-            if (p.getPlanetType() == PlanetTypes.GAS) {
+            this.civilization = civilization;
+            if (planet.getPlanetType() == PlanetTypes.GAS) {
                 scale = .5;
             }
             setPreferredSize(
-                    new Dimension((int) (p.getPlanetSize() * 2 * scale), (int) (p.getPlanetSize() * scale)));
+                    new Dimension((int) (planet.getPlanetSize() * 2 * scale), (int) (planet.getPlanetSize() * scale)));
             menu = new JPopupMenu();
             addMouseListener(this);
-            renderer = new TerrainRenderer(p);
-
-            img = renderer.getImage();
+            planetMapProvider = new PlanetMapProvider(planet);
         }
 
         @Override
@@ -202,28 +203,28 @@ public class ShrinkedPlanetSheet extends JPanel {
                 //Set opacity
                 //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
             }
-            g2d.drawImage(img, 0, 0, null);
+            if (planetMapProvider.isLoaded()) {
+                g2d.drawImage(planetMapProvider.getImage(), 0, 0, null);
+            }
 
             if (whatToShow == PLANET_RESOURCES || whatToShow == SHOW_ALL_RESOURCES) {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (Integer strataId : p.strata) {
+                for (Integer strataId : planet.strata) {
                     Stratum v = gameState.getObject(strataId, Stratum.class);
                     //Draw...
                     if (resourceToShow == SHOW_ALL) {
                         Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);
-                        g2d.setColor(Color.LIGHT_GRAY);
+                        g2d.setColor(Color.GRAY);
                         g2d.fill(circe);
                     }
                 }
             }
             if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
                 //Draw buildings
-                
-                for (Map.Entry<GeographicPoint, Integer> en : p.cityDistributions.entrySet()) {
+                for (Map.Entry<GeographicPoint, Integer> en : planet.cityDistributions.entrySet()) {
                     GeographicPoint point = en.getKey();
-
                     //Draw
                     Rectangle2D.Float rect = new Rectangle2D.Float(point.getX() * 2, point.getY() * 2, 2, 2);
                     g2d.setColor(Color.red);

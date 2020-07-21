@@ -49,6 +49,7 @@ import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
+import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
@@ -117,8 +118,6 @@ public class GameUpdater extends GameTicker {
         //DO ticks
         starDate.increment(tickIncrement);
 
-        updateObjectPositions();
-
         //Execute org actions
         performActions();
 
@@ -131,7 +130,10 @@ public class GameUpdater extends GameTicker {
         //Check for month increase            
         if (starDate.getDate() % GameRefreshRate == 1) {
             LOGGER.trace("Refreshing all the game objects");
+
             updateGame();
+            updateObjectPositions();
+
             for (int i = 0; i < gameState.getCivilizationCount(); i++) {
                 //int civId = universe.getCivilization(i);
                 //indexer.index(((Civilization) universe.organizations.get((universe.getCivilization(i)))));
@@ -171,7 +173,7 @@ public class GameUpdater extends GameTicker {
             //Run code...
             Behavior be = org.getBehavior();
 
-            if(be != null) {
+            if (be != null) {
                 be.doBehavior();
             }
             for (int k = 0; k < org.actionList.size(); k++) {
@@ -202,7 +204,6 @@ public class GameUpdater extends GameTicker {
                 }
             }
             universe.control.put(p, owner);
-
         }
     }
 
@@ -213,7 +214,12 @@ public class GameUpdater extends GameTicker {
             if (civIndex > -1) {
                 Civilization civil = gameState.getObject(civIndex, Civilization.class);
                 //Deal with later...
-                //civil.vision.put(p, VisionTypes.KNOWS_ALL);
+                Body bod = gameState.getObject(p, Body.class);
+                if (bod instanceof Planet) {
+                    civil.vision.put(((Planet) bod).getUniversePath(), VisionTypes.KNOWS_ALL);
+                } else if (bod instanceof StarSystem) {
+                    civil.vision.put(((StarSystem) bod).getUniversePath(), VisionTypes.KNOWS_ALL);
+                }
             }
         }
 
@@ -242,6 +248,7 @@ public class GameUpdater extends GameTicker {
                                 //int previous = universe.getCivilization(pt.getCivilization().vision.get(universe.getStarSystem(g).getUniversePath()));
                                 civil.vision.put(universe.getStarSystemObject(g).getUniversePath(),
                                         (amount > 100) ? 100 : (amount));
+                                System.out.println(amount);
                             }
                         }
                     }
@@ -727,7 +734,6 @@ public class GameUpdater extends GameTicker {
             StarSystem system = universe.getStarSystemObject(i);
 
             system.setPoint(system.getOrbit().toSpacePoint());
-
             for (int k = 0; k < system.getBodyCount(); k++) {
                 Body body = system.getBodyObject(k);
                 body.setPoint(body.getOrbit().toSpacePoint());
@@ -780,8 +786,6 @@ public class GameUpdater extends GameTicker {
 //        }
         }
     }
-
-    
 
     private PersonalityTrait getRandomPersonalityTrait() {
         return gameState.personalityTraits.get((int) (gameState.personalityTraits.size() * Math.random()));

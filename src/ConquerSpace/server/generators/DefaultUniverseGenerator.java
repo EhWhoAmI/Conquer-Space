@@ -29,6 +29,7 @@ import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.resources.Stratum;
+import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
@@ -109,12 +110,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         } catch (IOException ex) {
         }
 
-        for (int i = 0; i < starSystemCount; i++) {
+        for (int systemCount = 0; systemCount < starSystemCount; systemCount++) {
             //Create star system
             // 100 light years
             int dist = rand.nextInt((int) (AU_IN_LTYR * 100));
             float degrees = (rand.nextFloat() * 360);
             StarSystem sys = new StarSystem(state, new PolarCoordinate(degrees, dist));
+            universe.addStarSystem(sys);
 
             //Add stars
             Star star = generateStar(rand);
@@ -122,21 +124,15 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
             int planetCount = rand.nextInt(11);
             long lastDistance = 10000000;
-            for (int k = 0; k < planetCount; k++) {
+            for (int planetIndex = 0; planetIndex < planetCount; planetIndex++) {
                 //Add planets
                 //Set stuff
                 int planetType = Math.round(rand.nextFloat());
                 //System.out.println(planetType);
                 long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
                 lastDistance = orbitalDistance;
-                int planetSize;
-                if (planetType == PlanetTypes.GAS) {
-                    planetSize = randint(rand, 100, 1000);
-                } else {
-                    //Rock
-                    planetSize = randint(rand, 20, 150);
-                }
-                Planet p = generatePlanet(planetType, planetSize, k, i);
+                int planetSize = getRandomPlanetSize(planetType, rand);
+                Planet p = generatePlanet(planetType, planetSize, planetIndex);
                 //Set name
                 if (planetNameGenerator != null) {
                     p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
@@ -144,15 +140,15 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 //Set changin degrees
                 //Closer it is, the faster it is...
                 //mass is size times 100,000,0000
-                double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
+                double degs = (10 / (planetIndex + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
                 //degs *= 10;
                 p.setDegreesPerTurn((float) degs);
                 //System.err.println(p.terrain.terrainColor[0][0]);
+                p.setOrbit(new Orbit(0, orbitalDistance, 0, 0));
                 p.modDegrees(rand.nextInt(360));
+
                 sys.addBody(p);
             }
-
-            universe.addStarSystem(sys);
         }
         LOGGER.info("Done with universe generation");
 
@@ -165,7 +161,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setSpeciesName(c.speciesName);
         playerCiv.setCivilizationPreferredClimate(c.civilizationPreferredClimate);
         LOGGER.info("Creating suitable planet");
-        UniversePath up = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+        UniversePath up = createSuitablePlanet(playerCiv, universe, rand, planetNameGenerator);
         LOGGER.info("Done creating suitable planet");
         starSystemCount++;
         playerCiv.setStartingPlanet(up);
@@ -211,7 +207,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setSpeciesName(name);
             RacePreferredClimateTpe civPreferredClimate1 = RacePreferredClimateTpe.values()[rand.nextInt(RacePreferredClimateTpe.values().length)];
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
-            UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, starSystemCount, planetNameGenerator);
+            UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, planetNameGenerator);
             starSystemCount++;
             civ.setStartingPlanet(up1);
             Race civSpecies = new Race(gameState, 1, 0.01f, "Race " + i);
@@ -250,13 +246,12 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
      * @param u universe
      * @return the universe path the new star system and planet is in
      */
-    private UniversePath createSuitablePlanet(Civilization c, Galaxy u, Random rand, int lastStarSystem, NameGenerator planetNameGenerator) {
+    private UniversePath createSuitablePlanet(Civilization c, Galaxy u, Random rand, NameGenerator planetNameGenerator) {
         //Make the things
-        //
         int dist = rand.nextInt((int) (AU_IN_LTYR * 100));
         float degrees = (rand.nextFloat() * 360);
         StarSystem sys = new StarSystem(gameState, new PolarCoordinate(degrees, dist));
-
+        u.addStarSystem(sys);
         //Add stars
         Star star = generateStar(rand);
         sys.addBody(star);
@@ -272,14 +267,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             //System.out.println(planetType);
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;
-            int planetSize;
-            if (planetType == PlanetTypes.GAS) {
-                planetSize = randint(rand, 50, 500);
-            } else {
-                //Rock
-                planetSize = randint(rand, 30, 100);
-            }
-            Planet p = generatePlanet(planetType, planetSize, k, lastStarSystem);
+
+            int planetSize = getRandomPlanetSize(planetType, rand);
+            Planet p = generatePlanet(planetType, planetSize, k);
             p.setSemiMajorAxis((double) orbitalDistance);
             //So a circle...
 
@@ -322,14 +312,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             //System.out.println(planetType);
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;
-            int planetSize;
-            if (planetType == PlanetTypes.GAS) {
-                planetSize = randint(rand, 50, 500);
-            } else {
-                //Rock
-                planetSize = randint(rand, 30, 100);
-            }
-            Planet p = generatePlanet(planetType, planetSize, k, lastStarSystem);
+            int planetSize = getRandomPlanetSize(planetType, rand);
+            Planet p = generatePlanet(planetType, planetSize, k);
 
             generateResourceVeins(p);
 
@@ -358,7 +342,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             sys.addBody(p);
             living = p;
         }
-        u.addStarSystem(sys);
 
         //get a rocky planet
         return living.getUniversePath();
@@ -396,7 +379,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         return star;
     }
 
-    private Planet generatePlanet(int planetType, int planetSize, int id, int systemID) {
+    private Planet generatePlanet(int planetType, int planetSize, int id) {
         Planet p = new Planet(gameState, planetType, planetSize, id);
 
         generateResourceVeins(p);
@@ -476,5 +459,16 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         for (int i = 0; i < lifeLength; i++) {
             //Evolve
         }
+    }
+
+    private int getRandomPlanetSize(int planetType, Random rand) {
+        int planetSize;
+        if (planetType == PlanetTypes.GAS) {
+            planetSize = randint(rand, 50, 500);
+        } else {
+            //Rock
+            planetSize = randint(rand, 30, 100);
+        }
+        return planetSize;
     }
 }

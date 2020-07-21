@@ -17,6 +17,8 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
+import ConquerSpace.client.gui.game.planetdisplayer.UnownedPlanetInfoMenu;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.LaunchSystemDesigner;

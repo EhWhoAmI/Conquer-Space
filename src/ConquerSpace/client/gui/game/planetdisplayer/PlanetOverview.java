@@ -97,11 +97,11 @@ public class PlanetOverview extends JPanel {
 
     private int population;
 
-    private Image planetMap;
+    private PlanetMapProvider planetMap;
 
     private GameState gameState;
 
-    public PlanetOverview(GameState gameState, Planet p, Civilization c, Image planetMap) {
+    public PlanetOverview(GameState gameState, Planet p, Civilization c, PlanetMapProvider planetMap) {
         this.gameState = gameState;
         this.planetMap = planetMap;
         this.p = p;
@@ -234,8 +234,8 @@ public class PlanetOverview extends JPanel {
             }
             //Draw planet terrain
             if (showPlanetTerrain) {
-                if (planetMap != null) {
-                    g2d.drawImage(planetMap, 0, 0, null);
+                if (planetMap.isLoaded()) {
+                    g2d.drawImage(planetMap.getImage(), 0, 0, null);
                 }
             } else {
                 //Black for visibility

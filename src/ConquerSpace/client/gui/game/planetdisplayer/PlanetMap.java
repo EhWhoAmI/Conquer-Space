@@ -121,11 +121,11 @@ public class PlanetMap extends JPanel {
     private int resourceShown = -1;
     private int displayedView = NORMAL_VIEW;
     private boolean showTerrain = true;
-    private Image planetMap;
+    private PlanetMapProvider planetMap;
 
     private GameState gameState;
 
-    public PlanetMap(GameState gameState, Planet p, Civilization c, PlanetInfoSheet parent, Image planetMap) {
+    public PlanetMap(GameState gameState, Planet p, Civilization c, PlanetInfoSheet parent, PlanetMapProvider planetMap) {
         this.gameState = gameState;
         this.p = p;
         this.c = c;
@@ -138,9 +138,8 @@ public class PlanetMap extends JPanel {
         //Render map
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        mapWidth = planetMap.getWidth(null);
-        mapHeight = planetMap.getHeight(null);
-
+        // mapWidth = planetMap.getWidth(null);
+        // mapHeight = planetMap.getHeight(null);
         menuBar = new JMenuBar();
 
         viewMenu = new JMenu(LOCALE_MESSAGES.getMessage("game.planet.map.view"));
@@ -261,6 +260,8 @@ public class PlanetMap extends JPanel {
 
         int mouseX = 0;
         int mouseY = 0;
+        
+        int enlargementSize = 2;
 
         public MapPanel() {
             setBackground(Color.white);
@@ -271,9 +272,6 @@ public class PlanetMap extends JPanel {
 
             //Enlarge map
             //Because the pixel size is 2, we need to multiply the size by 4
-            int enlargementSize = 2;
-            planetSurfaceMap = planetMap.getScaledInstance(planetMap.getWidth(null) * enlargementSize, planetMap.getHeight(null) * enlargementSize, Image.SCALE_DEFAULT);
-
             //Read images
             //TODO: change where we read this to the start of the game.
             districtImages = new HashMap<>();
@@ -310,7 +308,9 @@ public class PlanetMap extends JPanel {
             g2d.translate(translateX, translateY);
 
             //Terrain
-            if (showTerrain && planetSurfaceMap != null) {
+            if (planetMap.isLoaded()) {
+                Image img = planetMap.getImage();
+                planetSurfaceMap = img.getScaledInstance(img.getWidth(null) * enlargementSize, img.getHeight(null) * enlargementSize, Image.SCALE_DEFAULT);
                 g2d.drawImage(planetSurfaceMap, 0, 0, null);
             }
 

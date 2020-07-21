@@ -60,9 +60,9 @@ public class UniverseRenderer {
         //Check for size of universe
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem s = universe.getStarSystemObject(i);
-//            if (s.getGalaticLocation().getDistance() > universeRadius) {
-//                universeRadius = (long) s.getGalaticLocation().getDistance();
-//            }
+            if (s.getOrbit().getSemiMajorAxis() > universeRadius) {
+                universeRadius = (long) s.getOrbit().getSemiMajorAxis();
+            }
         }
 
         universeRadius++;
@@ -113,7 +113,7 @@ public class UniverseRenderer {
             //Check vision
             StarSystem sys = universe.getStarSystemObject(i);
             // Draw star systems   
-            //Check vision...
+            // Check vision...
             if (c.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
                 //Control
                 if (universe.control.get(sys.getId()) > -1) {
@@ -131,10 +131,11 @@ public class UniverseRenderer {
                     }
                     //Control, if any...
                     Ellipse2D.Double control = new Ellipse2D.Double(
-                            (sys.getX() * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
-                            (sys.getY() * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10) / 2,
+                            convertPointToScreen(sys.getX(), translateX, scale) - GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2,
+                            convertPointToScreen(sys.getY(), translateY, scale) - GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2,
                             (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10),
                             (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR + 10));
+
                     g2d.fill(control);
                 }
                 //End of control
@@ -168,21 +169,22 @@ public class UniverseRenderer {
                 g2d.setColor(c);
 
                 Ellipse2D.Double system = new Ellipse2D.Double(
-                        (sys.getX() * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                        (sys.getY() * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                        convertPointToScreen(sys.getX(), translateX, scale),
+                        convertPointToScreen(sys.getY(), translateY, scale),
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
-
             } else {
                 //Draw stars and stuff...
                 g2d.setColor(Color.GRAY);
                 Ellipse2D.Double system = new Ellipse2D.Double(
-                        (sys.getX() * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                        (sys.getY() * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                        convertPointToScreen(sys.getX(), translateX, scale),
+                        convertPointToScreen(sys.getY(), translateY, scale),
                         GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
                 g2d.fill(system);
             }
 
+            g2d.drawString(Integer.toString(sys.getIndex()), (float) convertPointToScreen(sys.getX(), translateX, scale),
+                    (float) convertPointToScreen(sys.getY(), translateY, scale));
         }
 
         //Spaceships
@@ -194,8 +196,8 @@ public class UniverseRenderer {
             //Draw dot
             g2d.setColor(Color.yellow);
             Ellipse2D.Double shipShape = new Ellipse2D.Double(
-                    (x * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                    (y * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
+                    convertPointToScreen(x, translateX, scale),
+                    convertPointToScreen(y, translateY, scale),
                     GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
             g2d.fill(shipShape);
             //Show actions
@@ -253,5 +255,9 @@ public class UniverseRenderer {
         g2d.setColor(Color.blue);
 
         g2d.fill(system);*/
+    }
+
+    private double convertPointToScreen(double position, double translate, double scale) {
+        return (position * sizeOfLTYR + translate + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2);
     }
 }

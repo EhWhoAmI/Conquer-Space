@@ -579,8 +579,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                             if (Math.hypot(((sys.getX() * universeRenderer.sizeOfLTYR + translateX + BOUNDS_SIZE / 2) / scale - e.getX()),
                                     ((sys.getY() * universeRenderer.sizeOfLTYR + translateY + BOUNDS_SIZE / 2) / scale - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : civ.vision.keySet()) {
-                                    if (p.getSystemID() == sys.getId() && civ.vision.get(p) > VisionTypes.UNDISCOVERED) {
-                                        see(sys.getId());
+                                    if (p.getSystemID() == sys.getIndex()&& civ.vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                        see(sys.getIndex());
                                         repaint();
                                         break sectorit;
                                     }

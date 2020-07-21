@@ -212,9 +212,9 @@ public class SystemRenderer {
             Body body = sys.getBodyObject(i);
 
             //Check if out of bounds
-            int bodyX = (int) ((translateX + (body.getX()) * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
-            int bodyY = (int) ((translateY - (body.getY()) * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
-
+            int bodyX = (int) ((translateX + body.getX() * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            int bodyY = (int) ((translateY - body.getY() * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
+            
             //Draw terrain
             if (body instanceof Planet) {
                 Planet p = (Planet) body;

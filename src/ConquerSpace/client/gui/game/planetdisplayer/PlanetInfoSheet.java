@@ -51,6 +51,8 @@ public class PlanetInfoSheet extends JPanel {
     PlanetResources planetResources;
 
     private Image planetImage;
+    
+    private PlanetMapProvider planetMapProvider;
 
     private Civilization civilization;
     private Planet planet;
@@ -64,13 +66,12 @@ public class PlanetInfoSheet extends JPanel {
         this.civilization = c;
         this.planet = p;
 
-        TerrainRenderer renderer = new TerrainRenderer(p);
-        planetImage = renderer.getImage();
-        //planetImage = (planetImage.getScaledInstance((int) (p.getPlanetWidth() * 2d), (int) (p.getPlanetHeight() * 2d), Image.SCALE_DEFAULT));
+        PlanetMapProvider provider = new PlanetMapProvider(p);
+
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
 
-        overview = new PlanetOverview(gameState, p, c, planetImage);
+        overview = new PlanetOverview(gameState, p, c, provider);
         atmosphere = new AtmosphereInfo(p, c);
         population = new PlanetCities(gameState, p, c, this);
         spacePort = new SpacePortMenuSheet(gameState, p.getId(), c.getId());
@@ -78,7 +79,7 @@ public class PlanetInfoSheet extends JPanel {
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(gameState, p, c);
         localLifeMenu = new LocalLifeMenu(p, c);
-        planetMap = new PlanetMap(gameState, p, c, this, planetImage);
+        planetMap = new PlanetMap(gameState, p, c, this, provider);
         planetEconomy = new PlanetEconomy();
         planetResources = new PlanetResources(gameState, p, c, this);
 
