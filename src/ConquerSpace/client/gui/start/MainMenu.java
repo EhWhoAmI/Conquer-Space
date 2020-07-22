@@ -84,6 +84,7 @@ public class MainMenu extends JFrame implements WindowListener {
 
         setIconImage(ResourceLoader.getIcon("game.icon").getImage());
 
+        setResizable(false);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addWindowListener(this);
@@ -209,23 +210,15 @@ public class MainMenu extends JFrame implements WindowListener {
 
             //Action Listeners
             startGame.addActionListener(e -> {
-                dispose();
                 NewGame game = new NewGame(MainMenu.this);
                 game.setVisible(true);
+                MainMenu.this.setEnabled(false);
             });
 
             resumeGame.addActionListener(e -> {
-                JFileChooser chooser = new JFileChooser("./save");
-                chooser.showOpenDialog(null);
-                File save = chooser.getSelectedFile();
-                //Then load the universe
-                if (save != null) {
-                    Globals.generator = new SaveGameUniverseGenerator(save);
-                    //Still have to set the save file
-                    //Globals.gameState.saveFile = save;
-                    setLoadedUniverse(true);
-                    dispose();
-                }
+                SaveGameChooser saveGameChooser = new SaveGameChooser(MainMenu.this);
+                saveGameChooser.setVisible(true);
+                MainMenu.this.setEnabled(false);
             });
 
             about.addActionListener(e -> {

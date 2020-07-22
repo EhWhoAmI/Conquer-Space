@@ -149,9 +149,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-        //Stop playing sound
-        GameController.musicPlayer.clean();
-        System.exit(0);
+        menu.setEnabled(true);
     }
 
     @Override

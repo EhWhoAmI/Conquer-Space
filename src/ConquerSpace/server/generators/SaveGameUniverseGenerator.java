@@ -29,13 +29,16 @@ import java.io.File;
 public class SaveGameUniverseGenerator extends UniverseGenerator {
 
     private SaveGame save;
+    private File saveGameFile;
 
     public SaveGameUniverseGenerator(File file) {
+        saveGameFile = file;
         save = new SaveGame(file);
     }
 
     @Override
     public Galaxy generate(GameState gameState) throws Exception {
+        gameState.saveFile = saveGameFile;
         save.read(gameState);
         return null;
     }

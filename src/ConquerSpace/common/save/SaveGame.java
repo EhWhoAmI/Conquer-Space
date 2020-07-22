@@ -31,6 +31,7 @@ import java.io.ObjectOutputStream;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -119,36 +120,10 @@ public class SaveGame {
     }
 
     public static String getSaveFolder() {
-        String baseSave = System.getProperty("user.dir") + "/save";
-        //Get the other files
-        File baseSaveFile = new File(baseSave);
-        if (baseSaveFile.exists() && baseSaveFile.isFile()) {
-            //Delete the file
-            baseSaveFile.delete();
-            return (baseSave + "/save0");
-        } else if (!baseSaveFile.exists() || baseSaveFile.listFiles().length <= 0) {
-            return (baseSave + "/save0");
-        }
-
-        String[] fileList = baseSaveFile.list();
-        int highest = 0;
-        for (String folder : fileList) {
-            //Get the name
-            if (folder.startsWith("save")) {
-                //Get the number
-                String number = folder.substring(4);
-                try {
-                    int saveCount = Integer.parseInt(number);
-                    if (saveCount > highest) {
-                        highest = saveCount;
-                    }
-                } catch (NumberFormatException nfe) {
-
-                }
-            }
-        }
-        highest++;
-        return baseSave + "/save" + highest;
+        String baseSave = System.getProperty("user.dir") + "/save/";
+        
+        String saveText = String.format("%07d_save.sav", new Random().nextInt(10000000));
+        return baseSave + saveText;
     }
 
     public static String defaultSerialize(Object obj) {

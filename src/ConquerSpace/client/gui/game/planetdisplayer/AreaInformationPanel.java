@@ -31,6 +31,7 @@ import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
@@ -134,7 +135,9 @@ public class AreaInformationPanel extends JPanel {
                 add(title);
                 MineArea area = (MineArea) a;
                 JLabel resourceMined = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.mined", gameState.getGood(area.getResourceMinedId())));
+                JLabel miningVein = new JLabel("Stratum: " + gameState.getObject(area.getStratumMining(), Stratum.class));
                 add(resourceMined);
+                add(miningVein);
             } else if (a instanceof CommercialArea) {
                 JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.commercial.title"));
                 add(title);
