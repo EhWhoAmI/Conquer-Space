@@ -167,7 +167,9 @@ public class PlanetCities extends JPanel {
             if (areaListModel != null && cityList.getSelectedValue() != null) {
                 for (Integer areaId : cityList.getSelectedValue().areas) {
                     Area area = gameState.getObject(areaId, Area.class);
-                    areaListModel.addElement(area);
+                    if (!areaListModel.contains(area)) {
+                        areaListModel.addElement(area);
+                    }
                 }
 
             }
@@ -292,7 +294,7 @@ public class PlanetCities extends JPanel {
         //Areas
         areaListModel = new DefaultListModel<>();
         for (Integer areaId : selected.areas) {
-            Area area = gameState.getObject(selected.population, Area.class);
+            Area area = gameState.getObject(areaId, Area.class);
             areaListModel.addElement(area);
         }
 

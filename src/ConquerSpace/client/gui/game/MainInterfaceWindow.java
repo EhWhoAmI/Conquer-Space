@@ -97,7 +97,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     private boolean toShowResources = true;
 
     private final int planetinfotab = 1;
-    
+
     private PlayerRegister register;
 
     public MainInterfaceWindow(GameState gameState, Civilization c, PlayerRegister register) {
@@ -105,7 +105,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         this.universe = gameState.getUniverse();
         this.gameState = gameState;
         this.register = register;
-        
+
         init();
 
         //Set selected planet
