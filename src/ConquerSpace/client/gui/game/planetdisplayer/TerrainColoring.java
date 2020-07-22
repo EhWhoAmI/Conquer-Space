@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.universe.bodies.terrain;
+package ConquerSpace.client.gui.game.planetdisplayer;
 
 import java.awt.Color;
 import java.util.HashMap;

@@ -45,7 +45,7 @@ public class ShipListManager extends JPanel {
     
     private GameState gameState;
 
-    public ShipListManager(GameState gameState, Civilization c) {
+    public ShipListManager(GameState gameState, Civilization c, PlayerRegister register) {
         this.c = c;
         this.gameState = gameState;
         
@@ -68,7 +68,7 @@ public class ShipListManager extends JPanel {
                 if (shipDetailsSideWindow == null || shipDetailsSideWindow.isClosed()) {
                     //Clear...
                     shipDetailsSideWindow = null;
-                    shipDetailsSideWindow = new ShipDetailsSideWindow(s, c);
+                    shipDetailsSideWindow = new ShipDetailsSideWindow(s, c, register);
                     ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(shipDetailsSideWindow);
                     shipDetailsSideWindow.toFront();
                     int height = shipDetailsSideWindow.getDesktopPane().getHeight();

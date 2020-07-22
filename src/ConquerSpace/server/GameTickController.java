@@ -15,30 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game;
-
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.ships.Ship;
-import javax.swing.JInternalFrame;
+package ConquerSpace.server;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipDetailsSideWindow extends JInternalFrame {
-
-    private ShipInformationMenu men;
-
-    public ShipDetailsSideWindow(Ship s, Civilization c, PlayerRegister register) {
-        //Init...
-        men = new ShipInformationMenu(s, c, register);
-        add(men);
-        setVisible(true);
-        setClosable(true);
-        setResizable(true);
-        pack();
-        toFront();
-        //Get window size
-        
-    }
+public interface GameTickController {
+    public boolean allowTick();
+    public int getTickCount();
 }

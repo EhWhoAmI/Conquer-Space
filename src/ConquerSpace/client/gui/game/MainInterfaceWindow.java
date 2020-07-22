@@ -17,14 +17,14 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
-import ConquerSpace.client.gui.game.planetdisplayer.UnownedPlanetInfoMenu;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.LaunchSystemDesigner;
 import ConquerSpace.client.gui.game.engineering.SatelliteDesigner;
 import ConquerSpace.client.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
+import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
+import ConquerSpace.client.gui.game.planetdisplayer.UnownedPlanetInfoMenu;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -97,11 +97,14 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     private boolean toShowResources = true;
 
     private final int planetinfotab = 1;
+    
+    private PlayerRegister register;
 
-    public MainInterfaceWindow(GameState gameState, Civilization c) {
+    public MainInterfaceWindow(GameState gameState, Civilization c, PlayerRegister register) {
         this.civilization = c;
         this.universe = gameState.getUniverse();
         this.gameState = gameState;
+        this.register = register;
         
         init();
 
@@ -152,7 +155,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         planetInfoSheetContainer.setLayout(new BorderLayout());
 
         //Space ship tabs
-        spaceShipOverview = new SpaceShipOverview(gameState, civilization);
+        spaceShipOverview = new SpaceShipOverview(gameState, civilization, register);
 
         //Engineering tabs
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
@@ -319,14 +322,14 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         if (toShowResources) {
             //Check if owned or not
             if (p.getOwnerID() == (civilization.getId())) {
-                planetInfoSheet = new PlanetInfoSheet(gameState, selectedPlanet, civilization);
+                planetInfoSheet = new PlanetInfoSheet(gameState, selectedPlanet, civilization, register);
                 planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
             } else {
-                unownedPlanetInfoMenu = new UnownedPlanetInfoMenu(gameState, selectedPlanet, civilization);
+                unownedPlanetInfoMenu = new UnownedPlanetInfoMenu(gameState, selectedPlanet, civilization, register);
                 planetInfoSheetContainer.add(unownedPlanetInfoMenu, BorderLayout.CENTER);
             }
         } else {
-            shrinkedPlanetSheet = new ShrinkedPlanetSheet(gameState, p, civilization);
+            shrinkedPlanetSheet = new ShrinkedPlanetSheet(gameState, p, civilization, register);
             planetInfoSheetContainer.add(shrinkedPlanetSheet, BorderLayout.CENTER);
         }
         setSelectedTab(planetinfotab);

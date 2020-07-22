@@ -17,8 +17,6 @@
  */
 package ConquerSpace.common.game.ships.components;
 
-import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
-
 /**
  *
  * @author EhWhoAmI

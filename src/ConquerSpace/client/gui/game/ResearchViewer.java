@@ -19,7 +19,6 @@ package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.Scientist;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -168,7 +167,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
                     civilization.setTechPoints(civilization.getTechPoints() - t.getDifficulty());
                     techPointLabel.setText(LOCALE_MESSAGES.getMessage("game.research.techpointsleft", civilization.getTechPoints()));
                     list.removeElement(tech.getSelectedValue());
-                    civilization.controller.alert(new Alert(0, 0, LOCALE_MESSAGES.getMessage("game.research.alert.autoresearch", t.getName())));
+                    //Alert civ FIX
+                    //civilization.controller.alert(new Alert(0, 0, LOCALE_MESSAGES.getMessage("game.research.alert.autoresearch", t.getName())));
                 }
 
                 //Remove from list

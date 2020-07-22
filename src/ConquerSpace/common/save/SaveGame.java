@@ -20,8 +20,6 @@ package ConquerSpace.common.save;
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.AIController;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.util.Version;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -117,12 +115,6 @@ public class SaveGame {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Integer civId = gameState.getCivilization(i);
             Civilization civ = gameState.getObject(civId, Civilization.class);
-            if (civId.equals(playerCiv)) {
-                //Put in playerCiv
-                civ.controller = new PlayerController();
-            } else {
-                civ.controller = new AIController();
-            }
         }
     }
 

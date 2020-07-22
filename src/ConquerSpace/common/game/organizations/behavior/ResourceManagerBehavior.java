@@ -90,4 +90,7 @@ public class ResourceManagerBehavior extends Behavior {
         //Done
     }
 
+    @Override
+    public void initBehavior() {
+    }
 }

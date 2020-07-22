@@ -16,6 +16,7 @@ Game runs in the main thread
 Change to references to goods
 Add identifiers to resource and production processes
 You can use the command line options -t to see the tools available, and the option -d to a debug mode which opens up the game faster, with a default seed.
+Added save files
 
 Graphics and UI:
 Add lighting to planet surfaces so it looks cooler

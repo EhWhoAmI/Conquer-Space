@@ -34,6 +34,8 @@ import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Organization;
+import ConquerSpace.common.game.organizations.behavior.EmptyBehavior;
+import ConquerSpace.common.game.organizations.behavior.PlayerBehavior;
 import ConquerSpace.common.game.organizations.behavior.ResourceManagerBehavior;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.organizations.civilization.government.Government;
@@ -97,9 +99,15 @@ public class CivilizationInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-            Civilization civilization = gameState.getCivilizationObject(i); 
+            Civilization civilization = gameState.getCivilizationObject(i);
+
+            //Set behavior
+            if (civilization.getId() == gameState.playerCiv) {
+                civilization.setBehavior(new PlayerBehavior(gameState, civilization));
+            } else {
+                civilization.setBehavior(new EmptyBehavior(gameState, civilization));
+            }
             //Add templates
             initVision(civilization, universe);
 
@@ -115,7 +123,7 @@ public class CivilizationInitializer {
             civilization.hullMaterials.add(material.getId());
 
             UniversePath path = civilization.getStartingPlanet();
-                        
+
             Integer id = universe.getSpaceObject(path);
             Planet startingPlanet = gameState.getObject(id, Planet.class);
 

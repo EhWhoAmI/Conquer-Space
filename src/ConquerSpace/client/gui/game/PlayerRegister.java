@@ -17,28 +17,21 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
-import javax.swing.JInternalFrame;
+import java.util.ArrayList;
 
 /**
- *
+ * Stuff that the player would like to save
  * @author EhWhoAmI
  */
-public class ShipDetailsSideWindow extends JInternalFrame {
+public class PlayerRegister {
+    private ArrayList<Ship> selectedShips;
 
-    private ShipInformationMenu men;
+    public PlayerRegister() {
+        selectedShips = new ArrayList<>();
+    }
 
-    public ShipDetailsSideWindow(Ship s, Civilization c, PlayerRegister register) {
-        //Init...
-        men = new ShipInformationMenu(s, c, register);
-        add(men);
-        setVisible(true);
-        setClosable(true);
-        setResizable(true);
-        pack();
-        toFront();
-        //Get window size
-        
+    public ArrayList<Ship> getSelectedShips() {
+        return selectedShips;
     }
 }

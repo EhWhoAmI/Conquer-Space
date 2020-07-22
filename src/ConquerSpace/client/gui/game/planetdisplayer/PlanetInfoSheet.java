@@ -18,7 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.client.gui.renderers.TerrainRenderer;
+import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
@@ -61,7 +61,7 @@ public class PlanetInfoSheet extends JPanel {
     
     private GameState gameState;
 
-    public PlanetInfoSheet(GameState gameState, Planet p, Civilization c) {
+    public PlanetInfoSheet(GameState gameState, Planet p, Civilization c, PlayerRegister register) {
         this.gameState = gameState;
         this.civilization = c;
         this.planet = p;
@@ -72,7 +72,7 @@ public class PlanetInfoSheet extends JPanel {
         tpane = new JTabbedPane();
 
         overview = new PlanetOverview(gameState, p, c, provider);
-        atmosphere = new AtmosphereInfo(p, c);
+        atmosphere = new AtmosphereInfo(p, c, register);
         population = new PlanetCities(gameState, p, c, this);
         spacePort = new SpacePortMenuSheet(gameState, p.getId(), c.getId());
         planetGeology = new PlanetGeology(gameState, p);

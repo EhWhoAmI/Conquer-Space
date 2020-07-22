@@ -18,7 +18,6 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
@@ -76,8 +75,8 @@ public class CQSPConsole extends JInternalFrame {
                     Technology t = Technologies.getTechByID(state, Integer.parseInt(command[1]));
                     c.researchTech(state, t);
                     model.addElement("Researched " + t.getName() + " for " + c.getName());
-                    //Alert civ
-                    c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
+                    //Alert civ FIX
+                    //c.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
                 } else {
                     model.addElement("You need a number!");
                 }

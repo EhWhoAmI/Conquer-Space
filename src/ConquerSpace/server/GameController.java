@@ -20,8 +20,9 @@ package ConquerSpace.server;
 import ConquerSpace.client.gui.music.MusicPlayer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.GameTicker;
+import ConquerSpace.common.game.organizations.Organization;
+import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.Timer;
@@ -42,13 +43,13 @@ public class GameController {
      */
     public Galaxy universe;
 
-    public static GameTicker updater;
+    public GameTicker updater;
 
-    public static Civilization playerCiv = null;
+    public Civilization playerCiv = null;
 
     public static final int AU_IN_LTYR = 63241;
 
-    private PlayerController playerController;
+    private GameTickController tickController;
 
     private GameState gameState;
 
@@ -71,23 +72,28 @@ public class GameController {
 
         playerCiv = gs.getObject(gs.playerCiv, Civilization.class);
 
-        //Load the players
-        for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-            Civilization civilization = gameState.getCivilizationObject(i);
-            civilization.controller.init(gameState, civilization);
+        for (int i = 0; i < gameState.getOrganizationCount(); i++) {
+            Organization org = gameState.getOrganizationObject(i);
+            Behavior behavior = org.getBehavior();
+            if (behavior != null) {
+                behavior.initBehavior();
+
+                if (behavior instanceof GameTickController) {
+                    tickController = (GameTickController) behavior;
+                }
+            }
         }
 
         int tickerSpeed = 10;
 
         ticker = new Timer();
-        playerController = (PlayerController) playerCiv.controller;
 
         Runnable action = new Runnable() {
             public void run() {
                 //Ensure that the game does not stop on a crash
                 try {
-                    ticker.setWait(playerController.getTickCount());
-                    if (!playerController.allowTick()) {
+                    ticker.setWait(tickController.getTickCount());
+                    if (!tickController.allowTick()) {
                         updater.tick(1);
                     }
                 } catch (Exception e) {

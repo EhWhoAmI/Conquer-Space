@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.client.gui.game.ShipInformationMenu;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Orbitable;
@@ -48,7 +49,7 @@ public class AtmosphereInfo extends JPanel {
 
     private Planet planet;
 
-    public AtmosphereInfo(Planet p, Civilization c) {
+    public AtmosphereInfo(Planet p, Civilization c, PlayerRegister register) {
         setLayout(new BorderLayout());
         planet = p;
         //Draw panels and stuff
@@ -69,7 +70,7 @@ public class AtmosphereInfo extends JPanel {
         //Display ship info....
         shipsInOrbitList.addListSelectionListener(a -> {
             if (shipsInOrbitList.getSelectedValue() instanceof Ship) {
-                shipInformationMenu = new ShipInformationMenu((Ship) shipsInOrbitList.getSelectedValue(), c);
+                shipInformationMenu = new ShipInformationMenu((Ship) shipsInOrbitList.getSelectedValue(), c, register);
                 shipInfoContainer.removeAll();
                 shipInfoContainer.add(shipInformationMenu);
             }

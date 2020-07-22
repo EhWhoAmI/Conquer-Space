@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.ships.components.templates;
+package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.ships.components.ShipComponentTypes;
-import ConquerSpace.common.game.ships.components.engine.EngineTechnology;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**

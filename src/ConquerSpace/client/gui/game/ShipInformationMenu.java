@@ -18,7 +18,6 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.ships.Ship;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -38,7 +37,7 @@ public class ShipInformationMenu extends JPanel {
     private JButton selectButton;
 
     //Actions buttons. 
-    public ShipInformationMenu(Ship ship, Civilization c) {
+    public ShipInformationMenu(Ship ship, Civilization c, PlayerRegister playerRegister) {
         setLayout(new GridLayout(3, 2));
         shipNameLabel = new JLabel("Name: ");
         add(shipNameLabel);
@@ -58,8 +57,8 @@ public class ShipInformationMenu extends JPanel {
         }
         selectButton = new JButton("Select this Ship");
         selectButton.addActionListener(a -> {
-            if (!((PlayerController) c.controller).selectedShips.contains(ship)) {
-                ((PlayerController) c.controller).selectedShips.add(ship);
+            if (!playerRegister.getSelectedShips().contains(ship)) {
+                playerRegister.getSelectedShips().add(ship);
             }
         });
         add(selectButton);

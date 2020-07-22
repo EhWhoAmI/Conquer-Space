@@ -36,4 +36,5 @@ public abstract class Behavior extends ConquerSpaceGameObject implements Seriali
     }
     
     public abstract void doBehavior();
+    public abstract void initBehavior();
 }

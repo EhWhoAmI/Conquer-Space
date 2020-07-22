@@ -23,8 +23,6 @@ import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.AIController;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.resources.ResourceDistribution;
@@ -38,10 +36,9 @@ import ConquerSpace.common.game.universe.bodies.PlanetTypes;
 import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.game.universe.bodies.StarType;
-import ConquerSpace.common.game.universe.bodies.terrain.TerrainColoring;
+import ConquerSpace.client.gui.game.planetdisplayer.TerrainColoring;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.common.util.names.NameGenerator;
-import ConquerSpace.server.GameController;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -156,7 +153,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Player civ
         Civilization playerCiv = new Civilization(gameState, c.civilizationName);
         playerCiv.setColor(c.civColor);
-        playerCiv.setController(new PlayerController());
         playerCiv.setHomePlanetName(c.homePlanetName);
         playerCiv.setSpeciesName(c.speciesName);
         playerCiv.setCivilizationPreferredClimate(c.civilizationPreferredClimate);
@@ -184,8 +180,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         LOGGER.info("Done with player civ " + playerCiv.getName());
 
-        GameController.playerCiv = playerCiv;
-
         //Calculate number of civs
         int civCount = starSystemCount / 50;
 
@@ -202,7 +196,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             String name = civNameGenerator.getName(0, rand);
             Civilization civ = new Civilization(gameState, name);
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
-            civ.setController(new AIController());
             civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
             civ.setSpeciesName(name);
             RacePreferredClimateTpe civPreferredClimate1 = RacePreferredClimateTpe.values()[rand.nextInt(RacePreferredClimateTpe.values().length)];

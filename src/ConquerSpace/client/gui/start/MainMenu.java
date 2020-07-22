@@ -53,7 +53,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -217,13 +216,13 @@ public class MainMenu extends JFrame implements WindowListener {
 
             resumeGame.addActionListener(e -> {
                 JFileChooser chooser = new JFileChooser("./save");
-                chooser.setFileFilter(new FileNameExtensionFilter("Zip File", "zip"));
                 chooser.showOpenDialog(null);
                 File save = chooser.getSelectedFile();
                 //Then load the universe
                 if (save != null) {
                     Globals.generator = new SaveGameUniverseGenerator(save);
-                    Globals.gameState.saveFile = save;
+                    //Still have to set the save file
+                    //Globals.gameState.saveFile = save;
                     setLoadedUniverse(true);
                     dispose();
                 }

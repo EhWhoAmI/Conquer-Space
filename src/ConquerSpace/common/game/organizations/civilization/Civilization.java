@@ -24,7 +24,6 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.Organization;
-import ConquerSpace.common.game.organizations.civilization.controllers.CivilizationController;
 import ConquerSpace.common.game.organizations.civilization.government.Government;
 import ConquerSpace.common.game.organizations.civilization.stats.Economy;
 import ConquerSpace.common.game.organizations.civilization.stats.PopulationStats;
@@ -65,11 +64,6 @@ public class Civilization extends Organization implements Employer {
     private String speciesName;
 
     private String homePlanetName;
-
-    /**
-     * The controller of this civ.
-     */
-    public transient CivilizationController controller;
 
     public PopulationStats pop;
     public Economy economy;
@@ -204,10 +198,6 @@ public class Civilization extends Organization implements Employer {
         this.color = color;
     }
 
-    public void setController(CivilizationController controller) {
-        this.controller = controller;
-    }
-
     public void setHomePlanetName(String homePlanetName) {
         this.homePlanetName = homePlanetName;
     }
@@ -230,10 +220,6 @@ public class Civilization extends Organization implements Employer {
 
     public Color getColor() {
         return color;
-    }
-
-    public CivilizationController getController() {
-        return controller;
     }
 
     public String getHomePlanetName() {
@@ -407,7 +393,7 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void passEvent(Event e) {
-        controller.passEvent(e);
+        
     }
 
     public void employ(Integer p) {

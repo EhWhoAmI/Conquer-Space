@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer;
 
+import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.PolarCoordinate;
@@ -58,7 +59,7 @@ public class ShrinkedPlanetSheet extends JPanel {
 
     private AtmosphereInfo atmosphereInfo;
 
-    public ShrinkedPlanetSheet(GameState gameState, Planet p, Civilization c) {
+    public ShrinkedPlanetSheet(GameState gameState, Planet p, Civilization c, PlayerRegister register) {
         this.gameState = gameState;
         this.u = gameState.getUniverse();
         this.p = p;
@@ -135,7 +136,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         infoPane.add("Planet Overview", planetOverviewPanel);
 
         //Add atmosphere info
-        atmosphereInfo = new AtmosphereInfo(p, c);
+        atmosphereInfo = new AtmosphereInfo(p, c, register);
         infoPane.add("Atmosphere Info", atmosphereInfo);
         add(infoPane);
         //Add empty panel

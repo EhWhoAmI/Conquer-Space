@@ -32,11 +32,11 @@ public class SpaceShipOverview extends JPanel {
     private ShipListManager shipListManager;
     private JTabbedPane tabs;
 
-    public SpaceShipOverview(GameState gameState, Civilization civ) {
+    public SpaceShipOverview(GameState gameState, Civilization civ, PlayerRegister register) {
         setLayout(new BorderLayout());
         tabs = new JTabbedPane();
 
-        shipListManager = new ShipListManager(gameState, civ);
+        shipListManager = new ShipListManager(gameState, civ, register);
         tabs.add("Ship List", shipListManager);
 
         tabs.addChangeListener(l -> {

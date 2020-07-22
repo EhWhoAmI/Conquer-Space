@@ -17,25 +17,47 @@
  */
 package ConquerSpace.common.game.organizations.behavior;
 
+import ConquerSpace.client.gui.game.GameWindow;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Organization;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.server.GameTickController;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class EmptyBehavior extends Behavior{
+public class PlayerBehavior extends Behavior implements GameTickController {
 
-    public EmptyBehavior(GameState gameState, Organization org) {
+    public transient GameWindow mainwindow;
+    //UI stuff
+
+    public PlayerBehavior(GameState gameState, Organization org) {
         super(gameState, org);
+        if (!(org instanceof Civilization)) {
+            throw new IllegalArgumentException("The org has to be a civ!");
+        }
     }
-    
+
     @Override
-    public void doBehavior(){
-        //Do nothing
+    public void doBehavior() {
+        //Does nothing
     }
 
     @Override
     public void initBehavior() {
+        Civilization civilization = (Civilization) org;
+        mainwindow = new GameWindow(gameState, civilization);
+        mainwindow.setVisible(true);
+    }
+
+    @Override
+    public boolean allowTick() {
+        return mainwindow.allowTick();
+    }
+
+    @Override
+    public int getTickCount() {
+        return mainwindow.getTickCount();
     }
 }

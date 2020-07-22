@@ -15,64 +15,60 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.ships.components.templates;
+package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.ships.components.ShipComponentTypes;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("ship-component-template")
-public class ShipComponentTemplate extends ConquerSpaceGameObject{
+@SerializeClassName("engine-technology")
+public class EngineTechnology extends ConquerSpaceGameObject{
+    
+    private String name;
 
-    //Mass in KG
-    protected int mass;
-    //Cost in credits
-    protected int cost;
-    protected String name;
+    /**
+    * Efficiency: m/s per kg of propellant
+    */
+    private float efficiency;
+    private float thrust_multiplier;
 
-    protected ShipComponentTypes type;
-
-    public ShipComponentTemplate(GameState gameState) {
+    public EngineTechnology(GameState gameState, String name, float efficiency, float thrust_multiplier) {
         super(gameState);
+        this.name = name;
+        this.efficiency = efficiency;
+        this.thrust_multiplier = thrust_multiplier;
     }
 
-    public ShipComponentTemplate(GameState gameState, int mass, int cost, String name) {
-        super(gameState);
-        this.mass = mass;
-        this.cost = cost;
-        this.name = name;
+    public float getEfficiency() {
+        return efficiency;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getCost() {
-        return cost;
+    public float getThrustMultiplier() {
+        return thrust_multiplier;
     }
 
-    public int getMass() {
-        return mass;
-    }
-
-    public void setMass(int mass) {
-        this.mass = mass;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setEfficiency(float efficiency) {
+        this.efficiency = efficiency;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public ShipComponentTypes getType() {
-        return ShipComponentTypes.Test;
+    public void setThrust_multiplier(float thrust_multiplier) {
+        this.thrust_multiplier = thrust_multiplier;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

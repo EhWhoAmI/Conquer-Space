@@ -31,7 +31,6 @@ import ConquerSpace.common.actions.ShipSurveyAction;
 import ConquerSpace.common.actions.ToOrbitAction;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.controllers.PlayerController;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.SpacePoint;
@@ -87,7 +86,7 @@ import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
 
 /**
- *
+ * Game UI entrypoint
  * @author EhWhoAmI
  */
 public class GameWindow extends JFrame implements GUI, WindowListener, ComponentListener {
@@ -101,8 +100,6 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
     private Civilization civ;
 
-    private PlayerController controller;
-
     private MainInterfaceWindow mainInterfaceWindow;
 
     private Encyclopedia encyclopedia;
@@ -114,13 +111,16 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
     private StarDate date;
 
     private GameState gameState;
+    
+    private PlayerRegister playerRegister;
 
-    public GameWindow(GameState gameState, PlayerController controller, Civilization c) {
-        this.controller = controller;
+    public GameWindow(GameState gameState, Civilization c) {
         this.civ = c;
         this.universe = gameState.getUniverse();
         this.date = gameState.date;
         this.gameState = gameState;
+        
+        playerRegister = new PlayerRegister();
 
         //Edit menu bar
         addWindowListener(this);
@@ -150,7 +150,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         SwingWorker<MainInterfaceWindow, Void> interfaceWorker = new SwingWorker<MainInterfaceWindow, Void>() {
             @Override
             protected MainInterfaceWindow doInBackground() {
-                return new MainInterfaceWindow(gameState, civ);
+                return new MainInterfaceWindow(gameState, civ, playerRegister);
 
             }
 
@@ -173,7 +173,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
              * When concurrency doesn't work.
              */
             private void createFrame() {
-                mainInterfaceWindow = new MainInterfaceWindow(gameState, civ);
+                mainInterfaceWindow = new MainInterfaceWindow(gameState, civ, playerRegister);
                 addFrame(mainInterfaceWindow);
             }
         };
@@ -197,7 +197,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                 mainInterfaceWindow.setVisible(true);
             } else {
                 //Create it, ah well.
-                mainInterfaceWindow = new MainInterfaceWindow(gameState, civ);
+                mainInterfaceWindow = new MainInterfaceWindow(gameState, civ, playerRegister);
                 addFrame(mainInterfaceWindow);
                 mainInterfaceWindow.setVisible(true);
             }
@@ -250,7 +250,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
 
         JMenuItem seeHomePlanet = new JMenuItem(LOCALE_MESSAGES.getMessage("game.view.home.planet"));
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
+            desktopPane.see(civ.getStartingPlanet().getSystemID());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -382,7 +382,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
         gameTickTimer.start();
         changeTurnSaveWindowPosition();
         //See home planet
-        desktopPane.see(GameController.playerCiv.getStartingPlanet().getSystemID());
+        desktopPane.see(civ.getStartingPlanet().getSystemID());
     }
 
     @Override
@@ -753,7 +753,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             }
             JMenu selectedShips = new JMenu(LOCALE_MESSAGES.getMessage("game.click.popup.ship.selected"));
             //Get currently selected ships
-            for (Ship s : ((PlayerController) civ.controller).selectedShips) {
+            //Need to add a register...
+            for (Ship s : playerRegister.getSelectedShips()) {
                 JMenu men = new JMenu(s.toString());
                 JMenuItem gohereMenu = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.goto"));
                 gohereMenu.addActionListener(a -> {
@@ -873,7 +874,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             //Add a delete all selected ships
             JMenuItem deleteSelectedShips = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.ships"));
             deleteSelectedShips.addActionListener(a -> {
-                ((PlayerController) civ.controller).selectedShips.clear();
+                playerRegister.getSelectedShips().clear();
             });
 
             popupMenu.add(selectedShips);
