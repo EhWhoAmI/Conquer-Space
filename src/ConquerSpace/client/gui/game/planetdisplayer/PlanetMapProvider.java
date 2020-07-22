@@ -19,13 +19,17 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.util.logging.CQSPLogger;
 import java.awt.Image;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author EhWhoAmI
  */
 public class PlanetMapProvider {
+    
+    private static final Logger LOGGER = CQSPLogger.getLogger(PlanetMapProvider.class.getName());
 
     private boolean loaded;
     private Image image;
@@ -40,6 +44,7 @@ public class PlanetMapProvider {
             long end = System.currentTimeMillis();
 
             loaded = true;
+            LOGGER.info("Made terrain in " + (end - start) + "ms");
         });
         t.setName("Terrain renderer");
         t.start();

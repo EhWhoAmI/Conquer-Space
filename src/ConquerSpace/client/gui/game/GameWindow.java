@@ -575,8 +575,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
                             StarSystem sys = universe.getStarSystemObject(i);
-                            if (Math.hypot((convertPoint(sys.getX(), translateX) - e.getX()),
-                                    (convertPoint(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
+                            if (Math.hypot((convertPointUniverse(sys.getX(), translateX) - e.getX()),
+                                    (convertPointUniverse(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : civ.vision.keySet()) {
                                     if (p.getSystemID() == sys.getIndex() && civ.vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         see(sys.getIndex());
@@ -699,8 +699,8 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         //Check for vision
                         StarSystem sys = universe.getStarSystemObject(i);
                         
-                        if (Math.hypot((convertPoint(sys.getX(), translateX)- e.getX()),
-                                (convertPoint(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
+                        if (Math.hypot((convertPointUniverse(sys.getX(), translateX)- e.getX()),
+                                (convertPointUniverse(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                             if (civ.vision.containsKey(new UniversePath(sys.getId())) && civ.vision.get(new UniversePath(sys.getId())) > VisionTypes.UNDISCOVERED) {
                                 JMenuItem systemInfo = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.starsystem"), sys.getId()));
                                 systemInfo.addActionListener(a -> {
@@ -720,8 +720,11 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         Body body = selected.getBodyObject(i);
                         if (body instanceof Planet) {
                             Planet planet = (Planet) body;
-                            if (Math.hypot((translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getX(),
-                                    (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale - e.getY()) < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
+                            //Convert point...
+                            double x = (translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale;
+                            double y = (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale;
+                            if (Math.hypot(x - e.getX(), y - e.getY())
+                                    < (planet.getPlanetSize() / SystemRenderer.PLANET_DIVISOR)) {
                                 if (planet.hasScanned(civ.getId())) {
                                     JMenuItem planetName = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.planet"), planet.getId()));
                                     planetName.addActionListener(a -> {
@@ -794,7 +797,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
                         //Check if in star system
                         //Then check the goto position
 
-                        long gotoX = (long) (((e.getX() * scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU;
+                        long gotoX = (long) ((((e.getX() * scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU);
                         long gotoY = (long) ((((e.getY() * scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
 
                         //Get Location
@@ -878,7 +881,7 @@ public class GameWindow extends JFrame implements GUI, WindowListener, Component
             return popupMenu;
         }
         
-        private double convertPoint(double pos, double translate) {
+        private double convertPointUniverse(double pos, double translate) {
             return (pos * universeRenderer.sizeOfLTYR + translate + BOUNDS_SIZE / 2) / scale;
         }
     }

@@ -236,6 +236,8 @@ public class PlanetOverview extends JPanel {
             if (showPlanetTerrain) {
                 if (planetMap.isLoaded()) {
                     g2d.drawImage(planetMap.getImage(), 0, 0, null);
+                } else {
+                    g2d.drawString("Rendering Planet Map", 0, 0);
                 }
             } else {
                 //Black for visibility

@@ -42,26 +42,31 @@ public class TerrainRenderer {
         HashMap<Float, Color> colors;// = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
         TerrainGenerator terrainGenerator = new TerrainGenerator();
         ConquerSpace.common.jLibNoise.noise.utils.Image terrainColorses = null;
-        
+
         int imageRes = 2;
         int mapRes = 2;
         switch (p.getPlanetType()) {
+            default:
             case PlanetTypes.ROCK:
                 colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
                 terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
                         7, 0.9f, 2f, 0.5f, p.getPlanetWidth() * imageRes * 2, p.getPlanetHeight() * imageRes * 2,
-                        -p.getPlanetWidth() / (16*mapRes), 
-                        p.getPlanetWidth() / (16*mapRes), 
-                        -p.getPlanetHeight() / (16*mapRes), 
-                        p.getPlanetHeight() / (16*mapRes), 
+                        -p.getPlanetWidth() / (16 * mapRes),
+                        p.getPlanetWidth() / (16 * mapRes),
+                        -p.getPlanetHeight() / (16 * mapRes),
+                        p.getPlanetHeight() / (16 * mapRes),
                         colors);
                 break;
-            default:
             case PlanetTypes.GAS:
                 colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
                 terrainColorses = terrainGenerator.generateImage(p.getTerrainSeed(),
-                        7, 0.5f, 2f, 0.5f, p.getPlanetWidth() * imageRes, p.getPlanetHeight() * imageRes,
-                        0, p.getPlanetWidth() / (8*mapRes), 0, p.getPlanetHeight() / (2*mapRes), colors);
+                        4, 0.5f, 2f, 0.5f,
+                        p.getPlanetWidth() * imageRes,
+                        p.getPlanetHeight() * imageRes,
+                        0,
+                        p.getPlanetWidth() / (4 * mapRes),
+                        0,
+                        (int) (p.getPlanetHeight() / (1 * mapRes)), colors);
                 break;
         }
 
@@ -69,7 +74,7 @@ public class TerrainRenderer {
         return (planetDisplaying);
     }
 
-    //A small image for the map
+    //A small image for the map, so lower res...
     public Image getSquareImage(double scale) {
         BufferedImage planetDisplaying = new BufferedImage(p.getPlanetHeight(), p.getPlanetHeight(), BufferedImage.TYPE_INT_ARGB);
         HashMap<Float, Color> colors;// = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
@@ -77,16 +82,12 @@ public class TerrainRenderer {
         Color[][] terrainColorses = null;
 
         switch (p.getPlanetType()) {
+            default:
             case PlanetTypes.ROCK:
                 colors = TerrainColoring.getRockyTerrainColoring(p.getTerrainColoringIndex());
                 terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 3, 0, p.getPlanetSize() / 3, colors);
                 break;
             case PlanetTypes.GAS:
-                colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
-                terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 18, colors);
-                break;
-            default:
-                //Default option
                 colors = TerrainColoring.getGassyTerrainColoring(p.getTerrainColoringIndex());
                 terrainColorses = terrainGenerator.generate(p.getTerrainSeed(), 2, 0.5f, 2f, 0.5f, p.getPlanetHeight(), p.getPlanetHeight(), 0, p.getPlanetSize() / 18, 0, p.getPlanetSize() / 18, colors);
                 break;

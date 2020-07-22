@@ -124,8 +124,10 @@ public class SystemRenderer {
                         systemTerrain[k] = toBufferedImage(tr.getSquareImage(1));
 
                         //Create copy
-                        BufferedImage temp = resize(systemTerrain[k], systemTerrain[k].getHeight() / PLANET_DIVISOR, systemTerrain[k].getHeight() / PLANET_DIVISOR);
-                        systemTerrain[k] = new BufferedImage(systemTerrain[k].getHeight() / PLANET_DIVISOR, systemTerrain[k].getWidth() / PLANET_DIVISOR, BufferedImage.TYPE_INT_ARGB);
+                        int width = systemTerrain[k].getWidth() / PLANET_DIVISOR;
+                        int height = systemTerrain[k].getHeight() / PLANET_DIVISOR;
+                        BufferedImage temp = resize(systemTerrain[k], height, height);
+                        systemTerrain[k] = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
 
                         for (int x = 0; x < temp.getWidth(); x++) {
                             for (int y = 0; y < temp.getHeight(); y++) {
@@ -237,7 +239,6 @@ public class SystemRenderer {
             Body body = sys.getBodyObject(i);
 
             //Check if out of bounds
-                             //(translateX + body.getX() * distanceRatio + bounds.width / 2) / scale;
             int bodyX = (int) ((translateX + body.getX() * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
             int bodyY = (int) ((translateY - body.getY() * distanceRatio + bounds.width / 2) / scale);// - (p.getPlanetSize() / PLANET_DIVISOR / 2));
 

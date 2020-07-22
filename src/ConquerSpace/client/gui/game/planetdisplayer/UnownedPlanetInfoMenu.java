@@ -17,35 +17,16 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer;
 
-import ConquerSpace.client.gui.game.planetdisplayer.AtmosphereInfo;
-import ConquerSpace.client.gui.game.planetdisplayer.PlanetMapProvider;
-import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.resources.Stratum;
-import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.PlanetTypes;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
-import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
@@ -123,9 +104,10 @@ public class UnownedPlanetInfoMenu extends JPanel {
         }
 
         planetSectors = new JPanel();
-        PlanetSectorDisplayer sectorDisplayer = new PlanetSectorDisplayer(p, c);
+        PlanetMapProvider planetMapProvider = new PlanetMapProvider(p);
+        PlanetMinimapViewer planetMinimapViewer = new PlanetMinimapViewer(planetMapProvider, gameState, p, c);
         JPanel wrapper = new JPanel();
-        wrapper.add(sectorDisplayer);
+        wrapper.add(planetMinimapViewer);
         JTabbedPane buildingPanel = new JTabbedPane();
 
         JPanel buttonsWrapper = new JPanel();
@@ -134,9 +116,9 @@ public class UnownedPlanetInfoMenu extends JPanel {
 
         buildingPanel.addChangeListener(a -> {
             if (buildingPanel.getSelectedIndex() == 1) {
-                sectorDisplayer.whatToShow = PlanetSectorDisplayer.SHOW_ALL_RESOURCES;
+                planetMinimapViewer.setWhatToShow(PlanetMinimapViewer.SHOW_ALL_RESOURCES);
             } else if (buildingPanel.getSelectedIndex() == 0) {
-                sectorDisplayer.whatToShow = PlanetSectorDisplayer.PLANET_BUILDINGS;
+                planetMinimapViewer.setWhatToShow(PlanetMinimapViewer.PLANET_BUILDINGS);
             }
         });
         JScrollPane sectorsScrollPane = new JScrollPane(wrapper);
@@ -158,131 +140,5 @@ public class UnownedPlanetInfoMenu extends JPanel {
         add(infoPane);
         //Add empty panel
         //add(new JPanel());
-    }
-
-    private class PlanetSectorDisplayer extends JPanel implements MouseListener {
-
-        private final int SHOW_ALL = -1;
-        int resourceToShow = SHOW_ALL;
-
-        private int whatToShow = PLANET_BUILDINGS;
-        static final int PLANET_BUILDINGS = 0;
-        static final int PLANET_RESOURCES = 1;
-        static final int SHOW_ALL_RESOURCES = 2;
-        private JPopupMenu menu;
-        private Civilization civilization;
-        private Color color;
-        private Point point;
-
-        private Point lastClicked;
-        private PlanetMapProvider planetMapProvider;
-        private Planet planet;
-
-        public PlanetSectorDisplayer(Planet planet, Civilization civilization) {
-            this.planet = planet;
-            double scale = 2;
-
-            this.civilization = civilization;
-            if (planet.getPlanetType() == PlanetTypes.GAS) {
-                scale = .5;
-            }
-            setPreferredSize(
-                    new Dimension((int) (planet.getPlanetSize() * 2 * scale), (int) (planet.getPlanetSize() * scale)));
-            menu = new JPopupMenu();
-            addMouseListener(this);
-            planetMapProvider = new PlanetMapProvider(planet);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g;
-            //The thingy has to be a square number
-            //Times to draw the thingy
-            if (whatToShow == PLANET_RESOURCES) {
-                //Set opacity
-                //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-            }
-            if (planetMapProvider.isLoaded()) {
-                g2d.drawImage(planetMapProvider.getImage(), 0, 0, null);
-            }
-
-            if (whatToShow == PLANET_RESOURCES || whatToShow == SHOW_ALL_RESOURCES) {
-                //Set opacity
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
-                //Draw the circles
-                for (Integer strataId : planet.strata) {
-                    Stratum v = gameState.getObject(strataId, Stratum.class);
-                    //Draw...
-                    if (resourceToShow == SHOW_ALL) {
-                        Ellipse2D.Float circe = new Ellipse2D.Float(v.getX() * 2, v.getY() * 2, v.getRadius() * 2, v.getRadius() * 2);
-                        g2d.setColor(Color.GRAY);
-                        g2d.fill(circe);
-                    }
-                }
-            }
-            if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
-                //Draw buildings
-                for (Map.Entry<GeographicPoint, Integer> en : planet.cityDistributions.entrySet()) {
-                    GeographicPoint point = en.getKey();
-                    //Draw
-                    Rectangle2D.Float rect = new Rectangle2D.Float(point.getX() * 2, point.getY() * 2, 2, 2);
-                    g2d.setColor(Color.red);
-                    g2d.fill(rect);
-                }
-            }
-            if (whatToShow == SHOW_ALL_RESOURCES && point != null && color != null) {
-                //Show thingy
-                //Surround with yellow marker
-                Color invc = new Color(255 - color.getRed(),
-                        255 - color.getGreen(),
-                        255 - color.getBlue());
-                Rectangle2D.Float bgRect = new Rectangle2D.Float((float) point.getX() * 2 - 2, (float) point.getY() * 2 - 2, 6, 6);
-                g2d.setColor(invc);
-                g2d.fill(bgRect);
-                Rectangle2D.Float rect = new Rectangle2D.Float((float) point.getX() * 2, (float) point.getY() * 2, 2, 2);
-                g2d.setColor(color);
-                g2d.fill(rect);
-            }
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            lastClicked = e.getPoint();
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-
-        public void setWhatToShow(int what) {
-            whatToShow = what;
-            repaint();
-        }
-
-        public void setResourceViewing(int wat) {
-            resourceToShow = wat;
-        }
-
-        public Point getLastClicked() {
-            return lastClicked;
-        }
-
-        public void showLocation(Point pt, Color c) {
-            point = pt;
-            color = c;
-        }
     }
 }
