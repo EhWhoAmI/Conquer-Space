@@ -17,8 +17,8 @@
  */
 package ConquerSpace.client.gui.start;
 
+import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.Globals;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ResourceLoader;
@@ -131,7 +131,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
             //Create generator
             DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, seed);
-            Globals.generator = gen;
+            ConquerSpace.generator = gen;
 
             //Tell main thread that game works
             menu.dispose();

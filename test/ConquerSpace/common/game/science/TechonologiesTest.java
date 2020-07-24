@@ -1,6 +1,5 @@
-package ConquerSpace.game.tech;
+package ConquerSpace.common.game.science;
 
-import ConquerSpace.game.science.tech.Technologies;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;

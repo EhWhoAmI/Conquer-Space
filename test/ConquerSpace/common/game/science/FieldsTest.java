@@ -1,7 +1,5 @@
-package ConquerSpace.game.tech;
+package ConquerSpace.common.game.science;
 
-import ConquerSpace.game.science.FieldNode;
-import ConquerSpace.game.science.Fields;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,13 +37,12 @@ public class FieldsTest {
         Fields.readFields();
         for (int i = 0; i < Fields.fieldNodeRoot.getChildCount(); i++) {
             FieldNode n = Fields.fieldNodeRoot.getNode(i);
-            System.out.println(n.getName());
+            System.out.println("Child: " + n.getName());
             for (int s = 0; s < n.getChildCount(); s++) {
                 FieldNode node = n.getNode(s);
-                System.out.println("-" + node.getName());
+                System.out.println("Child of child: " + node.getName());
             }
         }
-        //fail("The test case is a prototype.");
     }
 
 }

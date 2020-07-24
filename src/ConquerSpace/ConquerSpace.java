@@ -17,6 +17,7 @@
  */
 package ConquerSpace;
 
+import ConquerSpace.client.ClientOptions;
 import ConquerSpace.client.gui.music.MusicPlayer;
 import ConquerSpace.client.gui.start.Loading;
 import ConquerSpace.client.gui.start.MainMenu;
@@ -33,6 +34,7 @@ import ConquerSpace.server.GameController;
 import ConquerSpace.server.generators.CivilizationConfig;
 import ConquerSpace.server.generators.DefaultUniverseGenerator;
 import ConquerSpace.server.generators.UniverseGenerationConfig;
+import ConquerSpace.server.generators.UniverseGenerator;
 import ConquerSpace.tools.ToolsSelectionMenu;
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -86,6 +88,7 @@ public final class ConquerSpace {
      */
     public static int BUILD_NUMBER = 0;
 
+    //Init build no
     static {
         Properties buildno = new Properties();
         try {
@@ -118,7 +121,13 @@ public final class ConquerSpace {
             HEADLESS = false,
             TRANSLATE_TEST = false;
 
-    public static final Properties defaultProperties = new Properties();
+    public static GameState gameState;
+    /**
+     * This is the settings of the game.
+     */
+    public static ClientOptions settings;
+    
+    public static UniverseGenerator generator;
 
     /**
      * Main class.
@@ -140,7 +149,6 @@ public final class ConquerSpace {
                 generateChecksum();
             }
 
-            setDefaultOptions();
             configureSettings();
 
             //Set language
@@ -254,7 +262,7 @@ public final class ConquerSpace {
         try {
             //Set look and feel
             //Get from settings...
-            if (Globals.settings.getProperty("laf").equals("default")) {
+            if (settings.getLaf().equals("default")) {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } else {
                 Properties lafProperties = new Properties();
@@ -264,7 +272,7 @@ public final class ConquerSpace {
                 } catch (FileNotFoundException ex) {
                 } catch (IOException ex) {
                 }
-                UIManager.setLookAndFeel(lafProperties.getProperty(Globals.settings.getProperty("laf")));
+                UIManager.setLookAndFeel(lafProperties.getProperty(settings.getLaf()));
             }
         } catch (ClassNotFoundException ex) {
             LOGGER.warn("", ex);
@@ -278,39 +286,32 @@ public final class ConquerSpace {
     }
 
     public static void loadUniverse() {
-        Globals.gameState = new GameState(0);
-        Globals.gameState.saveFile = new File(SaveGame.getSaveFolder());
+        gameState = new GameState(0);
+        gameState.saveFile = new File(SaveGame.getSaveFolder());
         //Load universe
         long loadingStart = System.currentTimeMillis();
-        GameLoader.load(Globals.gameState);
+        GameLoader.load(gameState);
         try {
-            Globals.generator.generate(Globals.gameState);
+            generator.generate(gameState);
         } catch (Exception ex) {
             ExceptionHandling.ExceptionMessageBox(ex.getClass().toString() + " while loading universe!", ex);
         }
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
-    }   
+    }
 
     public static void runGame() {
         //Start game
-        new GameController(Globals.gameState);
+        new GameController(gameState);
     }
 
     public static void configureSettings() {
-        //Init settings, and read from file if possible
-        Globals.settings = new Properties();
+        //Init settings, and read from file if possible        
+        settings = new ClientOptions();
         //Check for the existance of the settings file
         File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
         if (settingsFile.exists()) {
-            try {
-
-                FileInputStream fis = new FileInputStream(settingsFile);
-                Globals.settings.load(fis);
-            } catch (IOException ex) {
-                LOGGER.warn("Cannot load settings. Using default", ex);
-                createNewSettings(settingsFile);
-            }
+            settings.fromProperties(settingsFile);
         } else {
             createNewSettings(settingsFile);
         }
@@ -319,54 +320,31 @@ public final class ConquerSpace {
 
         try {
             //Write
-            Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+            settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
         } catch (IOException ex) {
         }
     }
 
     public static void createNewSettings(File settingsFile) {
-        for (String key : defaultProperties.stringPropertyNames()) {
-            Globals.settings.put(key, defaultProperties.get(key));
-        }
-
         try {
             if (!settingsFile.getParentFile().exists()) {
                 settingsFile.getParentFile().mkdir();
             }
             settingsFile.createNewFile();
-            //Add default settings
-
-            //Default settings
-            //Write
-            Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+            
+            //Save
+            settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
         } catch (IOException ex) {
             LOGGER.warn("Unable to create settings file!", ex);
         }
     }
 
     public static void configureGame() {
-        //Check if all settings exist
-        for (String key : defaultProperties.stringPropertyNames()) {
-            Globals.settings.putIfAbsent(key, defaultProperties.getProperty(key));
-        }
-
         //Get settings
-        String locale = Globals.settings.getProperty("locale");
-        if (ConquerSpace.locale == null) {
-            try {
-                ConquerSpace.locale = LocaleUtils.toLocale(locale);
-            } catch (IllegalArgumentException ar) {
-                LOGGER.warn("Invalid locale " + locale + " using default: " + ConquerSpace.DEFAULT_LOCALE.toString());
-                ConquerSpace.locale = DEFAULT_LOCALE;
-            }
-        }
-
-        //get version
-        String version = Globals.settings.getProperty("version");
-        //Do something
-        if (version != null) {
-            Version v = new Version(version);
-        }
+        ConquerSpace.locale= settings.getLocale();
+        
+        
+        Version version = settings.getVersion();
         //Check if not equal
 
         //Music
@@ -440,31 +418,15 @@ public final class ConquerSpace {
         }
     }
 
-    static void setDefaultOptions() {
-        //The default and required options that exist for backward compatability
-        //Default settings
-        defaultProperties.setProperty("locale", "en_US");
-
-        //Version
-        defaultProperties.setProperty("version", VERSION.toString());
-        defaultProperties.setProperty("debug", "no");
-
-        defaultProperties.setProperty("music", "yes");
-        defaultProperties.setProperty("music.volume", "0.8");
-
-        defaultProperties.setProperty("laf", "default");
-
-    }
-
     static void configureMusic() {
         GameController.musicPlayer = new MusicPlayer();
-        if (Globals.settings.getProperty("music").equals("no")) {
-            GameController.musicPlayer.stopMusic();
-        } else {
+        if (settings.isPlayMusic()) {
             GameController.musicPlayer.playMusic();
+        } else {
+            GameController.musicPlayer.stopMusic();
         }
         try {
-            GameController.musicPlayer.setVolume(Float.parseFloat(Globals.settings.getProperty("music.volume")));
+            GameController.musicPlayer.setVolume(settings.getMusicVolume());
         } catch (NumberFormatException nfe) {
             GameController.musicPlayer.setVolume(1);
         } catch (IllegalArgumentException iae) {
@@ -498,7 +460,7 @@ public final class ConquerSpace {
 
         //Create generator
         DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
-        Globals.generator = gen;
+        generator = gen;
     }
 
     public static void exitGame() {

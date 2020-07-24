@@ -17,7 +17,6 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.client.gui.GUI;
 import ConquerSpace.common.actions.Alert;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
@@ -29,7 +28,7 @@ import javax.swing.JScrollPane;
  *
  * @author EhWhoAmI
  */
-public class AlertDisplayer extends JInternalFrame implements GUI {
+public class AlertDisplayer extends JInternalFrame {
 
     private JList<Alert> alertList;
     private DefaultListModel<Alert> model;
@@ -67,7 +66,6 @@ public class AlertDisplayer extends JInternalFrame implements GUI {
         setClosable(true);
     }
 
-    @Override
     public void init() {
         //Form array
         model = new DefaultListModel<>();
@@ -78,18 +76,7 @@ public class AlertDisplayer extends JInternalFrame implements GUI {
         initWindow();
     }
 
-    @Override
-    public void refresh() {
-    }
-
-    @Override
-    public void clean() {
-        model.clear();
-    }
-
-    @Override
     public void reload() {
-        clean();
         init();
     }
 }

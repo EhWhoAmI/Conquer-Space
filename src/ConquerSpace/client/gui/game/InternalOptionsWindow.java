@@ -17,8 +17,8 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.VERSION;
-import ConquerSpace.Globals;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.server.GameController;
@@ -83,32 +83,28 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
         musicPanel = new JPanel();
         musicPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), "Music"));
         musicOnButton = new JCheckBox("Music");
-        if (Globals.settings.get("music").equals("yes")) {
-            musicOnButton.setSelected(true);
-        }
         musicOnButton.addActionListener(a -> {
-            if (Globals.settings.get("music").equals("no")) {
-                Globals.settings.setProperty("music", "yes");
+            if (ConquerSpace.settings.isPlayMusic()) {
+                ConquerSpace.settings.setPlayMusic(false);
+                GameController.musicPlayer.stopMusic();
+            } else {
+                ConquerSpace.settings.setPlayMusic(true);
                 if (!GameController.musicPlayer.isPlaying()) {
                     GameController.musicPlayer.playMusic();
                 }
-            } else if (Globals.settings.get("music").equals("yes")) {
-                Globals.settings.setProperty("music", "no");
-                GameController.musicPlayer.stopMusic();
             }
         });
 
-        if (Globals.settings.get("music").equals("no")) {
-            musicOnButton.setSelected(false);
-        }
+        musicOnButton.setSelected(ConquerSpace.settings.isPlayMusic());
 
         musicVolumeSlider = new JSlider(0, 100);
-        musicVolumeSlider.setValue((int) (Double.parseDouble(Globals.settings.getProperty("music.volume")) * 100));
+        musicVolumeSlider.setValue((int) (ConquerSpace.settings.getMusicVolume() * 100));
         musicVolumeSlider.setPaintLabels(true);
         musicVolumeSlider.setPaintTicks(true);
         musicVolumeSlider.addChangeListener(l -> {
-            GameController.musicPlayer.setVolume(((float) musicVolumeSlider.getValue()) / 100f);
-            Globals.settings.put("music.volume", "" + ((float) musicVolumeSlider.getValue()) / 100f);
+            float volume = (float) musicVolumeSlider.getValue() / 100f;
+            GameController.musicPlayer.setVolume(volume);
+            ConquerSpace.settings.setMusicVolume(volume);
         });
 
         DefaultComboBoxModel<String> lafComboBoxModel = new DefaultComboBoxModel<>();
@@ -130,7 +126,7 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }
-        lafComboBoxModel.setSelectedItem(Globals.settings.getProperty("laf"));
+        lafComboBoxModel.setSelectedItem(ConquerSpace.settings.getLaf());
 
         lookAndFeelComboBox.addActionListener(l -> {
             //Set the laf
@@ -149,11 +145,11 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
                     f.pack();
                 }
 
-                Globals.settings.setProperty("laf", lafText);
+                ConquerSpace.settings.setLaf(lafText);
 
                 File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
                 //Store the new settings
-                Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+                ConquerSpace.settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
             } catch (ClassNotFoundException ex) {
                 LOGGER.warn("", ex);
             } catch (InstantiationException ex) {
@@ -205,10 +201,10 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
         File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
         if (settingsFile.exists()) {
             //FileOutputStream fis = null;
-            try (FileOutputStream fis = new FileOutputStream(settingsFile);){
+            try (FileOutputStream fis = new FileOutputStream(settingsFile);) {
                 //Read from file.
                 PrintWriter pw = new PrintWriter(fis);
-                Globals.settings.store(pw, "Created by Conquer Space version " + VERSION.toString());
+                ConquerSpace.settings.toProperties().store(pw, "Created by Conquer Space version " + VERSION.toString());
                 pw.close();
             } catch (FileNotFoundException ex) {
             } catch (IOException ex) {

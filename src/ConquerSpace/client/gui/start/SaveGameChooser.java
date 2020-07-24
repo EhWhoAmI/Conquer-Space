@@ -17,18 +17,15 @@
  */
 package ConquerSpace.client.gui.start;
 
-import ConquerSpace.Globals;
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.server.generators.SaveGameUniverseGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
-import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -91,7 +88,7 @@ public class SaveGameChooser extends JFrame {
         selectGameButton = new JButton("Go with this save");
         selectGameButton.addActionListener((a) -> {
             if (!fileJList.isSelectionEmpty()) {
-                Globals.generator = new SaveGameUniverseGenerator(fileJList.getSelectedValue());
+                ConquerSpace.generator = new SaveGameUniverseGenerator(fileJList.getSelectedValue());
                 dispose();
                 
                 //Tell main thread that game works
