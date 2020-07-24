@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
@@ -28,10 +29,13 @@ import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -49,13 +53,13 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     private Good miningGood = null;
     private Stratum miningStratum = null;
     private float amountMining = 10;
-    
+
     private GameState gameState;
 
     public MinerAreaConstructionPanel(GameState gameState, Planet planet, City c) {
         super(planet, c);
         this.gameState = gameState;
-        
+
         setLayout(new HorizontalFlowLayout());
 
         Iterator<GeographicPoint> cityDist = planet.cityDistributions.keySet().iterator();
@@ -66,7 +70,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
             if (city != null && city.equals(c)) {
                 //Get point, search area
                 for (int k = 0; k < planet.strata.size(); k++) {
-                    
+
                     Stratum stratum = gameState.getObject(planet.strata.get(k), Stratum.class);
                     if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), nextElement.getX(), nextElement.getY())) {
                         //Is inside
@@ -96,14 +100,16 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
             miningStratum = strat;
         });
 
-        String[] rows = new String[]{"Resource", "Amount"};
+        String[] rows = new String[]{
+            LOCALE_MESSAGES.getMessage("game.planet.cities.construction.mine.resources"),
+            LOCALE_MESSAGES.getMessage("game.planet.cities.construction.mine.amount")};
         resourceListTableModel = new DefaultTableModel(rows, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        
+
         resourceListTable = new JTable(resourceListTableModel);
         resourceListTable.getSelectionModel().addListSelectionListener(l -> {
             int selected = resourceListTable.getSelectedRow();
@@ -115,22 +121,37 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
             }
         });
         resourceListTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
 
+        JPanel dataContainer = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.weightx = 1;
+        constraints.weightx = 0;
         constraints.weighty = 1;
         constraints.anchor = GridBagConstraints.NORTHWEST;
-        add(new JScrollPane(stratumList));
+        constraints.fill = GridBagConstraints.BOTH;
+        dataContainer.add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.construction.mine.mining")), constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.weightx = 0;
+        constraints.weighty = 1;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.fill = GridBagConstraints.BOTH;
+        dataContainer.add(new JScrollPane(stratumList), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
-        constraints.weightx = 1;
+        constraints.weightx = 0;
         constraints.weighty = 1;
         constraints.anchor = GridBagConstraints.NORTHWEST;
-        add(resourceListTable);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridheight = 2;
+        dataContainer.add(resourceListTable, constraints);
+
+        JPanel container2JPanel = new JPanel();
+        container2JPanel.add(dataContainer);
+        add(container2JPanel);
 
         if (strataListModel.size() > 0) {
             stratumList.setSelectedIndex(0);

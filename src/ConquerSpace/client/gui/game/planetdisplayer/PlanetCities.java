@@ -134,31 +134,11 @@ public class PlanetCities extends JPanel {
                 BorderFactory.createTitledBorder(
                         new LineBorder(Color.GRAY),
                         LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.currentstats")));
-        long pop = 0;
-        //Get average growth
-        float averageGrowthSum = 0;
-//        for (Map.Entry<GeographicPoint, District> entry : p.buildings.entrySet()) {
-//            GeographicPoint key = entry.getKey();
-//            District value = entry.getValue();
-//            float increment = 0;
-//            if (value instanceof PopulationStorage) {
-//                PopulationStorage storage = (PopulationStorage) value;
-//                pop += storage.getPopulationArrayList().size();
-//                //process pops
-//                for (PopulationUnit unit : storage.getPopulationArrayList()) {
-//                    //Fraction it so it does not accelerate at a crazy rate
-//                    //Do subtractions here in the future, like happiness, and etc.
-//                    increment += (unit.getSpecies().getBreedingRate() / 50);
-//                }
-//            }
-//            averageGrowthSum += increment;
-//        }
 
         populationCount = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.population", Utilities.longToHumanString(p.population)));
         currentStats.add(populationCount);
 
-        averageGrowthSum /= p.cities.size();
         averagePlanetPopGrowthLabel = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.averagegrowth", p.populationIncrease));
 
@@ -205,7 +185,7 @@ public class PlanetCities extends JPanel {
 
         taskPaneContainer.add(index);
         taskPaneContainer.setBackground(UIManager.getDefaults().getColor("Panel.background"));
-
+        
         cityList = new JList<>(cityListModel);
         cityList.setSelectedIndex(0);
         int cellHeight = 18;

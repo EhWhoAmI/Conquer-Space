@@ -121,7 +121,7 @@ public class AreaConstructionPanel extends JPanel {
 
         areaConstructionInfo = new JPanel(new BorderLayout());
 
-        constructButton = new JButton(LOCALE_MESSAGES.getMessage("game.planet.construction.construc"));
+        constructButton = new JButton(LOCALE_MESSAGES.getMessage("game.planet.construction.construct"));
         constructButton.addActionListener(l -> {
             Area areaToBuild = areaDesignPanel.getAreaToConstruct();
             if (areaDesignPanel != null && areaToBuild != null) {
