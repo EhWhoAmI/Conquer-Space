@@ -1,4 +1,4 @@
-/*
+    /*
  * Conquer Space - Conquer Space!
  * Copyright (C) 2019 EhWhoAmI
  * 
@@ -19,7 +19,6 @@ package ConquerSpace.client.gui.game;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.client.gui.GUI;
 import ConquerSpace.client.gui.renderers.SystemRenderer;
 import ConquerSpace.client.gui.renderers.UniverseRenderer;
 import ConquerSpace.common.GameState;

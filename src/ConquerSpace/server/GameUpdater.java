@@ -326,7 +326,7 @@ public class GameUpdater extends GameTicker {
             }
             city.areas.addAll(areasToAdd);
 
-            CityType type = classifyDistrict(city);
+            CityType type = classifyCity(city);
             city.setCityType(type);
         }
 
@@ -658,7 +658,7 @@ public class GameUpdater extends GameTicker {
         }
     }
 
-    private CityType classifyDistrict(City dis) {
+    private CityType classifyCity(City dis) {
         //Get the type of areas
         HashMap<AreaClassification, Integer> areaType = new HashMap<>();
         for (Integer areaId : dis.areas) {

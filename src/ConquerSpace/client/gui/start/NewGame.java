@@ -23,7 +23,6 @@ import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
-import ConquerSpace.server.GameController;
 import ConquerSpace.server.generators.CivilizationConfig;
 import ConquerSpace.server.generators.DefaultUniverseGenerator;
 import ConquerSpace.server.generators.UniverseGenerationConfig;
@@ -135,6 +134,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             Globals.generator = gen;
 
             //Tell main thread that game works
+            menu.dispose();
             menu.setLoadedUniverse(true);
         }
     }

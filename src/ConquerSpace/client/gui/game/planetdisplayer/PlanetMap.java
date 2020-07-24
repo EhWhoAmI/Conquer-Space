@@ -348,7 +348,7 @@ public class PlanetMap extends JPanel {
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
-                if (cityMapImage == null || needRefresh || true) {
+                if (true) {
                     //g2d
                     Graphics2D mapGraphics = g2d;
 
@@ -357,7 +357,6 @@ public class PlanetMap extends JPanel {
                     //for (int i = 0; i < size(); i++) {
                     Rectangle r = g.getClipBounds();
                     while (distIterator.hasNext()) {
-
                         GeographicPoint point = distIterator.next();
                         City c = p.getCity(point);
                         if (c != null) {

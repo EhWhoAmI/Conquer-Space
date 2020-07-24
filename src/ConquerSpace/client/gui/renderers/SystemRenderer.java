@@ -34,6 +34,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
@@ -91,7 +92,7 @@ public class SystemRenderer {
     private int[] starY;
     private int[] starRadius;
 
-    private final int starCount = 1500;
+    private final int starCount = 1000;
 
     public SystemRenderer(GameState gameState, StarSystem sys, Galaxy u, Dimension bounds) {
         this.gameState = gameState;
@@ -159,8 +160,8 @@ public class SystemRenderer {
         starRadius = new int[starCount];
         Random rand = new Random(sys.getIndex());
         for (int i = 0; i < starCount; i++) {
-            starX[i] = (rand.nextInt(4000));
-            starY[i] = (rand.nextInt(4000));
+            starX[i] = (rand.nextInt(3000));
+            starY[i] = (rand.nextInt(3000));
             starRadius[i] = (rand.nextInt(3));
         }
     }
@@ -175,18 +176,21 @@ public class SystemRenderer {
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
 
+        Rectangle boundsRectangle = g.getClipBounds();
+
         Rectangle2D.Float bg = new Rectangle2D.Float(0, 0, bounds.width, bounds.height);
         g2d.setColor(Color.BLACK);
         g2d.draw(bg);
 
         //Draw stars
-        int imageX = (int) ((translateX / scale) * 0.020) - 500;
-        int imageY = (int) ((translateY / scale) * 0.020) - 500;
-
+        int imageX = (int) ((translateX) * 0.020);
+        int imageY = (int) ((translateY) * 0.020);
         for (int i = 0; i < starCount; i++) {
-            Ellipse2D.Double star = new Ellipse2D.Double(starX[i] + imageX, starY[i] + imageY, starRadius[i], starRadius[i]);
-            g2d.setColor(Color.white);
-            g2d.fill(star);
+            if (boundsRectangle.contains(starX[i], starY[i])) {
+                Ellipse2D.Double star = new Ellipse2D.Double(starX[i] + imageX, starY[i] + imageY, starRadius[i], starRadius[i]);
+                g2d.setColor(Color.white);
+                g2d.fill(star);
+            }
         }
         //Render bg image
         //g2d.fill(bg);
@@ -215,7 +219,8 @@ public class SystemRenderer {
             g2d.setColor(Color.WHITE);
             g2d.draw(yline);
         }
-        //Draw orbit lines
+
+        //Draw orbit lines first, so that the planets are on top of the ornit line
         for (int i = 0; i < sys.getBodyCount(); i++) {
             Body planet = sys.getBodyObject(i);
             //Change accuracy based on scale
@@ -226,6 +231,7 @@ public class SystemRenderer {
             if (accuracy > smallestAccuracy) {
                 accuracy = smallestAccuracy;
             }
+            //Need to do less calculations when not visible
             GeneralPath orbitPath = createGeneralPath(planet, scale, translateX, translateY, accuracy);
             g2d.setColor(Color.WHITE);
             g2d.draw(orbitPath);
@@ -244,54 +250,51 @@ public class SystemRenderer {
                 Planet p = (Planet) body;
                 if ((bodyX > -20 && bodyX < (windowSize.getWidth() + 20)) && (bodyY < (windowSize.getHeight() + 20) && bodyY > -20)) {
                     double planetSize = p.getPlanetSize() * 200 * sizeofAU / (scale * 10_000_000);
+                    if (boundsRectangle.contains(bodyX, bodyY)) {
 
-                    if (systemTerrain[planetCount] != null) {
-                        g2d.drawImage(systemTerrain[planetCount],
-                                bodyX - (p.getPlanetHeight() / PLANET_DIVISOR / 2),
-                                bodyY - (p.getPlanetHeight() / PLANET_DIVISOR / 2), null);
-
-                        //Draw image, looks bad, so first comment out...
-                        /*if (((int) planetSize) > 0) { 
-                            g2d.drawImage(systemTerrain[planetCount].getScaledInstance((int) planetSize, (int) planetSize, Image.SCALE_DEFAULT),
-                                    (int) (bodyX - (planetSize / 2)),
-                                    (int) (bodyY - (planetSize / 2)), null);*/
-                    }
-
-                    //Draw real planet size
-                    g2d.setColor(Color.cyan);
-                    g2d.fill(new Ellipse2D.Double(
-                            bodyX - (planetSize / 2),
-                            bodyY - (planetSize / 2),
-                            planetSize, planetSize
-                    ));
-
-                    //Draw shadow - change to gradient to make it look better...
-                    g2d.setColor(Color.BLACK);
-                    Arc2D.Float shadowArc = new Arc2D.Float(Arc2D.CHORD);
-                    shadowArc.width = shadowArc.height = ((p.getPlanetHeight() * 1.1f) / PLANET_DIVISOR);
-                    shadowArc.x = (int) (bodyX - (p.getPlanetHeight() / PLANET_DIVISOR / 2));
-                    shadowArc.y = (int) (bodyY - (p.getPlanetHeight() / PLANET_DIVISOR / 2));
-                    shadowArc.start = (int) (p.getDegrees() - 100);
-                    shadowArc.extent = (200);
-                    g2d.fill(shadowArc);
-
-                    //Draw name and background
-                    if (!p.getName().equals("")) {
-                        g2d.setColor(Color.gray);
-
-                        if (p.isHabitated()) {
-                            g2d.setColor(Color.red);
-                            g2d.fill(new Rectangle2D.Double(
-                                    bodyX - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
-                                    bodyY + (p.getPlanetSize() / PLANET_DIVISOR / 2),
-                                    (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3)
-                            );
-                            g2d.setColor(Color.white);
+                        if (systemTerrain[planetCount] != null) {
+                            //Occlusion culling
+                            g2d.drawImage(systemTerrain[planetCount],
+                                    bodyX - (p.getPlanetHeight() / PLANET_DIVISOR / 2),
+                                    bodyY - (p.getPlanetHeight() / PLANET_DIVISOR / 2), null);
                         }
 
-                        g2d.drawString(p.getName(),
-                                (float) (bodyX - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2),
-                                (float) (bodyY + (p.getPlanetSize() / PLANET_DIVISOR / 2) + g2d.getFontMetrics().getHeight()));
+                        //Draw real planet size
+                        g2d.setColor(Color.cyan);
+                        g2d.fill(new Ellipse2D.Double(
+                                bodyX - (planetSize / 2),
+                                bodyY - (planetSize / 2),
+                                planetSize, planetSize
+                        ));
+
+                        //Draw shadow - change to gradient to make it look better...
+                        g2d.setColor(Color.BLACK);
+                        Arc2D.Float shadowArc = new Arc2D.Float(Arc2D.CHORD);
+                        shadowArc.width = shadowArc.height = ((p.getPlanetHeight() * 1.1f) / PLANET_DIVISOR);
+                        shadowArc.x = (int) (bodyX - (p.getPlanetHeight() / PLANET_DIVISOR / 2));
+                        shadowArc.y = (int) (bodyY - (p.getPlanetHeight() / PLANET_DIVISOR / 2));
+                        shadowArc.start = (int) (p.getDegrees() - 100);
+                        shadowArc.extent = (200);
+                        g2d.fill(shadowArc);
+
+                        //Draw name and background
+                        if (!p.getName().equals("")) {
+                            g2d.setColor(Color.gray);
+
+                            if (p.isHabitated()) {
+                                g2d.setColor(Color.red);
+                                g2d.fill(new Rectangle2D.Double(
+                                        bodyX - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2,
+                                        bodyY + (p.getPlanetSize() / PLANET_DIVISOR / 2),
+                                        (g2d.getFontMetrics().stringWidth(p.getName()) + 3), (g2d.getFontMetrics().getHeight()) + 3)
+                                );
+                                g2d.setColor(Color.white);
+                            }
+
+                            g2d.drawString(p.getName(),
+                                    (float) (bodyX - (g2d.getFontMetrics().stringWidth(p.getName()) + 3) / 2),
+                                    (float) (bodyY + (p.getPlanetSize() / PLANET_DIVISOR / 2) + g2d.getFontMetrics().getHeight()));
+                        }
                     }
                 }
                 planetCount++;

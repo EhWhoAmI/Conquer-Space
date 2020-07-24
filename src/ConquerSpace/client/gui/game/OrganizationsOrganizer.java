@@ -24,6 +24,7 @@ import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -34,14 +35,14 @@ import javax.swing.JScrollPane;
  * @author EhWhoAmI
  */
 public class OrganizationsOrganizer extends JPanel {
-
+    
     private JList<String> orgList;
     private ObjectListModel<Organization> orgListModel;
-
+    
     private JPanel orgInfoPanel;
     
     private JList<String> controlList;
-    private ObjectListModel<Administrable> adminstratableListModel;
+    private ObjectListModel<Integer> adminstratableListModel;
     
     public OrganizationsOrganizer(GameState state, Civilization c) {
         //Lazy for now...
@@ -55,17 +56,23 @@ public class OrganizationsOrganizer extends JPanel {
         orgListModel.setHandler(l -> {
             return l.getName();
         });
-
+        
         orgList = new JList<>(orgListModel);
         
         orgList.addListSelectionListener(l -> {
-            //adminstratableListModel.setElements(orgListModel.getObject(orgList.getSelectedIndex()).region.bodies);
+            ArrayList<Integer> data = orgListModel.getObject(orgList.getSelectedIndex()).region.bodies;
+            for (int i = 0; i < data.size(); i++) {
+                adminstratableListModel.addElement(data.get(i));
+            }
             controlList.updateUI();
         });
-
+        
         orgInfoPanel = new JPanel(new VerticalFlowLayout());
         
         adminstratableListModel = new ObjectListModel<>();
+        adminstratableListModel.setHandler(l -> {
+            return (state.getObject(l, Administrable.class).toString());
+        });
         controlList = new JList<>(adminstratableListModel);
         orgInfoPanel.add(new JLabel("Area under jurisdiction"));
         orgInfoPanel.add(new JScrollPane(controlList));

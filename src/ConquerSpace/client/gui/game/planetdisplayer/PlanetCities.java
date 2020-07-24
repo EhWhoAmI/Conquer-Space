@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
+import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.population.Population;
@@ -32,10 +33,18 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -43,9 +52,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.JXTaskPane;
+import org.jdesktop.swingx.JXTaskPaneContainer;
 
 /**
  *
@@ -86,7 +98,7 @@ public class PlanetCities extends JPanel {
 
     private Planet planet;
 
-    private int population = 1;
+    private long population = 1;
 
     private int citySelectedTab = 0;
     //So that the tab for the employment and things stay the same as you change your selection
@@ -102,6 +114,8 @@ public class PlanetCities extends JPanel {
 
     private PlanetInfoSheet parent;
     private GameState gameState;
+    
+    private int cityContainerHeight = 800;
 
     public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent) {
         this.universe = gameState.getUniverse();
@@ -149,7 +163,7 @@ public class PlanetCities extends JPanel {
                 LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.averagegrowth", p.populationIncrease));
 
         cityListPanel = new JPanel();
-        cityListPanel.setLayout(new BorderLayout());
+        cityListPanel.setLayout(new BorderLayout(5, 5));
 
         cityListModel = new DefaultListModel<>();
         for (Integer cityId : p.cities) {
@@ -157,8 +171,45 @@ public class PlanetCities extends JPanel {
 
             cityListModel.addElement(city);
         }
+        JXTaskPaneContainer taskPaneContainer = new JXTaskPaneContainer();
+        JXTaskPane index = new JXTaskPane();
+        index.setTitle("Legend");
+        index.setSpecial(true);  // actions can be added, a hyperlink will be created 
+
+        for (int i = 0; i < CityType.values().length; i++) {
+            CityType cityType = CityType.values()[i];
+            Color color = CityType.getDistrictColor(cityType);
+            BufferedImage image = new BufferedImage(8, 8, BufferedImage.TYPE_3BYTE_BGR);
+            Graphics2D g2d = (Graphics2D) image.getGraphics();
+            g2d.setColor(color);
+            g2d.fill(new Rectangle2D.Float(0, 0, 8, 8));
+            JLabel label = new JLabel(cityType.name(), new ImageIcon(image), JLabel.LEADING);
+            index.add(label);
+        }
+        index.setCollapsed(true);
+        index.setToolTipText(LOCALE_MESSAGES.getMessage("game.planet.cities.legend.tooltip"));
+
+        index.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int heightForList = cityContainerHeight - taskPaneContainer.getSize().height;
+                //Reduce rows
+                int things = heightForList / cityList.getFixedCellHeight();
+                cityList.setVisibleRowCount(things);
+                cityList.updateUI();
+                PlanetCities.this.updateUI();
+                PlanetCities.this.repaint();
+            }
+        });
+        index.setAnimated(false);
+
+        taskPaneContainer.add(index);
+        taskPaneContainer.setBackground(UIManager.getDefaults().getColor("Panel.background"));
+
         cityList = new JList<>(cityListModel);
         cityList.setSelectedIndex(0);
+        int cellHeight = 18;
+        cityList.setFixedCellHeight(cellHeight);
         cityInfoTabs = new JTabbedPane();
         cityInfoTabs.addChangeListener(c -> {
             if (cityInfoTabs.getSelectedIndex() > -1 && !isBuildingUi) {
@@ -174,6 +225,7 @@ public class PlanetCities extends JPanel {
 
             }
         });
+        cityList.setCellRenderer(new CityListRenderer());
 
         //Initialize table
         jobTableModel = new JobTableModel();
@@ -185,7 +237,12 @@ public class PlanetCities extends JPanel {
         JScrollPane scrollPane = new JScrollPane(cityList);
         cityList.setVisibleRowCount(50);
 
-        cityListPanel.add(scrollPane, BorderLayout.WEST);
+        JPanel contain = new JPanel();
+        contain.setLayout(new VerticalFlowLayout());
+        contain.add(taskPaneContainer);
+        contain.add(scrollPane);
+        cityListPanel.add(contain, BorderLayout.WEST);
+
         cityListPanel.setBorder(
                 BorderFactory.createTitledBorder(
                         new LineBorder(Color.GRAY),
@@ -362,7 +419,7 @@ public class PlanetCities extends JPanel {
 
         private void newCitySelection() {
             populationCount.clear();
-            population = 0;
+            population = gameState.getObject(currentlySelectedCity.population, Population.class).getPopulationSize();
             //Get population job
             for (Integer areaId : currentlySelectedCity.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
@@ -459,6 +516,28 @@ public class PlanetCities extends JPanel {
         @Override
         public String getColumnName(int column) {
             return colunmNames[column];
+        }
+    }
+
+    private class CityListRenderer extends DefaultListCellRenderer {
+
+        public CityListRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value,
+                int index, boolean isSelected, boolean cellHasFocus) {
+
+            Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            if (value instanceof City) {
+                City city = (City) value;
+
+                Color foregroundColor = CityType.getDistrictColor(city.getCityType());
+                c.setForeground(foregroundColor);
+            }
+            return c;
         }
     }
 }

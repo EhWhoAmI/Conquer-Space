@@ -290,7 +290,7 @@ public final class ConquerSpace {
         }
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
-    }
+    }   
 
     public static void runGame() {
         //Start game
