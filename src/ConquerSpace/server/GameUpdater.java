@@ -531,8 +531,8 @@ public class GameUpdater extends GameTicker {
                 for (Map.Entry<Integer, Double> entry : process.input.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-                    Double amount = city.resources.get(key);
-                    removeResource(key, val * GameRefreshRate, city);
+                    Double amountInCity = city.resources.get(key);
+                    removeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
                     city.resourceDemands.addValue(key, val);
                 }
 
@@ -540,8 +540,11 @@ public class GameUpdater extends GameTicker {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
 
-                    storeResource(key, val * GameRefreshRate, city);
+                    storeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
                 }
+                ((ManufacturerArea) area).setProducedLastTick(true);
+            } else {
+                ((ManufacturerArea) area).setProducedLastTick(false);
             }
         } else if (area instanceof ResearchArea) {
 

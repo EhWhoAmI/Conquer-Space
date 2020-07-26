@@ -90,6 +90,12 @@ public class AreaInformationPanel extends JPanel {
 
                 ManufacturerArea factory = (ManufacturerArea) a;
 
+                if(!factory.producedLastTick()) {
+                    JLabel notProductive = new JLabel("Not functioning");
+                    notProductive.setForeground(Color.red);
+                    add(notProductive);
+                }
+                
                 JLabel processName = new JLabel(factory.getProcess().name);
                 StringBuilder inputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.input"));
 
@@ -99,7 +105,7 @@ public class AreaInformationPanel extends JPanel {
                     inputString.append(gameState.getGood(key).getName());
                     inputString.append(" "
                             + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + " ");
-                    inputString.append(val);
+                    inputString.append(val * factory.getProductivity());
                     inputString.append(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.separator"));
                 }
 
@@ -111,7 +117,7 @@ public class AreaInformationPanel extends JPanel {
                     Double val = entry.getValue();
                     outputString.append(gameState.getGood(key).getName());
                     outputString.append(" " + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + "");
-                    outputString.append(val);
+                    outputString.append(val * factory.getProductivity());
                     outputString.append(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.separator"));
                 }
 

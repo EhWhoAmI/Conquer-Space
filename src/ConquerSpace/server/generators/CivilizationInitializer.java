@@ -175,7 +175,7 @@ public class CivilizationInitializer {
             //Ignore
         }
         Species food = createEdibleFood(c);
-        
+
         createResourceMiners(starting, c, c.getFoundingSpecies(), selector, townNames);
         createFarms(starting, food, c, selector, townNames);
         createCities(starting, c, selector, townNames);
@@ -305,42 +305,34 @@ public class CivilizationInitializer {
             }
         }
     }
-    
+
     private Species createEdibleFood(Civilization civ) {
         Species potato = new Species(gameState, "Potato");
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
         gameState.addSpecies(potato);
-        
-        int consumableResources = civ.getFoundingSpecies().getConsumableResource();
-        ProductionProcess foodProcess = new ProductionProcess(gameState);
-
-        foodProcess.input.put(potato.getFoodGood(), 10d);
-        foodProcess.output.put(consumableResources, 10d);
-        foodProcess.setName(potato.getName() + " to food");
-        
-        civ.productionProcesses.add(foodProcess);
         return potato;
     }
 
-    private void createFarms(Planet starting, Species crop, Civilization c, Random selector, NameGenerator gen) {
-        //Based on population
-        //Add livestock
-        //Create a test crop so that you can grow stuff
-        
-        //Set processable to foodgood
-        
-        //Set food good
-        //c.getFoundingSpecies().food = potato.getFoodGood();
+    private void createFarms(Planet starting, Species crop, Civilization civ, Random selector, NameGenerator gen) {
+        //Create production process for the food.
+        int consumableResources = civ.getFoundingSpecies().getConsumableResource();
+        ProductionProcess foodProcess = new ProductionProcess(gameState);
 
-        //Add the biomass
-        //Set the amount on planet...
+        foodProcess.input.put(crop.getFoodGood(), 10d);
+        foodProcess.output.put(consumableResources, 10d);
+        foodProcess.setName(crop.getName() + " to food");
+
+        civ.productionProcesses.add(foodProcess);
+
+        //Add local life for the crop
         LocalLife localLife = new LocalLife();
         localLife.setSpecies(crop);
         localLife.setBiomass(100_000);
         starting.localLife.add(localLife);
 
+        //Get the thing...
         for (int i = 0; i < 10; i++) {
             City faceBook = new City(gameState, starting.getId());
 
@@ -354,10 +346,19 @@ public class CivilizationInitializer {
                 field.setFieldSize(5000);
                 field.setOperatingJobs(10000);
                 field.setMaxJobs(30000);
-                field.setOwner(c.getId());
+                field.setOwner(civ.getId());
 
                 faceBook.addArea(field.getId());
             }
+
+            //Add factory that is quite productive at giving food
+            ManufacturerArea factory = new ManufacturerArea(gameState, foodProcess, 50000);
+            factory.setOwner(civ.getId());
+
+            factory.setMaxJobs(10000);
+            factory.setOperatingJobs(5000);
+            factory.setWorkingmultiplier(1.2f);
+            faceBook.areas.add(factory.getId());
 
             faceBook.setName(gen.getName(0, selector));
             //Add a farm

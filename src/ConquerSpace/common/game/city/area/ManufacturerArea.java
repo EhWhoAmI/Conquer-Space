@@ -32,9 +32,12 @@ public class ManufacturerArea extends Area {
     protected ProductionProcess process;
     //How much of that production process per round...
     float productivity;
+    
+    private boolean producedLastTick;
 
     public ManufacturerArea(GameState gameState, ProductionProcess process, float productivity) {
         super(gameState);
+        this.producedLastTick = false;
         this.process = process;
         this.productivity = productivity;
     }
@@ -64,5 +67,13 @@ public class ManufacturerArea extends Area {
     @Override
     public JobType getJobClassification() {
         return (JobType.FactoryWorker);
+    }
+
+    public boolean producedLastTick() {
+        return producedLastTick;
+    }
+
+    public void setProducedLastTick(boolean producedLastTick) {
+        this.producedLastTick = producedLastTick;
     }
 }

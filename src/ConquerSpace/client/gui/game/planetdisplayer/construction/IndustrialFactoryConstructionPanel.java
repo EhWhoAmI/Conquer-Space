@@ -109,7 +109,10 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
     @Override
     public Area getAreaToConstruct() {
         if (list.getSelectedIndex() > -1) {
-            return new ManufacturerArea(gameState, list.getSelectedValue(), 1);
+            ManufacturerArea area = new ManufacturerArea(gameState, list.getSelectedValue(), 1);
+            area.setMaxJobs(50000);
+            area.setOperatingJobs(10000);
+            return area;
         }
         return null;
     }
