@@ -19,6 +19,8 @@ package ConquerSpace.common.game.population;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.life.Species;
+import ConquerSpace.common.game.resources.Element;
+import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
@@ -31,7 +33,7 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("race")
 public class Race extends Species{
     @Serialize(value = "food-id", special = SaveStuff.Good)
-    public Integer food;
+    private Integer food;
     
     //Usage of food per month
     @Serialize("food")
@@ -51,6 +53,11 @@ public class Race extends Species{
         //Set id
         this.foodPerMonth = foodPerMonth;
         this.breedingRate = breedingRate;
+        
+        //Set food good
+        Good food = new Element(name + " consumable", 1, 1);
+        gameState.addGood(food);
+        this.food = food.getId();
     }
 
     public float getBreedingRate() {
@@ -75,5 +82,9 @@ public class Race extends Species{
 
     public void setUpkeep(float upkeep) {
         this.upkeep = upkeep;
+    }
+
+    public Integer getConsumableResource() {
+        return food;
     }
 }

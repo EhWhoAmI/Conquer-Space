@@ -36,13 +36,13 @@ import javax.swing.UIManager;
  *
  * @author EhWhoAmI
  */
-public class Encyclopedia extends JInternalFrame {
+public class EncyclopediaWindow extends JInternalFrame {
 
     private JEditorPane pane;
     private JList<Good> infoList;
 
     @SuppressWarnings("unchecked")
-    public Encyclopedia(GameState gameState) {
+    public EncyclopediaWindow(GameState gameState) {
         setTitle(LOCALE_MESSAGES.getMessage("game.encyclopedia.title"));
         //XD
         if ((int) (Math.random() * 42000) == 0) {
@@ -56,6 +56,11 @@ public class Encyclopedia extends JInternalFrame {
             builder.addElement(new EncyclopediaParagraph(g.getName()));
             builder.addElement(new EncyclopediaSeparator());
             builder.addElement(new EncyclopediaParagraph("Density: " + (g.getMass()/g.getVolume()) + " kg/m3"));
+            builder.addElement(new EncyclopediaParagraph("Tags: "));
+            
+            for(String s : g.tags) {
+                builder.addElement(new EncyclopediaParagraph(s));
+            }
             pane.setText(builder.build());
         });
 

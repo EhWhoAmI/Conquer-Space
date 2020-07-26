@@ -57,7 +57,7 @@ public class LocalLifeMenu extends JPanel {
             if(localLifeList.getSelectedValue() != null) {
                 LocalLife ll = localLifeList.getSelectedValue();
                 lifeName.setText(ll.getSpecies().getName());
-                lifeBiomass.setText(LOCALE_MESSAGES.getMessage("game.planet.locallife.biomass", ll.getBiomass()));
+                lifeBiomass.setText(LOCALE_MESSAGES.getMessage("game.planet.locallife.biomass", (double) ll.getBiomass()));
                 reproductionRate.setText(LOCALE_MESSAGES.getMessage("game.planet.locallife.reproduction", ll.getSpecies().getBaseBreedingRate()));
                 
                 lifeTraitListModel.clear();

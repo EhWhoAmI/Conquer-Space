@@ -174,9 +174,10 @@ public class CivilizationInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-
+        Species food = createEdibleFood(c);
+        
         createResourceMiners(starting, c, c.getFoundingSpecies(), selector, townNames);
-        createFarms(starting, c, selector, townNames);
+        createFarms(starting, food, c, selector, townNames);
         createCities(starting, c, selector, townNames);
 
         //Initialize namelists
@@ -304,24 +305,39 @@ public class CivilizationInitializer {
             }
         }
     }
-
-    private void createFarms(Planet starting, Civilization c, Random selector, NameGenerator gen) {
-        //Based on population
-        //Add livestock
-        //Create a test crop so that you can grow stuff
+    
+    private Species createEdibleFood(Civilization civ) {
         Species potato = new Species(gameState, "Potato");
         potato.lifeTraits.add(LifeTrait.Rooted);
         potato.lifeTraits.add(LifeTrait.Delicious);
         potato.lifeTraits.add(LifeTrait.Photosynthetic);
         gameState.addSpecies(potato);
+        
+        int consumableResources = civ.getFoundingSpecies().getConsumableResource();
+        ProductionProcess foodProcess = new ProductionProcess(gameState);
 
+        foodProcess.input.put(potato.getFoodGood(), 10d);
+        foodProcess.output.put(consumableResources, 10d);
+        foodProcess.setName(potato.getName() + " to food");
+        
+        civ.productionProcesses.add(foodProcess);
+        return potato;
+    }
+
+    private void createFarms(Planet starting, Species crop, Civilization c, Random selector, NameGenerator gen) {
+        //Based on population
+        //Add livestock
+        //Create a test crop so that you can grow stuff
+        
+        //Set processable to foodgood
+        
         //Set food good
-        c.getFoundingSpecies().food = potato.getFoodGood();
+        //c.getFoundingSpecies().food = potato.getFoodGood();
 
         //Add the biomass
         //Set the amount on planet...
         LocalLife localLife = new LocalLife();
-        localLife.setSpecies(potato);
+        localLife.setSpecies(crop);
         localLife.setBiomass(100_000);
         starting.localLife.add(localLife);
 
@@ -330,8 +346,8 @@ public class CivilizationInitializer {
 
             //Add farm fields...
             for (int k = 0; k < 15; k++) {
-                FarmFieldArea field = new FarmFieldArea(gameState, potato);
-                field.setGrown(potato);
+                FarmFieldArea field = new FarmFieldArea(gameState, crop);
+                field.setGrown(crop);
                 //30 days
                 field.setTime(30 * 24);
                 field.grow();

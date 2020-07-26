@@ -36,7 +36,7 @@ public class FarmFieldArea extends TimedManufacturerArea {
     private int fieldSize;
 
     public FarmFieldArea(GameState gameState, Species grownSpecies) {
-        super(gameState, new ProductionProcess(grownSpecies.getId()));
+        super(gameState, new ProductionProcess(gameState, grownSpecies.getId()));
         grown = grownSpecies.getId();
         //Because you can only grow one.
         setLimit(1);

@@ -308,7 +308,7 @@ public class AssetReader {
 
         int diff = obj.getInt("diff");
 
-        ProductionProcess process = new ProductionProcess();
+        ProductionProcess process = new ProductionProcess(state);
         process.name = name;
         process.identifier = identifier;
         process.input = input;

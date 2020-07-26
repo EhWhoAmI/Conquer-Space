@@ -21,9 +21,7 @@ import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.resources.FoodGood;
 import ConquerSpace.common.game.resources.Good;
-import ConquerSpace.common.game.resources.LiveGood;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.FieldNode;
@@ -135,16 +133,6 @@ public final class GameState implements Serializable {
     }
 
     public void addSpecies(Species speciesToAdd) {
-        //Nice
-        //Other stats...
-        FoodGood foodGoodResource = new FoodGood(speciesToAdd, 1, 420);
-        LiveGood speciesGoodResource = new LiveGood(speciesToAdd, 1, 420);
-        addGood(foodGoodResource);
-        addGood(speciesGoodResource);
-
-        speciesToAdd.setFoodGood(foodGoodResource.getId());
-        speciesToAdd.setSpeciesGood(speciesGoodResource.getId());
-
         species.add(speciesToAdd.getId());
     }
 

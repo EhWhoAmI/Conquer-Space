@@ -117,7 +117,7 @@ public class Civilization extends Organization implements Employer {
 
     private ArrayList<Integer> cities;
 
-    private Race foundingSpecies;
+    private Integer foundingSpecies;
 
     private City capitalCity;
 
@@ -312,11 +312,11 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void setFoundingSpecies(Race foundingSpecies) {
-        this.foundingSpecies = foundingSpecies;
+        this.foundingSpecies = foundingSpecies.getId();
     }
 
     public Race getFoundingSpecies() {
-        return foundingSpecies;
+        return gameState.getObject(foundingSpecies, Race.class);
     }
 
     public City getCapitalCity() {

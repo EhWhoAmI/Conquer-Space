@@ -106,7 +106,7 @@ public class PlanetIndustry extends JPanel {
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
         areaContainer.add(areaInfoPanel, constraints);
-        tabs.add(areaContainer, LOCALE_MESSAGES.getMessage("game.planet.industry.areas"));
+
         jobSortingOutPanel = new JPanel(new HorizontalFlowLayout());
 
         industryListModel = new DefaultListModel<>();
@@ -127,12 +127,6 @@ public class PlanetIndustry extends JPanel {
         jobSortingOutPanel.add(industryInfoContainer);
 
         tabs.add(jobSortingOutPanel, LOCALE_MESSAGES.getMessage("game.planet.industry.industries"));
-
-        //availableJobs = new JPanel();
-        //availableJobListModel = new JobListModel(p.planetJobs);
-        //availableJobList = new JList<>(availableJobListModel);
-        //availableJobs.add(new JScrollPane(availableJobList));
-        //tabs.add(availableJobs, "Available jobs");
         add(tabs);
     }
 

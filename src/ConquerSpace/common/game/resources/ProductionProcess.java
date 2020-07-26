@@ -17,6 +17,8 @@
  */
 package ConquerSpace.common.game.resources;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class ProductionProcess implements Serializable {
+public class ProductionProcess extends ConquerSpaceGameObject implements Serializable {
 
     private static int idCounter = 0;
 
@@ -38,14 +40,16 @@ public class ProductionProcess implements Serializable {
     //How difficult it is to extract. Will replace with the parts for the factory in the futute.
     public int diff;
 
-    public ProductionProcess() {
+    public ProductionProcess(GameState gameState) {
+        super(gameState);
         input = new HashMap<>();
         output = new HashMap<>();
         catalyst = new ArrayList<>();
         id = idCounter++;
     }
 
-    public ProductionProcess(Integer outputGood) {
+    public ProductionProcess(GameState gameState, Integer outputGood) {
+        super(gameState);
         input = new HashMap<>();
         output = new HashMap<>();
         output.put(outputGood, 1d);
@@ -58,7 +62,11 @@ public class ProductionProcess implements Serializable {
         return name;
     }
 
-    public int getId() {
-        return id;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

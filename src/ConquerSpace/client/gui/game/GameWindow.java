@@ -103,7 +103,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
 
     private MainInterfaceWindow mainInterfaceWindow;
 
-    private Encyclopedia encyclopedia;
+    private EncyclopediaWindow encyclopedia;
 
     private Galaxy universe;
 
@@ -211,7 +211,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                 }
                 encyclopedia.toFront();;
             } else {
-                encyclopedia = new Encyclopedia(gameState);
+                encyclopedia = new EncyclopediaWindow(gameState);
                 addFrame(encyclopedia);
                 encyclopedia.setVisible(true);
             }
@@ -258,31 +258,9 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
         views.add(seeHomePlanet);
         views.add(recenter);
 
-        JMenu menu = new JMenu(LOCALE_MESSAGES.getMessage("game.alerts"));
-
-        JMenuItem viewAlert = new JMenuItem(LOCALE_MESSAGES.getMessage("game.alerts.view"));
-        viewAlert.setAccelerator(KeyStroke.getKeyStroke('l'));
-        viewAlert.addActionListener((e) -> {
-            addFrame(AlertDisplayer.getInstance());
-        });
-        menu.add(viewAlert);
-
-        JMenu ships = new JMenu(LOCALE_MESSAGES.getMessage("game.ships"));
-
-        JMenu resources = new JMenu(LOCALE_MESSAGES.getMessage("game.resources"));
-        JMenuItem resourceIndex = new JMenuItem(LOCALE_MESSAGES.getMessage("game.resources"));
-        resourceIndex.addActionListener(a -> {
-            //addFrame(new ResourceManager(c));
-        });
-
-        resources.add(resourceIndex);
-
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
-        menuBar.add(menu);
-        menuBar.add(ships);
-        menuBar.add(resources);
 
         //Set timer
         gameTickTimer = new Timer(50, a -> {

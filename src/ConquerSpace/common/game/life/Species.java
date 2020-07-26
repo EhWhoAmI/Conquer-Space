@@ -19,10 +19,13 @@ package ConquerSpace.common.game.life;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.resources.FoodGood;
+import ConquerSpace.common.game.resources.LiveGood;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Species on a planet, can go to other planets
@@ -30,33 +33,43 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 @SerializeClassName("species")
-public class Species extends ConquerSpaceGameObject{
+public class Species extends ConquerSpaceGameObject {
+
     @Serialize("traits")
     public ArrayList<LifeTrait> lifeTraits;
 
     @Serialize(value = "live-good", special = SaveStuff.Good)
     private int speciesGood;
-    
+
     /**
      * Id of the food when it's dead
      */
     @Serialize(value = "food-good", special = SaveStuff.Good)
     private int foodGood;
     //Breeding rate
-    
+
     @Serialize("breeding-rate")
     private float baseBreedingRate = 0;
     //Breeding method
     //Etc...
-    
+
     @Serialize("name")
     private String name;
 
     public Species(GameState gameState, String name) {
         super(gameState);
-        //Add all the food goods...
-        lifeTraits = new ArrayList<>();
         this.name = name;
+        //Add all the food goods...
+        //Nice
+        FoodGood foodGoodResource = new FoodGood(this, 1, 420);
+        LiveGood speciesGoodResource = new LiveGood(this, 1, 420);
+        gameState.addGood(foodGoodResource);
+        gameState.addGood(speciesGoodResource);
+
+        setFoodGood(foodGoodResource.getId());
+        setSpeciesGood(speciesGoodResource.getId());
+
+        lifeTraits = new ArrayList<>();
     }
 
     public void setName(String name) {

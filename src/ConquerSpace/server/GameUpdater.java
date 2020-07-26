@@ -402,16 +402,17 @@ public class GameUpdater extends GameTicker {
             double consume = ((double) amount) * 0.5d;
 
             double foodAmount = 0;
-
-            if (city.resources.containsKey(gameState.getObject(seg.species, Race.class).food)) {
-                foodAmount = city.getResourceAmount(gameState.getObject(seg.species, Race.class).food);
+            Race race = gameState.getObject(seg.species, Race.class);
+            //Race race = city.resources.containsKey(gameState.getObject(seg.species, Race.class);
+            if (city.resources.containsKey(race.getConsumableResource())) {
+                foodAmount = city.getResourceAmount(race.getConsumableResource());
             }
 
             //Request food
             //Append resources
-            city.resourceDemands.addValue(gameState.getObject(seg.species, Race.class).food, consume);
+            city.resourceDemands.addValue(race.getConsumableResource(), consume);
 
-            boolean success = removeResource(gameState.getObject(seg.species, Race.class).food, consume, city);
+            boolean success = removeResource(race.getConsumableResource(), consume, city);
             //Not enough food
             boolean starving = false;
             if (!success) {

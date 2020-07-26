@@ -22,12 +22,17 @@ import ConquerSpace.common.save.Serialize;
 
 /**
  * Consumable
+ *
  * @author EhWhoAmI
  */
-public class FoodGood extends Good{
-    
+public class FoodGood extends Good {
+
     @Serialize("species")
     Integer species;
+
+    //Calories it provides per unit...
+    private int calories;
+
     public FoodGood(Species s, double volume, double mass) {
         super(s.getName(), "f_" + s.getName() + "_" + s.getId(), volume, mass);
         this.species = s.getId();
