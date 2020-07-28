@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
@@ -28,6 +29,7 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -87,7 +89,7 @@ public class PlanetIndustry extends JPanel {
 
         areaList.addListSelectionListener(l -> {
             areaInfoPanel.removeAll();
-            areaInfoPanel.add(new AreaInformationPanel(gameState, areaList.getSelectedValue()));
+            areaInfoPanel.add(AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue()));
         });
 
         JScrollPane scrollPane = new JScrollPane(areaList);
@@ -135,8 +137,10 @@ public class PlanetIndustry extends JPanel {
         areaDefaultListModel.clear();
         for (int i = 0; i < p.cities.size(); i++) {
             City city = gameState.getObject(p.cities.get(i), City.class);
-            for (Integer areaId : city.areas) {
-                Area area = gameState.getObject(areaId, Area.class);
+            Iterator<Integer> iterator = city.areas.iterator();
+            while(iterator.hasNext()) {
+                Integer in = iterator.next();
+                Area area = gameState.getObject(in, Area.class);
                 areaDefaultListModel.addElement(area);
             }
         }

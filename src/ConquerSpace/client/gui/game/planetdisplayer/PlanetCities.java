@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
@@ -114,7 +115,7 @@ public class PlanetCities extends JPanel {
 
     private PlanetInfoSheet parent;
     private GameState gameState;
-    
+
     private int cityContainerHeight = 800;
 
     public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent) {
@@ -185,7 +186,7 @@ public class PlanetCities extends JPanel {
 
         taskPaneContainer.add(index);
         taskPaneContainer.setBackground(UIManager.getDefaults().getColor("Panel.background"));
-        
+
         cityList = new JList<>(cityListModel);
         cityList.setSelectedIndex(0);
         int cellHeight = 18;
@@ -342,7 +343,9 @@ public class PlanetCities extends JPanel {
 
         areaList.addListSelectionListener(o -> {
             areaInfoContainerPanel.removeAll();
-            areaInfoContainerPanel.add(new AreaInformationPanel(gameState, areaList.getSelectedValue()));
+            areaInfoContainerPanel.add(AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue()));
+            areaInfoContainerPanel.validate();
+            areaInfoContainerPanel.repaint();
         });
 
         areaInfoPanel.add(areascrollPane);

@@ -107,7 +107,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
 
     private Galaxy universe;
 
-    private Timer gameTickTimer;
+    private Timer gameUIUpdater;
 
     private StarDate date;
 
@@ -263,12 +263,14 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
         menuBar.add(views);
 
         //Set timer
-        gameTickTimer = new Timer(50, a -> {
+        gameUIUpdater = new Timer(50, a -> {
             if (this.isActive()) {
                 try {
                     //Only update when visible, and mouse is moving into it, saves performance
                     if (mainInterfaceWindow != null && mainInterfaceWindow.isVisible()) {
                         mainInterfaceWindow.update();
+                        mainInterfaceWindow.validate();
+                        mainInterfaceWindow.repaint();
                     }
                     if (allowTick()) {
                         desktopPane.repaint();
@@ -279,7 +281,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
             }
         });
 
-        gameTickTimer.setRepeats(true);
+        gameUIUpdater.setRepeats(true);
 
         desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
 
@@ -298,7 +300,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
 
         setVisible(true);
 
-        gameTickTimer.start();
+        gameUIUpdater.start();
         changeTurnSaveWindowPosition();
         //See home planet
         desktopPane.see(civ.getStartingPlanet().getSystemID());
