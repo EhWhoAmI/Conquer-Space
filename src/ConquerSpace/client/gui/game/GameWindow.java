@@ -263,7 +263,8 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
         menuBar.add(views);
 
         //Set timer
-        gameUIUpdater = new Timer(50, a -> {
+        gameUIUpdater = new Timer(500, a -> {
+            long start = System.currentTimeMillis();
             if (this.isActive()) {
                 try {
                     //Only update when visible, and mouse is moving into it, saves performance
@@ -279,6 +280,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                     LOGGER.warn("Exception!", e);
                 }
             }
+            long end = System.currentTimeMillis();
         });
 
         gameUIUpdater.setRepeats(true);

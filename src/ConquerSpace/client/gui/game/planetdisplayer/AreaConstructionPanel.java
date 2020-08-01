@@ -78,9 +78,9 @@ public class AreaConstructionPanel extends JPanel {
 
     private AreaDesignPanel areaDesignPanel = null;
 
-    public AreaConstructionPanel(GameState gameState, 
-            Planet planet, 
-            Civilization c, 
+    public AreaConstructionPanel(GameState gameState,
+            Planet planet,
+            Civilization c,
             City city) {
         setLayout(new BorderLayout());
 
@@ -151,5 +151,9 @@ public class AreaConstructionPanel extends JPanel {
 
         add(constructButton, BorderLayout.SOUTH);
         areaTypeList.setSelectedIndex(0);
+    }
+    
+    public void update(){
+        
     }
 }

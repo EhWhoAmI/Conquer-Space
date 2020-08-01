@@ -128,15 +128,8 @@ public class GameUpdater extends GameTicker {
 
         //Check for month increase            
         if (starDate.getDate() % GameRefreshRate == 1) {
-            LOGGER.trace("Refreshing all the game objects");
-
             updateGame();
             updateObjectPositions();
-
-            for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-                //int civId = universe.getCivilization(i);
-                //indexer.index(((Civilization) universe.organizations.get((universe.getCivilization(i)))));
-            }
         }
         //Process people and generate every 1000 ticks, which is about every 41 days
         if (starDate.getDate() % (GameRefreshRate * 2) == 1) {

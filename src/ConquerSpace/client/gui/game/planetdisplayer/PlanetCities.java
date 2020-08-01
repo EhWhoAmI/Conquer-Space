@@ -118,6 +118,8 @@ public class PlanetCities extends JPanel {
 
     private int cityContainerHeight = 800;
 
+    private AreaInformationPanel areaInformationPanel;
+
     public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent) {
         this.universe = gameState.getUniverse();
         this.gameState = gameState;
@@ -343,7 +345,10 @@ public class PlanetCities extends JPanel {
 
         areaList.addListSelectionListener(o -> {
             areaInfoContainerPanel.removeAll();
-            areaInfoContainerPanel.add(AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue()));
+            areaInformationPanel = AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue());
+            if (areaInformationPanel != null) {
+                areaInfoContainerPanel.add(areaInformationPanel);
+            }
             areaInfoContainerPanel.validate();
             areaInfoContainerPanel.repaint();
         });
@@ -390,6 +395,9 @@ public class PlanetCities extends JPanel {
     }
 
     public void update() {
+        if (areaInformationPanel != null) {
+            areaInformationPanel.update();
+        }
     }
 
     private class JobTableModel extends AbstractTableModel {

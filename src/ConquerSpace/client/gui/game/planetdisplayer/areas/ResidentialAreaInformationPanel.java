@@ -19,30 +19,19 @@ package ConquerSpace.client.gui.game.planetdisplayer.areas;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.city.area.ConstructingArea;
+import ConquerSpace.common.game.city.area.ResidentialArea;
 import javax.swing.JLabel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ConstructionAreaInformationPanel extends AreaInformationPanel<ConstructingArea> {
+public class ResidentialAreaInformationPanel extends AreaInformationPanel<ResidentialArea> {
 
-    private JLabel timeLeft;
-
-    public ConstructionAreaInformationPanel(ConstructingArea area, GameState gameState) {
+    public ResidentialAreaInformationPanel(ResidentialArea area, GameState gameState) {
         super(area, gameState);
-        JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.title"));
+        JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.residential.title"));
         add(title);
-
-        JLabel constructingArea = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.what", area.getToBuild().toString()));
-        add(constructingArea);
-        timeLeft = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getTicksLeft()));
-        add(timeLeft);
         genericInformation();
-    }
-
-    public void update() {
-        timeLeft.setText(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getTicksLeft()));
     }
 }

@@ -76,6 +76,10 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
         add(minimumJobs);
         add(maximumJobs);
     }
+    
+    public void update() {
+        
+    }
 
     public static AreaInformationPanel getPanel(GameState gameState, Area a) {
         if (a instanceof ResearchArea) {
