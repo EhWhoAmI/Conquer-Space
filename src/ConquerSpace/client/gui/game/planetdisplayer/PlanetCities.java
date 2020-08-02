@@ -179,7 +179,7 @@ public class PlanetCities extends JPanel {
                 //Reduce rows
                 int things = heightForList / cityList.getFixedCellHeight();
                 cityList.setVisibleRowCount(things);
-                cityList.updateUI();
+                cityList.repaint();
                 PlanetCities.this.updateUI();
                 PlanetCities.this.repaint();
             }
@@ -251,7 +251,7 @@ public class PlanetCities extends JPanel {
         isBuildingUi = true;
         cityData.removeAll();
 
-        City selected = cityList.getSelectedValue();
+        City selectedCity = cityList.getSelectedValue();
 
         int popcount = 0;
         float increment = 0;
@@ -259,7 +259,7 @@ public class PlanetCities extends JPanel {
         int energyUsage = 0;
         int energyProvided = 0;
 
-        JLabel cityName = new JLabel(selected.getName());
+        JLabel cityName = new JLabel(selectedCity.getName());
         cityData.add(cityName);
 
         //Check if capital city
@@ -275,11 +275,11 @@ public class PlanetCities extends JPanel {
 
         //Population
         JLabel popCount = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(gameState.getObject(selected.population, Population.class).getPopulationSize())));
+                LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(gameState.getObject(selectedCity.population, Population.class).getPopulationSize())));
         cityData.add(popCount);
 
         JLabel priindustry = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selected.getCityType()));
+                LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selectedCity.getCityType()));
         cityData.add(priindustry);
 
         //Get the number of powerplants leading to it
@@ -292,8 +292,11 @@ public class PlanetCities extends JPanel {
         JLabel growthAmount = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.growth", 0));//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
         cityData.add(growthAmount);
-
-        //JLabel unemployment = new JLabel("Unemployment: " + );
+        
+        double unemploymentRate = selectedCity.getUnemploymentRate();
+        JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate*100) + "%");
+        unemployment.setForeground(new Color((float)unemploymentRate, 0f, 0f));
+        cityData.add(unemployment);
         //Max population
         JLabel maxPopulation = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
@@ -302,12 +305,12 @@ public class PlanetCities extends JPanel {
         //Check for govenor
         if (cityList.getSelectedValue().getGovernor() != null) {
             JLabel governorLabel = new JLabel(
-                    LOCALE_MESSAGES.getMessage("game.planet.cities.governor", selected.getGovernor().getName()));
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.governor", selectedCity.getGovernor().getName()));
             cityData.add(governorLabel);
         }
 
         DefaultListModel<String> tagsListModel = new DefaultListModel<>();
-        for (Map.Entry<String, Integer> entry : selected.tags.entrySet()) {
+        for (Map.Entry<String, Integer> entry : selectedCity.tags.entrySet()) {
             String key = entry.getKey();
             Integer val = entry.getValue();
             if (val == null) {
@@ -333,7 +336,7 @@ public class PlanetCities extends JPanel {
 
         //Areas
         areaListModel = new DefaultListModel<>();
-        for (Integer areaId : selected.areas) {
+        for (Integer areaId : selectedCity.areas) {
             Area area = gameState.getObject(areaId, Area.class);
             areaListModel.addElement(area);
         }
@@ -364,7 +367,7 @@ public class PlanetCities extends JPanel {
         //Fill up
         availableJobTable = new JTable(availableJobModel);
 
-        areaConstructionPanel = new AreaConstructionPanel(gameState, planet, owner, selected);
+        areaConstructionPanel = new AreaConstructionPanel(gameState, planet, owner, selectedCity);
 
         cityInfoTabs.removeAll();
         cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.areas"), areaInfoPanel);
@@ -377,10 +380,11 @@ public class PlanetCities extends JPanel {
         cityData.add(cityInfoTabs);
 
         //Select first area
-        if (!selected.areas.isEmpty()) {
+        if (!selectedCity.areas.isEmpty()) {
             //Select first area
             areaList.setSelectedIndex(0);
         }
+        cityData.revalidate();
         cityData.repaint();
         isBuildingUi = false;
     }
@@ -402,6 +406,8 @@ public class PlanetCities extends JPanel {
 
     private class JobTableModel extends AbstractTableModel {
 
+        private long currentlyWorking;
+
         HashMap<JobType, Integer> populationCount;
 
         public JobTableModel() {
@@ -409,20 +415,28 @@ public class PlanetCities extends JPanel {
         }
 
         private void newCitySelection() {
+            currentlyWorking = 0;
             populationCount.clear();
             population = gameState.getObject(currentlySelectedCity.population, Population.class).getPopulationSize();
             //Get population job
             for (Integer areaId : currentlySelectedCity.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
-                if (area instanceof Workable) {
-                    if (!populationCount.containsKey(area.getJobClassification())) {
-                        populationCount.put(area.getJobClassification(), area.getMaxJobsProvided());
-                    } else {
-                        int count = populationCount.get(area.getJobClassification());
-                        count += area.getMaxJobsProvided();
-                        populationCount.put(area.getJobClassification(), count);
-                    }
+                if (!populationCount.containsKey(area.getJobClassification())) {
+                    populationCount.put(area.getJobClassification(), area.getCurrentlyManningJobs());
+                    currentlyWorking += area.getCurrentlyManningJobs();
+                } else {
+                    int count = populationCount.get(area.getJobClassification());
+                    count += area.getCurrentlyManningJobs();
+                    currentlyWorking += area.getCurrentlyManningJobs();
+                    populationCount.put(area.getJobClassification(), count);
                 }
+            }
+            if (!populationCount.containsKey(JobType.Jobless)) {
+                populationCount.put(JobType.Jobless, (int) (population - currentlyWorking));
+            } else {
+                int count = populationCount.get(JobType.Jobless);
+                count += (int) (population - currentlyWorking);
+                populationCount.put(JobType.Jobless, count);
             }
         }
 

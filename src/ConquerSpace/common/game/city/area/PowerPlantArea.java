@@ -74,4 +74,12 @@ public class PowerPlantArea extends ConsumerArea {
     public JobType getJobClassification() {
         return (JobType.PowerPlantTechnician);
     }
+
+    public int getProduction() {
+        return production;
+    }
+
+    public void setProduction(int production) {
+        this.production = production;
+    }
 }

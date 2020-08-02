@@ -22,8 +22,11 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
+import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
+import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -42,43 +45,44 @@ import java.util.Iterator;
  */
 @SerializeClassName("city")
 public class City extends ConquerSpaceGameObject implements PersonEnterable, ResourceStockpile, Administrable {
+
     @Serialize("population")
     public Integer population;
-    
+
     public static final String CITY_DEFAULT = "emp";
-    
+
     private Integer governor;
-    
+
     @Serialize("name")
     private String name;
-    
+
     @Serialize("areas")
     public ArrayList<Integer> areas;
-    
+
     @Serialize("working-for")
     public ArrayList<Integer> workableFor;
-    
+
     @Serialize("people")
     public ArrayList<Person> peopleAtCity;
 
     @Serialize(value = "resources", special = SaveStuff.Good)
     public HashMap<Integer, Double> resources;
-    
+
     @Serialize(value = "demands", special = SaveStuff.Good)
     public DoubleHashMap<Integer> resourceDemands;
 
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
-    
+
     @Serialize("max-storage")
     private int maxStorage;
-    
+
     public ArrayList<Integer> supplyChains;
-    
+
     private int ledgerClearDelta = 0;
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
-    
+
     @Serialize("location")
     private Integer location;
 
@@ -100,6 +104,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     @Serialize("tiles")
     private int size;
 
+    private int energy;
+
     public City(GameState gameState, Integer location) {
         super(gameState);
         workableFor = new ArrayList<>();
@@ -109,15 +115,17 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
-        
+
         Population population = new Population(gameState);
         this.population = population.getId();
-        
+
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityType = CityType.Generic;
         size = 0;
+
+        energy = 0;
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
@@ -286,5 +294,28 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
 
     public int getLedgerClearDelta() {
         return ledgerClearDelta;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public void incrementEnergy(int amount) {
+        this.energy += amount;
+    }
+
+    public double getUnemploymentRate() {
+        long currentlyWorking = 0;
+        for (Integer areaId : areas) {
+            Area area = gameState.getObject(areaId, Area.class);
+            currentlyWorking += area.getCurrentlyManningJobs();
+        }
+        //return (population)
+        long populationSize = gameState.getObject(population, Population.class).getPopulationSize();
+        return ((double) (populationSize - currentlyWorking) / (double) populationSize);
     }
 }

@@ -35,7 +35,8 @@ public enum JobType {
     PowerPlantTechnician("Power Plant Technician"),
     FactoryWorker("Factory Worker"),
     Researcher("Researcher"),
-    Educator("Teacher");
+    Educator("Teacher"),
+    Imaginary("Imaginary");
     private final String name;
 
     JobType(String name) {

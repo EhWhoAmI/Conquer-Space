@@ -84,23 +84,23 @@ import org.apache.logging.log4j.Logger;
  * @author EhWhoAmI
  */
 public class GameUpdater extends GameTicker {
-
+    
     private static final Logger LOGGER = CQSPLogger.getLogger(GameUpdater.class.getName());
-
+    
     private Galaxy universe;
-
+    
     private StarDate starDate;
-
+    
     private GameState gameState;
-
+    
     private final int GameRefreshRate;
-
+    
     private long updateTime;
     private int ledgerClearTime;
-
+    
     private GameIndexer indexer;
     private PeopleProcessor peopleProcessor;
-
+    
     public GameUpdater(GameState gameState) {
         universe = gameState.getUniverse();
         starDate = gameState.date;
@@ -122,7 +122,7 @@ public class GameUpdater extends GameTicker {
 
         //Move ships
         moveShips();
-
+        
         calculateControl();
         calculateVision();
 
@@ -136,7 +136,7 @@ public class GameUpdater extends GameTicker {
             createPeople();
         }
     }
-
+    
     public synchronized void updateGame() {
         long start = System.currentTimeMillis();
         updateUniverse();
@@ -149,11 +149,11 @@ public class GameUpdater extends GameTicker {
 
         //Increment resources
         processResources();
-
+        
         peopleProcessor.processPeople(GameRefreshRate);
-
+        
         long end = System.currentTimeMillis();
-
+        
         updateTime = (end - start);
     }
 
@@ -164,7 +164,7 @@ public class GameUpdater extends GameTicker {
 
             //Run code...
             Behavior be = org.getBehavior();
-
+            
             if (be != null) {
                 be.doBehavior();
             }
@@ -179,7 +179,7 @@ public class GameUpdater extends GameTicker {
             org.actionList.clear();
         }
     }
-
+    
     public void calculateControl() {
         for (Integer p : universe.control.keySet()) {
             StarSystem starsystem = gameState.getObject(p, StarSystem.class);
@@ -198,7 +198,7 @@ public class GameUpdater extends GameTicker {
             universe.control.put(p, owner);
         }
     }
-
+    
     public void calculateVision() {
         for (Integer p : universe.control.keySet()) {
             //Vision is always visible when you control it
@@ -248,14 +248,14 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     public void updateUniverse() {
         //Loop through star systems
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             updateStarSystem(universe.getStarSystemObject(i));
         }
     }
-
+    
     private void updateStarSystem(StarSystem sys) {
         //Maybe later the objects in space.
         for (int i = 0; i < sys.getBodyCount(); i++) {
@@ -267,12 +267,12 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     private void processPlanet(Planet planet) {
         if (planet.isHabitated()) {
             //So we know how many people there are
             doPlanetCensus(planet);
-
+            
             processCities(planet);
         }
         processLocalLife(planet);
@@ -295,12 +295,14 @@ public class GameUpdater extends GameTicker {
             //Create orders from cities that have stuff
             //Clear demands
             city.resourceDemands.clear();
-
+            
+            city.setEnergy(0);
+            
             processPopulation(city);
 
             //Population growth
             calculateCityJobs(city);
-
+            
             for (Integer areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 processArea(planet, city, area);
@@ -311,14 +313,23 @@ public class GameUpdater extends GameTicker {
             ArrayList<Integer> areasToAdd = new ArrayList<>();
             while (areaIterator.hasNext()) {
                 Area area = gameState.getObject(areaIterator.next(), Area.class);
-
+                
                 if (area instanceof ConstructingArea && ((ConstructingArea) area).getTicksLeft() <= 0) {
                     areasToAdd.add(((ConstructingArea) area).getToBuild().getId());
                     areaIterator.remove();
                 }
             }
+            //May have to fill up jobs...
             city.areas.addAll(areasToAdd);
 
+            //Calculate unemployment rate
+            double unemploymentRate = city.getUnemploymentRate();
+            if (unemploymentRate > 0.1d) {
+                city.tags.put("High Unemployment", (int) Math.round(unemploymentRate * 100));
+            } else {
+                city.tags.remove("High Unemployment");
+            }
+            
             CityType type = classifyCity(city);
             city.setCityType(type);
         }
@@ -339,13 +350,13 @@ public class GameUpdater extends GameTicker {
 
         //Sort them out based off piority
         Collections.sort(city.areas);
-
+        
         for (Integer areaId : city.areas) {
             Area area = gameState.getObject(areaId, Area.class);
             necessaryJobsProviding += area.operatingJobsNeeded();
             maxJobsProviding += area.getMaxJobsProvided();
         }
-
+        
         if (maxJobsProviding < size) {
             //Fill necessary jobs if there are not enough people to get the max amount of people
             for (Integer areaId : city.areas) {
@@ -364,7 +375,7 @@ public class GameUpdater extends GameTicker {
             for (Integer areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 int toFill = area.getMaxJobsProvided() - area.operatingJobsNeeded();
-
+                
                 if ((size - toFill) > 0) {
                     area.setCurrentlyManningJobs(area.getMaxJobsProvided());
                 } else {
@@ -384,7 +395,7 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     private void processPopulation(City city) {
         //Process population upkeep
         Population pop = gameState.getObject(city.population, Population.class);
@@ -393,7 +404,7 @@ public class GameUpdater extends GameTicker {
             //Request resources
             long amount = (seg.size / 1000);
             double consume = ((double) amount) * 0.5d;
-
+            
             double foodAmount = 0;
             Race race = gameState.getObject(seg.species, Race.class);
             //Race race = city.resources.containsKey(gameState.getObject(seg.species, Race.class);
@@ -404,7 +415,7 @@ public class GameUpdater extends GameTicker {
             //Request food
             //Append resources
             city.resourceDemands.addValue(race.getConsumableResource(), consume);
-
+            
             boolean success = removeResource(race.getConsumableResource(), consume, city);
             //Not enough food
             boolean starving = false;
@@ -429,7 +440,7 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     private void doPlanetCensus(Planet p) {
         //Index panet population
         long total = 0;
@@ -439,53 +450,7 @@ public class GameUpdater extends GameTicker {
         }
         p.population = total;
     }
-
-    private void distributeResources(Planet planet) {
-        //Find stuff
-        for (Integer cityId : planet.cities) {
-            City city = gameState.getObject(cityId, City.class);
-            //Resources needed, keep
-            HashMap<Integer, Double> resourcesToSpend = new HashMap<>();
-            for (Map.Entry<Integer, Double> entry : city.resourceDemands.entrySet()) {
-                Integer key = entry.getKey();
-                Double val = entry.getValue();
-                if (city.resources.containsKey(key)) {
-                    double amount = city.resources.get(key) - val;
-                    if (amount > 0) {
-                        resourcesToSpend.put(key, amount);
-                    }
-                }
-            }
-
-            //Then, distribute resources
-            for (Integer citId : planet.cities) {
-                City cit = gameState.getObject(citId, City.class);
-                if (!cit.equals(city)) {
-                    //Send the resources to other places
-                    for (Map.Entry<Integer, Double> entry : cit.resourceDemands.entrySet()) {
-                        Integer key = entry.getKey();
-                        Double val = entry.getValue();
-                        //If have enough resources to put in
-                        if (resourcesToSpend.containsKey(key)) {
-                            double toSpendAmount = resourcesToSpend.get(key);
-                            if (val > 0 && toSpendAmount > 0) {
-                                if (val > toSpendAmount) {
-                                    //Send the resources
-                                    sendResources(key, toSpendAmount, city, cit);
-                                    //Subtract resources
-                                    resourcesToSpend.put(key, 0d);
-                                } else {
-                                    sendResources(key, val, city, cit);
-                                    resourcesToSpend.put(key, (toSpendAmount - val));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+    
     private void processArea(Planet planet, City city, Area area) {
         if (area instanceof FarmFieldArea) {
             FarmFieldArea farm = (FarmFieldArea) area;
@@ -493,14 +458,14 @@ public class GameUpdater extends GameTicker {
             if (removed > 0 && farm.operatingJobsNeeded() < farm.getCurrentlyManningJobs()) {
                 //Calculate percentage
                 storeResource(farm.getGrown().getFoodGood(), (removed * (double) farm.getFieldSize()), city);
-
+                
                 farm.grow();
             }
         } else if (area instanceof TimedManufacturerArea) {
             //Subtract time
             TimedManufacturerArea timedFactory = (TimedManufacturerArea) area;
             int removed = timedFactory.tick(GameRefreshRate);
-
+            
             if (area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
                 for (Map.Entry<Integer, Double> entry : timedFactory.getProcess().output.entrySet()) {
                     Integer key = entry.getKey();
@@ -515,6 +480,8 @@ public class GameUpdater extends GameTicker {
             PowerPlantArea powerPlant = (PowerPlantArea) area;
             if (area.operatingJobsNeeded() < area.getCurrentlyManningJobs()) {
                 removeResource(powerPlant.getUsedResource(), Double.valueOf(powerPlant.getMaxVolume()), city);
+                //Add energy to the city
+                city.incrementEnergy(powerPlant.getProduction());
             }
         } else if (area instanceof ManufacturerArea) {
             //Process resources used
@@ -528,11 +495,11 @@ public class GameUpdater extends GameTicker {
                     removeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
                     city.resourceDemands.addValue(key, val);
                 }
-
+                
                 for (Map.Entry<Integer, Double> entry : process.output.entrySet()) {
                     Integer key = entry.getKey();
                     Double val = entry.getValue();
-
+                    
                     storeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
                 }
                 ((ManufacturerArea) area).setProducedLastTick(true);
@@ -540,7 +507,7 @@ public class GameUpdater extends GameTicker {
                 ((ManufacturerArea) area).setProducedLastTick(false);
             }
         } else if (area instanceof ResearchArea) {
-
+            
         } else if (area instanceof MineArea) {
             MineArea mine = (MineArea) area;
             if (mine.operatingJobsNeeded() < mine.getCurrentlyManningJobs()) {
@@ -549,9 +516,9 @@ public class GameUpdater extends GameTicker {
                     Double val = entry.getValue();
                     removeResource(key, val * GameRefreshRate, city);
                 }
-
+                
                 double multiplier = getMultiplier(area);
-
+                
                 storeResource(mine.getResourceMinedId(), Double.valueOf(mine.getProductivity() * GameRefreshRate) * multiplier, city);
             }
         } else if (area instanceof SpacePortArea) {
@@ -573,13 +540,13 @@ public class GameUpdater extends GameTicker {
             //((Civilization) gameState.universe.organizations.get(gameState.universe.civs.get(observatory.getCivilization()))).visionPoints.add(observatory);
             //}
         }
-
+        
         if (area instanceof ConstructingArea) {
             ConstructingArea constructingArea = (ConstructingArea) area;
             constructingArea.tickConstruction(GameRefreshRate);
         }
     }
-
+    
     private void processLocalLife(Planet p) {
         //Process locallife
         for (LocalLife localLife : p.localLife) {
@@ -588,20 +555,20 @@ public class GameUpdater extends GameTicker {
             localLife.setBiomass((int) (breedingRate * biomass) + biomass);
         }
     }
-
+    
     private void processStar(Star s) {
-
+        
     }
-
+    
     private void processResearch(int delta) {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
-
+            
             Iterator<Technology> tech = civilization.currentlyResearchingTechonologys.keySet().iterator();
-
+            
             while (tech.hasNext()) {
                 Technology t = tech.next();
-
+                
                 if ((Technologies.estFinishTime(t) - civilization.civResearch.get(t)) <= 0) {
                     //Then tech is finished
                     civilization.researchTech(gameState, t);
@@ -630,11 +597,11 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     private void processResources() {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
-
+            
             for (Map.Entry<Integer, Double> entry : civilization.resourceList.entrySet()) {
                 civilization.resourceList.put(entry.getKey(), 0d);
             }
@@ -654,7 +621,7 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     private CityType classifyCity(City dis) {
         //Get the type of areas
         HashMap<AreaClassification, Integer> areaType = new HashMap<>();
@@ -680,7 +647,7 @@ public class GameUpdater extends GameTicker {
                 highestArea = key;
             }
         }
-
+        
         switch (highestArea) {
             case Financial:
                 return CityType.City;
@@ -702,7 +669,7 @@ public class GameUpdater extends GameTicker {
         }
         return CityType.Generic;
     }
-
+    
     private void moveShips() {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
@@ -711,7 +678,7 @@ public class GameUpdater extends GameTicker {
             for (Integer shipId : civilization.spaceships) {
                 Ship ship = gameState.getObject(shipId, Ship.class);
                 ShipAction sa = ship.getActionAndPopIfDone(gameState);
-
+                
                 if (!sa.checkIfDone(gameState)) {
                     //System.out.println(sa.getClass());
                     sa.doAction(gameState);
@@ -722,13 +689,13 @@ public class GameUpdater extends GameTicker {
             }
         }
     }
-
+    
     public void updateObjectPositions() {
         long start = System.currentTimeMillis();
         //Loop through star systems
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystemObject(i);
-
+            
             system.setPoint(system.getOrbit().toSpacePoint());
             for (int k = 0; k < system.getBodyCount(); k++) {
                 Body body = system.getBodyObject(k);
@@ -738,11 +705,11 @@ public class GameUpdater extends GameTicker {
         long end = System.currentTimeMillis();
         //System.out.println((end - start));
     }
-
+    
     private void createPeople() {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civ = gameState.getCivilizationObject(i);
-
+            
             NameGenerator gen = null;
             try {
                 gen = NameGenerator.getNameGenerator("us.names");
@@ -782,26 +749,26 @@ public class GameUpdater extends GameTicker {
 //        }
         }
     }
-
+    
     private PersonalityTrait getRandomPersonalityTrait() {
         return gameState.personalityTraits.get((int) (gameState.personalityTraits.size() * Math.random()));
     }
-
+    
     private double getMultiplier(Area area) {
         double extraJobs = area.getCurrentlyManningJobs() - area.operatingJobsNeeded();
-
+        
         double multiplier = 1;
         if (extraJobs > 0) {
             double maxExtraJobs = area.getMaxJobsProvided() - area.operatingJobsNeeded();
-
+            
             float workingMultiplier = area.getWorkingmultiplier() - 1f;
-
+            
             double extraJobsRatio = extraJobs / maxExtraJobs;
             if (extraJobsRatio > 1) {
                 extraJobsRatio = 1;
             }
             double multiplyBy = 1d + extraJobsRatio * workingMultiplier;
-
+            
             multiplier = multiplyBy;
         }
         return multiplier;

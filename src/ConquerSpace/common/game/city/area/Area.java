@@ -92,7 +92,7 @@ public class Area extends ConquerSpaceGameObject implements Workable, Comparable
 
     @Override
     public JobType getJobClassification() {
-        return (JobType.Jobless);
+        return (JobType.Imaginary);
     }
 
     public int getCurrentlyManningJobs() {

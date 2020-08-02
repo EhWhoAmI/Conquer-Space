@@ -263,6 +263,8 @@ public class Technologies implements Serializable{
             if (goodId != null) {
                 c.mineableGoods.add(goodId);
             }
+        } else if (action.startsWith("energy")) {
+            
         }
     }
 
