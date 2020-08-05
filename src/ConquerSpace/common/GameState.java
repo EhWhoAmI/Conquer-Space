@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -245,6 +246,10 @@ public final class GameState implements Serializable {
 
     public Integer getUniverseId() {
         return universeId;
+    }
+    
+    public ArrayList<Good> getGoodArrayList() {
+        return new ArrayList<>(goodHashMap.values());
     }
 
     /**

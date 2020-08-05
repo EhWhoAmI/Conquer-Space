@@ -179,8 +179,9 @@ public class PlanetCities extends JPanel {
                 //Reduce rows
                 int things = heightForList / cityList.getFixedCellHeight();
                 cityList.setVisibleRowCount(things);
+                cityList.validate();
                 cityList.repaint();
-                PlanetCities.this.updateUI();
+                PlanetCities.this.validate();
                 PlanetCities.this.repaint();
             }
         });
@@ -256,8 +257,8 @@ public class PlanetCities extends JPanel {
         int popcount = 0;
         float increment = 0;
         int maxPop = 0;
-        int energyUsage = 0;
-        int energyProvided = 0;
+        int energyUsage = selectedCity.getEnergyNeeded();
+        int energyProvided = selectedCity.getEnergyProvided();
 
         JLabel cityName = new JLabel(selectedCity.getName());
         cityData.add(cityName);
@@ -297,11 +298,14 @@ public class PlanetCities extends JPanel {
         JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate*100) + "%");
         unemployment.setForeground(new Color((float)unemploymentRate, 0f, 0f));
         cityData.add(unemployment);
+        
         //Max population
         JLabel maxPopulation = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
         cityData.add(maxPopulation);
-
+        
+        cityData.add(maxPopulation);
+        
         //Check for govenor
         if (cityList.getSelectedValue().getGovernor() != null) {
             JLabel governorLabel = new JLabel(
@@ -354,6 +358,8 @@ public class PlanetCities extends JPanel {
             }
             areaInfoContainerPanel.validate();
             areaInfoContainerPanel.repaint();
+            cityData.validate();
+            cityData.repaint();
         });
 
         areaInfoPanel.add(areascrollPane);
@@ -384,9 +390,9 @@ public class PlanetCities extends JPanel {
             //Select first area
             areaList.setSelectedIndex(0);
         }
-        cityData.revalidate();
-        cityData.repaint();
         isBuildingUi = false;
+        revalidate();
+        repaint();
     }
 
     public void showCity(City whichCity) {
@@ -394,7 +400,6 @@ public class PlanetCities extends JPanel {
         if (whichCity != null && cityListModel.contains(whichCity)) {
             cityList.setSelectedValue(whichCity, true);
             selectCity();
-            jobTableModel.newCitySelection();
         }
     }
 

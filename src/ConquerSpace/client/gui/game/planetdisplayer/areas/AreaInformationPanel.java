@@ -101,7 +101,7 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
         } else if (a instanceof ConstructingArea) {
             return new ConstructionAreaInformationPanel((ConstructingArea) a, gameState);
         } else {
-            return null;
+            return new EmptyAreaPanel(a, gameState);
         }
     }
 }

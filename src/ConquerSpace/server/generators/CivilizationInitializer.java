@@ -48,6 +48,7 @@ import ConquerSpace.common.game.population.Culture;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
+import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.science.Field;
@@ -64,10 +65,12 @@ import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.common.util.names.NameGenerator;
+import ConquerSpace.server.GameController;
 import ConquerSpace.server.PeopleProcessor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.annotation.Resource;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -160,7 +163,6 @@ public class CivilizationInitializer {
 
             //Set head of state position
             civilization.government.officials.get(civilization.government.headofState).setPosition(civilization.getCapitalCity());
-
         }
     }
 
@@ -600,16 +602,23 @@ public class CivilizationInitializer {
     private void addInfrastructure(City c) {
         PowerPlantArea powerPlant = new PowerPlantArea(gameState);
         //TODO: choose energy resource
-        /*
-                Resource resource = null;
-                for (Resource res : GameController.resources) {
-                    for (String tag : res.getTags()) {
-                        if (tag.equals("energy")) {
-                            resource = res;
-                            break;
-                        }
-                    }
-                }*/
+
+        Good resource = null;
+        for (Good res : gameState.getGoodArrayList()) {
+            for (String tag : res.tags) {
+                if (tag.equals("energy")) {
+                    resource = res;
+                    break;
+                }
+            }
+        }
+        
+        powerPlant.setMaxVolume(5);
+        powerPlant.setUsedResource(resource.getId());
+        powerPlant.setProduction(5000);
+        powerPlant.setOperatingJobs(5000);
+        powerPlant.setMaxJobs(6000);
+
         powerPlant.setOwner(c.getId());
         c.addArea(powerPlant.getId());
     }

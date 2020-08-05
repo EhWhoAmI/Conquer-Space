@@ -104,7 +104,11 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     @Serialize("tiles")
     private int size;
 
-    private int energy;
+    //Energy needed
+    private int energyProvided;
+    
+    //Energy needed
+    private int energyNeeded;
 
     public City(GameState gameState, Integer location) {
         super(gameState);
@@ -125,7 +129,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         cityType = CityType.Generic;
         size = 0;
 
-        energy = 0;
+        energyProvided = 0;
     }
 
     public void setPopulationUnitPercentage(float populationUnitPercentage) {
@@ -296,16 +300,24 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         return ledgerClearDelta;
     }
 
-    public int getEnergy() {
-        return energy;
+    public int getEnergyProvided() {
+        return energyProvided;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
+    public void setEnergyProvided(int energyProvided) {
+        this.energyProvided = energyProvided;
     }
 
     public void incrementEnergy(int amount) {
-        this.energy += amount;
+        this.energyProvided += amount;
+    }
+
+    public int getEnergyNeeded() {
+        return energyNeeded;
+    }
+
+    public void setEnergyNeeded(int energyNeeded) {
+        this.energyNeeded = energyNeeded;
     }
 
     public double getUnemploymentRate() {

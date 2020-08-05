@@ -51,7 +51,7 @@
         ]
         tags: [
             //For now, this can be used for pure energy
-            "Energy"
+            "energy"
         ]
     }
 ]
