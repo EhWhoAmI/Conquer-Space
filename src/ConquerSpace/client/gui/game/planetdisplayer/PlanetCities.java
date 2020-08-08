@@ -18,11 +18,13 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
@@ -74,6 +76,7 @@ public class PlanetCities extends JPanel {
     private JLabel averagePlanetPopGrowthLabel;
     private JPanel cityListPanel;
     private DefaultListModel<City> cityListModel;
+    JScrollPane cityListScrollPane;
     private JList<City> cityList;
     //private DefaultListModel<AreaWrapper> areaListModel;
     //private JList<AreaWrapper> areaList;
@@ -179,10 +182,7 @@ public class PlanetCities extends JPanel {
                 //Reduce rows
                 int things = heightForList / cityList.getFixedCellHeight();
                 cityList.setVisibleRowCount(things);
-                cityList.validate();
-                cityList.repaint();
-                PlanetCities.this.validate();
-                PlanetCities.this.repaint();
+                cityList.revalidate();
             }
         });
         index.setAnimated(false);
@@ -218,13 +218,13 @@ public class PlanetCities extends JPanel {
             selectCity();
         });
 
-        JScrollPane scrollPane = new JScrollPane(cityList);
+        cityListScrollPane = new JScrollPane(cityList);
         cityList.setVisibleRowCount(50);
 
         JPanel contain = new JPanel();
         contain.setLayout(new VerticalFlowLayout());
         contain.add(taskPaneContainer);
-        contain.add(scrollPane);
+        contain.add(cityListScrollPane);
         cityListPanel.add(contain, BorderLayout.WEST);
 
         cityListPanel.setBorder(
@@ -293,19 +293,19 @@ public class PlanetCities extends JPanel {
         JLabel growthAmount = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.growth", 0));//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
         cityData.add(growthAmount);
-        
+
         double unemploymentRate = selectedCity.getUnemploymentRate();
-        JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate*100) + "%");
-        unemployment.setForeground(new Color((float)unemploymentRate, 0f, 0f));
+        JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate * 100) + "%");
+        unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
         cityData.add(unemployment);
-        
+
         //Max population
         JLabel maxPopulation = new JLabel(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
         cityData.add(maxPopulation);
-        
+
         cityData.add(maxPopulation);
-        
+
         //Check for govenor
         if (cityList.getSelectedValue().getGovernor() != null) {
             JLabel governorLabel = new JLabel(
@@ -313,19 +313,14 @@ public class PlanetCities extends JPanel {
             cityData.add(governorLabel);
         }
 
-        DefaultListModel<String> tagsListModel = new DefaultListModel<>();
-        for (Map.Entry<String, Integer> entry : selectedCity.tags.entrySet()) {
-            String key = entry.getKey();
-            Integer val = entry.getValue();
-            if (val == null) {
-                tagsListModel.addElement(key);
-            } else {
-                tagsListModel.addElement(key + " " + val);
-            }
-        }
-        JList<String> tagsList = new JList<String>(tagsListModel);
+        ObjectListModel<CityModifier> modifierListModel = new ObjectListModel<>();
+        modifierListModel.setElements(selectedCity.cityModifiers);
+        modifierListModel.setHandler(l -> {
+            return (l.toString());
+        });
 
-        cityData.add(new JScrollPane(tagsList));
+        JList<String> modifierList = new JList<>(modifierListModel);
+        cityData.add(new JScrollPane(modifierList));
 
         JButton viewResourceButton = new JButton(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.viewresources"));

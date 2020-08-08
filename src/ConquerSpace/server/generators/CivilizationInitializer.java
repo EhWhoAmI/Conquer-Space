@@ -619,7 +619,6 @@ public class CivilizationInitializer {
         powerPlant.setOperatingJobs(5000);
         powerPlant.setMaxJobs(6000);
 
-        powerPlant.setOwner(c.getId());
         c.addArea(powerPlant.getId());
     }
 

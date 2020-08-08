@@ -233,13 +233,6 @@ public final class GameState implements Serializable {
         return seed;
     }
 
-    public void dumpEverything() {
-        for (Map.Entry<Integer, ConquerSpaceGameObject> entry : gameObjects.entrySet()) {
-            Object key = entry.getKey();
-            Object val = entry.getValue();
-        }
-    }
-
     public Galaxy getUniverse() {
         return universe;
     }

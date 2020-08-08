@@ -23,6 +23,7 @@ import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
@@ -51,6 +52,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
 
     public static final String CITY_DEFAULT = "emp";
 
+    /**
+     * The person who governs the place
+     */
     private Integer governor;
 
     @Serialize("name")
@@ -103,16 +107,21 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     //Size in tiles
     @Serialize("tiles")
     private int size;
+    
+    public ArrayList<CityModifier> cityModifiers;
 
     //Energy needed
     private int energyProvided;
     
     //Energy needed
     private int energyNeeded;
+    
+    private Integer owner;
 
     public City(GameState gameState, Integer location) {
         super(gameState);
         workableFor = new ArrayList<>();
+        owner = -1;
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
         resources = new HashMap<>();
@@ -126,6 +135,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
+        cityModifiers = new ArrayList<>();
         cityType = CityType.Generic;
         size = 0;
 
@@ -329,5 +339,13 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         //return (population)
         long populationSize = gameState.getObject(population, Population.class).getPopulationSize();
         return ((double) (populationSize - currentlyWorking) / (double) populationSize);
+    }
+
+    public Integer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Integer owner) {
+        this.owner = owner;
     }
 }

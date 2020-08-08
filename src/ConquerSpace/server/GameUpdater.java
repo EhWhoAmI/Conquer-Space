@@ -43,6 +43,10 @@ import ConquerSpace.common.game.city.area.PowerPlantArea;
 import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.city.area.TimedManufacturerArea;
+import ConquerSpace.common.game.city.modifier.CityModifier;
+import ConquerSpace.common.game.city.modifier.RiotModifier;
+import ConquerSpace.common.game.city.modifier.StarvationModifier;
+import ConquerSpace.common.game.city.modifier.UnemployedModifier;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.behavior.Behavior;
@@ -298,6 +302,11 @@ public class GameUpdater extends GameTicker {
 
             city.setEnergyProvided(0);
 
+            //Update the tags
+            for (CityModifier modifier : city.cityModifiers) {
+                modifier.incrementTicks(GameRefreshRate);
+            }
+
             processPopulation(city);
 
             //Population growth
@@ -305,6 +314,10 @@ public class GameUpdater extends GameTicker {
 
             for (Integer areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
+                //if not owned, becomes owned by the city
+                if (area.getOwner() == -1) {
+                    area.setOwner(planet.getOwnerID());
+                }
                 processArea(planet, city, area);
             }
 
@@ -325,9 +338,22 @@ public class GameUpdater extends GameTicker {
             //Calculate unemployment rate
             double unemploymentRate = city.getUnemploymentRate();
             if (unemploymentRate > 0.1d) {
-                city.tags.put("High Unemployment", (int) Math.round(unemploymentRate * 100));
+                if (!city.cityModifiers.contains(new UnemployedModifier())) {
+                    city.cityModifiers.add(new UnemployedModifier());
+                }
             } else {
-                city.tags.remove("High Unemployment");
+                city.cityModifiers.remove(new UnemployedModifier());
+            }
+            
+            //if unemployed for a long time, complain
+            if(city.cityModifiers.contains(new UnemployedModifier())) {
+                UnemployedModifier modifier = (UnemployedModifier) city.cityModifiers.get(city.cityModifiers.indexOf(new UnemployedModifier()));
+                if(modifier.getTicks() > 1000) {
+                    RiotModifier riotModifier = new RiotModifier();
+                    if(!city.cityModifiers.contains(riotModifier)) {
+                        city.cityModifiers.add(riotModifier);
+                    }
+                }
             }
 
             CityType type = classifyCity(city);
@@ -425,10 +451,12 @@ public class GameUpdater extends GameTicker {
                 double populationConsumption = foodAmount * 2;
                 double percentage = (populationConsumption / consume);
                 percentage = 1d - percentage;
-                city.tags.put("Starvation", (int) (percentage * 100d));
+                if (!city.cityModifiers.contains(new StarvationModifier())) {
+                    city.cityModifiers.add(new StarvationModifier());
+                }
                 starving = true;
             } else {
-                city.tags.remove("Starvation");
+                city.cityModifiers.remove(new StarvationModifier());
             }
 
             //Increment population
