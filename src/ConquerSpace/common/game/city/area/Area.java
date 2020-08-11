@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.save.Serialize;
@@ -44,7 +45,7 @@ public class Area extends ConquerSpaceGameObject implements Workable, Comparable
     
     //The org owning the thing
     @Serialize("owner")
-    private int owner = -1;
+    private ObjectReference owner = ObjectReference.INVALID_REFERENCE;
     
     //Resource request
     @Serialize("resource-priority")
@@ -116,11 +117,11 @@ public class Area extends ConquerSpaceGameObject implements Workable, Comparable
         return Integer.compare(priority, o.priority);
     }
 
-    public void setOwner(int owner) {
+    public void setOwner(ObjectReference owner) {
         this.owner = owner;
     }
 
-    public int getOwner() {
+    public ObjectReference getOwner() {
         return owner;
     }
 }

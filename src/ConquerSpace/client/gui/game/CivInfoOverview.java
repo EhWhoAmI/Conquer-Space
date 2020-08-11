@@ -17,9 +17,13 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
@@ -43,7 +47,7 @@ public class CivInfoOverview extends JPanel {
     private JPanel governmentPanel;
     private JTabbedPane mainTabs;
 
-    public CivInfoOverview(Civilization c, Galaxy u) {
+    public CivInfoOverview(GameState gameState, Civilization c, Galaxy u) {
         setLayout(new BorderLayout());
         //Civ name
         mainTabs = new JTabbedPane(JTabbedPane.BOTTOM);
@@ -55,7 +59,7 @@ public class CivInfoOverview extends JPanel {
         JLabel civHomePlanet = new JLabel("From " + c.getHomePlanetName());
         JLabel civTechLevel = new JLabel("Tech level: " + c.getTechLevel());
         JLabel civFoundingSpecies = new JLabel("Founding Species: " + c.getFoundingSpecies().getName());
-        JLabel capital = new JLabel("Capital: " + c.getCapitalCity().getName() + " on " + c.getCapitalPlanet().getName());
+        JLabel capital = new JLabel("Capital: " + gameState.getObject(c.getCapitalCity(), City.class).getName() + " on " + c.getCapitalPlanet().getName());
         JLabel currency = new JLabel("National currency: " + c.getNationalCurrency().getName());
 
         mainPanel.add(civName);

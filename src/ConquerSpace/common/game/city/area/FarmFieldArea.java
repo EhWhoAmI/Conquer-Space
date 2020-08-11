@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
@@ -31,13 +32,13 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("farm-field")
 public class FarmFieldArea extends TimedManufacturerArea {
 
-    private Integer grown;
+    private ObjectReference grown;
     private int time;
     private int fieldSize;
 
     public FarmFieldArea(GameState gameState, Species grownSpecies) {
-        super(gameState, new ProductionProcess(gameState, grownSpecies.getId()));
-        grown = grownSpecies.getId();
+        super(gameState, new ProductionProcess(gameState, grownSpecies.getFoodGood()));
+        grown = grownSpecies.getReference();
         //Because you can only grow one.
         setLimit(1);
     }
@@ -55,7 +56,7 @@ public class FarmFieldArea extends TimedManufacturerArea {
     }
 
     public void setGrown(Species grown) {
-        this.grown = grown.getId();
+        this.grown = grown.getReference();
     }
 
     public void setTime(int time) {

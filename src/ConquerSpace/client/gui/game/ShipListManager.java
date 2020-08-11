@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import java.awt.BorderLayout;
@@ -87,7 +88,7 @@ public class ShipListManager extends JPanel {
         //Populate table
         int selected = table.getSelectedRow();
         //model.empty();
-        for (Integer shipId : c.spaceships) {
+        for (ObjectReference shipId : c.spaceships) {
             Ship s = gameState.getObject(shipId, Ship.class);
             //process
             if(!model.objects.contains(s)) {

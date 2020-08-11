@@ -18,6 +18,7 @@
 package ConquerSpace.server;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Administrator;
 import ConquerSpace.common.game.characters.Person;
@@ -120,8 +121,8 @@ public class PeopleProcessor {
                 HeritableGovernmentPosition pos = (HeritableGovernmentPosition) admin.governmentPosition;
                 GovernmentPosition nextPosition = pos.nextInLine;
                 //Get person
-                Person next = ((Civilization)admin.employer).government.officials.get(nextPosition);
-                ((Civilization)admin.employer).government.officials.put(pos, next);
+                Person next = gameState.getObject(admin.employer, Civilization.class).government.officials.get(nextPosition);
+                gameState.getObject(admin.employer, Civilization.class).government.officials.put(pos, next);
                 next.setRole("GOT EM");
             }
         }

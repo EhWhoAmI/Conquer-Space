@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -37,10 +38,10 @@ public class StarSystem extends Body {
     public int planetCount = 0;
     
     @Serialize("bodies")
-    private ArrayList<Integer> bodies;
+    private ArrayList<ObjectReference> bodies;
 
     @Serialize("ships")
-    public ArrayList<Integer> spaceShips;
+    public ArrayList<ObjectReference> spaceShips;
     
     @Serialize("name")
     private String name = "";
@@ -63,11 +64,11 @@ public class StarSystem extends Body {
         return planetCount;
     }
     
-    public void addSpaceShip(Integer ship) {
+    public void addSpaceShip(ObjectReference ship) {
         spaceShips.add(ship);
     }
 
-    public ArrayList<Integer> getSpaceShips() {
+    public ArrayList<ObjectReference> getSpaceShips() {
         return spaceShips;
     }
 
@@ -91,20 +92,20 @@ public class StarSystem extends Body {
     public void addBody(StarSystemBody b){ 
         b.setIndex(bodies.size());
         b.setParent(this.index);
-        b.setParentId(this.getId());
+        b.setParentId(this.getReference());
         
         if(b instanceof Planet) {
             planetCount++;
         }
-        bodies.add(b.getId());
+        bodies.add(b.getReference());
     }
     
-    public Integer getBody(int id) {
+    public ObjectReference getBody(int id) {
         return bodies.get(id);
     }
     
-    public Body getBodyObject(int id) {
-        return gameState.getObject(getBody(id), Body.class);
+    public StarSystemBody getBodyObject(int id) {
+        return gameState.getObject(getBody(id), StarSystemBody.class);
     }
     
     public int getBodyCount() {

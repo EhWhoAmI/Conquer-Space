@@ -18,6 +18,8 @@
 package ConquerSpace.common.actions;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.SpaceShip;
 import ConquerSpace.common.game.universe.bodies.Planet;
 
@@ -32,9 +34,9 @@ public class ShipSurveyAction extends ShipAction {
     private int finishedProgress;
     private int perTick;
 
-    private int civID = -1;
+    private ObjectReference civReference = ObjectReference.INVALID_REFERENCE;
 
-    private Planet toSurvey;
+    private ObjectReference toSurvey = ObjectReference.INVALID_REFERENCE;
 
     public ShipSurveyAction(SpaceShip ship) {
         super(ship);
@@ -44,12 +46,12 @@ public class ShipSurveyAction extends ShipAction {
         this.progress = progress;
     }
 
-    public int getCivID() {
-        return civID;
+    public ObjectReference getCivReference() {
+        return civReference;
     }
 
-    public void setCivID(int civID) {
-        this.civID = civID;
+    public void setCivReference(ObjectReference civReference) {
+        this.civReference = civReference;
     }
 
     public void setFinishedProgress(int finishedProgress) {
@@ -73,22 +75,24 @@ public class ShipSurveyAction extends ShipAction {
     }
 
     public void setToSurvey(Planet toSurvey) {
-        this.toSurvey = toSurvey;
+        this.toSurvey = toSurvey.getReference();
     }
 
-    public Planet getToSurvey() {
+    public ObjectReference getToSurvey() {
         return toSurvey;
     }
 
     @Override
     public void doAction(GameState gameState) {
+        Ship shipObject = gameState.getObject(ship, Ship.class);
+        Planet toScan = gameState.getObject(toSurvey, Planet.class);
         //Check if orbiting planet...
-        if (ship.isOrbiting() && ship.getOrbiting().equals(toSurvey.getUniversePath())) {
+        if (shipObject.isOrbiting() && shipObject.getOrbiting().equals(toScan.getUniversePath())) {
             //Subtract
             progress += perTick;
             if (checkIfDone(gameState)) {
                 //Add to the planet
-                toSurvey.scan(civID);
+                toScan.scan(civReference);
             }
         }
     }

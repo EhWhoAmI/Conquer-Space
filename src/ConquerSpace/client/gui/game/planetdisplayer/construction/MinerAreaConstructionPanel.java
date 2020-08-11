@@ -165,7 +165,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     @Override
     public Area getAreaToConstruct() {
         if (miningStratum != null && miningGood != null) {
-            return new MineArea(gameState, miningStratum.getId(), miningGood.getId(), amountMining);
+            return new MineArea(gameState, miningStratum.getReference(), miningGood.getId(), amountMining);
         }
         return null;
     }

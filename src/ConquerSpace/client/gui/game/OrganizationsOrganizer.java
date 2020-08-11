@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game;
 
 import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -42,14 +43,14 @@ public class OrganizationsOrganizer extends JPanel {
     private JPanel orgInfoPanel;
     
     private JList<String> controlList;
-    private ObjectListModel<Integer> adminstratableListModel;
+    private ObjectListModel<ObjectReference> adminstratableListModel;
     
     public OrganizationsOrganizer(GameState state, Civilization c) {
         //Lazy for now...
         setLayout(new HorizontalFlowLayout());
         
         orgListModel = new ObjectListModel<>();
-        for (Integer o : c.getChildren()) {
+        for (ObjectReference o : c.getChildren()) {
             orgListModel.addElement(state.getObject(o, Organization.class));
         }
         
@@ -60,7 +61,7 @@ public class OrganizationsOrganizer extends JPanel {
         orgList = new JList<>(orgListModel);
         
         orgList.addListSelectionListener(l -> {
-            ArrayList<Integer> data = orgListModel.getObject(orgList.getSelectedIndex()).region.bodies;
+            ArrayList<ObjectReference> data = orgListModel.getObject(orgList.getSelectedIndex()).region.bodies;
             for (int i = 0; i < data.size(); i++) {
                 adminstratableListModel.addElement(data.get(i));
             }

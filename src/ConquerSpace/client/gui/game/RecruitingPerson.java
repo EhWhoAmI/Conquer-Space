@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.characters.Scientist;
@@ -116,8 +117,8 @@ public class RecruitingPerson extends JPanel {
                 int previousSelection = probablePersonList.getSelectedIndex();
                 
                 Person p = probablePersonList.getSelectedValue();
-                c.unrecruitedPeople.remove(p.getId());
-                c.people.add(p.getId());
+                c.unrecruitedPeople.remove(p.getReference());
+                c.people.add(p.getReference());
                 //Set selected value
                 probablePersonList.setSelectedIndex(previousSelection);
             }
@@ -146,10 +147,10 @@ public class RecruitingPerson extends JPanel {
 
     private class PersonListModel extends AbstractListModel<Person> {
 
-        ArrayList<Integer> person;
+        ArrayList<ObjectReference> person;
         long before = 0, after = System.currentTimeMillis();
 
-        public PersonListModel(ArrayList<Integer> person) {
+        public PersonListModel(ArrayList<ObjectReference> person) {
             this.person = person;
         }
 

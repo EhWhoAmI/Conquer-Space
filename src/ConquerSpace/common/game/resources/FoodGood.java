@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.resources;
 
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.save.Serialize;
 
@@ -28,13 +29,13 @@ import ConquerSpace.common.save.Serialize;
 public class FoodGood extends Good {
 
     @Serialize("species")
-    Integer species;
+    ObjectReference species;
 
     //Calories it provides per unit...
     private int calories;
 
     public FoodGood(Species s, double volume, double mass) {
-        super(s.getName(), "f_" + s.getName() + "_" + s.getId(), volume, mass);
-        this.species = s.getId();
+        super(s.getName(), "f_" + s.getName() + "_" + s.getReference().getId(), volume, mass);
+        this.species = s.getReference();
     }
 }

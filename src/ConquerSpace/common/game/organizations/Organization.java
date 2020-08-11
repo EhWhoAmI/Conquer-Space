@@ -19,6 +19,7 @@ package ConquerSpace.common.game.organizations;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Action;
 import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.behavior.EmptyBehavior;
@@ -35,13 +36,13 @@ import java.util.Arrays;
 public class Organization extends ConquerSpaceGameObject {
 
     @Serialize("children")
-    private ArrayList<Integer> children;
+    private ArrayList<ObjectReference> children;
     public ArrayList<Action> actionList;
     public AdministrativeRegion region;
 
     @Serialize("name")
     protected String name;
-    protected Integer behavior;
+    protected ObjectReference behavior;
 
     public Organization(GameState gameState, String name) {
         super(gameState);
@@ -50,34 +51,34 @@ public class Organization extends ConquerSpaceGameObject {
         children = new ArrayList<>();
         actionList = new ArrayList<>();
         region = new AdministrativeRegion();
-        behavior = new EmptyBehavior(gameState, this).getId();
+        behavior = new EmptyBehavior(gameState, this).getReference();
     }
 
     public String getName() {
         return name;
     }
 
-    public Integer[] getChildren() {
-        return Arrays.copyOf(children.toArray(), children.size(), Integer[].class);
+    public ObjectReference[] getChildren() {
+        return Arrays.copyOf(children.toArray(), children.size(), ObjectReference[].class);
     }
 
     public int getChildrenCount() {
         return children.size();
     }
 
-    public void addChild(Integer org) {
+    public void addChild(ObjectReference org) {
         children.add(org);
     }
 
     public void setBehavior(Behavior behavior) {
-        this.behavior = behavior.getId();
+        this.behavior = behavior.getReference();
     }
 
     public Behavior getBehavior() {
         return gameState.getObject(behavior, Behavior.class);
     }
     
-    public Integer getBehaviorId(){
-        return 0;
+    public ObjectReference getBehaviorId(){
+        return behavior;
     }
 }

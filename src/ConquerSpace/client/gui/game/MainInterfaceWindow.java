@@ -26,6 +26,7 @@ import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.UnownedPlanetInfoMenu;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
@@ -143,7 +144,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
                     //Do stuff
                     Planet p = (Planet) selectedNode.getUserObject();
                     //Selected planet
-                    setSelectedPlanet(p, p.hasScanned(civilization.getId()));
+                    setSelectedPlanet(p, p.hasScanned(civilization.getReference()));
                 }
                 //process
             }
@@ -211,7 +212,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         recruitingPerson = new RecruitingPerson(gameState, civilization);
         peopleTabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.people.recruitment"), recruitingPerson);
 
-        civInfoOverview = new CivInfoOverview(civilization, universe);
+        civInfoOverview = new CivInfoOverview(gameState, civilization, universe);
 
         resourceManager = new ResourceManager(civilization);
 
@@ -270,9 +271,9 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         universeBreakdownTreeModel.removeAllChildren();
         //get owned star systems
 
-        for (Integer p : civilization.habitatedPlanets) {
+        for (ObjectReference p : civilization.habitatedPlanets) {
             Planet planet = gameState.getObject(p, Planet.class);
-            DefaultMutableTreeNode system = new DefaultMutableTreeNode(Integer.toString(planet.getParent()));
+            DefaultMutableTreeNode system = new DefaultMutableTreeNode(Integer.toString(planet.getParentIndex()));
             DefaultMutableTreeNode dm = new DefaultMutableTreeNode(planet);
             system.add(dm);
             universeBreakdownTreeModel.add(system);
@@ -321,7 +322,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         planetInfoSheetContainer.removeAll();
         if (toShowResources) {
             //Check if owned or not
-            if (p.getOwnerID() == (civilization.getId())) {
+            if (p.getOwnerReference().equals(civilization.getReference())) {
                 planetInfoSheet = new PlanetInfoSheet(gameState, selectedPlanet, civilization, register);
                 planetInfoSheetContainer.add(planetInfoSheet, BorderLayout.CENTER);
             } else {

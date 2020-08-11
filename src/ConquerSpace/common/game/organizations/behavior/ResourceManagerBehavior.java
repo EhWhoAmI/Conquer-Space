@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.organizations.behavior;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.ResourceTransportAction;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.Administrable;
@@ -39,7 +40,7 @@ public class ResourceManagerBehavior extends Behavior {
     @Override
     public void doBehavior() {
         //Find stuff
-        for (Integer ad : org.region.bodies) {
+        for (ObjectReference ad : org.region.bodies) {
             Administrable admin = gameState.getObject(ad, Administrable.class);
             if (admin instanceof City) {
                 City fromCity = (City) admin;
@@ -57,7 +58,7 @@ public class ResourceManagerBehavior extends Behavior {
                 }
 
                 //Then, distribute resources
-                for (Integer ad2 : org.region.bodies) {
+                for (ObjectReference ad2 : org.region.bodies) {
                     Administrable admin2 = gameState.getObject(ad2, Administrable.class);
                     if (!Objects.equals(ad2, ad) && admin2 instanceof City) {
                         City candidateResourceCity = (City) admin2;

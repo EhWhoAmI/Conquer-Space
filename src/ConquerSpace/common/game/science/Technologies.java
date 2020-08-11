@@ -197,9 +197,9 @@ public class Technologies implements Serializable{
             //Remove trailing white space.
             String launchName = (text[1].trim());
 
-            LaunchSystem sys = gameState.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
-            if (sys != null) {
-                c.launchSystems.add(sys.getId());
+            LaunchSystem launchSystem = gameState.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
+            if (launchSystem != null) {
+                c.launchSystems.add(launchSystem.getReference());
             }
         } else if (action.startsWith("orbit")) {
             //Something you put into orbit
@@ -241,9 +241,10 @@ public class Technologies implements Serializable{
             String compName = (content[1].trim());
             int id = Integer.parseInt(compName);
 
-            EngineTechnology t = gameState.engineTechnologys.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
+            //Compare
+            EngineTechnology t = gameState.engineTechnologys.stream().filter(a -> a.getReference().equals(id)).findFirst().orElse(null);
             if (t != null) {
-                c.engineTechs.add(t.getId());
+                c.engineTechs.add(t.getReference());
             }
         } else if (action.startsWith("process")) {
             String[] text = action.split(":");

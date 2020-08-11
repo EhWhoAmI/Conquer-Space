@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.organizations.civilization.vision;
 
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.universe.UniversePath;
 
 /**
@@ -32,7 +33,7 @@ public interface VisionPoint {
      * @return range.
      */
     public int getRange();
-    public int getCivilization();
+    public ObjectReference getCivilization();
     public UniversePath getPosition();
     
     public static final int GAMMA = 0;

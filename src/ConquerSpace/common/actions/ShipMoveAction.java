@@ -45,9 +45,9 @@ public class ShipMoveAction extends ShipAction {
 
     @Override
     public void doAction(GameState state) {
-
-        double x = ship.getGoingToX() - ship.getX();
-        double y = ship.getGoingToY() - ship.getY();
+        Ship shipObject = state.getObject(ship, Ship.class);
+        double x = shipObject.getGoingToX() - shipObject.getX();
+        double y = shipObject.getGoingToY() - shipObject.getY();
 
         //Normalize
         double len = Math.sqrt(x * x + y * y);
@@ -55,30 +55,32 @@ public class ShipMoveAction extends ShipAction {
             x /= len;
             y /= len;
         }
-        double distance = Math.sqrt(Math.pow(ship.getGoingToX() - ship.getX(), 2) + Math.pow(ship.getGoingToY() - ship.getY(), 2));
-        double speed = ship.getSpeed();
+        double distance = Math.sqrt(Math.pow(shipObject.getGoingToX() - shipObject.getX(), 2) + Math.pow(shipObject.getGoingToY() - shipObject.getY(), 2));
+        double speed = shipObject.getSpeed();
 
         double objX = (x * speed);
         double objY = (y * speed);
 
         if (Math.sqrt(Math.pow(objX, 2) + Math.pow(objY, 2)) >= distance) {
-            objX = ship.getGoingToX();
-            objY = ship.getGoingToY();
-            ship.setX((long) objX);
-            ship.setY((long) objY);
+            objX = shipObject.getGoingToX();
+            objY = shipObject.getGoingToY();
+            shipObject.setX((long) objX);
+            shipObject.setY((long) objY);
         } else {
-            ship.translate((long) (objX), (long) (objY));
+            shipObject.translate((long) (objX), (long) (objY));
         }
     }
 
     @Override
     public boolean checkIfDone(GameState gameState) {
+        Ship shipObject = gameState.getObject(ship, Ship.class);
+
         //if out of star system
-        StarSystem sys = gameState.getObject(gameState.getUniverse().getStarSystem(ship.getLocation().getSystemID()), StarSystem.class);
-        if (Math.sqrt(Math.pow(ship.getX(), 2) + Math.pow(ship.getY(), 2)) >= (sys.getBodyObject(sys.getBodyCount()- 1).orbit.toPolarCoordinate().getDistance() + 10)) {
+        StarSystem sys = gameState.getObject(gameState.getUniverse().getStarSystem(shipObject.getLocation().getSystemIndex()), StarSystem.class);
+        if (Math.sqrt(Math.pow(shipObject.getX(), 2) + Math.pow(shipObject.getY(), 2)) >= (sys.getBodyObject(sys.getBodyCount() - 1).orbit.toPolarCoordinate().getDistance() + 10)) {
             return true;
         }
-        return (ship.getX() == position.getX() && ship.getY() == position.getY());
+        return (shipObject.getX() == position.getX() && shipObject.getY() == position.getY());
     }
 
     public SpacePoint getPosition() {
@@ -87,24 +89,25 @@ public class ShipMoveAction extends ShipAction {
 
     @Override
     public void initAction(GameState gameState) {
-        if (ship.isOrbiting()) {
+        Ship shipObject = gameState.getObject(ship, Ship.class);
+        if (shipObject.isOrbiting()) {
             //Exit orbit
-            Body body = gameState.getObject(gameState.getUniverse().getSpaceObject(ship.getOrbiting()), Body.class);
+            Body body = gameState.getObject(gameState.getUniverse().getSpaceObject(shipObject.getOrbiting()), Body.class);
             if (body instanceof Planet) {
                 Planet p = (Planet) body;
                 //Remove from orbit
-                p.getSatellites().remove(ship);
+                p.getSatellites().remove(shipObject.getReference());
 
-                ship.setX(p.getX());
-                ship.setY(p.getY());
-                ship.setIsOrbiting(false);
+                shipObject.setX(p.getX());
+                shipObject.setY(p.getY());
+                shipObject.setIsOrbiting(false);
 
                 //Add
-                gameState.getUniverse().getStarSystemObject(p.getParent()).addSpaceShip(ship.getId());
+                gameState.getUniverse().getStarSystemObject(p.getParentIndex()).addSpaceShip(shipObject.getReference());
             }
         }
-        ship.setGoingToX(position.getX());
-        ship.setGoingToY(position.getY());
+        shipObject.setGoingToX(position.getX());
+        shipObject.setGoingToY(position.getY());
     }
 
     public void setStarSystem(int starSystem) {

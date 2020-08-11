@@ -18,6 +18,7 @@
 package ConquerSpace.common.actions;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
@@ -37,19 +38,21 @@ public class ExitStarSystemAction extends ShipAction {
 
     @Override
     public void doAction(GameState gameState) {
+        Ship shipObject = gameState.getObject(ship, Ship.class);
+
         //Get out of star system
-        int id = ship.getLocation().getSystemID();
+        int id = shipObject.getLocation().getSystemIndex();
         if (id > -1) {
-            Integer systemId = gameState.getUniverse().getStarSystem(id);
+            ObjectReference systemId = gameState.getUniverse().getStarSystem(id);
             StarSystem sys = gameState.getObject(systemId, StarSystem.class);
             //Set location
-            ship.setLocation(new UniversePath());
+            shipObject.setLocation(new UniversePath());
 
-            sys.spaceShips.remove(ship.getId());
-            ship.setX(sys.getX());
-            ship.setY(sys.getY());
-            if (!gameState.getUniverse().spaceShips.contains(ship.getId())) {
-                gameState.getUniverse().spaceShips.add(ship.getId());
+            sys.spaceShips.remove(shipObject.getReference());
+            shipObject.setX(sys.getX());
+            shipObject.setY(sys.getY());
+            if (!gameState.getUniverse().spaceShips.contains(shipObject.getReference())) {
+                gameState.getUniverse().spaceShips.add(shipObject.getReference());
             }
         }
         done = true;

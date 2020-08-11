@@ -21,6 +21,7 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
@@ -152,7 +153,7 @@ public class PlanetCities extends JPanel {
         cityListPanel.setLayout(new BorderLayout(5, 5));
 
         cityListModel = new DefaultListModel<>();
-        for (Integer cityId : p.cities) {
+        for (ObjectReference cityId : p.cities) {
             City city = gameState.getObject(cityId, City.class);
 
             cityListModel.addElement(city);
@@ -200,7 +201,7 @@ public class PlanetCities extends JPanel {
                 citySelectedTab = cityInfoTabs.getSelectedIndex();
             }
             if (areaListModel != null && cityList.getSelectedValue() != null) {
-                for (Integer areaId : cityList.getSelectedValue().areas) {
+                for (ObjectReference areaId : cityList.getSelectedValue().areas) {
                     Area area = gameState.getObject(areaId, Area.class);
                     if (!areaListModel.contains(area)) {
                         areaListModel.addElement(area);
@@ -335,7 +336,7 @@ public class PlanetCities extends JPanel {
 
         //Areas
         areaListModel = new DefaultListModel<>();
-        for (Integer areaId : selectedCity.areas) {
+        for (ObjectReference areaId : selectedCity.areas) {
             Area area = gameState.getObject(areaId, Area.class);
             areaListModel.addElement(area);
         }
@@ -419,7 +420,7 @@ public class PlanetCities extends JPanel {
             populationCount.clear();
             population = gameState.getObject(currentlySelectedCity.population, Population.class).getPopulationSize();
             //Get population job
-            for (Integer areaId : currentlySelectedCity.areas) {
+            for (ObjectReference areaId : currentlySelectedCity.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 if (!populationCount.containsKey(area.getJobClassification())) {
                     populationCount.put(area.getJobClassification(), area.getCurrentlyManningJobs());

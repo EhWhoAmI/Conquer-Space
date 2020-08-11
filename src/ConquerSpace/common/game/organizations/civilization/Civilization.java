@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.organizations.civilization;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.Scientist;
 import ConquerSpace.common.game.city.City;
@@ -81,31 +82,31 @@ public class Civilization extends Organization implements Employer {
 
     private int techLevel = 0;
 
-    public ArrayList<Integer> people;
-    public ArrayList<Integer> unrecruitedPeople;
+    public ArrayList<ObjectReference> people;
+    public ArrayList<ObjectReference> unrecruitedPeople;
 
-    public ArrayList<Integer> launchSystems;
+    public ArrayList<ObjectReference> launchSystems;
 
     public ArrayList<SatelliteTemplate> satelliteTemplates;
 
-    public ArrayList<Integer> visionPoints;
-    public ArrayList<Integer> resourceStorages;
+    public ArrayList<ObjectReference> visionPoints;
+    public ArrayList<ObjectReference> resourceStorages;
 
-    public ArrayList<Integer> spaceships;
-    public ArrayList<Integer> shipClasses;
-    public ArrayList<Integer> hullMaterials;
-    public ArrayList<Integer> hulls;
+    public ArrayList<ObjectReference> spaceships;
+    public ArrayList<ObjectReference> shipClasses;
+    public ArrayList<ObjectReference> hullMaterials;
+    public ArrayList<ObjectReference> hulls;
     public Field fields;
-    public ArrayList<Integer> shipComponentList;
-    public ArrayList<Integer> engineTechs;
-    public ArrayList<Integer> launchVehicles;
+    public ArrayList<ObjectReference> shipComponentList;
+    public ArrayList<ObjectReference> engineTechs;
+    public ArrayList<ObjectReference> launchVehicles;
 
     /**
      * Resources that they possess.
      */
     public HashMap<Integer, Double> resourceList;
 
-    public ArrayList<Integer> habitatedPlanets;
+    public ArrayList<ObjectReference> habitatedPlanets;
 
     public ArrayList<Event> events;
 
@@ -113,19 +114,19 @@ public class Civilization extends Organization implements Employer {
 
     public ArrayList<Integer> mineableGoods;
 
-    public ArrayList<Integer> scienceLabs;
+    public ArrayList<ObjectReference> scienceLabs;
 
-    private ArrayList<Integer> cities;
+    private ArrayList<ObjectReference> cities;
 
-    private Integer foundingSpecies;
+    private ObjectReference foundingSpecies;
 
-    private City capitalCity;
+    private ObjectReference capitalCity;
 
-    private Planet capitalPlanet;
+    private ObjectReference capitalPlanet;
 
     private int techPoints = 0; //Research months or whatever
 
-    private Currency nationalCurrency;
+    private ObjectReference nationalCurrency;
 
     //Amount of money in millions of isk of their national currency ^
     private long moneyReserves = 0;
@@ -267,7 +268,7 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void assignResearch(Technology t, Person p) {
-        if (people.contains(p) && p instanceof Scientist) {
+        if (people.contains(p.getReference()) && p instanceof Scientist) {
             //Then do it...
             currentlyResearchingTechonologys.put(t, (Scientist) p);
             civResearch.put(t, 0);
@@ -291,7 +292,7 @@ public class Civilization extends Organization implements Employer {
         satelliteTemplates.add(s);
     }
 
-    public void addShipComponent(Integer s) {
+    public void addShipComponent(ObjectReference s) {
         shipComponentList.add(s);
     }
 
@@ -312,27 +313,27 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void setFoundingSpecies(Race foundingSpecies) {
-        this.foundingSpecies = foundingSpecies.getId();
+        this.foundingSpecies = foundingSpecies.getReference();
     }
 
     public Race getFoundingSpecies() {
         return gameState.getObject(foundingSpecies, Race.class);
     }
 
-    public City getCapitalCity() {
+    public ObjectReference getCapitalCity() {
         return capitalCity;
     }
 
     public void setCapitalCity(City capitalCity) {
-        this.capitalCity = capitalCity;
+        this.capitalCity = capitalCity.getReference();
     }
 
     public Planet getCapitalPlanet() {
-        return capitalPlanet;
+        return gameState.getObject(capitalPlanet, Planet.class);
     }
 
     public void setCapitalPlanet(Planet capitalPlanet) {
-        this.capitalPlanet = capitalPlanet;
+        this.capitalPlanet = capitalPlanet.getReference();
     }
 
     public int getTechPoints() {
@@ -362,11 +363,11 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void setNationalCurrency(Currency nationalCurrency) {
-        this.nationalCurrency = nationalCurrency;
+        this.nationalCurrency = nationalCurrency.getReference();
     }
 
     public Currency getNationalCurrency() {
-        return nationalCurrency;
+        return gameState.getObject(nationalCurrency, Currency.class);
     }
 
     public void setMoneyReserves(long moneyReserves) {
@@ -379,7 +380,7 @@ public class Civilization extends Organization implements Employer {
 
     @Override
     public Currency getCurrency() {
-        return nationalCurrency;
+        return gameState.getObject(nationalCurrency, Currency.class);
     }
 
     @Override
@@ -396,10 +397,10 @@ public class Civilization extends Organization implements Employer {
         
     }
 
-    public void employ(Integer p) {
+    public void employ(ObjectReference p) {
         people.add(p);
-        gameState.getObject(p, Person.class).employer = this;
-    }
+        gameState.getObject(p, Person.class).employer = getReference();
+;    }
 
     public ArrayList<ResourceStockpile> getResourceStorages() {
         ArrayList<ResourceStockpile> resourceStockpiles = new ArrayList<>();

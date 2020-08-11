@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -28,7 +29,7 @@ import ConquerSpace.common.save.SerializeClassName;
 public class EngineTemplate extends ShipComponentTemplate{
     
     private int thrust;
-    private Integer engineTechnology;
+    private ObjectReference engineTechnology;
     //Fuel
 
     public EngineTemplate(GameState gameState) {
@@ -52,7 +53,7 @@ public class EngineTemplate extends ShipComponentTemplate{
     }
 
     public void setEngineTechnology(EngineTechnology engineTechnology) {
-        this.engineTechnology = engineTechnology.getId();
+        this.engineTechnology = engineTechnology.getReference();
     }
 
     @Override

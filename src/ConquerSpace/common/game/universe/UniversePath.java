@@ -31,12 +31,12 @@ public class UniversePath implements Serializable{
     /**
      * ID of system
      */
-    private int systemID = -1;
+    private int systemIndex = -1;
 
     /**
      * The ID of the body.
      */
-    private int bodyID = -1;
+    private int bodyIndex = -1;
     
     /**
      * Empty constructor.
@@ -51,8 +51,8 @@ public class UniversePath implements Serializable{
      * @param bodyId id of the body
      */
     public UniversePath(int systemID, int bodyId) {
-        this.systemID = systemID;
-        this.bodyID = bodyId;
+        this.systemIndex = systemID;
+        this.bodyIndex = bodyId;
     }
 
     /**
@@ -61,7 +61,7 @@ public class UniversePath implements Serializable{
      * @param systemID ID of system
      */
     public UniversePath(int systemID) {
-        this.systemID = systemID;
+        this.systemIndex = systemID;
     }
 
 
@@ -70,12 +70,12 @@ public class UniversePath implements Serializable{
      *
      * @return Star system ID
      */
-    public int getSystemID() {
-        return systemID;
+    public int getSystemIndex() {
+        return systemIndex;
     }
 
-    public int getBodyID() {
-        return bodyID;
+    public int getBodyIndex() {
+        return bodyIndex;
     }
 
     /**
@@ -86,10 +86,10 @@ public class UniversePath implements Serializable{
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-            b.append(systemID);
-        if (bodyID >= 0) {
+            b.append(systemIndex);
+        if (bodyIndex >= 0) {
             b.append(":");
-            b.append(bodyID);
+            b.append(bodyIndex);
         }
         return b.toString();
     }
@@ -98,13 +98,13 @@ public class UniversePath implements Serializable{
     public boolean equals(Object obj) {
         if (obj instanceof UniversePath) {
             UniversePath other = (UniversePath) obj;
-            return ((this.bodyID == other.bodyID) && (this.systemID == other.systemID));
+            return ((this.bodyIndex == other.bodyIndex) && (this.systemIndex == other.systemIndex));
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return(("" + systemID + bodyID).hashCode());
+        return(("" + systemIndex + bodyIndex).hashCode());
     }
 }

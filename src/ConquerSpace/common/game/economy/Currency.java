@@ -17,6 +17,9 @@
  */
 package ConquerSpace.common.game.economy;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import java.io.Serializable;
 
@@ -25,7 +28,7 @@ import java.io.Serializable;
  *
  * @author EhWhoAmI
  */
-public class Currency implements Serializable {
+public class Currency extends ConquerSpaceGameObject implements Serializable {
 
     //Amount of isk you print
     private float inflation;
@@ -40,7 +43,11 @@ public class Currency implements Serializable {
     /**
      * The people who print the money...
      */
-    private Civilization controller;
+    private ObjectReference controller;
+
+    public Currency(GameState gameState) {
+        super(gameState);
+    }
 
     public long getInCirculation() {
         return inCirculation;
@@ -74,11 +81,11 @@ public class Currency implements Serializable {
         this.symbol = symbol;
     }
 
-    public void setController(Civilization controller) {
+    public void setController(ObjectReference controller) {
         this.controller = controller;
-    }
+    }   
 
-    public Civilization getController() {
+    public ObjectReference getController() {
         return controller;
     }
 }

@@ -19,6 +19,7 @@ package ConquerSpace.common.save;
 
 import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.util.Version;
 import java.io.File;
@@ -112,9 +113,9 @@ public class SaveGame {
         zipFile.close();
 
         //Other initialization actions
-        Integer playerCiv = gameState.playerCiv;
+        ObjectReference playerCiv = gameState.playerCiv;
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-            Integer civId = gameState.getCivilization(i);
+            ObjectReference civId = gameState.getCivilization(i);
             Civilization civ = gameState.getObject(civId, Civilization.class);
         }
     }

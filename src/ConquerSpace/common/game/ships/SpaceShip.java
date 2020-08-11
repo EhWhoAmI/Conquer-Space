@@ -164,7 +164,7 @@ public abstract class SpaceShip extends ConquerSpaceGameObject implements Orbita
     
     public void setLocation(UniversePath location) {
         this.location = location;
-        goingToStarSystem = location.getSystemID();
+        goingToStarSystem = location.getSystemIndex();
     }
 
     public void setGoingToStarSystem(int goingToStarSystem) {

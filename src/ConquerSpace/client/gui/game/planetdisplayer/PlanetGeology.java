@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class PlanetGeology extends javax.swing.JPanel {
         this.gameState = gameState;
         this.planet = p;
         stratumListModel = new DefaultListModel<>();
-        for (Integer stratumId : p.strata) {
+        for (ObjectReference stratumId : p.strata) {
             Stratum stratum = gameState.getObject(stratumId, Stratum.class);
 
             stratumListModel.addElement(stratum);

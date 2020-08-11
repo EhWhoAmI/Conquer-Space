@@ -19,6 +19,7 @@ package ConquerSpace.common.game.ships.launch;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -27,7 +28,7 @@ import ConquerSpace.common.save.SerializeClassName;
  */
 @SerializeClassName("launch-vehicle")
 public class LaunchVehicle extends ConquerSpaceGameObject{
-    public Integer systemType;
+    public ObjectReference systemType;
     public int costPerLaunch;
     public boolean reusability;
     public int reuseCost;
@@ -60,7 +61,7 @@ public class LaunchVehicle extends ConquerSpaceGameObject{
     }
 
     public void setSystemType(LaunchSystem systemType) {
-        this.systemType = systemType.getId();
+        this.systemType = systemType.getReference();
     }
 
     public int getCostPerLaunch() {

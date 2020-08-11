@@ -168,14 +168,14 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         gameState.addSpecies(playerSpecies);
 
         //Set currency
-        Currency nationCurrency = new Currency();
+        Currency nationCurrency = new Currency(gameState);
         nationCurrency.setName(c.civCurrencyName);
         nationCurrency.setSymbol(c.civCurrencySymbol);
         playerCiv.setNationalCurrency(nationCurrency);
-        nationCurrency.setController(playerCiv);
+        nationCurrency.setController(playerCiv.getReference());
 
         playerCiv.setFoundingSpecies(playerSpecies);
-        gameState.playerCiv = playerCiv.getId();
+        gameState.playerCiv = playerCiv.getReference();
         gameState.addCivilization(playerCiv);
 
         LOGGER.info("Done with player civ " + playerCiv.getName());
@@ -208,11 +208,11 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setFoundingSpecies(civSpecies);
 
             //Create currency
-            nationCurrency = new Currency();
+            nationCurrency = new Currency(gameState);
             nationCurrency.setName("ISK");
             nationCurrency.setSymbol("Z");
             civ.setNationalCurrency(nationCurrency);
-            nationCurrency.setController(civ);
+            nationCurrency.setController(civ.getReference());
 
             LOGGER.info("Done with civ " + civ.getName());
             //universe.
@@ -421,7 +421,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             stratum.setX(random.nextInt(p.getPlanetWidth()));
             stratum.setY(random.nextInt(p.getPlanetHeight()));
             stratum.setDepth(random.nextInt(planetSize / 2) + 1);
-            p.strata.add(stratum.getId());
+            p.strata.add(stratum.getReference());
         }
     }
 

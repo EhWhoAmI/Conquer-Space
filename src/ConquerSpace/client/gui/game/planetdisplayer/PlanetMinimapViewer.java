@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -93,7 +94,7 @@ public class PlanetMinimapViewer extends JPanel {
             //Set opacity
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
             //Draw the circles
-            for (Integer strataId : planet.strata) {
+            for (ObjectReference strataId : planet.strata) {
                 Stratum v = gameState.getObject(strataId, Stratum.class);
                 //Draw...
                 if (resourceToShow == SHOW_ALL) {
@@ -107,7 +108,7 @@ public class PlanetMinimapViewer extends JPanel {
             //Draw buildings
 
             if (planet.cityDistributions != null) {
-                for (Map.Entry<GeographicPoint, Integer> en : planet.cityDistributions.entrySet()) {
+                for (Map.Entry<GeographicPoint, ObjectReference> en : planet.cityDistributions.entrySet()) {
                     GeographicPoint point = en.getKey();
 
                     //Draw

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.resources;
 
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.save.Serialize;
 
@@ -26,9 +27,9 @@ import ConquerSpace.common.save.Serialize;
  */
 public class LiveGood extends Good{
     @Serialize("species")
-    Integer species;
+    ObjectReference species;
     public LiveGood(Species s, double volume, double mass) {
-        super(s.getName(), "l_" + s.getName() + "_" + s.getId(), volume, mass);
-        this.species = s.getId();
+        super(s.getName(), "l_" + s.getName() + "_" + s.getReference().getId(), volume, mass);
+        this.species = s.getReference();
     }
 }

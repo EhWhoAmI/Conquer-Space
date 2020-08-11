@@ -34,10 +34,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**
@@ -47,16 +46,18 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
  */
 public final class GameState implements Serializable {
 
+    //All game objects
+    //May need to be thread safe in the future
+    
+    EntityManager entities;
+        
+    private AtomicInteger objectCount;
+    
     @Serialize("seed")
     private long seed;
 
-    //May need to be thread safe in the future
-    @Serialize("objects")
-    protected HashMap<Integer, ConquerSpaceGameObject> gameObjects;
-    private Galaxy universe;
-
     @Serialize("universe")
-    private Integer universeId;
+    private ObjectReference universeId;
 
     @Serialize("date")
     public StarDate date;
@@ -70,16 +71,16 @@ public final class GameState implements Serializable {
     public ArrayList<LaunchSystem> launchSystems;
 
     @Serialize("civs")
-    private ArrayList<Integer> civilizations;
+    private ArrayList<ObjectReference> civilizations;
 
     @Serialize("orgs")
-    private ArrayList<Integer> organizations;
+    private ArrayList<ObjectReference> organizations;
 
     public ArrayList<EngineTechnology> engineTechnologys;
     public ArrayList<PersonalityTrait> personalityTraits;
 
     @Serialize("species")
-    public ArrayList<Integer> species;
+    public ArrayList<ObjectReference> species;
 
     public HashMap<String, Integer> shipTypes;
     public HashMap<String, Integer> shipTypeClasses;
@@ -94,7 +95,7 @@ public final class GameState implements Serializable {
     public HashMap<String, ProductionProcess> prodProcesses;
 
     @Serialize("player")
-    public Integer playerCiv;
+    public ObjectReference playerCiv;
 
     public FieldNode fieldNodeRoot;
     public ArrayList<Technology> techonologies = new ArrayList<>();
@@ -106,9 +107,9 @@ public final class GameState implements Serializable {
     //private GameUpdater updater;
     public GameState(int seed) {
         this.seed = seed;
-
-        //Init all stuff
-        gameObjects = new HashMap<>();
+        
+        entities = new EntityManager();
+        
 
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
@@ -122,9 +123,8 @@ public final class GameState implements Serializable {
 
         random = new Random(seed);
 
-        universe = new Galaxy(this);
-
-        universeId = universe.getId();
+        //Create new galaxy
+        universeId = new Galaxy(this).getReference();
     }
 
     public void addGood(Good good) {
@@ -134,7 +134,7 @@ public final class GameState implements Serializable {
     }
 
     public void addSpecies(Species speciesToAdd) {
-        species.add(speciesToAdd.getId());
+        species.add(speciesToAdd.getReference());
     }
 
     public Good getGood(int id) {
@@ -154,16 +154,13 @@ public final class GameState implements Serializable {
      * Adds the object to the index
      *
      * @param object object to add
-     * @return the id of the added object
      */
-    public int addGameObject(ConquerSpaceGameObject object) {
-        int id = gameObjects.size();
-        gameObjects.put(id, object);
-        return id;
+    public void addGameObject(ConquerSpaceGameObject object) {
+        entities.addGameObject(object);
     }
 
-    public ConquerSpaceGameObject getObject(int id) {
-        return gameObjects.get(id);
+    public ConquerSpaceGameObject getObject(ObjectReference id) {
+        return entities.getObject(id);
     }
 
     public Integer getGoodId(String identifier) {
@@ -171,8 +168,8 @@ public final class GameState implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getObject(int id, Class<T> expectedClass) {
-        ConquerSpaceGameObject o = gameObjects.get(id);
+    public <T> T getObject(ObjectReference id, Class<T> expectedClass) {
+        ConquerSpaceGameObject o = entities.getObject(id);
         if (expectedClass.isInstance(o)) {
             return (T) o;
         }
@@ -180,18 +177,18 @@ public final class GameState implements Serializable {
     }
 
     public int getObjectCount() {
-        return gameObjects.size();
+        return entities.getEntitiyCount();
     }
 
     public void addOrganization(Organization org) {
-        organizations.add(org.getId());
+        organizations.add(org.getReference());
     }
 
     public int getOrganizationCount() {
         return organizations.size();
     }
 
-    public Integer getOrganization(int id) {
+    public ObjectReference getOrganization(int id) {
         return organizations.get(id);
     }
 
@@ -199,20 +196,20 @@ public final class GameState implements Serializable {
         return getObject(getOrganization(id), Organization.class);
     }
 
-    public Organization getOrganizationObjectByIndex(int id) {
+    public Organization getOrganizationObjectByReference(ObjectReference id) {
         return getObject(id, Organization.class);
     }
 
     public void addCivilization(Civilization civ) {
-        civilizations.add(civ.getId());
-        organizations.add(civ.getId());
+        civilizations.add(civ.getReference());
+        organizations.add(civ.getReference());
     }
 
     public int getCivilizationCount() {
         return civilizations.size();
     }
 
-    public Integer getCivilization(int id) {
+    public ObjectReference getCivilization(int id) {
         return civilizations.get(id);
     }
 
@@ -234,13 +231,13 @@ public final class GameState implements Serializable {
     }
 
     public Galaxy getUniverse() {
-        return universe;
+        return getObject(universeId, Galaxy.class);
     }
 
-    public Integer getUniverseId() {
+    public ObjectReference getUniverseId() {
         return universeId;
     }
-    
+
     public ArrayList<Good> getGoodArrayList() {
         return new ArrayList<>(goodHashMap.values());
     }
@@ -253,9 +250,7 @@ public final class GameState implements Serializable {
     public void convert(GameState gameState) {
         seed = gameState.seed;
 
-        gameObjects = gameState.gameObjects;
-
-        universe = gameState.universe;
+        entities = gameState.entities;
 
         universeId = gameState.universeId;
 
@@ -286,5 +281,9 @@ public final class GameState implements Serializable {
         techonologies = gameState.techonologies;
 
         random = gameState.random;
+    }
+    
+    ObjectReference nextObjectReference() {
+        return new ObjectReference(objectCount.getAndIncrement());
     }
 }

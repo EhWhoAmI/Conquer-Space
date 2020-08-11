@@ -19,6 +19,7 @@ package ConquerSpace.common.game.ships.satellites;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -34,7 +35,7 @@ public class Satellite extends ConquerSpaceGameObject implements Launchable, Orb
     protected int mass;
     protected String name = "";
     protected int id;
-    protected int owner = -1;
+    protected ObjectReference owner = ObjectReference.INVALID_REFERENCE;
     protected UniversePath orbiting = null;
         
     public Satellite(GameState gameState) {
@@ -62,11 +63,11 @@ public class Satellite extends ConquerSpaceGameObject implements Launchable, Orb
         return getName();
     }
 
-    public int getOwner() {
+    public ObjectReference getOwner() {
         return owner;
     }
 
-    public void setOwner(int owner) {
+    public void setOwner(ObjectReference owner) {
         this.owner = owner;
     }
 

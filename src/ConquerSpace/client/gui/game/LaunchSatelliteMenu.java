@@ -120,7 +120,7 @@ public class LaunchSatelliteMenu extends JPanel {
                         //if(sat instanceof SpaceTelescope) {
                         //((SpaceTelescope) sat).setPosition(new Point(sys.getX(), sys.getY()));
                         //}
-                        sat.setOwner(c.getId());
+                        sat.setOwner(c.getReference());
                         //Actions.launchSatellite(sat, p, 100, c);
                         JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
                         break;

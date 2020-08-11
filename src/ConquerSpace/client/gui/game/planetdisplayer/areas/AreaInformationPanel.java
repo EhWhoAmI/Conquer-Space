@@ -55,7 +55,7 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
     protected void genericInformation() {
         JLabel owner = new JLabel("Owner: None");
 
-        Organization org = gameState.getOrganizationObjectByIndex(area.getOwner());
+        Organization org = gameState.getOrganizationObjectByReference(area.getOwner());
         if (org != null) {
             if (org instanceof Civilization) {
                 owner.setText("Owner: State owned by " + org.getName());

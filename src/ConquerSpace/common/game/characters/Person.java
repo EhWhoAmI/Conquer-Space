@@ -19,6 +19,7 @@ package ConquerSpace.common.game.characters;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
@@ -39,7 +40,7 @@ public class Person extends ConquerSpaceGameObject {
 
     //@Serialize(key = "location")
     //How to serialize person enterable
-    private Integer location;
+    private ObjectReference location;
 
     @Serialize("traits")
     public ArrayList<PersonalityTrait> traits;
@@ -48,7 +49,7 @@ public class Person extends ConquerSpaceGameObject {
 
     @Serialize("wealth")
     private int wealth;
-    public Employer employer;
+    public ObjectReference employer;
 
     @Serialize("dead")
     private boolean dead;
@@ -99,8 +100,12 @@ public class Person extends ConquerSpaceGameObject {
 
     public void setPosition(PersonEnterable position) {
         if (position instanceof ConquerSpaceGameObject) {
-            this.location = ((ConquerSpaceGameObject) position).getId();
+            this.location = ((ConquerSpaceGameObject) position).getReference();
         }
+    }
+    
+    public void setPosition(ObjectReference reference) {
+        this.location = reference;
     }
 
     public void setRole(String text) {

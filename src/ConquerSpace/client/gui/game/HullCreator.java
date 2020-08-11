@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.game.ships.hull.HullMaterial;
@@ -134,7 +135,7 @@ public class HullCreator extends JPanel {
         hullListContainer.setLayout(new VerticalFlowLayout());
         hullListModel = new DefaultListModel<>();
 
-        for (Integer sc : c.hulls) {
+        for (ObjectReference sc : c.hulls) {
             Hull shipClass = gameState.getObject(sc, Hull.class);
 
             hullListModel.addElement(shipClass);
@@ -254,6 +255,6 @@ public class HullCreator extends JPanel {
 
         Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);
-        c.hulls.add(hull.getId());
+        c.hulls.add(hull.getReference());
     }
 }

@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -697,7 +698,7 @@ public class PlanetResources extends javax.swing.JPanel {
             stockpileRow = storageResources.getSelectedRow();
             stockpileColunm = storageResources.getSelectedColumn();
         }
-        for (Integer cityId : p.cities) {
+        for (ObjectReference cityId : p.cities) {
             City city = gameState.getObject(cityId, City.class);
             Integer[] goods = city.storedTypes();
             //Sort through stuff

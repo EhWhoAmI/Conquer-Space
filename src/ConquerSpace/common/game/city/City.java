@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
@@ -48,26 +49,26 @@ import java.util.Iterator;
 public class City extends ConquerSpaceGameObject implements PersonEnterable, ResourceStockpile, Administrable {
 
     @Serialize("population")
-    public Integer population;
+    public ObjectReference population;
 
     public static final String CITY_DEFAULT = "emp";
 
     /**
      * The person who governs the place
      */
-    private Integer governor;
+    private ObjectReference governor;
 
     @Serialize("name")
     private String name;
 
     @Serialize("areas")
-    public ArrayList<Integer> areas;
+    public ArrayList<ObjectReference> areas;
 
     @Serialize("working-for")
-    public ArrayList<Integer> workableFor;
+    public ArrayList<ObjectReference> workableFor;
 
     @Serialize("people")
-    public ArrayList<Person> peopleAtCity;
+    public ArrayList<ObjectReference> peopleAtCity;
 
     @Serialize(value = "resources", special = SaveStuff.Good)
     public HashMap<Integer, Double> resources;
@@ -82,13 +83,13 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     @Serialize("max-storage")
     private int maxStorage;
 
-    public ArrayList<Integer> supplyChains;
+    public ArrayList<ObjectReference> supplyChains;
 
     private int ledgerClearDelta = 0;
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
 
     @Serialize("location")
-    private Integer location;
+    private ObjectReference location;
 
     @Serialize("tags")
     public HashMap<String, Integer> tags;
@@ -116,12 +117,12 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     //Energy needed
     private int energyNeeded;
     
-    private Integer owner;
+    private ObjectReference ownerReference;
 
-    public City(GameState gameState, Integer location) {
+    public City(GameState gameState, ObjectReference location) {
         super(gameState);
         workableFor = new ArrayList<>();
-        owner = -1;
+        ownerReference = null;
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
         resources = new HashMap<>();
@@ -130,7 +131,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         peopleAtCity = new ArrayList<>();
 
         Population population = new Population(gameState);
-        this.population = population.getId();
+        this.population = population.getReference();
 
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
@@ -175,7 +176,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
 
     public void setGovernor(Person governor) {
         governor.setRole("Governing " + name);
-        this.governor = governor.getId();
+        this.governor = governor.getReference();
     }
 
     public boolean toResetJobs() {
@@ -289,7 +290,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         size++;
     }
 
-    public void addArea(Integer a) {
+    public void addArea(ObjectReference a) {
         areas.add(a);
     }
 
@@ -332,7 +333,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
 
     public double getUnemploymentRate() {
         long currentlyWorking = 0;
-        for (Integer areaId : areas) {
+        for (ObjectReference areaId : areas) {
             Area area = gameState.getObject(areaId, Area.class);
             currentlyWorking += area.getCurrentlyManningJobs();
         }
@@ -341,11 +342,11 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         return ((double) (populationSize - currentlyWorking) / (double) populationSize);
     }
 
-    public Integer getOwner() {
-        return owner;
+    public ObjectReference getOwner() {
+        return ownerReference;
     }
 
-    public void setOwner(Integer owner) {
-        this.owner = owner;
+    public void setOwner(ObjectReference owner) {
+        this.ownerReference = owner;
     }
 }

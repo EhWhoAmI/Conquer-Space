@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
@@ -60,7 +61,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
 
         launchTypesValue = new JComboBox<LaunchSystem>();
 
-        for (Integer id : civ.launchSystems) {
+        for (ObjectReference id : civ.launchSystems) {
             launchTypesValue.addItem(gameState.getObject(id, LaunchSystem.class));
         }
 
@@ -90,7 +91,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
     public Area getAreaToConstruct() {
         if (launchTypesValue.getSelectedItem() != null && launchTypesValue.getSelectedItem() instanceof LaunchSystem) {
             LaunchSystem ls = (LaunchSystem) launchTypesValue.getSelectedItem();
-            return new SpacePortArea(gameState, ls.getId(), (Integer) maxLaunchTubes.getValue());
+            return new SpacePortArea(gameState, ls.getReference(), (Integer) maxLaunchTubes.getValue());
         }
         return null;
     }

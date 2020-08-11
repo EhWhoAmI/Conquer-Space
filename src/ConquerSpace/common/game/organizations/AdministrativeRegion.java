@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.organizations;
 
+import ConquerSpace.common.ObjectReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 public class AdministrativeRegion implements Serializable{
-    public ArrayList<Integer> bodies;
+    public ArrayList<ObjectReference> bodies;
 
     public AdministrativeRegion() {
         bodies = new ArrayList<>();

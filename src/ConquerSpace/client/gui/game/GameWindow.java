@@ -244,7 +244,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
 
         JMenuItem seeHomePlanet = new JMenuItem(LOCALE_MESSAGES.getMessage("game.view.home.planet"));
         seeHomePlanet.addActionListener(a -> {
-            desktopPane.see(civ.getStartingPlanet().getSystemID());
+            desktopPane.see(civ.getStartingPlanet().getSystemIndex());
         });
         seeHomePlanet.setAccelerator(KeyStroke.getKeyStroke((int) '9', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
@@ -305,7 +305,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
         gameUIUpdater.start();
         changeTurnSaveWindowPosition();
         //See home planet
-        desktopPane.see(civ.getStartingPlanet().getSystemID());
+        desktopPane.see(civ.getStartingPlanet().getSystemIndex());
     }
 
     public void reload() {
@@ -486,7 +486,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                             if (Math.hypot((convertPointUniverse(sys.getX(), translateX) - e.getX()),
                                     (convertPointUniverse(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                                 for (UniversePath p : civ.vision.keySet()) {
-                                    if (p.getSystemID() == sys.getIndex() && civ.vision.get(p) > VisionTypes.UNDISCOVERED) {
+                                    if (p.getSystemIndex() == sys.getIndex() && civ.vision.get(p) > VisionTypes.UNDISCOVERED) {
                                         see(sys.getIndex());
                                         repaint();
                                         break sectorit;
@@ -508,7 +508,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                                     //PlanetInfoSheet d = new PlanetInfoSheet(planet, c);
                                     //add(d);
                                     //Check if scanned
-                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.hasScanned(civ.getId()));
+                                    mainInterfaceWindow.setSelectedPlanet(planet, planet.hasScanned(civ.getReference()));
                                     mainInterfaceWindow.setSelectedTab(1);
 
                                     break;
@@ -614,12 +614,12 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                         if (Math.hypot((convertPointUniverse(sys.getX(), translateX) - e.getX()),
                                 (convertPointUniverse(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
                             
-                            if (civ.vision.containsKey(new UniversePath(sys.getId())) && 
-                                    civ.vision.get(new UniversePath(sys.getId())) > VisionTypes.UNDISCOVERED) {
+                            if (civ.vision.containsKey(new UniversePath(sys.getIndex())) && 
+                                    civ.vision.get(new UniversePath(sys.getIndex())) > VisionTypes.UNDISCOVERED) {
                                 JMenuItem systemInfo = 
-                                        new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.starsystem"), sys.getId()));
+                                        new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.starsystem"), sys.getIndex()));
                                 systemInfo.addActionListener(a -> {
-                                    see(sys.getId());
+                                    see(sys.getIndex());
                                     repaint();
                                 });
                                 popupMenu.add(systemInfo);
@@ -648,8 +648,8 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                                     mainInterfaceWindow.setSelectedTab(1);
                                 });
 
-                                if (planet.hasScanned(civ.getId())) {
-                                    planetName.setText(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.planet"), planet.getId()));
+                                if (planet.hasScanned(civ.getReference())) {
+                                    planetName.setText(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.planet"), planet.getIndex()));
                                 } else {
                                     planetName.setText(LOCALE_MESSAGES.getMessage("game.click.popup.planet.unexplored"));
                                 }
@@ -682,10 +682,10 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                         double gotoX = (e.getX() * scale - translateX - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
                         double gotoY = (e.getY() * scale - translateY - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
 
-                        if (s.getLocation().getSystemID() > -1) {
+                        if (s.getLocation().getSystemIndex() > -1) {
                             //Then get quickest route to out of system, and do the things
                             //Ah well, get slope because the path can be direct...
-                            StarSystem system = universe.getStarSystemObject(s.getLocation().getSystemID());
+                            StarSystem system = universe.getStarSystemObject(s.getLocation().getSystemIndex());
                             double slopeX = gotoX - system.getX();
                             double slopeY = gotoY - system.getY();
                             double slope = (slopeY / slopeX);
@@ -750,7 +750,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                 //If science ship
                 long stype = s.getHull().getShipType();
                 //Survey ship and over planet
-                if (stype == 70 && overPlanet && !overWhat.hasScanned(civ.getId())) {
+                if (stype == 70 && overPlanet && !overWhat.hasScanned(civ.getReference())) {
                     JMenuItem surveryor = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.survey"));
                     final Planet p = overWhat;
 
@@ -764,7 +764,7 @@ public class GameWindow extends JFrame implements WindowListener, ComponentListe
                         survey.setProgressPerTick(5);
                         survey.setFinishedProgress(100);
                         survey.setToSurvey(p);
-                        survey.setCivID(civ.getId());
+                        survey.setCivReference(civ.getReference());
 
                         s.addAction(gameState, orbitAction);
                         s.addAction(gameState, survey);

@@ -19,6 +19,7 @@ package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
@@ -35,14 +36,17 @@ import java.util.Iterator;
 public class Galaxy extends ConquerSpaceGameObject {
 
     @Serialize("systems")
-    private ArrayList<Integer> starSystems;
+    private ArrayList<ObjectReference> starSystems;
 
     @Serialize("control")
-    public HashMap<Integer, Integer> control;
+    //Star only add star systems
+    //Key is the star system reference
+    //Value is the owner
+    public HashMap<ObjectReference, ObjectReference> control;
 
     //Spaceships in orbit in the galaxy
     @Serialize("ships")
-    public ArrayList<Integer> spaceShips;
+    public ArrayList<ObjectReference> spaceShips;
 
     public Galaxy(GameState gameState) {
         super(gameState);
@@ -54,30 +58,27 @@ public class Galaxy extends ConquerSpaceGameObject {
     public void addStarSystem(StarSystem s) {
         int index = getStarSystemCount();
         s.setIndex(index);
-        starSystems.add(s.getId());
+        starSystems.add(s.getReference());
 
         //Add system to control
-        control.put(s.getId(), -1);
+        control.put(s.getReference(), ObjectReference.INVALID_REFERENCE);
     }
 
     public int getStarSystemCount() {
         return starSystems.size();
     }
 
-    public Integer getStarSystem(int i) {
+    public ObjectReference getStarSystem(int i) {
         return starSystems.get(i);
     }
 
     public StarSystem getStarSystemObject(int i) {
-        if (starSystems == null || gameState == null) {
-            System.out.println(starSystems + " \n" + gameState);
-        }
         return (gameState.getObject(
                 starSystems.get(i),
                 StarSystem.class));
     }
 
-    public Iterator<Integer> getStarSystemIterator() {
+    public Iterator<ObjectReference> getStarSystemIterator() {
         return starSystems.iterator();
     }
 
@@ -88,17 +89,17 @@ public class Galaxy extends ConquerSpaceGameObject {
      * @param p Path
      * @return Space object
      */
-    public Integer getSpaceObject(UniversePath p) {
-        Integer systemId = getStarSystem(p.getSystemID());
-        StarSystem system = gameState.getObject(systemId, StarSystem.class);
-        if (p.getBodyID() != -1) {
-            if (system.getBodyCount() < p.getBodyID()) {
+    public ObjectReference getSpaceObject(UniversePath p) {
+        ObjectReference systemReference = getStarSystem(p.getSystemIndex());
+        StarSystem system = gameState.getObject(systemReference, StarSystem.class);
+        if (p.getBodyIndex() != -1) {
+            if (system.getBodyCount() < p.getBodyIndex()) {
                 return null;
             } else {
-                return system.getBody(p.getBodyID());
+                return system.getBody(p.getBodyIndex());
             }
         } else {
-            return systemId;
+            return systemReference;
         }
 
     }

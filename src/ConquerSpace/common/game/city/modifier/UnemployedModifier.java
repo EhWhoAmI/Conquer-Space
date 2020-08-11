@@ -24,7 +24,7 @@ package ConquerSpace.common.game.city.modifier;
 public class UnemployedModifier extends CityModifier{
 
     public UnemployedModifier() {
-        super("unemployed");
+        super("employment");
     }
 
     @Override

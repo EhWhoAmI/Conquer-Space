@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.organizations.corp;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.organizations.Organization;
@@ -33,8 +34,8 @@ import ConquerSpace.common.save.SerializeClassName;
 public class Company extends Organization implements Employer{
     private String name;
     private int affiliation;
-    private Integer cityBasedIn;
-    private Integer planetBasedIn;
+    private ObjectReference cityBasedIn;
+    private ObjectReference planetBasedIn;
 
     public Company(GameState gameState, String name) {
         super(gameState, name);
@@ -62,7 +63,7 @@ public class Company extends Organization implements Employer{
     }
 
     public void setCityBasedIn(City cityBasedIn) {
-        this.cityBasedIn = cityBasedIn.getId();
+        this.cityBasedIn = cityBasedIn.getReference();
     }
 
     public void setName(String name) {
@@ -70,7 +71,7 @@ public class Company extends Organization implements Employer{
     }
 
     public void setPlanetBasedIn(Planet planetBasedIn) {
-        this.planetBasedIn = planetBasedIn.getId();
+        this.planetBasedIn = planetBasedIn.getReference();
     }
 
     @Override

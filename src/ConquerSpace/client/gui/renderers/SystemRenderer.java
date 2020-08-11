@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.renderers;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.actions.ShipMoveAction;
 import ConquerSpace.common.actions.ToOrbitAction;
@@ -156,7 +157,7 @@ public class SystemRenderer {
         };
 
         rendererThread = new Thread(r);
-        rendererThread.setName("system " + sys.getId() + " renderer");
+        rendererThread.setName("system " + sys.getIndex()+ " renderer");
         sizeofAU = 15;
         distanceRatio = sizeofAU / 10_000_000d;
 
@@ -349,7 +350,7 @@ public class SystemRenderer {
         g2d.setColor(new Color(0, 127, 255));
         g2d.draw(boundaryCircle);*/
         //draw spaceships
-        for (Integer id : sys.spaceShips) {
+        for (ObjectReference id : sys.spaceShips) {
             SpaceShip ship = gameState.getObject(id, SpaceShip.class);
 
             double x = (ship.getX());

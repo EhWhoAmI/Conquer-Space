@@ -19,6 +19,7 @@ package ConquerSpace.common.game.population;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -29,9 +30,9 @@ import ConquerSpace.common.save.SerializeClassName;
 public class PopulationSegment extends ConquerSpaceGameObject{
     public long size = 0;
     
-    public int species;
+    public ObjectReference species;
     
-    public int culture;
+    public ObjectReference culture;
     
     //Placeholder value for now...
     public int tier;
@@ -42,13 +43,13 @@ public class PopulationSegment extends ConquerSpaceGameObject{
     public float populationIncrease;
 
     
-    public PopulationSegment(GameState gameState, int species, int culture) {
+    public PopulationSegment(GameState gameState, ObjectReference species, ObjectReference culture) {
         super(gameState);
         this.species = species;
         this.culture = culture;
     }
 
-    public int getCulture() {
+    public ObjectReference getCulture() {
         return culture;
     }
 
@@ -56,7 +57,7 @@ public class PopulationSegment extends ConquerSpaceGameObject{
         return size;
     }
 
-    public int getSpecies() {
+    public ObjectReference getSpecies() {
         return species;
     }
 }

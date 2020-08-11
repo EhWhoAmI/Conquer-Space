@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.SerializeClassName;
@@ -29,11 +30,11 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("observatory-area")
 public class ObservatoryArea extends Area implements VisionPoint {
 
-    private int civilization;
+    private ObjectReference civilization;
     private int range;
     private UniversePath position;
 
-    public ObservatoryArea(GameState gameState, int civilization, int range, UniversePath position) {
+    public ObservatoryArea(GameState gameState, ObjectReference civilization, int range, UniversePath position) {
         super(gameState);
         this.civilization = civilization;
         this.range = range;
@@ -46,7 +47,7 @@ public class ObservatoryArea extends Area implements VisionPoint {
     }
 
     @Override
-    public int getCivilization() {
+    public ObjectReference getCivilization() {
         return civilization;
     }
 
@@ -55,7 +56,7 @@ public class ObservatoryArea extends Area implements VisionPoint {
         return position;
     }
 
-    public void setCivilization(int civilization) {
+    public void setCivilization(ObjectReference civilization) {
         this.civilization = civilization;
     }
 

@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
@@ -74,7 +75,7 @@ public class PlanetInfoSheet extends JPanel {
         overview = new PlanetOverview(gameState, p, c, provider);
         atmosphere = new AtmosphereInfo(p, c, register);
         population = new PlanetCities(gameState, p, c, this);
-        spacePort = new SpacePortMenuSheet(gameState, p.getId(), c.getId());
+        spacePort = new SpacePortMenuSheet(gameState, p.getReference(), c.getReference());
         planetGeology = new PlanetGeology(gameState, p);
         //building = new ConstructionMenu(u, p, c);
         industry = new PlanetIndustry(gameState, p, c);
@@ -135,9 +136,9 @@ public class PlanetInfoSheet extends JPanel {
 
         //Check if planet contains space port
         cityloop:
-        for (Integer cityId : planet.cities) {
+        for (ObjectReference cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
-            for (Integer areaId : city.areas) {            
+            for (ObjectReference areaId : city.areas) {            
                 Area areaObject = gameState.getObject(areaId, Area.class);
 
                 if (areaObject instanceof SpacePortArea) {

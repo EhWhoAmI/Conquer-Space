@@ -19,6 +19,7 @@ package ConquerSpace.common.game.population;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import java.util.Iterator;
 public class Population extends ConquerSpaceGameObject{
 
     @Serialize("segments")
-    public final ArrayList<Integer> populations;
+    public final ArrayList<ObjectReference> populations;
 
     private long populationSize = 0;
 
@@ -41,24 +42,24 @@ public class Population extends ConquerSpaceGameObject{
         populations = new ArrayList<>();
     }
 
-    public Integer getSegment(int index) {
+    public ObjectReference getSegment(int index) {
         return populations.get(index);
     }
 
-    public void addSegment(Integer seg) {
+    public void addSegment(ObjectReference seg) {
         populations.add(seg);
     }
 
     public long getPopulationSize() {
         populationSize = 0;
-        for (Integer seg : populations) {
+        for (ObjectReference seg : populations) {
             populationSize += 
                     gameState.getObject(seg, PopulationSegment.class).getSize();
         }
         return populationSize;
     }
 
-    public Iterator<Integer> getIterator() {
+    public Iterator<ObjectReference> getIterator() {
         return populations.iterator();
     }
 }

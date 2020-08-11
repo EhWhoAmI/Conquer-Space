@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
@@ -60,7 +61,7 @@ public class LaunchSpaceShipMenu extends JPanel {
         spaceShipListModel = new DefaultListModel<>();
         spaceShipList = new JList(spaceShipListModel);
 
-        for (Integer sc : c.shipClasses) {
+        for (ObjectReference sc : c.shipClasses) {
             ShipClass shipClass = gameState.getObject(sc, ShipClass.class);
             spaceShipListModel.addElement(shipClass);
         }

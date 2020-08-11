@@ -47,10 +47,7 @@ public class Actions {
     }
 
     public static void addArea(Planet on, City city, Area a) {
-        city.areas.add(a.getId());
-        if (a instanceof Workable) {
-            on.jobProviders.add(a);
-        }
+        city.areas.add(a.getReference());
     }
 
     public static void researchTech(Civilization c, Technology t) {
@@ -61,8 +58,7 @@ public class Actions {
         if (what instanceof VisionPoint) {
             SpaceTelescope obs = ((SpaceTelescope) what);
             obs.setPosition(whichPlanet.getUniversePath());
-            c.visionPoints.add(what.getId());
-
+            c.visionPoints.add(what.getReference());
         }
         what.setOrbiting(whichPlanet.getUniversePath());
 
@@ -73,7 +69,7 @@ public class Actions {
         what.setLocation(planet.getUniversePath());
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
-        civ.spaceships.add(what.getId());
+        civ.spaceships.add(what.getReference());
     }
 
     public static void launchLaunchable(Launchable launch, Planet planet) {
@@ -95,7 +91,7 @@ public class Actions {
             if (body instanceof Planet) {
                 Planet planet = (Planet) body;
                 //Remove from orbit
-                planet.getSatellites().remove(what);
+                planet.getSatellites().remove(what.getReference());
 
                 what.setX(planet.getX());
                 what.setY(planet.getY());

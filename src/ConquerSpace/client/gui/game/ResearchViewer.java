@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.Scientist;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -129,7 +130,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         techInfoPanel.add(listPane);
 
         personComboBoxModel = new DefaultComboBoxModel<>();
-        for (Integer id : civilization.people) {
+        for (ObjectReference id : civilization.people) {
             Person p = gameState.getObject(id, Person.class);
             if (p instanceof Scientist) {
                 personComboBoxModel.addElement(p);
@@ -222,7 +223,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
                 techTableModel.addRow(new String[]{t.getName(), civilization.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
             }
             personComboBoxModel.removeAllElements();
-            for (Integer id : civilization.people) {
+            for (ObjectReference id : civilization.people) {
                 Person p = gameState.getObject(id, Person.class);
                 if (p instanceof Scientist) {
                     personComboBoxModel.addElement(p);
@@ -289,7 +290,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         int selected = personComboBox.getSelectedIndex();
         if (!personComboBox.isPopupVisible()) {
             personComboBoxModel.removeAllElements();
-            for (Integer id : civilization.people) {
+            for (ObjectReference id : civilization.people) {
                 Person p = gameState.getObject(id, Person.class);
                 if (p instanceof Scientist) {
                     personComboBoxModel.addElement(p);

@@ -106,6 +106,6 @@ public class ObservatoryConstructionPanel extends AreaDesignPanel {
 
     @Override
     public Area getAreaToConstruct() {
-        return new ObservatoryArea(gameState, civ.getId(), Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()), p.getUniversePath());
+        return new ObservatoryArea(gameState, civ.getReference(), Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()), p.getUniversePath());
     }
 }

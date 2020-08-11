@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
@@ -93,12 +94,12 @@ public class UnownedPlanetInfoMenu extends JPanel {
         //Init planetPath
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
-        name.append(Integer.toString(p.getParent()));
-        name.append(" Planet id " + p.getId());
+        name.append(Integer.toString(p.getParentIndex()));
+        name.append(" Planet id " + p.getReference());
         planetPath.setText(name.toString());
 
         //Init owner
-        if (p.getOwnerID() > -1) {
+        if (p.getOwnerReference()!= ObjectReference.INVALID_REFERENCE) {
             ownerLabel.setText("Owner: " + c.getName());
         } else {
             ownerLabel.setText("No owner");

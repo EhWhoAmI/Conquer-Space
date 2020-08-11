@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game.engineering;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.LaunchVehicle;
@@ -291,14 +292,14 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
             vehicle.setSystemType((LaunchSystem) launchTypesValue.getSelectedItem());
             vehicle.setMaximumMass((Integer) payloadmassSpinner.getValue());
             vehicle.setReusability(reusabilityCheckbox.isSelected());
-            c.launchVehicles.add(vehicle.getId());
+            c.launchVehicles.add(vehicle.getReference());
             launchVehicleListModel.fireEvent();
         }
     }//GEN-LAST:event_saveLaunchSystemButtonActionPerformed
 
     private void updateComponent() {
         launchTypesValue.removeAllItems();
-        for (Integer obj : c.launchSystems) {
+        for (ObjectReference obj : c.launchSystems) {
             LaunchSystem launch = gameState.getObject(obj, LaunchSystem.class);
             launchTypesValue.addItem(launch);
         }

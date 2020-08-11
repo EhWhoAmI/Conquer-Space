@@ -17,13 +17,14 @@
  */
 package ConquerSpace.common.game.universe.bodies;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.organizations.civilization.stats.Economy;
-import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.ships.satellites.Satellite;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -49,27 +50,27 @@ public class Planet extends StarSystemBody implements Administrable {
     private int planetSize;
 
     @Serialize("strata")
-    public ArrayList<Integer> strata;
+    public ArrayList<ObjectReference> strata;
 
     @Serialize("owner")
-    private int ownerID = ControlTypes.NONE_CONTROLLED;
+    private ObjectReference ownerReference = ObjectReference.INVALID_REFERENCE;
 
     //Empty as default -- undiscovered
     @Serialize("name")
     private String name = "";
     //public PlanetSector[] planetSectors;
-    
+
     public Economy economy;
 
     @Serialize("satellites")
-    private ArrayList<Orbitable> satellites;
+    private ArrayList<ObjectReference> satellites;
 
     @Serialize("city-positions")
-    public HashMap<GeographicPoint, Integer> cityDistributions;
+    public HashMap<GeographicPoint, ObjectReference> cityDistributions;
 
     //Civs that have scanned this
     @Serialize("scanned")
-    private ArrayList<Integer> scanned;
+    private ArrayList<ObjectReference> scanned;
 
     @Serialize("terrain-seed")
     private int terrainSeed;
@@ -84,12 +85,9 @@ public class Planet extends StarSystemBody implements Administrable {
     private float degreesPerTurn = 0.0f;
 
     @Serialize("cities")
-    public ArrayList<Integer> cities;
+    public ArrayList<ObjectReference> cities;
 
-    private Person governor;
-
-    @Serialize("providers")
-    public ArrayList<Workable> jobProviders;
+    private ObjectReference governor;
 
     /**
      * If this is empty, the planet does not have life.
@@ -114,7 +112,6 @@ public class Planet extends StarSystemBody implements Administrable {
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
-        //planetSectors = new PlanetSector[surfaceArea];
         economy = new Economy();
         satellites = new ArrayList<>();
         strata = new ArrayList<>();
@@ -122,8 +119,6 @@ public class Planet extends StarSystemBody implements Administrable {
 
         scanned = new ArrayList<>();
         cities = new ArrayList<>();
-
-        jobProviders = new ArrayList<>();
 
         //planetJobs = new ArrayList<>();
         localLife = new ArrayList<>();
@@ -137,16 +132,16 @@ public class Planet extends StarSystemBody implements Administrable {
         return planetType;
     }
 
-    public int getOwnerID() {
-        return ownerID;
+    public ObjectReference getOwnerReference() {
+        return ownerReference;
     }
 
     public long getPopulation() {
         return 0;//population.population.get(population.population.size() - 1);
     }
 
-    public void setOwnerID(int ownerID) {
-        this.ownerID = ownerID;
+    public void setOwnerReference(ObjectReference ownerReference) {
+        this.ownerReference = ownerReference;
     }
 
     public void setName(String name) {
@@ -158,7 +153,7 @@ public class Planet extends StarSystemBody implements Administrable {
     }
 
     public UniversePath getUniversePath() {
-        return (new UniversePath(getParent(), getIndex()));
+        return (new UniversePath(getParentIndex(), getIndex()));
     }
 
     public int getSatelliteCount() {
@@ -166,26 +161,28 @@ public class Planet extends StarSystemBody implements Administrable {
     }
 
     public Orbitable getSatellite(int i) {
-        return satellites.get(i);
+        return gameState.getObject(satellites.get(i), Orbitable.class);
     }
 
     public void addSatellite(Satellite s) {
         s.setOrbiting(getUniversePath());
-        satellites.add(s);
+        satellites.add(s.getReference());
     }
 
-    public ArrayList<Orbitable> getSatellites() {
+    public ArrayList<ObjectReference> getSatellites() {
         return satellites;
     }
 
     public void putShipInOrbit(Orbitable orb) {
-        satellites.add(orb);
+        if (orb instanceof ConquerSpaceGameObject) {
+            satellites.add(((ConquerSpaceGameObject) orb).getReference());
+        }
     }
 
     @Override
     public String toString() {
         if (name.isEmpty()) {
-            return (getId() + "");
+            return getReference().toString();
         }
         return name;
     }
@@ -223,11 +220,11 @@ public class Planet extends StarSystemBody implements Administrable {
     }
 
     public Person getGovernor() {
-        return governor;
+        return gameState.getObject(governor, Person.class);
     }
 
     public void setGovernor(Person governor) {
-        this.governor = governor;
+        this.governor = governor.getReference();
     }
 
     public void addCityDefinition(GeographicPoint pt, City b) {
@@ -239,11 +236,11 @@ public class Planet extends StarSystemBody implements Administrable {
             b.incrementSize();
         }
 
-        if (!cityDistributions.containsValue(b.getId())) {
-            cities.add(b.getId());
+        if (!cityDistributions.containsValue(b.getReference())) {
+            cities.add(b.getReference());
         }
 
-        cityDistributions.put(pt, b.getId());
+        cityDistributions.put(pt, b.getReference());
     }
 
     /*
@@ -262,10 +259,10 @@ public class Planet extends StarSystemBody implements Administrable {
 
     public City getCity(GeographicPoint pt) {
         if (cityDistributions.containsKey(pt)) {
-            int id = cityDistributions.get(pt);
+            ObjectReference id = cityDistributions.get(pt);
 
             for (int i = 0; i < cities.size(); i++) {
-                if (cities.get(i) == id) {
+                if (cities.get(i).equals(id)) {
                     return gameState.getObject(cities.get(i), City.class);
                 }
             }
@@ -273,17 +270,17 @@ public class Planet extends StarSystemBody implements Administrable {
         return null;
     }
 
-    public boolean hasScanned(int id) {
+    public boolean hasScanned(ObjectReference id) {
         return scanned.contains(id);
     }
 
-    public void scan(int id) {
+    public void scan(ObjectReference id) {
         scanned.add(id);
     }
 
     public ArrayList<City> getCities() {
         ArrayList<City> cityList = new ArrayList<>();
-        for (Integer cityId : cities) {
+        for (ObjectReference cityId : cities) {
             City c = gameState.getObject(cityId, City.class);
             cityList.add(c);
         }

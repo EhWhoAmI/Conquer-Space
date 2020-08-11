@@ -126,7 +126,7 @@ public class AreaConstructionPanel extends JPanel {
             Area areaToBuild = areaDesignPanel.getAreaToConstruct();
             if (areaDesignPanel != null && areaToBuild != null) {
                 //Then construct area
-                city.addArea(new ConstructingArea(gameState, 10_000, areaToBuild).getId());
+                city.addArea(new ConstructingArea(gameState, 10_000, areaToBuild).getReference());
                 JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, LOCALE_MESSAGES.getMessage("game.planet.construction.created"));
             }
         });

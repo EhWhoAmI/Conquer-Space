@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.renderers;
 
 import ConquerSpace.client.gui.game.GameWindow;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.InterstellarTravelAction;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -116,14 +117,14 @@ public class UniverseRenderer {
             // Check vision...
             if (c.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
                 //Control
-                if (universe.control.get(sys.getId()) > -1) {
+                if (universe.control.get(sys.getReference()) != ObjectReference.INVALID_REFERENCE) {
                     switch (c.vision.
                             get(sys.getUniversePath())) {
                         case VisionTypes.EXISTS:
                             g2d.setColor(Color.gray);
                             break;
                         default:
-                            int id = universe.control.get(sys.getId());
+                            ObjectReference id = universe.control.get(sys.getReference());
                             Civilization civ = gameState.getObject(id, Civilization.class);
                             if (civ != null) {
                                 g2d.setColor(civ.getColor());
@@ -189,7 +190,7 @@ public class UniverseRenderer {
 
         //Spaceships
         //draw spaceships
-        for (Integer shipId : universe.spaceShips) {
+        for (ObjectReference shipId : universe.spaceShips) {
             SpaceShip ship = gameState.getObject(shipId, SpaceShip.class);
             double x = (ship.getX());
             double y = (ship.getY());

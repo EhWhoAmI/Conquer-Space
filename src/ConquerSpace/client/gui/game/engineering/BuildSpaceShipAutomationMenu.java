@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.engineering;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.components.EngineTechnology;
@@ -168,12 +169,12 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         shipTypeComboBox.getSelectedIndex(), 100, "name");
             }
             //Add hull
-            civ.hulls.add(selectedHull.getId());
+            civ.hulls.add(selectedHull.getReference());
             ShipClass sc = new ShipClass(gameState, shipNameField.getText(), selectedHull);
             //Add components
             //Autogenerate engine
 
-            civ.shipClasses.add(sc.getId());
+            civ.shipClasses.add(sc.getReference());
         });
 
         newStuff.add(newShipClass);
@@ -187,7 +188,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         //The panel that you cant really change the stuff inside
         shipListModel = new DefaultListModel<>();
-        for (Integer sc : c.shipClasses) {
+        for (ObjectReference sc : c.shipClasses) {
             ShipClass shipClass = gameState.getObject(sc, ShipClass.class);
             shipListModel.addElement(shipClass);
         }
@@ -656,7 +657,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             DefaultComboBoxModel<EngineTechnology> engineTechBoxModel = new DefaultComboBoxModel<>();
 
             //Add the civ info
-            for (Integer t : civ.engineTechs) {
+            for (ObjectReference t : civ.engineTechs) {
                 EngineTechnology technology = gameState.getObject(t, EngineTechnology.class);
 
                 engineTechBoxModel.addElement(technology);
@@ -675,7 +676,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             engineListModel = new DefaultListModel<>();
             //Fill list
             {
-                for (Integer obj : civ.shipComponentList) {
+                for (ObjectReference obj : civ.shipComponentList) {
                     ShipComponentTemplate template = gameState.getObject(obj, ShipComponentTemplate.class);
                     if (template instanceof EngineTemplate) {
                         engineListModel.addElement(new EngineComponentWrapper(template));
@@ -757,7 +758,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             setTitle(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.choose"));
             setLayout(new GridLayout(1, 2));
             hullListModel = new DefaultListModel<>();
-            for (Integer obj : civ.hulls) {
+            for (ObjectReference obj : civ.hulls) {
                 Hull hull = gameState.getObject(obj, Hull.class);
                 hullListModel.addElement(hull);
             }

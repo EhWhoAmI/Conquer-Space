@@ -17,7 +17,6 @@
  */
 package ConquerSpace.common;
 
-import ConquerSpace.common.save.Serialize;
 import java.io.Serializable;
 
 /**
@@ -27,18 +26,21 @@ import java.io.Serializable;
 public abstract class ConquerSpaceGameObject implements Serializable {
 
     protected final GameState gameState;
-
-    @Serialize("id")
-    private final int id;
+    
+    private final ObjectReference reference; 
 
     public ConquerSpaceGameObject(GameState gameState) {
         this.gameState = gameState;
-        id = gameState.addGameObject(this);
+        reference = gameState.entities.addGameObject(this);
+    }
+
+    public final ObjectReference getReference() {
+        return reference;
     }
 
     @Override
     public final int hashCode() {
-        return this.id;
+        return this.getReference().getId();
     }
 
     @Override
@@ -50,7 +52,7 @@ public abstract class ConquerSpaceGameObject implements Serializable {
             return false;
         }
         final ConquerSpaceGameObject other = (ConquerSpaceGameObject) obj;
-        if (this.id != other.id) {
+        if (!this.reference.equals(other.reference)) {
             return false;
         }
         return true;
@@ -58,9 +60,5 @@ public abstract class ConquerSpaceGameObject implements Serializable {
 
     public final GameState getGameState() {
         return gameState;
-    }
-
-    public final int getId() {
-        return id;
     }
 }

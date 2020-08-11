@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.Stratum;
@@ -128,10 +129,10 @@ public class PlanetOverview extends JPanel {
         }
 
         //Show planetPath
-        planetPath.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.universepath", p.getParent(), p.getId()));
+        planetPath.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.universepath", p.getParentIndex(), p.getReference().getId()));
 
         //Init owner
-        if (p.getOwnerID() > -1) {
+        if (p.getOwnerReference() != ObjectReference.INVALID_REFERENCE) {
             ownerLabel.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.ownerid", c.getName()));
         } else {
             ownerLabel.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.noowner"));
@@ -249,7 +250,7 @@ public class PlanetOverview extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (Integer strataId : p.strata) {
+                for (ObjectReference strataId : p.strata) {
                     Stratum v = gameState.getObject(strataId, Stratum.class);
                     //Draw...
                     if (resourceToShow == SHOW_ALL) {
@@ -272,7 +273,7 @@ public class PlanetOverview extends JPanel {
                 }
 
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, Integer> en : p.cityDistributions.entrySet()) {
+                for (Map.Entry<GeographicPoint, ObjectReference> en : p.cityDistributions.entrySet()) {
                     GeographicPoint p = en.getKey();
 
                     //Draw

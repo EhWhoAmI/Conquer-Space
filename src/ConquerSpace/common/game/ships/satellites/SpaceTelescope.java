@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.ships.satellites;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.SerializeClassName;
@@ -29,19 +30,19 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("space-telescope")
 public class SpaceTelescope extends Satellite implements VisionPoint{
 
-    private int civilization = -1;
+    private ObjectReference civilization = ObjectReference.INVALID_REFERENCE;
     private int range = 0;
 
     public SpaceTelescope(GameState gameState) {
         super(gameState);
     }
 
-    public void setCivilization(int civ) {
+    public void setCivilization(ObjectReference civ) {
         owner = civ;
     }
     
     @Override
-    public int getCivilization() {
+    public ObjectReference getCivilization() {
         return getOwner();
     }
 

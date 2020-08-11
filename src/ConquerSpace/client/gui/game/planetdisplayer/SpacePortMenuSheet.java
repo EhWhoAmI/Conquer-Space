@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
@@ -51,7 +52,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
     /**
      * Creates new form SpacePortMenuSheet
      */
-    public SpacePortMenuSheet(GameState gameState, Integer planet, Integer civilization) {
+    public SpacePortMenuSheet(GameState gameState, ObjectReference planet, ObjectReference civilization) {
         this.gameState = gameState;
         this.planet = gameState.getObject(planet, Planet.class);
         this.civilization = gameState.getObject(civilization, Civilization.class);
@@ -319,13 +320,13 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 SatelliteTemplate selectedObject = civilization.satelliteTemplates.get(selection);
                 Satellite sat = Satellites.parseSatellite(gameState, selectedObject, civilization.multipliers, civilization.values);
                 //Check if it orbits a planet
-                sat.setOwner(civilization.getId());
+                sat.setOwner(civilization.getReference());
                 Actions.launchSatellite(sat, planet, civilization);
                 JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
             } else if (tab == 1) {
                 int selection = qlSpaceshipList.getSelectedIndex();
                 //Create satellite
-                Integer selectedObjectIndex = civilization.shipClasses.get(selection);
+                ObjectReference selectedObjectIndex = civilization.shipClasses.get(selection);
                 ShipClass selectedObject = gameState.getObject(selectedObjectIndex, ShipClass.class);
 
                 Ship ship = new Ship(gameState, selectedObject,
@@ -368,7 +369,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         if (!qlSpaceshipList.isSelectionEmpty()) {
             int selection = qlSpaceshipList.getSelectedIndex();
             //Create satellite
-            Integer selectedObjectIndex = civilization.shipClasses.get(selection);
+            ObjectReference selectedObjectIndex = civilization.shipClasses.get(selection);
             ShipClass selectedObject  = gameState.getObject(selectedObjectIndex, ShipClass.class);
             qlSpaceshipNameLabel.setText(selectedObject.getName());
             qlSpaceshipMass.setText(selectedObject.getMass() + "");
@@ -414,9 +415,9 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
         //Get the amount of launch pads
         int launchPadCount = 0;
-        for (Integer cityIndex : planet.cities) {
+        for (ObjectReference cityIndex : planet.cities) {
             City city = gameState.getObject(cityIndex, City.class);
-            for (Integer areaIndex : city.areas) {
+            for (ObjectReference areaIndex : city.areas) {
                 Area area = gameState.getObject(areaIndex, Area.class);
                 if (area instanceof SpacePortArea) {
                     SpacePortArea port = (SpacePortArea) area;

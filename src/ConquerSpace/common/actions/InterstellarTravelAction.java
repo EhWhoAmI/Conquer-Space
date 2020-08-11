@@ -55,8 +55,10 @@ public class InterstellarTravelAction extends ShipAction {
 
     @Override
     public void doAction(GameState gameState) {
-        double x = positionX - ship.getX();
-        double y = positionY - ship.getY();
+        Ship shipObject = gameState.getObject(ship, Ship.class);
+
+        double x = positionX - shipObject.getX();
+        double y = positionY - shipObject.getY();
 
         //Normalize
         double len = Math.sqrt(x * x + y * y);
@@ -65,24 +67,25 @@ public class InterstellarTravelAction extends ShipAction {
             y /= len;
         }
         //Travel the fraction
-        double distance = Math.sqrt(Math.pow(positionX - ship.getX(), 2) + Math.pow(positionY - ship.getY(), 2));
-        double speed = ship.getSpeed() / ((double) KM_IN_AU);
+        double distance = Math.sqrt(Math.pow(positionX - shipObject.getX(), 2) + Math.pow(positionY - shipObject.getY(), 2));
+        double speed = shipObject.getSpeed() / ((double) KM_IN_AU);
         double objX = (x * speed);
         double objY = (y * speed);
 
         if (Math.sqrt(Math.pow(objX, 2) + Math.pow(objY, 2)) >= distance) {
             objX = positionX;
             objY = positionY;
-            ship.setX(objX);
-            ship.setY(objY);
+            shipObject.setX(objX);
+            shipObject.setY(objY);
         } else {
-            ship.translate(objX, objY);
+            shipObject.translate(objX, objY);
         }
     }
 
     @Override
     public boolean checkIfDone(GameState gameState) {
-        return (ship.getX() == positionX && ship.getY() == positionY);
+        Ship shipObject = gameState.getObject(ship, Ship.class);
+        return (shipObject.getX() == positionX && shipObject.getY() == positionY);
     }
 
     @Override

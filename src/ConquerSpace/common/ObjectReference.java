@@ -15,48 +15,49 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.ships.launch;
-
-import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.ships.Launchable;
-import java.io.Serializable;
+package ConquerSpace.common;
 
 /**
- * Used for building a rocket and launching it. It will remain full throughout
- * the duration.
+ *
  * @author EhWhoAmI
  */
-public class SpacePortLaunchPad implements Serializable{
-    public int ticks;
-    private Launchable launching = null;
-    private ObjectReference type;
+public final class ObjectReference {
+    public static final ObjectReference INVALID_REFERENCE = new ObjectReference(-1);
+    private int objectId;
 
-    public SpacePortLaunchPad(ObjectReference type) {
-        this.type = type;
+    public ObjectReference(int objectId) {
+        this.objectId = objectId;
     }
-    
-    public void beginLaunch(Launchable launch, int ticks) {
-        launching = launch;
-        this.ticks = ticks;
+
+    public int getId() {
+        return objectId;
     }
-    
-    public boolean isLaunching() {
-        if(launching != null) {
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        return false;
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ObjectReference other = (ObjectReference) obj;
+        if (this.objectId != other.objectId) {
+            return false;
+        }
+        return true;
     }
 
-    public ObjectReference getType() {
-        return type;
+    @Override
+    public int hashCode() {
+        return objectId;
     }
 
     @Override
     public String toString() {
-        return type.toString();
-    }
-
-    public Launchable getLaunching() {
-        return launching;
+        return Integer.toString(objectId);
     }
 }

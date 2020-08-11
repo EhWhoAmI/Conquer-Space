@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.characters.Scientist;
@@ -64,7 +65,7 @@ public class PersonWindow extends JPanel {
         this.gameState = gameState;
         setLayout(new HorizontalFlowLayout());
         listModel = new DefaultListModel<>();
-        for (Integer id : c.people) {
+        for (ObjectReference id : c.people) {
             Person person = gameState.getObject(id, Person.class);
             listModel.addElement(person);
         }
@@ -142,7 +143,7 @@ public class PersonWindow extends JPanel {
     public void update() {
         previouslySelected = personList.getSelectedIndex();
         listModel.clear();
-        for (Integer id : c.people) {
+        for (ObjectReference id : c.people) {
             Person person = gameState.getObject(id, Person.class);
             listModel.addElement(person);
         }

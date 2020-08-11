@@ -19,6 +19,7 @@ package ConquerSpace.common.game.ships.hull;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -33,7 +34,7 @@ public class Hull extends ConquerSpaceGameObject{
     //Meters cube
     private long space;
     
-    private Integer material;
+    private ObjectReference material;
     
     private int shipType;
     
@@ -46,7 +47,7 @@ public class Hull extends ConquerSpaceGameObject{
         super(gameState);
         this.mass = mass;
         this.space = space;
-        this.material = material.getId();
+        this.material = material.getReference();
         this.shipType = shipType;
         this.thrust = thrust;
         this.name = name;
@@ -100,7 +101,7 @@ public class Hull extends ConquerSpaceGameObject{
         this.thrust = thrust;
     }
 
-    public void setMaterial(Integer material) {
+    public void setMaterial(ObjectReference material) {
         this.material = material;
     }
 

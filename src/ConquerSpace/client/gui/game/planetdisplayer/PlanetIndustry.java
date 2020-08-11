@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
@@ -79,7 +80,7 @@ public class PlanetIndustry extends JPanel {
 
         for (int i = 0; i < p.cities.size(); i++) {
             City city = gameState.getObject(p.cities.get(i), City.class);
-            for (Integer areaId : city.areas) {
+            for (ObjectReference areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 areaDefaultListModel.addElement(area);
             }
@@ -137,9 +138,9 @@ public class PlanetIndustry extends JPanel {
         areaDefaultListModel.clear();
         for (int i = 0; i < p.cities.size(); i++) {
             City city = gameState.getObject(p.cities.get(i), City.class);
-            Iterator<Integer> iterator = city.areas.iterator();
+            Iterator<ObjectReference> iterator = city.areas.iterator();
             while(iterator.hasNext()) {
-                Integer in = iterator.next();
+                ObjectReference in = iterator.next();
                 Area area = gameState.getObject(in, Area.class);
                 areaDefaultListModel.addElement(area);
             }

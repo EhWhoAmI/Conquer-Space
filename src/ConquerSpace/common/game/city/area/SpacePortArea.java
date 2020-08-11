@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
@@ -29,19 +30,19 @@ import java.util.ArrayList;
 @SerializeClassName("space-port-area")
 public class SpacePortArea extends Area{
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
-    private Integer system;
+    private ObjectReference launchSystem;
 
-    public SpacePortArea(GameState gameState, Integer system, int amount) {
+    public SpacePortArea(GameState gameState, ObjectReference system, int amount) {
         super(gameState);
-        this.system = system;
+        this.launchSystem = system;
         launchPads = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             launchPads.add(new SpacePortLaunchPad(system));
         }
     }
     
-    public Integer getLaunchSystem() {
-        return system;
+    public ObjectReference getLaunchSystem() {
+        return launchSystem;
     }
 
     @Override

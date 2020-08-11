@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -27,12 +28,12 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("construction-area")
 public class ConstructingArea extends Area{
     private int ticksLeft;
-    private Integer toBuild;
+    private ObjectReference toBuild;
 
     public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
         super(gameState);
         this.ticksLeft = ticks;
-        this.toBuild = toBuild.getId();
+        this.toBuild = toBuild.getReference();
     }
 
     public Area getToBuild() {

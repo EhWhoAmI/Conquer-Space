@@ -18,6 +18,7 @@
 package ConquerSpace.common.actions;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.ships.SpaceShip;
 
 /**
@@ -26,13 +27,13 @@ import ConquerSpace.common.game.ships.SpaceShip;
  */
 public abstract class ShipAction {
 
-    protected SpaceShip ship;
+    protected ObjectReference ship;
     
     protected boolean done;
     
 
     public ShipAction(SpaceShip ship) {
-        this.ship = ship;
+        this.ship = ship.getReference();
     }
 
     public void doAction(GameState gameState) {

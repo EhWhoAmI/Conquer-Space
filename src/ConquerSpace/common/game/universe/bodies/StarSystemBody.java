@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -30,7 +31,7 @@ public class StarSystemBody extends Body{
     
     private int parent;
     
-    private int parentId;
+    private ObjectReference parentId;
 
     public StarSystemBody(GameState gameState) {
         super(gameState);
@@ -48,7 +49,7 @@ public class StarSystemBody extends Body{
         return index;
     }
 
-    public int getParent() {
+    public int getParentIndex() {
         return parent;
     }
 
@@ -56,11 +57,11 @@ public class StarSystemBody extends Body{
         this.parent = parent;
     }
 
-    public int getParentId() {
+    public ObjectReference getParentReference() {
         return parentId;
     }
 
-    void setParentId(int parentId) {
+    void setParentId(ObjectReference parentId) {
         this.parentId = parentId;
     }
 }
