@@ -22,6 +22,7 @@ import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.ships.components.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
+import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
@@ -201,6 +202,16 @@ public class Technologies implements Serializable{
             if (launchSystem != null) {
                 c.launchSystems.add(launchSystem.getReference());
             }
+            
+            //Add launch vehicle
+            LaunchVehicle vehicle = new LaunchVehicle(gameState);
+            vehicle.setSystemType(launchSystem);
+            vehicle.setCostPerLaunch(50000);
+            vehicle.setReliability(0.99f);
+            vehicle.setReusability(false);
+            vehicle.setMaximumMass(50000);
+            vehicle.setName("Test vehicle");
+            c.launchVehicles.add(vehicle.getReference());
         } else if (action.startsWith("orbit")) {
             //Something you put into orbit
             char[] dst = new char[50];

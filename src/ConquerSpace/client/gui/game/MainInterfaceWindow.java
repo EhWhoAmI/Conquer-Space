@@ -19,7 +19,7 @@ package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
-import ConquerSpace.client.gui.game.engineering.LaunchSystemDesigner;
+import ConquerSpace.client.gui.game.engineering.LaunchVehicleDesigner;
 import ConquerSpace.client.gui.game.engineering.SatelliteDesigner;
 import ConquerSpace.client.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
@@ -73,7 +73,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     JTabbedPane shipsComponentsOverviewPanel;
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
     private SatelliteDesigner satelliteDesigner;
-    private LaunchSystemDesigner launchSystemDesigner;
+    private LaunchVehicleDesigner launchSystemDesigner;
 
     private CivInfoOverview civInfoOverview;
 
@@ -171,7 +171,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         ImageIcon map = ResourceLoader.getIcon("satellite.icon");
 
         shipsComponentsOverviewPanel.setIconAt(1, map);
-        launchSystemDesigner = new LaunchSystemDesigner(gameState, civilization);
+        launchSystemDesigner = new LaunchVehicleDesigner(gameState, civilization);
         JPanel launchWrapper = new JPanel();
         launchWrapper.setLayout(new VerticalFlowLayout());
         launchWrapper.add(launchSystemDesigner);

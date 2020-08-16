@@ -28,7 +28,7 @@ import javax.swing.DefaultListModel;
  *
  * @author EhWhoAmI
  */
-public class LaunchSystemDesigner extends javax.swing.JPanel {
+public class LaunchVehicleDesigner extends javax.swing.JPanel {
 
     private Civilization c;
 
@@ -39,7 +39,7 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
     /**
      * Creates new form LaunchSystemDesignerSheet
      */
-    public LaunchSystemDesigner(GameState gameState, Civilization c) {
+    public LaunchVehicleDesigner(GameState gameState, Civilization c) {
         this.gameState = gameState;
         this.c = c;
         launchVehicleListModel = new LaunchVehicleListModel();
@@ -299,9 +299,15 @@ public class LaunchSystemDesigner extends javax.swing.JPanel {
 
     private void updateComponent() {
         launchTypesValue.removeAllItems();
+
         for (ObjectReference obj : c.launchSystems) {
             LaunchSystem launch = gameState.getObject(obj, LaunchSystem.class);
             launchTypesValue.addItem(launch);
+        }
+        for(ObjectReference reference : c.launchVehicles) {
+            LaunchVehicle vehicle = gameState.getObject(reference, LaunchVehicle.class);
+            launchVehicleListModel.addElement(vehicle);
+            launchVehicleListModel.fireEvent();
         }
     }
 
