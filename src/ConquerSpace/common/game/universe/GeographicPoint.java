@@ -89,4 +89,8 @@ public class GeographicPoint implements Serializable, CustomSerializer {
     public String getString() {
         return X + "-" + Y;
     }
+    
+    public double distance(GeographicPoint pt2) {
+        return Math.hypot(X - pt2.X, Y - pt2.Y);
+    }
 }

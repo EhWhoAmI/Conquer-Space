@@ -35,6 +35,7 @@ import ConquerSpace.common.game.city.area.ResidentialArea;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
+import ConquerSpace.common.game.logistics.SupplyManager;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.behavior.EmptyBehavior;
 import ConquerSpace.common.game.organizations.behavior.PlayerBehavior;
@@ -136,6 +137,8 @@ public class CivilizationInitializer {
             civilization.setCapitalPlanet(startingPlanet);
 
             initializeCities(startingPlanet, civilization, selector);
+
+            addSupplyLines(startingPlanet);
 
             nameStratumOnPlanet(startingPlanet, selector);
 
@@ -549,7 +552,7 @@ public class CivilizationInitializer {
             for (int h = 0; h < s.getBodyCount(); h++) {
                 StarSystemBody b = s.getBodyObject(h);
                 //Add planets
-                
+
                 c.vision.put(new UniversePath(i, b.getIndex()), VisionTypes.UNDISCOVERED);
             }
         }
@@ -616,7 +619,7 @@ public class CivilizationInitializer {
                 }
             }
         }
-        
+
         powerPlant.setMaxVolume(5);
         powerPlant.setUsedResource(resource.getId());
         powerPlant.setProduction(5000);
@@ -627,7 +630,8 @@ public class CivilizationInitializer {
     }
 
     private void addSupplyLines(Planet p) {
-        //Consolidate all resource miners
+        PlanetarySupplyLineGenerator gen = new PlanetarySupplyLineGenerator();
+        gen.generate(gameState, p);
     }
 
     private void initializeSpaceships(Civilization c) {

@@ -18,6 +18,7 @@
 package ConquerSpace.client.gui.start;
 
 import ConquerSpace.ConquerSpace;
+import static ConquerSpace.ConquerSpace.BUILD_TIME;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.common.util.ResourceLoader;
@@ -219,7 +220,7 @@ public class MainMenu extends JFrame implements WindowListener {
             });
 
             about.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, String.format(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.versiontext"), ConquerSpace.VERSION.toString(), System.getProperty("java.version")), LOCALE_MESSAGES.getMessage("start.gui.MainMenu.about"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, String.format(LOCALE_MESSAGES.getMessage("start.gui.MainMenu.versiontext"), ConquerSpace.VERSION.toString(), System.getProperty("java.version"), ConquerSpace.BUILD_TIME, ConquerSpace.BUILD_REVISION), LOCALE_MESSAGES.getMessage("start.gui.MainMenu.about"), JOptionPane.INFORMATION_MESSAGE);
             });
 
             manual.addActionListener(e -> {

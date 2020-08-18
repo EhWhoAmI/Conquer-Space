@@ -25,12 +25,12 @@ import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
+import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
+import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SaveStuff;
@@ -46,7 +46,7 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 @SerializeClassName("city")
-public class City extends ConquerSpaceGameObject implements PersonEnterable, ResourceStockpile, Administrable {
+public class City extends ConquerSpaceGameObject implements PersonEnterable, SupplyNode, Administrable {
 
     @Serialize("population")
     public ObjectReference population;
@@ -79,6 +79,10 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
+    
+    private ArrayList<ObjectReference> supplySegments;
+    
+    private GeographicPoint initialPoint = null;
 
     @Serialize("max-storage")
     private int maxStorage;
@@ -129,6 +133,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
+        
+        supplySegments = new ArrayList<>();
 
         Population population = new Population(gameState);
         this.population = population.getReference();
@@ -348,5 +354,23 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Res
 
     public void setOwner(ObjectReference owner) {
         this.ownerReference = owner;
+    }
+
+    @Override
+    public ArrayList<ObjectReference> getSupplyConnections() {
+        return supplySegments;
+    }
+
+    @Override
+    public void addSupplyConnection(ObjectReference reference) {
+        supplySegments.add(reference);
+    }
+
+    public GeographicPoint getInitialPoint() {
+        return initialPoint;
+    }
+
+    public void setInitialPoint(GeographicPoint initialPoint) {
+        this.initialPoint = initialPoint;
     }
 }

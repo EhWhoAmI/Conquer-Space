@@ -17,16 +17,36 @@
  */
 package ConquerSpace.common.game.logistics;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.ResourceStockpile;
-import java.util.ArrayList;
 
 /**
- * Connects to supplysegment stuff
+ *
  * @author EhWhoAmI
  */
-public interface SupplyNode extends ResourceStockpile{
-    //Supply chains connected
-    public ArrayList<ObjectReference> getSupplyConnections();
-    public void addSupplyConnection(ObjectReference reference);
+public class SupplySegment extends ConquerSpaceGameObject{
+    private ObjectReference point1;
+    private ObjectReference point2;
+    public SupplySegment(GameState state) {
+        super(state);
+        point1 = ObjectReference.INVALID_REFERENCE;
+        point2 = ObjectReference.INVALID_REFERENCE;
+    }
+
+    public ObjectReference getPoint1() {
+        return point1;
+    }
+
+    public void setPoint1(ObjectReference point1) {
+        this.point1 = point1;
+    }
+
+    public ObjectReference getPoint2() {
+        return point2;
+    }
+
+    public void setPoint2(ObjectReference point2) {
+        this.point2 = point2;
+    }
 }

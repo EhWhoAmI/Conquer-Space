@@ -238,6 +238,8 @@ public class Planet extends StarSystemBody implements Administrable {
 
         if (!cityDistributions.containsValue(b.getReference())) {
             cities.add(b.getReference());
+            //Add the initial point
+            b.setInitialPoint(pt);
         }
 
         cityDistributions.put(pt, b.getReference());

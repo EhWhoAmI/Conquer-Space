@@ -20,8 +20,11 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
+import ConquerSpace.common.game.logistics.SupplyNode;
+import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -49,6 +52,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -56,7 +60,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -260,7 +268,7 @@ public class PlanetMap extends JPanel {
 
         int mouseX = 0;
         int mouseY = 0;
-        
+
         int enlargementSize = 2;
 
         public MapPanel() {
@@ -363,6 +371,35 @@ public class PlanetMap extends JPanel {
                             int xPos = (int) (point.getX() * tileSize);
                             int yPos = (int) (point.getY() * tileSize);
                             if (r.contains(new Point(xPos, yPos))) {
+                                //Draw supply lines
+                                ArrayList<ObjectReference> ref = c.getSupplyConnections();
+                                for (int i = 0; i < ref.size(); i++) {
+                                    SupplySegment segment = gameState.getObject(ref.get(i), SupplySegment.class);
+                                    SupplyNode pt1 = gameState.getObject(segment.getPoint1(), SupplyNode.class);
+                                    SupplyNode pt2 = gameState.getObject(segment.getPoint2(), SupplyNode.class);
+                                    GeographicPoint city1Pt = null;
+                                    GeographicPoint city2Pt = null;
+                                    if (pt1 instanceof City) {
+                                        City originCity = (City) pt1;
+                                        city1Pt = originCity.getInitialPoint();
+                                    }
+                                    if (pt2 instanceof City) {
+                                        City destCity = (City) pt2;
+                                        city2Pt = destCity.getInitialPoint();
+                                    }
+                                    if (city1Pt != null && city2Pt != null) {
+                                        //Draw line
+                                        Line2D.Double line = new Line2D.Double(
+                                                city1Pt.getX() * tileSize + tileSize / 2,
+                                                city1Pt.getY() * tileSize + tileSize / 2,
+                                                city2Pt.getX() * tileSize + tileSize / 2,
+                                                city2Pt.getY() * tileSize + tileSize / 2);
+                                        g2d.setColor(Color.red);
+                                        g2d.draw(line);
+                                    }
+
+                                }
+
                                 //Draw city
                                 Rectangle2D.Double rect = new Rectangle2D.Double(xPos, yPos, tileSize, tileSize);
 
@@ -378,8 +415,6 @@ public class PlanetMap extends JPanel {
                                     Image im = list[point.hashCode() % listSize];
                                     mapGraphics.drawImage(im, (xPos), (yPos), null);
                                 }
-                                //Draw city name
-
                                 //Draw background
                                 mapGraphics.setColor(Color.black);
 
@@ -388,6 +423,7 @@ public class PlanetMap extends JPanel {
                                 Font derivedFont = getFont().deriveFont(fontSize);
                                 int width = getFontMetrics(derivedFont).stringWidth(c.getName());
 
+                                //Draw city name
                                 //Draw fancy text
                                 GraphicsUtil.paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
                             }

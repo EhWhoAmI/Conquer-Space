@@ -45,11 +45,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -87,6 +92,10 @@ public final class ConquerSpace {
      * Build number for debugging.
      */
     public static int BUILD_NUMBER = 0;
+    
+    public static String BUILD_TIME = "";
+    
+    public static String BUILD_REVISION = "";
 
     //Init build no
     static {
@@ -99,6 +108,25 @@ public final class ConquerSpace {
         } catch (IOException ex) {
             LOGGER.info("IO exception, no build number.", ex);
         }
+        Class clazz = ConquerSpace.class;
+        String className = clazz.getSimpleName() + ".class";
+        String classPath = clazz.getResource(className).toString();
+        if (classPath.startsWith("jar")) {
+            try {
+                // Class not from JAR
+                String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1)
+                        + "/META-INF/MANIFEST.MF";
+                Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+                Attributes attr = manifest.getMainAttributes();
+                BUILD_TIME = attr.getValue("Build-Time");
+                BUILD_REVISION = attr.getValue("Revision");
+            } catch (MalformedURLException ex) {
+                LOGGER.info("MalformedURLException", ex);
+            } catch (IOException ex) {
+                LOGGER.info("IOException", ex);
+            }
+        }
+
     }
 
     /**
@@ -126,7 +154,7 @@ public final class ConquerSpace {
      * This is the settings of the game.
      */
     public static ClientOptions settings;
-    
+
     public static UniverseGenerator generator;
 
     /**
@@ -267,7 +295,7 @@ public final class ConquerSpace {
             } else {
                 Properties lafProperties = new Properties();
                 File lafPropertyFile = new File(System.getProperty("user.dir") + "/assets/lookandfeels.properties");
-                try (FileInputStream fis = new FileInputStream(lafPropertyFile);) {
+                try ( FileInputStream fis = new FileInputStream(lafPropertyFile);) {
                     lafProperties.load(fis);
                 } catch (FileNotFoundException ex) {
                 } catch (IOException ex) {
@@ -331,7 +359,7 @@ public final class ConquerSpace {
                 settingsFile.getParentFile().mkdir();
             }
             settingsFile.createNewFile();
-            
+
             //Save
             settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
         } catch (IOException ex) {
@@ -341,9 +369,8 @@ public final class ConquerSpace {
 
     public static void configureGame() {
         //Get settings
-        ConquerSpace.locale= settings.getLocale();
-        
-        
+        ConquerSpace.locale = settings.getLocale();
+
         Version version = settings.getVersion();
         //Check if not equal
 

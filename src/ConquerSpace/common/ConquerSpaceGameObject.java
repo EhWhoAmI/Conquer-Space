@@ -58,7 +58,7 @@ public abstract class ConquerSpaceGameObject implements Serializable {
         return true;
     }
 
-    public final GameState getGameState() {
+    protected final GameState getGameState() {
         return gameState;
     }
 }

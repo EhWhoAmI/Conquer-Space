@@ -26,6 +26,9 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
+import ConquerSpace.common.game.logistics.SupplyChain;
+import ConquerSpace.common.game.logistics.SupplyNode;
+import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
@@ -322,6 +325,18 @@ public class PlanetCities extends JPanel {
 
         JList<String> modifierList = new JList<>(modifierListModel);
         cityData.add(new JScrollPane(modifierList));
+
+        DefaultListModel<String> connectedCityListModel = new DefaultListModel<>();
+        for (ObjectReference connection : selectedCity.getSupplyConnections()) {
+            SupplySegment seg = gameState.getObject(connection, SupplySegment.class);
+            if (!seg.getPoint1().equals(selectedCity.getReference())) {
+                connectedCityListModel.addElement(gameState.getObject(seg.getPoint1()).toString());
+            } else {
+                connectedCityListModel.addElement(gameState.getObject(seg.getPoint2()).toString());
+            }
+        }
+        JList<String> connectedCityList = new JList<>(connectedCityListModel);
+        cityData.add(new JScrollPane(connectedCityList));
 
         JButton viewResourceButton = new JButton(
                 LOCALE_MESSAGES.getMessage("game.planet.cities.viewresources"));
