@@ -26,13 +26,10 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
-import ConquerSpace.common.game.logistics.SupplyChain;
-import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.Utilities;
@@ -257,153 +254,156 @@ public class PlanetCities extends JPanel {
         cityData.removeAll();
 
         City selectedCity = cityList.getSelectedValue();
+        if (selectedCity != null) {
+            int popcount = 0;
+            float increment = 0;
+            int maxPop = 0;
+            int energyUsage = selectedCity.getEnergyNeeded();
+            int energyProvided = selectedCity.getEnergyProvided();
 
-        int popcount = 0;
-        float increment = 0;
-        int maxPop = 0;
-        int energyUsage = selectedCity.getEnergyNeeded();
-        int energyProvided = selectedCity.getEnergyProvided();
+            JLabel cityName = new JLabel(selectedCity.getName());
+            cityData.add(cityName);
 
-        JLabel cityName = new JLabel(selectedCity.getName());
-        cityData.add(cityName);
-
-        //Check if capital city
-        for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-            Civilization civilization = gameState.getCivilizationObject(i);
-            if (civilization.getCapitalCity().equals(cityList.getSelectedValue())) {
-                JLabel isCapital = new JLabel(
-                        LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName()));
-                cityData.add(isCapital);
-                break;
+            //Check if capital city
+            for (int i = 0; i < gameState.getCivilizationCount(); i++) {
+                Civilization civilization = gameState.getCivilizationObject(i);
+                if (civilization.getCapitalCity().equals(cityList.getSelectedValue())) {
+                    JLabel isCapital = new JLabel(
+                            LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName()));
+                    cityData.add(isCapital);
+                    break;
+                }
             }
-        }
 
-        //Population
-        JLabel popCount = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(gameState.getObject(selectedCity.population, Population.class).getPopulationSize())));
-        cityData.add(popCount);
+            //Population
+            JLabel popCount = new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(gameState.getObject(selectedCity.population, Population.class).getPopulationSize())));
+            cityData.add(popCount);
 
-        JLabel priindustry = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selectedCity.getCityType()));
-        cityData.add(priindustry);
+            JLabel priindustry = new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selectedCity.getCityType()));
+            cityData.add(priindustry);
 
-        //Get the number of powerplants leading to it
-        //Energy usage
-        JLabel energyUsageLabel = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.energyusage", energyUsage, energyProvided));
-        cityData.add(energyUsageLabel);
+            //Get the number of powerplants leading to it
+            //Energy usage
+            JLabel energyUsageLabel = new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.energyusage", energyUsage, energyProvided));
+            cityData.add(energyUsageLabel);
 
-        //Growth
-        JLabel growthAmount = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.growth", 0));//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
-        cityData.add(growthAmount);
+            //Growth
+            JLabel growthAmount = new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.growth", 0));//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
+            cityData.add(growthAmount);
 
-        double unemploymentRate = selectedCity.getUnemploymentRate();
-        JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate * 100) + "%");
-        unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
-        cityData.add(unemployment);
+            double unemploymentRate = selectedCity.getUnemploymentRate();
+            JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate * 100) + "%");
+            unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
+            cityData.add(unemployment);
 
-        //Max population
-        JLabel maxPopulation = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
-        cityData.add(maxPopulation);
+            //Max population
+            JLabel maxPopulation = new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
+            cityData.add(maxPopulation);
 
-        cityData.add(maxPopulation);
+            cityData.add(maxPopulation);
 
-        //Check for govenor
-        if (cityList.getSelectedValue().getGovernor() != null) {
-            JLabel governorLabel = new JLabel(
-                    LOCALE_MESSAGES.getMessage("game.planet.cities.governor", selectedCity.getGovernor().getName()));
-            cityData.add(governorLabel);
-        }
-
-        ObjectListModel<CityModifier> modifierListModel = new ObjectListModel<>();
-        modifierListModel.setElements(selectedCity.cityModifiers);
-        modifierListModel.setHandler(l -> {
-            return (l.toString());
-        });
-
-        JList<String> modifierList = new JList<>(modifierListModel);
-        cityData.add(new JScrollPane(modifierList));
-
-        DefaultListModel<String> connectedCityListModel = new DefaultListModel<>();
-        for (ObjectReference connection : selectedCity.getSupplyConnections()) {
-            SupplySegment seg = gameState.getObject(connection, SupplySegment.class);
-            if (!seg.getPoint1().equals(selectedCity.getReference())) {
-                connectedCityListModel.addElement(gameState.getObject(seg.getPoint1()).toString());
-            } else {
-                connectedCityListModel.addElement(gameState.getObject(seg.getPoint2()).toString());
+            //Check for govenor
+            if (cityList.getSelectedValue().getGovernor() != null) {
+                JLabel governorLabel = new JLabel(
+                        LOCALE_MESSAGES.getMessage("game.planet.cities.governor", selectedCity.getGovernor().getName()));
+                cityData.add(governorLabel);
             }
-        }
-        JList<String> connectedCityList = new JList<>(connectedCityListModel);
-        cityData.add(new JScrollPane(connectedCityList));
 
-        JButton viewResourceButton = new JButton(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.viewresources"));
-        viewResourceButton.addActionListener(l -> {
-            parent.setSelectedTab(8);
-            parent.planetResources.jTabbedPane1.setSelectedIndex(1);
-            parent.planetResources.selectStockpile(currentlySelectedCity);
-        });
-        cityData.add(viewResourceButton);
+            ObjectListModel<CityModifier> modifierListModel = new ObjectListModel<>();
+            modifierListModel.setElements(selectedCity.cityModifiers);
+            modifierListModel.setHandler(l -> {
+                return (l.toString());
+            });
 
-        JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
+            JTabbedPane cityLists = new JTabbedPane();
+            JList<String> modifierList = new JList<>(modifierListModel);
+            cityLists.add(new JScrollPane(modifierList), "Modifiers");
 
-        //Areas
-        areaListModel = new DefaultListModel<>();
-        for (ObjectReference areaId : selectedCity.areas) {
-            Area area = gameState.getObject(areaId, Area.class);
-            areaListModel.addElement(area);
-        }
-
-        areaList = new JList<>(areaListModel);
-        JScrollPane areascrollPane = new JScrollPane(areaList);
-
-        JPanel areaInfoContainerPanel = new JPanel();
-
-        areaList.addListSelectionListener(o -> {
-            areaInfoContainerPanel.removeAll();
-            areaInformationPanel = AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue());
-            if (areaInformationPanel != null) {
-                areaInfoContainerPanel.add(areaInformationPanel);
+            DefaultListModel<String> connectedCityListModel = new DefaultListModel<>();
+            for (ObjectReference connection : selectedCity.getSupplyConnections()) {
+                SupplySegment seg = gameState.getObject(connection, SupplySegment.class);
+                if (!seg.getPoint1().equals(selectedCity.getReference())) {
+                    connectedCityListModel.addElement(gameState.getObject(seg.getPoint1()).toString());
+                } else {
+                    connectedCityListModel.addElement(gameState.getObject(seg.getPoint2()).toString());
+                }
             }
-            areaInfoContainerPanel.validate();
-            areaInfoContainerPanel.repaint();
-            cityData.validate();
-            cityData.repaint();
-        });
+            JList<String> connectedCityList = new JList<>(connectedCityListModel);
+            cityLists.add(new JScrollPane(connectedCityList), "Linked Cities");
 
-        areaInfoPanel.add(areascrollPane);
-        areaInfoPanel.add(areaInfoContainerPanel);
+            cityData.add(cityLists);
+            JButton viewResourceButton = new JButton(
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.viewresources"));
+            viewResourceButton.addActionListener(l -> {
+                parent.setSelectedTab(8);
+                parent.planetResources.jTabbedPane1.setSelectedIndex(1);
+                parent.planetResources.selectStockpile(currentlySelectedCity);
+            });
+            cityData.add(viewResourceButton);
 
-        currentlySelectedCity = cityList.getSelectedValue();
-        jobTableModel.newCitySelection();
-        jobTable = new JTable(jobTableModel);
+            JPanel areaInfoPanel = new JPanel(new HorizontalFlowLayout());
 
-        availableJobModel = new DefaultTableModel(availableJobColunmNames, 0);
-        //Fill up
-        availableJobTable = new JTable(availableJobModel);
+            //Areas
+            areaListModel = new DefaultListModel<>();
+            for (ObjectReference areaId : selectedCity.areas) {
+                Area area = gameState.getObject(areaId, Area.class);
+                areaListModel.addElement(area);
+            }
 
-        areaConstructionPanel = new AreaConstructionPanel(gameState, planet, owner, selectedCity);
+            areaList = new JList<>(areaListModel);
+            JScrollPane areascrollPane = new JScrollPane(areaList);
 
-        cityInfoTabs.removeAll();
-        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.areas"), areaInfoPanel);
-        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.employment"), new JScrollPane(jobTable));
-        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.jobs"), new JScrollPane(availableJobTable));
-        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.construction"), areaConstructionPanel);
-        cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.resourcedemand"), new JScrollPane(new JTable(new StockpileStorageModel())));
+            JPanel areaInfoContainerPanel = new JPanel();
 
-        cityInfoTabs.setSelectedIndex(citySelectedTab);
-        cityData.add(cityInfoTabs);
+            areaList.addListSelectionListener(o -> {
+                areaInfoContainerPanel.removeAll();
+                areaInformationPanel = AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue());
+                if (areaInformationPanel != null) {
+                    areaInfoContainerPanel.add(areaInformationPanel);
+                }
+                areaInfoContainerPanel.validate();
+                areaInfoContainerPanel.repaint();
+                cityData.validate();
+                cityData.repaint();
+            });
 
-        //Select first area
-        if (!selectedCity.areas.isEmpty()) {
+            areaInfoPanel.add(areascrollPane);
+            areaInfoPanel.add(areaInfoContainerPanel);
+
+            currentlySelectedCity = cityList.getSelectedValue();
+            jobTableModel.newCitySelection();
+            jobTable = new JTable(jobTableModel);
+
+            availableJobModel = new DefaultTableModel(availableJobColunmNames, 0);
+            //Fill up
+            availableJobTable = new JTable(availableJobModel);
+
+            areaConstructionPanel = new AreaConstructionPanel(gameState, planet, owner, selectedCity);
+
+            cityInfoTabs.removeAll();
+            cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.areas"), areaInfoPanel);
+            cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.employment"), new JScrollPane(jobTable));
+            cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.jobs"), new JScrollPane(availableJobTable));
+            cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.construction"), areaConstructionPanel);
+            cityInfoTabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.resourcedemand"), new JScrollPane(new JTable(new StockpileStorageModel())));
+
+            cityInfoTabs.setSelectedIndex(citySelectedTab);
+            cityData.add(cityInfoTabs);
+
             //Select first area
-            areaList.setSelectedIndex(0);
+            if (!selectedCity.areas.isEmpty()) {
+                //Select first area
+                areaList.setSelectedIndex(0);
+            }
+            isBuildingUi = false;
+            revalidate();
+            repaint();
         }
-        isBuildingUi = false;
-        revalidate();
-        repaint();
     }
 
     public void showCity(City whichCity) {
@@ -415,6 +415,16 @@ public class PlanetCities extends JPanel {
     }
 
     public void update() {
+        //Rewrite cities
+        if (cityListModel.size() != planet.cities.size()) {
+            cityListModel.clear();
+            for (ObjectReference cityId : planet.cities) {
+                City city = gameState.getObject(cityId, City.class);
+                if (city != null) {
+                    cityListModel.addElement(city);
+                }
+            }
+        }
         if (areaInformationPanel != null) {
             areaInformationPanel.update();
         }

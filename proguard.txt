@@ -14,8 +14,6 @@
 -libraryjars dist/lib/xom-1.2.10.jar
 -libraryjars dist/lib/weblaf-ui-1.29.jar
 -libraryjars dist/lib/hjson-2.1.0.jar
--libraryjars dist/lib/jfreechart-1.0.19.jar
--libraryjars dist/lib/jcommon-1.0.23.jar
 -libraryjars dist/lib/commons-collections4-4.4.jar
 -libraryjars dist/lib/commons-cli-1.4.jar
 

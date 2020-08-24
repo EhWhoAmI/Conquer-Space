@@ -37,7 +37,8 @@ public class PlanetarySupplyLineGenerator {
         //Kruskal's Spanning Tree Algorithm
         //Create set of edges
         ArrayList<Edge> edges = new ArrayList<>();
-        ArrayList<ObjectReference> alreadyConnected = new ArrayList<>();
+
+        //Init references for better indexing
         BidiMap<Integer, ObjectReference> cityIds = new DualHashBidiMap<>();
         int i = 0;
         for (City c : p.getCities()) {
@@ -45,28 +46,31 @@ public class PlanetarySupplyLineGenerator {
             i++;
         }
 
+        ArrayList<ObjectReference> alreadyConnected = new ArrayList<>();
+        //Connect cities
         for (City c : p.getCities()) {
-            //Connect cities
             for (City c2 : p.getCities()) {
                 if (c != c2) {
-                    //Check if connected
+                    //Check if connected, reduces parallel edges
                     if (!alreadyConnected.contains(c2.getReference())) {
-                        edges.add(new Edge(cityIds.getKey(c.getReference()), cityIds.getKey(c2.getReference()), c.getInitialPoint().distance(c2.getInitialPoint())));
+                        edges.add(new Edge(cityIds.getKey(c.getReference()),
+                                cityIds.getKey(c2.getReference()),
+                                c.getInitialPoint().distance(c2.getInitialPoint())));
                     }
                 }
             }
             alreadyConnected.add(c.getReference());
         }
 
-        //Sort by distance
-        Collections.sort(edges);
-
         Graph g = new Graph(p.getCities().size(), edges.size());
         for (Edge edge : edges) {
+            //Add edges
             g.edges.add(edge);
         }
+        
+        //Do mst
         g.KruskalMST();
-        //Do stuff...
+
         for (int k = 0; k < g.resultCount; k++) {
             //Connect cities
             Edge res = g.result[k];

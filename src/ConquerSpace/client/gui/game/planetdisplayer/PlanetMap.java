@@ -60,17 +60,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JToolTip;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
@@ -211,7 +212,6 @@ public class PlanetMap extends JPanel {
         viewMenu.addSeparator();
 
         buildMenuButton = new JCheckBoxMenuItem(LOCALE_MESSAGES.getMessage("game.planet.map.view.newcity"));
-        //viewMenuButtonGroup.add(buildMenuButton);
         buildMenuButton.addActionListener(viewActionListener);
         viewMenu.add(buildMenuButton);
 
@@ -518,16 +518,29 @@ public class PlanetMap extends JPanel {
                     showBuildingInfo(b);
                 }
             } else if (SwingUtilities.isRightMouseButton(e) && displayedView == CONSTRUCTION_VIEW) {
-                //Make the things
-                //Create construction panel
-                //Check if point is within bounds
+                //Create construction panel, and Check if point is within bounds
                 if (mouseX > 0 && mouseY > 0 && mouseX < (p.getPlanetSize() * 2) && mouseY < p.getPlanetSize() && !constructionActive) {
                     GeographicPoint pt = new GeographicPoint(mouseX, mouseY);
                     currentlyBuildingPoint = pt;
                     constructionActive = true;
-
-                    //Switch to normal view
                     displayedView = NORMAL_VIEW;
+                    repaint();
+                    //Show create city panel
+                    JPanel createCityPanel = new JPanel();
+                    createCityPanel.add(new JLabel("City Name"));
+                    JTextField cityNameTextArea = new JTextField("Test", 32);
+                    createCityPanel.add(cityNameTextArea);
+                    JOptionPane.showMessageDialog(this, createCityPanel);
+                    
+                    //Get the name
+                    if(!cityNameTextArea.getText().isEmpty()) {
+                        //Then make city
+                        City newCity = new City(gameState, p.getReference());
+                        newCity.setName(cityNameTextArea.getText());
+                        p.addCityDefinition(pt, newCity);
+                    }
+                    constructionActive = false;
+                    //Switch to normal view
                 }
             }
         }
