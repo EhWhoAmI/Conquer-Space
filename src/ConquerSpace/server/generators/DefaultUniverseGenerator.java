@@ -129,22 +129,12 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
                 lastDistance = orbitalDistance;
                 int planetSize = getRandomPlanetSize(planetType, rand);
-                Planet p = generatePlanet(planetType, planetSize, planetIndex);
+                Planet p = generatePlanet(planetType, orbitalDistance, planetSize, planetIndex, rand);
+                sys.addBody(p);
                 //Set name
                 if (planetNameGenerator != null) {
                     p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
                 }
-                //Set changin degrees
-                //Closer it is, the faster it is...
-                //mass is size times 100,000,0000
-                double degs = (10 / (planetIndex + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
-                //degs *= 10;
-                p.setDegreesPerTurn((float) degs);
-                //System.err.println(p.terrain.terrainColor[0][0]);
-                p.setOrbit(new Orbit(0, orbitalDistance, 0, 0));
-                p.modDegrees(rand.nextInt(360));
-
-                sys.addBody(p);
             }
         }
         LOGGER.info("Done with universe generation");
@@ -255,47 +245,24 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         int k = 0;
         for (k = 0; k < planetCount; k++) {
             //Add planets
-            //Set stuff
             int planetType = Math.round(rand.nextFloat());
-            //System.out.println(planetType);
+            
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;
 
             int planetSize = getRandomPlanetSize(planetType, rand);
-            Planet p = generatePlanet(planetType, planetSize, k);
-            p.setSemiMajorAxis((double) orbitalDistance);
-            //So a circle...
+            Planet p = generatePlanet(planetType, orbitalDistance, planetSize, k, rand);
 
-            p.setRotation(rand.nextDouble() * 2 * Math.PI);
-            generateResourceVeins(p);
             if (planetType == PlanetTypes.ROCK) {
-                p.setTerrainSeed(rand.nextInt());
-                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
-                //= terrainColorses;
                 if (living == null) {
                     living = p;
                 }
-            } else if (planetType == PlanetTypes.GAS) {
-                p.setTerrainSeed(rand.nextInt());
-                p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_GASSY_COLORS));
             }
             //Set name
             if (planetNameGenerator != null) {
                 p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
             }
 
-            //Set changin degrees
-            //Closer it is, the faster it is...
-            //mass is size times 100,000,0000
-            double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
-            //degs *= 10;
-            p.setDegreesPerTurn((float) degs);
-            p.modDegrees(rand.nextInt(360));
-
-            //Seed life
-            if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
-                generateLocalLife(p);
-            }
             sys.addBody(p);
         }
 
@@ -306,32 +273,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;
             int planetSize = getRandomPlanetSize(planetType, rand);
-            Planet p = generatePlanet(planetType, planetSize, k);
-
-            generateResourceVeins(p);
-
-            p.setTerrainSeed(rand.nextInt());
-            p.setTerrainColoringIndex(rand.nextInt(TerrainColoring.NUMBER_OF_ROCKY_COLORS));
-            //= terrainColorses;
+            Planet p = generatePlanet(planetType, orbitalDistance, planetSize, k, rand);
 
             //Set name
             if (planetNameGenerator != null) {
                 p.setName(planetNameGenerator.getName(rand.nextInt(planetNameGenerator.getRulesCount()), rand));
             }
 
-            //Set changin degrees
-            //Closer it is, the faster it is...
-            //mass is size times 100,000,0000
-            double degs = (10 / (k + 1)) * (((float) (rand.nextInt(5) + 7)) / 10);
-            //degs *= 10;
-            p.setDegreesPerTurn((float) degs);
-            //System.err.println(p.terrain.terrainColor[0][0]);
-            p.modDegrees(rand.nextInt(360));
-
-            //Seed life
-            if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
-                generateLocalLife(p);
-            }
             sys.addBody(p);
             living = p;
         }
@@ -372,7 +320,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         return star;
     }
 
-    private Planet generatePlanet(int planetType, int planetSize, int id) {
+    private Planet generatePlanet(int planetType, double orbitalDistance, int planetSize, int id, Random rand) {
         Planet p = new Planet(gameState, planetType, planetSize, id);
 
         generateResourceVeins(p);
@@ -385,6 +333,15 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             p.setTerrainColoringIndex(random.nextInt(TerrainColoring.NUMBER_OF_GASSY_COLORS));
         }
 
+        //Set changin degrees
+        p.modDegrees(rand.nextInt(360));
+        
+        p.setSemiMajorAxis((double) orbitalDistance);
+        
+        //Seed life
+        if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
+            generateLocalLife(p);
+        }
         return p;
     }
 

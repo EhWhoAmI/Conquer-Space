@@ -21,6 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.SpacePoint;
+import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 
@@ -35,7 +36,7 @@ public class Body extends ConquerSpaceGameObject{
 
     //Not serialized because it's based on orbit
     public SpacePoint point = new SpacePoint(0, 0);
-
+    
     public Body(GameState gameState) {
         super(gameState);
     }
@@ -102,5 +103,9 @@ public class Body extends ConquerSpaceGameObject{
 
     public double getOrbitalDistance() {
         return orbit.toPolarCoordinate().getDistance();
+    }
+
+    public UniversePath getUniversePath() {
+        return new UniversePath();
     }
 }

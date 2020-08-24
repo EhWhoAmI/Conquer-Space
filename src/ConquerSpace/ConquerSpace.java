@@ -54,7 +54,6 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -92,9 +91,9 @@ public final class ConquerSpace {
      * Build number for debugging.
      */
     public static int BUILD_NUMBER = 0;
-    
+
     public static String BUILD_TIME = "";
-    
+
     public static String BUILD_REVISION = "";
 
     //Init build no
@@ -108,25 +107,8 @@ public final class ConquerSpace {
         } catch (IOException ex) {
             LOGGER.info("IO exception, no build number.", ex);
         }
-        Class clazz = ConquerSpace.class;
-        String className = clazz.getSimpleName() + ".class";
-        String classPath = clazz.getResource(className).toString();
-        if (classPath.startsWith("jar")) {
-            try {
-                // Class not from JAR
-                String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1)
-                        + "/META-INF/MANIFEST.MF";
-                Manifest manifest = new Manifest(new URL(manifestPath).openStream());
-                Attributes attr = manifest.getMainAttributes();
-                BUILD_TIME = attr.getValue("Build-Time");
-                BUILD_REVISION = attr.getValue("Revision");
-            } catch (MalformedURLException ex) {
-                LOGGER.info("MalformedURLException", ex);
-            } catch (IOException ex) {
-                LOGGER.info("IOException", ex);
-            }
-        }
 
+        processManifestData();
     }
 
     /**
@@ -148,6 +130,8 @@ public final class ConquerSpace {
             TOOLS = false,
             HEADLESS = false,
             TRANSLATE_TEST = false;
+    
+    public static final File SETTINGS_FILE = new File(System.getProperty("user.dir") + "/settings.properties");
 
     public static GameState gameState;
     /**
@@ -190,6 +174,7 @@ public final class ConquerSpace {
                     //Set catch all exceptions in game thread
                     Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
 
+                    //Configure look and feel
                     initLookAndFeel();
                     configureMusic();
                 }
@@ -204,6 +189,7 @@ public final class ConquerSpace {
                     while (!menu.isLoadedUniverse()) {
                         Thread.sleep(100);
                     }
+                    //Remove
                     menu = null;
                 }
                 //Show loading screen
@@ -217,73 +203,6 @@ public final class ConquerSpace {
                 //Clean up, however we do that
             }
         }
-    }
-
-    /**
-     * Kept for purely historical reasons.
-     */
-    public static void loadFiles() {
-        long startTime = System.currentTimeMillis();
-        try {
-            //Load the file check.
-            Scanner fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
-            int files = 0;
-            while (fileScanner.hasNextLine()) {
-                files++;
-                fileScanner.nextLine();
-            }
-            LOGGER.info("Asset Files: " + files);
-            //Reset Scanner
-            fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
-            int fileIndex = 0;
-            int filesMissing = 0;
-            while (fileScanner.hasNextLine()) {
-                fileIndex++;
-
-                String fileName = fileScanner.nextLine();
-
-                LOGGER.trace("Verifying file " + fileName);
-
-                //Check for it
-                File f = new File(System.getProperty("user.dir") + "/" + fileName);
-                //Next we have to determine the importance of the file. -- TODO
-                //File exists or not, and warn noone. XD
-                if (!f.exists()) {
-                    LOGGER.warn("Can't find file " + fileName + ". not fatal.");
-                    filesMissing++;
-                } else {
-                    LOGGER.trace("File " + fileName + " exists");
-                }
-            }
-            if (filesMissing == 0) {
-                LOGGER.info("No files missing.");
-            } else {
-                LOGGER.warn(filesMissing + " file(s) missing.");
-                int toexit = JOptionPane.showConfirmDialog(null, "You have "
-                        + filesMissing + " files missing. Make sure they are there"
-                        + ". \nSomething will go wrong if you don't fix"
-                        + "it. \nWe need all the files that we have. "
-                        + "Exit?", "Files missing",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-                if (toexit == JOptionPane.YES_OPTION) {
-                    //Then exit
-                    System.exit(0);
-                }
-                //or else leave the user to his or her own troubles. HEHEHE...
-            }
-        } catch (FileNotFoundException ex) {
-            //Cannot fine FILELIST
-            LOGGER.error("File not found Error: ", ex);
-            ExceptionHandling.ExceptionMessageBox("File FILELIST not found. Plea"
-                    + "se find it online or somewhere! We cannot check for any f"
-                    + "iles we need.", ex);
-            System.exit(1);
-        }
-
-        long endTime = System.currentTimeMillis();
-
-        //Log how long that took
-        LOGGER.info("Took " + (endTime - startTime) + "ms to load.");
     }
 
     public static void initLookAndFeel() {
@@ -315,6 +234,7 @@ public final class ConquerSpace {
 
     public static void loadUniverse() {
         gameState = new GameState(0);
+        //Set save folder
         gameState.saveFile = new File(SaveGame.getSaveFolder());
         //Load universe
         long loadingStart = System.currentTimeMillis();
@@ -337,18 +257,18 @@ public final class ConquerSpace {
         //Init settings, and read from file if possible        
         settings = new ClientOptions();
         //Check for the existance of the settings file
-        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
-        if (settingsFile.exists()) {
-            settings.fromProperties(settingsFile);
+        if (SETTINGS_FILE.exists()) {
+            settings.fromProperties(SETTINGS_FILE);
         } else {
-            createNewSettings(settingsFile);
+            createNewSettings(SETTINGS_FILE);
         }
+        
         //do settings
         configureGame();
 
         try {
-            //Write
-            settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+            //Write settings to file
+            settings.store(SETTINGS_FILE);
         } catch (IOException ex) {
         }
     }
@@ -356,12 +276,12 @@ public final class ConquerSpace {
     public static void createNewSettings(File settingsFile) {
         try {
             if (!settingsFile.getParentFile().exists()) {
-                settingsFile.getParentFile().mkdir();
+                settingsFile.getParentFile().mkdirs();
             }
             settingsFile.createNewFile();
 
             //Save
-            settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+            settings.store(settingsFile);
         } catch (IOException ex) {
             LOGGER.warn("Unable to create settings file!", ex);
         }
@@ -373,16 +293,16 @@ public final class ConquerSpace {
 
         Version version = settings.getVersion();
         //Check if not equal
-
-        //Music
     }
 
-    public static void generateChecksum() {
+    private static void generateChecksum() {
         //Get current file
         File codeFile = new File(ConquerSpace.class
                 .getProtectionDomain().getCodeSource()
                 .getLocation().getPath());
         File assetFolder = new File("assets/data");
+        
+        //Create thread to process checksums
         Runnable runnable = () -> {
             long start = System.currentTimeMillis();
             try {
@@ -406,7 +326,29 @@ public final class ConquerSpace {
         checksumThread.start();
     }
 
-    public static void initalizeCommandLineArgs(String[] args) {
+    //Gets manifest metadata
+    private static void processManifestData() {
+        Class clazz = ConquerSpace.class;
+        String className = clazz.getSimpleName() + ".class";
+        String classPath = clazz.getResource(className).toString();
+        if (classPath.startsWith("jar")) {
+            try {
+                // Class not from JAR
+                String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1)
+                        + "/META-INF/MANIFEST.MF";
+                Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+                Attributes attr = manifest.getMainAttributes();
+                BUILD_TIME = attr.getValue("Build-Time");
+                BUILD_REVISION = attr.getValue("Revision");
+            } catch (MalformedURLException ex) {
+                LOGGER.info("MalformedURLException", ex);
+            } catch (IOException ex) {
+                LOGGER.info("IOException", ex);
+            }
+        }
+    }
+
+    private static void initalizeCommandLineArgs(String[] args) {
         Options options = new Options();
         options.addOption("d", false, "Debug, default seed (42), all the menus can be skipped");
         options.addOption("t", false, "Run tool viewer");

@@ -36,8 +36,8 @@ public class ConstructingArea extends Area{
         this.toBuild = toBuild.getReference();
     }
 
-    public Area getToBuild() {
-        return gameState.getObject(toBuild, Area.class);
+    public ObjectReference getToBuild() {
+        return toBuild;
     }
 
     public int getTicksLeft() {

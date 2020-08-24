@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import javax.swing.AbstractListModel;
 
 /**
- *
+ * For handling lists, so no more need to create another list model again
  * @author EhWhoAmI
  */
 public class ObjectListModel<E> extends AbstractListModel<String> {

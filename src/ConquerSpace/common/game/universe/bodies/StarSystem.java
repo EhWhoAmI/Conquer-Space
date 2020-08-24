@@ -91,7 +91,7 @@ public class StarSystem extends Body {
     
     public void addBody(StarSystemBody b){ 
         b.setIndex(bodies.size());
-        b.setParent(this.index);
+        b.setParentIndex(this.index);
         b.setParentId(this.getReference());
         
         if(b instanceof Planet) {

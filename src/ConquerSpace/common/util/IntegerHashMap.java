@@ -32,4 +32,9 @@ public class IntegerHashMap<K> extends HashMap<K, Integer>{
             put(w, i);
         }
     }
+
+    @Override
+    public Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -21,7 +21,7 @@ package ConquerSpace.common.game.ships.components;
  * A component used for testing ships.
  * @author EhWhoAmI
  */
-public class TestComponent extends ShipComponent{
+public class TestComponent extends ShipComponent implements Cloneable{
     public TestComponent() {
         super(0, 0, "Test");
     }

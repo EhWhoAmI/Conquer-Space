@@ -18,7 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.ConquerSpace;
-import static ConquerSpace.ConquerSpace.VERSION;
+import static ConquerSpace.ConquerSpace.SETTINGS_FILE;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.server.GameController;
@@ -29,9 +29,7 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -147,9 +145,8 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
 
                 ConquerSpace.settings.setLaf(lafText);
 
-                File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
                 //Store the new settings
-                ConquerSpace.settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+                ConquerSpace.settings.store(SETTINGS_FILE);
             } catch (ClassNotFoundException ex) {
                 LOGGER.warn("", ex);
             } catch (InstantiationException ex) {
@@ -197,16 +194,10 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
 
     @Override
     public void internalFrameClosing(InternalFrameEvent e) {
-        //Write
-        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
-        if (settingsFile.exists()) {
-            //FileOutputStream fis = null;
-            try (FileOutputStream fis = new FileOutputStream(settingsFile);) {
-                //Read from file.
-                PrintWriter pw = new PrintWriter(fis);
-                ConquerSpace.settings.toProperties().store(pw, "Created by Conquer Space version " + VERSION.toString());
-                pw.close();
-            } catch (FileNotFoundException ex) {
+        //Write to settings file
+        if (SETTINGS_FILE.exists()) {
+            try {
+                ConquerSpace.settings.store(SETTINGS_FILE);
             } catch (IOException ex) {
             }
         }

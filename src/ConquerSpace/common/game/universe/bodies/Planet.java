@@ -152,10 +152,6 @@ public class Planet extends StarSystemBody implements Administrable {
         return name;
     }
 
-    public UniversePath getUniversePath() {
-        return (new UniversePath(getParentIndex(), getIndex()));
-    }
-
     public int getSatelliteCount() {
         return satellites.size();
     }

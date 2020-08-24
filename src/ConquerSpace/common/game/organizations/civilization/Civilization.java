@@ -400,7 +400,7 @@ public class Civilization extends Organization implements Employer {
     public void employ(ObjectReference p) {
         people.add(p);
         gameState.getObject(p, Person.class).employer = getReference();
-;    }
+    }
 
     public ArrayList<ResourceStockpile> getResourceStorages() {
         ArrayList<ResourceStockpile> resourceStockpiles = new ArrayList<>();

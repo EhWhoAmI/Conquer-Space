@@ -27,7 +27,7 @@ import ConquerSpace.common.save.SerializeClassName;
  * @author EhWhoAmI
  */
 @SerializeClassName("hull")
-public class Hull extends ConquerSpaceGameObject{
+public class Hull extends ConquerSpaceGameObject implements Cloneable{
     //KGS
     //Also determines hull hp and strength
     private long mass;
@@ -127,7 +127,7 @@ public class Hull extends ConquerSpaceGameObject{
     }
 
     @Override
-    public Object clone() {
+    public Object clone() throws CloneNotSupportedException {
         return new Hull(gameState, mass, space, getMaterial(), shipType, thrust, name);
     }
     

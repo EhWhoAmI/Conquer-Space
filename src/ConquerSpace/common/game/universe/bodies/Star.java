@@ -67,11 +67,6 @@ public class Star extends StarSystemBody {
     public int getParentStarSystem() {
         return parentStarSystem;
     }
-
-    
-    public UniversePath getUniversePath() {
-        return (new UniversePath(parentStarSystem, getIndex()));
-    }
     
     public int getOwnerID(){
         return ownerID;

@@ -21,7 +21,7 @@ package ConquerSpace.common.game.ships.components;
  *
  * @author EhWhoAmI
  */
-public class ShipComponent {
+public class ShipComponent implements Cloneable {
     //Mass in KG
     protected int mass;
     //Cost in credits
@@ -85,7 +85,7 @@ public class ShipComponent {
         return "";
     }
 
-    public Object clone() {
+    public Object clone() throws CloneNotSupportedException {
         return new ShipComponent(mass, cost, name);
     }
     

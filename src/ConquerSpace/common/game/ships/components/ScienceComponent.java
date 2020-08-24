@@ -21,7 +21,7 @@ package ConquerSpace.common.game.ships.components;
  *
  * @author EhWhoAmI
  */
-public class ScienceComponent extends ShipComponent{
+public class ScienceComponent extends ShipComponent implements Cloneable{
     private int scienceContribution = 0;
     
     public ScienceComponent(int mass, int cost, String name) {

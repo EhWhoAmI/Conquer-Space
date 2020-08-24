@@ -32,5 +32,10 @@ public class DoubleHashMap<K> extends HashMap<K, Double>{
             put(w, i);
         }
     }
+
+    @Override
+    public Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
 }
 

@@ -31,10 +31,15 @@ import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -42,19 +47,34 @@ import javax.swing.JPanel;
  */
 public class AreaInformationPanel<T extends Area> extends JPanel {
 
+    private static final Logger LOGGER = CQSPLogger.getLogger(AreaInformationPanel.class.getName());
     protected T area;
     protected GameState gameState;
-
+    
+    private static final HashMap<Class, Class> areaInfoMap = new HashMap<>();
+    
+    static {
+        areaInfoMap.put(ResearchArea.class, ResearchAreaInformationPanel.class);
+        areaInfoMap.put(CapitolArea.class, CapitolAreaInformationPanel.class);
+        areaInfoMap.put(InfrastructureArea.class, InfrastructureAreaInformationPanel.class);
+        areaInfoMap.put(ManufacturerArea.class, ManufacturerAreaInformationPanel.class);
+        areaInfoMap.put(FarmFieldArea.class, FarmFieldAreaInformationPanel.class);
+        areaInfoMap.put(CommercialArea.class, CommercialAreaInformationPanel.class);
+        areaInfoMap.put(SpacePortArea.class, SpacePortAreaInformationPanel.class);
+        areaInfoMap.put(ConstructingArea.class, ConstructionAreaInformationPanel.class);
+        areaInfoMap.put(MineArea.class, MineAreaInformationPanel.class);
+    }
+    
     public AreaInformationPanel(T area, GameState gameState) {
         this.area = area;
         this.gameState = gameState;
         
         setLayout(new VerticalFlowLayout());
     }
-
+    
     protected void genericInformation() {
         JLabel owner = new JLabel("Owner: None");
-
+        
         Organization org = gameState.getOrganizationObjectByReference(area.getOwner());
         if (org != null) {
             if (org instanceof Civilization) {
@@ -63,7 +83,7 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
                 owner.setText("Owner: " + org.getName());
             }
         }
-
+        
         JLabel currentJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.current", area.getCurrentlyManningJobs()));
         JLabel minimumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.minimum", area.operatingJobsNeeded()));
         JLabel maximumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.maximum", area.getMaxJobsProvided()));
@@ -80,27 +100,18 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
     public void update() {
         
     }
-
+    
+    @SuppressWarnings("unchecked")
     public static AreaInformationPanel getPanel(GameState gameState, Area a) {
-        if (a instanceof ResearchArea) {
-            return new ResearchAreaInformationPanel((ResearchArea) a, gameState);
-        } else if (a instanceof CapitolArea) {
-            return new CapitolAreaInformationPanel((CapitolArea) a, gameState);
-        } else if (a instanceof InfrastructureArea) {
-            return new InfrastructureAreaInformationPanel((InfrastructureArea) a, gameState);
-        } else if (a instanceof ManufacturerArea) {
-            return new ManufacturerAreaInformationPanel((ManufacturerArea) a, gameState);
-        } else if (a instanceof FarmFieldArea) {
-            return new FarmFieldAreaInformationPanel((FarmFieldArea) a, gameState);
-        } else if (a instanceof MineArea) {
-            return new MineAreaInformationPanel((MineArea) a, gameState);
-        } else if (a instanceof CommercialArea) {
-            return new CommercialAreaInformationPanel((CommercialArea) a, gameState);
-        } else if (a instanceof SpacePortArea) {
-            return new SpacePortAreaInformationPanel((SpacePortArea) a, gameState);
-        } else if (a instanceof ConstructingArea) {
-            return new ConstructionAreaInformationPanel((ConstructingArea) a, gameState);
-        } else {
+        try {
+            if (areaInfoMap.containsKey(a.getClass())) {
+                return (AreaInformationPanel) areaInfoMap.get(a.getClass()).getConstructor(a.getClass(), GameState.class).newInstance(a, gameState);
+            } else {
+                //Return empty 
+                return new EmptyAreaPanel(a, gameState);
+            }
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+            LOGGER.warn("Unable to open area information panel", ex);
             return new EmptyAreaPanel(a, gameState);
         }
     }

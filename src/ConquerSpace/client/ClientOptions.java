@@ -18,8 +18,12 @@
 package ConquerSpace.client;
 
 import ConquerSpace.ConquerSpace;
+import static ConquerSpace.ConquerSpace.VERSION;
+import static ConquerSpace.ConquerSpace.settings;
 import ConquerSpace.common.util.Version;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -181,5 +185,9 @@ public class ClientOptions {
         }
 
         laf = prop.getProperty(LAF_OPTION_STRING, DEFAULT_LAF);
+    }
+    
+    public void store(File file) throws FileNotFoundException, IOException {
+        toProperties().store(new FileOutputStream(file), "Created by Conquer Space version " + VERSION.toString());
     }
 }

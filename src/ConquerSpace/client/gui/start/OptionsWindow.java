@@ -19,8 +19,7 @@ package ConquerSpace.client.gui.start;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import static ConquerSpace.ConquerSpace.VERSION;
-import static ConquerSpace.ConquerSpace.settings;
+import static ConquerSpace.ConquerSpace.SETTINGS_FILE;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.server.GameController;
@@ -33,9 +32,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -148,9 +145,8 @@ public class OptionsWindow extends JFrame implements WindowListener {
 
                 ConquerSpace.settings.setLaf(lafText);
 
-                File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
                 //Store the new settings
-                ConquerSpace.settings.toProperties().store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
+                ConquerSpace.settings.store(SETTINGS_FILE);
             } catch (ClassNotFoundException ex) {
                 LOGGER.warn("", ex);
             } catch (InstantiationException ex) {
@@ -200,22 +196,10 @@ public class OptionsWindow extends JFrame implements WindowListener {
     public void windowClosing(WindowEvent e) {
         //Write
         //Write
-        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
-        if (settingsFile.exists()) {
-            FileOutputStream fis = null;
+        if (SETTINGS_FILE.exists()) {
             try {
-                //Read from file.
-                fis = new FileOutputStream(settingsFile);
-                PrintWriter pw = new PrintWriter(fis);
-                ConquerSpace.settings.toProperties().store(pw, "Created by Conquer Space version " + VERSION.toString());
-                pw.close();
-            } catch (FileNotFoundException ex) {
+                ConquerSpace.settings.store(SETTINGS_FILE);
             } catch (IOException ex) {
-            } finally {
-                try {
-                    fis.close();
-                } catch (IOException ex) {
-                }
             }
         }
     }

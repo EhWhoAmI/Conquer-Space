@@ -31,7 +31,7 @@ public class Government implements Serializable{
     Person leader;
     String leaderTitle;
     
-    //Important governemnt positions. All governments need these
+    //Important governenmt positions. All governments need these
     public GovernmentPosition headofState;
     public GovernmentPosition headofGovernment;
 
