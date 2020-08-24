@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
+import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -85,7 +86,7 @@ public class EconomyWindow extends JPanel {
 
         civilizationTradeValue.setText("Trade Value: <Not implemented yet>");
 
-        civEconomicReserves.setText("Reserves: " + c.getNationalCurrency().getSymbol() + " " + c.getMoneyReserves() + " million ");
+        civEconomicReserves.setText("Reserves: " + c.getNationalCurrency().getSymbol() + " " + Utilities.longToHumanString(c.getMoneyReserves()));
         currencyInflationRate.setText("Inflation rate: " + c.getNationalCurrency().getInflation() * 100 + "%");
     }
 }

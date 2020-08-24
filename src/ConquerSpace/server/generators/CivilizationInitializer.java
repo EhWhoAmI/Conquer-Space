@@ -198,6 +198,7 @@ public class CivilizationInitializer {
 
         for (int i = 0; i < starting.cities.size(); i++) {
             City city = gameState.getObject(starting.cities.get(i), City.class);
+            city.setOwner(c.getReference());
             addInfrastructure(city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city, c);

@@ -49,7 +49,10 @@ public class Utilities {
         "billion",
         "trillion",
         "quadrillion",
-        "quintillion"};
+        "quintillion", 
+        "sextillion", 
+        "septillion",
+        "octillion"};
 
     public static String longToHumanString(long number) {
         if (number < 10000) {

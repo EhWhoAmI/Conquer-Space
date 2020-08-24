@@ -451,7 +451,9 @@ public class GameUpdater extends GameTicker {
                     }
                 }
             }
-
+            
+            //Get population wealth, however that is defined
+            
             //Increment population
             double fraction = ((double) GameRefreshRate) / 10000d;
 
@@ -460,6 +462,7 @@ public class GameUpdater extends GameTicker {
                 seg.size = (long) ((double) seg.size * ((1 + seg.populationIncrease * fraction)));
             }
         }
+        
         //Calculate unemployment rate
         double unemploymentRate = city.getUnemploymentRate();
         if (unemploymentRate > 0.1d) {
@@ -479,6 +482,15 @@ public class GameUpdater extends GameTicker {
                     city.cityModifiers.add(riotModifier);
                 }
             }
+        }
+        
+        //Tax
+        long popSize = pop.getPopulationSize();
+        long tax = popSize * 5;
+
+        Object obj = gameState.getObject(city.getOwner());
+        if(obj instanceof Civilization) {
+            ((Civilization) obj).changeMoney(tax);
         }
     }
 
