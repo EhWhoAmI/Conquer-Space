@@ -21,6 +21,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.ManufacturerArea;
+import ConquerSpace.common.game.city.area.ManufacturerAreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -42,13 +43,11 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
 
     DefaultListModel<ProductionProcess> productionProcessListModel;
     JList<ProductionProcess> list;
-    
-    private GameState gameState;
 
     @SuppressWarnings("unchecked")
     public IndustrialFactoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(p, c);
-        this.gameState = gameState;
+        super(gameState, p, c, civ);
+        factory = new ManufacturerAreaFactory(civ);
         
         setLayout(new GridBagLayout());
         productionProcessListModel = new DefaultListModel<>();
@@ -62,10 +61,11 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
         JLabel input = new JLabel();
         JLabel output = new JLabel();
         list.addListSelectionListener(l -> {
-            processName.setText(((ProductionProcess) list.getSelectedValue()).name);
+            ProductionProcess process = ((ProductionProcess) list.getSelectedValue());
+            processName.setText(process.name);
             String inputString = "Input: ";
 
-            for (Map.Entry<Integer, Double> entry : ((ProductionProcess) list.getSelectedValue()).input.entrySet()) {
+            for (Map.Entry<Integer, Double> entry : process.input.entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
                 inputString = inputString + gameState.getGood(key).getName();
@@ -75,7 +75,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             input.setText(inputString);
 
             String outputString = "Output: ";
-            for (Map.Entry<Integer, Double> entry : ((ProductionProcess) list.getSelectedValue()).output.entrySet()) {
+            for (Map.Entry<Integer, Double> entry : process.output.entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
                 outputString = outputString + gameState.getGood(key).getName();
@@ -83,7 +83,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
                 outputString = outputString + ", ";
             }
             output.setText(outputString);
-
+            ((ManufacturerAreaFactory) factory).setProcess(process);
         });
         JPanel processInfoPanel = new JPanel();
         processInfoPanel.setLayout(new VerticalFlowLayout());
@@ -103,7 +103,8 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
         constraints.gridx = 1;
         constraints.gridy = 0;
         add(processInfoPanel, constraints);
-
+        
+        add(getCostPanel());
     }
 
     @Override

@@ -63,4 +63,33 @@
         catalysts: [
         ]
     }
+    {
+        name:Concrete Combination
+        identifier: concrete_making
+        // Just copy factorio for now
+        input: [
+            "water:3"
+            "o_iron:1"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "building_concrete:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Water Generation
+        identifier: water_making
+        input: [
+        ]
+        //Eh makes sense I guess
+        output: [
+            "water:5"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
 ]

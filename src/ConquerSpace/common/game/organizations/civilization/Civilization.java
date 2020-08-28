@@ -105,6 +105,8 @@ public class Civilization extends Organization implements Employer {
      * Resources that they possess.
      */
     public HashMap<Integer, Double> resourceList;
+    
+    public HashMap<String, Integer> taggedGoods;
 
     public ArrayList<ObjectReference> habitatedPlanets;
 
@@ -175,6 +177,7 @@ public class Civilization extends Organization implements Employer {
         habitatedPlanets = new ArrayList<>();
 
         resourceList = new HashMap<>();
+        taggedGoods = new HashMap<>();
 
         events = new ArrayList<>();
 

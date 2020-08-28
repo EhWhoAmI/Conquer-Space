@@ -17,24 +17,57 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.city.area.AreaFactory;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import com.alee.extended.layout.VerticalFlowLayout;
+import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class AreaDesignPanel extends JPanel{
+public class AreaDesignPanel extends JPanel {
+
     protected Area toConstruct = null;
-    
-    public AreaDesignPanel(Planet p, City c) {
-        
+    protected Civilization civ;
+    protected GameState gameState;
+
+    protected AreaFactory factory;
+
+    public AreaDesignPanel(GameState gameState, Planet p, City c, Civilization constructor) {
+        civ = constructor;
+        this.gameState = gameState;
+        factory = null;
     }
-    
+
     public Area getAreaToConstruct() {
         return toConstruct;
     }
-    
+
+    public JPanel getCostPanel() {
+        JPanel costPanel = new JPanel(new VerticalFlowLayout());
+        DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Good", "Amount"}, 0);
+        if (factory != null) {
+            for (Map.Entry<Integer, Double> entry : factory.getCost().entrySet()) {
+                Integer key = entry.getKey();
+                Double val = entry.getValue();
+                Good good = gameState.getGood(key);
+                tableModel.addRow(new Object[]{good.getName(), val});
+            }
+        }
+        JTable costTable = new JTable(tableModel);
+        costPanel.add(new JLabel("Cost"));
+        costPanel.add(new JScrollPane(costTable));
+        return costPanel;
+    }
 }

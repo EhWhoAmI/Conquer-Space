@@ -22,6 +22,8 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.MineArea;
+import ConquerSpace.common.game.city.area.MineAreaFactory;
+import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -56,8 +58,10 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
 
     private GameState gameState;
 
-    public MinerAreaConstructionPanel(GameState gameState, Planet planet, City c) {
-        super(planet, c);
+    public MinerAreaConstructionPanel(GameState gameState, Planet planet, City c, Civilization civ) {
+        super(gameState, planet, c, civ);
+        factory = new MineAreaFactory(civ);
+
         this.gameState = gameState;
 
         setLayout(new HorizontalFlowLayout());
@@ -96,7 +100,9 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
             if (resourceListTableModel.getRowCount() > 0) {
                 resourceListTable.addRowSelectionInterval(0, 0);
             }
-
+            if (factory != null) {
+                ((MineAreaFactory) factory).setMiningStratum(strat.getReference());
+            }
             miningStratum = strat;
         });
 
@@ -156,6 +162,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
         if (strataListModel.size() > 0) {
             stratumList.setSelectedIndex(0);
         }
+        add(getCostPanel());
     }
 
     private boolean inCircle(int xC, int yC, int r, int x, int y) {

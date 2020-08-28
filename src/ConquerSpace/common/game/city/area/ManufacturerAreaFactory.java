@@ -15,21 +15,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game.planetdisplayer.construction;
+package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.game.resources.ProductionProcess;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PowerPlantAreaConstructionPanel extends AreaDesignPanel{
+public class ManufacturerAreaFactory extends AreaFactory {
+    protected ProductionProcess process;
+    //How much of that production process per round...
+    float productivity;
     
-    public PowerPlantAreaConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(gameState, p, c, civ);
+    public ManufacturerAreaFactory(Civilization builder) {
+        super(builder);
     }
-    
+
+    public void setProcess(ProductionProcess process) {
+        this.process = process;
+    }
+
+    public void setProductivity(float productivity) {
+        this.productivity = productivity;
+    }
+
+    @Override
+    public Area build(GameState gameState) {
+        ManufacturerArea area = new ManufacturerArea(gameState, process, productivity);
+        return setDefaultInformation(gameState, area);
+    }
+
 }

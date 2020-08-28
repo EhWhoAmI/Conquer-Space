@@ -322,6 +322,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
                 Satellite sat = Satellites.parseSatellite(gameState, selectedObject, civilization.multipliers, civilization.values);
                 //Check if it orbits a planet
                 sat.setOwner(civilization.getReference());
+                //Choose launch vehicle
                 Actions.launchSatellite(sat, planet, civilization);
                 JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
             } else if (tab == 1) {

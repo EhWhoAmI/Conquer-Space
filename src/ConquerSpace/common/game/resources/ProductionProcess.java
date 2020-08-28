@@ -36,6 +36,9 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
     public String identifier;
     public HashMap<Integer, Double> input;
     public HashMap<Integer, Double> output;
+    /**
+     * Can add the stuff you need to construct this
+     */
     public ArrayList<Integer> catalyst;
     //How difficult it is to extract. Will replace with the parts for the factory in the futute.
     public int diff;

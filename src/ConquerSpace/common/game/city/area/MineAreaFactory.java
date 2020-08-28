@@ -15,21 +15,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game.planetdisplayer.construction;
+package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.city.City;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.universe.bodies.Planet;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PowerPlantAreaConstructionPanel extends AreaDesignPanel{
+public class MineAreaFactory extends AreaFactory{
+
+    private Integer resourceMined;
+    private ObjectReference miningStratum;
+    private float productivity;
     
-    public PowerPlantAreaConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(gameState, p, c, civ);
+    public MineAreaFactory(Civilization creator) {
+        super(creator);
     }
-    
+
+    public void setMiningStratum(ObjectReference miningStratum) {
+        this.miningStratum = miningStratum;
+    }
+
+    public void setResourceMined(Integer resourceMined) {
+        this.resourceMined = resourceMined;
+    }
+
+    public void setProductivity(float productivity) {
+        this.productivity = productivity;
+    }
+
+    @Override
+    public Area build(GameState gameState) {
+        MineArea area = new MineArea(gameState, miningStratum, resourceMined, productivity);
+        setDefaultInformation(gameState, area);
+        return area;
+    }
 }

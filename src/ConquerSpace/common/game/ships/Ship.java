@@ -31,11 +31,12 @@ import java.util.ArrayList;
  */
 @SerializeClassName("ship")
 public class Ship extends SpaceShip {
+
     String sclass;
 
     private Hull hull;
     public ArrayList<ShipComponent> components;
-    
+
     private ShipClass shipClass;
 
     public Ship(GameState gameState, ShipClass sclass, double X, double Y, Vector v, UniversePath location) {
@@ -52,7 +53,7 @@ public class Ship extends SpaceShip {
         components = new ArrayList<>();
         //Get components
         if (!sclass.components.isEmpty()) {
-            
+
         }
         this.hull = (Hull) sclass.getHull().clone();
         this.mass = sclass.getMass();
@@ -72,7 +73,6 @@ public class Ship extends SpaceShip {
     public void setVector(Vector v) {
         this.v = v;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -102,7 +102,7 @@ public class Ship extends SpaceShip {
     public String getShipClassName() {
         return sclass;
     }
-    
+
     public ShipClass getShipClass() {
         return shipClass;
     }

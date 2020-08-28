@@ -80,7 +80,7 @@ public class AreaConstructionPanel extends JPanel {
 
     public AreaConstructionPanel(GameState gameState,
             Planet planet,
-            Civilization c,
+            Civilization civilization,
             City city) {
         setLayout(new BorderLayout());
 
@@ -88,7 +88,7 @@ public class AreaConstructionPanel extends JPanel {
         for (int i = 0; i < AreaListNames.values().length; i++) {
             //Has launch capability
             if (AreaListNames.values()[i].equals(AreaListNames.SpacePort)) {
-                if (c.values.containsKey("haslaunch") && c.values.get("haslaunch") == 1) {
+                if (civilization.values.containsKey("haslaunch") && civilization.values.get("haslaunch") == 1) {
                     areaTypeListModel.addElement(AreaListNames.values()[i]);
                 }
             } else {
@@ -101,22 +101,27 @@ public class AreaConstructionPanel extends JPanel {
             //Get selected area type
             switch (areaTypeList.getSelectedValue()) {
                 case Mine:
-                    areaDesignPanel = new MinerAreaConstructionPanel(gameState, planet, city);
+                    areaDesignPanel = new MinerAreaConstructionPanel(gameState, planet, city, civilization);
                     break;
                 case SpacePort:
-                    areaDesignPanel = new SpacePortConstructionPanel(gameState, planet, city, c);
+                    areaDesignPanel = new SpacePortConstructionPanel(gameState, planet, city, civilization);
                     break;
                 case Manufacturer:
-                    areaDesignPanel = new IndustrialFactoryConstructionPanel(gameState, planet, city, c);
+                    areaDesignPanel = new IndustrialFactoryConstructionPanel(gameState, planet, city, civilization);
                     break;
                 case Observatory:
-                    areaDesignPanel = new ObservatoryConstructionPanel(gameState, planet, city, c);
+                    areaDesignPanel = new ObservatoryConstructionPanel(gameState, planet, city, civilization);
                     break;
                 default:
-                    areaDesignPanel = new AreaDesignPanel(planet, city);
+                    areaDesignPanel = new AreaDesignPanel(gameState, planet, city, civilization);
                     break;
             }
             areaConstructionInfo.add(areaDesignPanel, BorderLayout.PAGE_START);
+            
+            //Repaint so it shows immediately
+            areaDesignPanel.repaint();
+            areaConstructionInfo.revalidate();
+            areaConstructionInfo.repaint();
         });
 
         areaConstructionInfo = new JPanel(new BorderLayout());

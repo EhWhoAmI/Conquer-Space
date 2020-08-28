@@ -47,7 +47,7 @@ public class ObservatoryConstructionPanel extends AreaDesignPanel {
     private GameState gameState;
 
     public ObservatoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(p, c);
+        super(gameState,p, c, civ);
         this.p = p;
         this.civ = civ;
         this.gameState = gameState;

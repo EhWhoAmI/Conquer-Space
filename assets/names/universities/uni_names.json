@@ -3,29 +3,14 @@
     "rules": ["names\\space\\institution"],
     "counters": [],
     "names": [
-        "Hardvard",
-        "Yaleru",
-        "Decent",
-        "Good",
+        "Scientific",
         "Research",
-        "Profit",
-        "Screwing-people-over",
-        "0% acceptance rate",
-        "Stemford",
-        "Geek",
-        "Nerd",
-        "Dead",
-        "Technology",
-        "Caveman",
-        "Sixty Nine",
-        "Partying",
-        "Drunkard",
-        "No Student"
+        "Calculations",
+        "Sciencing"
     ],
     "space": [" "],
     "institution": [
-       "College",
-       "University",
-       "Institute"
+       "Institute",
+        "Labs"
     ]
 }

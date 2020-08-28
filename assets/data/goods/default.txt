@@ -90,4 +90,17 @@
 
         ]
     }
+{
+        name: Concrete
+        identifier: building_concrete
+        volume: 1
+        //Extra dense, so no one can move it
+        mass: 2400
+        formula: [
+        ]
+        tags: [
+            construction
+            structure
+        ]
+    }
 ]

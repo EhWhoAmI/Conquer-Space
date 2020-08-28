@@ -27,20 +27,21 @@ import ConquerSpace.common.save.SerializeClassName;
  * @author EhWhoAmI
  */
 @SerializeClassName("hull")
-public class Hull extends ConquerSpaceGameObject implements Cloneable{
+public class Hull extends ConquerSpaceGameObject implements Cloneable {
+
     //KGS
     //Also determines hull hp and strength
     private long mass;
     //Meters cube
     private long space;
-    
+
     private ObjectReference material;
-    
+
     private int shipType;
-    
+
     //Thrust in kilonewtons
     private long thrust;
-    
+
     private String name;
 
     public Hull(GameState gameState, long mass, long space, HullMaterial material, int shipType, long thrust, String name) {
@@ -52,7 +53,7 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable{
         this.thrust = thrust;
         this.name = name;
     }
-    
+
     public long getMass() {
         return mass;
     }
@@ -72,17 +73,17 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable{
     public HullMaterial getMaterial() {
         return gameState.getObject(material, HullMaterial.class);
     }
-    
+
     public float getMassToSpaceRatio() {
-        return ((float)mass/(float)space);
+        return ((float) mass / (float) space);
     }
-    
+
     public float getStrength() {
         return (getMassToSpaceRatio() * getMaterial().getStrength());
     }
-    
+
     public boolean isValid() {
-        return (getStrength()>=1);
+        return (getStrength() >= 1);
     }
 
     public long getThrust() {
@@ -127,9 +128,8 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable{
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         return new Hull(gameState, mass, space, getMaterial(), shipType, thrust, name);
     }
-    
-    
+
 }

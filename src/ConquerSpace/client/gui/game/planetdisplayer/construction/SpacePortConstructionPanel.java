@@ -46,7 +46,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
     private GameState gameState;
 
     public SpacePortConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(p, c);
+        super(gameState, p, c, civ);
         this.gameState = gameState;
 
         setLayout(new GridBagLayout());

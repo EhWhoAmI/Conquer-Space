@@ -745,4 +745,46 @@
     floor: 17
     id: 32
   }
+  {
+    name: Concrete Making
+    deps: []
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 0
+    action:
+    [
+      process:concrete_making
+    ]
+    fields:
+    [
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 17
+    id: 33
+  }
+  {
+    name: Water Making
+    deps: []
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 0
+    action:
+    [
+      process:water_making
+    ]
+    fields:
+    [
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 17
+    id: 34
+  }
 ]

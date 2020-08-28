@@ -115,7 +115,11 @@ public class CivilizationInitializer {
             } else {
                 civilization.setBehavior(new EmptyBehavior(gameState, civilization));
             }
-            //Add templates
+
+            //Add resources for the civ
+            civilization.taggedGoods.put("structure", findGoodByTag("structure"));
+            civilization.taggedGoods.put("energy", findGoodByTag("energy"));
+            
             initVision(civilization, universe);
 
             //Science
@@ -199,7 +203,7 @@ public class CivilizationInitializer {
         for (int i = 0; i < starting.cities.size(); i++) {
             City city = gameState.getObject(starting.cities.get(i), City.class);
             city.setOwner(c.getReference());
-            addInfrastructure(city);
+            addInfrastructure(c, city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city, c);
             addPopulation(city, selector, c);
@@ -607,22 +611,11 @@ public class CivilizationInitializer {
         c.addArea(area.getReference());
     }
 
-    private void addInfrastructure(City c) {
+    private void addInfrastructure(Civilization civ, City c) {
         PowerPlantArea powerPlant = new PowerPlantArea(gameState);
-        //TODO: choose energy resource
-
-        Good resource = null;
-        for (Good res : gameState.getGoodArrayList()) {
-            for (String tag : res.tags) {
-                if (tag.equals("energy")) {
-                    resource = res;
-                    break;
-                }
-            }
-        }
 
         powerPlant.setMaxVolume(5);
-        powerPlant.setUsedResource(resource.getId());
+        powerPlant.setUsedResource(civ.taggedGoods.get("energy"));
         powerPlant.setProduction(5000);
         powerPlant.setOperatingJobs(5000);
         powerPlant.setMaxJobs(6000);
@@ -640,5 +633,22 @@ public class CivilizationInitializer {
         template.setMass(84);
         template.setName("Sputnik");
         c.satelliteTemplates.add(template);
+    }
+
+    private int findGoodByTag(String tagSearched) {
+        Good resource = null;
+        for (Good res : gameState.getGoodArrayList()) {
+            for (String tag : res.tags) {
+                if (tag.equals(tagSearched)) {
+                    resource = res;
+                    break;
+                }
+            }
+        }
+        if (resource != null) {
+            return resource.getId();
+        } else {
+            return -1;
+        }
     }
 }

@@ -108,6 +108,14 @@ public class Area extends ConquerSpaceGameObject implements Workable, Comparable
         this.workingmultiplier = workingmultiplier;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     public float getWorkingmultiplier() {
         return workingmultiplier;
     }
