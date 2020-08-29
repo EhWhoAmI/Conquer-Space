@@ -28,6 +28,7 @@ import ConquerSpace.common.actions.ActionStatus;
 import ConquerSpace.common.actions.Actions;
 import static ConquerSpace.common.actions.Actions.removeResource;
 import static ConquerSpace.common.actions.Actions.storeResource;
+import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.city.City;
@@ -637,8 +638,8 @@ public class GameUpdater extends GameTicker {
                     civilization.civResearch.remove(t);
                     //c.currentlyResearchingTechonologys.remove(t);
                     tech.remove();
-                    //Alert civ FIX
-                    //civilization.controller.alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
+
+                    civilization.getBehavior().alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
                 } else {
                     //Increment by number of ticks
                     civilization.civResearch.put(t, civilization.civResearch.get(t) + civilization.currentlyResearchingTechonologys.get(t).getSkill() * delta);

@@ -25,10 +25,8 @@ import ConquerSpace.client.gui.game.planetdisplayer.construction.ObservatoryCons
 import ConquerSpace.client.gui.game.planetdisplayer.construction.SpacePortConstructionPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.ConstructingArea;
-import ConquerSpace.common.game.city.area.SpacePortAreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.BorderLayout;

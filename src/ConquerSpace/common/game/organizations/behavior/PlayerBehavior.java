@@ -19,6 +19,7 @@ package ConquerSpace.common.game.organizations.behavior;
 
 import ConquerSpace.client.gui.game.GameWindow;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.server.GameTickController;
@@ -32,11 +33,8 @@ public class PlayerBehavior extends Behavior implements GameTickController {
     public transient GameWindow mainwindow;
     //UI stuff
 
-    public PlayerBehavior(GameState gameState, Organization org) {
+    public PlayerBehavior(GameState gameState, Civilization org) {
         super(gameState, org);
-        if (!(org instanceof Civilization)) {
-            throw new IllegalArgumentException("The org has to be a civ!");
-        }
     }
 
     @Override
@@ -59,5 +57,10 @@ public class PlayerBehavior extends Behavior implements GameTickController {
     @Override
     public int getTickCount() {
         return mainwindow.getTickCount();
+    }
+
+    @Override
+    public void alert(Alert alert) {
+        mainwindow.alertNotification(alert);
     }
 }
