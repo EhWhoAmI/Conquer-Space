@@ -20,8 +20,8 @@ package ConquerSpace.client.gui.game.planetdisplayer.construction;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.city.area.SpacePortArea;
+import ConquerSpace.common.game.city.area.AreaFactory;
+import ConquerSpace.common.game.city.area.SpacePortAreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -37,34 +37,48 @@ import javax.swing.SpinnerNumberModel;
  * @author EhWhoAmI
  */
 public class SpacePortConstructionPanel extends AreaDesignPanel {
-
+    
     private JLabel amount;
     private JSpinner maxLaunchTubes;
     private JLabel launchTypes;
     private JComboBox<LaunchSystem> launchTypesValue;
-
+    
     private GameState gameState;
-
+    
+    SpacePortAreaFactory factory;
+    
+    private final int defaultPortsCount = 3;
+    
     public SpacePortConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(gameState, p, c, civ);
         this.gameState = gameState;
-
+        factory = new SpacePortAreaFactory(civ);
+        factory.setLaunchSystemCount(defaultPortsCount);
+        
         setLayout(new GridBagLayout());
         amount = new JLabel("Amount of launch ports");
-
+        
         launchTypes = new JLabel("Launch types");
-
-        SpinnerNumberModel model = new SpinnerNumberModel(3, 1, 5000, 1);
-
+        
+        SpinnerNumberModel model = new SpinnerNumberModel(defaultPortsCount, 1, 5000, 1);
+        
         maxLaunchTubes = new JSpinner(model);
+        maxLaunchTubes.addChangeListener(l -> {
+            factory.setLaunchSystemCount((Integer)maxLaunchTubes.getValue());
+        });
+        
         ((JSpinner.DefaultEditor) maxLaunchTubes.getEditor()).getTextField().setEditable(false);
-
-        launchTypesValue = new JComboBox<LaunchSystem>();
-
+        
+        launchTypesValue = new JComboBox<>();
+        
         for (ObjectReference id : civ.launchSystems) {
             launchTypesValue.addItem(gameState.getObject(id, LaunchSystem.class));
         }
-
+        factory.setLaunchSystem(((LaunchSystem) launchTypesValue.getSelectedItem()).getReference());
+        launchTypesValue.addActionListener(l -> {
+            factory.setLaunchSystem(((LaunchSystem) launchTypesValue.getSelectedItem()).getReference());
+        });
+        
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -73,26 +87,22 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.fill = GridBagConstraints.BOTH;
         add(amount, constraints);
-
+        
         constraints.gridx = 1;
         constraints.gridy = 0;
         add(maxLaunchTubes, constraints);
-
+        
         constraints.gridx = 0;
         constraints.gridy = 1;
         add(launchTypes, constraints);
-
+        
         constraints.gridx = 1;
         constraints.gridy = 1;
         add(launchTypesValue, constraints);
     }
 
     @Override
-    public Area getAreaToConstruct() {
-        if (launchTypesValue.getSelectedItem() != null && launchTypesValue.getSelectedItem() instanceof LaunchSystem) {
-            LaunchSystem ls = (LaunchSystem) launchTypesValue.getSelectedItem();
-            return new SpacePortArea(gameState, ls.getReference(), (Integer) maxLaunchTubes.getValue());
-        }
-        return null;
+    public AreaFactory getAreaToConstruct() {
+        return factory;
     }
 }

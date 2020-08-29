@@ -36,29 +36,25 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author EhWhoAmI
  */
-public class AreaDesignPanel extends JPanel {
+public abstract class AreaDesignPanel extends JPanel {
 
     protected Area toConstruct = null;
     protected Civilization civ;
     protected GameState gameState;
 
-    protected AreaFactory factory;
 
     public AreaDesignPanel(GameState gameState, Planet p, City c, Civilization constructor) {
         civ = constructor;
         this.gameState = gameState;
-        factory = null;
     }
 
-    public Area getAreaToConstruct() {
-        return toConstruct;
-    }
+    public abstract AreaFactory getAreaToConstruct();
 
     public JPanel getCostPanel() {
         JPanel costPanel = new JPanel(new VerticalFlowLayout());
         DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Good", "Amount"}, 0);
-        if (factory != null) {
-            for (Map.Entry<Integer, Double> entry : factory.getCost().entrySet()) {
+        if (getAreaToConstruct() != null) {
+            for (Map.Entry<Integer, Double> entry : getAreaToConstruct().getCost().entrySet()) {
                 Integer key = entry.getKey();
                 Double val = entry.getValue();
                 Good good = gameState.getGood(key);

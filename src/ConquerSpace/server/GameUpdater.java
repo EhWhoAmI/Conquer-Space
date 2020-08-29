@@ -332,8 +332,8 @@ public class GameUpdater extends GameTicker {
                     ConstructingArea constructingArea = ((ConstructingArea) area);
                     if (constructingArea.getTicksLeft() <= 0) {
                         areasToAdd.add(constructingArea.getToBuild());
+                        areaIterator.remove();
                     }
-                    areaIterator.remove();
                 }
             }
             //May have to fill up jobs...
@@ -451,9 +451,8 @@ public class GameUpdater extends GameTicker {
                     }
                 }
             }
-            
+
             //Get population wealth, however that is defined
-            
             //Increment population
             double fraction = ((double) GameRefreshRate) / 10000d;
 
@@ -462,7 +461,7 @@ public class GameUpdater extends GameTicker {
                 seg.size = (long) ((double) seg.size * ((1 + seg.populationIncrease * fraction)));
             }
         }
-        
+
         //Calculate unemployment rate
         double unemploymentRate = city.getUnemploymentRate();
         if (unemploymentRate > 0.1d) {
@@ -483,13 +482,13 @@ public class GameUpdater extends GameTicker {
                 }
             }
         }
-        
+
         //Tax
         long popSize = pop.getPopulationSize();
         long tax = popSize * 5;
 
         Object obj = gameState.getObject(city.getOwner());
-        if(obj instanceof Civilization) {
+        if (obj instanceof Civilization) {
             ((Civilization) obj).changeMoney(tax);
         }
     }
@@ -594,6 +593,14 @@ public class GameUpdater extends GameTicker {
         //Construct
         if (area instanceof ConstructingArea) {
             ConstructingArea constructingArea = (ConstructingArea) area;
+            //Remove resources
+
+            HashMap<Integer, Double> cost = constructingArea.getCostPerTurn();
+            for (Map.Entry<Integer, Double> entry : cost.entrySet()) {
+                Integer key = entry.getKey();
+                Double val = entry.getValue();
+                removeResource(key, val * GameRefreshRate, city);
+            }
             constructingArea.tickConstruction(GameRefreshRate);
         }
     }
@@ -755,7 +762,7 @@ public class GameUpdater extends GameTicker {
     private void createPeople() {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civ = gameState.getCivilizationObject(i);
-            
+
             //Because people stay now, will ignore them for now
         }
     }

@@ -15,27 +15,43 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game.planetdisplayer.construction;
+package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.AreaFactory;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.universe.bodies.Planet;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PowerPlantAreaConstructionPanel extends AreaDesignPanel{
-    
-    public PowerPlantAreaConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(gameState, p, c, civ);
+public class SpacePortAreaFactory extends AreaFactory {
+
+    private ObjectReference launchSystem = ObjectReference.INVALID_REFERENCE;
+    private int launchSystemCount = 0;
+
+    public SpacePortAreaFactory(Civilization civ) {
+        super(civ);
+    }
+
+    public void setLaunchSystem(ObjectReference launchSystem) {
+        this.launchSystem = launchSystem;
+    }
+
+    public void setLaunchSystemCount(int launchSystemCount) {
+        this.launchSystemCount = launchSystemCount;
+    }
+
+    public ObjectReference getLaunchSystem() {
+        return launchSystem;
+    }
+
+    public int getLaunchSystemCount() {
+        return launchSystemCount;
     }
 
     @Override
-    public AreaFactory getAreaToConstruct() {
-        return null;
+    public Area build(GameState gameState) {
+        return new SpacePortArea(gameState, launchSystem, launchSystemCount);
     }
-    
 }

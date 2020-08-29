@@ -20,6 +20,7 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
+import java.util.HashMap;
 
 /**
  *
@@ -29,11 +30,13 @@ import ConquerSpace.common.save.SerializeClassName;
 public class ConstructingArea extends Area{
     private int ticksLeft;
     private ObjectReference toBuild;
+    private HashMap<Integer, Double> costPerTurn;
 
     public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
         super(gameState);
         this.ticksLeft = ticks;
         this.toBuild = toBuild.getReference();
+        costPerTurn = new HashMap<>();
     }
 
     public ObjectReference getToBuild() {
@@ -47,7 +50,11 @@ public class ConstructingArea extends Area{
     public void setTicksLeft(int ticksLeft) {
         this.ticksLeft = ticksLeft;
     }
-    
+
+    public void setCostPerTurn(HashMap<Integer, Double> costPerTurn) {
+        this.costPerTurn = costPerTurn;
+    }
+
     public void tickConstruction(int value) {
         ticksLeft -= value;
     }
@@ -55,5 +62,9 @@ public class ConstructingArea extends Area{
     @Override
     public String toString() {
         return "Constructing " + toBuild.toString();
+    }
+    
+    public HashMap<Integer, Double> getCostPerTurn() {
+        return costPerTurn;
     }
 }

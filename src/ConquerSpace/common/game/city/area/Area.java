@@ -24,6 +24,7 @@ import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
+import java.util.HashMap;
 
 /**
  * Works as a modifier to the district

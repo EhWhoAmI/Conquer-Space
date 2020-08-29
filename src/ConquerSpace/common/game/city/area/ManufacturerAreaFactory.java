@@ -47,5 +47,4 @@ public class ManufacturerAreaFactory extends AreaFactory {
         ManufacturerArea area = new ManufacturerArea(gameState, process, productivity);
         return setDefaultInformation(gameState, area);
     }
-
 }

@@ -20,8 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer.construction;
 import ConquerSpace.common.Calculators;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.city.area.ObservatoryArea;
+import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.GridBagConstraints;
@@ -105,7 +104,7 @@ public class ObservatoryConstructionPanel extends AreaDesignPanel {
     }
 
     @Override
-    public Area getAreaToConstruct() {
-        return new ObservatoryArea(gameState, civ.getReference(), Calculators.Optics.getRange(1, (int) lensSizeSpinner.getValue()), p.getUniversePath());
+    public AreaFactory getAreaToConstruct() {
+        return null;
     }
 }

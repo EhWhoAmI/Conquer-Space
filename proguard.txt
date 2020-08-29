@@ -16,6 +16,8 @@
 -libraryjars dist/lib/hjson-2.1.0.jar
 -libraryjars dist/lib/commons-collections4-4.4.jar
 -libraryjars dist/lib/commons-cli-1.4.jar
+-libraryjars lib/SwingLogger.jar
+-libraryjars lib/swingx-all-1.6.4.jar
 
 -printmapping mapping.txt
 -overloadaggressively
@@ -23,14 +25,6 @@
 -ignorewarnings
 
 
-
--keep class ConquerSpace.util.logging.SwingMessageAppender extends org.apache.logging.log4j.core.appender.AbstractAppender {
-    <fields>;
-}
-
--keep,allowshrinking class ConquerSpace.util.logging.SwingMessageAppender extends org.apache.logging.log4j.core.appender.AbstractAppender {
-    <fields>;
-}
 
 # Keep - Applications. Keep all application classes, along with their 'main' methods.
 -keepclasseswithmembers public class * {
@@ -57,6 +51,37 @@
 -keepclasseswithmembers,includedescriptorclasses,allowshrinking class * {
     native <methods>;
 }
+
+# Keep - _class method names. Keep all .class method names. This may be
+# useful for libraries that will be obfuscated again with different obfuscators.
+-keepclassmembers,allowshrinking class * {
+    java.lang.Class class$(java.lang.String);
+    java.lang.Class class$(java.lang.String,boolean);
+}
+
+-keepclassmembers,allowshrinking class * {
+    @proguard.annotation.KeepName
+    <fields>;
+    @proguard.annotation.KeepName
+    <methods>;
+}
+
+-keepclassmembers,allowshrinking @proguard.annotation.KeepClassMemberNames class * {
+    <fields>;
+    <methods>;
+}
+
+-keepclassmembers,allowshrinking @proguard.annotation.KeepPublicClassMemberNames class * {
+    public <fields>;
+    public <methods>;
+}
+
+-keepclassmembers,allowshrinking @proguard.annotation.KeepPublicProtectedClassMemberNames class * {
+    public protected <fields>;
+    public protected <methods>;
+}
+
+-keep,allowshrinking @proguard.annotation.KeepName class *
 
 # Remove - System method calls. Remove all invocations of System
 # methods without side effects whose return values are not used.

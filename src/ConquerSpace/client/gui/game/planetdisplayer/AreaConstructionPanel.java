@@ -26,12 +26,16 @@ import ConquerSpace.client.gui.game.planetdisplayer.construction.SpacePortConstr
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.ConstructingArea;
+import ConquerSpace.common.game.city.area.SpacePortAreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -100,6 +104,9 @@ public class AreaConstructionPanel extends JPanel {
             areaConstructionInfo.removeAll();
             //Get selected area type
             switch (areaTypeList.getSelectedValue()) {
+                default:
+                    //Show nothing
+                    break;
                 case Mine:
                     areaDesignPanel = new MinerAreaConstructionPanel(gameState, planet, city, civilization);
                     break;
@@ -112,26 +119,37 @@ public class AreaConstructionPanel extends JPanel {
                 case Observatory:
                     areaDesignPanel = new ObservatoryConstructionPanel(gameState, planet, city, civilization);
                     break;
-                default:
-                    areaDesignPanel = new AreaDesignPanel(gameState, planet, city, civilization);
-                    break;
+
             }
-            areaConstructionInfo.add(areaDesignPanel, BorderLayout.PAGE_START);
-            
-            //Repaint so it shows immediately
-            areaDesignPanel.repaint();
-            areaConstructionInfo.revalidate();
-            areaConstructionInfo.repaint();
+            if (areaDesignPanel != null) {
+                areaConstructionInfo.add(areaDesignPanel, BorderLayout.PAGE_START);
+
+                //Repaint so it shows immediately
+                areaConstructionInfo.revalidate();
+                areaConstructionInfo.repaint();
+            }
         });
 
         areaConstructionInfo = new JPanel(new BorderLayout());
 
         constructButton = new JButton(LOCALE_MESSAGES.getMessage("game.planet.construction.construct"));
         constructButton.addActionListener(l -> {
-            Area areaToBuild = areaDesignPanel.getAreaToConstruct();
+            AreaFactory areaToBuild = areaDesignPanel.getAreaToConstruct();
+
             if (areaDesignPanel != null && areaToBuild != null) {
                 //Then construct area
-                city.addArea(new ConstructingArea(gameState, 10_000, areaToBuild).getReference());
+                ConstructingArea area = new ConstructingArea(gameState, areaToBuild.buildTime(), areaToBuild.build(gameState));
+                //Set cost
+                HashMap<Integer, Double> cost = new HashMap<>();
+                for (Map.Entry<Integer, Double> entry : areaToBuild.getCost().entrySet()) {
+                    Integer key = entry.getKey();
+                    Double val = entry.getValue();
+                    cost.put(key, val / areaToBuild.buildTime());
+                }
+                area.setCostPerTurn(cost);
+
+                city.addArea(area.getReference());
+                System.out.println(city.areas);
                 JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, LOCALE_MESSAGES.getMessage("game.planet.construction.created"));
             }
         });
@@ -157,8 +175,8 @@ public class AreaConstructionPanel extends JPanel {
         add(constructButton, BorderLayout.SOUTH);
         areaTypeList.setSelectedIndex(0);
     }
-    
-    public void update(){
-        
+
+    public void update() {
+
     }
 }

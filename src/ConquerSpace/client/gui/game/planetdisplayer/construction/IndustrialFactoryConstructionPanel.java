@@ -19,8 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer.construction;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.city.area.ManufacturerArea;
+import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.ManufacturerAreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
@@ -43,12 +42,14 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
 
     DefaultListModel<ProductionProcess> productionProcessListModel;
     JList<ProductionProcess> list;
+    ManufacturerAreaFactory factory;
 
     @SuppressWarnings("unchecked")
     public IndustrialFactoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(gameState, p, c, civ);
         factory = new ManufacturerAreaFactory(civ);
-        
+        factory.setMaxJobs(10000);
+        factory.setOperatingJobs(5000);
         setLayout(new GridBagLayout());
         productionProcessListModel = new DefaultListModel<>();
         for (int i = 0; i < civ.productionProcesses.size(); i++) {
@@ -83,7 +84,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
                 outputString = outputString + ", ";
             }
             output.setText(outputString);
-            ((ManufacturerAreaFactory) factory).setProcess(process);
+            factory.setProcess(process);
         });
         JPanel processInfoPanel = new JPanel();
         processInfoPanel.setLayout(new VerticalFlowLayout());
@@ -108,13 +109,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
     }
 
     @Override
-    public Area getAreaToConstruct() {
-        if (list.getSelectedIndex() > -1) {
-            ManufacturerArea area = new ManufacturerArea(gameState, list.getSelectedValue(), 1);
-            area.setMaxJobs(50000);
-            area.setOperatingJobs(10000);
-            return area;
-        }
-        return null;
+    public AreaFactory getAreaToConstruct() {
+        return factory;
     }
 }

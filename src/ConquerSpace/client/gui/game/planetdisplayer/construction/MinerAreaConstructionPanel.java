@@ -20,8 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer.construction;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.city.area.MineArea;
+import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.MineAreaFactory;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.Good;
@@ -57,11 +56,12 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     private float amountMining = 10;
 
     private GameState gameState;
-
+    private MineAreaFactory factory;
+    
     public MinerAreaConstructionPanel(GameState gameState, Planet planet, City c, Civilization civ) {
         super(gameState, planet, c, civ);
         factory = new MineAreaFactory(civ);
-
+        factory.setProductivity(amountMining);
         this.gameState = gameState;
 
         setLayout(new HorizontalFlowLayout());
@@ -101,7 +101,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
                 resourceListTable.addRowSelectionInterval(0, 0);
             }
             if (factory != null) {
-                ((MineAreaFactory) factory).setMiningStratum(strat.getReference());
+                factory.setMiningStratum(strat.getReference());
             }
             miningStratum = strat;
         });
@@ -123,6 +123,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
                 Object selectedGoodObject = resourceListTableModel.getValueAt(selected, 0);
                 if (selectedGoodObject instanceof Good) {
                     miningGood = (Good) selectedGoodObject;
+                    factory.setResourceMined(miningGood.getId());
                 }
             }
         });
@@ -170,11 +171,7 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     }
 
     @Override
-    public Area getAreaToConstruct() {
-        if (miningStratum != null && miningGood != null) {
-            return new MineArea(gameState, miningStratum.getReference(), miningGood.getId(), amountMining);
-        }
-        return null;
+    public AreaFactory getAreaToConstruct() {
+        return factory;
     }
-
 }
