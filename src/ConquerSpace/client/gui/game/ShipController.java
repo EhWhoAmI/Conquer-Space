@@ -17,37 +17,15 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class SpaceShipOverview extends JPanel {
+public class ShipController extends JPanel{
 
-    private ShipManager shipListManager;
-    private ShipController controller;
-    private JTabbedPane tabs;
-
-    public SpaceShipOverview(GameState gameState, Civilization civ, PlayerRegister register) {
-        setLayout(new BorderLayout());
-        tabs = new JTabbedPane();
-
-        shipListManager = new ShipManager(gameState, civ, register);
-        tabs.add("Ship List", shipListManager);
-
-        tabs.addChangeListener(l -> {
-            update();
-        });
-        add(tabs, BorderLayout.CENTER);
+    public ShipController() {
     }
-
-    public void update() {
-        //shipDesigner.update();
-        shipListManager.update();
-    }
+    
 }

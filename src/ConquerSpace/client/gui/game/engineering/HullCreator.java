@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game;
+package ConquerSpace.client.gui.game.engineering;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;

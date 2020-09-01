@@ -595,7 +595,6 @@ public class GameUpdater extends GameTicker {
         if (area instanceof ConstructingArea) {
             ConstructingArea constructingArea = (ConstructingArea) area;
             //Remove resources
-
             HashMap<Integer, Double> cost = constructingArea.getCostPerTurn();
             for (Map.Entry<Integer, Double> entry : cost.entrySet()) {
                 Integer key = entry.getKey();

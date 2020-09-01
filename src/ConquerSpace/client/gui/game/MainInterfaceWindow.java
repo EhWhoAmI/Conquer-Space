@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.client.gui.game.engineering.HullCreator;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.LaunchVehicleDesigner;
@@ -254,7 +255,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.setIconAt(7, econ);
         tabs.setIconAt(8, events);
         tabs.setIconAt(9, orgs);
-
+        
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
 

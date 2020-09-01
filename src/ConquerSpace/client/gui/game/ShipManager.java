@@ -31,10 +31,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
+ * Listing the ships
  * @author EhWhoAmI
  */
-public class ShipListManager extends JPanel {
+public class ShipManager extends JPanel {
 
     private ShipTableModel model;
     private JScrollPane scrollPane;
@@ -46,7 +46,7 @@ public class ShipListManager extends JPanel {
     
     private GameState gameState;
 
-    public ShipListManager(GameState gameState, Civilization c, PlayerRegister register) {
+    public ShipManager(GameState gameState, Civilization c, PlayerRegister register) {
         this.c = c;
         this.gameState = gameState;
         

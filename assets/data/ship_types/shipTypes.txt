@@ -2,6 +2,7 @@
 "probe" 10
 "science ship" 20
 "survey ship" 30
+"space station" 40
 "repair ship" 110
 "construction ship" 120
 "colony ship" 210

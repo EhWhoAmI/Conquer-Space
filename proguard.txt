@@ -16,8 +16,8 @@
 -libraryjars dist/lib/hjson-2.1.0.jar
 -libraryjars dist/lib/commons-collections4-4.4.jar
 -libraryjars dist/lib/commons-cli-1.4.jar
--libraryjars lib/SwingLogger.jar
--libraryjars lib/swingx-all-1.6.4.jar
+-libraryjars dist/lib/SwingLogger.jar
+-libraryjars dist/lib/swingx-all-1.6.4.jar
 
 -printmapping mapping.txt
 -overloadaggressively
