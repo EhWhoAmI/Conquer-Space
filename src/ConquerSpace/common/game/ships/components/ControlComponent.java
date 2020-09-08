@@ -17,18 +17,16 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class ControlComponent extends ShipComponent{
-    
-    public ControlComponent(int mass, int cost, String name) {
-        super(mass, cost, name);
+public class ControlComponent extends ShipComponent {
+
+    public ControlComponent(GameState gameState) {
+        super(gameState);
     }
     
-    @Override
-    public String getRatingType() {
-        return "Control Power";
-    }
 }

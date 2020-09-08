@@ -21,7 +21,6 @@ import ConquerSpace.client.gui.game.engineering.HullCreator;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.LaunchVehicleDesigner;
-import ConquerSpace.client.gui.game.engineering.SatelliteDesigner;
 import ConquerSpace.client.gui.game.engineering.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
@@ -73,7 +72,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     JTabbedPane shipsComponentsOverviewPanel;
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
-    private SatelliteDesigner satelliteDesigner;
     private LaunchVehicleDesigner launchSystemDesigner;
 
     private CivInfoOverview civInfoOverview;
@@ -167,11 +165,9 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipdesign"), buildSpaceShipAutomationMenu);
 
-        satelliteDesigner = new SatelliteDesigner(civilization);
-        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.satellite"), satelliteDesigner);
         ImageIcon map = ResourceLoader.getIcon("satellite.icon");
 
-        shipsComponentsOverviewPanel.setIconAt(1, map);
+        //shipsComponentsOverviewPanel.setIconAt(1, map);
         launchSystemDesigner = new LaunchVehicleDesigner(gameState, civilization);
         JPanel launchWrapper = new JPanel();
         launchWrapper.setLayout(new VerticalFlowLayout());
@@ -344,12 +340,12 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     }
 
     private void updateComponents() {
-        shipsComponentsOverviewPanel.setEnabledAt(2, false);
+        /*shipsComponentsOverviewPanel.setEnabledAt(2, false);
         shipsComponentsOverviewPanel.setToolTipTextAt(2, "You need to research a launch system in the Research Tab!");
         if (civilization.values.containsKey("haslaunch") && civilization.values.get("haslaunch") == 1) {
             shipsComponentsOverviewPanel.setEnabledAt(2, true);
             shipsComponentsOverviewPanel.setToolTipText("");
-        }
+        }*/
     }
 
     @Override

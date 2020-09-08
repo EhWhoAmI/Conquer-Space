@@ -17,17 +17,16 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class ProbeCoreComponent extends ControlComponent {
-    
-    public ProbeCoreComponent(int mass, int cost, String name) {
-        super(mass, cost, name);
-    }
+public class CommunicationsComponent extends ShipComponent{
 
-    public String getSecondaryRatingType() {
-        return "Control range";
+    public CommunicationsComponent(GameState gameState) {
+        super(gameState);
     }
+    
 }

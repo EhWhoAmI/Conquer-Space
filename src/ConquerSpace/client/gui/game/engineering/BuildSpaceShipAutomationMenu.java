@@ -22,35 +22,26 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.ShipClass;
-import ConquerSpace.common.game.ships.components.EngineTechnology;
-import ConquerSpace.common.game.ships.components.EngineTemplate;
-import ConquerSpace.common.game.ships.components.ShipComponentTemplate;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.game.ships.hull.HullMaterial;
 import ConquerSpace.common.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -82,7 +73,6 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     private JLabel hullLabel;
     private JCheckBox toDesignHullOrNotToDesign;
     private JButton chooseHullButton;
-    private HullChooserDialog hullChooserDialog;
 
     private JLabel hullNameLabel;
     private JLabel hullSpaceLabel;
@@ -126,14 +116,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     private JTabbedPane mainTabs;
     private JPanel componentRoughDesignPanel;
 
-    private EngineConfigWindow engineConfigWindow = null;
-
     //Hull is null means it is self designed
     private Hull selectedHull = null;
 
     private NameGenerator nameGenerator;
-
-    private EngineTemplate selectedEngine;
 
     private GameState gameState;
 
@@ -249,25 +235,16 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             });
             chooseHullButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.choose"));
             chooseHullButton.addActionListener(l -> {
-                //Close and recreate
-                if (hullChooserDialog != null) {
-                    hullChooserDialog.dispose();
-                    hullChooserDialog = null;
-                }
-
-                hullChooserDialog = new HullChooserDialog();
-
-                //window.setContentPane(this);
-                JComponent comp;
-                for (comp = this; comp != null; comp = (JComponent) comp.getParent()) {
-                    if (comp instanceof JDesktopPane) {
-                        break;
+                HullDesignerPanel panel = new HullDesignerPanel(gameState, civ);
+                int close = JOptionPane.showInternalConfirmDialog(this,
+                        panel, "Hull Chooser",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (close == JOptionPane.OK_OPTION) {
+                    //Get selected hull
+                    if (panel.getSelectedHull() != null) {
+                        selectedHull = panel.getSelectedHull();
                     }
                 }
-                JDesktopPane desktop = (JDesktopPane) comp;
-                desktop.add(hullChooserDialog);
-
-                hullChooserDialog.setVisible(true);
             });
             chooseHullButton.setEnabled(false);
 
@@ -418,25 +395,6 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             engineTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.label"));
             setEngineButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.button"));
             setEngineButton.addActionListener(l -> {
-                //Close and recreate
-                if (engineConfigWindow != null) {
-                    engineConfigWindow.dispose();
-                    engineConfigWindow = null;
-                }
-
-                engineConfigWindow = new EngineConfigWindow();
-
-                //window.setContentPane(this);
-                JComponent comp;
-                for (comp = this; comp != null; comp = (JComponent) comp.getParent()) {
-                    if (comp instanceof JDesktopPane) {
-                        break;
-                    }
-                }
-                JDesktopPane desktop = (JDesktopPane) comp;
-                desktop.add(engineConfigWindow);
-                engineConfigWindow.setVisible(true);
-                //Add the thing...
             });
             engineTypeNotificationLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
 
@@ -600,190 +558,5 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.info"), shipInformationPanel);
         mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.components"), componentRoughDesignPanel);
         add(mainTabs, BorderLayout.CENTER);
-    }
-
-    private class EngineConfigWindow extends JInternalFrame {
-
-        private JCheckBox toDesignOrNotToDesign;
-        private JButton closeButton;
-
-        private JPanel mainEngineEventPanel;
-
-        private JPanel createEnginePanel;
-        private JLabel engineNameLabel;
-        private JTextField engineNameField;
-        private JComboBox<EngineTechnology> engineTechComboBox;
-
-        private JPanel chooseEnginePanel;
-        private JList<EngineComponentWrapper> engineList;
-        private DefaultListModel<EngineComponentWrapper> engineListModel;
-        private JButton selectEngineButton;
-
-        private JPanel engineInfoPanel;
-
-        private CardLayout cardLayout;
-
-        public EngineConfigWindow() {
-            setLayout(new VerticalFlowLayout());
-            setTitle(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine"));
-            setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-            add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine")));
-            toDesignOrNotToDesign = new JCheckBox(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.autodesign"));
-            toDesignOrNotToDesign.setSelected(true);
-
-            toDesignOrNotToDesign.addItemListener(l -> {
-                //l.getStateChange() == 1 means checked
-                if (l.getStateChange() == 1) {
-                    cardLayout.show(mainEngineEventPanel, "autodesign");
-                    toDesignOrNotToDesign.setText(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.autodesign.yes"));
-                } else {
-                    cardLayout.show(mainEngineEventPanel, "no");
-                    toDesignOrNotToDesign.setText(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.autodesign.no"));
-                }
-            });
-            add(toDesignOrNotToDesign);
-            cardLayout = new CardLayout();
-
-            mainEngineEventPanel = new JPanel();
-            mainEngineEventPanel.setLayout(cardLayout);
-            add(mainEngineEventPanel);
-
-            createEnginePanel = new JPanel(new VerticalFlowLayout());
-            createEnginePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.designer")));
-            mainEngineEventPanel.add("autodesign", createEnginePanel);
-
-            //Just type of engine, and thrust power i guess
-            DefaultComboBoxModel<EngineTechnology> engineTechBoxModel = new DefaultComboBoxModel<>();
-
-            //Add the civ info
-            for (ObjectReference t : civ.engineTechs) {
-                EngineTechnology technology = gameState.getObject(t, EngineTechnology.class);
-
-                engineTechBoxModel.addElement(technology);
-            }
-            engineTechComboBox = new JComboBox<>(engineTechBoxModel);
-            createEnginePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.tech")));
-            createEnginePanel.add(engineTechComboBox);
-
-            //Select engine....
-            chooseEnginePanel = new JPanel();
-            mainEngineEventPanel.add("no", chooseEnginePanel);
-            chooseEnginePanel.setLayout(new VerticalFlowLayout());
-            chooseEnginePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.choose")));
-
-            JPanel engineSelectionPanel = new JPanel();
-            engineListModel = new DefaultListModel<>();
-            //Fill list
-            {
-                for (ObjectReference obj : civ.shipComponentList) {
-                    ShipComponentTemplate template = gameState.getObject(obj, ShipComponentTemplate.class);
-                    if (template instanceof EngineTemplate) {
-                        engineListModel.addElement(new EngineComponentWrapper(template));
-                    }
-                }
-            }
-            engineList = new JList<>(engineListModel);
-            engineList.addListSelectionListener(l -> {
-                ShipComponentTemplate componentTemplate = engineList.getSelectedValue().object;
-                if (componentTemplate instanceof EngineTemplate) {
-                    EngineTemplate engineTemplate = (EngineTemplate) componentTemplate;
-                    engineInfoPanel.removeAll();
-                    //Add info
-                    engineInfoPanel.setLayout(new VerticalFlowLayout());
-                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.name", engineTemplate.getName())));
-                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.tech", engineTemplate.getEngineTechnology().getName())));
-                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.power", engineTemplate.getThrust())));
-                    engineInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.mass", engineTemplate.getMass())));
-
-                    engineInfoPanel.validate();
-                    engineInfoPanel.repaint();
-                }
-            });
-            JScrollPane engineListScrollPane = new JScrollPane(engineList);
-            //chooseEnginePanel.add(engineListScrollPane);
-
-            engineInfoPanel = new JPanel();
-            //chooseEnginePanel.add(engineInfoPanel);
-
-            engineSelectionPanel.setLayout(new GridLayout(1, 2));
-            engineSelectionPanel.add(engineListScrollPane);
-            engineSelectionPanel.add(engineInfoPanel);
-            chooseEnginePanel.add(engineSelectionPanel);
-            //End Self design
-
-            //Other panel...
-            closeButton = new JButton(LOCALE_MESSAGES.getMessage("gui.close"));
-            closeButton.addActionListener(l -> {
-                if (toDesignOrNotToDesign.isSelected()) {
-                    engineTypeNotificationLabel.setText(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.engine.dialog.seldesign"));
-                    engineTypeNotificationLabel.repaint();
-                } else {
-                    if (engineList.getSelectedValue() != null) {
-                        engineTypeNotificationLabel.setText(engineList.getSelectedValue().object.getName());
-                        engineTypeNotificationLabel.repaint();
-                    }
-                }
-                dispose();
-            });
-            add(closeButton);
-            setClosable(true);
-            setResizable(true);
-            pack();
-        }
-
-        private class EngineComponentWrapper {
-
-            ShipComponentTemplate object;
-
-            public EngineComponentWrapper(ShipComponentTemplate object) {
-                this.object = object;
-            }
-
-            @Override
-            public String toString() {
-                return object.getName();
-            }
-        }
-    }
-
-    private class HullChooserDialog extends JInternalFrame {
-
-        private DefaultListModel<Hull> hullListModel;
-        private JList<Hull> hullList;
-
-        private JPanel hullInfoPanel;
-
-        private HullChooserDialog() {
-            setTitle(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.choose"));
-            setLayout(new GridLayout(1, 2));
-            hullListModel = new DefaultListModel<>();
-            for (ObjectReference obj : civ.hulls) {
-                Hull hull = gameState.getObject(obj, Hull.class);
-                hullListModel.addElement(hull);
-            }
-            hullList = new JList<>(hullListModel);
-            hullList.addListSelectionListener(l -> {
-                hullInfoPanel.removeAll();
-                //Add components
-                hullInfoPanel.setLayout(new VerticalFlowLayout());
-
-                Hull h = hullList.getSelectedValue();
-                hullInfoPanel.add(new JLabel(h.getName()));
-                hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.material", h.getMaterial().getName())));
-                hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.mass", h.getMass())));
-                hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.rated", h.getThrust())));
-                //hullInfoPanel.add(new JLabel(h()));
-                hullInfoPanel.validate();
-                hullInfoPanel.repaint();
-            });
-            JScrollPane scrollPane = new JScrollPane(hullList);
-            hullInfoPanel = new JPanel();
-            add(scrollPane);
-            add(hullInfoPanel);
-            setClosable(true);
-            setResizable(true);
-            pack();
-        }
     }
 }

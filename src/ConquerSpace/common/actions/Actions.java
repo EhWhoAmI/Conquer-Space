@@ -27,8 +27,6 @@ import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Ship;
-import ConquerSpace.common.game.ships.satellites.Satellite;
-import ConquerSpace.common.game.ships.satellites.SpaceTelescope;
 import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -56,16 +54,6 @@ public class Actions {
 
     }
 
-    public static void launchSatellite(Satellite what, Planet whichPlanet, Civilization c) {
-        if (what instanceof VisionPoint) {
-            SpaceTelescope obs = ((SpaceTelescope) what);
-            obs.setPosition(whichPlanet.getUniversePath());
-            c.visionPoints.add(what.getReference());
-        }
-        what.setOrbiting(whichPlanet.getUniversePath());
-
-        whichPlanet.addSatellite(what);
-    }
 
     public static void launchShip(Ship what, Planet planet, Civilization civ) {
         what.setLocation(planet.getUniversePath());
@@ -80,9 +68,6 @@ public class Actions {
             ship.setLocation(planet.getUniversePath());
             ship.setIsOrbiting(true);
             planet.putShipInOrbit(ship);
-        } else if (launch instanceof Satellite) {
-            Satellite satellite = (Satellite) launch;
-            planet.addSatellite(satellite);
         }
     }
 

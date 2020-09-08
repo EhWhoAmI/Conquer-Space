@@ -24,7 +24,7 @@ import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.Fields;
 import ConquerSpace.common.game.science.Technologies;
-import ConquerSpace.common.game.ships.components.EngineTechnology;
+import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.util.ArrayList;

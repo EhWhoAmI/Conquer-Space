@@ -26,7 +26,7 @@ import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.FieldNode;
 import ConquerSpace.common.game.science.Technology;
-import ConquerSpace.common.game.ships.components.EngineTechnology;
+import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.save.Serialize;

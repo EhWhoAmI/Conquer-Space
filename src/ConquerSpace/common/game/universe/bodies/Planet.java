@@ -26,7 +26,6 @@ import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.organizations.civilization.stats.Economy;
 import ConquerSpace.common.game.ships.Orbitable;
-import ConquerSpace.common.game.ships.satellites.Satellite;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.Serialize;
@@ -158,11 +157,6 @@ public class Planet extends StarSystemBody implements Administrable {
 
     public Orbitable getSatellite(int i) {
         return gameState.getObject(satellites.get(i), Orbitable.class);
-    }
-
-    public void addSatellite(Satellite s) {
-        s.setOrbiting(getUniversePath());
-        satellites.add(s.getReference());
     }
 
     public ArrayList<ObjectReference> getSatellites() {

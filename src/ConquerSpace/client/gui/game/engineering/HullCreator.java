@@ -83,7 +83,7 @@ public class HullCreator extends JPanel {
     private JFormattedTextField massTextField;
     private JLabel massUnitText;
     private JLabel hullMaterialLabel;
-    private JComboBox<HullMaterial> hullMaterialComboBox;
+    private JComboBox<ObjectReference> hullMaterialComboBox;
 
     private JLabel emptyLabel;
 
@@ -251,7 +251,7 @@ public class HullCreator extends JPanel {
         long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
         long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
         int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
-        HullMaterial material = (HullMaterial) hullMaterialComboBox.getSelectedItem();
+        HullMaterial material = gameState.getObject((ObjectReference) hullMaterialComboBox.getSelectedItem(), HullMaterial.class);
 
         Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);

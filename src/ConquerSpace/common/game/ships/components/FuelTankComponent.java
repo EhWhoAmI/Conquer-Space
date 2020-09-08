@@ -17,18 +17,37 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class FuelTankComponent extends ShipComponent{
-
-    public FuelTankComponent(int mass, int cost, String name) {
-        super(mass, cost, name);
-    }
+    Integer fuelType;
     
-    @Override
-    public String getRatingType() {
-        return "Storage (kiloliters, or 1000 liters)";
+    /**
+     * Kilos of fuel
+     */
+    int capacity;
+
+    public FuelTankComponent(GameState gameState) {
+        super(gameState);
+    }
+
+    public Integer getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(Integer fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

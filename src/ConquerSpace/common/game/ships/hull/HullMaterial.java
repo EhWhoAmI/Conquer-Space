@@ -26,15 +26,24 @@ import ConquerSpace.common.save.SerializeClassName;
  * @author EhWhoAmI
  */
 @SerializeClassName("hullmaterial")
-public class HullMaterial extends ConquerSpaceGameObject{
+public class HullMaterial extends ConquerSpaceGameObject {
+
     private String name;
     private int strength;
     //Kg per m3
     private float density;
-    
+
     //cost per kg
     private int cost;
-    
+
+    public HullMaterial(GameState gameState, String name, int strength, float density, int cost) {
+        super(gameState);
+        this.name = name;
+        this.strength = strength;
+        this.density = density;
+        this.cost = cost;
+    }
+
     public int getCost() {
         return cost;
     }
@@ -54,13 +63,5 @@ public class HullMaterial extends ConquerSpaceGameObject{
     @Override
     public String toString() {
         return name;
-    }
-
-    public HullMaterial(GameState gameState, String name, int strength, float density, int cost) {
-        super(gameState);
-        this.name = name;
-        this.strength = strength;
-        this.density = density;
-        this.cost = cost;
     }
 }

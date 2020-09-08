@@ -20,7 +20,7 @@ package ConquerSpace.common.game.science;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
-import ConquerSpace.common.game.ships.components.EngineTechnology;
+import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import ConquerSpace.common.util.ResourceLoader;

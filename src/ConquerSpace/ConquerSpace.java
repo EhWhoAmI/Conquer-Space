@@ -130,7 +130,7 @@ public final class ConquerSpace {
             TOOLS = false,
             HEADLESS = false,
             TRANSLATE_TEST = false;
-    
+
     public static final File SETTINGS_FILE = new File(System.getProperty("user.dir") + "/settings.properties");
 
     public static GameState gameState;
@@ -262,7 +262,7 @@ public final class ConquerSpace {
         } else {
             createNewSettings(SETTINGS_FILE);
         }
-        
+
         //do settings
         configureGame();
 
@@ -289,8 +289,7 @@ public final class ConquerSpace {
 
     public static void configureGame() {
         //Get settings
-        ConquerSpace.locale = settings.getLocale();
-
+        ConquerSpace.locale = LocaleUtils.toLocale(System.getProperty("user.language"));
         Version version = settings.getVersion();
         //Check if not equal
     }
@@ -301,7 +300,7 @@ public final class ConquerSpace {
                 .getProtectionDomain().getCodeSource()
                 .getLocation().getPath());
         File assetFolder = new File("assets/data");
-        
+
         //Create thread to process checksums
         Runnable runnable = () -> {
             long start = System.currentTimeMillis();

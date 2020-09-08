@@ -17,21 +17,16 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class ScienceComponent extends ShipComponent implements Cloneable{
-    private int scienceContribution = 0;
+public class PowerSupplyComponent extends ShipComponent{
+    int energy;
+    public PowerSupplyComponent(GameState gameState) {
+        super(gameState);
+    }
     
-    public ScienceComponent(int mass, int cost, String name) {
-        super(mass, cost, name);
-    }
-
-    @Override
-    public Object clone() {
-        ScienceComponent sc =  new ScienceComponent(mass, cost, name);
-        sc.scienceContribution = scienceContribution;
-        return sc;
-    }
 }

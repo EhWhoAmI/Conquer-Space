@@ -104,7 +104,7 @@ public class Messages {
         } catch (IllegalFormatConversionException ifce) {
             //Fail silently when there is an incorrect format
             LOGGER.warn("Problem with formatting " + key + " " + ifce.getMessage(), ifce);
-        } catch(UnknownFormatConversionException ufce) {
+        } catch (UnknownFormatConversionException ufce) {
             LOGGER.warn("Problem with formatting " + key + " " + ufce.getMessage() + " format " + ufce.getConversion(), ufce);
         }
         return (content);

@@ -17,33 +17,64 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class EngineComponent extends ShipComponent{
-
-    private EngineTechnology engineTech;
+    private ObjectReference engineType;
     
-    public EngineComponent() {
-        super(0, 0, null);
+    /**
+     * Efficiency in mass of fuel per kilonewton of thrust generated, 
+     * which means that this would also be subtracted per tick.
+     */
+    private double efficiency;
+    
+    /**
+     * Maximum thrust in kn.
+     */
+    private double thrust;
+    
+    /**
+     * Fuel type.
+     */
+    private int fuel;
+    public EngineComponent(GameState gameState) {
+        super(gameState);
     }
 
-    @Override
-    public String getRatingType() {
-        return "Thrust (kn)";
+    public void setEngineType(ObjectReference engineType) {
+        this.engineType = engineType;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + " " + engineTech.getName() + " engine";
+    public ObjectReference getEngineType() {
+        return engineType;
     }
 
-    public void setEngineTech(EngineTechnology engineTech) {
-        this.engineTech = engineTech;
+    public double getEfficiency() {
+        return efficiency;
     }
 
-    public EngineTechnology getEngineTech() {
-        return engineTech;
+    public void setEfficiency(double efficiency) {
+        this.efficiency = efficiency;
+    }
+
+    public int getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(int fuel) {
+        this.fuel = fuel;
+    }
+
+    public double getThrust() {
+        return thrust;
+    }
+
+    public void setThrust(double thrust) {
+        this.thrust = thrust;
     }
 }

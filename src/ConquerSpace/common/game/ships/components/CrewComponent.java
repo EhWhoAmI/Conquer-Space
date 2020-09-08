@@ -17,17 +17,34 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class BridgeComponent extends ControlComponent{
-    public BridgeComponent(int mass, int cost, String name) {
-        super(mass, cost, name);
+public class CrewComponent extends ShipComponent{
+
+    private int maxCrew;
+    private int currentlyCrewed;
+    
+    public CrewComponent(GameState gameState) {
+        super(gameState);
     }
 
-    @Override
-    public String getSecondaryRatingType() {
-        return "Crew";
+    public int getMaxCrew() {
+        return maxCrew;
+    }
+
+    public int getCurrentlyCrewed() {
+        return currentlyCrewed;
+    }
+
+    public void setMaxCrew(int maxCrew) {
+        this.maxCrew = maxCrew;
+    }
+
+    public void setCurrentlyCrewed(int currentlyCrewed) {
+        this.currentlyCrewed = currentlyCrewed;
     }
 }

@@ -17,40 +17,30 @@
  */
 package ConquerSpace.common.game.ships.components;
 
+import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.GameState;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipComponent implements Cloneable {
+public class ShipComponent extends ConquerSpaceGameObject implements Cloneable {
+
     //Mass in KG
     protected int mass;
-    //Cost in credits
-    protected int cost;
-    protected String name;
-    protected int id;
-    protected int rating;
-    protected int secondaryRating;
 
-    public ShipComponent(int mass, int cost, String name) {
-        this.mass = mass;
-        this.cost = cost;
-        this.name = name;
+    protected String name;
+
+    public ShipComponent(GameState gameState) {
+        super(gameState);
     }
 
     public void setMass(int mass) {
         this.mass = mass;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getCost() {
-        return cost;
     }
 
     public int getMass() {
@@ -61,34 +51,6 @@ public class ShipComponent implements Cloneable {
         return name;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getRatingType() {
-        return "";
-    }
-
-    public int getSecondaryRating() {
-        return secondaryRating;
-    }
-
-    public void setSecondaryRating(int secondaryRating) {
-        this.secondaryRating = secondaryRating;
-    }
-
-    public String getSecondaryRatingType() {
-        return "";
-    }
-
-    public Object clone() throws CloneNotSupportedException {
-        return new ShipComponent(mass, cost, name);
-    }
-    
     @Override
     public String toString() {
         return getName();

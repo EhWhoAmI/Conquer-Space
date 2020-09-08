@@ -18,7 +18,6 @@
 package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Actions;
@@ -28,8 +27,6 @@ import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
-import ConquerSpace.common.game.ships.satellites.Satellite;
-import ConquerSpace.common.game.ships.satellites.Satellites;
 import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -44,7 +41,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
 
     private Civilization civilization;
     private Planet planet;
-    
+
     private GameState gameState;
 
     private SatelliteListModel satelliteListModel;
@@ -146,8 +143,8 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         qlSatorShipTabs.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         java.awt.GridBagLayout jPanel6Layout = new java.awt.GridBagLayout();
-        jPanel6Layout.columnWidths = new int[] {0, 5, 0};
-        jPanel6Layout.rowHeights = new int[] {0};
+        jPanel6Layout.columnWidths = new int[]{0, 5, 0};
+        jPanel6Layout.rowHeights = new int[]{0};
         jPanel6.setLayout(jPanel6Layout);
 
         qlsatelliteList.setModel(satelliteListModel);
@@ -173,28 +170,28 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(qlSatMassLabel)
-                    .addComponent(qlSatNameLabel))
-                .addGap(0, 1050, Short.MAX_VALUE))
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel5))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(qlSatMassLabel)
+                                        .addComponent(qlSatNameLabel))
+                                .addGap(0, 1050, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(qlSatNameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(qlSatMassLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel4)
+                                        .addComponent(qlSatNameLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel5)
+                                        .addComponent(qlSatMassLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -232,29 +229,29 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addComponent(qlSpaceshipMass)
-                .addGap(0, 1205, Short.MAX_VALUE))
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(qlSpaceshipNameLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(qlSpaceshipMass)
+                                .addGap(0, 1205, Short.MAX_VALUE))
+                        .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(qlSpaceshipNameLabel)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(qlSpaceshipNameLabel)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(qlSpaceshipMass))
-                .addGap(0, 0, Short.MAX_VALUE))
+                jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(qlSpaceshipNameLabel)
+                                        .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel8)
+                                        .addComponent(qlSpaceshipMass))
+                                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -313,19 +310,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
         int toAutomateOrNot = parentTabs.getSelectedIndex();
         if (toAutomateOrNot == 0) {
             int tab = qlSatorShipTabs.getSelectedIndex();
-            if (tab == 0) {
-                //Do satellites
-                //Automate
-                int selection = qlsatelliteList.getSelectedIndex();
-                //Create satellite
-                SatelliteTemplate selectedObject = civilization.satelliteTemplates.get(selection);
-                Satellite sat = Satellites.parseSatellite(gameState, selectedObject, civilization.multipliers, civilization.values);
-                //Check if it orbits a planet
-                sat.setOwner(civilization.getReference());
-                //Choose launch vehicle
-                Actions.launchSatellite(sat, planet, civilization);
-                JOptionPane.showInternalMessageDialog(getParent(), "Launched satellite");
-            } else if (tab == 1) {
+            if (tab == 1) {
                 int selection = qlSpaceshipList.getSelectedIndex();
                 //Create satellite
                 ObjectReference selectedObjectIndex = civilization.shipClasses.get(selection);
@@ -372,7 +357,7 @@ public class SpacePortMenuSheet extends javax.swing.JPanel {
             int selection = qlSpaceshipList.getSelectedIndex();
             //Create satellite
             ObjectReference selectedObjectIndex = civilization.shipClasses.get(selection);
-            ShipClass selectedObject  = gameState.getObject(selectedObjectIndex, ShipClass.class);
+            ShipClass selectedObject = gameState.getObject(selectedObjectIndex, ShipClass.class);
             qlSpaceshipNameLabel.setText(selectedObject.getName());
             qlSpaceshipMass.setText(selectedObject.getMass() + "");
         }
