@@ -19,7 +19,7 @@ package ConquerSpace.client.gui.game.engineering;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import javax.swing.DefaultListModel;

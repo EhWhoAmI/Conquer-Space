@@ -20,8 +20,7 @@ package ConquerSpace.common.game.organizations.behavior;
 import ConquerSpace.client.gui.game.GameWindow;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.actions.Alert;
-import ConquerSpace.common.game.organizations.Organization;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.server.GameTickController;
 
 /**

@@ -20,7 +20,6 @@ package ConquerSpace.common.game.economy;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import java.io.Serializable;
 
 /**

@@ -21,7 +21,7 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.renderers.TerrainRenderer;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;

@@ -15,13 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.organizations.corp;
+package ConquerSpace.common.game.organizations;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.economy.Currency;
-import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;

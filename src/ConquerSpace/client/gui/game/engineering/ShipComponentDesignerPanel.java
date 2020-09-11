@@ -15,14 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.organizations.civilization.stats;
+package ConquerSpace.client.gui.game.engineering;
 
-import java.io.Serializable;
+import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.ships.components.ShipComponent;
+import javax.swing.JPanel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Stats implements Serializable{
-    
+public class ShipComponentDesignerPanel extends JPanel {
+
+    ShipComponent generateComponent() {
+        return null;
+    }
 }

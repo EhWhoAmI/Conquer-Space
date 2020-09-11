@@ -18,7 +18,6 @@
 package ConquerSpace.client.gui.start;
 
 import ConquerSpace.ConquerSpace;
-import static ConquerSpace.ConquerSpace.BUILD_TIME;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.common.util.ResourceLoader;

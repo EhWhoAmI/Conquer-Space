@@ -26,7 +26,7 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.logistics.SupplySegment;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.universe.bodies.Planet;

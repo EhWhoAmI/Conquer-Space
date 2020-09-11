@@ -18,8 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.game.organizations.Civilization;
 import java.util.HashMap;
 
 /**

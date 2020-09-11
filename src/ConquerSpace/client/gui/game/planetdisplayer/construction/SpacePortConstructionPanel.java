@@ -22,7 +22,7 @@ import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.SpacePortAreaFactory;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.GridBagConstraints;

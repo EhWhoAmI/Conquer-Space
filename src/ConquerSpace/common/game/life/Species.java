@@ -25,7 +25,6 @@ import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Species on a planet, can go to other planets

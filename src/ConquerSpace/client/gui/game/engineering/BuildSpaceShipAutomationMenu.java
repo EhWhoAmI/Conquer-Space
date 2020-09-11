@@ -20,10 +20,9 @@ package ConquerSpace.client.gui.game.engineering;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.hull.Hull;
-import ConquerSpace.common.game.ships.hull.HullMaterial;
 import ConquerSpace.common.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -150,8 +149,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             if (selectedHull == null) {
                 //Autogenerate...
                 //Need to make hull material...
+                //Get hull material
                 selectedHull = new Hull(gameState, 100, 100,
-                        new HullMaterial(gameState, "Test Hull Material", 10, 10, 10),
+                        civ.hullMaterials.get(0),
                         shipTypeComboBox.getSelectedIndex(), 100, "name");
             }
             //Add hull

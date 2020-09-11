@@ -19,7 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.bodies.Planet;

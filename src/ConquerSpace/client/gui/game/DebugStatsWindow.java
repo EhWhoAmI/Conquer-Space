@@ -17,9 +17,8 @@
  */
 package ConquerSpace.client.gui.game;
 
-import swinglogger.SwingMessageAppender;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -35,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import org.apache.logging.log4j.Logger;
+import swinglogger.SwingMessageAppender;
 
 /**
  * Show debug stats, like memory used.

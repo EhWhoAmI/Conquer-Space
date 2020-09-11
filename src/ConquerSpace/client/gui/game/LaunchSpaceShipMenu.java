@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.game;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Actions;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;

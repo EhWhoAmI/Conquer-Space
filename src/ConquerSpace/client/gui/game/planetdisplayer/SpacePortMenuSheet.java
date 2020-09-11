@@ -24,7 +24,7 @@ import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;

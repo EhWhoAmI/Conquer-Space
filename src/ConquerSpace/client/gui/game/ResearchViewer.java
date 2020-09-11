@@ -22,7 +22,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.Scientist;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
 import com.alee.extended.layout.VerticalFlowLayout;

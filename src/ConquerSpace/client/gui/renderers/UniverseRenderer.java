@@ -22,7 +22,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.InterstellarTravelAction;
 import ConquerSpace.common.actions.ShipAction;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.SpaceShip;
 import ConquerSpace.common.game.universe.bodies.Galaxy;

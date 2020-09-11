@@ -17,7 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JPanel;

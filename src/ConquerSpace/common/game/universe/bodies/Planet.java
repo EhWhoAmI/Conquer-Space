@@ -24,10 +24,8 @@ import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Administrable;
-import ConquerSpace.common.game.organizations.civilization.stats.Economy;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.universe.GeographicPoint;
-import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
@@ -58,8 +56,6 @@ public class Planet extends StarSystemBody implements Administrable {
     @Serialize("name")
     private String name = "";
     //public PlanetSector[] planetSectors;
-
-    public Economy economy;
 
     @Serialize("satellites")
     private ArrayList<ObjectReference> satellites;
@@ -111,7 +107,6 @@ public class Planet extends StarSystemBody implements Administrable {
         //Surface area equals 4 * diameter
         //Surface area is in sectors
         //1 sector = 10 'units'
-        economy = new Economy();
         satellites = new ArrayList<>();
         strata = new ArrayList<>();
         cityDistributions = new HashMap<>();

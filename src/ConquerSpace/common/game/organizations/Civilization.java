@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.organizations.civilization;
+package ConquerSpace.common.game.organizations;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
@@ -24,10 +24,7 @@ import ConquerSpace.common.game.characters.Scientist;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.events.Event;
-import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.organizations.civilization.government.Government;
-import ConquerSpace.common.game.organizations.civilization.stats.Economy;
-import ConquerSpace.common.game.organizations.civilization.stats.PopulationStats;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.population.jobs.Employer;
@@ -65,9 +62,6 @@ public class Civilization extends Organization implements Employer {
     private String speciesName;
 
     private String homePlanetName;
-
-    public PopulationStats pop;
-    public Economy economy;
 
     public HashMap<UniversePath, Integer> vision;
 
@@ -142,9 +136,6 @@ public class Civilization extends Organization implements Employer {
 
         //Set a temp starting point as in 0:0:0
         vision = new HashMap<>();
-
-        pop = new PopulationStats();
-        economy = new Economy();
 
         civTechs = new HashMap<>();
         civResearch = new HashMap<>();

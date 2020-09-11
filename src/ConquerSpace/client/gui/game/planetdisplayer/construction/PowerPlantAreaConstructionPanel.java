@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer.construction;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.AreaFactory;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 
 /**

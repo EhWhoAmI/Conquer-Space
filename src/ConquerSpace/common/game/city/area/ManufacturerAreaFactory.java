@@ -18,7 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 
 /**

@@ -17,7 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;

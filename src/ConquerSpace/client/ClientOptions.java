@@ -19,7 +19,6 @@ package ConquerSpace.client;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.VERSION;
-import static ConquerSpace.ConquerSpace.settings;
 import ConquerSpace.common.util.Version;
 import java.io.File;
 import java.io.FileNotFoundException;

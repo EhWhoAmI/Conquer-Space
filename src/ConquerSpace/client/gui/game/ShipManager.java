@@ -19,7 +19,7 @@ package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import java.awt.BorderLayout;
 import java.util.ArrayList;

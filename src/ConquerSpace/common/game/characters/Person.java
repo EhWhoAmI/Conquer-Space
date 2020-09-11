@@ -20,7 +20,6 @@ package ConquerSpace.common.game.characters;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;

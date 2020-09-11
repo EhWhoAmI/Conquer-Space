@@ -15,12 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.organizations.civilization.stats;
+package ConquerSpace.client.gui.game.engineering;
+
+import com.alee.extended.layout.VerticalFlowLayout;
+import javax.swing.JLabel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class Politics extends Stats{
+public class PowerSupplyDesignerPanel extends ShipComponentDesignerPanel {
+
+    public PowerSupplyDesignerPanel() {
+        setLayout(new VerticalFlowLayout());
+        add(new JLabel("Power Supply"));
+    }
     
 }

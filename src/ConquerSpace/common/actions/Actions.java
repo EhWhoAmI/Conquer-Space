@@ -20,9 +20,7 @@ package ConquerSpace.common.actions;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
-import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
-import ConquerSpace.common.game.population.jobs.Workable;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Launchable;
@@ -30,8 +28,6 @@ import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This is like a driver to do all the actions. All methods must be static.

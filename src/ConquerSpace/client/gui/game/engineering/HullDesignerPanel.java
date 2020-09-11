@@ -20,8 +20,9 @@ package ConquerSpace.client.gui.game.engineering;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.game.ships.hull.HullMaterial;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
 import javax.swing.DefaultListModel;
@@ -58,9 +59,13 @@ public class HullDesignerPanel extends JPanel {
 
             Hull h = hullList.getSelectedValue();
             hullInfoPanel.add(new JLabel(h.getName()));
-            hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.material", h.getMaterial().getName())));
-            hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.mass", h.getMass())));
-            hullInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.rated", h.getThrust())));
+            hullInfoPanel.add(new JLabel(
+                    LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.material", 
+                            gameState.getObject(h.getMaterial(), HullMaterial.class).getName())));
+            hullInfoPanel.add(
+                    new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.mass", h.getMass())));
+            hullInfoPanel.add(
+                    new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.hull.dialog.rated", h.getThrust())));
             //hullInfoPanel.add(new JLabel(h()));
             hullInfoPanel.validate();
             hullInfoPanel.repaint();

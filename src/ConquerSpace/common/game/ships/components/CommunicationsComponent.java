@@ -28,5 +28,5 @@ public class CommunicationsComponent extends ShipComponent{
     public CommunicationsComponent(GameState gameState) {
         super(gameState);
     }
-    
+
 }

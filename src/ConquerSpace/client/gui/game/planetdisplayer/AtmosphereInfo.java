@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.client.gui.game.ShipInformationMenu;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Orbitable;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Planet;

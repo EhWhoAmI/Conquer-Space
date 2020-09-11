@@ -27,12 +27,16 @@ Better music
 Available job list
 Add constructing areas UI to cities
 Add ticker to see the difference of resources over time
+Remove satellites, replace with ships that cannot move
 
 Gameplay:
 All buildings are resource storages now
 Planet sizes and width changed
 Areas now generate resources, not populations
 Cities now distribute resources to surrounding areas
+Added organizations, which are capable of doing various actions
+ - Added resource distribution organization, which distributes resources throughout the planet.
+ 
 
 
 0.0.2 (March 22, 2020)

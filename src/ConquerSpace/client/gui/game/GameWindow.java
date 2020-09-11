@@ -30,7 +30,7 @@ import ConquerSpace.common.actions.ShipMoveAction;
 import ConquerSpace.common.actions.ShipSurveyAction;
 import ConquerSpace.common.actions.ToOrbitAction;
 import ConquerSpace.common.game.events.Event;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.SpacePoint;

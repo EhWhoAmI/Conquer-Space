@@ -18,13 +18,12 @@
 package ConquerSpace.server;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Administrator;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.government.GovernmentPosition;
 import ConquerSpace.common.game.organizations.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.common.game.population.Race;

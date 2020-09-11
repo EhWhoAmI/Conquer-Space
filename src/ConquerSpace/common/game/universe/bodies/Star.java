@@ -18,7 +18,6 @@
 package ConquerSpace.common.game.universe.bodies;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**

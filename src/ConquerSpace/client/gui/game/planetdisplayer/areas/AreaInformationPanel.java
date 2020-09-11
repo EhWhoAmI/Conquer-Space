@@ -29,14 +29,13 @@ import ConquerSpace.common.game.city.area.ManufacturerArea;
 import ConquerSpace.common.game.city.area.MineArea;
 import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.SpacePortArea;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.apache.logging.log4j.Logger;

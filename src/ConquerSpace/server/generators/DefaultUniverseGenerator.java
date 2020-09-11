@@ -17,17 +17,17 @@
  */
 package ConquerSpace.server.generators;
 
+import ConquerSpace.client.gui.game.planetdisplayer.TerrainColoring;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.resources.Stratum;
-import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
@@ -36,7 +36,6 @@ import ConquerSpace.common.game.universe.bodies.PlanetTypes;
 import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.game.universe.bodies.StarType;
-import ConquerSpace.client.gui.game.planetdisplayer.TerrainColoring;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.common.util.names.NameGenerator;
 import java.awt.Color;

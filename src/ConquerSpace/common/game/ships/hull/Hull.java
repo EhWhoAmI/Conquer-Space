@@ -44,11 +44,11 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable {
 
     private String name;
 
-    public Hull(GameState gameState, long mass, long space, HullMaterial material, int shipType, long thrust, String name) {
+    public Hull(GameState gameState, long mass, long space, ObjectReference material, int shipType, long thrust, String name) {
         super(gameState);
         this.mass = mass;
         this.space = space;
-        this.material = material.getReference();
+        this.material = material;
         this.shipType = shipType;
         this.thrust = thrust;
         this.name = name;
@@ -70,8 +70,8 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable {
         this.space = space;
     }
 
-    public HullMaterial getMaterial() {
-        return gameState.getObject(material, HullMaterial.class);
+    public ObjectReference getMaterial() {
+        return material;
     }
 
     public float getMassToSpaceRatio() {
@@ -79,7 +79,7 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable {
     }
 
     public float getStrength() {
-        return (getMassToSpaceRatio() * getMaterial().getStrength());
+        return (getMassToSpaceRatio() * gameState.getObject(material, HullMaterial.class).getStrength());
     }
 
     public boolean isValid() {

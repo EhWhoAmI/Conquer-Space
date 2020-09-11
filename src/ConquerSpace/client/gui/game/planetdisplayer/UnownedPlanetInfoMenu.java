@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import ConquerSpace.client.gui.game.PlayerRegister;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;

@@ -19,9 +19,8 @@ package ConquerSpace.client.gui.game.engineering;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.hull.Hull;
-import ConquerSpace.common.game.ships.hull.HullMaterial;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -251,7 +250,7 @@ public class HullCreator extends JPanel {
         long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
         long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
         int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
-        HullMaterial material = gameState.getObject((ObjectReference) hullMaterialComboBox.getSelectedItem(), HullMaterial.class);
+        ObjectReference material = (ObjectReference) hullMaterialComboBox.getSelectedItem();
 
         Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);

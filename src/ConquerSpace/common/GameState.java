@@ -19,8 +19,8 @@ package ConquerSpace.common;
 
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.life.Species;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;

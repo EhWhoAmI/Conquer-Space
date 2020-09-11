@@ -18,12 +18,10 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;

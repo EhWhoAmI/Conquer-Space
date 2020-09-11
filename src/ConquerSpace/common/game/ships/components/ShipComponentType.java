@@ -15,30 +15,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game;
-
-import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.ships.Ship;
-import javax.swing.JInternalFrame;
+package ConquerSpace.common.game.ships.components;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipDetailsSideWindow extends JInternalFrame {
+public enum ShipComponentType {
+    Engine("Engine"),
+    Crew("Crew"),
+    Control("Control"),
+    FuelTank("Fuel Tank"),
+    PowerSupply("Power Supply");
 
-    private ShipInformationMenu men;
+    String text;
 
-    public ShipDetailsSideWindow(Ship s, Civilization c, PlayerRegister register) {
-        //Init...
-        men = new ShipInformationMenu(s, c, register);
-        add(men);
-        setVisible(true);
-        setClosable(true);
-        setResizable(true);
-        pack();
-        toFront();
-        //Get window size
-        
+    private ShipComponentType(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return text;
     }
 }

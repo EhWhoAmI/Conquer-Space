@@ -19,7 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.organizations.civilization.Civilization;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
  *
