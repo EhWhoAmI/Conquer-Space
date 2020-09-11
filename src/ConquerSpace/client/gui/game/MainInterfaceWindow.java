@@ -21,7 +21,7 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.HullCreator;
 import ConquerSpace.client.gui.game.engineering.LaunchVehicleDesigner;
-import ConquerSpace.client.gui.game.engineering.ShipComponentDesigner;
+import ConquerSpace.client.gui.game.engineering.shipcomponent.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.UnownedPlanetInfoMenu;

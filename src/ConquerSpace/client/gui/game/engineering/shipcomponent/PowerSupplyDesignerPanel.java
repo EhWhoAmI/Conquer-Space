@@ -15,19 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game.engineering;
+package ConquerSpace.client.gui.game.engineering.shipcomponent;
 
-import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.ships.components.ShipComponent;
-import javax.swing.JPanel;
+import com.alee.extended.layout.VerticalFlowLayout;
+import javax.swing.JLabel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipComponentDesignerPanel extends JPanel {
+public class PowerSupplyDesignerPanel extends ShipComponentDesignerPanel {
 
-    ShipComponent generateComponent() {
-        return null;
+    public PowerSupplyDesignerPanel() {
+        setLayout(new VerticalFlowLayout());
+        add(new JLabel("Power Supply"));
     }
+    
 }

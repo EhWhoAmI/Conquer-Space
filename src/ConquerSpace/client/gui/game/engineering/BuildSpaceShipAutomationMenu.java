@@ -228,7 +228,6 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             toDesignHullOrNotToDesign.addActionListener(l -> {
                 if (toDesignHullOrNotToDesign.isSelected()) {
                     chooseHullButton.setEnabled(false);
-
                 } else {
                     chooseHullButton.setEnabled(true);
                 }
@@ -395,6 +394,13 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             engineTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.label"));
             setEngineButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.button"));
             setEngineButton.addActionListener(l -> {
+                ShipEngineConfigurePanel panel = new ShipEngineConfigurePanel(gameState, civ);
+                int close = JOptionPane.showInternalConfirmDialog(this,
+                        panel, "Engine Chooser",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (close == JOptionPane.OK_OPTION) {
+                    
+                }
             });
             engineTypeNotificationLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
 

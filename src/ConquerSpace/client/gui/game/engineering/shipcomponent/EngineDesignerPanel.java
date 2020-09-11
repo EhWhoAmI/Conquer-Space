@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.client.gui.game.engineering;
+package ConquerSpace.client.gui.game.engineering.shipcomponent;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
@@ -54,12 +54,16 @@ public class EngineDesignerPanel extends ShipComponentDesignerPanel {
         engineTechnologyComboBox = new JComboBox<>(civilization.engineTechs.toArray());
         thrustLabel = new JLabel("Max Thrust");
         thrustSpinner = new JSpinner(new SpinnerNumberModel(0d, 0d, Double.MAX_VALUE, 1d));
+        
+        //Set Width
         Component thrustSpinnerEditor = thrustSpinner.getEditor();
         JFormattedTextField jftf = ((JSpinner.DefaultEditor) thrustSpinnerEditor).getTextField();
         jftf.setColumns(16);
 
         efficiencyLabel = new JLabel("Fuel Efficiency");
         efficiencySpinner = new JSpinner(new SpinnerNumberModel(0d, 0d, Double.MAX_VALUE, 1d));
+        
+        //Set width
         Component efficiencySpinnerEditor = efficiencySpinner.getEditor();
         jftf = ((JSpinner.DefaultEditor) efficiencySpinnerEditor).getTextField();
         jftf.setColumns(16);
