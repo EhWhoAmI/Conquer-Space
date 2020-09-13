@@ -52,14 +52,14 @@ public class PlanetInfoSheet extends JPanel {
     PlanetResources planetResources;
 
     private Image planetImage;
-    
+
     private PlanetMapProvider planetMapProvider;
 
     private Civilization civilization;
     private Planet planet;
 
     private final int spacePortIndex = 4;
-    
+
     private GameState gameState;
 
     public PlanetInfoSheet(GameState gameState, Planet p, Civilization c, PlayerRegister register) {
@@ -74,7 +74,7 @@ public class PlanetInfoSheet extends JPanel {
 
         overview = new PlanetOverview(gameState, p, c, provider);
         atmosphere = new AtmosphereInfo(p, c, register);
-        population = new PlanetCities(gameState, p, c, this);
+        population = new PlanetCities(gameState, p, c, this, provider);
         spacePort = new SpacePortMenuSheet(gameState, p.getReference(), c.getReference());
         planetGeology = new PlanetGeology(gameState, p);
         //building = new ConstructionMenu(u, p, c);
@@ -138,7 +138,7 @@ public class PlanetInfoSheet extends JPanel {
         cityloop:
         for (ObjectReference cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
-            for (ObjectReference areaId : city.areas) {            
+            for (ObjectReference areaId : city.areas) {
                 Area areaObject = gameState.getObject(areaId, Area.class);
 
                 if (areaObject instanceof SpacePortArea) {

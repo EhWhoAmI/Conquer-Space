@@ -17,34 +17,41 @@
  */
 package ConquerSpace.common.game.population.jobs;
 
+import java.awt.Color;
+
 /**
  *
  * @author EhWhoAmI
  */
 public enum JobType {
-    Miner("Miner"), 
-    Jobless("Jobless"), 
-    Administrator("Administrator"), 
-    Farmer("Farmer"), 
-    Construction("Construction"),
-    Infrastructure("Infrastructure"),
-    Research("Research"),
-    AeronauticalEngineer("Aeronautical Engineer"),
-    PopUpkeepWorker("Population Upkeep Worker"),
-    SpacePortEngineer("Space Port Engineer"),
-    PowerPlantTechnician("Power Plant Technician"),
-    FactoryWorker("Factory Worker"),
-    Researcher("Researcher"),
-    Educator("Teacher"),
-    Imaginary("Imaginary");
-    private final String name;
+    Miner("Miner", new Color(140, 3, 252)),
+    Jobless("Jobless", Color.red),
+    Administrator("Administrator", new Color(252, 98, 3)),
+    Farmer("Farmer", Color.green),
+    Construction("Construction", Color.darkGray),
+    Infrastructure("Infrastructure", Color.WHITE),
+    AeronauticalEngineer("Aeronautical Engineer", Color.orange),
+    PopUpkeepWorker("Population Upkeep Worker", new Color(255, 0, 255)),
+    SpacePortEngineer("Space Port Engineer", Color.pink),
+    PowerPlantTechnician("Power Plant Technician", Color.yellow),
+    FactoryWorker("Factory Worker", Color.GRAY),
+    Researcher("Researcher", Color.cyan),
+    Educator("Teacher", new Color(210, 105, 30)), //Brown
+    Imaginary("Imaginary", Color.red);
 
-    JobType(String name) {
+    private final String name;
+    private final Color color;
+
+    JobType(String name, Color color) {
         this.name = name;
+        this.color = color;
     }
-    
+
     public String getName() {
         return name;
     }
 
+    public Color getColor() {
+        return color;
+    }
 }

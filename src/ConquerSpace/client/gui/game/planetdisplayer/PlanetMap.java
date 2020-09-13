@@ -253,13 +253,14 @@ public class PlanetMap extends JPanel {
     private class MapPanel extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener {
 
         private BufferedImage resourceImage = null;
-        private BufferedImage cityMapImage = null;
         private Image planetSurfaceMap = null;
 
         private HashMap<String, Image[]> districtImages;
 
         //Pre save images...
         boolean needRefresh = false;
+
+        boolean isLoaded = false;
 
         GeographicPoint currentlyBuildingPoint;
         boolean constructionActive = false;
@@ -314,9 +315,13 @@ public class PlanetMap extends JPanel {
             g2d.translate(translateX, translateY);
 
             //Terrain
-            if (planetMap.isLoaded()) {
+            if (planetMap.isLoaded() && !isLoaded) {
                 Image img = planetMap.getImage();
                 planetSurfaceMap = img.getScaledInstance(img.getWidth(null) * enlargementSize, img.getHeight(null) * enlargementSize, Image.SCALE_DEFAULT);
+                isLoaded = true;
+            }
+
+            if (isLoaded) {
                 g2d.drawImage(planetSurfaceMap, 0, 0, null);
             }
 
@@ -438,8 +443,6 @@ public class PlanetMap extends JPanel {
                         mapGraphics.fill(buildingPointInside);
                     }
                 }
-                //Draw
-                g2d.drawImage(cityMapImage, 0, 0, null);
             }
 
             if (displayedView == CONSTRUCTION_VIEW) {
@@ -529,9 +532,9 @@ public class PlanetMap extends JPanel {
                     JTextField cityNameTextArea = new JTextField("Test", 32);
                     createCityPanel.add(cityNameTextArea);
                     JOptionPane.showMessageDialog(this, createCityPanel);
-                    
+
                     //Get the name
-                    if(!cityNameTextArea.getText().isEmpty()) {
+                    if (!cityNameTextArea.getText().isEmpty()) {
                         //Then make city
                         City newCity = new City(gameState, p.getReference());
                         newCity.setName(cityNameTextArea.getText());

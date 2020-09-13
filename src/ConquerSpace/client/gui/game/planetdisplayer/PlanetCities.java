@@ -72,7 +72,7 @@ public class PlanetCities extends JPanel {
     private Planet planet;
 
     CityInformationPanel cityInformationPanel;
-    
+
     private int citySelectedTab = 0;
     //So that the tab for the employment and things stay the same as you change your selection
     boolean isBuildingUi = false;
@@ -88,13 +88,15 @@ public class PlanetCities extends JPanel {
     private int cityContainerHeight = 800;
 
     private AreaInformationPanel areaInformationPanel;
+    PlanetMapProvider provider;
 
-    public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent) {
+    public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent, PlanetMapProvider provider) {
         this.universe = gameState.getUniverse();
         this.gameState = gameState;
         this.planet = p;
         this.owner = civ;
         this.parent = parent;
+        this.provider = provider;
         tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
 
@@ -126,7 +128,7 @@ public class PlanetCities extends JPanel {
         JXTaskPaneContainer taskPaneContainer = new JXTaskPaneContainer();
         JXTaskPane index = new JXTaskPane();
         index.setTitle("Legend");
-        index.setSpecial(true);  // actions can be added, a hyperlink will be created 
+        index.setSpecial(true);
 
         for (int i = 0; i < CityType.values().length; i++) {
             CityType cityType = CityType.values()[i];
@@ -182,7 +184,7 @@ public class PlanetCities extends JPanel {
 
         //City info
         cityData = new JPanel();
-        cityData.setLayout(new VerticalFlowLayout());
+        cityData.setLayout(new BorderLayout());
         cityListPanel.add(cityData, BorderLayout.CENTER);
 
         growthPanel.add(currentStats);
@@ -200,16 +202,17 @@ public class PlanetCities extends JPanel {
         isBuildingUi = true;
 
         if (cityInformationPanel != null) {
-            citySelectedTab = cityInformationPanel.getSelectedTab();
+            //citySelectedTab = cityInformationPanel.getSelectedTab();
         }
 
         cityData.removeAll();
 
         currentlySelectedCity = cityList.getSelectedValue();
         if (currentlySelectedCity != null) {
-            cityInformationPanel = new CityInformationPanel(gameState, currentlySelectedCity, planet, owner);
-            cityInformationPanel.setSelectedTab(citySelectedTab);
-            cityData.add(cityInformationPanel);
+            cityInformationPanel = new CityInformationPanel(gameState, this, currentlySelectedCity, planet, owner, provider);
+
+            ///cityInformationPanel.setSelectedTab(citySelectedTab);
+            cityData.add(cityInformationPanel, BorderLayout.CENTER);
             isBuildingUi = false;
             revalidate();
             repaint();
