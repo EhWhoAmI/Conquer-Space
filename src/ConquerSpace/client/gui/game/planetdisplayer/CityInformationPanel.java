@@ -20,11 +20,13 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.client.gui.ObjectListModel;
+import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
+import ConquerSpace.common.game.city.area.AreaClassification;
 import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.logistics.SupplySegment;
@@ -538,31 +540,38 @@ public class CityInformationPanel extends JPanel {
             JXTaskPaneContainer industriesList = new JXTaskPaneContainer();
             //Get list of industries
 
-            HashMap<Class, Integer> industriesMap = new HashMap<>();
+            HashMap<AreaClassification, Integer> industriesMap = new HashMap<>();
             for (int i = 0; i < selectedCity.areas.size(); i++) {
                 Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
                 if (area != null) {
-                    if (industriesMap.containsKey(area.getClass())) {
-                        industriesMap.put(area.getClass(), industriesMap.get(area.getClass()) + 1);
+                    if (industriesMap.containsKey(area.getAreaType())) {
+                        industriesMap.put(area.getAreaType(), industriesMap.get(area.getAreaType()) + 1);
                     } else {
-                        industriesMap.put(area.getClass(), 1);
+                        industriesMap.put(area.getAreaType(), 1);
                     }
                 }
             }
 
-            for (Map.Entry<Class, Integer> entry : industriesMap.entrySet()) {
-                Object key = entry.getKey();
-                Object val = entry.getValue();
+            for (Map.Entry<AreaClassification, Integer> entry : industriesMap.entrySet()) {
+                AreaClassification key = entry.getKey();
+                Integer val = entry.getValue();
 
                 JXTaskPane pane = new JXTaskPane(key.toString());
-                pane.add(new JLabel(val.toString()));
-                pane.add(new JLabel("More placeholder text"));
-                pane.add(new JButton("Testing button"));
+                pane.add(new JLabel("Number of Areas of this Type:" + val.toString()));
+                //List all areas of this type
+                for (int i = 0; i < selectedCity.areas.size(); i++) {
+                    Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
+                    if (area.getAreaType().equals(key)) {
+                        //Then add to list I guess
+                        pane.add((AreaInformationPanel.getPanel(gameState, area)));
+                    }
+                }
+
                 pane.setCollapsed(true);
                 pane.setAnimated(false);
                 industriesList.add(pane);
             }
-            //Set to better colors
+            //Set to better colors  
             industriesList.setBackground(UIManager.getDefaults().getColor("Panel.background"));
             industriesList.setForeground(UIManager.getDefaults().getColor("Label.foreground"));
             industriesList.setFont(UIManager.getDefaults().getFont("Label.font"));
