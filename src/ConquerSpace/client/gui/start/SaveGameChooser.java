@@ -78,8 +78,8 @@ public class SaveGameChooser extends JFrame {
                 }
                 zipFile.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
-                System.out.println(ex);
+                //Print out error
+                //FIXME
             }
         });
 

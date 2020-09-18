@@ -217,7 +217,9 @@ public class CityInformationPanel extends JPanel {
                     GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
 
                 } catch (IOException ex) {
-                    System.out.println("no file");
+                    //System.out.println("no file");
+                    //Ignore for now 
+                    //FIXME
                 }
                 long end = System.currentTimeMillis();
 

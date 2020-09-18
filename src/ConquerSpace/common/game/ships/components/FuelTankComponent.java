@@ -50,4 +50,8 @@ public class FuelTankComponent extends ShipComponent{
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.FuelTank;
+    }
 }

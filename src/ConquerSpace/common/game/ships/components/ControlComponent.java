@@ -28,5 +28,9 @@ public class ControlComponent extends ShipComponent {
     public ControlComponent(GameState gameState) {
         super(gameState);
     }
-    
+
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.Control;
+    }
 }

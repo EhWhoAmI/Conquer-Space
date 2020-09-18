@@ -18,9 +18,11 @@
 package ConquerSpace.common.game.science;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.ships.EngineTechnology;
+import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import ConquerSpace.common.util.ResourceLoader;
@@ -250,10 +252,12 @@ public class Technologies implements Serializable{
             String[] content = action.split(":");
 
             String compName = (content[1].trim());
-            int id = Integer.parseInt(compName);
+            //int id = Integer.parseInt(compName);
 
             //Compare
-            EngineTechnology t = gameState.engineTechnologys.stream().filter(a -> a.getReference().equals(id)).findFirst().orElse(null);
+            EngineTechnology t = gameState.engineTechnologys.stream().filter(
+                    a -> gameState.getObject(a.getReference(), EngineTechnology.class)
+                            .getIdentifier().equals(compName)).findFirst().orElse(null);
             if (t != null) {
                 c.engineTechs.add(t.getReference());
             }

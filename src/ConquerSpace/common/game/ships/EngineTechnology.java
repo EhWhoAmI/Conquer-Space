@@ -29,6 +29,7 @@ import ConquerSpace.common.save.SerializeClassName;
 public class EngineTechnology extends ConquerSpaceGameObject{
     
     private String name;
+    private String identifier;
 
     /**
     * Efficiency: m/s per kg of propellant
@@ -65,6 +66,14 @@ public class EngineTechnology extends ConquerSpaceGameObject{
 
     public void setThrust_multiplier(float thrust_multiplier) {
         this.thrust_multiplier = thrust_multiplier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     @Override

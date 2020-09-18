@@ -29,4 +29,8 @@ public class CommunicationsComponent extends ShipComponent{
         super(gameState);
     }
 
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.Communications;
+    }
 }

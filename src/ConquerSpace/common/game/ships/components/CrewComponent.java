@@ -26,7 +26,6 @@ import ConquerSpace.common.GameState;
 public class CrewComponent extends ShipComponent{
 
     private int maxCrew;
-    private int currentlyCrewed;
     
     public CrewComponent(GameState gameState) {
         super(gameState);
@@ -36,15 +35,12 @@ public class CrewComponent extends ShipComponent{
         return maxCrew;
     }
 
-    public int getCurrentlyCrewed() {
-        return currentlyCrewed;
-    }
-
     public void setMaxCrew(int maxCrew) {
         this.maxCrew = maxCrew;
     }
 
-    public void setCurrentlyCrewed(int currentlyCrewed) {
-        this.currentlyCrewed = currentlyCrewed;
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.Crew;
     }
 }

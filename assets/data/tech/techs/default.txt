@@ -201,7 +201,7 @@
     difficulty: 2
     action:
     [
-      thrust:1
+      thrust:chemical
     ]
     fields:
     [
@@ -226,7 +226,7 @@
     difficulty: 3
     action:
     [
-      thrust:2
+      thrust:electrothermal
     ]
     fields:
     [
@@ -251,7 +251,7 @@
     difficulty: 3
     action:
     [
-      thrust:0
+      thrust:ion
     ]
     fields:
     [
@@ -276,7 +276,7 @@
     difficulty: 3
     action:
     [
-      thrust:3
+      thrust:plasma
     ]
     fields:
     [
@@ -301,7 +301,7 @@
     difficulty: 2
     action:
     [
-      thrust:4
+      thrust:nuclear
     ]
     fields:
     [

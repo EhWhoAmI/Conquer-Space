@@ -77,4 +77,9 @@ public class EngineComponent extends ShipComponent{
     public void setThrust(double thrust) {
         this.thrust = thrust;
     }
+    
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.Engine;
+    }
 }

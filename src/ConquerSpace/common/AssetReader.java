@@ -217,10 +217,11 @@ public class AssetReader {
 
     public static Object processEngineTech(JSONObject obj, GameState state) {
         String name = obj.getString("name");
-        int id = obj.getInt("id");
+        String identifier = obj.getString("identifier");
         float efficiency = obj.getFloat("efficiency");
         float power = obj.getFloat("thrust_multiplier");
         EngineTechnology tech = new EngineTechnology(state, name, efficiency, power);
+        tech.setIdentifier(identifier);
         return tech;
     }
 

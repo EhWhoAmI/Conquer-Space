@@ -26,7 +26,8 @@ public enum ShipComponentType {
     Crew("Crew"),
     Control("Control"),
     FuelTank("Fuel Tank"),
-    PowerSupply("Power Supply");
+    PowerSupply("Power Supply"),
+    Communications("Communications");
 
     String text;
 

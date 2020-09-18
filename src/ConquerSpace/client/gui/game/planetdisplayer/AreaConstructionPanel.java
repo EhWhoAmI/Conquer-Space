@@ -147,7 +147,6 @@ public class AreaConstructionPanel extends JPanel {
                 area.setCostPerTurn(cost);
 
                 city.addArea(area.getReference());
-                System.out.println(city.areas);
                 JOptionPane.showInternalMessageDialog(AreaConstructionPanel.this, LOCALE_MESSAGES.getMessage("game.planet.construction.created"));
             }
         });

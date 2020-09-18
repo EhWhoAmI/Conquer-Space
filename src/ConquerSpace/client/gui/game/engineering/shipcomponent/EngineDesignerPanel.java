@@ -46,15 +46,17 @@ public class EngineDesignerPanel extends ShipComponentDesignerPanel {
     private JSpinner efficiencySpinner;
 
     private GameState gameState;
+    private Civilization civilization;
 
     public EngineDesignerPanel(GameState gameState, Civilization civilization) {
         this.gameState = gameState;
+        this.civilization = civilization;
         setLayout(new VerticalFlowLayout());
         engineTechonolgyLabel = new JLabel("Propulsion Type");
         engineTechnologyComboBox = new JComboBox<>(civilization.engineTechs.toArray());
         thrustLabel = new JLabel("Max Thrust");
         thrustSpinner = new JSpinner(new SpinnerNumberModel(0d, 0d, Double.MAX_VALUE, 1d));
-        
+
         //Set Width
         Component thrustSpinnerEditor = thrustSpinner.getEditor();
         JFormattedTextField jftf = ((JSpinner.DefaultEditor) thrustSpinnerEditor).getTextField();
@@ -62,7 +64,7 @@ public class EngineDesignerPanel extends ShipComponentDesignerPanel {
 
         efficiencyLabel = new JLabel("Fuel Efficiency");
         efficiencySpinner = new JSpinner(new SpinnerNumberModel(0d, 0d, Double.MAX_VALUE, 1d));
-        
+
         //Set width
         Component efficiencySpinnerEditor = efficiencySpinner.getEditor();
         jftf = ((JSpinner.DefaultEditor) efficiencySpinnerEditor).getTextField();
@@ -95,6 +97,33 @@ public class EngineDesignerPanel extends ShipComponentDesignerPanel {
         component.setThrust((double) thrustSpinner.getValue());
         component.setEfficiency((double) efficiencySpinner.getValue());
         component.setEngineType((ObjectReference) engineTechnologyComboBox.getSelectedItem());
-        return component; 
+        return component;
+    }
+
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag); //To change body of generated methods, choose Tools | Templates.
+        if (aFlag) {
+            refreshEngineTechs();
+        }
+    }
+
+    @Override
+    public void clearUI() {
+        //Re-add engine techs
+        refreshEngineTechs();
+        thrustSpinner.setValue(0d);
+        efficiencySpinner.setValue(0d);
+    }
+
+    private void refreshEngineTechs() {
+        engineTechnologyComboBox.removeAllItems();
+        for (ObjectReference or : civilization.engineTechs) {
+            engineTechnologyComboBox.addItem(or);
+        }
+
+        if (engineTechnologyComboBox.getItemCount() > 0) {
+            engineTechnologyComboBox.setSelectedIndex(0);
+        }
     }
 }

@@ -44,31 +44,32 @@ import javax.swing.JToolBar;
  * @author EhWhoAmI
  */
 public class ShipComponentDesigner extends JPanel {
-
+    
     private GameState gameState;
     private JButton saveComponentButton;
-
+    private JButton newComponentButton;
+    
     private ObjectListModel<ObjectReference> shipComponentListModel;
     private JList<String> shipComponentList;
-
+    
     private JPanel componentInformationPanel;
     private JPanel componentCustomizationPanel;
-
+    
     private DefaultComboBoxModel<ShipComponentType> shipComponentTypeComboBoxModel;
     private JComboBox<ShipComponentType> shipComponentTypes;
-
+    
     private JTextField shipComponentName;
     CardLayout layout;
-
+    
     ArrayList<ShipComponentDesignerPanel> designerPanels;
-
+    
     @SuppressWarnings("unchecked")
     public ShipComponentDesigner(GameState gameState, Civilization c) {
         this.gameState = gameState;
-
+        
         designerPanels = new ArrayList<>();
         setLayout(new BorderLayout());
-
+        
         JToolBar toolBar = new JToolBar();
         saveComponentButton = new JButton("Save Component");
         saveComponentButton.addActionListener(l -> {
@@ -76,60 +77,71 @@ public class ShipComponentDesigner extends JPanel {
                 if (comp.isVisible() && comp instanceof ShipComponentDesignerPanel) {
                     //It's what we want
                     ShipComponent ref = ((ShipComponentDesignerPanel) comp).generateComponent();
-                    if (ref != null) {
+                    if (ref != null && shipComponentName.getText().isEmpty()) {
                         ref.setName(shipComponentName.getText());
                         //Add ship component
                         c.shipComponentList.add(ref.getReference());
                         shipComponentList.updateUI();
-
-                        //Clear UI
-                        shipComponentName.setText("");
-                        for (ShipComponentDesignerPanel panel : designerPanels) {
-                            panel.clearUI();
-                        }
+                        
+                        clearUI();
                     }
                     break;
                 }
             }
         });
         toolBar.add(saveComponentButton);
-
-        toolBar.add(new JButton("Load Component"));
+        newComponentButton = new JButton("New Component");
+        newComponentButton.addActionListener(l -> {
+            clearUI();
+        });
+        toolBar.add(newComponentButton);
 
         shipComponentListModel = new ObjectListModel<>();
         shipComponentListModel.setElements(c.shipComponentList);
         shipComponentListModel.setHandler(l -> {
             return gameState.getObject(l, ShipComponent.class).getName();
         });
-
+        
         shipComponentList = new JList<>(shipComponentListModel);
+        shipComponentList.addListSelectionListener(l -> {
+            ObjectReference shipComponentId = shipComponentListModel.getObject(shipComponentList.getSelectedIndex());
+            ShipComponent component = gameState.getObject(shipComponentId, ShipComponent.class);
+            //Set name
+            shipComponentName.setText(component.getName());
+            //Set the type
+            layout.show(componentCustomizationPanel, component.getShipComponentType().toString());
+            shipComponentTypeComboBoxModel.setSelectedItem(component.getShipComponentType());
+            //Load UI
+            for (ShipComponentDesignerPanel panel : designerPanels) {
+                panel.loadComponent(component);
+            }
+        });
         shipComponentList.setFixedCellWidth(250);
-
+        
         componentInformationPanel = new JPanel();
         componentInformationPanel.setLayout(new VerticalFlowLayout());
-
+        
         shipComponentTypeComboBoxModel = new DefaultComboBoxModel<>(ShipComponentType.values());
         shipComponentTypes = new JComboBox<>(shipComponentTypeComboBoxModel);
         shipComponentTypes.addActionListener(l -> {
             //Set selected panel
             layout.show(componentCustomizationPanel, shipComponentTypes.getSelectedItem().toString());
-
         });
-
+        
         JPanel typeContainerPanel = new JPanel(new HorizontalFlowLayout());
         typeContainerPanel.add(new JLabel("Ship Component Type: "));
         typeContainerPanel.add(shipComponentTypes);
-
+        
         componentInformationPanel.add(typeContainerPanel);
-
+        
         JPanel namecontainerPanel = new JPanel(new HorizontalFlowLayout());
         namecontainerPanel.add(new JLabel("Component Name: "));
         shipComponentName = new JTextField(32);
         namecontainerPanel.add(shipComponentName);
         componentInformationPanel.add(namecontainerPanel);
-
+        
         componentCustomizationPanel = new JPanel();
-
+        
         layout = new CardLayout();
         componentCustomizationPanel.setLayout(layout);
 
@@ -143,12 +155,20 @@ public class ShipComponentDesigner extends JPanel {
         CrewComponentDesignerPanel ccdp = new CrewComponentDesignerPanel(gameState);
         designerPanels.add(ccdp);
         componentCustomizationPanel.add(ccdp, ShipComponentType.Crew.toString());
-
+        
         componentInformationPanel.add(componentCustomizationPanel);
         JPanel container = new JPanel(new VerticalFlowLayout());
         container.add(componentInformationPanel);
         add(toolBar, BorderLayout.NORTH);
         add(new JScrollPane(shipComponentList), BorderLayout.WEST);
         add(container, BorderLayout.CENTER);
+    }
+    
+    private void clearUI() {
+        //Clear UI
+        shipComponentName.setText("");
+        for (ShipComponentDesignerPanel panel : designerPanels) {
+            panel.clearUI();
+        }
     }
 }

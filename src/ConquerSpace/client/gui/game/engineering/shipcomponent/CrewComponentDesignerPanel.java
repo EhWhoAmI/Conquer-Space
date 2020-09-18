@@ -55,4 +55,15 @@ public class CrewComponentDesignerPanel extends ShipComponentDesignerPanel {
         return crewComponent; 
     }
 
+    @Override
+    public void clearUI() {
+        crewCount.setValue(1);
+    }
+
+    @Override
+    public void loadComponent(ShipComponent comp) {
+        if(comp instanceof CrewComponent) {
+            crewCount.setValue(((CrewComponent) comp).getMaxCrew());
+        }
+    }
 }

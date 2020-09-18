@@ -24,7 +24,7 @@ import ConquerSpace.common.GameState;
  *
  * @author EhWhoAmI
  */
-public class ShipComponent extends ConquerSpaceGameObject implements Cloneable {
+public abstract class ShipComponent extends ConquerSpaceGameObject implements Cloneable {
 
     //Mass in KG
     protected int mass;
@@ -55,4 +55,6 @@ public class ShipComponent extends ConquerSpaceGameObject implements Cloneable {
     public String toString() {
         return getName();
     }
+    
+    public abstract ShipComponentType getShipComponentType();
 }

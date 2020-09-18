@@ -23,10 +23,16 @@ import ConquerSpace.common.GameState;
  *
  * @author EhWhoAmI
  */
-public class PowerSupplyComponent extends ShipComponent{
+public class PowerSupplyComponent extends ShipComponent {
+
     int energy;
+
     public PowerSupplyComponent(GameState gameState) {
         super(gameState);
     }
-    
+
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.PowerSupply;
+    }
 }
