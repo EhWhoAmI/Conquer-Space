@@ -42,7 +42,7 @@ public class PlanetInfoSheet extends JPanel {
     JTabbedPane tpane;
     PlanetOverview overview;
     PlanetCities population;
-    SpacePortMenuSheet spacePort;
+    SpacePortMenu spacePortMenu;
     AtmosphereInfo atmosphere;
     PlanetIndustry industry;
     LocalLifeMenu localLifeMenu;
@@ -62,9 +62,9 @@ public class PlanetInfoSheet extends JPanel {
 
     private GameState gameState;
 
-    public PlanetInfoSheet(GameState gameState, Planet p, Civilization c, PlayerRegister register) {
+    public PlanetInfoSheet(GameState gameState, Planet p, Civilization civilization, PlayerRegister register) {
         this.gameState = gameState;
-        this.civilization = c;
+        this.civilization = civilization;
         this.planet = p;
 
         PlanetMapProvider provider = new PlanetMapProvider(p);
@@ -72,23 +72,23 @@ public class PlanetInfoSheet extends JPanel {
         setLayout(new BorderLayout());
         tpane = new JTabbedPane();
 
-        overview = new PlanetOverview(gameState, p, c, provider);
-        atmosphere = new AtmosphereInfo(p, c, register);
-        population = new PlanetCities(gameState, p, c, this, provider);
-        spacePort = new SpacePortMenuSheet(gameState, p.getReference(), c.getReference());
+        overview = new PlanetOverview(gameState, p, civilization, provider);
+        atmosphere = new AtmosphereInfo(p, civilization, register);
+        population = new PlanetCities(gameState, p, civilization, this, provider);
+        spacePortMenu = new SpacePortMenu(gameState, planet, civilization);
         planetGeology = new PlanetGeology(gameState, p);
         //building = new ConstructionMenu(u, p, c);
-        industry = new PlanetIndustry(gameState, p, c);
-        localLifeMenu = new LocalLifeMenu(p, c);
-        planetMap = new PlanetMap(gameState, p, c, this, provider);
+        industry = new PlanetIndustry(gameState, p, civilization);
+        localLifeMenu = new LocalLifeMenu(p, civilization);
+        planetMap = new PlanetMap(gameState, p, civilization, this, provider);
         planetEconomy = new PlanetEconomy();
-        planetResources = new PlanetResources(gameState, p, c, this);
+        planetResources = new PlanetResources(gameState, p, civilization, this);
 
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.overview"), overview);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.map"), planetMap);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.geology"), planetGeology);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.cities"), population);
-        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.space"), spacePort);
+        tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.space"), spacePortMenu);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.atmosphere"), atmosphere);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.industry"), industry);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.locallife"), localLifeMenu);

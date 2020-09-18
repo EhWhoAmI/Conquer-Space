@@ -50,4 +50,13 @@ public class SpaceShipOverview extends JPanel {
         //shipDesigner.update();
         shipListManager.update();
     }
+
+    //Update list
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        if (aFlag) {
+            update();
+        }
+    }
 }

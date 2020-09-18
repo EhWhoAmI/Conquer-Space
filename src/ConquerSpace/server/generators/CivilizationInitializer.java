@@ -121,9 +121,6 @@ public class CivilizationInitializer {
             //Science
             initializeTech(civilization, selector);
 
-            //Init templates
-            initializeSpaceships(civilization);
-
             initalizeCivValues(civilization);
 
             HullMaterial material = new HullMaterial(gameState, "Testing Hull Material", 100, 5, 12);
@@ -622,13 +619,6 @@ public class CivilizationInitializer {
     private void addSupplyLines(Planet p) {
         PlanetarySupplyLineGenerator gen = new PlanetarySupplyLineGenerator();
         gen.generate(gameState, p);
-    }
-
-    private void initializeSpaceships(Civilization c) {
-        SatelliteTemplate template = new SatelliteTemplate();
-        template.setMass(84);
-        template.setName("Sputnik");
-        c.satelliteTemplates.add(template);
     }
 
     private int findGoodByTag(String tagSearched) {

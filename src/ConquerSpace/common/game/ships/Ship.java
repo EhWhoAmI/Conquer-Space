@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 @SerializeClassName("ship")
-public class Ship extends SpaceShip {
+public class Ship extends SpaceShip implements Launchable{
 
     String sclass;
 

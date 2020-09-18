@@ -71,7 +71,7 @@ public class AreaFactory {
     }
     
     public int buildTime() {
-        return 10000;
+        return 50;
     }
 
     public Area build(GameState gameState) {

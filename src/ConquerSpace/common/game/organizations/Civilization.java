@@ -81,8 +81,6 @@ public class Civilization extends Organization implements Employer {
 
     public ArrayList<ObjectReference> launchSystems;
 
-    public ArrayList<SatelliteTemplate> satelliteTemplates;
-
     public ArrayList<ObjectReference> visionPoints;
     public ArrayList<ObjectReference> resourceStorages;
 
@@ -146,7 +144,6 @@ public class Civilization extends Organization implements Employer {
         unrecruitedPeople = new ArrayList<>();
 
         launchSystems = new ArrayList<>();
-        satelliteTemplates = new ArrayList<>();
 
         visionPoints = new ArrayList<>();
         resourceStorages = new ArrayList<>();
@@ -280,10 +277,6 @@ public class Civilization extends Organization implements Employer {
         civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Technologies.RESEARCHED)).forEachOrdered((t) -> {
             techLevel += t.getLevel();
         });
-    }
-
-    public void addSatelliteTemplate(SatelliteTemplate s) {
-        satelliteTemplates.add(s);
     }
 
     public void addShipComponent(ObjectReference s) {

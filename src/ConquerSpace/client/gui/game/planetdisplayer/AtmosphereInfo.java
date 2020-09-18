@@ -104,4 +104,12 @@ public class AtmosphereInfo extends JPanel {
             }
         }
     }
+
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        if (aFlag) {
+            updateList();
+        }
+    }
 }
