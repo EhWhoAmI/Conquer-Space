@@ -162,6 +162,7 @@ public class PlanetCities extends JPanel {
         cityList.setSelectedIndex(0);
         int cellHeight = 18;
         cityList.setFixedCellHeight(cellHeight);
+        cityList.setFixedCellWidth(32);
         cityList.setCellRenderer(new CityListRenderer());
 
         cityList.addListSelectionListener(l -> {

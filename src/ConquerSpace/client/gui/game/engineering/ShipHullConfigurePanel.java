@@ -35,7 +35,7 @@ import javax.swing.JScrollPane;
  *
  * @author EhWhoAmI
  */
-public class HullDesignerPanel extends JPanel {
+public class ShipHullConfigurePanel extends JPanel {
 
     private DefaultListModel<Hull> hullListModel;
     private JList<Hull> hullList;
@@ -44,13 +44,14 @@ public class HullDesignerPanel extends JPanel {
 
     private Hull selectedHull = null;
 
-    public HullDesignerPanel(GameState gameState, Civilization civ) {
+    public ShipHullConfigurePanel(GameState gameState, Civilization civ) {
         setLayout(new GridLayout(1, 2));
         hullListModel = new DefaultListModel<>();
         for (ObjectReference obj : civ.hulls) {
             Hull hull = gameState.getObject(obj, Hull.class);
             hullListModel.addElement(hull);
         }
+        
         hullList = new JList<>(hullListModel);
         hullList.addListSelectionListener(l -> {
             hullInfoPanel.removeAll();

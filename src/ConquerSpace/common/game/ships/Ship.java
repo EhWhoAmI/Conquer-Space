@@ -18,8 +18,7 @@
 package ConquerSpace.common.game.ships;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.ships.components.ShipComponent;
-import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.save.SerializeClassName;
@@ -34,10 +33,10 @@ public class Ship extends SpaceShip {
 
     String sclass;
 
-    private Hull hull;
-    public ArrayList<ShipComponent> components;
+    private ObjectReference hull;
+    public ArrayList<ObjectReference> components;
 
-    private ShipClass shipClass;
+    private ObjectReference shipClass;
 
     public Ship(GameState gameState, ShipClass sclass, double X, double Y, Vector v, UniversePath location) {
         super(gameState);
@@ -47,15 +46,15 @@ public class Ship extends SpaceShip {
         goingToY = Y;
         this.v = v;
         this.location = location;
-        shipClass = sclass;
+        shipClass = sclass.getReference();
         //Set ship's id
 
         components = new ArrayList<>();
         //Get components
         if (!sclass.components.isEmpty()) {
-
+            components.addAll(sclass.components);
         }
-        this.hull = (Hull) sclass.getHull().clone();
+        this.hull = sclass.getHull();
         this.mass = sclass.getMass();
         this.sclass = sclass.getName();
     }
@@ -95,7 +94,7 @@ public class Ship extends SpaceShip {
         return location;
     }
 
-    public Hull getHull() {
+    public ObjectReference getHull() {
         return hull;
     }
 
@@ -103,7 +102,7 @@ public class Ship extends SpaceShip {
         return sclass;
     }
 
-    public ShipClass getShipClass() {
+    public ObjectReference getShipClass() {
         return shipClass;
     }
 

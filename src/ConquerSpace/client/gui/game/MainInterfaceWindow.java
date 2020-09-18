@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
+import ConquerSpace.client.gui.game.engineering.FullShipClassInformationMenu;
 import ConquerSpace.client.gui.game.engineering.HullCreator;
 import ConquerSpace.client.gui.game.engineering.LaunchVehicleDesigner;
 import ConquerSpace.client.gui.game.engineering.shipcomponent.ShipComponentDesigner;
@@ -72,6 +73,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     JTabbedPane shipsComponentsOverviewPanel;
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
+    private FullShipClassInformationMenu fullShipClassInformationMenu;
     private LaunchVehicleDesigner launchSystemDesigner;
 
     private CivInfoOverview civInfoOverview;
@@ -165,6 +167,9 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         buildSpaceShipAutomationMenu = new BuildSpaceShipAutomationMenu(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipdesign"), buildSpaceShipAutomationMenu);
 
+        fullShipClassInformationMenu = new FullShipClassInformationMenu(gameState, civilization);
+        shipsComponentsOverviewPanel.add("Ship Classes", fullShipClassInformationMenu);
+
         ImageIcon map = ResourceLoader.getIcon("satellite.icon");
 
         //shipsComponentsOverviewPanel.setIconAt(1, map);
@@ -173,26 +178,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         launchWrapper.setLayout(new VerticalFlowLayout());
         launchWrapper.add(launchSystemDesigner);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.launchsystem"), launchWrapper);
-
-        updateComponents();
-
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                updateComponents();
-            }
-        });
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                updateComponents();
-            }
-        });
-
-        addPropertyChangeListener(l -> {
-            updateComponents();
-        });
 
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipcomponent"), shipComponentDesigner);
@@ -251,7 +236,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.setIconAt(7, econ);
         tabs.setIconAt(8, events);
         tabs.setIconAt(9, orgs);
-        
+
         add(universeBreakdown, BorderLayout.WEST);
         add(tabs, BorderLayout.CENTER);
 
@@ -260,6 +245,26 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
             public void mouseEntered(MouseEvent e) {
                 update();
             }
+        });
+
+        updateComponents();
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                updateComponents();
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                updateComponents();
+            }
+        });
+
+        addPropertyChangeListener(l -> {
+            updateComponents();
         });
     }
 

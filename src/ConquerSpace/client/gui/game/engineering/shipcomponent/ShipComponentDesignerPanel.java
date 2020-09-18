@@ -30,4 +30,12 @@ public class ShipComponentDesignerPanel extends JPanel {
     ShipComponent generateComponent() {
         return null;
     }
+    
+    public void clearUI() {
+        
+    }
+    
+    public void loadComponent(ShipComponent comp) {
+        
+    }
 }

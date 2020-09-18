@@ -18,10 +18,12 @@
 package ConquerSpace.client.gui.game.engineering;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.ShipClass;
+import ConquerSpace.common.game.ships.components.ShipComponent;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
@@ -30,6 +32,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -57,8 +60,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
     private Civilization civ;
 
-    private JList<ShipClass> shipList;
-    private DefaultListModel<ShipClass> shipListModel;
+    private ArrayList<ObjectReference> objectComponentsToAdd;
+
+    private JList<String> shipList;
+    private ObjectListModel<ObjectReference> shipListModel;
 
     JPanel shipDetailsPanel;
     private JLabel shipNameLabel;
@@ -112,6 +117,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     private JLabel shipScienceLabel;
     private JButton shipScienceButton;
 
+    JList<String> shipComponents;
+    JList<String> alreadyAddedShipComponentList;
+
     private JTabbedPane mainTabs;
     private JPanel componentRoughDesignPanel;
 
@@ -145,22 +153,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         });
 
         saveShipClass.addActionListener(l -> {
-            //Create ship class...
-            if (selectedHull == null) {
-                //Autogenerate...
-                //Need to make hull material...
-                //Get hull material
-                selectedHull = new Hull(gameState, 100, 100,
-                        civ.hullMaterials.get(0),
-                        shipTypeComboBox.getSelectedIndex(), 100, "name");
-            }
-            //Add hull
-            civ.hulls.add(selectedHull.getReference());
-            ShipClass sc = new ShipClass(gameState, shipNameField.getText(), selectedHull);
-            //Add components
-            //Autogenerate engine
-
-            civ.shipClasses.add(sc.getReference());
+            createShip();
         });
 
         newStuff.add(newShipClass);
@@ -173,12 +166,15 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         shipInformationPanel.setLayout(new HorizontalFlowLayout());
 
         //The panel that you cant really change the stuff inside
-        shipListModel = new DefaultListModel<>();
-        for (ObjectReference sc : c.shipClasses) {
-            ShipClass shipClass = gameState.getObject(sc, ShipClass.class);
-            shipListModel.addElement(shipClass);
-        }
+        shipListModel = new ObjectListModel<>();
+        shipListModel.setElements(civ.shipClasses);
+
+        shipListModel.setHandler(l -> {
+            return gameState.getObject(l, ShipClass.class).getName();
+        });
+
         shipList = new JList<>(shipListModel);
+        shipList.setFixedCellWidth(250);
         JScrollPane shipListScrollPane = new JScrollPane(shipList);
         shipInformationPanel.add(shipListScrollPane);
 
@@ -234,7 +230,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             });
             chooseHullButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.choose"));
             chooseHullButton.addActionListener(l -> {
-                HullDesignerPanel panel = new HullDesignerPanel(gameState, civ);
+                ShipHullConfigurePanel panel = new ShipHullConfigurePanel(gameState, civ);
                 int close = JOptionPane.showInternalConfirmDialog(this,
                         panel, "Hull Chooser",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -399,7 +395,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         panel, "Engine Chooser",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (close == JOptionPane.OK_OPTION) {
-                    
+
                 }
             });
             engineTypeNotificationLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
@@ -504,6 +500,44 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             shipScienceButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.science.configure"));
             shipScienceButton.setEnabled(false);
 
+            //Another panel to select everything
+            JPanel addRandomShipComponentPanel = new JPanel();
+            ObjectListModel<ObjectReference> shipComponentListModel = new ObjectListModel<>();
+            shipComponentListModel.setElements(c.shipComponentList);
+            shipComponentListModel.setHandler(l -> {
+                return gameState.getObject(l, ShipComponent.class).getName();
+            });
+
+            objectComponentsToAdd = new ArrayList<>();
+
+            shipComponents = new JList<>(shipComponentListModel);
+            shipComponents.setFixedCellWidth(64);
+
+            ObjectListModel<ObjectReference> addedShipComponentListModel = new ObjectListModel<>();
+            addedShipComponentListModel.setElements(objectComponentsToAdd);
+            addedShipComponentListModel.setHandler(l -> {
+                return gameState.getObject(l, ShipComponent.class).getName();
+            });
+            
+            alreadyAddedShipComponentList = new JList<>(addedShipComponentListModel);
+            alreadyAddedShipComponentList.setFixedCellWidth(64);
+
+            //Add button to add component
+            JButton addSelectedComponentButton = new JButton("Add Component");
+            addSelectedComponentButton.addActionListener(l -> {
+                int selected = shipComponents.getSelectedIndex();
+                if (selected >= 0) {
+                    //Then get the component and add it to the thing
+                    ObjectReference reference = shipComponentListModel.getObject(selected);
+                    objectComponentsToAdd.add(reference);
+                    alreadyAddedShipComponentList.updateUI();
+                }
+            });
+
+            addRandomShipComponentPanel.add(new JScrollPane(shipComponents));
+            addRandomShipComponentPanel.add(addSelectedComponentButton);
+            addRandomShipComponentPanel.add(new JScrollPane(alreadyAddedShipComponentList));
+
             GridBagConstraints constraints = new GridBagConstraints();
 
             constraints.gridx = 0;
@@ -531,6 +565,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             grandContainer.add(shipScienceButton, constraints);
+
+            constraints.gridx = 2;
+            constraints.gridy = 0;
+            grandContainer.add(addRandomShipComponentPanel, constraints);
 
             //So that it goes to the top left corner...            
             constraints.gridx = 0;
@@ -564,5 +602,43 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.info"), shipInformationPanel);
         mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.components"), componentRoughDesignPanel);
         add(mainTabs, BorderLayout.CENTER);
+    }
+
+    /**
+     * So that we can update the UI every time it becomes visible
+     *
+     * @param aFlag
+     */
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        //Update stuff
+        if (aFlag) {
+            shipComponents.updateUI();
+            alreadyAddedShipComponentList.updateUI();
+            shipList.updateUI();
+        }
+    }
+
+    public void createShip() {
+        //Create ship class...
+        if (selectedHull == null) {
+            //Autogenerate...
+            //Need to make hull material...
+            //Get hull material
+            selectedHull = new Hull(gameState, 100, 100,
+                    civ.hullMaterials.get(0),
+                    shipTypeComboBox.getSelectedIndex(), 100, shipNameField.getText() + " Hull");
+            civ.hulls.add(selectedHull.getReference());
+
+        }
+        //Add hull
+        ShipClass sc = new ShipClass(gameState, shipNameField.getText(), selectedHull.getReference());
+        //Add components
+        sc.components.addAll(objectComponentsToAdd);
+        //And other components
+        //Autogenerate engine, etc...
+        civ.shipClasses.add(sc.getReference());
+        shipList.updateUI();
     }
 }

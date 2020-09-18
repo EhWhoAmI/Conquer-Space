@@ -19,6 +19,7 @@ package ConquerSpace.common.game.ships;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.ships.hull.Hull;
 import ConquerSpace.common.save.SerializeClassName;
 import java.io.Serializable;
@@ -34,12 +35,12 @@ public class ShipClass extends ConquerSpaceGameObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private Hull hull;
-    public ArrayList<Integer> components;
+    private ObjectReference hull;
+    public ArrayList<ObjectReference> components;
     private int mass = 1;
     private long estimatedThrust = 0;
 
-    public ShipClass(GameState gameState, String name, Hull h) {
+    public ShipClass(GameState gameState, String name, ObjectReference h) {
         super(gameState);
         this.name = name;
         this.hull = h;
@@ -59,11 +60,11 @@ public class ShipClass extends ConquerSpaceGameObject implements Serializable {
         return name;
     }
 
-    public Hull getHull() {
+    public ObjectReference getHull() {
         return hull;
     }
 
-    public void setHull(Hull hull) {
+    public void setHull(ObjectReference hull) {
         this.hull = hull;
     }
 

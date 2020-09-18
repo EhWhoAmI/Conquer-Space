@@ -28,9 +28,7 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.TextField;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -46,27 +44,31 @@ import javax.swing.JToolBar;
  * @author EhWhoAmI
  */
 public class ShipComponentDesigner extends JPanel {
-    
+
     private GameState gameState;
     private JButton saveComponentButton;
-    
+
     private ObjectListModel<ObjectReference> shipComponentListModel;
     private JList<String> shipComponentList;
-    
+
     private JPanel componentInformationPanel;
     private JPanel componentCustomizationPanel;
-    
+
     private DefaultComboBoxModel<ShipComponentType> shipComponentTypeComboBoxModel;
     private JComboBox<ShipComponentType> shipComponentTypes;
-    
+
     private JTextField shipComponentName;
     CardLayout layout;
-    
+
+    ArrayList<ShipComponentDesignerPanel> designerPanels;
+
     @SuppressWarnings("unchecked")
     public ShipComponentDesigner(GameState gameState, Civilization c) {
         this.gameState = gameState;
+
+        designerPanels = new ArrayList<>();
         setLayout(new BorderLayout());
-        
+
         JToolBar toolBar = new JToolBar();
         saveComponentButton = new JButton("Save Component");
         saveComponentButton.addActionListener(l -> {
@@ -79,57 +81,69 @@ public class ShipComponentDesigner extends JPanel {
                         //Add ship component
                         c.shipComponentList.add(ref.getReference());
                         shipComponentList.updateUI();
+
+                        //Clear UI
+                        shipComponentName.setText("");
+                        for (ShipComponentDesignerPanel panel : designerPanels) {
+                            panel.clearUI();
+                        }
                     }
                     break;
                 }
             }
         });
         toolBar.add(saveComponentButton);
-        toolBar.add(new JButton("Save Component"));
-        
+
+        toolBar.add(new JButton("Load Component"));
+
         shipComponentListModel = new ObjectListModel<>();
         shipComponentListModel.setElements(c.shipComponentList);
         shipComponentListModel.setHandler(l -> {
             return gameState.getObject(l, ShipComponent.class).getName();
         });
-        
+
         shipComponentList = new JList<>(shipComponentListModel);
         shipComponentList.setFixedCellWidth(250);
-        
+
         componentInformationPanel = new JPanel();
         componentInformationPanel.setLayout(new VerticalFlowLayout());
-        
+
         shipComponentTypeComboBoxModel = new DefaultComboBoxModel<>(ShipComponentType.values());
         shipComponentTypes = new JComboBox<>(shipComponentTypeComboBoxModel);
         shipComponentTypes.addActionListener(l -> {
             //Set selected panel
             layout.show(componentCustomizationPanel, shipComponentTypes.getSelectedItem().toString());
-            
+
         });
-        
+
         JPanel typeContainerPanel = new JPanel(new HorizontalFlowLayout());
         typeContainerPanel.add(new JLabel("Ship Component Type: "));
         typeContainerPanel.add(shipComponentTypes);
-        
+
         componentInformationPanel.add(typeContainerPanel);
-        
+
         JPanel namecontainerPanel = new JPanel(new HorizontalFlowLayout());
         namecontainerPanel.add(new JLabel("Component Name: "));
         shipComponentName = new JTextField(32);
         namecontainerPanel.add(shipComponentName);
         componentInformationPanel.add(namecontainerPanel);
-        
+
         componentCustomizationPanel = new JPanel();
-        
+
         layout = new CardLayout();
         componentCustomizationPanel.setLayout(layout);
 
         //Add the various things
         EngineDesignerPanel engineDesignerPanel = new EngineDesignerPanel(gameState, c);
+        designerPanels.add(engineDesignerPanel);
         componentCustomizationPanel.add(engineDesignerPanel, ShipComponentType.Engine.toString());
         PowerSupplyDesignerPanel psdp = new PowerSupplyDesignerPanel();
+        designerPanels.add(psdp);
         componentCustomizationPanel.add(psdp, ShipComponentType.PowerSupply.toString());
-        
+        CrewComponentDesignerPanel ccdp = new CrewComponentDesignerPanel(gameState);
+        designerPanels.add(ccdp);
+        componentCustomizationPanel.add(ccdp, ShipComponentType.Crew.toString());
+
         componentInformationPanel.add(componentCustomizationPanel);
         JPanel container = new JPanel(new VerticalFlowLayout());
         container.add(componentInformationPanel);
