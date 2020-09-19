@@ -32,6 +32,7 @@ import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
+import java.util.UUID;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -84,6 +85,8 @@ public class SpacePortMenu extends JPanel {
             ShipClass shipClass = gameState.getObject(reference, ShipClass.class);
             //Launch ship somehow
             Ship ship = new Ship(gameState, shipClass, planet.getY(), planet.getX(), new Vector(0, 0), planet.getUniversePath());
+            //Set random name for now
+            ship.setName(UUID.randomUUID().toString());
             //Then stuff it onto launch system and launch into space
             //Hm...
             //Add to civ
@@ -92,15 +95,15 @@ public class SpacePortMenu extends JPanel {
         });
 
         add(spacePortCount);
-        
+
         JPanel launchableInformationPanel = new JPanel(new HorizontalFlowLayout());
         launchableInformationPanel.add(new JScrollPane(launchableList));
-        
+
         JPanel shipInfoandLaunchPanel = new JPanel(new VerticalFlowLayout());
         shipInfoandLaunchPanel.add(selectedShipButton);
         shipInfoandLaunchPanel.add(launchButton);
         launchableInformationPanel.add(shipInfoandLaunchPanel);
-        
+
         add(launchableInformationPanel);
         updateComponent();
     }

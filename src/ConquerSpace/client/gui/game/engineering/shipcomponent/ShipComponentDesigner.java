@@ -77,7 +77,7 @@ public class ShipComponentDesigner extends JPanel {
                 if (comp.isVisible() && comp instanceof ShipComponentDesignerPanel) {
                     //It's what we want
                     ShipComponent ref = ((ShipComponentDesignerPanel) comp).generateComponent();
-                    if (ref != null && shipComponentName.getText().isEmpty()) {
+                    if (ref != null && !shipComponentName.getText().isEmpty()) {
                         ref.setName(shipComponentName.getText());
                         //Add ship component
                         c.shipComponentList.add(ref.getReference());

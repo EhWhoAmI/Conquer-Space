@@ -31,7 +31,7 @@ import java.util.ArrayList;
 @SerializeClassName("ship")
 public class Ship extends SpaceShip implements Launchable{
 
-    String sclass;
+    String sclassname;
 
     private ObjectReference hull;
     public ArrayList<ObjectReference> components;
@@ -56,7 +56,7 @@ public class Ship extends SpaceShip implements Launchable{
         }
         this.hull = sclass.getHull();
         this.mass = sclass.getMass();
-        this.sclass = sclass.getName();
+        this.sclassname = sclass.getName();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class Ship extends SpaceShip implements Launchable{
     }
 
     public String getShipClassName() {
-        return sclass;
+        return sclassname;
     }
 
     public ObjectReference getShipClass() {

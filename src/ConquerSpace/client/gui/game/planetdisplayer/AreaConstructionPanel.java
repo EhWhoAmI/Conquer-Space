@@ -80,27 +80,25 @@ public class AreaConstructionPanel extends JPanel {
 
     private AreaDesignPanel areaDesignPanel = null;
 
+    private Civilization civilization;
+
     public AreaConstructionPanel(GameState gameState,
             Planet planet,
             Civilization civilization,
             City city) {
+        this.civilization = civilization;
         setLayout(new BorderLayout());
 
         areaTypeListModel = new DefaultListModel<>();
-        for (int i = 0; i < AreaListNames.values().length; i++) {
-            //Has launch capability
-            if (AreaListNames.values()[i].equals(AreaListNames.SpacePort)) {
-                if (civilization.values.containsKey("haslaunch") && civilization.values.get("haslaunch") == 1) {
-                    areaTypeListModel.addElement(AreaListNames.values()[i]);
-                }
-            } else {
-                areaTypeListModel.addElement(AreaListNames.values()[i]);
-            }
-        }
+        configureAvailableBuildings();
+
         areaTypeList = new JList<>(areaTypeListModel);
         areaTypeList.addListSelectionListener(l -> {
             areaConstructionInfo.removeAll();
             //Get selected area type
+            if (areaTypeList.getSelectedValue() == null) {
+                return;
+            }
             switch (areaTypeList.getSelectedValue()) {
                 default:
                     //Show nothing
@@ -117,7 +115,6 @@ public class AreaConstructionPanel extends JPanel {
                 case Observatory:
                     areaDesignPanel = new ObservatoryConstructionPanel(gameState, planet, city, civilization);
                     break;
-
             }
             if (areaDesignPanel != null) {
                 areaConstructionInfo.add(areaDesignPanel, BorderLayout.PAGE_START);
@@ -126,6 +123,7 @@ public class AreaConstructionPanel extends JPanel {
                 areaConstructionInfo.revalidate();
                 areaConstructionInfo.repaint();
             }
+
         });
 
         areaConstructionInfo = new JPanel(new BorderLayout());
@@ -175,5 +173,31 @@ public class AreaConstructionPanel extends JPanel {
 
     public void update() {
 
+    }
+
+    public void configureAvailableBuildings() {
+        areaTypeListModel.clear();
+        for (int i = 0; i < AreaListNames.values().length; i++) {
+            //Has launch capability
+            if (AreaListNames.values()[i].equals(AreaListNames.SpacePort)) {
+                if (civilization.values.containsKey("haslaunch") && civilization.values.get("haslaunch") == 1) {
+                    areaTypeListModel.addElement(AreaListNames.values()[i]);
+                }
+            } else {
+                areaTypeListModel.addElement(AreaListNames.values()[i]);
+            }
+        }
+        if (areaTypeList != null) {
+            areaTypeList.setSelectedIndex(0);
+        }
+    }
+
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+
+        if (aFlag) {
+            configureAvailableBuildings();
+        }
     }
 }

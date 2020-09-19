@@ -28,6 +28,7 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
 
     //Mass in KG
     protected int mass;
+    protected int volume;
 
     protected String name;
 
@@ -54,6 +55,14 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
     @Override
     public String toString() {
         return getName();
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+
+    public int getVolume() {
+        return volume;
     }
     
     public abstract ShipComponentType getShipComponentType();

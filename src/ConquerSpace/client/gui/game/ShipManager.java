@@ -23,15 +23,14 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 /**
  * Listing the ships
+ *
  * @author EhWhoAmI
  */
 public class ShipManager extends JPanel {
@@ -40,17 +39,14 @@ public class ShipManager extends JPanel {
     private JScrollPane scrollPane;
     private JTable table;
 
-    private ShipDetailsSideWindow shipDetailsSideWindow = null;
-
     private Civilization c;
-    
+
     private GameState gameState;
 
-    public ShipManager(GameState gameState, Civilization c, PlayerRegister register) {
+    public ShipManager(GameState gameState, Civilization c, PlayerRegister register, SpaceShipOverview shipController) {
         this.c = c;
         this.gameState = gameState;
-        
-        //setTitle("All Ships");
+
         setLayout(new BorderLayout());
         model = new ShipTableModel();
 
@@ -63,22 +59,15 @@ public class ShipManager extends JPanel {
         };
 
         table.getSelectionModel().addListSelectionListener(l -> {
-            if (l.getValueIsAdjusting() && table.getSelectedRow()>-1) {
+            if (l.getValueIsAdjusting() && table.getSelectedRow() > -1) {
                 Ship s = model.get(table.getSelectedRow());
                 //Window
-                if (shipDetailsSideWindow == null || shipDetailsSideWindow.isClosed()) {
-                    //Clear...
-                    shipDetailsSideWindow = null;
-                    shipDetailsSideWindow = new ShipDetailsSideWindow(s, c, register);
-                    ((JDesktopPane) SwingUtilities.getAncestorOfClass(JDesktopPane.class, this)).add(shipDetailsSideWindow);
-                    shipDetailsSideWindow.toFront();
-                    int height = shipDetailsSideWindow.getDesktopPane().getHeight();
-                    shipDetailsSideWindow.setLocation(0, height - shipDetailsSideWindow.getHeight());
-                }
+                //Just show on a separate window
+                shipController.showShip(s);
             }
         });
         table.getTableHeader().setReorderingAllowed(false);
-        
+
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
         update();
@@ -91,7 +80,7 @@ public class ShipManager extends JPanel {
         for (ObjectReference shipId : c.spaceships) {
             Ship s = gameState.getObject(shipId, Ship.class);
             //process
-            if(!model.objects.contains(s)) {
+            if (!model.objects.contains(s)) {
                 model.add(s);
             }
         }

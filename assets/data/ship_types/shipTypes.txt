@@ -1,4 +1,5 @@
 # Comments start with hashtags
+"satellite"
 "probe" 10
 "science ship" 20
 "survey ship" 30
