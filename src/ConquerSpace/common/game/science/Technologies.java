@@ -22,7 +22,7 @@ import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.ships.EngineTechnology;
-import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import ConquerSpace.common.util.ResourceLoader;

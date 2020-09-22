@@ -286,6 +286,9 @@ public class PlanetMap extends JPanel {
             File[] dirs = imagesDir.listFiles();
             if (dirs != null) {
                 for (File dirImage : dirs) {
+                    if (!dirImage.isDirectory()) {
+                        continue;
+                    }
                     ArrayList<Image> imageList = new ArrayList<>();
                     for (File imageFile : dirImage.listFiles()) {
                         try {

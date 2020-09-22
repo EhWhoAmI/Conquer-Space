@@ -33,7 +33,7 @@ import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.Ship;
-import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.universe.SpacePoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Body;

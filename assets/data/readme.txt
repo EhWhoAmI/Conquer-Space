@@ -1,22 +1,18 @@
-How to create your own launch system
+These are the data files for the game.
 
-A launch system is to send things, anything, into space.
-Mainly, in the beginning of the game, it would be used for sending satellites into space,
-and everything starts from there.
+All of them are in the data format of hjson, https://hjson.github.io/
 
-How to write one.
-First, you need to create the necessary techs in the techs folder. Add a 'space travel'
-tag to it. Do whatever you want to put into there in the proper tech.
-
-Here is what each of the individual stats and what they do
-name -- name of launch type
-tech -- the name of the tech you created
-size -- The bigger the number, the less the ports you can put in an area.
-safety -- The bigger the number, the more the launches blow up
-cost -- Cost per production of the launch vehicle
-reusable -- the reusability of the ship launch vehicle. Can it be reused?
- - reuse cost -- the cost to reuse
-cargo -- Max cargo space of the launch vehicle in kgs
-
-Everything can be changed by techs, perhaps we add a multiplier like
-<launch system name>_<value>
+Folder structure:
+- buildings  - stuff to do with buildings. Not really used now
+- config  - configurations, not really in use for now
+- console  - important files for the console
+- elements  Elements of the periodic table for the elemental goods
+- engine_tech  ship engine technologies
+- events  events on planets, not in use right now.
+- goods  goods and what they are made off
+- launch  launch systems
+- ores  Ores, and their distributions
+- processes  Production processes
+- ship_types  Types and classes of ships
+- tech  Technology list
+- traits Person traits, not in use for now

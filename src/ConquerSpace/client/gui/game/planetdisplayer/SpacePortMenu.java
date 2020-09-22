@@ -27,7 +27,7 @@ import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
-import ConquerSpace.common.game.ships.SpaceShip;
+import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
@@ -36,6 +36,7 @@ import java.util.UUID;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -88,7 +89,16 @@ public class SpacePortMenu extends JPanel {
             //Set random name for now
             ship.setName(UUID.randomUUID().toString());
             //Then stuff it onto launch system and launch into space
-            //Hm...
+            //Get launch system
+//            if (civilization.launchSystems.isEmpty()) {
+//                //No launch system, exit
+//                JOptionPane.showInternalMessageDialog(SpacePortMenu.this, "You need to design a launch system before you can launch your space ship!");
+//                return;
+//            }
+            //Then stuff to launchsystem
+            LaunchSystem launchSystem = gameState.getObject(civilization.launchSystems.get(0), LaunchSystem.class);
+            
+            
             //Add to civ
             civilization.spaceships.add(ship.getReference());
             Actions.launchLaunchable(ship, planet);

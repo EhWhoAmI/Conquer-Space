@@ -27,6 +27,8 @@ import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.FieldNode;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.EngineTechnology;
+import ConquerSpace.common.game.ships.ShipClass;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.save.Serialize;
@@ -82,7 +84,7 @@ public final class GameState implements Serializable {
     @Serialize("species")
     public ArrayList<ObjectReference> species;
 
-    public HashMap<String, Integer> shipTypes;
+    public ArrayList<ShipType> shipTypes;
     public HashMap<String, Integer> shipTypeClasses;
 
     //Can theoratically delete this after universe generation is finished. Only needed for generating a star system
@@ -110,7 +112,6 @@ public final class GameState implements Serializable {
         
         entities = new EntityManager();
         
-
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
 
@@ -253,6 +254,8 @@ public final class GameState implements Serializable {
         entities = gameState.entities;
 
         universeId = gameState.universeId;
+        
+        objectCount = gameState.objectCount;
 
         date = gameState.date;
         launchSystems = gameState.launchSystems;
@@ -281,6 +284,8 @@ public final class GameState implements Serializable {
         techonologies = gameState.techonologies;
 
         random = gameState.random;
+        
+        
     }
     
     ObjectReference nextObjectReference() {

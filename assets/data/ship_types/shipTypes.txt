@@ -1,16 +1,11 @@
-# Comments start with hashtags
-"satellite"
-"probe" 10
-"science ship" 20
-"survey ship" 30
-"space station" 40
-"repair ship" 110
-"construction ship" 120
-"colony ship" 210
-
-"cargo ship" 310
-"transportation ship" 320
-"tug" 360
-
-"corvette" 1000
-"destroyer" 1010
+//Id is set by the computer so nice stuff
+[
+    {
+        identifier: Satellite
+        isMilitary: false
+    }
+    {
+        identifier: Space Station
+        isMilitary: false
+    }
+]

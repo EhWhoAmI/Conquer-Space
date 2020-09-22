@@ -15,55 +15,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.city.area;
+package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.logistics.ResourcePermissions;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StorageNeeds;
-import ConquerSpace.common.game.universe.UniversePath;
-import ConquerSpace.common.save.SerializeClassName;
-import ConquerSpace.common.util.DoubleHashMap;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 /**
+ * This can store resources, and is the same as a resource stockpile. It's just
+ * that you cannot connect to it via logistics
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("stockpile-area")
-public class ResourceStockpileArea extends Area implements ResourceStockpile {
+public class CargoComponent extends ShipComponent implements ResourceStockpile {
 
-    private ResourcePermissions defaultPermissions;
-    private HashMap<Integer, ResourcePermissions> allPermissions;
+    int storageVolume;
 
-    public HashMap<Integer, Double> resources;
-    public DoubleHashMap<Integer> resourceDemands;
+    HashMap<Integer, Double> resources;
 
-    public ArrayList<StorageNeeds> storageNeeds;
-    public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
-    public UniversePath path;
-    
-    public ResourceStockpileArea(GameState gameState) {
+    public CargoComponent(GameState gameState) {
         super(gameState);
-        allPermissions = new HashMap<>();
-        defaultPermissions = new ResourcePermissions(false, false, false);
-        resourceLedger = new HashMap<>();
-        resourceDemands = new DoubleHashMap<>();
+        resources = new HashMap<>();
     }
 
-    public ResourcePermissions getPermission(Integer person) {
-        if (allPermissions.containsKey(person)) {
-            return allPermissions.get(person);
-        }
-        return defaultPermissions;
+    public void setStorageVolume(int storageVolume) {
+        this.storageVolume = storageVolume;
     }
 
-    public void addPermission(Integer person, ResourcePermissions permission) {
-        allPermissions.put(person, permission);
+    public int getStorageVolume() {
+        return storageVolume;
     }
-    
+
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.Cargo;
+    }
 
     @Override
     public void addResourceTypeStore(Integer type) {
@@ -81,20 +68,11 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
             resources.put(type, 0d);
         }
         resources.put(type, resources.get(type) + amount);
-        //Add to ledger
-        if (resourceLedger.containsKey(type)) {
-            DoubleHashMap<String> resource = resourceLedger.get(type);
-            resource.addValue("added", (amount));
-        } else {
-            DoubleHashMap<String> resource = new DoubleHashMap<>();
-            resource.put("added", amount);
-            resourceLedger.put(type, resource);
-        }
     }
 
     @Override
     public boolean canStore(Integer type) {
-        return true;//(resources.containsKey(type));
+        return true;
     }
 
     @Override
@@ -125,16 +103,6 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
         }
 
         resources.put(type, (currentlyStored - amount));
-        //Add to ledger
-        if (resourceLedger.containsKey(type)) {
-            DoubleHashMap<String> resource = resourceLedger.get(type);
-            resource.addValue("removed", -amount);
-            resourceLedger.put(type, resource);
-        } else {
-            DoubleHashMap<String> resource = new DoubleHashMap<>();
-            resource.addValue("removed", -amount);
-            resourceLedger.put(type, resource);
-        }
         return true;
     }
 }

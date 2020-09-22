@@ -25,6 +25,7 @@ import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.EngineTechnology;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -153,49 +154,14 @@ public class AssetReader {
         }
         return elements;
     }
-
-    //This one is a little different...
-    public static void readShipTypes(GameState state) {
-        try {
-            //Open file
-            Scanner s = new Scanner(ResourceLoader.getResourceByFile("text.ship.types.types"));
-            while (s.hasNextLine()) {
-                String st = s.nextLine();
-                if (st.startsWith("#")) {
-                    continue;
-                } else if (st.startsWith("\"")) {
-                    //Parse string
-                    StringBuilder sb = new StringBuilder();
-                    int i;
-                    for (i = 1; i < st.length() && st.charAt(i) != '\"'; i++) {
-                        sb.append(st.charAt(i));
-                    }
-                    //Get number
-                    int number = Integer.parseInt(st.substring(i + 2));
-                    state.shipTypes.put(sb.toString(), number);
-                }
-            }
-            //Open file
-            Scanner s2 = new Scanner(ResourceLoader.getResourceByFile("text.ship.types.classification"));
-            while (s2.hasNextLine()) {
-                String st = s2.nextLine();
-                if (st.startsWith("#")) {
-                    continue;
-                } else if (st.startsWith("\"")) {
-                    //Parse string
-                    StringBuilder sb = new StringBuilder();
-                    int i;
-                    for (i = 1; i < st.length() && st.charAt(i) != '\"'; i++) {
-                        sb.append(st.charAt(i));
-                    }
-                    //Get number
-                    int number = Integer.parseInt(st.substring(i + 2));
-                    state.shipTypeClasses.put(sb.toString(), number);
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            LOGGER.warn("Cannot open ship types", ex);
-        }
+    
+    public static Object processShipType(JSONObject obj) {
+        String identifier = obj.getString("identifier");
+        boolean isMilitary = obj.getBoolean("military");
+        ShipType shipType = new ShipType();
+        shipType.setIdentifier(identifier);
+        shipType.setMilitary(isMilitary);
+        return shipType;
     }
 
     public static Object processElement(JSONObject obj) {

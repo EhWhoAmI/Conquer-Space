@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.game.engineering;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.game.ships.Hull;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -149,15 +149,15 @@ public class HullCreator extends JPanel {
             massTextField.setText("" + h.getMass());
             spaceBox.setText("" + h.getSpace());
             estThrustField.setText("" + h.getThrust());
-            for (Map.Entry<String, Integer> entry : gameState.shipTypes.entrySet()) {
-                String key = entry.getKey();
-                Integer value = entry.getValue();
-                //Compare
-                int type = (int) h.getShipType();
-                if (type == value) {
-                    hullComboBox.setSelectedItem(key);
-                }
-            }
+//            for (Map.Entry<String, Integer> entry : gameState.shipTypes.entrySet()) {
+//                String key = entry.getKey();
+//                Integer value = entry.getValue();
+//                //Compare
+//                int type = (int) h.getShipType();
+//                if (type == value) {
+//                    hullComboBox.setSelectedItem(key);
+//                }
+//            }
             className.setText(h.getName());
         });
 
@@ -193,9 +193,9 @@ public class HullCreator extends JPanel {
         massUnitText = new JLabel("kg");
 
         hullComboBoxLabel = new JLabel("Hull for type: ");
-        Vector v = new Vector((gameState.shipTypes.keySet()));
-        v.sort(Comparator.naturalOrder());
-        hullComboBox = new JComboBox<>(v);
+        //Vector v = new Vector((gameState.shipTypes.keySet()));
+        //v.sort(Comparator.naturalOrder());
+        hullComboBox = new JComboBox<>();
         hullComboBox.setFocusable(false);
         JLabel emptyLabel2 = new JLabel("");
 
@@ -249,10 +249,10 @@ public class HullCreator extends JPanel {
         long mass = Long.parseLong(massTextField.getText().replaceAll(",", ""));
         long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
         long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
-        int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
+        //int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
         ObjectReference material = (ObjectReference) hullMaterialComboBox.getSelectedItem();
 
-        Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
+        Hull hull = new Hull(gameState, mass, space, material, 0, thrust, className.getText());
         hullListModel.addElement(hull);
         c.hulls.add(hull.getReference());
     }

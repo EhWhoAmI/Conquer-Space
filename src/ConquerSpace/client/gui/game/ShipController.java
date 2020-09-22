@@ -81,10 +81,14 @@ public class ShipController extends JPanel {
             if (selected >= 0) {
                 //Then get the component and add it to the thing
                 ObjectReference reference = shipComponentListModel.getObject(selected);
-                //Add to ship
+                //Then create mission to dock to it
+                //Check for cargo ships...
                 if (currentShip != null) {
-                    currentShip.components.add(reference);
+                    //currentShip.components.add(reference);
+                    
                 }
+                
+                
                 shipcomponents.updateUI();
             }
         });

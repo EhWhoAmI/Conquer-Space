@@ -27,8 +27,6 @@ public interface ResourceStockpile {
     public void addResourceTypeStore(Integer type);
     public Double getResourceAmount(Integer type);
     public void addResource(Integer type, Double amount);
-    //Describe position
-    public UniversePath getUniversePath();
     public boolean canStore(Integer type);
     
     public Integer[] storedTypes();

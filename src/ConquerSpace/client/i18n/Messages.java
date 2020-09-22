@@ -52,7 +52,7 @@ public class Messages {
             File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
             URL[] urls = {resourcesFolder.toURI().toURL()};
             ClassLoader loader = new URLClassLoader(urls);
-            bundle = ResourceBundle.getBundle(("ApplicationMessages").replace("/", "."), Locale.getDefault(), loader);
+            bundle = ResourceBundle.getBundle("", Locale.getDefault(), loader);
             return;
         } catch (MalformedURLException ex) {
             LOGGER.error(ex);
@@ -65,7 +65,7 @@ public class Messages {
         //Load resource file
         LOGGER.warn("Loading locale " + l.toString());
 
-        File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/ApplicationMessages_" + l.toString() + ".properties");
+        File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/" + l.toString() + ".properties");
         try {
             FileInputStream is = new FileInputStream(resourcesFolder);
             bundle = new IncompleteResourceBundle(is);
@@ -83,7 +83,7 @@ public class Messages {
         try {
             LOGGER.info("Loading default bundle " + ConquerSpace.DEFAULT_LOCALE);
             //Default bundle is in assets, so we don't meet any issues, unless they mess with the jar itself
-            InputStream in = getClass().getResourceAsStream("/assets/i18n/ApplicationMessages_" + ConquerSpace.DEFAULT_LOCALE.toString() + ".properties");
+            InputStream in = getClass().getResourceAsStream("/assets/i18n/" + ConquerSpace.DEFAULT_LOCALE.toString() + ".properties");
 
             bundle = new IncompleteResourceBundle(in);
         } catch (Exception ex) {

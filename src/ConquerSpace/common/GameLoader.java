@@ -25,6 +25,7 @@ import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.Fields;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.EngineTechnology;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ public class GameLoader {
      */
     public static void load(GameState gameState) {
         long start = System.currentTimeMillis();
-        gameState.shipTypes = new HashMap<>();
         gameState.shipTypeClasses = new HashMap<>();
 
         //Init tech and fields
@@ -55,7 +55,9 @@ public class GameLoader {
         gameState.launchSystems = readHjsonFromDirInArray("dirs.launch",
                 LaunchSystem.class, gameState, AssetReader::processLaunchSystem);
 
-        readShipTypes(gameState);
+        
+        gameState.shipTypes = readHjsonFromDirInArray("dirs.ship.types.types",
+                ShipType.class, AssetReader::processShipType);
 
         gameState.personalityTraits = readHjsonFromDirInArray("dirs.traits",
                 PersonalityTrait.class, AssetReader::processPersonalityTraits);

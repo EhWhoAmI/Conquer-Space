@@ -1,6 +1,6 @@
 def copy_i18n(cqsp_dir):
     src_dir = cqsp_dir + 'src/'
-    i18n_file = src_dir + 'assets/i18n/ApplicationMessages_en_US.properties'
+    i18n_file = src_dir + 'assets/i18n/en_US.properties'
     i18n_output = cqsp_dir + 'assets/i18n/EmptyLocale.properties'
     with open(i18n_file, 'r') as f:
         Lines = f.readlines() 
@@ -10,7 +10,7 @@ def copy_i18n(cqsp_dir):
                 # Skip first line
                 if(line.startswith('# Default')):
                     output.write('# To add your own locale, copy this file and add your own locale\n')
-                    output.write('# Then rename it Application_<lang>_<country>.properties\n')
+                    output.write('# Then rename it <lang>_<country>.properties\n')
                 elif(line.startswith('#')):
                     # Comment
                     output.write(line)

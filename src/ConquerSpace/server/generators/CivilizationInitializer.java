@@ -57,7 +57,7 @@ import ConquerSpace.common.game.science.Field;
 import ConquerSpace.common.game.science.Fields;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
-import ConquerSpace.common.game.ships.hull.HullMaterial;
+import ConquerSpace.common.game.ships.HullMaterial;
 import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;

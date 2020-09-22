@@ -25,7 +25,8 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.components.ControlComponent;
 import ConquerSpace.common.game.ships.components.ShipComponent;
-import ConquerSpace.common.game.ships.hull.Hull;
+import ConquerSpace.common.game.ships.Hull;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -34,6 +35,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -81,7 +83,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     private JLabel hullMaterialLabel;
 
     private JLabel shipTypeLabel;
-    private JComboBox<String> shipTypeComboBox;
+    private JComboBox<ShipType> shipTypeComboBox;
 
     private JLabel shipArmorLabel;
 
@@ -191,24 +193,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             massUnit = new JLabel("kg");
 
             shipTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shiptype"));
-            Vector<String> v = new Vector<>((gameState.shipTypes.keySet()));
-            shipTypeComboBox = new JComboBox<String>(v);
-            shipTypeComboBox.addActionListener(l -> {
-                //Get selected thing
-                String text = (String) shipTypeComboBox.getSelectedItem();
-                int id = gameState.shipTypes.get(text);
-                id = ((id / 100));
-                shipScienceButton.setEnabled(false);
 
-                for (String s : gameState.shipTypeClasses.keySet()) {
-                    if (gameState.shipTypeClasses.get(s) != id) {
-                        continue;
-                    }
-                    //It is something!
-                    if (s.equals("Science")) {
-                        shipScienceButton.setEnabled(true);
-                    }
-                }
+            shipTypeComboBox = new JComboBox<>(            Arrays.copyOf(gameState.shipTypes.toArray(), gameState.shipTypes.size(), ShipType[].class));
+            shipTypeComboBox.addActionListener(l -> {
+                
             });
 
             shipSpeedLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.speed"));
@@ -579,19 +567,22 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         //Init all final stuff to init. 
         {
             String text = (String) shipTypeComboBox.getSelectedItem();
-            int id = gameState.shipTypes.get(text);
-            id = ((id / 100));
-            shipScienceButton.setEnabled(false);
 
-            for (String s : gameState.shipTypeClasses.keySet()) {
-                if (gameState.shipTypeClasses.get(s) != id) {
-                    continue;
-                }
-                //It is something!
-                if (s.equals("Science")) {
-                    shipScienceButton.setEnabled(true);
-                }
-            }
+//            if (gameState.shipTypes.containsKey(text)) {
+//                int id = gameState.shipTypes.get(text);
+//                id = ((id / 100));
+//                shipScienceButton.setEnabled(false);
+//
+//                for (String s : gameState.shipTypeClasses.keySet()) {
+//                    if (gameState.shipTypeClasses.get(  s) != id) {
+//                        continue;
+//                    }
+//                    //It is something!
+//                    if (s.equals("Science")) {
+//                        shipScienceButton.setEnabled(true);
+//                    }
+//                }
+//            }
         }
         mainTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
         shipInformationPanel.add(shipDetailsContainer);

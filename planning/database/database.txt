@@ -1,6 +1,0 @@
-Use Derby to do the database.
- - is easier to store data
- - If something goes wrong, blame them, not me.
-
-How planets are stored:
-Max amount of planets: 
