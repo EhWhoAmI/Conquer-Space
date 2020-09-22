@@ -23,5 +23,5 @@ def copy_i18n(cqsp_dir):
                     output.write('\n')
 
 if __name__ == '__main__':
-    cqsp_dir = '../../'
+    cqsp_dir = './'
     copy_i18n(cqsp_dir)

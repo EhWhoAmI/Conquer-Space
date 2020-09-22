@@ -194,9 +194,16 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
             shipTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shiptype"));
 
-            shipTypeComboBox = new JComboBox<>(            Arrays.copyOf(gameState.shipTypes.toArray(), gameState.shipTypes.size(), ShipType[].class));
+            shipTypeComboBox = new JComboBox<>(Arrays.copyOf(gameState.shipTypes.toArray(), gameState.shipTypes.size(), ShipType[].class));
             shipTypeComboBox.addActionListener(l -> {
-                
+                ShipType shipType = (ShipType) shipTypeComboBox.getSelectedItem();
+
+                shipScienceButton.setEnabled(false);
+
+                //Enable if it is science
+                if (shipType.containsTag("science")) {
+                    shipScienceButton.setEnabled(true);
+                }
             });
 
             shipSpeedLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.speed"));
@@ -566,23 +573,13 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         //Init all final stuff to init. 
         {
-            String text = (String) shipTypeComboBox.getSelectedItem();
+            ShipType shipType = (ShipType) shipTypeComboBox.getSelectedItem();
+            shipScienceButton.setEnabled(false);
 
-//            if (gameState.shipTypes.containsKey(text)) {
-//                int id = gameState.shipTypes.get(text);
-//                id = ((id / 100));
-//                shipScienceButton.setEnabled(false);
-//
-//                for (String s : gameState.shipTypeClasses.keySet()) {
-//                    if (gameState.shipTypeClasses.get(  s) != id) {
-//                        continue;
-//                    }
-//                    //It is something!
-//                    if (s.equals("Science")) {
-//                        shipScienceButton.setEnabled(true);
-//                    }
-//                }
-//            }
+            //Enable if it is science
+            if (shipType.containsTag("science")) {
+                shipScienceButton.setEnabled(true);
+            }
         }
         mainTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
         shipInformationPanel.add(shipDetailsContainer);
@@ -618,7 +615,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //Get hull material
             selectedHull = new Hull(gameState, 100, 100,
                     civ.hullMaterials.get(0),
-                    shipTypeComboBox.getSelectedIndex(), 100, shipName + " Hull");
+                    (ShipType) shipTypeComboBox.getSelectedItem(), 100, shipName + " Hull");
             civ.hulls.add(selectedHull.getReference());
         }
         //Add hull

@@ -157,10 +157,15 @@ public class AssetReader {
     
     public static Object processShipType(JSONObject obj) {
         String identifier = obj.getString("identifier");
-        boolean isMilitary = obj.getBoolean("military");
+        JSONArray tags = obj.getJSONArray("tags");
         ShipType shipType = new ShipType();
         shipType.setIdentifier(identifier);
-        shipType.setMilitary(isMilitary);
+        ArrayList<String> tagsArrayList = new ArrayList<>();
+        for(int i = 0; i < tags.length(); i++) {
+            tagsArrayList.add(tags.getString(i));
+        }
+        shipType.setTags(Arrays.copyOf(tagsArrayList.toArray(), tagsArrayList.size(), String[].class));
+        
         return shipType;
     }
 

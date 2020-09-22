@@ -40,7 +40,8 @@ public class IncompleteResourceBundle extends ResourceBundle {
         Properties properties = new Properties();
         properties.load(is);
         prop = new HashMap(properties);
-        defaultProperties = ResourceBundle.getBundle("assets.i18n.ApplicationMessages", ConquerSpace.DEFAULT_LOCALE);
+        
+        defaultProperties = ResourceBundle.getBundle("assets.i18n." + ConquerSpace.DEFAULT_LOCALE);
     }
 
     @Override

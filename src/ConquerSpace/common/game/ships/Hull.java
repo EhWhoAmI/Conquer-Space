@@ -37,14 +37,14 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable {
 
     private ObjectReference material;
 
-    private int shipType;
+    private ShipType shipType;
 
     //Thrust in kilonewtons
     private long thrust;
 
     private String name;
 
-    public Hull(GameState gameState, long mass, long space, ObjectReference material, int shipType, long thrust, String name) {
+    public Hull(GameState gameState, long mass, long space, ObjectReference material, ShipType shipType, long thrust, String name) {
         super(gameState);
         this.mass = mass;
         this.space = space;
@@ -90,11 +90,11 @@ public class Hull extends ConquerSpaceGameObject implements Cloneable {
         return thrust;
     }
 
-    public long getShipType() {
+    public ShipType getShipType() {
         return shipType;
     }
 
-    public void setShipType(int shipType) {
+    public void setShipType(ShipType shipType) {
         this.shipType = shipType;
     }
 

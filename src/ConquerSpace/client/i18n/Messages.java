@@ -71,7 +71,9 @@ public class Messages {
             bundle = new IncompleteResourceBundle(is);
             return;
         } catch (FileNotFoundException ex) {
+            LOGGER.error(ex);
         } catch (IOException ex) {
+            LOGGER.error(ex);
         }
 
         LOGGER.warn("Can't find locale " + l.toString());

@@ -26,7 +26,7 @@ import java.util.Objects;
 public class ShipType {
 
     String identifier;
-    boolean military;
+    String[] tags;
 
     public ShipType() {
     }
@@ -35,12 +35,24 @@ public class ShipType {
         this.identifier = identifier;
     }
 
-    public boolean isMilitary() {
-        return military;
+    public void setTags(String[] tags) {
+        this.tags = tags;
     }
 
-    public void setMilitary(boolean military) {
-        this.military = military;
+    public String[] getTags() {
+        return tags;
+    }
+
+    public boolean containsTag(String key) {
+        boolean result = false;
+        for (String i : tags) {
+            if (i.equals(key)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -64,5 +76,10 @@ public class ShipType {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return identifier;
     }
 }

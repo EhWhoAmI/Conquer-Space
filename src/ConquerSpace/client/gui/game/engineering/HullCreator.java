@@ -21,6 +21,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Hull;
+import ConquerSpace.common.game.ships.ShipType;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -29,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.UUID;
@@ -71,7 +73,7 @@ public class HullCreator extends JPanel {
     private JLabel classText;
     private JLabel hullComboBoxLabel;
     private JButton selectRandomNameButton;
-    private JComboBox<String> hullComboBox;
+    private JComboBox<ShipType> shipTypecomboBox;
     private JLabel spaceLabel;
     private JFormattedTextField spaceBox;
     private JLabel meterscubedlabel;
@@ -149,15 +151,8 @@ public class HullCreator extends JPanel {
             massTextField.setText("" + h.getMass());
             spaceBox.setText("" + h.getSpace());
             estThrustField.setText("" + h.getThrust());
-//            for (Map.Entry<String, Integer> entry : gameState.shipTypes.entrySet()) {
-//                String key = entry.getKey();
-//                Integer value = entry.getValue();
-//                //Compare
-//                int type = (int) h.getShipType();
-//                if (type == value) {
-//                    hullComboBox.setSelectedItem(key);
-//                }
-//            }
+            shipTypecomboBox.setSelectedItem(h.getShipType());
+            
             className.setText(h.getName());
         });
 
@@ -195,8 +190,8 @@ public class HullCreator extends JPanel {
         hullComboBoxLabel = new JLabel("Hull for type: ");
         //Vector v = new Vector((gameState.shipTypes.keySet()));
         //v.sort(Comparator.naturalOrder());
-        hullComboBox = new JComboBox<>();
-        hullComboBox.setFocusable(false);
+        shipTypecomboBox = new JComboBox<>(Arrays.copyOf(gameState.shipTypes.toArray(), gameState.shipTypes.size(), ShipType[].class));
+        shipTypecomboBox.setFocusable(false);
         JLabel emptyLabel2 = new JLabel("");
 
         spaceLabel = new JLabel("Hull space");
@@ -215,7 +210,7 @@ public class HullCreator extends JPanel {
         hullViewer.add(classText);
         hullViewer.add(selectRandomNameButton);
         hullViewer.add(hullComboBoxLabel);
-        hullViewer.add(hullComboBox);
+        hullViewer.add(shipTypecomboBox);
         hullViewer.add(emptyLabel2);
         hullViewer.add(hullMaterialLabel);
         hullViewer.add(hullMaterialComboBox);
@@ -249,10 +244,10 @@ public class HullCreator extends JPanel {
         long mass = Long.parseLong(massTextField.getText().replaceAll(",", ""));
         long space = Long.parseLong(spaceBox.getText().replaceAll(",", ""));
         long thrust = Long.parseLong(estThrustField.getText().replaceAll(",", ""));
-        //int shipType = gameState.shipTypes.get((String) hullComboBox.getSelectedItem());
+        ShipType shipType = (ShipType) shipTypecomboBox.getSelectedItem();
         ObjectReference material = (ObjectReference) hullMaterialComboBox.getSelectedItem();
 
-        Hull hull = new Hull(gameState, mass, space, material, 0, thrust, className.getText());
+        Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);
         c.hulls.add(hull.getReference());
     }

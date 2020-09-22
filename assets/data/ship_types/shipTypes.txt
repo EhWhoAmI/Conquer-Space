@@ -2,10 +2,14 @@
 [
     {
         identifier: Satellite
-        isMilitary: false
+        tags: []
     }
     {
         identifier: Space Station
-        isMilitary: false
+        tags: []
+    }
+    {
+        identifier: Science Research Station
+        tags: ["science"]
     }
 ]

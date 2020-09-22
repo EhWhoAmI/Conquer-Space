@@ -34,6 +34,7 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.Hull;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.universe.SpacePoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Body;
@@ -805,9 +806,9 @@ public class GameWindow extends JFrame implements WindowListener,
                     men.add(orbiting);
                 }
                 //If science ship
-                long stype = gameState.getObject(s.getHull(), Hull.class).getShipType();
+                ShipType stype = gameState.getObject(s.getHull(), Hull.class).getShipType();
                 //Survey ship and over planet, 
-                if (stype == 70 && overPlanet && !overWhat.hasScanned(civ.getReference())) {
+                if (stype.containsTag("science") && overPlanet && !overWhat.hasScanned(civ.getReference())) {
                     JMenuItem surveryor = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.survey"));
                     final Planet p = overWhat;
 
