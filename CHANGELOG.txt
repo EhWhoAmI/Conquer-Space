@@ -21,7 +21,7 @@ Added save files
 Graphics and UI:
 Add lighting to planet surfaces so it looks cooler
 More accurate orbit circles, now even eccentric orbit circles can be shown, such as an ellipse
-Better music
+Better music options
  - Volume can now be changed
  - Music can be toggled better
 Available job list

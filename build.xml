@@ -102,10 +102,7 @@
             <fileset file="LICENSE.txt"/>
             <fileset file="README.txt"/>
         </copy>
-        <echo message="Done copying files"/>    
-        
-        <buildnumber file="assets/BUILDNO"/>
-        <echo message="Changing build number"/>
+        <echo message="Done copying files"/>
     </target>
     
     <target name="compress">

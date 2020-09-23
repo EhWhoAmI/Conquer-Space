@@ -37,12 +37,11 @@ public class Version implements Comparable<Version> {
      * @param patch Patch number.
      * @param extras Extras, e.g.:"-dev", "-alpha"
      */
-    public Version(int major, int minor, int patch, String extras, int build) {
+    public Version(int major, int minor, int patch, String extras) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
         this.prerelease = extras;
-        this.build = build;
     }
 
     public Version(int major, int minor, int patch) {

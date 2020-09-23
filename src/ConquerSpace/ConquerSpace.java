@@ -84,34 +84,14 @@ public final class ConquerSpace {
      */
     private static final Logger LOGGER = CQSPLogger.getLogger(ConquerSpace.class.getName());
 
-    /**
-     * Build number for debugging.
-     */
-    public static int BUILD_NUMBER = 0;
-
     public static String BUILD_TIME = "";
 
     public static String BUILD_REVISION = "";
 
-    //Init build no
-    static {
-        Properties buildno = new Properties();
-        try {
-            buildno.load(new FileInputStream(System.getProperty("user.dir") + "/assets/BUILDNO"));
-            BUILD_NUMBER = Integer.parseInt(buildno.getProperty("build.number"));
-        } catch (FileNotFoundException ex) {
-            LOGGER.info("Asset file not found, no build number.", ex);
-        } catch (IOException ex) {
-            LOGGER.info("IO exception, no build number.", ex);
-        }
-
-        processManifestData();
-    }
-
     /**
      * The version of the game.
      */
-    public static final Version VERSION = new Version(0, 0, 3, "indev", BUILD_NUMBER);
+    public static final Version VERSION = new Version(0, 0, 3, "indev");
 
     /**
      * Localization.

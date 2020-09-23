@@ -21,7 +21,9 @@ import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
+import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.ships.Ship;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.components.ShipComponent;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.util.ArrayList;
@@ -48,13 +50,16 @@ public class ShipController extends JPanel {
 
     Civilization civilization;
     Ship currentShip;
+    GameState gameState;
 
     public ShipController(GameState gameState, Civilization civilization) {
         this.civilization = civilization;
+        this.gameState = gameState;
         currentShip = null;
         setLayout(new VerticalFlowLayout());
         shipNameLabel = new JLabel();
         shipClassLabel = new JLabel();
+
         //Show ship components and other happiness
         shipComponentModel = new ObjectListModel<>();
         shipComponentModel.setHandler(l -> {
@@ -82,13 +87,10 @@ public class ShipController extends JPanel {
                 //Then get the component and add it to the thing
                 ObjectReference reference = shipComponentListModel.getObject(selected);
                 //Then create mission to dock to it
-                //Check for cargo ships...
                 if (currentShip != null) {
-                    //currentShip.components.add(reference);
-                    
+                    //Create cargo mission, then attach
                 }
-                
-                
+
                 shipcomponents.updateUI();
             }
         });
@@ -106,7 +108,8 @@ public class ShipController extends JPanel {
         currentShip = ship;
 
         shipNameLabel.setText(ship.getName());
-        shipClassLabel.setText(ship.getShipClassName());
+        ShipType shipType = gameState.getObject(ship.getHull(), Hull.class).getShipType();
+        shipClassLabel.setText(ship.getShipClassName() + "-class " + shipType.toString());
         shipComponentModel.setElements(ship.components);
         //shipComponentListModel.setElements(civilization.shipComponentList);
         shipcomponents.updateUI();

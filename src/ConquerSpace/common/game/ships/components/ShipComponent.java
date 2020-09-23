@@ -19,6 +19,7 @@ package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.resources.ManufacturedGood;
 
 /**
  *
@@ -31,17 +32,24 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
     protected int volume;
 
     protected String name;
+    
+    protected int good;
 
     public ShipComponent(GameState gameState) {
         super(gameState);
+        ManufacturedGood manufacturedGood = new ManufacturedGood();
+        gameState.addGood(manufacturedGood);
+        this.good = manufacturedGood.getId();
     }
 
     public void setMass(int mass) {
         this.mass = mass;
+        ((ManufacturedGood) gameState.getGood(good)).setMass(mass);
     }
 
     public void setName(String name) {
         this.name = name;
+        ((ManufacturedGood) gameState.getGood(good)).setName(name);
     }
 
     public int getMass() {
@@ -59,10 +67,15 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
 
     public void setVolume(int volume) {
         this.volume = volume;
+        ((ManufacturedGood) gameState.getGood(good)).setVolume(volume);
     }
 
     public int getVolume() {
         return volume;
+    }
+
+    public int getGood() {
+        return good;
     }
     
     public abstract ShipComponentType getShipComponentType();
