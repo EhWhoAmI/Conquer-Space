@@ -243,7 +243,7 @@ public class CityInformationPanel extends JPanel {
             //Check if capital city
             for (int i = 0; i < gameState.getCivilizationCount(); i++) {
                 Civilization civilization = gameState.getCivilizationObject(i);
-                if (civilization.getCapitalCity().equals(selectedCity)) {
+                if (civilization.getCapitalCity().equals(selectedCity.getReference())) {
                     JLabel isCapital = new JLabel(
                             LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName()));
                     add(isCapital);

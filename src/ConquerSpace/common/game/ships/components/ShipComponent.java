@@ -39,6 +39,7 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
     public ShipComponent(GameState gameState) {
         super(gameState);
         ManufacturedGood manufacturedGood = new ManufacturedGood();
+        manufacturedGood.tags = new String[]{"component"};
         gameState.addGood(manufacturedGood);
         this.good = manufacturedGood.getId();
     }

@@ -23,11 +23,21 @@ package ConquerSpace.common;
  */
 public final class ObjectReference {
     public static final ObjectReference INVALID_REFERENCE = new ObjectReference(-1);
-    private int objectId;
+    private final int objectId;
 
-    public ObjectReference(int objectId) {
+    ObjectReference(int objectId) {
         this.objectId = objectId;
     }
+
+    /**
+     * Copies the reference
+     * @param reference 
+     */
+    public ObjectReference(ObjectReference reference) {
+        this.objectId = reference.objectId;
+    }
+    
+    
 
     public int getId() {
         return objectId;
