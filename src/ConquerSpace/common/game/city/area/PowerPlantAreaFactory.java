@@ -18,68 +18,58 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.save.SerializeClassName;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("power-plant-area")
-public class PowerPlantArea extends ConsumerArea {
-    //Needs the attribute 'energy'
+public class PowerPlantAreaFactory extends AreaFactory {
+    
     private Integer usesResource;
     //Amount of units needed to get each time
     private int maxVolume;
     
     private int currentCapacity;
-    
+
     //In megawatts
     private int production;
-
-    PowerPlantArea(GameState gameState) {
-        super(gameState);
+    
+    public PowerPlantAreaFactory(Civilization builder) {
+        super(builder);
     }
     
-    @Override
-    public String toString() {
-        return "Power Plant";
-    }
-
-    public Integer getUsedResource() {
-        return usesResource;
-    }
-
-    public void setUsedResource(Integer usesResource) {
-        this.usesResource = usesResource;
-    }
-
-    public int getMaxVolume() {
-        return maxVolume;
-    }
-
     public void setMaxVolume(int maxVolume) {
         this.maxVolume = maxVolume;
     }
-
-    public void setCurrentCapacity(int currentCapacity) {
-        this.currentCapacity = currentCapacity;
+    
+    public void setProduction(int production) {
+        this.production = production;
     }
-
-    public int getCurrentCapacity() {
-        return currentCapacity;
+    
+    public void setUsesResource(Integer usesResource) {
+        this.usesResource = usesResource;
     }
-       
-    @Override
-    public JobType getJobClassification() {
-        return (JobType.PowerPlantTechnician);
+    
+    public int getMaxVolume() {
+        return maxVolume;
     }
-
+    
     public int getProduction() {
         return production;
     }
-
-    public void setProduction(int production) {
-        this.production = production;
+    
+    public Integer getUsesResource() {
+        return usesResource;
+    }
+    
+    @Override
+    public Area build(GameState gameState) {
+        PowerPlantArea area = new PowerPlantArea(gameState);
+        area.setProduction(production);
+        area.setMaxVolume(maxVolume);
+        area.setUsedResource(usesResource);
+        setDefaultInformation(gameState, area);
+        return area;
     }
 }

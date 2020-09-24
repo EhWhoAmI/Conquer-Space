@@ -34,7 +34,7 @@ public class ObservatoryArea extends Area implements VisionPoint {
     private int range;
     private UniversePath position;
 
-    public ObservatoryArea(GameState gameState, ObjectReference civilization, int range, UniversePath position) {
+    ObservatoryArea(GameState gameState, ObjectReference civilization, int range, UniversePath position) {
         super(gameState);
         this.civilization = civilization;
         this.range = range;

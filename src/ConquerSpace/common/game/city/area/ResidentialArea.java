@@ -29,7 +29,7 @@ public class ResidentialArea extends ConsumerArea {
 
     int maxPopulation;
 
-    public ResidentialArea(GameState gameState) {
+    ResidentialArea(GameState gameState) {
         super(gameState);
     }
 

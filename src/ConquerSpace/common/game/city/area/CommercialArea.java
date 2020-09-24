@@ -18,7 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.economy.Currency;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -28,9 +28,9 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("commercial-area")
 public class CommercialArea extends Area{
     private int tradeValue;
-    private Currency currency;
+    private ObjectReference currency;
 
-    public CommercialArea(GameState gameState) {
+    CommercialArea(GameState gameState) {
         super(gameState);
         priority = 10;
     }
@@ -47,6 +47,4 @@ public class CommercialArea extends Area{
     public String toString() {
         return "Commercial Area";
     }
-    
-    
 }

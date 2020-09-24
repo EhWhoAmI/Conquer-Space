@@ -32,6 +32,12 @@ public class ConstructingArea extends Area{
     private ObjectReference toBuild;
     private HashMap<Integer, Double> costPerTurn;
 
+    /**
+     * This is the only constructor that can be public, because it is supposed to be easy to make it.
+     * @param gameState
+     * @param ticks
+     * @param toBuild 
+     */
     public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
         super(gameState);
         this.ticksLeft = ticks;

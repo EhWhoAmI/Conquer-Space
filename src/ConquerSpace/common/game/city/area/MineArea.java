@@ -35,7 +35,7 @@ public class MineArea extends Area {
     private HashMap<Integer, Double> necessaryGoods;
     private Integer resourceMined;
 
-    public MineArea(GameState gameState, ObjectReference mining, Integer resourceMined, float productivity) {
+    MineArea(GameState gameState, ObjectReference mining, Integer resourceMined, float productivity) {
         super(gameState);
         this.miningStratum = mining;
         this.productivity = productivity;

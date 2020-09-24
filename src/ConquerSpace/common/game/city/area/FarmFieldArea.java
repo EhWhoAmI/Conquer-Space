@@ -36,9 +36,10 @@ public class FarmFieldArea extends TimedManufacturerArea {
     private int time;
     private int fieldSize;
 
-    public FarmFieldArea(GameState gameState, Species grownSpecies) {
-        super(gameState, new ProductionProcess(gameState, grownSpecies.getFoodGood()));
-        grown = grownSpecies.getReference();
+    FarmFieldArea(GameState gameState, ObjectReference grownSpecies) {
+        super(gameState, new ProductionProcess(gameState,
+                gameState.getObject(grownSpecies, Species.class).getFoodGood()));
+        grown = grownSpecies;
         //Because you can only grow one.
         setLimit(1);
     }
@@ -55,7 +56,7 @@ public class FarmFieldArea extends TimedManufacturerArea {
         return gameState.getObject(grown, Species.class);
     }
 
-    public void setGrown(Species grown) {
+    void setGrown(Species grown) {
         this.grown = grown.getReference();
     }
 
@@ -73,11 +74,11 @@ public class FarmFieldArea extends TimedManufacturerArea {
     public String toString() {
         return "Farm Area";
     }
-    
+
     public AreaClassification getAreaType() {
         return AreaClassification.Farm;
     }
-    
+
     @Override
     public JobType getJobClassification() {
         return (JobType.Farmer);

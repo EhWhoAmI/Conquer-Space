@@ -18,15 +18,36 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
+ * Note: science is not included because the science can change, and can be
+ * customize a lot, so there is no need for the factory to build the area.
  *
  * @author EhWhoAmI
  */
-public class LogisticsHubArea extends Area{
+public class ResearchAreaFactory extends AreaFactory {
 
-    LogisticsHubArea(GameState gameState) {
-        super(gameState);
+    private String name;
+
+    public ResearchAreaFactory(Civilization builder) {
+        super(builder);
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public Area build(GameState gameState) {
+        ResearchArea area = new ResearchArea(gameState);
+        area.setName(name);
+        setDefaultInformation(gameState, area);
+        return area;
+    }
+
 }

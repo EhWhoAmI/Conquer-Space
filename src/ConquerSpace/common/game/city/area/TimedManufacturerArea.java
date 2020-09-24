@@ -41,7 +41,7 @@ public class TimedManufacturerArea extends Area {
 
     float productivity = 0;
 
-    public TimedManufacturerArea(GameState gameState, ProductionProcess process) {
+    TimedManufacturerArea(GameState gameState, ProductionProcess process) {
         super(gameState);
         queue = new ArrayList<>();
         this.process = process;

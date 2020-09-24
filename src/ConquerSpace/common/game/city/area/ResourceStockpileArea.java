@@ -45,7 +45,7 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
     public UniversePath path;
     
-    public ResourceStockpileArea(GameState gameState) {
+    ResourceStockpileArea(GameState gameState) {
         super(gameState);
         allPermissions = new HashMap<>();
         defaultPermissions = new ResourcePermissions(false, false, false);

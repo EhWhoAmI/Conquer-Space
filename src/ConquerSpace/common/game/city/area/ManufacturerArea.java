@@ -35,7 +35,7 @@ public class ManufacturerArea extends Area {
     
     private boolean producedLastTick;
 
-    public ManufacturerArea(GameState gameState, ProductionProcess process, float productivity) {
+    ManufacturerArea(GameState gameState, ProductionProcess process, float productivity) {
         super(gameState);
         this.producedLastTick = false;
         this.process = process;

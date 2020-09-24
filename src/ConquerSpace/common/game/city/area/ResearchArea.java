@@ -33,7 +33,7 @@ public class ResearchArea extends ConsumerArea implements ScienceLab {
 
     public HashMap<String, Integer> focusFields;
 
-    public ResearchArea(GameState gameState) {
+    ResearchArea(GameState gameState) {
         super(gameState);
         focusFields = new HashMap<>();
     }

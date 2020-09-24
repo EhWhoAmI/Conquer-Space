@@ -32,7 +32,7 @@ public class SpacePortArea extends Area{
     public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
     private ObjectReference launchSystem;
 
-    public SpacePortArea(GameState gameState, ObjectReference system, int amount) {
+    SpacePortArea(GameState gameState, ObjectReference system, int amount) {
         super(gameState);
         this.launchSystem = system;
         launchPads = new ArrayList<>();

@@ -18,15 +18,33 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class LogisticsHubArea extends Area{
+public class ResidentialAreaFactory extends AreaFactory {
 
-    LogisticsHubArea(GameState gameState) {
-        super(gameState);
+    int maxPopulation;
+
+    public ResidentialAreaFactory(Civilization creator) {
+        super(creator);
     }
-    
+
+    public void setMaxPopulation(int maxPopulation) {
+        this.maxPopulation = maxPopulation;
+    }
+
+    public int getMaxPopulation() {
+        return maxPopulation;
+    }
+
+    @Override
+    public Area build(GameState gameState) {
+        ResidentialArea area = new ResidentialArea(gameState);
+        setDefaultInformation(gameState, area);
+        area.maxPopulation = maxPopulation;
+        return area;
+    }
 }

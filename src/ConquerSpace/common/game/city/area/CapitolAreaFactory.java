@@ -18,15 +18,23 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class LogisticsHubArea extends Area{
+public class CapitolAreaFactory extends AreaFactory {
 
-    LogisticsHubArea(GameState gameState) {
-        super(gameState);
+    public CapitolAreaFactory(Civilization builder) {
+        super(builder);
     }
-    
+
+    @Override
+    public Area build(GameState gameState) {
+        CapitolArea area = new CapitolArea(gameState);
+        setDefaultInformation(gameState, area);
+        return area;
+    }
+
 }

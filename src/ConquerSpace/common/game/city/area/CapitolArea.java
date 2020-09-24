@@ -28,7 +28,7 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("capitol-area")
 public class CapitolArea extends ConsumerArea {
 
-    public CapitolArea(GameState gameState) {
+    CapitolArea(GameState gameState) {
         super(gameState);
         priority = 1;
     }

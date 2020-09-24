@@ -18,15 +18,33 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class LogisticsHubArea extends Area{
+public class CommercialAreaFactory extends AreaFactory {
 
-    LogisticsHubArea(GameState gameState) {
-        super(gameState);
+    private int tradeValue;
+
+    public CommercialAreaFactory(Civilization builder) {
+        super(builder);
     }
-    
+
+    public void setTradeValue(int tradeValue) {
+        this.tradeValue = tradeValue;
+    }
+
+    public int getTradeValue() {
+        return tradeValue;
+    }
+
+    @Override
+    public Area build(GameState gameState) {
+        CommercialArea area = new CommercialArea(gameState);
+        area.setTradeValue(tradeValue);
+        setDefaultInformation(gameState, area);
+        return area;
+    }
 }

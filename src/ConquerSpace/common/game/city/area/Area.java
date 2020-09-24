@@ -57,7 +57,7 @@ public class Area extends ConquerSpaceGameObject implements Workable, Comparable
     @Serialize("productivity")
     private float workingmultiplier = 1;
 
-    public Area(GameState gameState) {
+    Area(GameState gameState) {
         super(gameState);
     }
 
@@ -112,7 +112,7 @@ public class Area extends ConquerSpaceGameObject implements Workable, Comparable
         return priority;
     }
 
-    public void setPriority(int priority) {
+    void setPriority(int priority) {
         this.priority = priority;
     }
 

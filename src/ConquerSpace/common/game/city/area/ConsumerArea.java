@@ -32,7 +32,7 @@ public class ConsumerArea extends Area{
      */
     public HashMap<Integer, Double> consumed;
     
-    public ConsumerArea(GameState gameState) {
+    ConsumerArea(GameState gameState) {
         super(gameState);
         consumed = new HashMap<>();
     }
