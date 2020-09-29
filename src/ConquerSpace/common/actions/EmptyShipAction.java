@@ -17,16 +17,36 @@
  */
 package ConquerSpace.common.actions;
 
+import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.ships.SpaceShip;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class EmptyShipAction extends ShipAction{
-    
+public class EmptyShipAction extends ShipAction {
+
     public EmptyShipAction(SpaceShip ship) {
         super(ship);
     }
-    
+
+    @Override
+    public boolean checkIfDone(GameState gameState) {
+        return true;
+    }
+
+    @Override
+    public void doAction(GameState gameState) {
+        //Leave empty
+    }
+
+    @Override
+    public void initAction(GameState gameState) {
+        //Leave empty
+    }
+
+    @Override
+    public boolean isPossible(GameState gameState) {
+        return true;
+    }
 }

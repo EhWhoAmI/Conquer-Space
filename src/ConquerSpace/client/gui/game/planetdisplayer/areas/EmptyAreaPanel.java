@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer.areas;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.area.Area;
+import javax.swing.JLabel;
 
 /**
  *
@@ -28,6 +29,7 @@ public class EmptyAreaPanel extends AreaInformationPanel<Area> {
 
     public EmptyAreaPanel(Area area, GameState gameState) {
         super(area, gameState);
+        add(new JLabel(area.getClass().toString()));
         genericInformation();
     }
 }

@@ -65,7 +65,7 @@ public class FarmFieldFactory extends AreaFactory {
         setDefaultInformation(gameState, area);
         area.setTime(time);
         area.setFieldSize(fieldSize);
-        return super.build(gameState); //To change body of generated methods, choose Tools | Templates.
+        return area; //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.start;
 
+import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -66,8 +67,11 @@ public class ManualContent extends JFrame {
             for (int i = 0; i < imgs.size(); i++) {
                 Element imgE = imgs.get(i);
                 Attribute attri = imgE.getAttribute("src");
-                String imgPathName = System.getProperty("user.dir") + File.separator + "assets" + File.separator + "manuals" + File.separator + attri.getValue();
-                if(System.getProperty("os.name").toLowerCase().contains("win")) {
+                String imgPathName = ConquerSpace.USER_DIR 
+                        + File.separator + "assets" 
+                        + File.separator + "manuals" 
+                        + File.separator + attri.getValue();
+                if (System.getProperty("os.name").toLowerCase().contains("win")) {
                     //Windows, remove the disk
                     imgPathName = imgPathName.replaceAll(".*:", "");
                 }
@@ -93,7 +97,7 @@ public class ManualContent extends JFrame {
         text.setEditable(false);
 
         JScrollPane pane = new JScrollPane(text);
-        
+
         add(pane);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent arg0) {

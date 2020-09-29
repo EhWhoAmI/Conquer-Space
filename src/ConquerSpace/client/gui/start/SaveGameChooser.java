@@ -49,7 +49,7 @@ public class SaveGameChooser extends JFrame {
     public SaveGameChooser(MainMenu menu) {
         setTitle("Choose Save File");
         setLayout(new HorizontalFlowLayout());
-        File file = new File(System.getProperty("user.dir") + "/save");
+        File file = new File(ConquerSpace.USER_DIR + "/save");
         File[] list = file.listFiles();
         JList<File> fileJList = new JList<>(list);
 
@@ -67,7 +67,7 @@ public class SaveGameChooser extends JFrame {
                         stream.read(data);
                         stream.close();
                         JSONObject json = new JSONObject(new String(data));
-                        
+
                         //Set UI
                         saveInfoPanel.removeAll();
                         saveInfoPanel.add(new JLabel("Version: " + json.getString("version")));
@@ -90,7 +90,7 @@ public class SaveGameChooser extends JFrame {
             if (!fileJList.isSelectionEmpty()) {
                 ConquerSpace.generator = new SaveGameUniverseGenerator(fileJList.getSelectedValue());
                 dispose();
-                
+
                 //Tell main thread that game works
                 menu.setLoadedUniverse(true);
                 menu.dispose();
@@ -99,16 +99,16 @@ public class SaveGameChooser extends JFrame {
 
         add(new JScrollPane(fileJList));
         add(saveInfoPanel);
-        
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 //Reenable main window...
                 menu.setEnabled(true);
             }
-            
+
         });
-        
+
         setSize(new Dimension(500, 200));
     }
 }

@@ -372,4 +372,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     public void setInitialPoint(GeographicPoint initialPoint) {
         this.initialPoint = initialPoint;
     }
+
+    public ObjectReference getLocation() {
+        return location;
+    }
 }

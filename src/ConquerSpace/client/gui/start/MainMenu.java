@@ -230,7 +230,7 @@ public class MainMenu extends JFrame implements WindowListener {
             credits.addActionListener(e -> {
                 FileInputStream fis = null;
                 try {
-                    File file = new File(System.getProperty("user.dir") + "/assets/credits.html");
+                    File file = new File(ConquerSpace.USER_DIR + "/assets/credits.html");
                     fis = new FileInputStream(file);
                     byte[] data = new byte[(int) file.length()];
                     fis.read(data);

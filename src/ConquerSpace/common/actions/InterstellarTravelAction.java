@@ -92,6 +92,11 @@ public class InterstellarTravelAction extends ShipAction {
     public void initAction(GameState gameState) {
     }
 
+    @Override
+    public boolean isPossible(GameState gameState) {
+        return true;
+    }
+
     public void setStarSystem(int starSystem) {
         this.starSystem = starSystem;
     }

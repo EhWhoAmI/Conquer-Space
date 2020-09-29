@@ -36,7 +36,7 @@ public class SpacePortAreaInformationPanel extends AreaInformationPanel<SpacePor
 
         JLabel launchSystemLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.launchsystem", gameState.getObject(area.getLaunchSystem(), LaunchSystem.class).getName()));
         add(launchSystemLabel);
-        JLabel launchPadLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.pads", area.launchPads.size()));
+        JLabel launchPadLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.pads", area.getLaunchPadCount()));
         add(launchPadLabel);
         genericInformation();
     }

@@ -19,28 +19,29 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
 /**
  * A place where you can start to Conquer Space!
+ *
  * @author EhWhoAmI
  */
 @SerializeClassName("space-port-area")
-public class SpacePortArea extends Area{
-    public ArrayList<SpacePortLaunchPad> launchPads = new ArrayList<>();
+public class SpacePortArea extends Area {
+
+    int launchPadCount;
+    public ArrayList<ObjectReference> landedShips;
     private ObjectReference launchSystem;
 
     SpacePortArea(GameState gameState, ObjectReference system, int amount) {
         super(gameState);
         this.launchSystem = system;
-        launchPads = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            launchPads.add(new SpacePortLaunchPad(system));
-        }
+
+        launchPadCount = amount;
+        landedShips = new ArrayList<>();
     }
-    
+
     public ObjectReference getLaunchSystem() {
         return launchSystem;
     }
@@ -49,4 +50,9 @@ public class SpacePortArea extends Area{
     public String toString() {
         return "Space Port";
     }
+
+    public int getLaunchPadCount() {
+        return launchPadCount;
+    }
+
 }

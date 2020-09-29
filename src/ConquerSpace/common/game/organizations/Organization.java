@@ -20,7 +20,7 @@ package ConquerSpace.common.game.organizations;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.actions.Action;
+import ConquerSpace.common.actions.OrganizationAction;
 import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.behavior.EmptyBehavior;
 import ConquerSpace.common.save.Serialize;
@@ -37,7 +37,7 @@ public class Organization extends ConquerSpaceGameObject {
 
     @Serialize("children")
     private ArrayList<ObjectReference> children;
-    public ArrayList<Action> actionList;
+    public ArrayList<OrganizationAction> actionList;
     public AdministrativeRegion region;
 
     @Serialize("name")

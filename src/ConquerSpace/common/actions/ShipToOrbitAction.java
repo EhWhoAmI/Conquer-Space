@@ -27,11 +27,11 @@ import ConquerSpace.common.game.universe.bodies.StarSystem;
  *
  * @author EhWhoAmI
  */
-public class ToOrbitAction extends ShipAction {
+public class ShipToOrbitAction extends ShipAction {
 
     private Planet position;
 
-    public ToOrbitAction(Ship ship) {
+    public ShipToOrbitAction(Ship ship) {
         super(ship);
     }
 
@@ -103,6 +103,11 @@ public class ToOrbitAction extends ShipAction {
 
         shipObject.setGoingToX(position.getX());
         shipObject.setGoingToY(position.getY());
+    }
+
+    @Override
+    public boolean isPossible(GameState gameState) {
+        return true;
     }
 
     public Planet getPosition() {

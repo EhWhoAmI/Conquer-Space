@@ -49,7 +49,7 @@ public class Messages {
 
     public Messages() {
         try {
-            File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/");
+            File resourcesFolder = new File(ConquerSpace.USER_DIR + "/assets/i18n/");
             URL[] urls = {resourcesFolder.toURI().toURL()};
             ClassLoader loader = new URLClassLoader(urls);
             bundle = ResourceBundle.getBundle("", Locale.getDefault(), loader);
@@ -65,7 +65,7 @@ public class Messages {
         //Load resource file
         LOGGER.warn("Loading locale " + l.toString());
 
-        File resourcesFolder = new File(System.getProperty("user.dir") + "/assets/i18n/" + l.toString() + ".properties");
+        File resourcesFolder = new File(ConquerSpace.USER_DIR + "/assets/i18n/" + l.toString() + ".properties");
         try {
             FileInputStream is = new FileInputStream(resourcesFolder);
             bundle = new IncompleteResourceBundle(is);

@@ -110,6 +110,11 @@ public class ShipMoveAction extends ShipAction {
         shipObject.setGoingToY(position.getY());
     }
 
+    @Override
+    public boolean isPossible(GameState gameState) {
+        return true;
+    }
+
     public void setStarSystem(int starSystem) {
         this.starSystem = starSystem;
     }

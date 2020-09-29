@@ -101,4 +101,14 @@ public class ShipSurveyAction extends ShipAction {
     public boolean checkIfDone(GameState gameState) {
         return progress >= finishedProgress;
     }
+
+    @Override
+    public void initAction(GameState gameState) {
+        //No need to init
+    }
+
+    @Override
+    public boolean isPossible(GameState gameState) {
+        return true;
+    }
 }

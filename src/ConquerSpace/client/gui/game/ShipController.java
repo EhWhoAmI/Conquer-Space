@@ -26,7 +26,6 @@ import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.components.ShipComponent;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;

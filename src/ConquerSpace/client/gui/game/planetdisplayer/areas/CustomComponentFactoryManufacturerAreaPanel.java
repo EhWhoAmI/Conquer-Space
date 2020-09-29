@@ -15,19 +15,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.resources;
+
+package ConquerSpace.client.gui.game.planetdisplayer.areas;
+
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.city.area.CustomComponentFactoryManufacturerArea;
+import javax.swing.JLabel;
 
 /**
  *
  * @author EhWhoAmI
  */
-public interface ResourceStockpile {
-    public void addResourceTypeStore(Integer type);
-    public Double getResourceAmount(Integer type);
-    public void addResource(Integer type, Double amount);
-    public boolean canStore(Integer type);
+public class CustomComponentFactoryManufacturerAreaPanel 
+        extends AreaInformationPanel<CustomComponentFactoryManufacturerArea>{
+
+    public CustomComponentFactoryManufacturerAreaPanel(CustomComponentFactoryManufacturerArea area,
+            GameState gameState) {
+        super(area, gameState);
+        //Add stuff
+        add(new JLabel("Factory"));
+        genericInformation();
+    }
     
-    public Integer[] storedTypes();
-    
-    public boolean removeResource(Integer type, Double amount);
 }

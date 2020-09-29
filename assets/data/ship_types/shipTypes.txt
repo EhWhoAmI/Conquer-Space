@@ -12,4 +12,8 @@
         identifier: Science Research Station
         tags: ["science"]
     }
+    {
+        identifier: Launch Vehicle
+        tags: ["launch"]
+    }
 ]

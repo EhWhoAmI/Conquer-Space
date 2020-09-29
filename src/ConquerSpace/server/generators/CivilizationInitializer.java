@@ -24,21 +24,15 @@ import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.characters.Scientist;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.area.CapitolArea;
 import ConquerSpace.common.game.city.area.CapitolAreaFactory;
-import ConquerSpace.common.game.city.area.CommercialArea;
 import ConquerSpace.common.game.city.area.CommercialAreaFactory;
-import ConquerSpace.common.game.city.area.FarmFieldArea;
+import ConquerSpace.common.game.city.area.CustomComponentFactoryManufacturerAreaFactory;
 import ConquerSpace.common.game.city.area.FarmFieldFactory;
-import ConquerSpace.common.game.city.area.ManufacturerArea;
 import ConquerSpace.common.game.city.area.ManufacturerAreaFactory;
-import ConquerSpace.common.game.city.area.MineArea;
 import ConquerSpace.common.game.city.area.MineAreaFactory;
-import ConquerSpace.common.game.city.area.PowerPlantArea;
 import ConquerSpace.common.game.city.area.PowerPlantAreaFactory;
 import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.ResearchAreaFactory;
-import ConquerSpace.common.game.city.area.ResidentialArea;
 import ConquerSpace.common.game.city.area.ResidentialAreaFactory;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
@@ -66,7 +60,6 @@ import ConquerSpace.common.game.science.Fields;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.HullMaterial;
-import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
@@ -259,6 +252,15 @@ public class CivilizationInitializer {
                 factory.setWorkingmultiplier(1.2f);
                 city.areas.add(factory.build(gameState).getReference());
             }
+
+            //Add a custom constructor for fun
+            CustomComponentFactoryManufacturerAreaFactory ccfmaf
+                    = new CustomComponentFactoryManufacturerAreaFactory(civ);
+
+            ccfmaf.setMaxJobs(10000);
+            ccfmaf.setOperatingJobs(5000);
+            ccfmaf.setWorkingmultiplier(1.2f);
+            city.areas.add(ccfmaf.build(gameState).getReference());
 
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
             city.setName(townGen.getName(0, selector));

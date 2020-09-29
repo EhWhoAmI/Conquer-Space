@@ -17,7 +17,6 @@
  */
 package ConquerSpace.client.gui.game.engineering.shipcomponent;
 
-import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.ships.components.ShipComponent;
 import javax.swing.JPanel;
 

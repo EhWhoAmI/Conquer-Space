@@ -33,7 +33,6 @@ import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.science.Field;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
-import ConquerSpace.common.game.ships.satellites.templates.SatelliteTemplate;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.Serialize;

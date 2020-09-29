@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.util;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,7 +57,7 @@ public class ResourceLoader {
     }
 
     public static String loadResourceString(String key) {
-        return (System.getProperty("user.dir") + "/assets/" + prop.getProperty(key));
+        return (ConquerSpace.USER_DIR + "/assets/" + prop.getProperty(key));
     }
 
     public static FileReader silentLoadResourceReader(String key) {

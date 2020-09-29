@@ -121,8 +121,8 @@ public class SaveGame {
     }
 
     public static String getSaveFolder() {
-        String baseSave = System.getProperty("user.dir") + "/save/";
-        
+        String baseSave = ConquerSpace.USER_DIR + "/save/";
+
         String saveText = String.format("%07d_save.sav", new Random().nextInt(10000000));
         return baseSave + saveText;
     }

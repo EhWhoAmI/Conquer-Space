@@ -15,22 +15,44 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.actions;
+
+package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 
 /**
- * Action of a tick.
- *
+ * An engine for launch vehicles.
  * @author EhWhoAmI
  */
-public abstract class Action {
+public class ToOrbitEngineComponent extends ShipComponent {
 
-    public Action() {
+    ObjectReference launchSystemType;
+
+    int thrust;
+
+    public ToOrbitEngineComponent(GameState gameState) {
+        super(gameState);
     }
 
-    /**
-     * Do the action
-     */
-    abstract public ActionStatus doAction(GameState gameState);
+    @Override
+    public ShipComponentType getShipComponentType() {
+        return ShipComponentType.ToOrbit;
+    }
+
+    public ObjectReference getLaunchSystemType() {
+        return launchSystemType;
+    }
+
+    public void setLaunchSystemType(ObjectReference launchSystemType) {
+        this.launchSystemType = launchSystemType;
+    }
+
+    public int getThrust() {
+        return thrust;
+    }
+
+    public void setThrust(int thrust) {
+        this.thrust = thrust;
+    }
 }

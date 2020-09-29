@@ -18,13 +18,10 @@
 package ConquerSpace.common.game.science;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.ships.EngineTechnology;
-import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
-import ConquerSpace.common.game.ships.launch.LaunchVehicle;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
@@ -44,7 +41,7 @@ import org.json.JSONObject;
  *
  * @author EhWhoAmI
  */
-public class Technologies implements Serializable{
+public class Technologies implements Serializable {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Technologies.class.getName());
 
@@ -64,6 +61,8 @@ public class Technologies implements Serializable{
                 } catch (IOException ex) {
                     LOGGER.warn("IOException", ex);
                 } catch (JSONException jsone) {
+                    //Ignore
+                    LOGGER.warn("Formatting issue with " + f.getName(), jsone);
                 }
             }
         }
@@ -204,16 +203,7 @@ public class Technologies implements Serializable{
             if (launchSystem != null) {
                 c.launchSystems.add(launchSystem.getReference());
             }
-            
-            //Add launch vehicle
-            LaunchVehicle vehicle = new LaunchVehicle(gameState);
-            vehicle.setSystemType(launchSystem);
-            vehicle.setCostPerLaunch(50000);
-            vehicle.setReliability(0.99f);
-            vehicle.setReusability(false);
-            vehicle.setMaximumMass(50000);
-            vehicle.setName("Test vehicle");
-            c.launchVehicles.add(vehicle.getReference());
+
         } else if (action.startsWith("orbit")) {
             //Something you put into orbit
             char[] dst = new char[50];
@@ -244,8 +234,8 @@ public class Technologies implements Serializable{
             String compName = (new String(dst).trim());
 
             //if (s != null) {
-                //TODO add preinstalled templates
-                //c.addShipComponent(s);
+            //TODO add preinstalled templates
+            //c.addShipComponent(s);
             //}
         } else if (action.startsWith("thrust")) {
             //Do component
@@ -280,7 +270,7 @@ public class Technologies implements Serializable{
                 c.mineableGoods.add(goodId);
             }
         } else if (action.startsWith("energy")) {
-            
+
         }
     }
 

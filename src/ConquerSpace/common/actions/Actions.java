@@ -22,7 +22,6 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Body;
@@ -45,11 +44,6 @@ public class Actions {
     public static void addArea(Planet on, City city, Area a) {
         city.areas.add(a.getReference());
     }
-
-    public static void researchTech(Civilization c, Technology t) {
-
-    }
-
 
     public static void launchShip(Ship what, Planet planet, Civilization civ) {
         what.setLocation(planet.getUniversePath());
@@ -79,9 +73,6 @@ public class Actions {
                 what.setX(planet.getX());
                 what.setY(planet.getY());
                 what.setIsOrbiting(false);
-
-                //Add
-                //u.get(planet.getParentStarSystem()).addSpaceShip(what);
             }
         }
         what.setGoingToX(x);

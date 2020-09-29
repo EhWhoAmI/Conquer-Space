@@ -67,4 +67,9 @@ public class ExitStarSystemAction extends ShipAction {
     public boolean checkIfDone(GameState gameState) {
         return done;
     }
+    
+    @Override
+    public boolean isPossible(GameState gameState) {
+        return true;
+    }
 }

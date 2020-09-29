@@ -1,7 +1,12 @@
 Conquer Space
 0.0.3
 ----------
-Nice words about the game go here...
+Links:
+ - Discord: https://discord.gg/h5r77Sa>
+
+ - Website: https://ehwhoami.itch.io/conquer-space>
+
+ - Planning: https://github.com/EhWhoAmI/Conquer-Space/projects/12
 ----------
 Command line options
 You can use the command line option -t to see the tools menu.

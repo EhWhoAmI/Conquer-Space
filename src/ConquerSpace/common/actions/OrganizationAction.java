@@ -15,19 +15,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.resources;
+package ConquerSpace.common.actions;
+
+import ConquerSpace.common.GameState;
 
 /**
+ * Action of a tick.
  *
  * @author EhWhoAmI
  */
-public interface ResourceStockpile {
-    public void addResourceTypeStore(Integer type);
-    public Double getResourceAmount(Integer type);
-    public void addResource(Integer type, Double amount);
-    public boolean canStore(Integer type);
-    
-    public Integer[] storedTypes();
-    
-    public boolean removeResource(Integer type, Double amount);
+public abstract class OrganizationAction {
+
+    public OrganizationAction() {
+    }
+
+    /**
+     * Do the action
+     * @param gameState GameState
+     * @return what happened.
+     */
+    abstract public ActionStatus doAction(GameState gameState);
 }

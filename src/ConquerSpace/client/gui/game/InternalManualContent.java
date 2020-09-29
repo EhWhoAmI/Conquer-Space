@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import static ConquerSpace.ConquerSpace.USER_DIR;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
@@ -66,7 +67,10 @@ public class InternalManualContent extends JInternalFrame {
             for (int i = 0; i < imgs.size(); i++) {
                 Element imgE = imgs.get(i);
                 Attribute attri = imgE.getAttribute("src");
-                String imgPathName = System.getProperty("user.dir") + File.separator + "assets" + File.separator + "manuals" + File.separator + attri.getValue();
+                String imgPathName = USER_DIR 
+                        + File.separator + "assets" 
+                        + File.separator + "manuals" 
+                        + File.separator + attri.getValue();
                 if(System.getProperty("os.name").toLowerCase().contains("win")) {
                     //Windows, remove the disk
                     imgPathName = imgPathName.replaceAll(".*:", "");

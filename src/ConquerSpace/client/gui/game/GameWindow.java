@@ -28,12 +28,12 @@ import ConquerSpace.common.actions.ExitStarSystemAction;
 import ConquerSpace.common.actions.InterstellarTravelAction;
 import ConquerSpace.common.actions.ShipMoveAction;
 import ConquerSpace.common.actions.ShipSurveyAction;
-import ConquerSpace.common.actions.ToOrbitAction;
+import ConquerSpace.common.actions.ShipToOrbitAction;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
-import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.Hull;
+import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.universe.SpacePoint;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -799,7 +799,7 @@ public class GameWindow extends JFrame implements WindowListener,
                         //Convert
 
                         //Get Location
-                        ToOrbitAction action = new ToOrbitAction(s);
+                        ShipToOrbitAction action = new ShipToOrbitAction(s);
                         action.setPlanet(p);
                         s.addAction(gameState, action);
                     });
@@ -815,7 +815,7 @@ public class GameWindow extends JFrame implements WindowListener,
                     surveryor.addActionListener(a -> {
                         //Move position
                         //Get Location
-                        ToOrbitAction orbitAction = new ToOrbitAction(s);
+                        ShipToOrbitAction orbitAction = new ShipToOrbitAction(s);
                         orbitAction.setPlanet(p);
 
                         ShipSurveyAction survey = new ShipSurveyAction(s);

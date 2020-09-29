@@ -21,7 +21,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.actions.ShipMoveAction;
-import ConquerSpace.common.actions.ToOrbitAction;
+import ConquerSpace.common.actions.ShipToOrbitAction;
 import ConquerSpace.common.game.ships.SpaceShip;
 import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
@@ -380,8 +380,8 @@ public class SystemRenderer {
 
                     g2d.setColor(Color.green);
                     g2d.draw(line);
-                } else if (act instanceof ToOrbitAction) {
-                    ToOrbitAction move = (ToOrbitAction) act;
+                } else if (act instanceof ShipToOrbitAction) {
+                    ShipToOrbitAction move = (ShipToOrbitAction) act;
                     Line2D.Double line = new Line2D.Double(
                             actionXStart,
                             actionYStart,

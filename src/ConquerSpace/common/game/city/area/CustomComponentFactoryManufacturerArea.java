@@ -19,7 +19,6 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.ProductionProcess;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,6 +59,11 @@ public class CustomComponentFactoryManufacturerArea extends Area {
 
     public ArrayList<Production> getProductionList() {
         return productionList;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Manufacturing;
     }
 
     private class Production implements Serializable {

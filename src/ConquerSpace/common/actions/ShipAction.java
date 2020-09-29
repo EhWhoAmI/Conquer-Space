@@ -36,14 +36,26 @@ public abstract class ShipAction {
         this.ship = ship.getReference();
     }
 
-    public void doAction(GameState gameState) {
-    }
+    /**
+     * Step the action.
+     * @param gameState  gameState
+     */
+    public abstract void doAction(GameState gameState);
+    
+    /**
+     * Initializes the action.
+     * @param gameState 
+     */
+    public abstract void initAction(GameState gameState);
+    
+    /**
+     * Is this action possible?
+     * @param gameState gamestate
+     * @return if possible
+     */
+    public abstract boolean isPossible(GameState gameState);
     
     public boolean checkIfDone(GameState gameState) {
         return true;
-    }
-    
-    public void initAction(GameState gameState) {
-        
     }
 }

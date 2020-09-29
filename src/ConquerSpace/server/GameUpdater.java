@@ -23,12 +23,11 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.GameTicker;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.StarDate;
-import ConquerSpace.common.actions.Action;
 import ConquerSpace.common.actions.ActionStatus;
-import ConquerSpace.common.actions.Actions;
 import static ConquerSpace.common.actions.Actions.removeResource;
 import static ConquerSpace.common.actions.Actions.storeResource;
 import ConquerSpace.common.actions.Alert;
+import ConquerSpace.common.actions.OrganizationAction;
 import ConquerSpace.common.actions.ShipAction;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.city.City;
@@ -62,7 +61,6 @@ import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Ship;
-import ConquerSpace.common.game.ships.launch.SpacePortLaunchPad;
 import ConquerSpace.common.game.universe.SpacePoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Body;
@@ -172,7 +170,7 @@ public class GameUpdater extends GameTicker {
             }
             for (int k = 0; k < org.actionList.size(); k++) {
                 try {
-                    Action act = org.actionList.get(k);
+                    OrganizationAction act = org.actionList.get(k);
                     ActionStatus status = act.doAction(gameState); //???
                 } catch (Exception e) {
                     ExceptionHandling.ExceptionMessageBox("Exception while executing actions!", e);
@@ -575,15 +573,6 @@ public class GameUpdater extends GameTicker {
             }
         } else if (area instanceof SpacePortArea) {
             SpacePortArea spacePort = (SpacePortArea) area;
-            for (int i = 0; i < spacePort.launchPads.size(); i++) {
-                SpacePortLaunchPad pad = spacePort.launchPads.get(i);
-                pad.ticks -= GameRefreshRate;
-                if (pad.ticks <= 0) {
-                    //Launch!
-                    //Get the owner somehow...
-                    Actions.launchLaunchable(pad.getLaunching(), planet);
-                }
-            }
         } else if (area instanceof ObservatoryArea) {
             ObservatoryArea observatory = (ObservatoryArea) area;
             //Do vision points

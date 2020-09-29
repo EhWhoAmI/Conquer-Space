@@ -31,14 +31,15 @@ import java.util.ArrayList;
 @SerializeClassName("ship")
 public class Ship extends SpaceShip implements Launchable{
 
-    String sclassname;
+    String shipClassName;
 
     private ObjectReference hull;
     public ArrayList<ObjectReference> components;
 
     private ObjectReference shipClass;
+    public ArrayList<ShipCapability> shipCapabilities;
 
-    public Ship(GameState gameState, ShipClass sclass, double X, double Y, Vector v, UniversePath location) {
+    public Ship(GameState gameState, ShipClass shipClass, double X, double Y, Vector v, UniversePath location) {
         super(gameState);
         this.X = X;
         this.Y = Y;
@@ -46,17 +47,19 @@ public class Ship extends SpaceShip implements Launchable{
         goingToY = Y;
         this.v = v;
         this.location = location;
-        shipClass = sclass.getReference();
+        this.shipClass = shipClass.getReference();
         //Set ship's id
 
         components = new ArrayList<>();
         //Get components
-        if (!sclass.components.isEmpty()) {
-            components.addAll(sclass.components);
+        if (!shipClass.components.isEmpty()) {
+            components.addAll(shipClass.components);
         }
-        this.hull = sclass.getHull();
-        this.mass = sclass.getMass();
-        this.sclassname = sclass.getName();
+        
+        shipCapabilities = new ArrayList<>();
+        this.hull = shipClass.getHull();
+        this.mass = shipClass.getMass();
+        this.shipClassName = shipClass.getName();
     }
 
     @Override
@@ -99,7 +102,7 @@ public class Ship extends SpaceShip implements Launchable{
     }
 
     public String getShipClassName() {
-        return sclassname;
+        return shipClassName;
     }
 
     public ObjectReference getShipClass() {

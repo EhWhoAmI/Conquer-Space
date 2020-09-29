@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.start;
 
+import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -61,7 +62,7 @@ public class Manual extends JFrame implements ListSelectionListener {
         // Load properties. Need to use a hashmap, because the properties
         // does not load in the order that we like. It is kind of random. 
         try {
-            Scanner scan = new Scanner(new File(System.getProperty("user.dir") + "/assets/manuals/manlist.properties"));
+            Scanner scan = new Scanner(new File(ConquerSpace.USER_DIR + "/assets/manuals/manlist.properties"));
             while (scan.hasNextLine()) {
                 String text = scan.nextLine();
                 String values[] = text.split("=");
@@ -115,9 +116,9 @@ public class Manual extends JFrame implements ListSelectionListener {
                 try {
                     value = ManualContent.getInstance(
                             new String(Files.readAllBytes(Paths.get(
-                                    System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
+                                    ConquerSpace.USER_DIR + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
                     LOGGER.info("Loading manual " + str);
-                    
+
                     value.setVisible(true);
                     break;
                 } catch (IOException ex) {

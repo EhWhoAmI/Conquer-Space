@@ -32,7 +32,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 import javax.swing.DefaultListModel;

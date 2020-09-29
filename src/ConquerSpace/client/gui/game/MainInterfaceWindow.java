@@ -21,7 +21,6 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.FullShipClassInformationMenu;
 import ConquerSpace.client.gui.game.engineering.HullCreator;
-import ConquerSpace.client.gui.game.engineering.LaunchVehicleDesigner;
 import ConquerSpace.client.gui.game.engineering.shipcomponent.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
@@ -74,7 +73,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     JTabbedPane shipsComponentsOverviewPanel;
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
     private FullShipClassInformationMenu fullShipClassInformationMenu;
-    private LaunchVehicleDesigner launchSystemDesigner;
 
     private CivInfoOverview civInfoOverview;
 
@@ -169,15 +167,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
         fullShipClassInformationMenu = new FullShipClassInformationMenu(gameState, civilization);
         shipsComponentsOverviewPanel.add("Ship Classes", fullShipClassInformationMenu);
-
-        ImageIcon map = ResourceLoader.getIcon("satellite.icon");
-
-        //shipsComponentsOverviewPanel.setIconAt(1, map);
-        launchSystemDesigner = new LaunchVehicleDesigner(gameState, civilization);
-        JPanel launchWrapper = new JPanel();
-        launchWrapper.setLayout(new VerticalFlowLayout());
-        launchWrapper.add(launchSystemDesigner);
-        shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.launchsystem"), launchWrapper);
 
         ShipComponentDesigner shipComponentDesigner = new ShipComponentDesigner(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.shipcomponent"), shipComponentDesigner);

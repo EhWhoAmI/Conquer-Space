@@ -23,6 +23,7 @@ import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.CapitolArea;
 import ConquerSpace.common.game.city.area.CommercialArea;
 import ConquerSpace.common.game.city.area.ConstructingArea;
+import ConquerSpace.common.game.city.area.CustomComponentFactoryManufacturerArea;
 import ConquerSpace.common.game.city.area.FarmFieldArea;
 import ConquerSpace.common.game.city.area.InfrastructureArea;
 import ConquerSpace.common.game.city.area.ManufacturerArea;
@@ -49,9 +50,9 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
     private static final Logger LOGGER = CQSPLogger.getLogger(AreaInformationPanel.class.getName());
     protected T area;
     protected GameState gameState;
-    
+
     private static final HashMap<Class, Class> areaInfoMap = new HashMap<>();
-    
+
     static {
         areaInfoMap.put(ResearchArea.class, ResearchAreaInformationPanel.class);
         areaInfoMap.put(CapitolArea.class, CapitolAreaInformationPanel.class);
@@ -62,18 +63,19 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
         areaInfoMap.put(SpacePortArea.class, SpacePortAreaInformationPanel.class);
         areaInfoMap.put(ConstructingArea.class, ConstructionAreaInformationPanel.class);
         areaInfoMap.put(MineArea.class, MineAreaInformationPanel.class);
+        areaInfoMap.put(CustomComponentFactoryManufacturerArea.class, CustomComponentFactoryManufacturerAreaPanel.class);
     }
-    
+
     public AreaInformationPanel(T area, GameState gameState) {
         this.area = area;
         this.gameState = gameState;
-        
+
         setLayout(new VerticalFlowLayout());
     }
-    
+
     protected void genericInformation() {
         JLabel owner = new JLabel("Owner: None");
-        
+
         Organization org = gameState.getOrganizationObjectByReference(area.getOwner());
         if (org != null) {
             if (org instanceof Civilization) {
@@ -82,7 +84,7 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
                 owner.setText("Owner: " + org.getName());
             }
         }
-        
+
         JLabel currentJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.current", area.getCurrentlyManningJobs()));
         JLabel minimumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.minimum", area.operatingJobsNeeded()));
         JLabel maximumJobs = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.manpower.maximum", area.getMaxJobsProvided()));
@@ -95,11 +97,11 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
         add(minimumJobs);
         add(maximumJobs);
     }
-    
+
     public void update() {
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     public static AreaInformationPanel getPanel(GameState gameState, Area a) {
         try {
@@ -109,7 +111,12 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
                 //Return empty 
                 return new EmptyAreaPanel(a, gameState);
             }
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+        } catch (InstantiationException 
+                | IllegalAccessException 
+                | IllegalArgumentException 
+                | InvocationTargetException 
+                | NoSuchMethodException 
+                | SecurityException ex) {
             LOGGER.warn("Unable to open area information panel", ex);
             return new EmptyAreaPanel(a, gameState);
         }

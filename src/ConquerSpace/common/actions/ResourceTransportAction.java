@@ -21,10 +21,10 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 
 /**
- *
+ * Org transports good.
  * @author EhWhoAmI
  */
-public class ResourceTransportAction extends Action {
+public class ResourceTransportAction extends OrganizationAction {
 
     private ResourceStockpile from;
     private ResourceStockpile to;

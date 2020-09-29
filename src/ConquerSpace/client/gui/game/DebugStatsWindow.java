@@ -69,21 +69,10 @@ public class DebugStatsWindow extends JInternalFrame {
 
     private JButton throwException;
 
-//    private TimeSeriesCollection memoryInfoStats;
-//    private TimeSeries usedMemorySeries;
-//    private TimeSeries availableMemorySeries;
-//    private JFreeChart chart;
-    /**
-     * Universe
-     */
-    private Galaxy universe;
-
     /**
      * Creates the window, and adds all things.
      */
     private DebugStatsWindow(GameState state) {
-        universe = state.getUniverse();
-
         setTitle("Stats for Nerds");
         setLayout(new VerticalFlowLayout(5, 4));
         Runtime runtime = Runtime.getRuntime();
@@ -92,8 +81,6 @@ public class DebugStatsWindow extends JInternalFrame {
         objectCountLabel = new JLabel("Game Objects: " + state.getObjectCount());
         deviceInfo = new JButton("Current runtime stats");
         logger = new JButton("Show Logs");
-
-        
 
         runTrashCompactor = new JButton("Force Garbage Collection");
         runTrashCompactor.setFocusable(false);
@@ -151,21 +138,6 @@ public class DebugStatsWindow extends JInternalFrame {
                 throw new ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything("No u. Seriously, though, you can just press don\'t exit, and nothing will happen.");
             }
         });
-//        memoryInfoStats = new TimeSeriesCollection();
-//
-//        usedMemorySeries = new TimeSeries("Used Memory");
-//        availableMemorySeries = new TimeSeries("Available Memory");
-//        usedMemorySeries.setMaximumItemAge(1000 * 120);
-//        availableMemorySeries.setMaximumItemAge(1000 * 120);
-//
-//        memoryInfoStats.addSeries(usedMemorySeries);
-//        memoryInfoStats.addSeries(availableMemorySeries);
-//
-//        chart = ChartFactory.createTimeSeriesChart("Memory Usage over time", "", "MB", memoryInfoStats, true, true, false);
-//        ChartPanel panel = new ChartPanel(chart);
-//        panel.setDomainZoomable(false);
-//        panel.setPopupMenu(null);
-//        panel.setRangeZoomable(false);
         add(memoryusedLabel);
         add(threadCountLabel);
         add(objectCountLabel);
@@ -179,14 +151,11 @@ public class DebugStatsWindow extends JInternalFrame {
         //Ticker to tick and update the text.
         Timer ticker = new Timer(0, (e) -> {
             Runtime r = Runtime.getRuntime();
-            memoryusedLabel.setText("Memory used: " + byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) + "/" + byteCountToDisplaySize(r.totalMemory()) + ". Something like " + (((((float) r.totalMemory()) - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
-//            Millisecond time = new Millisecond();
-//            usedMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory() - r.freeMemory())));
-//            availableMemorySeries.add(time, byteCountToDisplaySizeNumber(BigInteger.valueOf(r.totalMemory())));
-//
-//            usedMemorySeries.removeAgedItems(true);
-//            availableMemorySeries.removeAgedItems(true);
-//            chart.fireChartChanged();
+            memoryusedLabel.setText("Memory used: " + byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) 
+                    + "/" + byteCountToDisplaySize(r.totalMemory()) 
+                    + ". Something like " 
+                    + (((((float) r.totalMemory()) 
+                            - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
             threadCountLabel.setText("Threads currently running: " + Thread.getAllStackTraces().size());
             objectCountLabel.setText("Game Objects: " + state.getObjectCount());
             repaint();

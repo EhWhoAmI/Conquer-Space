@@ -15,19 +15,44 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.resources;
+
+package ConquerSpace.common.game.ships;
 
 /**
+ * What a ship is capable of doing.
  *
  * @author EhWhoAmI
  */
-public interface ResourceStockpile {
-    public void addResourceTypeStore(Integer type);
-    public Double getResourceAmount(Integer type);
-    public void addResource(Integer type, Double amount);
-    public boolean canStore(Integer type);
+public enum ShipCapability {
+    /**
+     * The ship is able to enter orbit from land. Will probably customize so that it can deal with
+     * different planets.
+     */
+    ToOrbit,
     
-    public Integer[] storedTypes();
+    /**
+     * The ship is able to travel in space.
+     */
+    SpaceTravel,
     
-    public boolean removeResource(Integer type, Double amount);
+    /**
+     * The ship is able to travel in the atmosphere.
+     */
+    AtmosphericTravel,
+    
+    /**
+     * The ship is able to enter the atmosphere safely. Note: it does not mean that it can land or
+     * fly.
+     */
+    Reentry,
+    
+    /**
+     * The ship is able to dock with another ship.
+     */
+    Docking,
+    
+    /**
+     * The ship is able to land on a surface.
+     */
+    Landing;
 }

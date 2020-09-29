@@ -29,17 +29,20 @@ import ConquerSpace.common.save.SerializeClassName;
  * Works as a modifier to the district
  */
 @SerializeClassName("area")
-public class Area extends ConquerSpaceGameObject implements Workable, Comparable<Area> {
+public abstract class Area extends ConquerSpaceGameObject implements Workable, Comparable<Area> {
 
     /**
      * The number of people currently manning the place.
      */
     @Serialize("manning")
     private int currentlyManningJobs;
+    
     @Serialize("operating")
     private int operatingJobs;
+    
     @Serialize("max")
     private int maxJobs;
+    
     @Serialize("power")
     private int powerUsage;
     

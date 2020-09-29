@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.science.Technologies;
@@ -59,7 +60,7 @@ public class CQSPConsole extends JInternalFrame {
             if (command[0].toLowerCase().equals("help")) {
                 try {
                     //Display console help text
-                    Scanner scan = new Scanner(new File(System.getProperty("user.dir") + "/assets/data/console/helptext.txt"));
+                    Scanner scan = new Scanner(new File(ConquerSpace.USER_DIR + "/assets/data/console/helptext.txt"));
                     while (scan.hasNextLine()) {
                         model.addElement(scan.nextLine());
                     }

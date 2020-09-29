@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.start;
 
+import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.FileNotFoundException;
@@ -35,6 +36,7 @@ import org.apache.logging.log4j.Logger;
  * @author EhWhoAmI
  */
 public class Loading extends JFrame {
+
     private static final Logger LOGGER = CQSPLogger.getLogger(Loading.class.getName());
     private JProgressBar jpb;
     private JLabel quoteLabel;
@@ -46,7 +48,8 @@ public class Loading extends JFrame {
         quoteLabel = new JLabel();
         try {
             //Set quote
-            List<String> lines = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/assets/quotelist.txt"));
+            List<String> lines = Files.readAllLines(Paths.get(ConquerSpace.USER_DIR 
+                    + "/assets/quotelist.txt"));
             Random rand = new Random();
             int index = rand.nextInt(lines.size());
             String quote = lines.get(index);

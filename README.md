@@ -11,7 +11,7 @@ Will feature detailed 4x and grand strategy gameplay.
 
  - Website: <https://ehwhoami.itch.io/conquer-space>
 
- - Planning: <https://ehwhoami.github.io/Conquer-Space-Design/>
+ - Planning: <https://github.com/EhWhoAmI/Conquer-Space/projects/12>
  
 ### Compiling
 `git clone https://github.com/EhWhoAmI/Conquer-Space.git` to clone this repo.
@@ -30,6 +30,8 @@ This uses [Netbeans](https://netbeans.org/) to compile, but [Apache Ant](http://
 | Easyogg      | Music playing | <http://www.cokeandcode.com/main/code/> |
 | Jorbis | Ogg codec | <http://www.jcraft.com/jorbis/> |
 | Apache Commons | Utilities | <https://commons.apache.org/>|
+| Xchart | Charts | <https://knowm.org/open-source/xchart/> |
+| SwingX | UI | <https://github.com/ebourg/swingx> |
 
 ### Helping
 If you are excited to help, you need to know Java. If you know both, great!

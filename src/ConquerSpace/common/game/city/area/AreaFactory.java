@@ -25,7 +25,7 @@ import java.util.HashMap;
  *
  * @author EhWhoAmI
  */
-public class AreaFactory {
+public abstract class AreaFactory {
 
     private Civilization builder;
 
@@ -74,11 +74,7 @@ public class AreaFactory {
         return 50;
     }
 
-    public Area build(GameState gameState) {
-        Area area = new Area(gameState);
-        setDefaultInformation(gameState, area);
-        return area;
-    }
+    public abstract Area build(GameState gameState);
 
     public Area setDefaultInformation(GameState gameState, Area area) {
         area.setOwner(builder.getReference());

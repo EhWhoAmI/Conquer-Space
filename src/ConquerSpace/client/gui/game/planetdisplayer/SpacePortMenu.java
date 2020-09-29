@@ -36,7 +36,6 @@ import java.util.UUID;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -97,8 +96,7 @@ public class SpacePortMenu extends JPanel {
 //            }
             //Then stuff to launchsystem
             LaunchSystem launchSystem = gameState.getObject(civilization.launchSystems.get(0), LaunchSystem.class);
-            
-            
+
             //Add to civ
             civilization.spaceships.add(ship.getReference());
             Actions.launchLaunchable(ship, planet);
@@ -127,7 +125,7 @@ public class SpacePortMenu extends JPanel {
                 Area area = gameState.getObject(areaIndex, Area.class);
                 if (area instanceof SpacePortArea) {
                     SpacePortArea port = (SpacePortArea) area;
-                    launchPadCount += port.launchPads.size();
+                    launchPadCount += port.getLaunchPadCount();
                 }
             }
         }

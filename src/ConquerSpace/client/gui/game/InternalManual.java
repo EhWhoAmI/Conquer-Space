@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import static ConquerSpace.ConquerSpace.USER_DIR;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.awt.Dimension;
@@ -58,7 +59,7 @@ public class InternalManual extends JInternalFrame implements ListSelectionListe
         // Load properties. Need to use a hashmap, because the properties
         // does not load in the order that we like. It is kind of random. 
         try {
-            Scanner scan = new Scanner(new File(System.getProperty("user.dir") + "/assets/manuals/manlist.properties"));
+            Scanner scan = new Scanner(new File(USER_DIR + "/assets/manuals/manlist.properties"));
             while (scan.hasNextLine()) {
                 String text = scan.nextLine();
                 String values[] = text.split("=");
@@ -97,7 +98,7 @@ public class InternalManual extends JInternalFrame implements ListSelectionListe
                 try {
                     value = new InternalManualContent(
                             new String(Files.readAllBytes(Paths.get(
-                                    System.getProperty("user.dir") + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
+                                    USER_DIR + "/assets/manuals/" + str)), StandardCharsets.UTF_8));
                     LOGGER.info("Loading manual " + str);
                     
                     getDesktopPane().add(value);
