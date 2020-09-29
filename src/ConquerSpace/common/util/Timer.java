@@ -18,7 +18,7 @@
 package ConquerSpace.common.util;
 
 /**
- *
+ * Timer that executes an action on an interval.
  * @author EhWhoAmI
  */
 public class Timer {
@@ -33,16 +33,27 @@ public class Timer {
         action = new Runnable() {
             @Override
             public void run() {
-                //Do nothing
+                //Do nothing, because it is the default action
             }
         };
 
         runningThread = new Thread(() -> {
             while (running) {
+                long timeStart = System.currentTimeMillis();
                 action.run();
+                long timeEnd = System.currentTimeMillis();
+                
+                long actualWait = wait - (timeEnd - timeStart);
+                
+                //Skip because the tick took longer than expected
+                if(actualWait <= 0) {
+                    continue;
+                }
+                
                 try {
                     Thread.sleep(wait);
                 } catch (InterruptedException ex) {
+                    //Ignore
                 }
             }
         });

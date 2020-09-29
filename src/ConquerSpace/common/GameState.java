@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**
@@ -49,10 +48,7 @@ public final class GameState implements Serializable {
 
     //All game objects
     //May need to be thread safe in the future
-    
     EntityManager entities;
-        
-    private AtomicInteger objectCount;
     
     @Serialize("seed")
     private long seed;
@@ -254,8 +250,6 @@ public final class GameState implements Serializable {
 
         universeId = gameState.universeId;
         
-        objectCount = gameState.objectCount;
-
         date = gameState.date;
         launchSystems = gameState.launchSystems;
         civilizations = gameState.civilizations;
@@ -285,9 +279,5 @@ public final class GameState implements Serializable {
         random = gameState.random;
         
         
-    }
-    
-    ObjectReference nextObjectReference() {
-        return new ObjectReference(objectCount.getAndIncrement());
     }
 }

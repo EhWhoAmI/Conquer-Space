@@ -35,13 +35,23 @@ public class EntityManager {
         objectCount = new AtomicInteger();
     }
 
-    public ObjectReference addGameObject(ConquerSpaceGameObject object) {
+    /**
+     * Adds the game object to the manager.
+     * @param object The object to add.
+     * @return the object reference when it is added
+     */
+    ObjectReference addGameObject(ConquerSpaceGameObject object) {
         ObjectReference nextReference = new ObjectReference(objectCount.incrementAndGet());
 
         objects.put(nextReference, object);
         return nextReference;
     }
 
+    /**
+     * Gets the object from the manager.
+     * @param id reference of the object.
+     * @return the object.
+     */
     public ConquerSpaceGameObject getObject(ObjectReference id) {
         return objects.get(id);
     }

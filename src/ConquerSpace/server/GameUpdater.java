@@ -95,8 +95,7 @@ public class GameUpdater extends GameTicker {
 
     private final int GameRefreshRate;
 
-    private long updateTime;
-    private int ledgerClearTime;
+    private int ledgerClearInterval;
 
     private GameIndexer indexer;
     private PeopleProcessor peopleProcessor;
@@ -108,7 +107,7 @@ public class GameUpdater extends GameTicker {
         indexer = new GameIndexer(gameState.getUniverse());
         peopleProcessor = new PeopleProcessor(gameState);
         this.GameRefreshRate = gameState.GameRefreshRate;
-        ledgerClearTime = GameRefreshRate * 10;
+        ledgerClearInterval = GameRefreshRate * 10;
     }
 
     //Process ingame tick.
@@ -138,7 +137,6 @@ public class GameUpdater extends GameTicker {
     }
 
     public synchronized void updateGame() {
-        long start = System.currentTimeMillis();
         updateUniverse();
 
         //Increment tech
@@ -151,10 +149,6 @@ public class GameUpdater extends GameTicker {
         processResources();
 
         peopleProcessor.processPeople(GameRefreshRate);
-
-        long end = System.currentTimeMillis();
-
-        updateTime = (end - start);
     }
 
     //Will have to check for actions that contradict each other or something in the future..

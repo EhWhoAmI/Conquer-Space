@@ -58,6 +58,8 @@ public class GameController {
 
     private Timer ticker;
 
+    public static transient long updateTime = 0;
+
     /**
      * Constructor. Inits all components.
      */
@@ -91,14 +93,20 @@ public class GameController {
         Runnable action = new Runnable() {
             public void run() {
                 //Ensure that the game does not stop on a crash
+                long start = System.currentTimeMillis();
+                
                 try {
                     ticker.setWait(tickController.getTickCount());
                     if (!tickController.allowTick()) {
+                        //Time ticks
                         updater.tick(1);
                     }
                 } catch (Exception e) {
                     ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
                 }
+
+                long end = System.currentTimeMillis();
+                updateTime = (end - start);
             }
         };
         ticker.setAction(action);

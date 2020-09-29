@@ -19,8 +19,8 @@ package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.server.GameController;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,7 +56,9 @@ public class DebugStatsWindow extends JInternalFrame {
     private JLabel memoryusedLabel;
 
     private JLabel threadCountLabel;
-    
+
+    private JLabel tickTimeLabel;
+
     private JLabel objectCountLabel;
 
     private JButton runTrashCompactor;
@@ -69,16 +71,24 @@ public class DebugStatsWindow extends JInternalFrame {
 
     private JButton throwException;
 
+    Runtime runtime;
+
+    GameState gameState;
+
     /**
      * Creates the window, and adds all things.
      */
     private DebugStatsWindow(GameState state) {
+        gameState = state;
+        runtime = Runtime.getRuntime();
+
         setTitle("Stats for Nerds");
         setLayout(new VerticalFlowLayout(5, 4));
-        Runtime runtime = Runtime.getRuntime();
-        memoryusedLabel = new JLabel("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()) + ". Something like " + (((((float) runtime.totalMemory()) - ((float) runtime.freeMemory()))) / ((float) runtime.totalMemory()) * 100) + "%");
-        threadCountLabel = new JLabel("Threads currently running: " + Thread.getAllStackTraces().size());
-        objectCountLabel = new JLabel("Game Objects: " + state.getObjectCount());
+
+        memoryusedLabel = new JLabel(getMemoryString());
+        threadCountLabel = new JLabel(getThreadString());
+        tickTimeLabel = new JLabel(getTickTimeString());
+        objectCountLabel = new JLabel(getGameObjectString());
         deviceInfo = new JButton("Current runtime stats");
         logger = new JButton("Show Logs");
 
@@ -91,7 +101,8 @@ public class DebugStatsWindow extends JInternalFrame {
         openConsole = new JButton("Open Console");
         openConsole.setFocusable(false);
         openConsole.addActionListener((e) -> {
-            CQSPConsole con = new CQSPConsole(state, state.getObject(state.playerCiv, Civilization.class));
+            CQSPConsole con
+                    = new CQSPConsole(state, state.getObject(state.playerCiv, Civilization.class));
             getDesktopPane().add(con);
         });
 
@@ -102,7 +113,7 @@ public class DebugStatsWindow extends JInternalFrame {
                 //Write the universe to file
                 writer = new FileWriter("./runstats.txt");
                 PrintWriter pw = new PrintWriter(writer);
-                pw.println("This file contains data about your computer. You do not need to ");
+                pw.println("This file contains data about your computer.");
             } catch (IOException ex) {
                 LOGGER.error("Cannot write to file!", ex);
             } finally {
@@ -127,7 +138,8 @@ public class DebugStatsWindow extends JInternalFrame {
 
                 getDesktopPane().add(frame);
             } else {
-                JOptionPane.showMessageDialog(this, "We had an issue opening the log panel", "Could not open log panel", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "We had an issue opening the log panel",
+                        "Could not open log panel", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -135,11 +147,14 @@ public class DebugStatsWindow extends JInternalFrame {
         throwException.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent l) {
-                throw new ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything("No u. Seriously, though, you can just press don\'t exit, and nothing will happen.");
+                throw new ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything("No u. "
+                        + "Seriously, though, you can just press don\'t exit, "
+                        + "and nothing will happen.");
             }
         });
         add(memoryusedLabel);
         add(threadCountLabel);
+        add(tickTimeLabel);
         add(objectCountLabel);
         add(runTrashCompactor);
         add(openConsole);
@@ -150,14 +165,10 @@ public class DebugStatsWindow extends JInternalFrame {
 
         //Ticker to tick and update the text.
         Timer ticker = new Timer(0, (e) -> {
-            Runtime r = Runtime.getRuntime();
-            memoryusedLabel.setText("Memory used: " + byteCountToDisplaySize(r.totalMemory() - r.freeMemory()) 
-                    + "/" + byteCountToDisplaySize(r.totalMemory()) 
-                    + ". Something like " 
-                    + (((((float) r.totalMemory()) 
-                            - ((float) r.freeMemory()))) / ((float) r.totalMemory()) * 100) + "%");
-            threadCountLabel.setText("Threads currently running: " + Thread.getAllStackTraces().size());
-            objectCountLabel.setText("Game Objects: " + state.getObjectCount());
+            memoryusedLabel.setText(getMemoryString());
+            threadCountLabel.setText(getThreadString());
+            tickTimeLabel.setText(getTickTimeString());
+            objectCountLabel.setText(getGameObjectString());
             repaint();
         });
         //Every 1 second, update. make it update ever so often, but not so that it
@@ -169,6 +180,27 @@ public class DebugStatsWindow extends JInternalFrame {
         setResizable(true);
         setClosable(true);
         setVisible(true);
+    }
+
+    private String getMemoryString() {
+        double totalMemory = (double) runtime.totalMemory();
+        double freeMemory = (double) runtime.freeMemory();
+        return "Memory used: " + byteCountToDisplaySize((long) totalMemory - (long) freeMemory)
+                + "/" + byteCountToDisplaySize((long) totalMemory)
+                + ", or "
+                + ((double) Math.round((totalMemory - freeMemory) / totalMemory * 10000) / 100d) + "%";
+    }
+
+    private String getThreadString() {
+        return "Threads currently running: " + Thread.getAllStackTraces().size();
+    }
+
+    private String getTickTimeString() {
+        return "Tick Time: " + GameController.updateTime;
+    }
+
+    private String getGameObjectString() {
+        return "Number of Game Objects: " + gameState.getObjectCount();
     }
 
     /**
