@@ -45,8 +45,9 @@ public class ShipType {
 
     public boolean containsTag(String key) {
         boolean result = false;
+        int hash = key.hashCode();
         for (String i : tags) {
-            if (i.equals(key)) {
+            if (i.hashCode() == hash) {
                 result = true;
                 break;
             }

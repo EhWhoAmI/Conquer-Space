@@ -44,32 +44,32 @@ import javax.swing.JToolBar;
  * @author EhWhoAmI
  */
 public class ShipComponentDesigner extends JPanel {
-    
+
     private GameState gameState;
     private JButton saveComponentButton;
     private JButton newComponentButton;
-    
+
     private ObjectListModel<ObjectReference> shipComponentListModel;
     private JList<String> shipComponentList;
-    
+
     private JPanel componentInformationPanel;
     private JPanel componentCustomizationPanel;
-    
+
     private DefaultComboBoxModel<ShipComponentType> shipComponentTypeComboBoxModel;
     private JComboBox<ShipComponentType> shipComponentTypes;
-    
+
     private JTextField shipComponentName;
     CardLayout layout;
-    
+
     ArrayList<ShipComponentDesignerPanel> designerPanels;
-    
+
     @SuppressWarnings("unchecked")
     public ShipComponentDesigner(GameState gameState, Civilization c) {
         this.gameState = gameState;
-        
+
         designerPanels = new ArrayList<>();
         setLayout(new BorderLayout());
-        
+
         JToolBar toolBar = new JToolBar();
         saveComponentButton = new JButton("Save Component");
         saveComponentButton.addActionListener(l -> {
@@ -82,7 +82,7 @@ public class ShipComponentDesigner extends JPanel {
                         //Add ship component
                         c.shipComponentList.add(ref.getReference());
                         shipComponentList.updateUI();
-                        
+
                         clearUI();
                     }
                     break;
@@ -101,7 +101,7 @@ public class ShipComponentDesigner extends JPanel {
         shipComponentListModel.setHandler(l -> {
             return gameState.getObject(l, ShipComponent.class).getName();
         });
-        
+
         shipComponentList = new JList<>(shipComponentListModel);
         shipComponentList.addListSelectionListener(l -> {
             ObjectReference shipComponentId = shipComponentListModel.getObject(shipComponentList.getSelectedIndex());
@@ -117,31 +117,31 @@ public class ShipComponentDesigner extends JPanel {
             }
         });
         shipComponentList.setFixedCellWidth(250);
-        
+
         componentInformationPanel = new JPanel();
         componentInformationPanel.setLayout(new VerticalFlowLayout());
-        
+
         shipComponentTypeComboBoxModel = new DefaultComboBoxModel<>(ShipComponentType.values());
         shipComponentTypes = new JComboBox<>(shipComponentTypeComboBoxModel);
         shipComponentTypes.addActionListener(l -> {
             //Set selected panel
             layout.show(componentCustomizationPanel, shipComponentTypes.getSelectedItem().toString());
         });
-        
+
         JPanel typeContainerPanel = new JPanel(new HorizontalFlowLayout());
         typeContainerPanel.add(new JLabel("Ship Component Type: "));
         typeContainerPanel.add(shipComponentTypes);
-        
+
         componentInformationPanel.add(typeContainerPanel);
-        
+
         JPanel namecontainerPanel = new JPanel(new HorizontalFlowLayout());
         namecontainerPanel.add(new JLabel("Component Name: "));
         shipComponentName = new JTextField(32);
         namecontainerPanel.add(shipComponentName);
         componentInformationPanel.add(namecontainerPanel);
-        
+
         componentCustomizationPanel = new JPanel();
-        
+
         layout = new CardLayout();
         componentCustomizationPanel.setLayout(layout);
 
@@ -155,7 +155,10 @@ public class ShipComponentDesigner extends JPanel {
         CrewComponentDesignerPanel ccdp = new CrewComponentDesignerPanel(gameState);
         designerPanels.add(ccdp);
         componentCustomizationPanel.add(ccdp, ShipComponentType.Crew.toString());
-        
+        ToOrbitEngineDesignerPanel toedp = new ToOrbitEngineDesignerPanel(gameState, c);
+        designerPanels.add(toedp);
+        componentCustomizationPanel.add(toedp, ShipComponentType.ToOrbit.toString());
+
         componentInformationPanel.add(componentCustomizationPanel);
         JPanel container = new JPanel(new VerticalFlowLayout());
         container.add(componentInformationPanel);
@@ -163,7 +166,7 @@ public class ShipComponentDesigner extends JPanel {
         add(new JScrollPane(shipComponentList), BorderLayout.WEST);
         add(container, BorderLayout.CENTER);
     }
-    
+
     private void clearUI() {
         //Clear UI
         shipComponentName.setText("");

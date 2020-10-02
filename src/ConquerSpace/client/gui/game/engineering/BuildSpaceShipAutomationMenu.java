@@ -97,10 +97,12 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     private JLabel shipSpeedUnit;
     private JSpinner shipSpeedSpinner;
 
-    private JPanel engineStuffPanel;
     private JLabel engineTypeLabel;
     private JButton setEngineButton;
-    private JLabel engineTypeNotificationLabel;
+    private JLabel engineTypeIndicatorLabel;
+
+    private JLabel toOrbitEngineLabel;
+    private JButton toOrbitEngineButton;
 
     private JLabel fuelCapacityLabel;
     private JLabel fuelCapacityValue;
@@ -198,10 +200,17 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 ShipType shipType = (ShipType) shipTypeComboBox.getSelectedItem();
 
                 shipScienceButton.setEnabled(false);
+                shipSpeedSpinner.setEnabled(true);
+                toOrbitEngineButton.setEnabled(false);
 
                 //Enable if it is science
                 if (shipType.containsTag("science")) {
                     shipScienceButton.setEnabled(true);
+                }
+
+                if (shipType.containsTag("launch")) {
+                    shipSpeedSpinner.setEnabled(false);
+                    toOrbitEngineButton.setEnabled(true);
                 }
             });
 
@@ -242,29 +251,25 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.gridx = 0;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 0;
-            //constraints.weighty = 1;
+
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(shipNameLabel, constraints);
             constraints.gridx = 1;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 0;
-            //constraints.weighty = 1;
+
             shipDetailsPanel.add(shipNameField, constraints);
             constraints.gridx = 2;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 0;
-            //constraints.weighty = 1;
+
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(randomShipNameButton, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 0;
-            //constraints.weighty = 1;
+
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(massLabel, constraints);
             constraints.gridx = 1;
@@ -389,7 +394,20 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
                 }
             });
-            engineTypeNotificationLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
+            engineTypeIndicatorLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
+
+            toOrbitEngineLabel = new JLabel("Orbital rated engine:");
+            toOrbitEngineButton = new JButton("Customize engine");
+            toOrbitEngineButton.addActionListener(l -> {
+                ShipToOrbitEngineConfigurePanel panel = new ShipToOrbitEngineConfigurePanel(gameState, civ);
+                int close = JOptionPane.showInternalConfirmDialog(this,
+                        panel, "Customize Orbital Engine",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (close == JOptionPane.OK_OPTION) {
+
+                }
+            });
+            toOrbitEngineButton.setEnabled(false);
 
             fuelCapacityLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.label"));
             fuelCapacityValue = new JLabel("0");
@@ -442,31 +460,39 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
-            shipChangablePanel.add(engineTypeNotificationLabel, constraints);
+            shipChangablePanel.add(engineTypeIndicatorLabel, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 3;
+            shipChangablePanel.add(toOrbitEngineLabel, constraints);
+
+            constraints.gridx = 1;
+            constraints.gridy = 3;
+            shipChangablePanel.add(toOrbitEngineButton, constraints);
+
+            constraints.gridx = 0;
+            constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(fuelCapacityLabel, constraints);
 
             constraints.gridx = 1;
-            constraints.gridy = 3;
+            constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(fuelCapacityValue, constraints);
 
             constraints.gridx = 2;
-            constraints.gridy = 3;
+            constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(fuelCapacityUnit, constraints);
 
             constraints.gridx = 3;
-            constraints.gridy = 3;
+            constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
@@ -539,22 +565,16 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.gridx = 1;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 1;
-            //constraints.weighty = 1;
             grandContainer.add(shipSensorButton, constraints);
 
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 1;
-            //constraints.weighty = 1;
             grandContainer.add(shipScienceLabel, constraints);
 
             constraints.gridx = 1;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-            //constraints.weightx = 1;
-            //constraints.weighty = 1;
             grandContainer.add(shipScienceButton, constraints);
 
             constraints.gridx = 2;
