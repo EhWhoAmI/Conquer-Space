@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
 import java.util.TreeMap;
+import org.hjson.JsonValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -48,6 +49,7 @@ public class NameGenerator {
         fis.read(data);
         fis.close();
         String text = new String(data);
+        text = JsonValue.readHjson(text).toString();
 
         nameGeneratorObject = new JSONObject(text);
         //Get the info

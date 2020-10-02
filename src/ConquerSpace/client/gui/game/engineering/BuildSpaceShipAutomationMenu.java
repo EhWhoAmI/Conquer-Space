@@ -404,7 +404,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         panel, "Customize Orbital Engine",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (close == JOptionPane.OK_OPTION) {
-
+                    
                 }
             });
             toOrbitEngineButton.setEnabled(false);

@@ -1,0 +1,44 @@
+{
+  name: Civ Names
+  rules:
+  [
+    first\space\second
+  ]
+  counters: []
+  first:
+  [
+    He
+    Be
+    Das
+    Kas
+    Mak
+    Aef
+    Len
+    Las
+    Ke
+  ]
+  space:
+  [
+    le
+    as
+    ma
+    "'ea"
+    mal
+    "'as"
+    had
+    "'kah"
+    fad
+  ]
+  second:
+  [
+    ese
+    ""
+    et
+    "'tese"
+    mad
+    las
+    bas
+    ish
+    ""
+  ]
+}

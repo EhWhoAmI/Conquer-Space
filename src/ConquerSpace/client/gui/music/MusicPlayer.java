@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.logging.log4j.Logger;
+import org.hjson.JsonValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.newdawn.easyogg.OggClip;
@@ -44,7 +45,7 @@ public class MusicPlayer implements Runnable {
     boolean toStop = false;
 
     float volume = 0.8f;
-    
+
     long songStart = 0;
     long songPause = 0;
     //How far into the song it is
@@ -52,13 +53,14 @@ public class MusicPlayer implements Runnable {
 
     public MusicPlayer() {
         toPlay = false;
-        File f = new File("assets/music/music_list.json");
-        try (FileInputStream fis = new FileInputStream(f);){
+        File f = new File("assets/music/music_list.txt");
+        try ( FileInputStream fis = new FileInputStream(f);) {
             //Load music
             byte[] data = new byte[(int) f.length()];
             fis.read(data);
             fis.close();
             String text = new String(data);
+            text = JsonValue.readHjson(text).toString();
             musicArray = new JSONArray(text);
             musicThread = new Thread(this);
             musicThread.setName("musicplayer");
