@@ -23,16 +23,20 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Hull;
+import ConquerSpace.common.game.ships.ShipCapability;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.components.ControlComponent;
 import ConquerSpace.common.game.ships.components.ShipComponent;
+import ConquerSpace.common.game.ships.components.ToOrbitEngineComponent;
 import ConquerSpace.common.util.names.NameGenerator;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,127 +60,126 @@ import javax.swing.SpinnerNumberModel;
  * @author EhWhoAmI
  */
 public class BuildSpaceShipAutomationMenu extends JPanel {
-
+    
     private Civilization civ;
-
+    
     private ArrayList<ObjectReference> objectComponentsToAdd;
-
+    
     private JList<String> shipList;
     private ObjectListModel<ObjectReference> shipListModel;
-
+    
     JPanel shipDetailsPanel;
     private JLabel shipNameLabel;
     private JTextField shipNameField;
     private JButton randomShipNameButton;
-
+    
     private JLabel massLabel;
     private JLabel massText;
     private JLabel massUnit;
-
+    
     private JLabel hullLabel;
     private JCheckBox toDesignHullOrNotToDesign;
     private JButton chooseHullButton;
-
+    
     private JLabel hullNameLabel;
     private JLabel hullSpaceLabel;
     private JLabel hullMaterialLabel;
-
+    
     private JLabel shipTypeLabel;
     private JComboBox<ShipType> shipTypeComboBox;
-
+    
     private JLabel shipArmorLabel;
-
+    
     private JLabel shipShieldLabel;
-
-    //Will be automatically decided
-    private JLabel shipSpaceLabel;
-
-    private JLabel shipCargoSpaceLabel;
-
+    
     private JLabel shipSpeedLabel;
     private JLabel shipSpeedUnit;
     private JSpinner shipSpeedSpinner;
-
+    
     private JLabel engineTypeLabel;
     private JButton setEngineButton;
     private JLabel engineTypeIndicatorLabel;
-
+    
     private JLabel toOrbitEngineLabel;
     private JButton toOrbitEngineButton;
-
+    private JCheckBox toOrbitEngineEnableButton;
+    private ObjectReference toOrbitEngineType;
+    //What the engine is
+    private ObjectReference toOrbitEngineSelection;
+    private int toOrbitEngineAmount;
+    private boolean designToOrbitEngineOrNot;
+    
     private JLabel fuelCapacityLabel;
     private JLabel fuelCapacityValue;
     private JLabel fuelCapacityUnit;
     private JButton fuelCapicityConfig;
-
-    private JTable shipComponentsTable;
-
+    
     private JLabel shipSensorsLabel;
     private JButton shipSensorButton;
-    private JLabel shipWeaponLabel;
-    private JButton shipWeaponButton;
     private JLabel shipScienceLabel;
     private JButton shipScienceButton;
-
+    
     JList<String> shipComponents;
     JList<String> alreadyAddedShipComponentList;
-
+    
     private JTabbedPane mainTabs;
     private JPanel componentRoughDesignPanel;
 
     //Hull is null means it is self designed
     private Hull selectedHull = null;
-
+    
     private NameGenerator nameGenerator;
-
+    
     private GameState gameState;
-
+    
     public BuildSpaceShipAutomationMenu(GameState gameState, Civilization c) {
         this.gameState = gameState;
         this.civ = c;
         setLayout(new BorderLayout());
-
+        
         try {
             nameGenerator = NameGenerator.getNameGenerator("component.names");
         } catch (IOException ex) {
         }
-
+        
         JToolBar menuBar = new JToolBar();
         JButton newShipClass = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.newclass"));
         JButton saveShipClass = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.design"));
-
+        
         newShipClass.addActionListener(l -> {
             //Empty all components
-            shipSpeedSpinner.setValue(0);
-            shipNameField.setText("");
-            selectedHull = null;
-        });
+            //shipSpeedSpinner.setValue(0);
+            //shipNameField.setText("");
 
+            // selectedHull = null;
+            System.out.println(toOrbitEngineEnableButton.isSelected());
+        });
+        
         saveShipClass.addActionListener(l -> {
             createShip();
         });
-
+        
         menuBar.add(newShipClass);
         menuBar.add(saveShipClass);
         add(menuBar, BorderLayout.NORTH);
-
+        
         JPanel shipInformationPanel = new JPanel();
-
+        
         shipInformationPanel.setLayout(new HorizontalFlowLayout());
 
         //The panel that you cant really change the stuff inside
         shipListModel = new ObjectListModel<>();
         shipListModel.setElements(civ.shipClasses);
-
+        
         shipListModel.setHandler(l -> {
             return gameState.getObject(l, ShipClass.class).getName();
         });
-
+        
         shipList = new JList<>(shipListModel);
         shipList.setFixedCellWidth(250);
         JScrollPane shipListScrollPane = new JScrollPane(shipList);
         shipInformationPanel.add(shipListScrollPane);
-
+        
         shipDetailsPanel = new JPanel();
         JPanel shipDetailsContainer = new JPanel(new VerticalFlowLayout());
         {
@@ -188,36 +191,34 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             randomShipNameButton.addActionListener(l -> {
                 shipNameField.setText(nameGenerator.getName(0));
             });
-
+            
             massLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.mass"));
             massText = new JLabel("0");
             massUnit = new JLabel("kg");
-
+            
             shipTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shiptype"));
-
+            
             shipTypeComboBox = new JComboBox<>(Arrays.copyOf(gameState.shipTypes.toArray(), gameState.shipTypes.size(), ShipType[].class));
             shipTypeComboBox.addActionListener(l -> {
                 ShipType shipType = (ShipType) shipTypeComboBox.getSelectedItem();
-
+                
                 shipScienceButton.setEnabled(false);
                 shipSpeedSpinner.setEnabled(true);
-                toOrbitEngineButton.setEnabled(false);
 
                 //Enable if it is science
                 if (shipType.containsTag("science")) {
                     shipScienceButton.setEnabled(true);
                 }
-
+                
                 if (shipType.containsTag("launch")) {
                     shipSpeedSpinner.setEnabled(false);
-                    toOrbitEngineButton.setEnabled(true);
                 }
             });
-
+            
             shipSpeedLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.speed"));
             shipSpeedUnit = new JLabel("<html>m/s<sup>2</sup></html");
             shipSpeedSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 1000000, 10));
-
+            
             hullLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull"));
             toDesignHullOrNotToDesign = new JCheckBox(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign"));
             toDesignHullOrNotToDesign.setSelected(true);
@@ -242,34 +243,34 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 }
             });
             chooseHullButton.setEnabled(false);
-
+            
             hullNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign.name"));
             hullSpaceLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign.volume"));
             hullMaterialLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.hull.autodesign.material"));
-
+            
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.gridx = 0;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-
+            
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(shipNameLabel, constraints);
             constraints.gridx = 1;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-
+            
             shipDetailsPanel.add(shipNameField, constraints);
             constraints.gridx = 2;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-
+            
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(randomShipNameButton, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-
+            
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(massLabel, constraints);
             constraints.gridx = 1;
@@ -286,7 +287,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(massUnit, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 2;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -301,7 +302,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(shipTypeComboBox, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 3;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -309,7 +310,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //constraints.weighty = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             shipDetailsPanel.add(shipSpeedLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 3;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -353,7 +354,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.gridwidth = GridBagConstraints.REMAINDER;
             shipDetailsPanel.add(hullNameLabel, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 6;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -362,7 +363,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.gridwidth = GridBagConstraints.REMAINDER;
             shipDetailsPanel.add(hullSpaceLabel, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 7;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -373,16 +374,16 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             shipDetailsPanel.add(hullMaterialLabel, constraints);
             shipDetailsContainer.add(shipDetailsPanel);
         }
-
+        
         JPanel shipChangablePanel = new JPanel(new GridBagLayout());
         JPanel shipChangablePanelContainer = new JPanel(new GridBagLayout());
         {
             GridBagConstraints constraints = new GridBagConstraints();
-
+            
             shipArmorLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.armor.label"));
-
+            
             shipShieldLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.shields.label"));
-
+            
             engineTypeLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.label"));
             setEngineButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.button"));
             setEngineButton.addActionListener(l -> {
@@ -391,11 +392,11 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         panel, "Engine Chooser",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (close == JOptionPane.OK_OPTION) {
-
+                    
                 }
             });
             engineTypeIndicatorLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
-
+            
             toOrbitEngineLabel = new JLabel("Orbital rated engine:");
             toOrbitEngineButton = new JButton("Customize engine");
             toOrbitEngineButton.addActionListener(l -> {
@@ -404,16 +405,28 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         panel, "Customize Orbital Engine",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (close == JOptionPane.OK_OPTION) {
-                    
+                    designToOrbitEngineOrNot = panel.getToDesign();
+                    if (designToOrbitEngineOrNot) {
+                        //If designing
+                        toOrbitEngineAmount = panel.getAmountToOrbit();
+                        toOrbitEngineType = panel.getEngineTech();
+                    } else {
+                        toOrbitEngineSelection = panel.getShipComponent();
+                    }
                 }
             });
-            toOrbitEngineButton.setEnabled(false);
-
+            
+            toOrbitEngineEnableButton = new JCheckBox("Enable orbital capability");
+            toOrbitEngineEnableButton.setSelected(true);
+            toOrbitEngineEnableButton.addActionListener(l -> {
+                toOrbitEngineButton.setEnabled(toOrbitEngineEnableButton.isSelected());
+                
+            });
             fuelCapacityLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.label"));
             fuelCapacityValue = new JLabel("0");
             fuelCapacityUnit = new JLabel("<html>m<sup>3</sup></html");
             fuelCapicityConfig = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.configure"));
-
+            
             constraints.gridx = 0;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -426,71 +439,75 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //constraints.weightx = 0;
             //constraints.weighty = 1;
             shipChangablePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.nocombat")), constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 0;
             //constraints.weighty = 1;
             shipChangablePanel.add(shipShieldLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 0;
             //constraints.weighty = 1;
             shipChangablePanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.nocombat")), constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 2;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 0;
             //constraints.weighty = 1;
             shipChangablePanel.add(engineTypeLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 2;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 0;
             //constraints.weighty = 1;
             shipChangablePanel.add(setEngineButton, constraints);
-
+            
             constraints.gridx = 2;
             constraints.gridy = 2;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(engineTypeIndicatorLabel, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 3;
             shipChangablePanel.add(toOrbitEngineLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 3;
             shipChangablePanel.add(toOrbitEngineButton, constraints);
-
+            
+            constraints.gridx = 2;
+            constraints.gridy = 3;
+            shipChangablePanel.add(toOrbitEngineEnableButton, constraints);
+            
             constraints.gridx = 0;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(fuelCapacityLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(fuelCapacityValue, constraints);
-
+            
             constraints.gridx = 2;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
             shipChangablePanel.add(fuelCapacityUnit, constraints);
-
+            
             constraints.gridx = 3;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -504,17 +521,25 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.weighty = 1;
             shipChangablePanelContainer.add(shipChangablePanel, constraints);
         }
+        
         componentRoughDesignPanel = new JPanel();
         //Format stuff
+
         {
             componentRoughDesignPanel.setLayout(new GridBagLayout());
             JPanel grandContainer = new JPanel(new GridBagLayout());
-
+            
             shipSensorsLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.sensors"));
             shipSensorButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.sensors.configure"));
-
+            shipSensorButton.addActionListener(l -> {
+                JOptionPane.showInternalMessageDialog(BuildSpaceShipAutomationMenu.this, "Not implemented yet");
+            });
+            
             shipScienceLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.science"));
             shipScienceButton = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.designer.science.configure"));
+            shipScienceButton.addActionListener(l -> {
+                JOptionPane.showInternalMessageDialog(BuildSpaceShipAutomationMenu.this, "Not implemented yet");
+            });
             shipScienceButton.setEnabled(false);
 
             //Another panel to add random ship components
@@ -524,18 +549,18 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             shipComponentListModel.setHandler(l -> {
                 return gameState.getObject(l, ShipComponent.class).getName();
             });
-
+            
             objectComponentsToAdd = new ArrayList<>();
-
+            
             shipComponents = new JList<>(shipComponentListModel);
             shipComponents.setFixedCellWidth(64);
-
+            
             ObjectListModel<ObjectReference> addedShipComponentListModel = new ObjectListModel<>();
             addedShipComponentListModel.setElements(objectComponentsToAdd);
             addedShipComponentListModel.setHandler(l -> {
                 return gameState.getObject(l, ShipComponent.class).getName();
             });
-
+            
             alreadyAddedShipComponentList = new JList<>(addedShipComponentListModel);
             alreadyAddedShipComponentList.setFixedCellWidth(64);
 
@@ -550,33 +575,33 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                     alreadyAddedShipComponentList.updateUI();
                 }
             });
-
+            
             addRandomShipComponentPanel.add(new JScrollPane(shipComponents));
             addRandomShipComponentPanel.add(addSelectedComponentButton);
             addRandomShipComponentPanel.add(new JScrollPane(alreadyAddedShipComponentList));
-
+            
             GridBagConstraints constraints = new GridBagConstraints();
-
+            
             constraints.gridx = 0;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             grandContainer.add(shipSensorsLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             grandContainer.add(shipSensorButton, constraints);
-
+            
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             grandContainer.add(shipScienceLabel, constraints);
-
+            
             constraints.gridx = 1;
             constraints.gridy = 1;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             grandContainer.add(shipScienceButton, constraints);
-
+            
             constraints.gridx = 2;
             constraints.gridy = 0;
             grandContainer.add(addRandomShipComponentPanel, constraints);
@@ -601,9 +626,11 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             }
         }
         mainTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+        
         shipInformationPanel.add(shipDetailsContainer);
+        
         shipInformationPanel.add(shipChangablePanelContainer);
-
+        
         mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.info"), shipInformationPanel);
         mainTabs.add(LOCALE_MESSAGES.getMessage("game.engineering.ship.components"), componentRoughDesignPanel);
         add(mainTabs, BorderLayout.CENTER);
@@ -624,7 +651,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             shipList.updateUI();
         }
     }
-
+    
     public void createShip() {
         //Create ship class...
         String shipName = shipNameField.getText();
@@ -646,6 +673,28 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         ControlComponent component = new ControlComponent(gameState);
         component.setName(shipName + " controller");
         sc.components.add(component.getReference());
+
+        //To Orbit capabilities
+        if (toOrbitEngineEnableButton.isEnabled()) {
+            sc.capabilities.add(ShipCapability.ToOrbit);
+            //Add thing
+            if (designToOrbitEngineOrNot) {
+                //Or else design engine
+                //F/m=a
+
+                double thrust = sc.getMass() * Double.parseDouble(gameState.constants.getProperty("toorbit.acceleration"));
+                //Create component
+                ToOrbitEngineComponent engineComponent = new ToOrbitEngineComponent(gameState);
+                engineComponent.setThrust((int) thrust);
+                engineComponent.setLaunchSystemType(toOrbitEngineType);
+                engineComponent.setName("Launch system");
+                sc.components.add(engineComponent.getReference());
+                civ.shipComponentList.add(engineComponent.getReference());
+            } else {
+                sc.components.add(toOrbitEngineSelection);
+            }
+        }
+
         //And other components
         //Autogenerate engine, etc...
         civ.shipClasses.add(sc.getReference());

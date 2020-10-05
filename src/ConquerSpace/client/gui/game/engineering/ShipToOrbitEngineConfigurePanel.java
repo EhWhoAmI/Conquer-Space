@@ -134,9 +134,9 @@ public class ShipToOrbitEngineConfigurePanel extends JPanel {
             add(panel);
 
             panel = new JPanel(new HorizontalFlowLayout());
-            panel.add(new JLabel("Thrust: "));
+            panel.add(new JLabel("Amount to orbit: "));
             panel.add(thrustSpinner);
-            panel.add(new JLabel("kn"));
+            panel.add(new JLabel("kg"));
             add(panel);
         }
 
@@ -161,10 +161,20 @@ public class ShipToOrbitEngineConfigurePanel extends JPanel {
         }
     }
 
+    public int getAmountToOrbit() {
+        return (Integer) createEngineConfigurePanel.thrustSpinner.getValue();
+    }
+
+    public ObjectReference getEngineTech() {
+        return createEngineConfigurePanel.comboBoxModel
+                .getElementAt(createEngineConfigurePanel.launchSystemTypeComboBox.getSelectedIndex()).getReference();
+    }
+
+    public boolean getToDesign() {
+        return tabs.getSelectedIndex() == 1;
+    }
+
     ObjectReference getShipComponent() {
-        if (tabs.getSelectedIndex() == 1) {
-            return createEngineConfigurePanel.generateComponent().getReference();
-        }
         return selectedEngine;
     }
 }

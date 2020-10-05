@@ -27,7 +27,10 @@ import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
+import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +58,6 @@ public class GameLoader {
         gameState.launchSystems = readHjsonFromDirInArray("dirs.launch",
                 LaunchSystem.class, gameState, AssetReader::processLaunchSystem);
 
-        
         gameState.shipTypes = readHjsonFromDirInArray("dirs.ship.types.types",
                 ShipType.class, AssetReader::processShipType);
 
@@ -88,10 +90,17 @@ public class GameLoader {
             gameState.oreDistributions.put(identifier, dist);
         }
         gameState.prodProcesses = new HashMap<>();
-        
+
         ArrayList<ProductionProcess> processes = readHjsonFromDirInArray("dirs.processes", ProductionProcess.class, gameState, AssetReader::processProcess);
         for (ProductionProcess process : processes) {
             gameState.prodProcesses.put(process.identifier, process);
+        }
+
+        try {
+            //Constants
+            gameState.constants.load(new FileInputStream(ResourceLoader.getResourceByFile("game.constants")));
+        } catch (IOException ex) {
+            LOGGER.warn("No constants!", ex);
         }
 
         //Events

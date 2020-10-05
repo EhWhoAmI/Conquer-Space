@@ -36,6 +36,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Random;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
@@ -90,6 +91,8 @@ public final class GameState implements Serializable {
     public DualHashBidiMap<String, Integer> goodIdentifiers;
 
     public HashMap<String, ProductionProcess> prodProcesses;
+    
+    public Properties constants;
 
     @Serialize("player")
     public ObjectReference playerCiv;
@@ -118,6 +121,8 @@ public final class GameState implements Serializable {
         date = new StarDate(1l);
 
         random = new Random(seed);
+        
+        constants = new Properties();
 
         //Create new galaxy
         universeId = new Galaxy(this).getReference();
@@ -275,9 +280,9 @@ public final class GameState implements Serializable {
 
         fieldNodeRoot = gameState.fieldNodeRoot;
         techonologies = gameState.techonologies;
+        
+        constants = gameState.constants;
 
-        random = gameState.random;
-        
-        
+        random = gameState.random;        
     }
 }

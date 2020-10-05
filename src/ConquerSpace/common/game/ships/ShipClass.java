@@ -38,12 +38,14 @@ public class ShipClass extends ConquerSpaceGameObject implements Serializable {
     public ArrayList<ObjectReference> components;
     private int mass = 1;
     private long estimatedThrust = 0;
+    public ArrayList<ShipCapability> capabilities;
 
     public ShipClass(GameState gameState, String name, ObjectReference h) {
         super(gameState);
         this.name = name;
         this.hull = h;
         components = new ArrayList<>();
+        capabilities = new ArrayList<>();
     }
 
     public String getName() {
@@ -68,6 +70,7 @@ public class ShipClass extends ConquerSpaceGameObject implements Serializable {
     }
 
     public int getMass() {
+        //Mass is hull + components and stuff
         return mass;
     }
 
