@@ -105,7 +105,7 @@ public class SpacePortMenu extends JPanel {
         add(spacePortCount);
 
         JPanel launchableInformationPanel = new JPanel(new HorizontalFlowLayout());
-        launchableInformationPanel.add(new JScrollPane(launchableList));
+        //launchableInformationPanel.add(new JScrollPane(launchableList));
 
         JPanel shipInfoandLaunchPanel = new JPanel(new VerticalFlowLayout());
         shipInfoandLaunchPanel.add(selectedShipButton);

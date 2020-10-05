@@ -687,7 +687,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 ToOrbitEngineComponent engineComponent = new ToOrbitEngineComponent(gameState);
                 engineComponent.setThrust((int) thrust);
                 engineComponent.setLaunchSystemType(toOrbitEngineType);
-                engineComponent.setName("Launch system");
+                engineComponent.setName("Launch system"); 
                 sc.components.add(engineComponent.getReference());
                 civ.shipComponentList.add(engineComponent.getReference());
             } else {

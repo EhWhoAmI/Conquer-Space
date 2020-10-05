@@ -23,17 +23,22 @@ import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.AreaClassification;
+import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.ships.Ship;
+import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.universe.GeographicPoint;
+import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -61,10 +66,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -582,13 +590,15 @@ public class CityInformationPanel extends JPanel {
 
             areaConstructionPanel = new AreaConstructionPanel(gameState, planet, civilization, selectedCity);
 
+            CityProductionPanel production = new CityProductionPanel();
             tabs = new JTabbedPane();
 
-            tabs.add("Industries", scrollPane);
+            tabs.add("Industries and production", scrollPane);
             tabs.add("Construction", areaConstructionPanel);
+            tabs.add("Production", production);
             add(tabs, BorderLayout.CENTER);
 
-            setBorder(new TitledBorder(new LineBorder(Color.gray), "Areas"));
+            setBorder(new TitledBorder(new LineBorder(Color.gray), "Industries"));
             setPreferredSize(new Dimension(831, 312));
         }
     }
@@ -703,6 +713,58 @@ public class CityInformationPanel extends JPanel {
             public String getColumnName(int column) {
                 return colunmNames[column];
             }
+        }
+    }
+
+    /**
+     * Panel to order the production of certain goods or something.
+     */
+    public class CityProductionPanel extends JPanel {
+
+        public CityProductionPanel() {
+            setLayout(new VerticalFlowLayout());
+            add(new JLabel("Production"));
+
+            //Create new space ship menu
+            add(new JLabel("Create space ship"));
+            ObjectListModel<ObjectReference> shipList = new ObjectListModel<>();
+            shipList.setElements(civilization.shipClasses);
+            shipList.setHandler(l -> {
+                return gameState.getObject(l, ShipClass.class).getName();
+            });
+            JList<String> list = new JList<>(shipList);
+            add(new JScrollPane(list));
+            JButton createButton = new JButton("Launch!");
+            createButton.addActionListener(l -> {
+                //Find the space ports on this planet... 
+                //Get selected ship
+                if (list.getSelectedIndex() < -1) {
+                    JOptionPane.showInternalMessageDialog(this, "You need to select a ship");
+                    return;
+                }
+                int launchPadCount = 0;
+                for (ObjectReference cityIndex : planet.cities) {
+                    City city = gameState.getObject(cityIndex, City.class);
+                    for (ObjectReference areaIndex : city.areas) {
+                        Area area = gameState.getObject(areaIndex, Area.class);
+                        if (area instanceof SpacePortArea) {
+                            SpacePortArea port = (SpacePortArea) area;
+                            //then we can do stuff to the area
+                            //Add selected ship class
+                            //UI to create ship
+                            ShipClass shipClass = gameState.getObject(shipList.getObject(list.getSelectedIndex()), ShipClass.class);
+                            Ship ship = new Ship(gameState, shipClass, planet.getY(), planet.getX(), new Vector(0, 0), planet.getUniversePath());
+                            //Set random name for now
+                            ship.setName(UUID.randomUUID().toString());
+                            port.landedShips.add(ship.getReference());
+                            JOptionPane.showInternalMessageDialog(this, "Ok gonna launch ship " + shipClass.getName() + " with name " + ship.getName());
+                            return;
+                        }
+                    }
+                }
+                JOptionPane.showInternalMessageDialog(this, "You need to build a space port!");
+            });
+            add(createButton);
         }
     }
 }

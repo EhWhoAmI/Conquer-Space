@@ -18,10 +18,15 @@
 package ConquerSpace.client.gui.game.planetdisplayer.areas;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
+import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.area.SpacePortArea;
+import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -38,6 +43,17 @@ public class SpacePortAreaInformationPanel extends AreaInformationPanel<SpacePor
         add(launchSystemLabel);
         JLabel launchPadLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.spaceport.pads", area.getLaunchPadCount()));
         add(launchPadLabel);
+
+        //List all the space ships
+        ObjectListModel<ObjectReference> spaceShipList = new ObjectListModel<>();
+        spaceShipList.setElements(area.landedShips);
+        spaceShipList.setHandler(l -> {
+            return gameState.getObject(l, Ship.class).getName();
+        });
+        JList<String> list = new JList<>(spaceShipList);
+        //Set action listener
+        add(new JScrollPane(list));
+        
         genericInformation();
     }
 
