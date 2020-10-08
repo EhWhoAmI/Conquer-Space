@@ -57,6 +57,7 @@ public class Ship extends SpaceShip implements Launchable{
         }
         
         shipCapabilities = new ArrayList<>();
+        shipCapabilities.addAll(shipClass.capabilities);
         this.hull = shipClass.getHull();
         this.mass = shipClass.getMass();
         this.shipClassName = shipClass.getName();

@@ -18,10 +18,12 @@
 package ConquerSpace.client.gui;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import javax.swing.AbstractListModel;
 
 /**
  * For handling lists, so no more need to create another list model again
+ *
  * @author EhWhoAmI
  */
 public class ObjectListModel<E> extends AbstractListModel<String> {
@@ -32,15 +34,19 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
     public ObjectListModel() {
         elements = new ArrayList<>();
     }
-    
+
     public void addElement(E obj) {
         elements.add(obj);
     }
-    
+
+    public void addAllElements(Collection<? extends E> col) {
+        elements.addAll(col);
+    }
+
     public E getObject(int i) {
         return (elements.get(i));
     }
-    
+
     @Override
     public int getSize() {
         return elements.size();
@@ -58,7 +64,7 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
     public void setHandler(ObjectListModelHandler<E> handler) {
         this.handler = handler;
     }
-    
+
     public void clear() {
         elements.clear();
     }
@@ -68,6 +74,7 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
     }
 
     public interface ObjectListModelHandler<E> {
+
         public String toString(E object);
     }
 }

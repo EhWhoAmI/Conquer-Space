@@ -26,6 +26,7 @@ import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.ships.Ship;
+import ConquerSpace.common.game.ships.ShipCapability;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.Vector;
@@ -36,6 +37,7 @@ import java.util.UUID;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -63,16 +65,16 @@ public class SpacePortMenu extends JPanel {
         spacePortCount = new JLabel();
 
         launchableListModel = new ObjectListModel<>();
-        launchableListModel.setElements(civilization.shipClasses);
+        //launchableListModel.setElements(civilization.shipClasses);
         launchableListModel.setHandler(l -> {
-            return gameState.getObject(l, ShipClass.class).toString();
+            return gameState.getObject(l, Ship.class).toString();
         });
 
         launchableList = new JList<>(launchableListModel);
         launchableList.setFixedCellWidth(250);
         launchableList.addListSelectionListener(l -> {
             ObjectReference reference = launchableListModel.getObject(launchableList.getSelectedIndex());
-            ShipClass shipClass = gameState.getObject(reference, ShipClass.class);
+            Ship shipClass = gameState.getObject(reference, Ship.class);
             selectedShipButton.setText(shipClass.getName());
             launchButton.setEnabled(true);
         });
@@ -81,31 +83,39 @@ public class SpacePortMenu extends JPanel {
         launchButton = new JButton("Launch Ship!");
         launchButton.setEnabled(false);
         launchButton.addActionListener(l -> {
-            ObjectReference reference = launchableListModel.getObject(launchableList.getSelectedIndex());
-            ShipClass shipClass = gameState.getObject(reference, ShipClass.class);
-            //Launch ship somehow
-            Ship ship = new Ship(gameState, shipClass, planet.getY(), planet.getX(), new Vector(0, 0), planet.getUniversePath());
-            //Set random name for now
-            ship.setName(UUID.randomUUID().toString());
-            //Then stuff it onto launch system and launch into space
-            //Get launch system
-//            if (civilization.launchSystems.isEmpty()) {
-//                //No launch system, exit
-//                JOptionPane.showInternalMessageDialog(SpacePortMenu.this, "You need to design a launch system before you can launch your space ship!");
-//                return;
-//            }
-            //Then stuff to launchsystem
-            LaunchSystem launchSystem = gameState.getObject(civilization.launchSystems.get(0), LaunchSystem.class);
-
             //Add to civ
-            civilization.spaceships.add(ship.getReference());
-            Actions.launchLaunchable(ship, planet);
+            //civilization.spaceships.add(ship.getReference());
+            ObjectReference reference = launchableListModel.getObject(launchableList.getSelectedIndex());
+            Ship ship = gameState.getObject(reference, Ship.class);
+            if (ship.shipCapabilities.contains(ShipCapability.ToOrbit)) {
+                Actions.launchLaunchable(ship, planet);
+                //Remove from planet
+                planetloop:
+                for (ObjectReference cityIndex : planet.cities) {
+                    City city = gameState.getObject(cityIndex, City.class);
+                    for (ObjectReference areaIndex : city.areas) {
+                        Area area = gameState.getObject(areaIndex, Area.class);
+                        if (area instanceof SpacePortArea) {
+                            SpacePortArea port = (SpacePortArea) area;
+                            if (port.landedShips.contains(reference)) {
+                                port.landedShips.remove(reference);
+                                break planetloop;
+                            }
+                        }
+                    }
+                }
+                civilization.spaceships.add(reference);
+                //Update UI
+            } else {
+                JOptionPane.showInternalMessageDialog(this, "The ship needs to be orbit capable!");
+            }
+            updateComponent();
         });
 
         add(spacePortCount);
 
         JPanel launchableInformationPanel = new JPanel(new HorizontalFlowLayout());
-        //launchableInformationPanel.add(new JScrollPane(launchableList));
+        launchableInformationPanel.add(new JScrollPane(launchableList));
 
         JPanel shipInfoandLaunchPanel = new JPanel(new VerticalFlowLayout());
         shipInfoandLaunchPanel.add(selectedShipButton);
@@ -117,6 +127,7 @@ public class SpacePortMenu extends JPanel {
     }
 
     private void updateComponent() {
+        launchableListModel.clear();
         //Get the amount of launch pads
         int launchPadCount = 0;
         for (ObjectReference cityIndex : planet.cities) {
@@ -126,6 +137,7 @@ public class SpacePortMenu extends JPanel {
                 if (area instanceof SpacePortArea) {
                     SpacePortArea port = (SpacePortArea) area;
                     launchPadCount += port.getLaunchPadCount();
+                    launchableListModel.addAllElements(port.landedShips);
                 }
             }
         }

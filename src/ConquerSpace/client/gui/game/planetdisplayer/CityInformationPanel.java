@@ -721,6 +721,8 @@ public class CityInformationPanel extends JPanel {
      */
     public class CityProductionPanel extends JPanel {
 
+        JList<String> shipClassList;
+
         public CityProductionPanel() {
             setLayout(new VerticalFlowLayout());
             add(new JLabel("Production"));
@@ -732,13 +734,13 @@ public class CityInformationPanel extends JPanel {
             shipList.setHandler(l -> {
                 return gameState.getObject(l, ShipClass.class).getName();
             });
-            JList<String> list = new JList<>(shipList);
-            add(new JScrollPane(list));
+            shipClassList = new JList<>(shipList);
+            add(new JScrollPane(shipClassList));
             JButton createButton = new JButton("Launch!");
             createButton.addActionListener(l -> {
                 //Find the space ports on this planet... 
                 //Get selected ship
-                if (list.getSelectedIndex() < -1) {
+                if (shipClassList.getSelectedIndex() < -1) {
                     JOptionPane.showInternalMessageDialog(this, "You need to select a ship");
                     return;
                 }
@@ -752,7 +754,7 @@ public class CityInformationPanel extends JPanel {
                             //then we can do stuff to the area
                             //Add selected ship class
                             //UI to create ship
-                            ShipClass shipClass = gameState.getObject(shipList.getObject(list.getSelectedIndex()), ShipClass.class);
+                            ShipClass shipClass = gameState.getObject(shipList.getObject(shipClassList.getSelectedIndex()), ShipClass.class);
                             Ship ship = new Ship(gameState, shipClass, planet.getY(), planet.getX(), new Vector(0, 0), planet.getUniversePath());
                             //Set random name for now
                             ship.setName(UUID.randomUUID().toString());
@@ -766,5 +768,14 @@ public class CityInformationPanel extends JPanel {
             });
             add(createButton);
         }
+
+        @Override
+        public void setVisible(boolean aFlag) {
+            super.setVisible(aFlag);
+            if (aFlag) {
+                shipClassList.updateUI();
+            }
+        }
     }
+
 }

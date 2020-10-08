@@ -681,7 +681,6 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             if (designToOrbitEngineOrNot) {
                 //Or else design engine
                 //F/m=a
-
                 double thrust = sc.getMass() * Double.parseDouble(gameState.constants.getProperty("toorbit.acceleration"));
                 //Create component
                 ToOrbitEngineComponent engineComponent = new ToOrbitEngineComponent(gameState);
