@@ -25,9 +25,11 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Civilization;
+import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipCapability;
 import ConquerSpace.common.game.ships.ShipClass;
+import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -107,7 +109,26 @@ public class SpacePortMenu extends JPanel {
                 civilization.spaceships.add(reference);
                 //Update UI
             } else {
-                JOptionPane.showInternalMessageDialog(this, "The ship needs to be orbit capable!");
+                boolean needLaunch = true;
+                //Find a launch vehicle...
+                for (int i = 0; i < launchableListModel.getSize(); i++) {
+                    ObjectReference ref = launchableListModel.getObject(i);
+                    Ship shipLaunchVehicle = gameState.getObject(ref, Ship.class);
+
+                    if (shipLaunchVehicle.getShipType().containsTag("launch")) {
+                        //Then can launch
+                        needLaunch = false;
+
+                        //Stuff on the launch vehicle,
+                        //inform
+                        JOptionPane.showInternalMessageDialog(this, "Launching ship on " + shipLaunchVehicle.getName());
+                        //Launch
+                        break;
+                    }
+                }
+                if (needLaunch) {
+                    JOptionPane.showInternalMessageDialog(this, "The ship needs to be orbit capable, or you need a launch vehicle in the space port!");
+                }
             }
             updateComponent();
         });

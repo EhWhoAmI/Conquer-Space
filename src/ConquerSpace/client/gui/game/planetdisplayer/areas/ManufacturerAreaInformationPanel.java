@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer.areas;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.area.ManufacturerArea;
+import ConquerSpace.common.game.resources.GoodReference;
 import java.awt.Color;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -45,8 +46,8 @@ public class ManufacturerAreaInformationPanel extends AreaInformationPanel<Manuf
         JLabel processName = new JLabel(area.getProcess().name);
         StringBuilder inputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.input"));
 
-        for (Map.Entry<Integer, Double> entry : area.getProcess().input.entrySet()) {
-            Integer key = entry.getKey();
+        for (Map.Entry<GoodReference, Double> entry : area.getProcess().input.entrySet()) {
+            GoodReference key = entry.getKey();
             Double val = entry.getValue();
             inputString.append(gameState.getGood(key).getName());
             inputString.append(" "
@@ -58,8 +59,8 @@ public class ManufacturerAreaInformationPanel extends AreaInformationPanel<Manuf
         JLabel input = new JLabel(inputString.toString());
 
         StringBuilder outputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.output"));
-        for (Map.Entry<Integer, Double> entry : area.getProcess().output.entrySet()) {
-            Integer key = entry.getKey();
+        for (Map.Entry<GoodReference, Double> entry : area.getProcess().output.entrySet()) {
+            GoodReference key = entry.getKey();
             Double val = entry.getValue();
             outputString.append(gameState.getGood(key).getName());
             outputString.append(" " + LOCALE_MESSAGES.getMessage("game.planet.areas.factory.amount") + "");

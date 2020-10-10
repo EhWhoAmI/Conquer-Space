@@ -18,7 +18,9 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.logistics.ResourcePermissions;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -36,13 +38,13 @@ import java.util.Iterator;
 public class ResourceStockpileArea extends Area implements ResourceStockpile {
 
     private ResourcePermissions defaultPermissions;
-    private HashMap<Integer, ResourcePermissions> allPermissions;
+    private HashMap<ObjectReference, ResourcePermissions> allPermissions;
 
-    public HashMap<Integer, Double> resources;
-    public DoubleHashMap<Integer> resourceDemands;
+    public HashMap<GoodReference, Double> resources;
+    public DoubleHashMap<GoodReference> resourceDemands;
 
     public ArrayList<StorageNeeds> storageNeeds;
-    public HashMap<Integer, DoubleHashMap<String>> resourceLedger;
+    public HashMap<GoodReference, DoubleHashMap<String>> resourceLedger;
     public UniversePath path;
     
     ResourceStockpileArea(GameState gameState) {
@@ -53,30 +55,30 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
         resourceDemands = new DoubleHashMap<>();
     }
 
-    public ResourcePermissions getPermission(Integer person) {
+    public ResourcePermissions getPermission(ObjectReference person) {
         if (allPermissions.containsKey(person)) {
             return allPermissions.get(person);
         }
         return defaultPermissions;
     }
 
-    public void addPermission(Integer person, ResourcePermissions permission) {
+    public void addPermission(ObjectReference person, ResourcePermissions permission) {
         allPermissions.put(person, permission);
     }
     
 
     @Override
-    public void addResourceTypeStore(Integer type) {
+    public void addResourceTypeStore(GoodReference type) {
         resources.put(type, 0d);
     }
 
     @Override
-    public Double getResourceAmount(Integer type) {
+    public Double getResourceAmount(GoodReference type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(Integer type, Double amount) {
+    public void addResource(GoodReference type, Double amount) {
         if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
@@ -93,17 +95,17 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     }
 
     @Override
-    public boolean canStore(Integer type) {
+    public boolean canStore(GoodReference type) {
         return true;//(resources.containsKey(type));
     }
 
     @Override
-    public Integer[] storedTypes() {
-        Iterator<Integer> res = resources.keySet().iterator();
-        Integer[] arr = new Integer[resources.size()];
+    public GoodReference[] storedTypes() {
+        Iterator<GoodReference> res = resources.keySet().iterator();
+        GoodReference[] arr = new GoodReference[resources.size()];
         int i = 0;
         while (res.hasNext()) {
-            Integer next = res.next();
+            GoodReference next = res.next();
             arr[i] = next;
             i++;
         }
@@ -111,7 +113,7 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     }
 
     @Override
-    public boolean removeResource(Integer type, Double amount) {
+    public boolean removeResource(GoodReference type, Double amount) {
         //Get the amount in the place
         if (!resources.containsKey(type)) {
             //Remove stuff for now

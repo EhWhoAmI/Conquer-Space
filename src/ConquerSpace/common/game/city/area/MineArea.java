@@ -20,6 +20,7 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
@@ -32,10 +33,10 @@ public class MineArea extends Area {
 
     private ObjectReference miningStratum;
     private float productivity;
-    private HashMap<Integer, Double> necessaryGoods;
-    private Integer resourceMined;
+    private HashMap<GoodReference, Double> necessaryGoods;
+    private GoodReference resourceMined;
 
-    MineArea(GameState gameState, ObjectReference mining, Integer resourceMined, float productivity) {
+    MineArea(GameState gameState, ObjectReference mining, GoodReference resourceMined, float productivity) {
         super(gameState);
         this.miningStratum = mining;
         this.productivity = productivity;
@@ -56,11 +57,11 @@ public class MineArea extends Area {
         return miningStratum;
     }
 
-    public HashMap<Integer, Double> getNecessaryGoods() {
+    public HashMap<GoodReference, Double> getNecessaryGoods() {
         return necessaryGoods;
     }
     
-    public Integer getResourceMinedId() {
+    public GoodReference getResourceMinedId() {
         return resourceMined;
     }
 

@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -28,7 +29,7 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("power-plant-area")
 public class PowerPlantArea extends ConsumerArea {
     //Needs the attribute 'energy'
-    private Integer usesResource;
+    private GoodReference usesResource;
     //Amount of units needed to get each time
     private int maxVolume;
     
@@ -46,11 +47,11 @@ public class PowerPlantArea extends ConsumerArea {
         return "Power Plant";
     }
 
-    public Integer getUsedResource() {
+    public GoodReference getUsedResource() {
         return usesResource;
     }
 
-    public void setUsedResource(Integer usesResource) {
+    public void setUsedResource(GoodReference usesResource) {
         this.usesResource = usesResource;
     }
 

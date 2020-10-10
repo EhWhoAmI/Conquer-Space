@@ -21,6 +21,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.Civilization;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Ship;
@@ -79,7 +80,7 @@ public class Actions {
         what.setGoingToY(y);
     }
     
-    public static void storeResource(Integer resourceType, Double amount, ResourceStockpile from) {
+    public static void storeResource(GoodReference resourceType, Double amount, ResourceStockpile from) {
         if (resourceType != null && amount > 0) {
             if (from.canStore(resourceType)) {
                 //Store resource
@@ -90,7 +91,7 @@ public class Actions {
         }
     }
 
-    public static boolean removeResource(Integer resourceType, Double amount, ResourceStockpile from) {
+    public static boolean removeResource(GoodReference resourceType, Double amount, ResourceStockpile from) {
         if (resourceType != null && amount != 0) {
             if (from.canStore(resourceType)) {
                 //Store resource
@@ -107,7 +108,7 @@ public class Actions {
         return false;
     }
 
-    public static boolean sendResources(Integer resourceType, Double amount, ResourceStockpile from, ResourceStockpile to) {
+    public static boolean sendResources(GoodReference resourceType, Double amount, ResourceStockpile from, ResourceStockpile to) {
         if (removeResource(resourceType, amount, from)) {
             storeResource(resourceType, amount, to);
             return true;

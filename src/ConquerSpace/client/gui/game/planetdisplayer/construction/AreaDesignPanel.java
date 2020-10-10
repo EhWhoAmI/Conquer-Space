@@ -23,6 +23,7 @@ import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Good;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.util.Map;
@@ -54,8 +55,8 @@ public abstract class AreaDesignPanel extends JPanel {
         JPanel costPanel = new JPanel(new VerticalFlowLayout());
         DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Good", "Amount"}, 0);
         if (getAreaToConstruct() != null) {
-            for (Map.Entry<Integer, Double> entry : getAreaToConstruct().getCost().entrySet()) {
-                Integer key = entry.getKey();
+            for (Map.Entry<GoodReference, Double> entry : getAreaToConstruct().getCost().entrySet()) {
+                GoodReference key = entry.getKey();
                 Double val = entry.getValue();
                 Good good = gameState.getGood(key);
                 tableModel.addRow(new Object[]{good.getName(), val});

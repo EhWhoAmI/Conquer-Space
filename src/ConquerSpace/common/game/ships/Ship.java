@@ -29,10 +29,10 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 @SerializeClassName("ship")
-public class Ship extends SpaceShip implements Launchable{
+public class Ship extends SpaceShip implements Launchable {
 
     String shipClassName;
-
+    ShipType shipType;
     private ObjectReference hull;
     public ArrayList<ObjectReference> components;
 
@@ -55,10 +55,11 @@ public class Ship extends SpaceShip implements Launchable{
         if (!shipClass.components.isEmpty()) {
             components.addAll(shipClass.components);
         }
-        
+
         shipCapabilities = new ArrayList<>();
         shipCapabilities.addAll(shipClass.capabilities);
         this.hull = shipClass.getHull();
+        this.shipType = gameState.getObject(hull, Hull.class).getShipType();
         this.mass = shipClass.getMass();
         this.shipClassName = shipClass.getName();
     }
@@ -113,5 +114,9 @@ public class Ship extends SpaceShip implements Launchable{
     @Override
     public long getSpeed() {
         return estimatedThrust / mass;
+    }
+
+    public ShipType getShipType() {
+        return shipType;
     }
 }

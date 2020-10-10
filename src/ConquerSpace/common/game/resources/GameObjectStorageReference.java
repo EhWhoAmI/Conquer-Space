@@ -15,19 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 package ConquerSpace.common.game.resources;
+
+import ConquerSpace.common.ObjectReference;
 
 /**
  *
  * @author EhWhoAmI
  */
-public interface ResourceStockpile {
-    public void addResourceTypeStore(GoodReference type);
-    public Double getResourceAmount(GoodReference type);
-    public void addResource(GoodReference type, Double amount);
-    public boolean canStore(GoodReference type);
-    
-    public GoodReference[] storedTypes();
-    
-    public boolean removeResource(GoodReference type, Double amount);
+public class GameObjectStorageReference implements StoreableReference {
+
+    private final ObjectReference reference;
+
+    public GameObjectStorageReference(ObjectReference reference) {
+        this.reference = reference;
+    }
+
+     public ObjectReference getReference() {
+        return reference;
+    }
+
 }

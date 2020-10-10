@@ -23,6 +23,7 @@ import ConquerSpace.common.actions.ResourceTransportAction;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.organizations.Organization;
+import ConquerSpace.common.game.resources.GoodReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -45,9 +46,9 @@ public class ResourceManagerBehavior extends Behavior {
             if (admin instanceof City) {
                 City fromCity = (City) admin;
                 //Resources needed, keep
-                HashMap<Integer, Double> resourcesToSpend = new HashMap<>();
-                for (Map.Entry<Integer, Double> entry : fromCity.resourceDemands.entrySet()) {
-                    Integer key = entry.getKey();
+                HashMap<GoodReference, Double> resourcesToSpend = new HashMap<>();
+                for (Map.Entry<GoodReference, Double> entry : fromCity.resourceDemands.entrySet()) {
+                    GoodReference key = entry.getKey();
                     Double val = entry.getValue();
                     if (fromCity.resources.containsKey(key)) {
                         double amount = fromCity.resources.get(key) - val;
@@ -63,8 +64,8 @@ public class ResourceManagerBehavior extends Behavior {
                     if (!Objects.equals(ad2, ad) && admin2 instanceof City) {
                         City candidateResourceCity = (City) admin2;
                         //Send the resources to other places
-                        for (Map.Entry<Integer, Double> entry : candidateResourceCity.resourceDemands.entrySet()) {
-                            Integer key = entry.getKey();
+                        for (Map.Entry<GoodReference, Double> entry : candidateResourceCity.resourceDemands.entrySet()) {
+                            GoodReference key = entry.getKey();
                             Double val = entry.getValue();
                             //If have enough resources to put in
                             if (resourcesToSpend.containsKey(key)) {

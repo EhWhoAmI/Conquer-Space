@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,9 +44,9 @@ public class ExceptionHandling {
     public static void ExceptionMessageBox(String what, Throwable ex) {
         ExceptionMessageBox(what, ex, null);
     }
+
     /**
-     * Takes in a string and exception. Has a message box for the user and makes
-     * a crash dump.
+     * Takes in a string and exception. Has a message box for the user and makes a crash dump.
      *
      * @param what Your own message.
      * @param ex Exception that caused it.
@@ -57,7 +58,7 @@ public class ExceptionHandling {
 
         exit = JOptionPane.showConfirmDialog(null,
                 optionPanel,
-                String.format(LOCALE_MESSAGES.getMessage("errorhandlingtitle"), ex.getClass().getName() ,ex.getMessage()),
+                String.format(LOCALE_MESSAGES.getMessage("errorhandlingtitle"), ex.getClass().getName(), ex.getMessage()),
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);//Create dump file
 
         writeErrorLog(ex, what, gameState);
@@ -69,13 +70,13 @@ public class ExceptionHandling {
     public static void FatalExceptionMessageBox(String what, Throwable ex) {
         FatalExceptionMessageBox(what, ex, null);
     }
-    
+
     public static void FatalExceptionMessageBox(String what, Throwable ex, GameState gameState) {
         JPanel optionPanel = createOptionPanel(what, ex);
 
         JOptionPane.showMessageDialog(null,
                 optionPanel,
-                String.format(LOCALE_MESSAGES.getMessage("fatalhandlingtitle"), ex.getClass().getName() ,ex.getMessage()), JOptionPane.ERROR_MESSAGE);//Create dump file
+                String.format(LOCALE_MESSAGES.getMessage("fatalhandlingtitle"), ex.getClass().getName(), ex.getMessage()), JOptionPane.ERROR_MESSAGE);//Create dump file
         writeErrorLog(ex, what, gameState);
         System.exit(1);
     }
@@ -95,15 +96,18 @@ public class ExceptionHandling {
         String exceptionAsString = sw.toString();
         JTextArea area = new JTextArea(exceptionAsString);
         area.setRows(16);
+        area.setColumns(64);
         area.setEditable(false);
         optionPanel.add(new JScrollPane(area));
+        
+        optionPanel.add(new JLabel("Do you want to quit the game?"));
         return optionPanel;
     }
-    
+
     private static void writeErrorLog(Throwable ex, String header) {
         writeErrorLog(ex, header, null);
     }
-    
+
     private static void writeErrorLog(Throwable ex, String header, GameState gameState) {
         PrintWriter writer = null;
         Runtime runtime = Runtime.getRuntime();
@@ -130,13 +134,20 @@ public class ExceptionHandling {
             } else {
                 writer.println("Asset checksum: not generated yet");
             }
-            
+
             if (gameState != null && gameState.getUniverse() != null) {
                 writer.println("Universe seed: " + gameState.getSeed());
             }
 
             writer.println("Java version: " + System.getProperty("java.version") + " running on " + System.getProperty("os.name"));
             writer.println("Threads running: " + Thread.getAllStackTraces().size());
+            //List threads
+            Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+            for (Thread t : threadSet) {
+                writer.println(t.getId() + " " + t.getName() + " " + t.getState() + " daemon: " + t.isDaemon());
+            }
+
+            writer.println();
             writer.println("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()));
 
             writer.println();

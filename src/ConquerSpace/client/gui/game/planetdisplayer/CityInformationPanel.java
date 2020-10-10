@@ -35,6 +35,7 @@ import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -683,7 +684,7 @@ public class CityInformationPanel extends JPanel {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                int storedValue = selectedCity.storedTypes()[rowIndex];
+                GoodReference storedValue = selectedCity.storedTypes()[rowIndex];
 
                 if (selectedCity != null) {
                     switch (columnIndex) {
@@ -751,7 +752,6 @@ public class CityInformationPanel extends JPanel {
                         Area area = gameState.getObject(areaIndex, Area.class);
                         if (area instanceof SpacePortArea) {
                             SpacePortArea port = (SpacePortArea) area;
-                            //then we can do stuff to the area
                             //Add selected ship class
                             //UI to create ship
                             ShipClass shipClass = gameState.getObject(shipList.getObject(shipClassList.getSelectedIndex()), ShipClass.class);
@@ -760,11 +760,14 @@ public class CityInformationPanel extends JPanel {
                             ship.setName(UUID.randomUUID().toString());
                             port.landedShips.add(ship.getReference());
                             JOptionPane.showInternalMessageDialog(this, "Ok gonna launch ship " + shipClass.getName() + " with name " + ship.getName());
+                            
+                            //Deselect
+                            shipClassList.clearSelection();
                             return;
                         }
                     }
                 }
-                JOptionPane.showInternalMessageDialog(this, "You need to build a space port!");
+                JOptionPane.showInternalMessageDialog(this, "You need to build a space port somewhere on this planet!");
             });
             add(createButton);
         }

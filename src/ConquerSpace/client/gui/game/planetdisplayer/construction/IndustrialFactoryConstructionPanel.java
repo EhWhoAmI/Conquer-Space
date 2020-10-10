@@ -22,6 +22,7 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.ManufacturerAreaFactory;
 import ConquerSpace.common.game.organizations.Civilization;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -66,8 +67,8 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             processName.setText(process.name);
             String inputString = "Input: ";
 
-            for (Map.Entry<Integer, Double> entry : process.input.entrySet()) {
-                Integer key = entry.getKey();
+            for (Map.Entry<GoodReference, Double> entry : process.input.entrySet()) {
+                GoodReference key = entry.getKey();
                 Double val = entry.getValue();
                 inputString = inputString + gameState.getGood(key).getName();
                 inputString = inputString + " amount " + val;
@@ -76,8 +77,8 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             input.setText(inputString);
 
             String outputString = "Output: ";
-            for (Map.Entry<Integer, Double> entry : process.output.entrySet()) {
-                Integer key = entry.getKey();
+            for (Map.Entry<GoodReference, Double> entry : process.output.entrySet()) {
+                GoodReference key = entry.getKey();
                 Double val = entry.getValue();
                 outputString = outputString + gameState.getGood(key).getName();
                 outputString = outputString + " amount " + val;

@@ -20,6 +20,7 @@ package ConquerSpace.common;
 import static ConquerSpace.common.AssetReader.*;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.resources.Element;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.Fields;
@@ -86,7 +87,7 @@ public class GameLoader {
 
         //Sort through the list
         for (ResourceDistribution dist : res) {
-            Integer identifier = gameState.getGoodId(dist.resourceName);
+            GoodReference identifier = gameState.getGoodId(dist.resourceName);
             gameState.oreDistributions.put(identifier, dist);
         }
         gameState.prodProcesses = new HashMap<>();

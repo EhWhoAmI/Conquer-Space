@@ -22,6 +22,7 @@ import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.resources.Good;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.FieldNode;
@@ -84,11 +85,11 @@ public final class GameState implements Serializable {
     public HashMap<String, Integer> shipTypeClasses;
 
     //Can theoratically delete this after universe generation is finished. Only needed for generating a star system
-    public HashMap<Integer, ResourceDistribution> oreDistributions = new HashMap<>();
+    public HashMap<GoodReference, ResourceDistribution> oreDistributions = new HashMap<>();
 
     //Handles goods
-    private HashMap<Integer, Good> goodHashMap;
-    public DualHashBidiMap<String, Integer> goodIdentifiers;
+    private HashMap<GoodReference, Good> goodHashMap;
+    public DualHashBidiMap<String, GoodReference> goodIdentifiers;
 
     public HashMap<String, ProductionProcess> prodProcesses;
     
@@ -138,7 +139,7 @@ public final class GameState implements Serializable {
         species.add(speciesToAdd.getReference());
     }
 
-    public Good getGood(int id) {
+    public Good getGood(GoodReference id) {
         return goodHashMap.get(id);
     }
 
@@ -164,7 +165,7 @@ public final class GameState implements Serializable {
         return entities.getObject(id);
     }
 
-    public Integer getGoodId(String identifier) {
+    public GoodReference getGoodId(String identifier) {
         return goodIdentifiers.get(identifier);
     }
 

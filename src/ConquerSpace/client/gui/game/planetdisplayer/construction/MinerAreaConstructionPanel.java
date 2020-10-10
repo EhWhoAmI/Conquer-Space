@@ -24,6 +24,7 @@ import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.MineAreaFactory;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Good;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -90,8 +91,8 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
         stratumList.addListSelectionListener(l -> {
             resourceListTableModel.setRowCount(0);
             Stratum strat = strataListModel.elementAt(stratumList.getSelectedIndex());
-            for (Map.Entry<Integer, Integer> en : strat.minerals.entrySet()) {
-                Integer key = en.getKey();
+            for (Map.Entry<GoodReference, Integer> en : strat.minerals.entrySet()) {
+                GoodReference key = en.getKey();
                 Integer val = en.getValue();
 
                 resourceListTableModel.addRow(new Object[]{gameState.getGood(key).getName(), val});

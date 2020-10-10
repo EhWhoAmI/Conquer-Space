@@ -28,7 +28,7 @@ public abstract class Good implements Comparable<Good>, Serializable{
     private static int idCounter = 0;
     
     @Serialize("id")
-    int id;
+    GoodReference id;
     //On Screen name
     @Serialize("name")
     String name;
@@ -50,14 +50,14 @@ public abstract class Good implements Comparable<Good>, Serializable{
         this.mass = mass;
         this.identifier = identifier;
         fractionable = false;
-        id = idCounter++;
+        id = new GoodReference(idCounter++);
     }
 
     public String getName() {
         return name;
     }
 
-    public int getId() {
+    public GoodReference getId() {
         return id;
     }
     

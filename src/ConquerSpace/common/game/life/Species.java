@@ -20,6 +20,7 @@ package ConquerSpace.common.game.life;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.FoodGood;
+import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.LiveGood;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
@@ -38,13 +39,13 @@ public class Species extends ConquerSpaceGameObject {
     public ArrayList<LifeTrait> lifeTraits;
 
     @Serialize(value = "live-good", special = SaveStuff.Good)
-    private int speciesGood;
+    private GoodReference speciesGood;
 
     /**
      * Id of the food when it's dead
      */
     @Serialize(value = "food-good", special = SaveStuff.Good)
-    private int foodGood;
+    private GoodReference foodGood;
     //Breeding rate
 
     @Serialize("breeding-rate")
@@ -87,19 +88,19 @@ public class Species extends ConquerSpaceGameObject {
         this.baseBreedingRate = baseBreedingRate;
     }
 
-    public int getFoodGood() {
+    public GoodReference getFoodGood() {
         return foodGood;
     }
 
-    public int getLiveSpeciesGood() {
+    public GoodReference getLiveSpeciesGood() {
         return speciesGood;
     }
 
-    public void setFoodGood(int foodGood) {
+    public void setFoodGood(GoodReference foodGood) {
         this.foodGood = foodGood;
     }
 
-    public void setSpeciesGood(int speciesGood) {
+    public void setSpeciesGood(GoodReference speciesGood) {
         this.speciesGood = speciesGood;
     }
 
