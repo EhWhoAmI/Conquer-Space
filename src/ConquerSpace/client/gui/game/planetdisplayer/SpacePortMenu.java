@@ -25,17 +25,12 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.ships.Hull;
+import ConquerSpace.common.game.resources.GameObjectStorageReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipCapability;
-import ConquerSpace.common.game.ships.ShipClass;
-import ConquerSpace.common.game.ships.ShipType;
-import ConquerSpace.common.game.ships.launch.LaunchSystem;
-import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
-import java.util.UUID;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -57,7 +52,7 @@ public class SpacePortMenu extends JPanel {
     ObjectListModel<ObjectReference> launchableListModel;
     JList<String> launchableList;
     JButton launchButton;
-    JLabel selectedShipButton;
+    JLabel selectedShipLabel;
 
     public SpacePortMenu(GameState gameState, Planet planet, Civilization civilization) {
         setLayout(new VerticalFlowLayout());
@@ -77,51 +72,50 @@ public class SpacePortMenu extends JPanel {
         launchableList.addListSelectionListener(l -> {
             ObjectReference reference = launchableListModel.getObject(launchableList.getSelectedIndex());
             Ship shipClass = gameState.getObject(reference, Ship.class);
-            selectedShipButton.setText(shipClass.getName());
+            selectedShipLabel.setText(shipClass.getName() + " " + shipClass.getShipClassName() + "-class " + shipClass.getShipType().getName());
             launchButton.setEnabled(true);
         });
 
-        selectedShipButton = new JLabel("");
+        selectedShipLabel = new JLabel("");
         launchButton = new JButton("Launch Ship!");
         launchButton.setEnabled(false);
         launchButton.addActionListener(l -> {
             //Add to civ
-            //civilization.spaceships.add(ship.getReference());
-            ObjectReference reference = launchableListModel.getObject(launchableList.getSelectedIndex());
-            Ship ship = gameState.getObject(reference, Ship.class);
+            ObjectReference shipToLaunch = launchableListModel.getObject(launchableList.getSelectedIndex());
+            Ship ship = gameState.getObject(shipToLaunch, Ship.class);
             if (ship.shipCapabilities.contains(ShipCapability.ToOrbit)) {
                 Actions.launchLaunchable(ship, planet);
                 //Remove from planet
-                planetloop:
-                for (ObjectReference cityIndex : planet.cities) {
-                    City city = gameState.getObject(cityIndex, City.class);
-                    for (ObjectReference areaIndex : city.areas) {
-                        Area area = gameState.getObject(areaIndex, Area.class);
-                        if (area instanceof SpacePortArea) {
-                            SpacePortArea port = (SpacePortArea) area;
-                            if (port.landedShips.contains(reference)) {
-                                port.landedShips.remove(reference);
-                                break planetloop;
-                            }
-                        }
-                    }
-                }
-                civilization.spaceships.add(reference);
+                removeShipFromPlanet(shipToLaunch);
                 //Update UI
             } else {
                 boolean needLaunch = true;
                 //Find a launch vehicle...
                 for (int i = 0; i < launchableListModel.getSize(); i++) {
-                    ObjectReference ref = launchableListModel.getObject(i);
-                    Ship shipLaunchVehicle = gameState.getObject(ref, Ship.class);
+                    ObjectReference shipLaunchVehicleReference = launchableListModel.getObject(i);
+                    Ship shipLaunchVehicle = gameState.getObject(shipLaunchVehicleReference, Ship.class);
 
+                    
                     if (shipLaunchVehicle.getShipType().containsTag("launch")) {
+
                         //Then can launch
                         needLaunch = false;
 
                         //Stuff on the launch vehicle,
+                        //Stuff on launch vehicle
+                        shipLaunchVehicle.addResource(new GameObjectStorageReference(shipToLaunch), 1d);
+
+                        //Add deploy action...
+                        //Launch
+                        removeShipFromPlanet(shipLaunchVehicle.getReference());
+                        removeShipFromPlanet(shipToLaunch);
+                        Actions.launchLaunchable(shipLaunchVehicle, planet);
+
+                        //Should be removed...
+                        //Remove both stuff from planet
                         //inform
                         JOptionPane.showInternalMessageDialog(this, "Launching ship on " + shipLaunchVehicle.getName());
+
                         //Launch
                         break;
                     }
@@ -139,7 +133,7 @@ public class SpacePortMenu extends JPanel {
         launchableInformationPanel.add(new JScrollPane(launchableList));
 
         JPanel shipInfoandLaunchPanel = new JPanel(new VerticalFlowLayout());
-        shipInfoandLaunchPanel.add(selectedShipButton);
+        shipInfoandLaunchPanel.add(selectedShipLabel);
         shipInfoandLaunchPanel.add(launchButton);
         launchableInformationPanel.add(shipInfoandLaunchPanel);
 
@@ -171,6 +165,24 @@ public class SpacePortMenu extends JPanel {
         if (aFlag) {
             launchableList.updateUI();
             updateComponent();
+        }
+    }
+
+    public void removeShipFromPlanet(ObjectReference reference) {
+        planetloop:
+        for (ObjectReference cityIndex : planet.cities) {
+            City city = gameState.getObject(cityIndex, City.class);
+            for (ObjectReference areaIndex : city.areas) {
+                Area area = gameState.getObject(areaIndex, Area.class);
+                if (area instanceof SpacePortArea) {
+                    SpacePortArea port = (SpacePortArea) area;
+                    if (port.landedShips.contains(reference)) {
+                        port.landedShips.remove(reference);
+
+                        break planetloop;
+                    }
+                }
+            }
         }
     }
 }

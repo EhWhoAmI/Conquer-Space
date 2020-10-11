@@ -20,7 +20,7 @@ package ConquerSpace.common.game.ships.components;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ManufacturedGood;
 
 /**
@@ -35,7 +35,7 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
 
     protected String name;
 
-    protected GoodReference good;
+    protected StoreableReference good;
 
     public ShipComponent(GameState gameState) {
         super(gameState);
@@ -77,7 +77,7 @@ public abstract class ShipComponent extends ConquerSpaceGameObject implements Cl
         return volume;
     }
 
-    public GoodReference getGood() {
+    public StoreableReference getGood() {
         return good;
     }
 

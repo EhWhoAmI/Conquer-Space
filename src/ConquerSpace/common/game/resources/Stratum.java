@@ -43,7 +43,7 @@ public class Stratum extends ConquerSpaceGameObject{
     private String name = "layer";
     
     @Serialize(value = "minerals", special = SaveStuff.Good)
-    public HashMap<GoodReference, Integer> minerals;
+    public HashMap<StoreableReference, Integer> minerals;
 
     public Stratum(GameState gameState) {
         super(gameState);

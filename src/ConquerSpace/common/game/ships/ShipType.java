@@ -45,9 +45,9 @@ public class ShipType {
 
     public boolean containsTag(String key) {
         boolean result = false;
-        int hash = key.hashCode();
+        int hash = key.toLowerCase().hashCode();
         for (String i : tags) {
-            if (i.hashCode() == hash) {
+            if (i.toLowerCase().hashCode() == hash) {
                 result = true;
                 break;
             }
@@ -81,6 +81,10 @@ public class ShipType {
 
     @Override
     public String toString() {
+        return identifier;
+    }
+    
+    public String getName() {
         return identifier;
     }
 }

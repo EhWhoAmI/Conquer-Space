@@ -20,7 +20,7 @@ package ConquerSpace.tools;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.Good;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.NonElement;
 import ConquerSpace.common.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
@@ -150,8 +150,8 @@ public class ResourceViewer extends JFrame {
 
                 if (selected instanceof NonElement) {
                     NonElement ne = (NonElement) selected;
-                    for (Map.Entry<GoodReference, Double> entry : ne.recipie.entrySet()) {
-                        GoodReference key = entry.getKey();
+                    for (Map.Entry<StoreableReference, Double> entry : ne.recipie.entrySet()) {
+                        StoreableReference key = entry.getKey();
                         Double val = entry.getValue();
                         //forumlaTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
                     }

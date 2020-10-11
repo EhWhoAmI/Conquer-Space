@@ -19,7 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
@@ -31,7 +31,7 @@ import java.util.HashMap;
 public class ConstructingArea extends Area{
     private int ticksLeft;
     private ObjectReference toBuild;
-    private HashMap<GoodReference, Double> costPerTurn;
+    private HashMap<StoreableReference, Double> costPerTurn;
 
     /**
      * This is the only constructor that can be public, because it is supposed to be easy to make it.
@@ -58,7 +58,7 @@ public class ConstructingArea extends Area{
         this.ticksLeft = ticksLeft;
     }
 
-    public void setCostPerTurn(HashMap<GoodReference, Double> costPerTurn) {
+    public void setCostPerTurn(HashMap<StoreableReference, Double> costPerTurn) {
         this.costPerTurn = costPerTurn;
     }
 
@@ -71,7 +71,7 @@ public class ConstructingArea extends Area{
         return "Constructing " + toBuild.toString();
     }
     
-    public HashMap<GoodReference, Double> getCostPerTurn() {
+    public HashMap<StoreableReference, Double> getCostPerTurn() {
         return costPerTurn;
     }
 }

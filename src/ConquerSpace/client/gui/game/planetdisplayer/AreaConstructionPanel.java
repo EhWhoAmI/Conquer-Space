@@ -28,7 +28,7 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.ConstructingArea;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -137,9 +137,9 @@ public class AreaConstructionPanel extends JPanel {
                 //Then construct area
                 ConstructingArea area = new ConstructingArea(gameState, areaToBuild.buildTime(), areaToBuild.build(gameState));
                 //Set cost
-                HashMap<GoodReference, Double> cost = new HashMap<>();
-                for (Map.Entry<GoodReference, Double> entry : areaToBuild.getCost().entrySet()) {
-                    GoodReference key = entry.getKey();
+                HashMap<StoreableReference, Double> cost = new HashMap<>();
+                for (Map.Entry<StoreableReference, Double> entry : areaToBuild.getCost().entrySet()) {
+                    StoreableReference key = entry.getKey();
                     Double val = entry.getValue();
                     cost.put(key, val / areaToBuild.buildTime());
                 }

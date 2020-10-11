@@ -20,7 +20,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.util.Map;
@@ -167,8 +167,8 @@ public class PlanetGeology extends javax.swing.JPanel {
 
             //Set the stuff
             resourceListModel.clear();
-            for (Map.Entry<GoodReference, Integer> en : stratum.minerals.entrySet()) {
-                GoodReference key = en.getKey();
+            for (Map.Entry<StoreableReference, Integer> en : stratum.minerals.entrySet()) {
+                StoreableReference key = en.getKey();
                 Integer val = en.getValue();
 
                 resourceListModel.addElement(gameState.getGood(key).getName() + " " + val);

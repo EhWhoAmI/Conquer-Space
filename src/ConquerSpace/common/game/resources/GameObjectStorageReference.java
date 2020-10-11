@@ -19,12 +19,13 @@
 package ConquerSpace.common.game.resources;
 
 import ConquerSpace.common.ObjectReference;
+import java.util.Objects;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class GameObjectStorageReference implements StoreableReference {
+public class GameObjectStorageReference extends StoreableReference {
 
     private final ObjectReference reference;
 
@@ -32,8 +33,37 @@ public class GameObjectStorageReference implements StoreableReference {
         this.reference = reference;
     }
 
-     public ObjectReference getReference() {
+    public ObjectReference getReference() {
         return reference;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.reference);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameObjectStorageReference other = (GameObjectStorageReference) obj;
+        if (!Objects.equals(this.reference, other.reference)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return "";
+    }
 }

@@ -20,7 +20,7 @@ package ConquerSpace.common;
 import static ConquerSpace.common.AssetReader.*;
 import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.resources.Element;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.science.Fields;
@@ -61,7 +61,7 @@ public class GameLoader {
 
         gameState.shipTypes = readHjsonFromDirInArray("dirs.ship.types.types",
                 ShipType.class, AssetReader::processShipType);
-
+        
         gameState.personalityTraits = readHjsonFromDirInArray("dirs.traits",
                 PersonalityTrait.class, AssetReader::processPersonalityTraits);
 
@@ -87,7 +87,7 @@ public class GameLoader {
 
         //Sort through the list
         for (ResourceDistribution dist : res) {
-            GoodReference identifier = gameState.getGoodId(dist.resourceName);
+            StoreableReference identifier = gameState.getGoodId(dist.resourceName);
             gameState.oreDistributions.put(identifier, dist);
         }
         gameState.prodProcesses = new HashMap<>();

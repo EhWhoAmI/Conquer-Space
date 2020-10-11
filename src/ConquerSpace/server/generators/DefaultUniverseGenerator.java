@@ -26,7 +26,7 @@ import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.PolarCoordinate;
@@ -350,9 +350,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Find the amount of resources to add...
         //Sort through resources, and find suitable
-        ArrayList<GoodReference> toAdd = new ArrayList<>();
-        for (Map.Entry<GoodReference, ResourceDistribution> entry : gameState.oreDistributions.entrySet()) {
-            GoodReference key = entry.getKey();
+        ArrayList<StoreableReference> toAdd = new ArrayList<>();
+        for (Map.Entry<StoreableReference, ResourceDistribution> entry : gameState.oreDistributions.entrySet()) {
+            StoreableReference key = entry.getKey();
             ResourceDistribution val = entry.getValue();
             double rarity = val.rarity;
             if (random.nextDouble() < rarity) {
@@ -369,7 +369,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Stratum stratum = new Stratum(gameState);
 
             //Add resources
-            for (GoodReference o : toAdd) {
+            for (StoreableReference o : toAdd) {
                 stratum.minerals.put(o, randint(random, 10000, 500_000));
             }
 

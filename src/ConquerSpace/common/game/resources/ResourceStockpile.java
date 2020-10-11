@@ -22,12 +22,12 @@ package ConquerSpace.common.game.resources;
  * @author EhWhoAmI
  */
 public interface ResourceStockpile {
-    public void addResourceTypeStore(GoodReference type);
-    public Double getResourceAmount(GoodReference type);
-    public void addResource(GoodReference type, Double amount);
-    public boolean canStore(GoodReference type);
+    public void addResourceTypeStore(StoreableReference type);
+    public Double getResourceAmount(StoreableReference type);
+    public void addResource(StoreableReference type, Double amount);
+    public boolean canStore(StoreableReference type);
     
-    public GoodReference[] storedTypes();
+    public StoreableReference[] storedTypes();
     
-    public boolean removeResource(GoodReference type, Double amount);
+    public boolean removeResource(StoreableReference type, Double amount);
 }

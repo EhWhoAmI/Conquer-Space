@@ -54,6 +54,7 @@ import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.science.Field;
@@ -276,7 +277,7 @@ public class CivilizationInitializer {
             Stratum stratum = gameState.getObject(p.strata.get(k), Stratum.class);
             for (int i = 0; i < 3; i++) {
                 City miner = new City(gameState, p.getReference());
-                for (GoodReference resource : stratum.minerals.keySet()) {
+                for (StoreableReference resource : stratum.minerals.keySet()) {
                     MineAreaFactory mineArea = new MineAreaFactory(c);
 
                     mineArea.setProductivity((float) (10 * (selector.nextDouble() + 0.1)));
@@ -338,7 +339,7 @@ public class CivilizationInitializer {
 
     private void createFarms(Planet starting, Species crop, Civilization civ, Random selector, NameGenerator gen) {
         //Create production process for the food.
-        GoodReference consumableResources = civ.getFoundingSpecies().getConsumableResource();
+        StoreableReference consumableResources = civ.getFoundingSpecies().getConsumableResource();
         ProductionProcess foodProcess = new ProductionProcess(gameState);
 
         foodProcess.input.put(crop.getFoodGood(), 10d);
@@ -636,7 +637,7 @@ public class CivilizationInitializer {
         gen.generate(gameState, p);
     }
 
-    private GoodReference findGoodByTag(String tagSearched) {
+    private StoreableReference findGoodByTag(String tagSearched) {
         Good resource = null;
         for (Good res : gameState.getGoodArrayList()) {
             for (String tag : res.tags) {
@@ -649,7 +650,7 @@ public class CivilizationInitializer {
         if (resource != null) {
             return resource.getId();
         } else {
-            return new GoodReference(-1);
+            return GoodReference.INVALID_REFERENCE;
         }
     }
 }

@@ -22,7 +22,7 @@ package ConquerSpace.common.game.resources;
  *
  * @author EhWhoAmI
  */
-public class GoodReference implements StoreableReference {
+public class GoodReference extends StoreableReference {
     public static final GoodReference INVALID_REFERENCE = new GoodReference(-1);
     private final int id;
 
@@ -59,4 +59,8 @@ public class GoodReference implements StoreableReference {
         return true;
     }
 
+    @Override
+    public String getName() {
+        return "";
+    }
 }

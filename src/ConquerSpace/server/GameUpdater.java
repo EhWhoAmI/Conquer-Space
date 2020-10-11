@@ -56,7 +56,7 @@ import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.science.Technologies;
@@ -512,7 +512,7 @@ public class GameUpdater extends GameTicker {
             ProductionProcess factoryProcess = timedFactory.getProcess();
             if (areaIsProducing(area)) {
                 factoryProcess.output.entrySet().forEach(entry -> {
-                    GoodReference key = entry.getKey();
+                    StoreableReference key = entry.getKey();
                     Double val = entry.getValue();
 
                     //Get percentage
@@ -534,7 +534,7 @@ public class GameUpdater extends GameTicker {
             if (areaIsProducing(area)) {
                 //Query resources
                 process.input.entrySet().forEach(entry -> {
-                    GoodReference key = entry.getKey();
+                    StoreableReference key = entry.getKey();
                     Double val = entry.getValue();
                     Double amountInCity = city.resources.get(key);
                     removeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
@@ -542,7 +542,7 @@ public class GameUpdater extends GameTicker {
                 });
 
                 process.output.entrySet().forEach(entry -> {
-                    GoodReference key = entry.getKey();
+                    StoreableReference key = entry.getKey();
                     Double val = entry.getValue();
 
                     storeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
@@ -557,7 +557,7 @@ public class GameUpdater extends GameTicker {
             MineArea mine = (MineArea) area;
             if (areaIsProducing(mine)) {
                 mine.getNecessaryGoods().entrySet().forEach(entry -> {
-                    GoodReference key = entry.getKey();
+                    StoreableReference key = entry.getKey();
                     Double val = entry.getValue();
                     removeResource(key, val * GameRefreshRate, city);
                 });
@@ -577,9 +577,9 @@ public class GameUpdater extends GameTicker {
         if (area instanceof ConstructingArea) {
             ConstructingArea constructingArea = (ConstructingArea) area;
             //Remove resources
-            HashMap<GoodReference, Double> cost = constructingArea.getCostPerTurn();
-            for (Map.Entry<GoodReference, Double> entry : cost.entrySet()) {
-                GoodReference key = entry.getKey();
+            HashMap<StoreableReference, Double> cost = constructingArea.getCostPerTurn();
+            for (Map.Entry<StoreableReference, Double> entry : cost.entrySet()) {
+                StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 removeResource(key, val * GameRefreshRate, city);
             }
@@ -638,14 +638,14 @@ public class GameUpdater extends GameTicker {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
 
-            for (Map.Entry<GoodReference, Double> entry : civilization.resourceList.entrySet()) {
+            for (Map.Entry<StoreableReference, Double> entry : civilization.resourceList.entrySet()) {
                 civilization.resourceList.put(entry.getKey(), 0d);
             }
             //Process resources
             for (ResourceStockpile s : civilization.getResourceStorages()) {
                 //Get resource types allowed
 
-                for (GoodReference type : s.storedTypes()) {
+                for (StoreableReference type : s.storedTypes()) {
                     //add to index
                     if (!civilization.resourceList.containsKey(type)) {
                         civilization.resourceList.put(type, 0d);

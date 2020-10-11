@@ -18,26 +18,23 @@
 package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * This can store resources, and is the same as a resource stockpile. It's just
- * that you cannot connect to it via logistics
+ * This can store resources, and is the same as a resource stockpile. It's just that you cannot
+ * connect to it via logistics
  *
  * @author EhWhoAmI
  */
-public class CargoComponent extends ShipComponent implements ResourceStockpile {
+public class CargoComponent extends ShipComponent {
 
     int storageVolume;
 
-    HashMap<GoodReference, Double> resources;
-
     public CargoComponent(GameState gameState) {
         super(gameState);
-        resources = new HashMap<>();
     }
 
     public void setStorageVolume(int storageVolume) {
@@ -51,59 +48,5 @@ public class CargoComponent extends ShipComponent implements ResourceStockpile {
     @Override
     public ShipComponentType getShipComponentType() {
         return ShipComponentType.Cargo;
-    }
-
-    @Override
-    public void addResourceTypeStore(GoodReference type) {
-        resources.put(type, 0d);
-    }
-
-    @Override
-    public Double getResourceAmount(GoodReference type) {
-        return resources.get(type);
-    }
-
-    @Override
-    public void addResource(GoodReference type, Double amount) {
-        if (!resources.containsKey(type)) {
-            resources.put(type, 0d);
-        }
-        resources.put(type, resources.get(type) + amount);
-    }
-
-    @Override
-    public boolean canStore(GoodReference type) {
-        return true;
-    }
-
-    @Override
-    public GoodReference[] storedTypes() {
-        Iterator<GoodReference> res = resources.keySet().iterator();
-        GoodReference[] arr = new GoodReference[resources.size()];
-        int i = 0;
-        while (res.hasNext()) {
-            GoodReference next = res.next();
-            arr[i] = next;
-            i++;
-        }
-        return arr;
-    }
-
-    @Override
-    public boolean removeResource(GoodReference type, Double amount) {
-        //Get the amount in the place
-        if (!resources.containsKey(type)) {
-            //Remove stuff for now
-            //resources.put(type, amount);
-            return false;
-        }
-        Double currentlyStored = resources.get(type);
-
-        if (amount > currentlyStored) {
-            return false;
-        }
-
-        resources.put(type, (currentlyStored - amount));
-        return true;
     }
 }

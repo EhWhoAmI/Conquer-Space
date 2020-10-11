@@ -35,7 +35,7 @@ import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -684,7 +684,7 @@ public class CityInformationPanel extends JPanel {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                GoodReference storedValue = selectedCity.storedTypes()[rowIndex];
+                StoreableReference storedValue = selectedCity.storedTypes()[rowIndex];
 
                 if (selectedCity != null) {
                     switch (columnIndex) {
@@ -759,8 +759,10 @@ public class CityInformationPanel extends JPanel {
                             //Set random name for now
                             ship.setName(UUID.randomUUID().toString());
                             port.landedShips.add(ship.getReference());
+                            civilization.spaceships.add(ship.getReference());
+
                             JOptionPane.showInternalMessageDialog(this, "Ok gonna launch ship " + shipClass.getName() + " with name " + ship.getName());
-                            
+
                             //Deselect
                             shipClassList.clearSelection();
                             return;

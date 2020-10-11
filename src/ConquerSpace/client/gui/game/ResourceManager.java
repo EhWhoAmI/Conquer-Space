@@ -18,7 +18,7 @@
 package ConquerSpace.client.gui.game;
 
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -54,9 +54,8 @@ public class ResourceManager extends JPanel {
         resourceTable = new JTable(resourceTableModel);
 
         //Initalize with default values
-        for (Map.Entry<GoodReference, Double> entry : c.resourceList.entrySet()) {
-            GoodReference key = entry.getKey();
-            System.out.println(key);
+        for (Map.Entry<StoreableReference, Double> entry : c.resourceList.entrySet()) {
+            StoreableReference key = entry.getKey();
             resourceTableModel.addRow(new String[]{key.toString(), "0"});
         }
         JScrollPane pane = new JScrollPane(resourceTable);
@@ -67,8 +66,8 @@ public class ResourceManager extends JPanel {
         //fill table
         int x = 0;
         resourceTableModel.setRowCount(0);
-        for (Map.Entry<GoodReference, Double> entry : c.resourceList.entrySet()) {
-            GoodReference key = entry.getKey();
+        for (Map.Entry<StoreableReference, Double> entry : c.resourceList.entrySet()) {
+            StoreableReference key = entry.getKey();
             Double val = entry.getValue();
             resourceTableModel.addRow(new String[]{key.toString(), Double.toString(val)});
             x++;

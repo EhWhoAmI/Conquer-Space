@@ -25,6 +25,7 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.DoubleHashMap;
@@ -54,8 +55,8 @@ public class PlanetResources extends javax.swing.JPanel {
     private Planet p;
     private Civilization c;
 
-    private HashMap<GoodReference, Double> planetResource;
-    private HashMap<GoodReference, HashMap<String, Double>> planetLedger;
+    private HashMap<StoreableReference, Double> planetResource;
+    private HashMap<StoreableReference, HashMap<String, Double>> planetLedger;
 
     private ArrayList<ResourceStockpile> stockpiles;
 
@@ -360,7 +361,7 @@ public class PlanetResources extends javax.swing.JPanel {
             ResourceStockpile pileTo = stockpiles.get(resourceSendCityToComboBox.getSelectedIndex());
             ComboBoxModel<String> comboBoxModel = resourceToTakeComboBox.getModel();
             if (comboBoxModel instanceof ResourceValueComboBoxModel) {
-                GoodReference resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
+                StoreableReference resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
                 if (ArrayUtils.contains(pileTo.storedTypes(), resourceId)) {
                     resourceInputLabel.setText(gameState.getGood(resourceId) + " " + pileTo.getResourceAmount(resourceId));
                 } else {
@@ -384,7 +385,7 @@ public class PlanetResources extends javax.swing.JPanel {
         //Send resources
         ComboBoxModel<String> comboBoxModel = resourceToTakeComboBox.getModel();
         if (comboBoxModel instanceof ResourceValueComboBoxModel) {
-            GoodReference resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
+            StoreableReference resourceId = ((ResourceValueComboBoxModel) comboBoxModel).list[resourceToTakeComboBox.getSelectedIndex()];
             //ResourceTransportAction act = new ResourceTransportAction(
             //stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex()),
             //stockpiles.get(resourceSendCityToComboBox.getSelectedIndex()),
@@ -404,9 +405,9 @@ public class PlanetResources extends javax.swing.JPanel {
     private class ResourceValueComboBoxModel extends DefaultComboBoxModel<String> {
 
         ResourceStockpile pile;
-        GoodReference[] list;
+        StoreableReference[] list;
 
-        public ResourceValueComboBoxModel(GoodReference[] list, ResourceStockpile pile) {
+        public ResourceValueComboBoxModel(StoreableReference[] list, ResourceStockpile pile) {
             this.list = list;
             this.pile = pile;
         }
@@ -445,7 +446,7 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            GoodReference storedValue = selectedStockpile.storedTypes()[rowIndex];
+            StoreableReference storedValue = selectedStockpile.storedTypes()[rowIndex];
 
             if (selectedStockpile != null) {
                 switch (columnIndex) {
@@ -568,9 +569,9 @@ public class PlanetResources extends javax.swing.JPanel {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            GoodReference planetResourceId = new GoodReference(-1);
-            if (planetResource.keySet().toArray()[rowIndex] instanceof GoodReference) {
-                planetResourceId = (GoodReference) planetResource.keySet().toArray()[rowIndex];
+            StoreableReference planetResourceId = GoodReference.INVALID_REFERENCE;
+            if (planetResource.keySet().toArray()[rowIndex] instanceof StoreableReference) {
+                planetResourceId = (StoreableReference) planetResource.keySet().toArray()[rowIndex];
             }
 
             if (!planetResourceId.equals(GoodReference.INVALID_REFERENCE)) {
@@ -702,9 +703,9 @@ public class PlanetResources extends javax.swing.JPanel {
         }
         for (ObjectReference cityId : p.cities) {
             City city = gameState.getObject(cityId, City.class);
-            GoodReference[] goods = city.storedTypes();
+            StoreableReference[] goods = city.storedTypes();
             //Sort through stuff
-            for (GoodReference g : goods) {
+            for (StoreableReference g : goods) {
                 if (!planetResource.containsKey(g)) {
                     //Add key
                     planetResource.put(g, 0d);

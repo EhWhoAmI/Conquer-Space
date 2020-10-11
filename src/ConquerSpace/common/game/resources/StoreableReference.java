@@ -22,6 +22,6 @@ package ConquerSpace.common.game.resources;
  *
  * @author EhWhoAmI
  */
-public interface StoreableReference {
-    
+public abstract class StoreableReference {
+    public abstract String getName();
 }

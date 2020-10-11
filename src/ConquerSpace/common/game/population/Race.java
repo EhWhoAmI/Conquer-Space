@@ -21,7 +21,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.Good;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
@@ -34,7 +34,7 @@ import ConquerSpace.common.save.SerializeClassName;
 @SerializeClassName("race")
 public class Race extends Species{
     @Serialize(value = "food-id", special = SaveStuff.Good)
-    private GoodReference food;
+    private StoreableReference food;
     
     //Usage of food per month
     @Serialize("food")
@@ -85,7 +85,7 @@ public class Race extends Species{
         this.upkeep = upkeep;
     }
 
-    public GoodReference getConsumableResource() {
+    public StoreableReference getConsumableResource() {
         return food;
     }
 }

@@ -50,8 +50,8 @@ public class FullShipClassInformationMenu extends JPanel {
 
         shipList = new JList<>(shipClassList);
         shipList.setFixedCellWidth(250);
-        
-        shipList.addListSelectionListener(l ->{
+
+        shipList.addListSelectionListener(l -> {
             ObjectReference reference = shipClassList.getObject(shipList.getSelectedIndex());
             ShipClass shipClass = gameState.getObject(reference, ShipClass.class);
             shipComponentList.setElements(shipClass.components);
@@ -60,11 +60,15 @@ public class FullShipClassInformationMenu extends JPanel {
 
         shipComponentList = new ObjectListModel<>();
         shipComponentList.setHandler(l -> {
-            return gameState.getObject(l, ShipComponent.class).getName();
+            ShipComponent component = gameState.getObject(l, ShipComponent.class);
+            if (component != null) {
+                return component.getName();
+            }
+            return "null";
         });
         componentList = new JList<>(shipComponentList);
         componentList.setFixedCellWidth(100);
-        
+
         //UI to add and remove components and the like
         add(new JScrollPane(shipList));
         add(new JScrollPane(componentList));
@@ -72,7 +76,7 @@ public class FullShipClassInformationMenu extends JPanel {
 
     @Override
     public void setVisible(boolean aFlag) {
-        super.setVisible(aFlag); 
+        super.setVisible(aFlag);
         if (aFlag) {
             shipList.updateUI();
         }

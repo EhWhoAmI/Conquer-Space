@@ -28,7 +28,7 @@ import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -71,10 +71,10 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     public ArrayList<ObjectReference> peopleAtCity;
 
     @Serialize(value = "resources", special = SaveStuff.Good)
-    public HashMap<GoodReference, Double> resources;
+    public HashMap<StoreableReference, Double> resources;
 
     @Serialize(value = "demands", special = SaveStuff.Good)
-    public DoubleHashMap<GoodReference> resourceDemands;
+    public DoubleHashMap<StoreableReference> resourceDemands;
 
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
@@ -90,7 +90,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     public ArrayList<ObjectReference> supplyChains;
 
     private int ledgerClearDelta = 0;
-    public HashMap<GoodReference, DoubleHashMap<String>> resourceLedger;
+    public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
 
     @Serialize("location")
     private ObjectReference location;
@@ -212,17 +212,17 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     }
 
     @Override
-    public void addResourceTypeStore(GoodReference type) {
+    public void addResourceTypeStore(StoreableReference type) {
         resources.put(type, 0d);
     }
 
     @Override
-    public Double getResourceAmount(GoodReference type) {
+    public Double getResourceAmount(StoreableReference type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(GoodReference type, Double amount) {
+    public void addResource(StoreableReference type, Double amount) {
         if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
@@ -239,17 +239,17 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     }
 
     @Override
-    public boolean canStore(GoodReference type) {
+    public boolean canStore(StoreableReference type) {
         return true;//(resources.containsKey(type));
     }
 
     @Override
-    public GoodReference[] storedTypes() {
-        Iterator<GoodReference> res = resources.keySet().iterator();
-        GoodReference[] arr = new GoodReference[resources.size()];
+    public StoreableReference[] storedTypes() {
+        Iterator<StoreableReference> res = resources.keySet().iterator();
+        StoreableReference[] arr = new StoreableReference[resources.size()];
         int i = 0;
         while (res.hasNext()) {
-            GoodReference next = res.next();
+            StoreableReference next = res.next();
             arr[i] = next;
             i++;
         }
@@ -257,7 +257,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     }
 
     @Override
-    public boolean removeResource(GoodReference type, Double amount) {
+    public boolean removeResource(StoreableReference type, Double amount) {
         //Get the amount in the place
         if (!resources.containsKey(type)) {
             //Remove stuff for now
