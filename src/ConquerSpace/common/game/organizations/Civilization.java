@@ -97,7 +97,7 @@ public class Civilization extends Organization implements Employer {
      * Resources that they possess.
      */
     public HashMap<StoreableReference, Double> resourceList;
-    
+
     public HashMap<String, StoreableReference> taggedGoods;
 
     public ArrayList<ObjectReference> habitatedPlanets;
@@ -381,7 +381,7 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void passEvent(Event e) {
-        
+
     }
 
     public void employ(ObjectReference p) {
@@ -391,13 +391,20 @@ public class Civilization extends Organization implements Employer {
 
     public ArrayList<ResourceStockpile> getResourceStorages() {
         ArrayList<ResourceStockpile> resourceStockpiles = new ArrayList<>();
-        
+
         for (int i = 0; i < resourceStorages.size(); i++) {
             ResourceStockpile pile = gameState.getObject(resourceStorages.get(i), ResourceStockpile.class);
-            if(pile != null) {
+            if (pile != null) {
                 resourceStockpiles.add(pile);
             }
         }
         return resourceStockpiles;
+    }
+
+    public boolean civValueIsGreaterThan(String key, Integer i) {
+        if (values.containsKey(key)) {
+            return values.get(key) > i;
+        }
+        return false;
     }
 }

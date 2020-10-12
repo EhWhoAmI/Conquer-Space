@@ -21,6 +21,7 @@ import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.Actions;
+import ConquerSpace.common.actions.ShipUnloadAction;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.SpacePortArea;
@@ -90,36 +91,14 @@ public class SpacePortMenu extends JPanel {
                 //Update UI
             } else {
                 boolean needLaunch = true;
-                //Find a launch vehicle...
-                for (int i = 0; i < launchableListModel.getSize(); i++) {
-                    ObjectReference shipLaunchVehicleReference = launchableListModel.getObject(i);
-                    Ship shipLaunchVehicle = gameState.getObject(shipLaunchVehicleReference, Ship.class);
 
-                    
-                    if (shipLaunchVehicle.getShipType().containsTag("launch")) {
-
-                        //Then can launch
-                        needLaunch = false;
-
-                        //Stuff on the launch vehicle,
-                        //Stuff on launch vehicle
-                        shipLaunchVehicle.addResource(new GameObjectStorageReference(shipToLaunch), 1d);
-
-                        //Add deploy action...
-                        //Launch
-                        removeShipFromPlanet(shipLaunchVehicle.getReference());
-                        removeShipFromPlanet(shipToLaunch);
-                        Actions.launchLaunchable(shipLaunchVehicle, planet);
-
-                        //Should be removed...
-                        //Remove both stuff from planet
-                        //inform
-                        JOptionPane.showInternalMessageDialog(this, "Launching ship on " + shipLaunchVehicle.getName());
-
-                        //Launch
-                        break;
-                    }
+                //Check if has enough launch stuff
+                if (civilization.civValueIsGreaterThan("launch", (int) ship.getMass())) {
+                    removeShipFromPlanet(shipToLaunch);
+                    Actions.launchLaunchable(ship, planet);
+                    needLaunch = false;
                 }
+
                 if (needLaunch) {
                     JOptionPane.showInternalMessageDialog(this, "The ship needs to be orbit capable, or you need a launch vehicle in the space port!");
                 }

@@ -713,9 +713,8 @@ public class GameUpdater extends GameTicker {
             for (ObjectReference shipId : civilization.spaceships) {
                 Ship ship = gameState.getObject(shipId, Ship.class);
                 ShipAction sa = ship.getActionAndPopIfDone(gameState);
-
+                System.out.println(sa);
                 if (!sa.checkIfDone(gameState)) {
-                    //System.out.println(sa.getClass());
                     sa.doAction(gameState);
                 } else {
                     //Next action and init

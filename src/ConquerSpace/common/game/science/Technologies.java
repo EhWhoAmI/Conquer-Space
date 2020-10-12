@@ -183,6 +183,10 @@ public class Technologies implements Serializable {
             } else {
                 c.multipliers.put(splitAction[1], Double.parseDouble(splitAction[1]));
             }
+        } else if (action.startsWith("value")) {
+            //Sets a certain value
+            String[] splitAction = action.split(":");
+            c.values.put(splitAction[0], Integer.parseInt(splitAction[1]));
         } else if (action.startsWith("field")) {
             //Add the field that is mentioned
             action = action.toLowerCase();
@@ -239,6 +243,7 @@ public class Technologies implements Serializable {
             //c.addShipComponent(s);
             //}
         } else if (action.startsWith("thrust")) {
+            //Add engine tech
             //Do component
             String[] content = action.split(":");
 
@@ -253,6 +258,7 @@ public class Technologies implements Serializable {
                 c.engineTechs.add(t.getReference());
             }
         } else if (action.startsWith("process")) {
+            //Unlocks process
             String[] text = action.split(":");
             String content = text[1].trim();
 
@@ -263,6 +269,7 @@ public class Technologies implements Serializable {
                 LOGGER.trace("Could not find process " + content);
             }
         } else if (action.startsWith("mine")) {
+            //Able to mine
             String[] text = action.split(":");
             String content = text[1].trim();
 

@@ -354,6 +354,7 @@
     [
       field:aeronautics:1
       launch:Space Plane
+      value:100000
     ]
     fields:
     [
@@ -406,6 +407,7 @@
     [
       field:aeronautics:1
       launch:Rocket
+      value:100000
     ]
     fields:
     [

@@ -670,7 +670,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
         component.setName(shipName + " controller");
         sc.components.add(component.getReference());
 
-        //To Orbit capabilities
+        //To orbit capabilities
         if (toOrbitEngineEnableButton.isSelected()) {
             sc.capabilities.add(ShipCapability.ToOrbit);
             //Add thing
