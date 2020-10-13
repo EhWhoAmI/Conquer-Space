@@ -31,7 +31,10 @@ public class ResearchArea extends ConsumerArea implements ScienceLab {
 
     private String name;
 
-    public HashMap<String, Integer> focusFields;
+    /**
+     * The fields to add the science.
+     */
+    public HashMap<String, Double> focusFields;
 
     ResearchArea(GameState gameState) {
         super(gameState);
@@ -48,7 +51,7 @@ public class ResearchArea extends ConsumerArea implements ScienceLab {
     }
 
     @Override
-    public HashMap<String, Integer> scienceProvided() {
+    public HashMap<String, Double> scienceProvided() {
         return focusFields;
     }
 

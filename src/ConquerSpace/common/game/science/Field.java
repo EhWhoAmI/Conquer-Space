@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class Field implements Serializable{
 
     private String name;
-    private int level;
+    private double level;
     private Field parent;
     private ArrayList<Field> nodes;
 
@@ -39,11 +39,11 @@ public class Field implements Serializable{
         nodes = new ArrayList<>();
     }
 
-    public int getLevel() {
+    public double getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(double level) {
         this.level = level;
     }
 
@@ -60,7 +60,7 @@ public class Field implements Serializable{
         return name;
     }
 
-    public void incrementLevel(int amount) {
+    public void incrementLevel(double amount) {
         this.level += amount;
     }
 

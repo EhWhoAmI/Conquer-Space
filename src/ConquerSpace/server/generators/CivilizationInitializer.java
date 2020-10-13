@@ -604,7 +604,7 @@ public class CivilizationInitializer {
 
         //Choose random field
         Field toAdd = fields.get(selector.nextInt(fields.size()));
-        area.focusFields.put(toAdd.getName(), 1);
+        area.focusFields.put(toAdd.getName(), 1d);
 
         civilization.scienceLabs.add(area.getReference());
 

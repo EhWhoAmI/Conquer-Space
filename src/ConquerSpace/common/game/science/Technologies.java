@@ -193,7 +193,7 @@ public class Technologies implements Serializable {
             String[] text = action.split(":");
             //Loop through the things
             //Use recursion
-            c.upgradeField(text[1], Integer.parseInt(text[2]));
+            c.upgradeField(text[1], Double.parseDouble(text[2]));
         } else if (action.startsWith("launch")) {
             //Set civ has launchpads
             c.values.put("haslaunch", 1);

@@ -23,12 +23,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -48,6 +51,8 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
 
     private HashMap<Integer, Integer> colCount = new HashMap<>();
 
+    private HashMap<Field, Rectangle> rectangles = new HashMap<>();
+
     /*
     Note to future me:
     I want to add colors for the different values, so here is a list of what you can add:
@@ -58,6 +63,9 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
         this.civ = civ;
         addMouseMotionListener(this);
         addMouseListener(this);
+        addMouseWheelListener(new MouseAdapter() {
+            //Nothing because it's just so the screen behind doesnt move
+        });
     }
 
     @Override
@@ -93,8 +101,15 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
         g2d.setColor(Color.BLACK);
         g2d.draw(rect2d);
 
-        g2d.drawString(f.getName(), (float) (5 + translateX + rowLength * col), (float) (i * rowHeight + height + translateY));
-        g2d.drawString("Level: " + f.getLevel(), (float) (5 + translateX + rowLength * col), (float) (i * rowHeight + 2 * height + translateY));
+        //Set the positions of stuff
+        rectangles.put(f, new Rectangle(rowLength * col + translateX,
+                i * rowHeight + translateY, blockWidth, blockHeight));
+        g2d.drawString(f.getName(),
+                (float) (5 + translateX + rowLength * col),
+                (float) (i * rowHeight + height + translateY));
+        g2d.drawString("Level: " + String.format("%.2f", f.getLevel()),
+                (float) (5 + translateX + rowLength * col),
+                (float) (i * rowHeight + 2 * height + translateY));
 
         //Draw line
         //g2d.drawLine
@@ -169,6 +184,19 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
+        //Find selected thing
+        if (arg0.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(arg0)) {
+            for (Map.Entry<Field, Rectangle> entry : rectangles.entrySet()) {
+                Field key = entry.getKey();
+                Rectangle val = entry.getValue();
+
+                arg0.getX();
+                arg0.getY();
+                if (arg0.getX() > val.x && arg0.getX() < val.x + val.width && arg0.getY() > val.y && arg0.getY() < val.y + val.height) {
+                    JOptionPane.showInternalMessageDialog(this, key.getName());
+                }
+            }
+        }
     }
 
     @Override
@@ -177,5 +205,20 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
 
     @Override
     public void mouseExited(MouseEvent arg0) {
+    }
+
+    class Rectangle {
+
+        double x;
+        double y;
+        int width;
+        int height;
+
+        public Rectangle(double x, double y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
     }
 }

@@ -24,5 +24,5 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public interface ScienceLab {
-    public HashMap<String, Integer> scienceProvided();
+    public HashMap<String, Double> scienceProvided();
 }

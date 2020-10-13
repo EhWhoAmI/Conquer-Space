@@ -332,7 +332,7 @@ public class Civilization extends Organization implements Employer {
     }
 
     //Field stuff
-    public void upgradeField(String name, int amount) {
+    public void upgradeField(String name, Double amount) {
         //Search for field...
         if (fields != null) {
             Field f = fields.getNode(name);

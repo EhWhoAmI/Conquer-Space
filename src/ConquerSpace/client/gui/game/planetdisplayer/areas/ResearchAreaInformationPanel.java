@@ -41,9 +41,9 @@ public class ResearchAreaInformationPanel extends AreaInformationPanel<ResearchA
                 new String[]{
                     LOCALE_MESSAGES.getMessage("game.planet.areas.research.table.field"),
                     LOCALE_MESSAGES.getMessage("game.planet.areas.research.table.value")}, 0);
-        for (Map.Entry<String, Integer> en : research.focusFields.entrySet()) {
+        for (Map.Entry<String, Double> en : research.focusFields.entrySet()) {
             String key = en.getKey();
-            Integer val = en.getValue();
+            Double val = en.getValue();
 
             model.addRow(new Object[]{key, val});
         }

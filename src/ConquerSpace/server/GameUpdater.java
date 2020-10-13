@@ -552,7 +552,23 @@ public class GameUpdater extends GameTicker {
                 ((ManufacturerArea) area).setProducedLastTick(false);
             }
         } else if (area instanceof ResearchArea) {
+            //Add science
+            ResearchArea researchArea = (ResearchArea) area;
+            //Contribute science towards the thing
+            Organization org = gameState.getObject(researchArea.getOwner(), Organization.class);
 
+            if (org instanceof Civilization) {
+                Civilization civ = (Civilization) org;
+                for (Map.Entry<String, Double> entry : researchArea.focusFields.entrySet()) {
+                    String key = entry.getKey();
+                    Double val = entry.getValue();
+
+                    //Add the science
+                    //Add random amount of science
+                    civ.upgradeField(key, val * gameState.getRandom().nextDouble());
+                }
+            }
+            //researchArea.getOwner()
         } else if (area instanceof MineArea) {
             MineArea mine = (MineArea) area;
             if (areaIsProducing(mine)) {
