@@ -25,6 +25,7 @@ import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.ships.components.ShipComponent;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -84,10 +85,20 @@ public class ShipController extends JPanel {
             int selected = shipComponentToAdd.getSelectedIndex();
             if (selected >= 0) {
                 //Then get the component and add it to the thing
-                ObjectReference reference = shipComponentListModel.getObject(selected);
+                ObjectReference selectedComponent = shipComponentListModel.getObject(selected);
                 //Then create mission to dock to it
                 if (currentShip != null) {
                     //Create cargo mission, then attach
+                    //Needs to be orbiting place...
+                    
+                    if(currentShip.isOrbiting()) {
+                        Planet p = gameState.getObject(gameState.getUniverse().getSpaceObject(currentShip.getOrbiting()), Planet.class);
+                        if(p.isHabitated()) {
+                            //Then can be habitated
+                            //Add component, etc...
+                            currentShip.components.add(selectedComponent);
+                        }
+                    }
                 }
 
                 shipcomponents.updateUI();
