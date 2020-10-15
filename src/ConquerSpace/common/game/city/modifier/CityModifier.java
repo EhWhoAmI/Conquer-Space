@@ -17,11 +17,13 @@
  */
 package ConquerSpace.common.game.city.modifier;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public class CityModifier {
+public class CityModifier implements Serializable{
     String name;
     int ticks;
 

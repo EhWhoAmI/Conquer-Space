@@ -46,14 +46,14 @@ public class SaveGame {
 
     private Version earliestCompatableVersion = new Version(0, 0, 3);
 
-    private File folder;
+    private File saveFile;
 
     private Class[] primitives = new Class[]{Integer.class, Boolean.class, Double.class, Float.class, Long.class, String.class, List.class, Map.class};
 
     private JSONObject saveData;
 
     public SaveGame(File file) {
-        this.folder = file;
+        this.saveFile = file;
     }
 
     public SaveGame(String s) {
@@ -72,7 +72,13 @@ public class SaveGame {
         saveData.put("version", ConquerSpace.VERSION.getVersionCore());
 
         //Zip
-        String zipFileName = folder.getPath();//folder.getName() + "/save.zip";
+        String zipFileName = saveFile.getPath();//folder.getName() + "/save.zip";
+        
+        //Create if it doesnt exist
+        if(!saveFile.exists()) {
+            saveFile.getParentFile().mkdirs();
+            saveFile.createNewFile();
+        }
         FileOutputStream fos = new FileOutputStream(zipFileName);
         ZipOutputStream zos = new ZipOutputStream(fos);
 
@@ -95,7 +101,7 @@ public class SaveGame {
     }
 
     public void read(GameState gameState) throws FileNotFoundException, IOException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InstantiationException {
-        String zipFileName = folder.getPath();//
+        String zipFileName = saveFile.getPath();//
         ZipFile zipFile = new ZipFile(zipFileName);
 
         StringBuilder builder = new StringBuilder();

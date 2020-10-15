@@ -35,5 +35,6 @@
         <node name="Psychology"/>
         <node name="Aeronautics"/>
         <node name="Metallurgy"/>
+        <node name="Mineral Extraction"/>
     </node>
 </node>

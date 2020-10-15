@@ -107,7 +107,7 @@ public final class ConquerSpace {
             TOOLS = false,
             HEADLESS = false,
             TRANSLATE_TEST = false;
-    
+
     public static final String USER_DIR = System.getProperty("user.dir");
 
     public static final File SETTINGS_FILE = new File(USER_DIR + "/settings.properties");
@@ -198,7 +198,9 @@ public final class ConquerSpace {
                 } catch (FileNotFoundException ex) {
                 } catch (IOException ex) {
                 }
-                UIManager.setLookAndFeel(lafProperties.getProperty(settings.getLaf()));
+                if (lafProperties.containsKey(settings.getLaf())) {
+                    UIManager.setLookAndFeel(lafProperties.getProperty(settings.getLaf()));
+                }
             }
         } catch (ClassNotFoundException ex) {
             LOGGER.warn("", ex);

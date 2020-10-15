@@ -17,11 +17,13 @@
  */
 package ConquerSpace.common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EhWhoAmI
  */
-public final class ObjectReference {
+public final class ObjectReference implements Serializable{
     public static final ObjectReference INVALID_REFERENCE = new ObjectReference(-1);
     private final int objectId;
 

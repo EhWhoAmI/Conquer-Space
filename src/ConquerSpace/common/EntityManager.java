@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author EhWhoAmI
  */
-public class EntityManager {
+public class EntityManager implements Serializable{
 
     private HashMap<ObjectReference, ConquerSpaceGameObject> objects;
 

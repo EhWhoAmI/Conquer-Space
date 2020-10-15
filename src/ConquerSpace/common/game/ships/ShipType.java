@@ -17,13 +17,14 @@
  */
 package ConquerSpace.common.game.ships;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class ShipType {
+public class ShipType implements Serializable{
 
     String identifier;
     String[] tags;

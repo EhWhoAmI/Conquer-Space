@@ -99,7 +99,7 @@ public class ExceptionHandling {
         area.setColumns(64);
         area.setEditable(false);
         optionPanel.add(new JScrollPane(area));
-        
+
         optionPanel.add(new JLabel("Do you want to quit the game?"));
         return optionPanel;
     }
@@ -154,6 +154,11 @@ public class ExceptionHandling {
             writer.print(header.replace("\n", System.getProperty("line.separator")));
             writer.print("\n\nStack trace: \n\n".replace("\n", System.getProperty("line.separator")));
             ex.printStackTrace(writer);
+            
+            if (ex.getCause() != null) {
+                writer.println();
+                ex.getCause().printStackTrace(writer);
+            }
             writer.println();
             writer.close();
 
