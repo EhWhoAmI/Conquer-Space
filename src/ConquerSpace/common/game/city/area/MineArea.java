@@ -19,8 +19,10 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
@@ -60,7 +62,7 @@ public class MineArea extends Area {
     public HashMap<StoreableReference, Double> getNecessaryGoods() {
         return necessaryGoods;
     }
-    
+
     public StoreableReference getResourceMinedId() {
         return resourceMined;
     }
@@ -73,5 +75,10 @@ public class MineArea extends Area {
     @Override
     public JobType getJobClassification() {
         return (JobType.Miner);
+    }
+
+    @Override
+    public void accept(AreaDispatcher dispatcher) {
+        dispatcher.dispatch(this);
     }
 }

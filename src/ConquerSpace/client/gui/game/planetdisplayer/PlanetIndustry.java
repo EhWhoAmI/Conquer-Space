@@ -19,6 +19,7 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
+import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanelBuilder;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
@@ -43,27 +44,27 @@ import javax.swing.JTabbedPane;
  * @author EhWhoAmI
  */
 public class PlanetIndustry extends JPanel {
-
+    
     private JTabbedPane tabs;
-
+    
     private JPanel areaContainer;
     private DefaultListModel<Area> areaDefaultListModel;
     private JList<Area> areaList;
-
+    
     private JPanel areaInfoPanel;
 
     //Sorts out all the buildings and places
     private JPanel jobSortingOutPanel;
     private DefaultListModel<String> industryListModel;
     private JList<String> industryList;
-
+    
     private JPanel industryInfoContainer;
     private CardLayout industryInfoCardLayout;
-
+    
     private Planet p;
     
     private GameState gameState;
-
+    
     public PlanetIndustry(GameState gameState, Planet p, Civilization c) {
         this.p = p;
         this.gameState = gameState;
@@ -77,7 +78,7 @@ public class PlanetIndustry extends JPanel {
         areaContainer = new JPanel();
         areaContainer.setLayout(new GridBagLayout());
         areaDefaultListModel = new DefaultListModel<>();
-
+        
         for (int i = 0; i < p.cities.size(); i++) {
             City city = gameState.getObject(p.cities.get(i), City.class);
             for (ObjectReference areaId : city.areas) {
@@ -85,18 +86,20 @@ public class PlanetIndustry extends JPanel {
                 areaDefaultListModel.addElement(area);
             }
         }
-
+        
         areaList = new JList<>(areaDefaultListModel);
-
+        
         areaList.addListSelectionListener(l -> {
             areaInfoPanel.removeAll();
-            areaInfoPanel.add(AreaInformationPanel.getPanel(gameState, areaList.getSelectedValue()));
+            AreaInformationPanelBuilder builder = new AreaInformationPanelBuilder(gameState);
+            areaList.getSelectedValue().accept(builder);
+            areaInfoPanel.add(builder.getPanel(areaList.getSelectedValue()));
         });
-
+        
         JScrollPane scrollPane = new JScrollPane(areaList);
-
+        
         areaInfoPanel = new JPanel();
-
+        
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -109,37 +112,37 @@ public class PlanetIndustry extends JPanel {
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
         areaContainer.add(areaInfoPanel, constraints);
-
+        
         jobSortingOutPanel = new JPanel(new HorizontalFlowLayout());
-
+        
         industryListModel = new DefaultListModel<>();
         industryListModel.addElement("Farming");
         industryList = new JList<>(industryListModel);
-
+        
         industryList.addListSelectionListener(l -> {
             if (industryList.getSelectedValue().equals("Farming")) {
                 industryInfoCardLayout.show(industryInfoContainer, "Farm");
             }
         });
-
+        
         industryInfoContainer = new JPanel();
         industryInfoCardLayout = new CardLayout();
         industryInfoContainer.setLayout(industryInfoCardLayout);
-
+        
         jobSortingOutPanel.add(new JScrollPane(industryList));
         jobSortingOutPanel.add(industryInfoContainer);
-
+        
         tabs.add(jobSortingOutPanel, LOCALE_MESSAGES.getMessage("game.planet.industry.industries"));
         add(tabs);
     }
-
+    
     public void update() {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
         for (int i = 0; i < p.cities.size(); i++) {
             City city = gameState.getObject(p.cities.get(i), City.class);
             Iterator<ObjectReference> iterator = city.areas.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 ObjectReference in = iterator.next();
                 Area area = gameState.getObject(in, Area.class);
                 areaDefaultListModel.addElement(area);

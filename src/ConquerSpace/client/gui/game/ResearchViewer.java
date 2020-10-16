@@ -130,12 +130,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         techInfoPanel.add(listPane);
 
         personComboBoxModel = new DefaultComboBoxModel<>();
-        for (ObjectReference id : civilization.people) {
-            Person p = gameState.getObject(id, Person.class);
-            if (p instanceof Scientist) {
-                personComboBoxModel.addElement(p);
-            }
-        }
+        fillComboBox();
+        
         techInfoPanel.add(new JLabel(LOCALE_MESSAGES.getMessage("game.research.person.researcher") + ":"));
         personComboBox = new JComboBox<>(personComboBoxModel);
         techInfoPanel.add(personComboBox);
@@ -223,12 +219,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
                 techTableModel.addRow(new String[]{t.getName(), civilization.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
             }
             personComboBoxModel.removeAllElements();
-            for (ObjectReference id : civilization.people) {
-                Person p = gameState.getObject(id, Person.class);
-                if (p instanceof Scientist) {
-                    personComboBoxModel.addElement(p);
-                }
-            }
+            fillComboBox();
         });
         techonologyViewer = new TechonologyViewer(civilization);
 
@@ -290,12 +281,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         int selected = personComboBox.getSelectedIndex();
         if (!personComboBox.isPopupVisible()) {
             personComboBoxModel.removeAllElements();
-            for (ObjectReference id : civilization.people) {
-                Person p = gameState.getObject(id, Person.class);
-                if (p instanceof Scientist) {
-                    personComboBoxModel.addElement(p);
-                }
-            }
+            fillComboBox();
             personComboBox.setSelectedIndex(selected);
         }
     }
@@ -331,5 +317,14 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         update();
+    }
+
+    public void fillComboBox() {
+        for (ObjectReference id : civilization.people) {
+            Person p = gameState.getObject(id, Person.class);
+            if (p instanceof Scientist) {
+                personComboBoxModel.addElement(p);
+            }
+        }
     }
 }

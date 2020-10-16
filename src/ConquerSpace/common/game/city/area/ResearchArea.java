@@ -18,8 +18,10 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.science.ScienceLab;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
@@ -58,5 +60,10 @@ public class ResearchArea extends ConsumerArea implements ScienceLab {
     @Override
     public JobType getJobClassification() {
         return (JobType.Educator);
+    }
+    
+    @Override
+    public void accept(AreaDispatcher dispatcher) {
+        dispatcher.dispatch(this);
     }
 }

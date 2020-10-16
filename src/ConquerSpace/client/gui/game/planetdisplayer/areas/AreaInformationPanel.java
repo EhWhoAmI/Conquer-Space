@@ -51,21 +51,6 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
     protected T area;
     protected GameState gameState;
 
-    private static final HashMap<Class, Class> areaInfoMap = new HashMap<>();
-
-    static {
-        areaInfoMap.put(ResearchArea.class, ResearchAreaInformationPanel.class);
-        areaInfoMap.put(CapitolArea.class, CapitolAreaInformationPanel.class);
-        areaInfoMap.put(InfrastructureArea.class, InfrastructureAreaInformationPanel.class);
-        areaInfoMap.put(ManufacturerArea.class, ManufacturerAreaInformationPanel.class);
-        areaInfoMap.put(FarmFieldArea.class, FarmFieldAreaInformationPanel.class);
-        areaInfoMap.put(CommercialArea.class, CommercialAreaInformationPanel.class);
-        areaInfoMap.put(SpacePortArea.class, SpacePortAreaInformationPanel.class);
-        areaInfoMap.put(ConstructingArea.class, ConstructionAreaInformationPanel.class);
-        areaInfoMap.put(MineArea.class, MineAreaInformationPanel.class);
-        areaInfoMap.put(CustomComponentFactoryManufacturerArea.class, CustomComponentFactoryManufacturerAreaPanel.class);
-    }
-
     public AreaInformationPanel(T area, GameState gameState) {
         this.area = area;
         this.gameState = gameState;
@@ -100,25 +85,5 @@ public class AreaInformationPanel<T extends Area> extends JPanel {
 
     public void update() {
 
-    }
-
-    @SuppressWarnings("unchecked")
-    public static AreaInformationPanel getPanel(GameState gameState, Area a) {
-        try {
-            if (areaInfoMap.containsKey(a.getClass())) {
-                return (AreaInformationPanel) areaInfoMap.get(a.getClass()).getConstructor(a.getClass(), GameState.class).newInstance(a, gameState);
-            } else {
-                //Return empty 
-                return new EmptyAreaPanel(a, gameState);
-            }
-        } catch (InstantiationException 
-                | IllegalAccessException 
-                | IllegalArgumentException 
-                | InvocationTargetException 
-                | NoSuchMethodException 
-                | SecurityException ex) {
-            LOGGER.warn("Unable to open area information panel", ex);
-            return new EmptyAreaPanel(a, gameState);
-        }
     }
 }

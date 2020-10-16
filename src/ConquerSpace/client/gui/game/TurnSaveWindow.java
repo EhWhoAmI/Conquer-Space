@@ -95,7 +95,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         runningstatsButton = new JButton(LOCALE_MESSAGES.getMessage("game.debug"));
         optionsWindowButton = new JButton(LOCALE_MESSAGES.getMessage("options.title"));
 
-        turnLabel.setText(String.format(LOCALE_MESSAGES.getMessage("game.date.display"), date.getYears(), date.getMonthNumber(), date.getDays()));
+        turnLabel.setText(LOCALE_MESSAGES.getMessage("game.date.display", date.getYears(), date.getMonthNumber(), date.getDays()));
 
         statusProgressBar.setIndeterminate(false);
 
@@ -186,7 +186,7 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
             }
         });
         Timer updater = new Timer(100, (e) -> {
-            turnLabel.setText(String.format(LOCALE_MESSAGES.getMessage("game.date.display"), date.getYears(), date.getMonthNumber(), date.getDays()));
+            turnLabel.setText(LOCALE_MESSAGES.getMessage("game.date.display", date.getYears(), date.getMonthNumber(), date.getDays()));
         });
         updater.start();
 

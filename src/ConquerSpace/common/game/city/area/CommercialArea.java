@@ -19,6 +19,8 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.city.City;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -46,5 +48,10 @@ public class CommercialArea extends Area{
     @Override
     public String toString() {
         return "Commercial Area";
+    }
+    
+    @Override
+    public void accept(AreaDispatcher dispatcher) {
+        dispatcher.dispatch(this);
     }
 }

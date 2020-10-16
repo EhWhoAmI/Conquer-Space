@@ -19,7 +19,9 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
@@ -28,16 +30,19 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 @SerializeClassName("construction-area")
-public class ConstructingArea extends Area{
+public class ConstructingArea extends Area {
+
     private int ticksLeft;
     private ObjectReference toBuild;
     private HashMap<StoreableReference, Double> costPerTurn;
 
     /**
-     * This is the only constructor that can be public, because it is supposed to be easy to make it.
+     * This is the only constructor that can be public, because it is supposed to be easy to make
+     * it.
+     *
      * @param gameState
      * @param ticks
-     * @param toBuild 
+     * @param toBuild
      */
     public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
         super(gameState);
@@ -70,8 +75,13 @@ public class ConstructingArea extends Area{
     public String toString() {
         return "Constructing " + toBuild.toString();
     }
-    
+
     public HashMap<StoreableReference, Double> getCostPerTurn() {
         return costPerTurn;
+    }
+
+    @Override
+    public void accept(AreaDispatcher dispatcher) {
+        dispatcher.dispatch(this);
     }
 }

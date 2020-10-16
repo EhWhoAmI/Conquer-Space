@@ -20,8 +20,10 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 
@@ -36,20 +38,20 @@ public abstract class Area extends ConquerSpaceGameObject implements Workable, C
      */
     @Serialize("manning")
     private int currentlyManningJobs;
-    
+
     @Serialize("operating")
     private int operatingJobs;
-    
+
     @Serialize("max")
     private int maxJobs;
-    
+
     @Serialize("power")
     private int powerUsage;
-    
+
     //The org owning the thing
     @Serialize("owner")
     private ObjectReference owner = ObjectReference.INVALID_REFERENCE;
-    
+
     //Resource request
     @Serialize("resource-priority")
     protected int priority = Integer.MAX_VALUE;
@@ -135,4 +137,6 @@ public abstract class Area extends ConquerSpaceGameObject implements Workable, C
     public ObjectReference getOwner() {
         return owner;
     }
+
+    public abstract void accept(AreaDispatcher dispatcher);
 }

@@ -19,11 +19,13 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.logistics.ResourcePermissions;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.UniversePath;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     public ArrayList<StorageNeeds> storageNeeds;
     public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
     public UniversePath path;
-    
+
     ResourceStockpileArea(GameState gameState) {
         super(gameState);
         allPermissions = new HashMap<>();
@@ -65,7 +67,6 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     public void addPermission(ObjectReference person, ResourcePermissions permission) {
         allPermissions.put(person, permission);
     }
-    
 
     @Override
     public void addResourceTypeStore(StoreableReference type) {
@@ -138,5 +139,10 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
             resourceLedger.put(type, resource);
         }
         return true;
+    }
+
+    @Override
+    public void accept(AreaDispatcher dispatcher) {
+        dispatcher.dispatch(this);
     }
 }

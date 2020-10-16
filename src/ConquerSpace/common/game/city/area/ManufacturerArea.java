@@ -18,8 +18,10 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -29,10 +31,11 @@ import ConquerSpace.common.save.SerializeClassName;
  */
 @SerializeClassName("manufacturer-area")
 public class ManufacturerArea extends Area {
+
     protected ProductionProcess process;
     //How much of that production process per round...
     float productivity;
-    
+
     private boolean producedLastTick;
 
     ManufacturerArea(GameState gameState, ProductionProcess process, float productivity) {
@@ -63,7 +66,7 @@ public class ManufacturerArea extends Area {
     public AreaClassification getAreaType() {
         return AreaClassification.Manufacturing;
     }
-    
+
     @Override
     public JobType getJobClassification() {
         return (JobType.FactoryWorker);
@@ -75,5 +78,10 @@ public class ManufacturerArea extends Area {
 
     public void setProducedLastTick(boolean producedLastTick) {
         this.producedLastTick = producedLastTick;
+    }
+
+    @Override
+    public void accept(AreaDispatcher dispatcher) {
+        dispatcher.dispatch(this);
     }
 }

@@ -15,37 +15,49 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 package ConquerSpace.common.game.city.area;
 
-import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("residential-area")
-public class ResidentialArea extends ConsumerArea {
+public interface AreaDispatcher {
 
-    int maxPopulation;
+    void dispatch(CommercialArea area);
 
-    ResidentialArea(GameState gameState) {
-        super(gameState);
-    }
+    void dispatch(ConstructingArea area);
 
-    public AreaClassification getAreaType() {
-        return AreaClassification.Residential;
-    }
+    void dispatch(ConsumerArea area);
 
-    @Override
-    public String toString() {
-        return "Residential Area";
-    }
-    
-    @Override
-    public void accept(AreaDispatcher dispatcher) {
-        dispatcher.dispatch(this);
-    }
+    void dispatch(CustomComponentFactoryManufacturerArea area);
+
+    void dispatch(TimedManufacturerArea area);
+
+    void dispatch(ManufacturerArea area);
+
+    void dispatch(MineArea area);
+
+    void dispatch(SpacePortArea area);
+
+    void dispatch(LogisticsHubArea area);
+
+    void dispatch(ObservatoryArea area);
+
+    void dispatch(ResourceStockpileArea area);
+
+    void dispatch(FarmFieldArea area);
+
+    void dispatch(PowerPlantArea area);
+
+    void dispatch(ResearchArea area);
+
+    void dispatch(ResidentialArea area);
+
+    void dispatch(InfrastructureArea area);
+
+    void dispatch(CapitolArea area);
 }

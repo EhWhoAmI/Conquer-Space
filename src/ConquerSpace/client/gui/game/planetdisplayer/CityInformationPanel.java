@@ -21,6 +21,7 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
+import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanelBuilder;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
@@ -572,7 +573,9 @@ public class CityInformationPanel extends JPanel {
                     Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
                     if (area.getAreaType().equals(key)) {
                         //Then add to list I guess
-                        pane.add((AreaInformationPanel.getPanel(gameState, area)));
+                        AreaInformationPanelBuilder builder = new AreaInformationPanelBuilder(gameState);
+                        area.accept(builder);
+                        pane.add(builder.getPanel(area));
                     }
                 }
 
