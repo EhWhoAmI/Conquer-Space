@@ -37,7 +37,7 @@ import javax.swing.JScrollPane;
  *
  * @author EhWhoAmI
  */
-public class ShipController extends JPanel {
+public class ShipControllerPanel extends JPanel {
 
     JLabel shipNameLabel;
     JLabel shipClassLabel;
@@ -52,7 +52,7 @@ public class ShipController extends JPanel {
     Ship currentShip;
     GameState gameState;
 
-    public ShipController(GameState gameState, Civilization civilization) {
+    public ShipControllerPanel(GameState gameState, Civilization civilization) {
         this.civilization = civilization;
         this.gameState = gameState;
         currentShip = null;

@@ -95,6 +95,7 @@ public class Technologies implements Serializable {
 
             int type = -1;
             switch (techonology.getString("type")) {
+                default:
                 case "UNLOCK":
                     type = TechonologyTypes.UNLOCK;
                     break;

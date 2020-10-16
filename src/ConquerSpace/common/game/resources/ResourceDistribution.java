@@ -66,6 +66,4 @@ public class ResourceDistribution  implements Serializable{
     public String toString() {
         return resourceName;
     }
-    
-    
 }

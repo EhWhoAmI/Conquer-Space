@@ -74,7 +74,6 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
     }
 
     public interface ObjectListModelHandler<E> {
-
         public String toString(E object);
     }
 }

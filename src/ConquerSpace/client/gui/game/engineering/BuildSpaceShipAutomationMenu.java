@@ -487,28 +487,29 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
-            shipChangablePanel.add(fuelCapacityLabel, constraints);
+            //shipChangablePanel.add(fuelCapacityLabel, constraints);
 
             constraints.gridx = 1;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
-            shipChangablePanel.add(fuelCapacityValue, constraints);
+            //shipChangablePanel.add(fuelCapacityValue, constraints);
 
             constraints.gridx = 2;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
-            shipChangablePanel.add(fuelCapacityUnit, constraints);
+            //shipChangablePanel.add(fuelCapacityUnit, constraints);
 
             constraints.gridx = 3;
             constraints.gridy = 4;
             constraints.anchor = GridBagConstraints.NORTHWEST;
             //constraints.weightx = 1;
             //constraints.weighty = 1;
-            shipChangablePanel.add(fuelCapicityConfig, constraints);
+            //shipChangablePanel.add(fuelCapicityConfig, constraints);
+            
             constraints.gridx = 0;
             constraints.gridy = 0;
             constraints.anchor = GridBagConstraints.NORTHWEST;

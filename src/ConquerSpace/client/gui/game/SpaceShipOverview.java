@@ -31,7 +31,7 @@ import javax.swing.JTabbedPane;
 public class SpaceShipOverview extends JPanel {
 
     private ShipManager shipListManager;
-    private ShipController controller;
+    private ShipControllerPanel controller;
     private JTabbedPane tabs;
 
     public SpaceShipOverview(GameState gameState, Civilization civ, PlayerRegister register) {
@@ -39,7 +39,7 @@ public class SpaceShipOverview extends JPanel {
         tabs = new JTabbedPane();
         
         shipListManager = new ShipManager(gameState, civ, register, this);
-        controller = new ShipController(gameState, civ);
+        controller = new ShipControllerPanel(gameState, civ);
 
         tabs.add("Ship List", shipListManager);
         tabs.add("Ship information", controller);
