@@ -33,6 +33,7 @@ public class TerrainColoring {
     public static HashMap<Float, Color> getRockyTerrainColoring(int i) {
         HashMap<Float, Color> colors = new HashMap<>();
         switch (i) {
+            default:
             case 0:
                 colors.put(-1f, new Color(69, 24, 4));
                 colors.put(-0.25f, new Color(193, 68, 14));
@@ -66,6 +67,7 @@ public class TerrainColoring {
                 colors.put(0.550f, new Color(4, 115, 0, 255)); // trees
                 colors.put(0.800f, new Color(128, 128, 128, 255)); // rock
                 colors.put(1.0000f, new Color(255, 255, 255, 255)); // snow
+                break;
         }
         return colors;
     }
@@ -74,6 +76,7 @@ public class TerrainColoring {
         HashMap<Float, Color> colors = new HashMap<>();
 
         switch (i) {
+            default:
             case 0:
                 colors.put(-1f, new Color(200, 139, 58));
                 colors.put(-0.5f, new Color(167, 156, 134));
@@ -88,6 +91,7 @@ public class TerrainColoring {
                 colors.put(-.5f, new Color(164, 155, 114));
                 colors.put(0f, new Color(197, 171, 110));
                 colors.put(0.5f, new Color(195, 161, 113));
+                break;
         }
         return colors;
     }

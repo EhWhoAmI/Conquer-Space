@@ -9,11 +9,12 @@ Removed district systems, replaced with cities being defined by a series of poin
 	- better for understanding
 As a result, areas generate resources too
 Removed population units, Change to population segment system
+Removed satellites, changed it with space ships
 
 Technical:
 Change java version from 1.12 to 1.8 for compatability
 Game runs in the main thread
-Change to references to goods
+Change how the game handles objects to references to game objects
 Add identifiers to resource and production processes
 You can use the command line options -t to see the tools available, and the option -d to a debug mode which opens up the game faster, with a default seed.
 Added save files
@@ -28,6 +29,8 @@ Available job list
 Add constructing areas UI to cities
 Add ticker to see the difference of resources over time
 Remove satellites, replace with ships that cannot move
+Overhauled planet GUI, so it looks neater
+Change star map to procedually generated
 
 Gameplay:
 All buildings are resource storages now

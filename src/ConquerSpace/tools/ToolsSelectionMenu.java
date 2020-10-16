@@ -47,6 +47,7 @@ public class ToolsSelectionMenu extends JFrame implements WindowListener {
         toolsList.addListSelectionListener(l -> {
             String text = toolsList.getSelectedValue();
             switch (text) {
+                default:
                 case GOODS_STRING:
                     new ResourceViewer(state);
                     selectedTools = true;

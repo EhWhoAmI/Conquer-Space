@@ -30,10 +30,10 @@ import ConquerSpace.common.game.universe.bodies.StarSystem;
 public class ExitStarSystemAction extends ShipAction {
 
     private int starSystem;
-    boolean done = false;
 
     public ExitStarSystemAction(Ship s) {
         super(s);
+        done = false;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ExitStarSystemAction extends ShipAction {
     public boolean checkIfDone(GameState gameState) {
         return done;
     }
-    
+
     @Override
     public boolean isPossible(GameState gameState) {
         return true;
