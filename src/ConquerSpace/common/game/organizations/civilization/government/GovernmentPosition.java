@@ -35,7 +35,7 @@ public class GovernmentPosition implements Serializable{
         id = idCounter++;
     }
 
-    public String getName() {
+    public String getTitleName() {
         return name;
     }
 

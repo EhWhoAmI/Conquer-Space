@@ -19,8 +19,8 @@ package ConquerSpace.common.game.science;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.ResourceLoader;

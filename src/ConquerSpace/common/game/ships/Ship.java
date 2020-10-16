@@ -21,7 +21,6 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
-import ConquerSpace.common.game.ships.components.ShipComponentType;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.save.SerializeClassName;

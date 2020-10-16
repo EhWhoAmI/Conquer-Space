@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -82,23 +83,23 @@ public class DebugStatsWindow extends JInternalFrame {
         gameState = state;
         runtime = Runtime.getRuntime();
 
-        setTitle("Stats for Nerds");
+        setTitle(LOCALE_MESSAGES.getMessage("game.debug.title"));
         setLayout(new VerticalFlowLayout(5, 4));
 
         memoryusedLabel = new JLabel(getMemoryString());
         threadCountLabel = new JLabel(getThreadString());
         tickTimeLabel = new JLabel(getTickTimeString());
         objectCountLabel = new JLabel(getGameObjectString());
-        deviceInfo = new JButton("Current runtime stats");
-        logger = new JButton("Show Logs");
+        deviceInfo = new JButton(LOCALE_MESSAGES.getMessage("game.debug.runtimestats"));
+        logger = new JButton(LOCALE_MESSAGES.getMessage("game.debug.logs.show"));
 
-        runTrashCompactor = new JButton("Force Garbage Collection");
+        runTrashCompactor = new JButton(LOCALE_MESSAGES.getMessage("game.debug.gc"));
         runTrashCompactor.setFocusable(false);
         runTrashCompactor.addActionListener((e) -> {
             System.gc();
         });
 
-        openConsole = new JButton("Open Console");
+        openConsole = new JButton(LOCALE_MESSAGES.getMessage("game.debug.console"));
         openConsole.setFocusable(false);
         openConsole.addActionListener((e) -> {
             CQSPConsole con
@@ -138,18 +139,17 @@ public class DebugStatsWindow extends JInternalFrame {
 
                 getDesktopPane().add(frame);
             } else {
-                JOptionPane.showMessageDialog(this, "We had an issue opening the log panel",
-                        "Could not open log panel", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, LOCALE_MESSAGES.getMessage("game.debug.logs.error.title"),
+                        LOCALE_MESSAGES.getMessage("game.debug.logs.error.body"), JOptionPane.ERROR_MESSAGE);
             }
         });
+        logger.setEnabled(false);
 
-        throwException = new JButton("Exception Roulette");
+        throwException = new JButton(LOCALE_MESSAGES.getMessage("game.debug.fun"));
         throwException.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent l) {
-                throw new ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything("No u. "
-                        + "Seriously, though, you can just press don\'t exit, "
-                        + "and nothing will happen.");
+                throw new ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything("oof");
             }
         });
         add(memoryusedLabel);
@@ -183,24 +183,28 @@ public class DebugStatsWindow extends JInternalFrame {
     }
 
     private String getMemoryString() {
-        double totalMemory = (double) runtime.totalMemory();
-        double freeMemory = (double) runtime.freeMemory();
-        return "Memory used: " + byteCountToDisplaySize((long) totalMemory - (long) freeMemory)
-                + "/" + byteCountToDisplaySize((long) totalMemory)
-                + ", or "
-                + ((double) Math.round((totalMemory - freeMemory) / totalMemory * 10000) / 100d) + "%";
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+        return LOCALE_MESSAGES.getMessage("game.debug.memoryused",
+                byteCountToDisplaySize(totalMemory - freeMemory),
+                byteCountToDisplaySize(totalMemory),
+                calculatePercentage((double) totalMemory, (double) freeMemory));
+    }
+
+    public double calculatePercentage(double total, double part) {
+        return (double) Math.round((total - part) / total * 10000) / 100d;
     }
 
     private String getThreadString() {
-        return "Threads currently running: " + Thread.getAllStackTraces().size();
+        return LOCALE_MESSAGES.getMessage("game.debug.threads", Thread.getAllStackTraces().size());
     }
 
     private String getTickTimeString() {
-        return "Tick Time: " + GameController.updateTime;
+        return LOCALE_MESSAGES.getMessage("game.debug.ticktime", GameController.updateTime);
     }
 
     private String getGameObjectString() {
-        return "Number of Game Objects: " + gameState.getObjectCount();
+        return LOCALE_MESSAGES.getMessage("game.debug.objectCount", gameState.getObjectCount());
     }
 
     /**
@@ -316,7 +320,7 @@ public class DebugStatsWindow extends JInternalFrame {
         } else if (size.divide(ONE_KB_BI).compareTo(BigInteger.ZERO) > 0) {
             displaySize = String.valueOf(size.divide(ONE_KB_BI)) + " KB";
         } else {
-            displaySize = String.valueOf(size) + " bytes";
+            displaySize = String.valueOf(size) + " b";
         }
         return displaySize;
     }
@@ -346,8 +350,13 @@ public class DebugStatsWindow extends JInternalFrame {
         return byteCountToDisplaySize(BigInteger.valueOf(size));
     }
 
+    public static String byteCountToDisplaySize(final double size) {
+        return byteCountToDisplaySize(BigInteger.valueOf((long) size));
+    }
+
     //Runtime exception so that it doesn't have to be caught
-    public static class ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything extends RuntimeException {
+    public static class ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything 
+            extends RuntimeException {
 
         public ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything() {
             super();

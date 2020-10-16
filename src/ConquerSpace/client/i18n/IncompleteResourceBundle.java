@@ -18,6 +18,7 @@
 package ConquerSpace.client.i18n;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -25,12 +26,15 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author EhWhoAmI
  */
 public class IncompleteResourceBundle extends ResourceBundle {
+
+    private static final Logger LOGGER = CQSPLogger.getLogger(IncompleteResourceBundle.class.getName());
 
     private HashMap<String, String> prop;
     private ResourceBundle defaultProperties;
@@ -40,35 +44,51 @@ public class IncompleteResourceBundle extends ResourceBundle {
         Properties properties = new Properties();
         properties.load(is);
         prop = new HashMap(properties);
-        
+
         defaultProperties = ResourceBundle.getBundle("assets.i18n." + ConquerSpace.DEFAULT_LOCALE);
     }
 
     @Override
     protected Object handleGetObject(String key) {
+        String content = "";
         if (prop.containsKey(key)) {
-            String content = (prop.get(key));
+            content = (prop.get(key));
             if (ConquerSpace.TRANSLATE_TEST) {
-                return "Translate OK:(" + content + ")";
+                content = "Translate OK:(" + content + ")";
             }
-            return content;
         } else if (defaultProperties.containsKey(key)) {
-            String content = defaultProperties.getString(key);
+            content = defaultProperties.getString(key);
             if (ConquerSpace.TRANSLATE_TEST) {
-                return "Translate Missing:(" + content + ")";
+                LOGGER.warn("TRANSLATE MISSING: " + content);
+                content = "Translate Missing:(" + content + ")";
             }
-            return content;
         } else {
-            String content = key;
+            content = key;
             if (ConquerSpace.TRANSLATE_TEST) {
-                return "Translate Non-existent:(" + content + ")";
+                LOGGER.warn("NO TRANSLATE: " + content);
+                content = "Translate Non-existent:(" + content + ")";
             }
-            return content;
         }
+        return content;
+    }
+
+    public TranslateStatus getTranslateStatus(String key) {
+        if (prop.containsKey(key)) {
+            return TranslateStatus.EXISTS;
+        } else if (defaultProperties.containsKey(key)) {
+            return (TranslateStatus.MISSING);
+        }
+        return TranslateStatus.NON_EXISTENT;
     }
 
     @Override
     public Enumeration<String> getKeys() {
         return Collections.enumeration(prop.keySet());
+    }
+
+    public static enum TranslateStatus {
+        EXISTS, //Exists
+        MISSING, //Missing from current properties
+        NON_EXISTENT; //Does not exist anywhere
     }
 }

@@ -28,9 +28,9 @@ import ConquerSpace.common.game.organizations.civilization.government.Government
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.population.jobs.Employer;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Field;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;

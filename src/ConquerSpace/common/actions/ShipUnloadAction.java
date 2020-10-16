@@ -42,11 +42,9 @@ public class ShipUnloadAction extends ShipAction {
         //Get orbiting stuff
         ObjectReference orbitingref = gameState.getUniverse().getSpaceObject(spaceShip.getOrbiting());
         Body body = gameState.getObject(orbitingref, Body.class);
-        System.out.println(body);
         if (body instanceof Planet) {
             //Place into orbit
             ((Planet) body).getSatellites().add(ship);
-            System.out.println("done!");
             this.done = true;
 
         }

@@ -18,8 +18,8 @@
 package ConquerSpace.common.actions;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.StoreableReference;
 
 /**
  * Org transports good.

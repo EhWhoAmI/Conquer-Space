@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.city.City;
@@ -44,8 +45,13 @@ public class CivInfoOverview extends JPanel {
     private JPanel populationPanel;
     private JPanel governmentPanel;
     private JTabbedPane mainTabs;
+    
+    private JLabel civLeaderLabel;
 
-    public CivInfoOverview(GameState gameState, Civilization c, Galaxy u) {
+    Civilization civ;
+
+    public CivInfoOverview(GameState gameState, Civilization civ, Galaxy u) {
+        this.civ = civ;
         setLayout(new BorderLayout());
         //Civ name
         mainTabs = new JTabbedPane(JTabbedPane.BOTTOM);
@@ -53,12 +59,13 @@ public class CivInfoOverview extends JPanel {
         mainPanel = new JPanel();
         mainPanel.setLayout(new VerticalFlowLayout());
 
-        JLabel civName = new JLabel(c.getName());
-        JLabel civHomePlanet = new JLabel("From " + c.getHomePlanetName());
-        JLabel civTechLevel = new JLabel("Tech level: " + c.getTechLevel());
-        JLabel civFoundingSpecies = new JLabel("Founding Species: " + c.getFoundingSpecies().getName());
-        JLabel capital = new JLabel("Capital: " + gameState.getObject(c.getCapitalCity(), City.class).getName() + " on " + c.getCapitalPlanet().getName());
-        JLabel currency = new JLabel("National currency: " + c.getNationalCurrency().getName());
+        JLabel civName = new JLabel(LOCALE_MESSAGES.getMessage("game.civinfo.name", civ.getName()));
+        JLabel civHomePlanet = new JLabel(LOCALE_MESSAGES.getMessage("game.civinfo.homeplanet", civ.getHomePlanetName()));
+        JLabel civTechLevel = new JLabel(LOCALE_MESSAGES.getMessage("game.civinfo.tech", civ.getTechLevel()));
+        JLabel civFoundingSpecies = new JLabel(LOCALE_MESSAGES.getMessage("game.civinfo.founding", civ.getFoundingSpecies().getName()));
+        City capitalCity = gameState.getObject(civ.getCapitalCity(), City.class);
+        JLabel capital = new JLabel(LOCALE_MESSAGES.getMessage("game.civinfo.capital", capitalCity.getName(), civ.getCapitalPlanet().getName()));
+        JLabel currency = new JLabel(LOCALE_MESSAGES.getMessage("game.civinfo.currency", civ.getNationalCurrency().getName()));
 
         mainPanel.add(civName);
         mainPanel.add(civHomePlanet);
@@ -76,39 +83,37 @@ public class CivInfoOverview extends JPanel {
 
         governmentPanel = new JPanel(new VerticalFlowLayout());
 
-        Person p = c.government.officials.get(c.government.headofState);
-        JLabel civLeader = new JLabel(c.government.headofState.getName() + " " + p.getName());
-        governmentPanel.add(civLeader);
+        Person p = civ.government.officials.get(civ.government.headofState);
+        civLeaderLabel = new JLabel(civ.government.headofState.getTitleName() + " " + p.getName());
+        governmentPanel.add(civLeaderLabel);
 
-        mainTabs.addTab("Civilization", mainPanel);
+        mainTabs.addTab(LOCALE_MESSAGES.getMessage("game.civinfo.tabs.civ"), mainPanel);
         //mainTabs.addTab("Resources", resourcesPanel);
-        mainTabs.addTab("Population", populationPanel);
-        mainTabs.addTab("Government", governmentPanel);
+        mainTabs.addTab(LOCALE_MESSAGES.getMessage("game.civinfo.tabs.pops"), populationPanel);
+        mainTabs.addTab(LOCALE_MESSAGES.getMessage("game.civinfo.tabs.gov"), governmentPanel);
         add(mainTabs, BorderLayout.CENTER);
 
         //Updating code
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
-                //Update info...
-                Person p = c.government.officials.get(c.government.headofState);
-
-                //populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
-                civLeader.setText(c.government.headofState.getName() + " " + p.getName());
+                updateLeaderLabel();
             }
         });
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                //Update info...
-                Person p = c.government.officials.get(c.government.headofState);
-
-                //populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
-                civLeader.setText(c.government.headofState.getName() + " " + p.getName());
+                updateLeaderLabel();
             }
         });
         setVisible(true);
     }
 
+    private void updateLeaderLabel() {
+        Person p = civ.government.officials.get(civ.government.headofState);
+
+        //populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
+        civLeaderLabel.setText(LOCALE_MESSAGES.getMessage("game.civinfo.headofstate", civ.government.headofState.getTitleName(), p.getName()));
+    }
 }

@@ -18,10 +18,6 @@
 package ConquerSpace.common.game.ships.components;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.resources.StoreableReference;
-import ConquerSpace.common.game.resources.ResourceStockpile;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * This can store resources, and is the same as a resource stockpile. It's just that you cannot

@@ -56,9 +56,9 @@ import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Ship;
@@ -729,7 +729,6 @@ public class GameUpdater extends GameTicker {
             for (ObjectReference shipId : civilization.spaceships) {
                 Ship ship = gameState.getObject(shipId, Ship.class);
                 ShipAction sa = ship.getActionAndPopIfDone(gameState);
-                System.out.println(sa);
                 if (!sa.checkIfDone(gameState)) {
                     sa.doAction(gameState);
                 } else {

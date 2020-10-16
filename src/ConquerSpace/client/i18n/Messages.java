@@ -18,6 +18,7 @@
 package ConquerSpace.client.i18n;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.client.i18n.IncompleteResourceBundle.TranslateStatus;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.MessageFormat;
 import java.util.IllegalFormatConversionException;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -41,25 +43,11 @@ import org.apache.logging.log4j.Logger;
 public class Messages {
 
     private static final Logger LOGGER = CQSPLogger.getLogger(Messages.class.getName());
-    private ResourceBundle bundle;
+    private IncompleteResourceBundle bundle;
 
     private static final Locale[] SUPPORTED_LOCALES = {
         new Locale("en", "us")
     };
-
-    public Messages() {
-        try {
-            File resourcesFolder = new File(ConquerSpace.USER_DIR + "/assets/i18n/");
-            URL[] urls = {resourcesFolder.toURI().toURL()};
-            ClassLoader loader = new URLClassLoader(urls);
-            bundle = ResourceBundle.getBundle("", Locale.getDefault(), loader);
-            return;
-        } catch (MalformedURLException ex) {
-            LOGGER.error(ex);
-        }
-
-        loadDefaultbundle();
-    }
 
     public Messages(Locale l) {
         //Load resource file
@@ -95,14 +83,19 @@ public class Messages {
     }
 
     public String getMessage(String key) {
+        if (ConquerSpace.TRANSLATE_TEST && bundle.getTranslateStatus(key) != TranslateStatus.EXISTS) {
+            //REPORT
+            LOGGER.warn("Translate " + key + " does not exist", new Exception("Stack trace"));
+            
+        }
         String content = bundle.getString(key);
         return (content);
     }
 
     public String getMessage(String key, Object... objs) {
-        String content = bundle.getString(key);
+        String content = getMessage(key);
         try {
-            content = String.format(content, objs);
+            content = MessageFormat.format(content, objs);
         } catch (IllegalFormatConversionException ifce) {
             //Fail silently when there is an incorrect format
             LOGGER.warn("Problem with formatting " + key + " " + ifce.getMessage(), ifce);

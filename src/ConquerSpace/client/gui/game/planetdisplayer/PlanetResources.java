@@ -25,8 +25,8 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.GoodReference;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.awt.Color;
@@ -428,7 +428,7 @@ public class PlanetResources extends javax.swing.JPanel {
         String[] colunmNames = {
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"),
-            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", gameState.GameRefreshRate)};
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.delta", gameState.GameRefreshRate)};
 
         @Override
         public int getRowCount() {
@@ -555,7 +555,7 @@ public class PlanetResources extends javax.swing.JPanel {
         String[] colunmNames = {
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"),
-            LOCALE_MESSAGES.getMessage("game.planet.resources.delta", gameState.GameRefreshRate)};
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.delta", gameState.GameRefreshRate)};
 
         @Override
         public int getRowCount() {

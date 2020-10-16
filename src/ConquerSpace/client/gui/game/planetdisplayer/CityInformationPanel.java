@@ -23,7 +23,6 @@ import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.actions.Actions;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.CityType;
 import ConquerSpace.common.game.city.area.Area;
@@ -280,7 +279,7 @@ public class CityInformationPanel extends JPanel {
             add(growthAmount);
 
             double unemploymentRate = selectedCity.getUnemploymentRate();
-            JLabel unemployment = new JLabel("Unemployment rate: " + Math.round(unemploymentRate * 100) + "%");
+            JLabel unemployment = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.unempoymentrate", Math.round(unemploymentRate * 100)));
             unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
             add(unemployment);
 
@@ -295,7 +294,7 @@ public class CityInformationPanel extends JPanel {
                 add(governorLabel);
             }
 
-            setBorder(new TitledBorder(new LineBorder(Color.gray), "Overview"));
+            setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.overview")));
         }
     }
 
@@ -434,7 +433,8 @@ public class CityInformationPanel extends JPanel {
             JTable jobTable = new JTable(jobTableModel);
 
             //Set info
-            PieChart chart = new PieChartBuilder().height(300).title("Jobs").build();
+            PieChart chart = new PieChartBuilder().height(300).
+                    title(LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")).build();
             chart.getStyler().setToolTipsAlwaysVisible(true);
             chart.getStyler().setDrawAllAnnotations(true);
             chart.getStyler().setDonutThickness(0.5);
@@ -450,10 +450,10 @@ public class CityInformationPanel extends JPanel {
             chart.getStyler().setSeriesColors(Arrays.copyOf(jobs.toArray(), jobs.toArray().length, Color[].class));
             XChartPanel<PieChart> chartPanel = new XChartPanel<>(chart);
 
-            tabs.add("Pie Chart", chartPanel);
-            tabs.add("Table", new JScrollPane(jobTable));
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), chartPanel);
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
             add(tabs, BorderLayout.CENTER);
-            setBorder(new TitledBorder(new LineBorder(Color.gray), "Jobs"));
+            setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
         }
 
         public void initPopulationInfo() {
@@ -566,7 +566,7 @@ public class CityInformationPanel extends JPanel {
                 Integer val = entry.getValue();
 
                 JXTaskPane pane = new JXTaskPane(key.toString());
-                pane.add(new JLabel("Number of Areas of this Type:" + val.toString()));
+                pane.add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.areas.type", val.toString())));
                 //List all areas of this type
                 for (int i = 0; i < selectedCity.areas.size(); i++) {
                     Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
@@ -594,12 +594,12 @@ public class CityInformationPanel extends JPanel {
             CityProductionPanel production = new CityProductionPanel();
             tabs = new JTabbedPane();
 
-            tabs.add("Industries and production", scrollPane);
-            tabs.add("Construction", areaConstructionPanel);
-            tabs.add("Production", production);
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.industries"), scrollPane);
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.construction"), areaConstructionPanel);
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.production"), production);
             add(tabs, BorderLayout.CENTER);
 
-            setBorder(new TitledBorder(new LineBorder(Color.gray), "Industries"));
+            setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.industries")));
             setPreferredSize(new Dimension(831, 312));
         }
     }
@@ -652,13 +652,13 @@ public class CityInformationPanel extends JPanel {
 
             resourceTable = new JTable(new StockpileStorageModel());
 
-            tabs.add("Modifiers", new JScrollPane(modifierList));
-            tabs.add("Linked Cities", new JScrollPane(connectedCityList));
-            tabs.add("Resource Ledger", new JScrollPane(resourceTable));
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.linked"), new JScrollPane(connectedCityList));
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.ledger"), new JScrollPane(resourceTable));
 
             //Show table of resources
             add(tabs, BorderLayout.CENTER);
-            setBorder(new TitledBorder(new LineBorder(Color.gray), "Economy and Other stuff"));
+            setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.economy")));
         }
 
         private class StockpileStorageModel extends AbstractTableModel {
@@ -666,7 +666,7 @@ public class CityInformationPanel extends JPanel {
             String[] colunmNames = {
                 LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
                 LOCALE_MESSAGES.getMessage("game.planet.resources.table.count"),
-                LOCALE_MESSAGES.getMessage("game.planet.resources.delta", gameState.GameRefreshRate)};
+                LOCALE_MESSAGES.getMessage("game.planet.resources.table.delta", gameState.GameRefreshRate)};
 
             @Override
             public int getRowCount() {
@@ -692,7 +692,7 @@ public class CityInformationPanel extends JPanel {
                             return gameState.getGood(storedValue);
                         case 1:
                             return selectedCity.getResourceAmount(storedValue)
-                                    + ", or "
+                                    + "u/"
                                     //Get mass in kg...
                                     + (selectedCity.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass())
                                     + " kg";
@@ -726,10 +726,10 @@ public class CityInformationPanel extends JPanel {
 
         public CityProductionPanel() {
             setLayout(new VerticalFlowLayout());
-            add(new JLabel("Production"));
+            add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.production")));
 
             //Create new space ship menu
-            add(new JLabel("Create space ship"));
+            add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.spaceship")));
             ObjectListModel<ObjectReference> shipList = new ObjectListModel<>();
             shipList.setElements(civilization.shipClasses);
             shipList.setHandler(l -> {
@@ -737,7 +737,7 @@ public class CityInformationPanel extends JPanel {
             });
             shipClassList = new JList<>(shipList);
             add(new JScrollPane(shipClassList));
-            JButton createButton = new JButton("Launch!");
+            JButton createButton = new JButton(LOCALE_MESSAGES.getMessage("game.planet.cities.create"));
             createButton.addActionListener(l -> {
                 //Find the space ports on this planet... 
                 //Get selected ship
@@ -761,7 +761,7 @@ public class CityInformationPanel extends JPanel {
                             port.landedShips.add(ship.getReference());
                             civilization.spaceships.add(ship.getReference());
 
-                            JOptionPane.showInternalMessageDialog(this, "Ok gonna launch ship " + shipClass.getName() + " with name " + ship.getName());
+                            JOptionPane.showInternalMessageDialog(this, LOCALE_MESSAGES.getMessage("game.planet.cities.launch.alert", shipClass.getName(), ship.getName()));
 
                             //Deselect
                             shipClassList.clearSelection();
@@ -769,7 +769,7 @@ public class CityInformationPanel extends JPanel {
                         }
                     }
                 }
-                JOptionPane.showInternalMessageDialog(this, "You need to build a space port somewhere on this planet!");
+                JOptionPane.showInternalMessageDialog(this, LOCALE_MESSAGES.getMessage("game.planet.cities.needport"));
             });
             add(createButton);
         }

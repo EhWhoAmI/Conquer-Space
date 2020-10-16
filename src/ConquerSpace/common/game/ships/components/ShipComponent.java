@@ -20,8 +20,8 @@ package ConquerSpace.common.game.ships.components;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.ManufacturedGood;
+import ConquerSpace.common.game.resources.StoreableReference;
 
 /**
  *

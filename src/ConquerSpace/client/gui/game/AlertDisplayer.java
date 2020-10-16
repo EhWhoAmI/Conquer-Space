@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game;
 
+import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.actions.Alert;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
@@ -36,7 +37,7 @@ public class AlertDisplayer extends JInternalFrame {
     private static AlertDisplayer instance;
 
     private AlertDisplayer() {
-        setTitle("Alerts");
+        setTitle(LOCALE_MESSAGES.getMessage("game.alerts"));
 
         init();
 
