@@ -91,7 +91,7 @@ public final class ConquerSpace {
     /**
      * The version of the game.
      */
-    public static final Version VERSION = new Version(0, 0, 3);
+    public static final Version VERSION = new Version(0, 1, 0);
 
     /**
      * Localization.

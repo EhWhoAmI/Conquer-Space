@@ -84,9 +84,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
-import org.knowm.xchart.PieChart;
-import org.knowm.xchart.PieChartBuilder;
-import org.knowm.xchart.XChartPanel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.PieSectionEntity;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
@@ -153,7 +159,7 @@ public class CityInformationPanel extends JPanel {
         constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0;
-        constraints.weighty = 1;
+        constraints.weighty = 0;
         constraints.gridy = 2;
         constraints.gridx = 2;
         constraints.gridwidth = 1;
@@ -432,24 +438,39 @@ public class CityInformationPanel extends JPanel {
             JobTableModel jobTableModel = new JobTableModel();
             JTable jobTable = new JTable(jobTableModel);
 
-            //Set info
-            PieChart chart = new PieChartBuilder().height(300).
-                    title(LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")).build();
-            chart.getStyler().setToolTipsAlwaysVisible(true);
-            chart.getStyler().setDrawAllAnnotations(true);
-            chart.getStyler().setDonutThickness(0.5);
-            ArrayList<Color> jobs = new ArrayList<>();
-            // Series
+            DefaultPieDataset dataset = new DefaultPieDataset();
             for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
                 JobType key = entry.getKey();
                 Integer val = entry.getValue();
-                chart.addSeries(key.getName(), val);
-                jobs.add(key.getColor());
+                dataset.setValue(key, val);
             }
-            Arrays.copyOf(jobs.toArray(), jobs.toArray().length, Color[].class);
-            chart.getStyler().setSeriesColors(Arrays.copyOf(jobs.toArray(), jobs.toArray().length, Color[].class));
-            XChartPanel<PieChart> chartPanel = new XChartPanel<>(chart);
 
+            JFreeChart chart = ChartFactory.createPieChart(LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs"), dataset, true, true, false);
+            for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
+                JobType key = entry.getKey();
+                Integer val = entry.getValue();
+                ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
+            }
+
+            ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setPopupMenu(null);
+            chartPanel.addChartMouseListener(new ChartMouseListener() {
+                @Override
+                public void chartMouseClicked(ChartMouseEvent cme) {
+                    ChartEntity entity = cme.getEntity();
+                    if (entity instanceof PieSectionEntity) {
+                        //System.out.println(((PieSectionEntity) entity).getSectionKey());
+                        //System.out.println(((PieSectionEntity) entity).getSectionKey().getClass());
+                    } 
+                }
+
+                @Override
+                public void chartMouseMoved(ChartMouseEvent cme) {
+
+                }
+            });
+
+            //XChartPanel<PieChart> chartPanel = new XChartPanel<>(chart);
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), chartPanel);
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
             add(tabs, BorderLayout.CENTER);

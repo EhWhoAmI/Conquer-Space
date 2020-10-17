@@ -465,7 +465,7 @@ public class GameUpdater extends GameTicker {
             }
         }
 
-        //Tax
+        //Tax, the tax is paid to population
         long popSize = pop.getPopulationSize();
         long tax = popSize * 5;
 
