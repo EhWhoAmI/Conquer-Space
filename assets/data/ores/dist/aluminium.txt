@@ -1,41 +1,7 @@
 [
     //As Gibbsite, Bohemitem and Diaspore are often found together as bauxite, they have similar stats
     {
-        name: Gibbsite
-        distribution: [
-            30
-            60
-        ]
-        depth: [
-            1
-            30
-        ]
-        rarity: 1
-        abundance: 60000
-        dist-density: 32
-        tags: [
-
-        ]
-    }
-    {
-        name: Bohemite
-        distribution: [
-            30
-            60
-        ]
-        depth: [
-            1
-            30
-        ]
-        rarity: 1
-        abundance: 60000
-        dist-density: 32
-        tags: [
-
-        ]
-    }
-    {
-        name: Diaspore
+        name: o_aluminium
         distribution: [
             30
             60

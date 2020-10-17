@@ -1,6 +1,49 @@
 Changelog:
 
-0.0.2:
+0.0.3 (October 17, 2020)
+------------------------------------------------------------------------
+Total Overhauls:
+Removed district systems, replaced with cities being defined by a series of points, 
+	- probably better for performance
+	- better for code
+	- better for understanding
+As a result, areas generate resources too
+Removed population units, Change to population segment system
+Removed satellites, changed it with space ships
+
+Technical:
+Change java version from 1.12 to 1.8 for compatability
+Game runs in the main thread
+Change how the game handles objects to references to game objects
+Add identifiers to resource and production processes
+You can use the command line options -t to see the tools available, and the option -d to a debug mode which opens up the game faster, with a default seed.
+Added save files
+
+Graphics and UI:
+Add lighting to planet surfaces so it looks cooler
+More accurate orbit circles, now even eccentric orbit circles can be shown, such as an ellipse
+Better music options
+ - Volume can now be changed
+ - Music can be toggled better
+Available job list
+Add constructing areas UI to cities
+Add ticker to see the difference of resources over time
+Remove satellites, replace with ships that cannot move
+Overhauled planet GUI, so it looks neater
+Change star map to procedually generated
+
+Gameplay:
+All buildings are resource storages now
+Planet sizes and width changed
+Areas now generate resources, not populations
+Cities now distribute resources to surrounding areas
+Added organizations, which are capable of doing various actions
+ - Added resource distribution organization, which distributes resources throughout the planet.
+ 
+
+
+0.0.2 (March 22, 2020)
+------------------------------------------------------------------------
 Total Overhauls:
 Resources are changed into goods, that can be processed into different resources
 Mining is changed into strata, that are similar to veins, just that they have multiple resources
@@ -20,7 +63,8 @@ Bug Fixes:
 Pressing the console button twice will not lead to an exception
 
 
-0.0.1:
+0.0.1 (July 14, 2019)
+------------------------------------------------------------------------
 Massive changes:
 We removed the planet sector system, and replaced it with terrain.
 Buildings have been shaken up also

@@ -1,25 +1,13 @@
 [
     {
-        name: Hematite
+        name: Iron Ore
+        identifier: o_iron
         volume: 1
         mass: 5.3
         // Iron ore
         formula: [
-            "Iron:2"
-            "Oxygen:3"
-        ]
-        tags: [
-
-        ]
-    }
-    {
-        name: Magnetite
-        volume: 1
-        mass: 5.15
-        // Iron ore
-        formula: [
-            "Iron:3"
-            "Oxygen:4"
+            "e_iron:2"
+            "e_oxygen:3"
         ]
         tags: [
 

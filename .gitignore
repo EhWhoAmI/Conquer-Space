@@ -24,10 +24,11 @@ universe.dump
 *.dump
 
 # Javadoc files
-/docs/
+javadoc/
 
 # Settings
 settings.properties
 
 # Mapping files
 mapping.txt
+__pycache__

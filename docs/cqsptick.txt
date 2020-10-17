@@ -1,0 +1,13 @@
+The process of Conquer Space ticks
+
+Increment date (by 1)
+Calculate vision (may change into a listener because it may be a little bit computer resource consuming)
+Update object positions
+Move ships
+
+ - Check for game update tick
+	- Update universe
+		- Process star system
+	- Calculate tech level and tech
+	- Calculate resources
+	- Process people

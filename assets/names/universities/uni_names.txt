@@ -1,0 +1,24 @@
+{
+  name: Unis
+  rules:
+  [
+    names\space\institution
+  ]
+  counters: []
+  names:
+  [
+    Scientific
+    Research
+    Calculations
+    Sciencing
+  ]
+  space:
+  [
+    " "
+  ]
+  institution:
+  [
+    Institute
+    Labs
+  ]
+}

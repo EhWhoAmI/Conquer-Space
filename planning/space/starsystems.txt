@@ -1,5 +1,0 @@
-Star systems
-Star systems can have a maximum of say, 15 planets, with some math in accodrance with the size of the planets.
-
-If we want it to be accurate, solve this nice small issue:
-https://en.wikipedia.org/wiki/N-body_problem

@@ -4,27 +4,15 @@
         //Add 1 for each process thing
         //Components needed to create factory
         //Other stuff I can't remember
-        //Maybe even procedually generated processes with some parameters
-        name: Magnetite Smelting
+        //Maybe even procedurally generated processes with some parameters
+        name: Iron Ore Smelting
+        identifier: smelting_o_iron
         input: [
-            "Magnetite:1"
+            "o_iron:1"
         ]
         output: [
-            "Iron:1"
-            "Oxygen:2"
-        ]
-        diff: 1
-        catalysts: [
-        ]
-    }
-    {
-        name: Hematite Smelting
-        input: [
-            "Hematite:1"
-        ]
-        output: [
-            "Iron:3"
-            "Oxygen:4"
+            "e_iron:1"
+            "e_oxygen:2"
         ]
         diff: 1
         catalysts: [
@@ -32,58 +20,73 @@
     }
     {
         name: Low Grade Steel Making
+        identifier: steel_low_grade_making
         input: [
-            "Iron:9"
-            "Carbon:1"
+            "e_iron:1"
+            "e_carbon:0.1"
         ]
         output: [
-            "Low Grade Steel:1"
-        ]
-        diff: 1
-        catalysts: [
-        ]
-    }
-    //https://en.wikipedia.org/wiki/Bayer_process
-    {
-        name: Bayer process gibbsite
-        //It produces Aluminium oxide 
-        input: [
-            "Gibbsite:1"
-        ]
-        //Eh makes sense I guess
-        output: [
-            "Aluminium:1"
-            "Water:2"
+            "steel_low_grade:1"
         ]
         diff: 1
         catalysts: [
         ]
     }
     {
-        name: Bayer process diaspore
-        //It produces Aluminium oxide 
+        name: Aluminium ore smelting
+        identifier: smelting_o_aluminium
         input: [
-            "Diaspore:1"
+            "o_aluminium:1"
         ]
         //Eh makes sense I guess
         output: [
-            "Aluminium:1"
-            "Water:2"
+            "e_aluminium:1"
+            "water:2"
         ]
         diff: 1
         catalysts: [
         ]
     }
     {
-        name: Bayer process boehmite
-        //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
+        name:Consumer Good Making
+        identifier: consumer_good_making
+         //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
         input: [
-            "Boehmite:1"
+            "plastic:1"
+            "steel_low_grade:1"
         ]
         //Eh makes sense I guess
         output: [
-            "Aluminium:1"
-            "Water:2"
+            "generic_consumer_good:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Concrete Combination
+        identifier: concrete_making
+        // Just copy factorio for now
+        input: [
+            "water:3"
+            "o_iron:1"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "building_concrete:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Water Generation
+        identifier: water_making
+        input: [
+        ]
+        //Eh makes sense I guess
+        output: [
+            "water:5"
         ]
         diff: 1
         catalysts: [

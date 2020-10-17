@@ -1,10 +1,11 @@
 [
     {
         name: Graphite
+        identifier: graphite
         volume: 1
         mass: 2.26
         formula: [
-            "Carbon:1"
+            "e_carbon:1"
         ]
         tags: [
 
@@ -12,12 +13,13 @@
     }
     {
         name: Low Grade Steel
+        identifier: steel_low_grade
         volume: 10
         mass: 72.66600
         //10 percent thingy
         formula: [
-            "Iron:9"
-            "Carbon:1"
+            "e_iron:9"
+            "e_carbon:1"
         ]
         tags: [
 
@@ -25,11 +27,12 @@
     }
     {
         name: Water
+        identifier: water
         volume: 1
         mass: 1
         formula: [
-            "Oxygen:1"
-            "Hydrogen:2"
+            "e_oxygen:1"
+            "e_hydrogen:2"
         ]
         tags: [
 
@@ -37,14 +40,67 @@
     }
     {
         name: Aluminium Oxide
+        identifier: aluminium_oxide
         volume: 1
         mass: 3.987
         formula: [
-            "Oxygen:3"
-            "Aluminium:2"
+            "e_oxygen:3"
+            "e_aluminium:2"
         ]
         tags: [
 
+        ]
+    }
+    {
+        name: Plastic
+        identifier: plastic
+        volume: 1
+        mass: 0.95
+        formula: [
+            "e_carbon:3"
+            "e_oxygen:5"
+            "e_chlorine:1"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Generic Consumer Good
+        identifier: generic_consumer_good
+        volume: 1
+        mass: 2.3
+        formula: [
+            "plastic:1"
+            "steel_low_grade:1"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Uncraftable Mysterious Goo
+        identifier: goo_test
+        volume: 1
+        //Extra dense, so no one can move it
+        mass: 500000000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
+{
+        name: Concrete
+        identifier: building_concrete
+        volume: 1
+        //Extra dense, so no one can move it
+        mass: 2400
+        formula: [
+        ]
+        tags: [
+            construction
+            structure
         ]
     }
 ]

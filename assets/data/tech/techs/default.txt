@@ -154,7 +154,7 @@
     id: 8
   }
   {
-    name: basic science
+    name: Basic science
     deps:
     [
       life
@@ -166,9 +166,15 @@
     difficulty: 0
     action:
     [
-      field:science:10
+      field:science:50
       field:biology:10
       field:chemistry:10
+      field:biology:10
+      field:medicine:10
+      field:mathematics:10
+      field:algebra:5
+      field:geometry:5
+      field:engineering:5
       tech:flight:20
       tech:rocket science:20
     ]
@@ -195,7 +201,7 @@
     difficulty: 2
     action:
     [
-      thrust:1
+      thrust:chemical
     ]
     fields:
     [
@@ -220,7 +226,7 @@
     difficulty: 3
     action:
     [
-      thrust:2
+      thrust:electrothermal
     ]
     fields:
     [
@@ -245,7 +251,7 @@
     difficulty: 3
     action:
     [
-      thrust:0
+      thrust:ion
     ]
     fields:
     [
@@ -270,7 +276,7 @@
     difficulty: 3
     action:
     [
-      thrust:3
+      thrust:plasma
     ]
     fields:
     [
@@ -295,7 +301,7 @@
     difficulty: 2
     action:
     [
-      thrust:4
+      thrust:nuclear
     ]
     fields:
     [
@@ -320,6 +326,7 @@
     difficulty: 2
     action:
     [
+      field:aeronautics:1
       tech:space planes:100
     ]
     fields:
@@ -345,7 +352,9 @@
     difficulty: 5
     action:
     [
+      field:aeronautics:1
       launch:Space Plane
+      value:100000
     ]
     fields:
     [
@@ -370,6 +379,7 @@
     difficulty: 2
     action:
     [
+      field:aeronautics:1
       tech:rocketery:100
     ]
     fields:
@@ -395,7 +405,9 @@
     difficulty: 5
     action:
     [
-      launch(Rocket)
+      field:aeronautics:1
+      launch:Rocket
+      value:100000
     ]
     fields:
     [
@@ -582,8 +594,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        process:Magnetite Smelting
-        process:Hematite Smelting
+        process:smelting_o_iron
     ]
     fields:
     [
@@ -607,8 +618,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        mine:Magnetite
-        mine:Hematite
+        mine:o_iron
     ]
     fields:
     [
@@ -632,9 +642,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        mine:Boehmite
-        mine:Diaspore
-        mine:Gibbsite
+        mine:o_aluminium
     ]
     fields:
     [
@@ -658,9 +666,7 @@
     upgradable: false
     difficulty: 1
     action: [
-        process:Bayer process gibbsite
-        process:Bayer process diaspore
-        process:Bayer process boehmite
+        process:smelting_o_aluminium
     ]
     fields:
     [
@@ -684,7 +690,7 @@
     upgradable: false
     difficulty: 1
     action: [
-      process:Low Grade Steel Making
+      process:steel_low_grade_making
     ]
     fields:
     [
@@ -696,5 +702,91 @@
     ]
     floor: 15
     id: 30
+  }
+  {
+    name:Making Consumer Goods
+    deps:
+    [
+      Knowledge
+    ]
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 1
+    action: [
+      process:consumer_good_making
+    ]
+    fields:
+    [
+      
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 16
+    id: 31
+  }
+  {
+    name: Energy Processing
+    deps: []
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 0
+    action:
+    [
+    ]
+    fields:
+    [
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 17
+    id: 32
+  }
+  {
+    name: Concrete Making
+    deps: []
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 0
+    action:
+    [
+      process:concrete_making
+    ]
+    fields:
+    [
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 17
+    id: 33
+  }
+  {
+    name: Water Making
+    deps: []
+    level: 0
+    type: UNLOCK
+    upgradable: false
+    difficulty: 0
+    action:
+    [
+      process:water_making
+    ]
+    fields:
+    [
+    ]
+    tags:
+    [
+      Starting
+    ]
+    floor: 17
+    id: 34
   }
 ]

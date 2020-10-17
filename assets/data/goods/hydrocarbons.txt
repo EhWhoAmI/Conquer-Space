@@ -1,11 +1,12 @@
 [
     {
         name: Propane
+        identifier: hc_propane
         volume: 1
         mass: 2.0098
         formula: [
-            "Hydrogen:8"
-            "Carbon:3"
+            "e_hydrogen:8"
+            "e_carbon:3"
         ]
         tags: [
             
@@ -13,11 +14,12 @@
     }
     {
         name: Hexadecane
+        identifier: hc_hexadecane
         volume: 1
         mass: 0.77
         formula: [
-            "Hydrogen:34"
-            "Carbon:16"
+            "e_hydrogen:34"
+            "e_carbon:16"
         ]
         tags: [
             
@@ -25,11 +27,12 @@
     }
     {
         name: Octane
+        identifier: hc_octane
         volume: 1
         mass: 0.703
         formula: [
-            "Hydrogen:18"
-            "Carbon:8"
+            "e_hydrogen:18"
+            "e_carbon:8"
         ]
         tags: [
             
@@ -38,16 +41,17 @@
     {
         //This crude oil is really danm sweet
         name: Sweet Crude Oil
+        identifier: crude_oil_sweet
         volume: 4
         mass: 5.7
         formula: [
-            "Octane:2"
-            "Hexadecane:1"
-            "Propane:2"
+            "hc_octane:2"
+            "hc_hexadecane:1"
+            "hc_propane:2"
         ]
         tags: [
             //For now, this can be used for pure energy
-            "Energy"
+            "energy"
         ]
     }
 ]

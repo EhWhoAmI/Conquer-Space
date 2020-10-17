@@ -17,30 +17,50 @@
  */
 package ConquerSpace;
 
-import ConquerSpace.game.GameController;
-import ConquerSpace.gui.music.MusicPlayer;
-import ConquerSpace.gui.start.MainMenu;
-import ConquerSpace.i18n.Messages;
-import ConquerSpace.util.logging.CQSPLogger;
-import ConquerSpace.util.Checksum;
-import ConquerSpace.util.ExceptionHandling;
-import ConquerSpace.util.Version;
+import ConquerSpace.client.ClientOptions;
+import ConquerSpace.client.gui.music.MusicPlayer;
+import ConquerSpace.client.gui.start.Loading;
+import ConquerSpace.client.gui.start.MainMenu;
+import ConquerSpace.client.i18n.Messages;
+import ConquerSpace.common.GameLoader;
+import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.save.SaveGame;
+import ConquerSpace.common.util.Checksum;
+import ConquerSpace.common.util.ExceptionHandling;
+import ConquerSpace.common.util.Version;
+import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.server.GameController;
+import ConquerSpace.server.generators.CivilizationConfig;
+import ConquerSpace.server.generators.DefaultUniverseGenerator;
+import ConquerSpace.server.generators.UniverseGenerationConfig;
+import ConquerSpace.server.generators.UniverseGenerator;
+import ConquerSpace.tools.ToolsSelectionMenu;
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Scanner;
-import javax.swing.JOptionPane;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.logging.log4j.Logger;
 
 /*
@@ -55,152 +75,133 @@ import org.apache.logging.log4j.Logger;
 /**
  * Conquer Space main class. Where everything starts.
  *
- * @author Zyun
+ * @author EhWhoAmI
  */
-public class ConquerSpace {
+public final class ConquerSpace {
 
     /**
      * Logger for the class.
      */
     private static final Logger LOGGER = CQSPLogger.getLogger(ConquerSpace.class.getName());
 
-    /**
-     * Build number for debugging.
-     */
-    public static int BUILD_NUMBER = 0;
+    public static String BUILD_TIME = "";
 
-    static {
-        Properties buildno = new Properties();
-        try {
-            buildno.load(new FileInputStream(System.getProperty("user.dir") + "/assets/BUILDNO"));
-            BUILD_NUMBER = Integer.parseInt(buildno.getProperty("build.number"));
-        } catch (FileNotFoundException ex) {
-            LOGGER.info("Asset file not found. No Problem.", ex);
-        } catch (IOException ex) {
-            LOGGER.info("Io exception. No Problem.", ex);
-        }
-    }
+    public static String BUILD_REVISION = "";
 
     /**
      * The version of the game.
      */
-    public static final Version VERSION = new Version(0, 0, 2, "rc-1" + BUILD_NUMBER);
+    public static final Version VERSION = new Version(0, 0, 3);
 
     /**
      * Localization.
      */
-    public static Messages localeMessages;
+    public static Messages LOCALE_MESSAGES;
+    public static Locale locale = null;
+    public static final Locale DEFAULT_LOCALE = new Locale("en", "us");
 
     public static String codeChecksum = null;
     public static String assetChecksum = null;
 
-    public static final boolean DEBUG = true;
+    public static boolean DEBUG = false,
+            TOOLS = false,
+            HEADLESS = false,
+            TRANSLATE_TEST = false;
+
+    public static final String USER_DIR = System.getProperty("user.dir");
+
+    public static final File SETTINGS_FILE = new File(USER_DIR + "/settings.properties");
+
+    public static GameState gameState;
+    /**
+     * This is the settings of the game.
+     */
+    public static ClientOptions settings;
+
+    public static UniverseGenerator generator;
 
     /**
      * Main class.
      *
      * @param args Command line arguments. Does nothing so far.
      */
-    public static void main(String[] args) {
-        CQSPLogger.initLoggers();
-        LOGGER.info("Run started: " + new Date().toString());
-        LOGGER.info("Version " + VERSION.toString());
+    public static void main(String[] args) throws InterruptedException {
+        initalizeCommandLineArgs(args);
+        if (TOOLS) {
+            new ToolsSelectionMenu(null);
+        } else {
+            CQSPLogger.initLoggers();
+            LOGGER.info("Run started: " + new Date().toString());
+            LOGGER.info("Version " + VERSION.toString());
 
-        //Generate hash to verify the version
-        //For error messages
-        if (!DEBUG) {
-            generateChecksum();
-        }
-
-        configureSettings();
-
-        //Set catch all exceptions
-        Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
-
-        initLookAndFeel();
-
-        GameController.musicPlayer = new MusicPlayer();
-        if (Globals.settings.getProperty("music").equals("no")) {
-            GameController.musicPlayer.setToPlay(false);
-            GameController.musicPlayer.stopMusic();
-        }
-
-        //New Game Menu
-        MainMenu menu = new MainMenu();
-        menu.setVisible(true);
-    }
-
-    /**
-     * Kept for purely historical reasons.
-     */
-    public static void loadFiles() {
-        long startTime = System.currentTimeMillis();
-        try {
-            //Load the file check.
-            Scanner fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
-            int files = 0;
-            while (fileScanner.hasNextLine()) {
-                files++;
-                fileScanner.nextLine();
+            //Generate hash to verify the version
+            //For error messages
+            if (!DEBUG) {
+                generateChecksum();
             }
-            LOGGER.info("Asset Files: " + files);
-            //Reset Scanner
-            fileScanner = new Scanner(new File(System.getProperty("user.dir") + "/assets/FILELIST"));
-            int fileIndex = 0;
-            int filesMissing = 0;
-            while (fileScanner.hasNextLine()) {
-                fileIndex++;
 
-                String fileName = fileScanner.nextLine();
+            configureSettings();
 
-                LOGGER.trace("Verifying file " + fileName);
+            //Set language
+            LOCALE_MESSAGES = new Messages(ConquerSpace.locale);
 
-                //Check for it
-                File f = new File(System.getProperty("user.dir") + "/" + fileName);
-                //Next we have to determine the importance of the file. -- TODO
-                //File exists or not, and warn noone. XD
-                if (!f.exists()) {
-                    LOGGER.warn("Can't find file " + fileName + ". not fatal.");
-                    filesMissing++;
+            //New Game Menu
+            try {
+                //Headless, no UI
+                //Turn off music for now
+                if (!HEADLESS) {
+                    //Set catch all exceptions in game thread
+                    Toolkit.getDefaultToolkit().getSystemEventQueue().push(new EventQueueProxy());
+
+                    //Configure look and feel
+                    initLookAndFeel();
+                    configureMusic();
+                }
+                if (DEBUG) {
+                    //Debug game loader
+                    setDebugUniverseGenerator();
                 } else {
-                    LOGGER.trace("File " + fileName + " exists");
+                    MainMenu menu = new MainMenu();
+                    menu.setVisible(true);
+
+                    //While the menu not loaded...
+                    while (!menu.isLoadedUniverse()) {
+                        Thread.sleep(100);
+                    }
+                    //Remove
+                    menu = null;
                 }
+                //Show loading screen
+                Loading load = new Loading();
+                loadUniverse();
+                load.setVisible(false);
+                runGame();
+            } catch (Exception e) {
+                //Catch exceptions...
+                ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
+                //Clean up, however we do that
             }
-            if (filesMissing == 0) {
-                LOGGER.info("No files missing.");
-            } else {
-                LOGGER.warn(filesMissing + " file(s) missing.");
-                int toexit = JOptionPane.showConfirmDialog(null, "You have "
-                        + filesMissing + " files missing. Make sure they are there"
-                        + ". \nSomething will go wrong if you don't fix"
-                        + "it. \nWe need all the files that we have. "
-                        + "Exit?", "Files missing",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-                if (toexit == JOptionPane.YES_OPTION) {
-                    //Then exit
-                    System.exit(0);
-                }
-                //or else leave the user to his or her own troubles. HEHEHE...
-            }
-        } catch (FileNotFoundException ex) {
-            //Cannot fine FILELIST
-            LOGGER.error("File not found Error: ", ex);
-            ExceptionHandling.ExceptionMessageBox("File FILELIST not found. Plea"
-                    + "se find it online or somewhere! We cannot check for any f"
-                    + "iles we need.", ex);
-            System.exit(1);
         }
-
-        long endTime = System.currentTimeMillis();
-
-        //Log how long that took
-        LOGGER.info("Took " + (endTime - startTime) + "ms to load.");
     }
 
     public static void initLookAndFeel() {
         try {
             //Set look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //Get from settings...
+            if (settings.getLaf().equals("default")) {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } else {
+                Properties lafProperties = new Properties();
+                File lafPropertyFile = new File(USER_DIR + "/assets/lookandfeels.properties");
+                try ( FileInputStream fis = new FileInputStream(lafPropertyFile);) {
+                    lafProperties.load(fis);
+                } catch (FileNotFoundException ex) {
+                } catch (IOException ex) {
+                }
+                if (lafProperties.containsKey(settings.getLaf())) {
+                    UIManager.setLookAndFeel(lafProperties.getProperty(settings.getLaf()));
+                }
+            }
         } catch (ClassNotFoundException ex) {
             LOGGER.warn("", ex);
         } catch (InstantiationException ex) {
@@ -212,87 +213,206 @@ public class ConquerSpace {
         }
     }
 
+    public static void loadUniverse() {
+        gameState = new GameState(0);
+        //Set save folder
+        gameState.saveFile = new File(SaveGame.getSaveFolder());
+        //Load universe
+        long loadingStart = System.currentTimeMillis();
+        GameLoader.load(gameState);
+        try {
+            generator.generate(gameState);
+        } catch (Exception ex) {
+            ExceptionHandling.ExceptionMessageBox(ex.getClass().toString() + " while loading universe!", ex);
+        }
+        long loadingEnd = System.currentTimeMillis();
+        LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
+    }
+
+    public static void runGame() {
+        //Start game
+        new GameController(gameState);
+    }
+
     public static void configureSettings() {
-        //Init settings, and read from file if possible
-        Globals.settings = new Properties();
+        //Init settings, and read from file if possible        
+        settings = new ClientOptions();
         //Check for the existance of the settings file
-        File settingsFile = new File(System.getProperty("user.dir") + "/settings.properties");
-        if (settingsFile.exists()) {
-            try {
-                //Read from file.
-                FileInputStream fis = new FileInputStream(settingsFile);
-                Globals.settings.load(fis);
-
-                //Get settings
-                String locale = Globals.settings.getProperty("locale");
-                String[] locales = locale.split("-");
-                localeMessages = new Messages(new Locale(locales[0], locales[1]));
-
-                //get version
-                String version = Globals.settings.getProperty("version");
-                if (!(((version.split("-"))[0]).equals(VERSION.toString().split("-")[0]))) {
-                    //Then different version, update. How, idk.
-                }
-
-            } catch (IOException ex) {
-                LOGGER.warn("Cannot load settings. Using default", ex);
-            }
+        if (SETTINGS_FILE.exists()) {
+            settings.fromProperties(SETTINGS_FILE);
         } else {
-            try {
-                if (!settingsFile.getParentFile().exists()) {
-                    settingsFile.getParentFile().mkdir();
-                }
-                settingsFile.createNewFile();
-                //Add default settings
+            createNewSettings(SETTINGS_FILE);
+        }
 
-                //Default settings
-                Globals.settings.setProperty("locale", "en-US");
-                localeMessages = new Messages(new Locale("en", "US"));
+        //do settings
+        configureGame();
 
-                //Version
-                Globals.settings.setProperty("version", VERSION.toString());
-                Globals.settings.setProperty("debug", "no");
-
-                Globals.settings.setProperty("music", "yes");
-
-                Globals.settings.store(new FileOutputStream(settingsFile), "Created by Conquer Space version " + VERSION.toString());
-            } catch (IOException ex) {
-                LOGGER.warn("Unable to create settings file!", ex);
-            }
+        try {
+            //Write settings to file
+            settings.store(SETTINGS_FILE);
+        } catch (IOException ex) {
         }
     }
 
-    public static void generateChecksum() {
-        //Get current file
-        File codeFile = new File(ConquerSpace.class.getProtectionDomain().getCodeSource()
-                .getLocation().getPath());
-        File assetFolder = new File(System.getProperty("user.dir") + "/assets/data");
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                long start = System.currentTimeMillis();
-                try {
-                    codeChecksum = Checksum.hashFolder(codeFile);
-                    LOGGER.info("Done with code checksum");
-                    assetChecksum = Checksum.hashFolder(assetFolder);
-                    LOGGER.info("Done with asset checksum");
-                } catch (NoSuchAlgorithmException ex) {
-                    LOGGER.warn("", ex);
-                } catch (IOException ex) {
-                    LOGGER.warn("", ex);
-                }
-                LOGGER.info("Code checksum: " + codeChecksum);
-                LOGGER.info("Asset checksum: " + assetChecksum);
-                long end = System.currentTimeMillis();
-                LOGGER.info("Time needed to calculate checksum: " + (end - start));
+    public static void createNewSettings(File settingsFile) {
+        try {
+            if (!settingsFile.getParentFile().exists()) {
+                settingsFile.getParentFile().mkdirs();
             }
+            settingsFile.createNewFile();
+
+            //Save
+            settings.store(settingsFile);
+        } catch (IOException ex) {
+            LOGGER.warn("Unable to create settings file!", ex);
+        }
+    }
+
+    public static void configureGame() {
+        //Get settings
+        ConquerSpace.locale = LocaleUtils.toLocale(System.getProperty("user.language"));
+        Version version = settings.getVersion();
+        //Check if not equal
+    }
+
+    private static void generateChecksum() {
+        //Get current file
+        File codeFile = new File(ConquerSpace.class
+                .getProtectionDomain().getCodeSource()
+                .getLocation().getPath());
+        File assetFolder = new File("assets/data");
+
+        //Create thread to process checksums
+        Runnable runnable = () -> {
+            long start = System.currentTimeMillis();
+            try {
+                codeChecksum = Checksum.hashFolder(codeFile);
+                LOGGER.info("Done with code checksum");
+                assetChecksum = Checksum.hashFolder(assetFolder);
+                LOGGER.info("Done with asset checksum");
+            } catch (NoSuchAlgorithmException ex) {
+                LOGGER.warn("", ex);
+            } catch (IOException ex) {
+                LOGGER.warn("", ex);
+            }
+            LOGGER.info("Code checksum: " + codeChecksum);
+            LOGGER.info("Asset checksum: " + assetChecksum);
+            long end = System.currentTimeMillis();
+            LOGGER.info("Time needed to calculate checksum: " + (end - start) + "ms");
         };
+
         Thread checksumThread = new Thread(runnable);
         checksumThread.setName("checksum");
         checksumThread.start();
     }
 
-    public static void initalizeCommandLineArgs() {
+    //Gets manifest metadata
+    private static void processManifestData() {
+        Class clazz = ConquerSpace.class;
+        String className = clazz.getSimpleName() + ".class";
+        String classPath = clazz.getResource(className).toString();
+        if (classPath.startsWith("jar")) {
+            try {
+                // Class not from JAR
+                String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1)
+                        + "/META-INF/MANIFEST.MF";
+                Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+                Attributes attr = manifest.getMainAttributes();
+                BUILD_TIME = attr.getValue("Build-Time");
+                BUILD_REVISION = attr.getValue("Revision");
+            } catch (MalformedURLException ex) {
+                LOGGER.info("MalformedURLException", ex);
+            } catch (IOException ex) {
+                LOGGER.info("IOException", ex);
+            }
+        }
+    }
+
+    private static void initalizeCommandLineArgs(String[] args) {
+        Options options = new Options();
+        options.addOption("d", false, "Debug, default seed (42), all the menus can be skipped");
+        options.addOption("t", false, "Run tool viewer");
+        options.addOption("headless", false, "Headless start");
+
+        Option translateOption = Option.builder("translate")
+                .optionalArg(true)
+                .numberOfArgs(1)
+                .desc("Debug translations")
+                .build();
+        options.addOption(translateOption);
+
+        CommandLineParser parser = new DefaultParser();
+        try {
+            CommandLine commandLineArgs = parser.parse(options, args);
+            DEBUG = commandLineArgs.hasOption('d');
+            TOOLS = commandLineArgs.hasOption('t');
+            HEADLESS = commandLineArgs.hasOption("headless");
+            TRANSLATE_TEST = commandLineArgs.hasOption("translate");
+
+            //Deal with locale
+            String translateLocale = commandLineArgs.getOptionValue("translate");
+            LOGGER.info("Loading Locale " + translateLocale);
+            if (translateLocale != null) {
+                //Set locale to test, later
+                try {
+                    ConquerSpace.locale = LocaleUtils.toLocale(translateLocale);
+                } catch (IllegalArgumentException iae) {
+                    LOGGER.warn("Invalid locale " + translateLocale + " using default: " + ConquerSpace.DEFAULT_LOCALE.toString());
+                    ConquerSpace.locale = DEFAULT_LOCALE;
+                }
+            }
+
+        } catch (ParseException ex) {
+            LOGGER.warn(ex);
+        }
+    }
+
+    static void configureMusic() {
+        GameController.musicPlayer = new MusicPlayer();
+        if (settings.isPlayMusic()) {
+            GameController.musicPlayer.playMusic();
+        } else {
+            GameController.musicPlayer.stopMusic();
+        }
+        try {
+            GameController.musicPlayer.setVolume(settings.getMusicVolume());
+        } catch (NumberFormatException nfe) {
+            GameController.musicPlayer.setVolume(1);
+        } catch (IllegalArgumentException iae) {
+            GameController.musicPlayer.setVolume(1);
+        }
+    }
+
+    static void setDebugUniverseGenerator() {
+        UniverseGenerationConfig config = new UniverseGenerationConfig();
+
+        config.universeSize = UniverseGenerationConfig.UniverseSize.Medium;
+        config.universeShape = UniverseGenerationConfig.UniverseShape.Irregular;
+        config.universeAge = UniverseGenerationConfig.UniverseAge.Ancient;
+        config.civilizationCount = UniverseGenerationConfig.CivilizationCount.Common;
+        config.planetCommonality = UniverseGenerationConfig.PlanetRarity.Common;
+
+        //XD
+        config.seed = (42);
+
+        //Set the player Civ options
+        CivilizationConfig civilizationConfig = new CivilizationConfig();
+        civilizationConfig.civColor = (Color.CYAN);
+        civilizationConfig.civSymbol = ("A");
+        civilizationConfig.civilizationName = ("Humans");
+        civilizationConfig.civilizationPreferredClimate = RacePreferredClimateTpe.Varied;
+        civilizationConfig.homePlanetName = ("Earth");
+        civilizationConfig.speciesName = ("Earthlings");
+        civilizationConfig.civCurrencyName = ("Money");
+        civilizationConfig.civCurrencySymbol = ("M");
+        config.civConfig = (civilizationConfig);
+
+        //Create generator
+        DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, 42);
+        generator = gen;
+    }
+
+    public static void exitGame() {
 
     }
 
@@ -306,10 +426,6 @@ public class ConquerSpace {
                 super.dispatchEvent(newEvent);
             } catch (Throwable t) {
                 ExceptionHandling.ExceptionMessageBox("Exception!", t);
-                //Also print stack trace if debug
-                if (true) {
-                    t.printStackTrace();
-                }
             }
         }
     }
