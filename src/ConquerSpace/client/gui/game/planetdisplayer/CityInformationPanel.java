@@ -20,7 +20,6 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.GraphicsUtil;
 import ConquerSpace.client.gui.ObjectListModel;
-import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanelBuilder;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;

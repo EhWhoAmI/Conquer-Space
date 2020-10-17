@@ -18,10 +18,8 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**

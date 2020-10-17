@@ -19,8 +19,6 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 

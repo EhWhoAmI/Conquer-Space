@@ -23,9 +23,6 @@
  */
 package ConquerSpace.common.jLibNoise.noise.module;
 
-import ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam;
-import ConquerSpace.common.jLibNoise.noise.ExceptionNoModule;
-import ConquerSpace.common.jLibNoise.noise.utils.NotImplementedException;
 
 /**
  * Abstract base class for noise modules.
@@ -54,7 +51,7 @@ public abstract class Module {
      *
      * @param index The index value assigned to the source module.
      * @return A reference to the source module.
-     * @throws ExceptionNoModule See the preconditions for more information.
+     * @throws IllegalArgumentException See the preconditions for more information.
      *  The index value ranges from 0 to one less than the number of
      * source modules required by this noise module.
      *  A source module with the specified index value has been added
@@ -68,7 +65,7 @@ public abstract class Module {
         // was incorrect; it should be:
         // m_pSourceModule[index] == NULL
         if (index >= getSourceModuleCount() || index < 0 || sourceModule[index] == null) {
-            throw new ExceptionNoModule();
+            throw new IllegalArgumentException("Index value is not in specified range");
         }
         return sourceModule[index];
     }
@@ -80,7 +77,7 @@ public abstract class Module {
      * @return The number of source modules required by this noise module.
      */
     public int getSourceModuleCount() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -136,7 +133,7 @@ public abstract class Module {
     public void setSourceModule(int index, Module sourceModule) {
         assert (this.sourceModule != null);
         if (index >= getSourceModuleCount() || index < 0) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
         this.sourceModule[index] = sourceModule;
     }

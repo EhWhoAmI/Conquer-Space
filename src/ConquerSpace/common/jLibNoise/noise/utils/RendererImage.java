@@ -23,7 +23,6 @@
  */
 package ConquerSpace.common.jLibNoise.noise.utils;
 
-import ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.common.jLibNoise.noise.Interp;
 import ConquerSpace.common.jLibNoise.noise.MathConst;
 import ConquerSpace.common.jLibNoise.noise.Misc;
@@ -413,7 +412,7 @@ public class RendererImage {
                 || sourceNoiseMap.getWidth() <= 0
                 || sourceNoiseMap.getHeight() <= 0
                 || gradient.getGradientPointCount() < 2) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
 
         int width = sourceNoiseMap.getWidth();
@@ -422,7 +421,7 @@ public class RendererImage {
         // If a background image was provided, make sure it is the same size the source noise map.
         if (backgroundImage != null) {
             if (backgroundImage.getWidth() != width || backgroundImage.getHeight() != height) {
-                throw new ExceptionInvalidParam();
+                throw new IllegalArgumentException();
             }
         }
 
@@ -650,7 +649,7 @@ public class RendererImage {
      */
     public void setLightContrast(double lightContrast) {
         if (lightContrast <= 0.0) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
 
         this.lightContrast = lightContrast;
@@ -685,7 +684,7 @@ public class RendererImage {
      */
     public void setLightIntensity(double lightIntensity) {
         if (lightIntensity < 0.0) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
 
         this.lightIntensity = lightIntensity;

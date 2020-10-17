@@ -23,7 +23,6 @@
  */
 package ConquerSpace.common.jLibNoise.noise.utils;
 
-import ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.common.jLibNoise.noise.Misc;
 
 /**
@@ -194,7 +193,7 @@ public class GradientColor {
                 break;
             } else if (gradientPos == gradientPoints[insertionPos].pos) {
                 // Each gradient point is required to contain a unique gradient position, so throw an exception.
-                throw new ExceptionInvalidParam();
+                throw new IllegalArgumentException();
             }
         }
         return insertionPos;

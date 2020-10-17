@@ -20,10 +20,8 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.population.jobs.Workable;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 

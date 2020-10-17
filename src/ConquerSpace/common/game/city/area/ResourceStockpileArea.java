@@ -19,13 +19,11 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.logistics.ResourcePermissions;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.UniversePath;
-import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;

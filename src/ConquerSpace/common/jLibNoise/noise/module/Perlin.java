@@ -23,7 +23,6 @@
  */
 package ConquerSpace.common.jLibNoise.noise.module;
 
-import ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.common.jLibNoise.noise.NoiseGen;
 import ConquerSpace.common.jLibNoise.noise.NoiseQuality;
 
@@ -217,13 +216,13 @@ public class Perlin extends Module {
      * calculate the Perlin-noise value.
      *
      * @param octaveCount The number of octaves that generate the Perlin noise.
-     * @throws ExceptionInvalidParam An invalid parameter was
+     * @throws IllegalArgumentException An invalid parameter was
      *                               specified; see the preconditions for more information.
      *  The number of octaves ranges from 1 to PERLIN_MAX_OCTAVE.
      */
     public void setOctaveCount(int octaveCount) {
         if (octaveCount < 1 || octaveCount > PERLIN_MAX_OCTAVE) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
         this.octaveCount = octaveCount;
     }

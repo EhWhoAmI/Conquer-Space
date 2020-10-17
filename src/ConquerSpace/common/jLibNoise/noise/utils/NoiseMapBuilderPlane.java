@@ -23,7 +23,6 @@
  */
 package ConquerSpace.common.jLibNoise.noise.utils;
 
-import ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.common.jLibNoise.noise.Interp;
 import ConquerSpace.common.jLibNoise.noise.model.Plane;
 
@@ -51,7 +50,7 @@ public class NoiseMapBuilderPlane extends NoiseMapBuilder {
                 || destHeight <= 0
                 || sourceModule == null
                 || destNoiseMap == null) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
 
         // Resize the destination noise map so that it can store the new output values from the source model.
@@ -169,13 +168,13 @@ public class NoiseMapBuilderPlane extends NoiseMapBuilder {
      * @param upperXBound upperXBound The upper x boundary of the noise map, in units.
      * @param lowerZBound The lower z boundary of the noise map, in units.
      * @param upperZBound The upper z boundary of the noise map, in units.
-     * @throws ExceptionInvalidParam See the preconditions.
+     * @throws IllegalArgumentException See the preconditions.
      *  The lower x boundary is less than the upper x boundary.
      *  The lower z boundary is less than the upper z boundary.
      */
     public void setBounds(double lowerXBound, double upperXBound, double lowerZBound, double upperZBound) {
         if (lowerXBound >= upperXBound || lowerZBound >= upperZBound) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
 
         this.lowerXBound = lowerXBound;

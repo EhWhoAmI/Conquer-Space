@@ -18,9 +18,6 @@
 
 package ConquerSpace.common.game.city.area;
 
-import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.universe.bodies.Planet;
-
 /**
  *
  * @author EhWhoAmI

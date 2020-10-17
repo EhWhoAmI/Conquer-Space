@@ -23,7 +23,6 @@
  */
 package ConquerSpace.common.jLibNoise.noise.utils;
 
-import ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam;
 import ConquerSpace.common.jLibNoise.noise.model.Sphere;
 
 /**
@@ -60,22 +59,22 @@ public class NoiseMapBuilderSphere extends NoiseMapBuilder {
     @Override
     public void build() {
         if (eastLonBound <= westLonBound) {
-            throw new ExceptionInvalidParam("East bound <= West bound");
+            throw new IllegalArgumentException("East bound <= West bound");
         }
         if (northLatBound <= southLatBound) {
-            throw new ExceptionInvalidParam("North bound <= South bound");
+            throw new IllegalArgumentException("North bound <= South bound");
         }
         if (destWidth <= 0) {
-            throw new ExceptionInvalidParam("Destination width <= 0");
+            throw new IllegalArgumentException("Destination width <= 0");
         }
         if (destHeight <= 0) {
-            throw new ExceptionInvalidParam("Destination height <= 0");
+            throw new IllegalArgumentException("Destination height <= 0");
         }
         if (sourceModule == null) {
-            throw new ExceptionInvalidParam("Source module not defined");
+            throw new IllegalArgumentException("Source module not defined");
         }
         if (destNoiseMap == null) {
-            throw new ExceptionInvalidParam("Destination noise map not defined");
+            throw new IllegalArgumentException("Destination noise map not defined");
         }
 
         // Resize the destination noise map so that it can store the new output
@@ -154,11 +153,11 @@ public class NoiseMapBuilderSphere extends NoiseMapBuilder {
      * @param eastLonBound The eastern boundary of the noise map, in degrees.
      *  The southern boundary is less than the northern boundary.
      *  The western boundary is less than the eastern boundary.
-     * @throws ExceptionInvalidParam See the preconditions.
+     * @throws IllegalArgumentException See the preconditions.
      */
     public void setBounds(double southLatBound, double northLatBound, double westLonBound, double eastLonBound) {
         if (southLatBound >= northLatBound || westLonBound >= eastLonBound) {
-            throw new ExceptionInvalidParam();
+            throw new IllegalArgumentException();
         }
 
         this.southLatBound = southLatBound;
