@@ -1,6 +1,6 @@
 Changelog:
 
-0.0.3 (TBD)
+0.0.3 (October 17, 2020)
 ------------------------------------------------------------------------
 Total Overhauls:
 Removed district systems, replaced with cities being defined by a series of points, 
