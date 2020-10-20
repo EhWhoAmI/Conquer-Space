@@ -109,10 +109,6 @@ public class Image {
      *
      * @param width The width of the new image.
      * @param height The height of the new image.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam See the preconditions.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory. The width and
-     * height values are positive. The width and height values do not exceed the maximum possible
-     * width and height for the image.
      */
     public Image(int width, int height) {
         initObj();
@@ -123,7 +119,6 @@ public class Image {
      * Copy constructor.
      *
      * @param rhs Image to copy
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory.
      */
     public Image(Image rhs) {
         initObj();
@@ -293,27 +288,11 @@ public class Image {
      * Reallocates the image to recover wasted memory.
      * <p>
      * The contents of the image is unaffected.
+     * 
+     * Does nothing lol
      *
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory. (Yes, this
-     * method can return an out-of-memory exception because two images will exist temporarily in
-     * memory during this call.)
      */
     public void reclaimMem() {
-//        size_t newMemUsage = CalcMinMemUsage(m_width, m_height);
-//        if (m_memUsed > newMemUsage) {
-//            // There is wasted memory.  Create the smallest buffer that can fit the
-//            // data and copy the data to it.
-//            Color * pNewImage = NULL;
-//            try {
-//                pNewImage = new Color[newMemUsage];
-//            } catch (...){
-//                throw noise::ExceptionOutOfMemory();
-//            }
-//            memcpy(pNewImage, m_pImage, newMemUsage * sizeof(float));
-//            delete[] m_pImage;
-//            m_pImage = pNewImage;
-//            m_memUsed = newMemUsage;
-//        }
         throw new UnsupportedOperationException();
     }
 
@@ -337,10 +316,7 @@ public class Image {
      *
      * @param width The new width for the image.
      * @param height The new height for the image.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam See the preconditions.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory. The width and
-     * height values are positive. The width and height values do not exceed the maximum possible
-     * width and height for the image.
+     * @throws IllegalArgumentException See the preconditions.
      */
     public void setSize(int width, int height) {
         if (width < 0 || height < 0 || width > RASTER_MAX_WIDTH || height > RASTER_MAX_HEIGHT) {

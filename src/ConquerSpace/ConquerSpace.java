@@ -402,9 +402,9 @@ public final class ConquerSpace {
         civilizationConfig.civilizationName = ("Humans");
         civilizationConfig.civilizationPreferredClimate = RacePreferredClimateTpe.Varied;
         civilizationConfig.homePlanetName = ("Earth");
-        civilizationConfig.speciesName = ("Earthlings");
-        civilizationConfig.civCurrencyName = ("Money");
-        civilizationConfig.civCurrencySymbol = ("M");
+        civilizationConfig.speciesName = ("Human");
+        civilizationConfig.civCurrencyName = ("Dollar");
+        civilizationConfig.civCurrencySymbol = ("$");
         config.civConfig = (civilizationConfig);
 
         //Create generator

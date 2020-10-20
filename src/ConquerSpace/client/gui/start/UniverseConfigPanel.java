@@ -138,13 +138,13 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         civTempResistanceComboBox = new JComboBox<>(RacePreferredClimateTpe.values());
 
         speciesNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.species"));
-        speciesNameField = new JTextField("Earthlings");
+        speciesNameField = new JTextField("Human");
 
         currencyNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.currency"));
-        currencyNameTextField = new JTextField("Money");
+        currencyNameTextField = new JTextField("Dollar");
 
         currencySymbolLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.symbol.currency"));
-        currencySymbolTextField = new JTextField("M");
+        currencySymbolTextField = new JTextField("$");
 
         lsidePan.add(universeSizeLabel);
         lsidePan.add(universeSizeBox);

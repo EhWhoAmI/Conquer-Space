@@ -20,7 +20,7 @@ package ConquerSpace.common.game.ships;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.save.SerializeClassName;
@@ -42,7 +42,7 @@ public class Ship extends SpaceShip implements Launchable, ResourceStockpile {
 
     private ObjectReference shipClass;
     public ArrayList<ShipCapability> shipCapabilities;
-    HashMap<StoreableReference, Double> resources;
+    HashMap<StorableReference, Double> resources;
 
     public Ship(GameState gameState, ShipClass shipClass, double X, double Y, Vector v, UniversePath location) {
         super(gameState);
@@ -127,17 +127,17 @@ public class Ship extends SpaceShip implements Launchable, ResourceStockpile {
     }
 
     @Override
-    public void addResourceTypeStore(StoreableReference type) {
+    public void addResourceTypeStore(StorableReference type) {
         resources.put(type, 0d);
     }
 
     @Override
-    public Double getResourceAmount(StoreableReference type) {
+    public Double getResourceAmount(StorableReference type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(StoreableReference type, Double amount) {
+    public void addResource(StorableReference type, Double amount) {
         if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
@@ -145,17 +145,17 @@ public class Ship extends SpaceShip implements Launchable, ResourceStockpile {
     }
 
     @Override
-    public boolean canStore(StoreableReference type) {
+    public boolean canStore(StorableReference type) {
         return true;
     }
 
     @Override
-    public StoreableReference[] storedTypes() {
-        Iterator<StoreableReference> res = resources.keySet().iterator();
-        StoreableReference[] arr = new StoreableReference[resources.size()];
+    public StorableReference[] storedTypes() {
+        Iterator<StorableReference> res = resources.keySet().iterator();
+        StorableReference[] arr = new StorableReference[resources.size()];
         int i = 0;
         while (res.hasNext()) {
-            StoreableReference next = res.next();
+            StorableReference next = res.next();
             arr[i] = next;
             i++;
         }
@@ -163,7 +163,7 @@ public class Ship extends SpaceShip implements Launchable, ResourceStockpile {
     }
 
     @Override
-    public boolean removeResource(StoreableReference type, Double amount) {
+    public boolean removeResource(StorableReference type, Double amount) {
         //Get the amount in the place
         if (!resources.containsKey(type)) {
             //Remove stuff for now

@@ -24,7 +24,7 @@ import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.science.FieldNode;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.EngineTechnology;
@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -51,7 +52,7 @@ public final class GameState implements Serializable {
     //All game objects
     //May need to be thread safe in the future
     EntityManager entities;
-    
+
     @Serialize("seed")
     private long seed;
 
@@ -79,20 +80,20 @@ public final class GameState implements Serializable {
     public ArrayList<PersonalityTrait> personalityTraits;
 
     @Serialize("species")
-    public ArrayList<ObjectReference> species;
+    public HashSet<ObjectReference> species;
 
     public ArrayList<ShipType> shipTypes;
     public HashMap<String, Integer> shipTypeClasses;
 
     //Can theoratically delete this after universe generation is finished. Only needed for generating a star system
-    public HashMap<StoreableReference, ResourceDistribution> oreDistributions = new HashMap<>();
+    public HashMap<StorableReference, ResourceDistribution> oreDistributions = new HashMap<>();
 
     //Handles goods
-    private HashMap<StoreableReference, Good> goodHashMap;
-    public DualHashBidiMap<String, StoreableReference> goodIdentifiers;
+    private HashMap<StorableReference, Good> goodHashMap;
+    public DualHashBidiMap<String, StorableReference> goodIdentifiers;
 
     public HashMap<String, ProductionProcess> prodProcesses;
-    
+
     public Properties constants;
 
     @Serialize("player")
@@ -108,13 +109,13 @@ public final class GameState implements Serializable {
     //private GameUpdater updater;
     public GameState(int seed) {
         this.seed = seed;
-        
+
         entities = new EntityManager();
-        
+
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
 
-        species = new ArrayList<>();
+        species = new HashSet<>();
 
         goodIdentifiers = new DualHashBidiMap<>();
         goodHashMap = new HashMap<>();
@@ -122,7 +123,7 @@ public final class GameState implements Serializable {
         date = new StarDate(1l);
 
         random = new Random(seed);
-        
+
         constants = new Properties();
 
         //Create new galaxy
@@ -139,7 +140,7 @@ public final class GameState implements Serializable {
         species.add(speciesToAdd.getReference());
     }
 
-    public Good getGood(StoreableReference id) {
+    public Good getGood(StorableReference id) {
         return goodHashMap.get(id);
     }
 
@@ -165,7 +166,7 @@ public final class GameState implements Serializable {
         return entities.getObject(id);
     }
 
-    public StoreableReference getGoodId(String identifier) {
+    public StorableReference getGoodId(String identifier) {
         return goodIdentifiers.get(identifier);
     }
 
@@ -255,7 +256,7 @@ public final class GameState implements Serializable {
         entities = gameState.entities;
 
         universeId = gameState.universeId;
-        
+
         date = gameState.date;
         launchSystems = gameState.launchSystems;
         civilizations = gameState.civilizations;
@@ -281,9 +282,9 @@ public final class GameState implements Serializable {
 
         fieldNodeRoot = gameState.fieldNodeRoot;
         techonologies = gameState.techonologies;
-        
+
         constants = gameState.constants;
 
-        random = gameState.random;        
+        random = gameState.random;
     }
 }

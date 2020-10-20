@@ -38,6 +38,8 @@ import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.city.modifier.RiotModifier;
 import ConquerSpace.common.game.city.modifier.StarvationModifier;
 import ConquerSpace.common.game.city.modifier.UnemployedModifier;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
@@ -48,7 +50,7 @@ import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Ship;
@@ -272,10 +274,15 @@ public class GameUpdater extends GameTicker {
      * @param delta
      */
     private void processCities(Planet planet) {
+        Market planetMarket = gameState.getObject(planet.getPlanetaryMarket(), Market.class);
+        planetMarket.clearOrders();
         for (ObjectReference cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
             //Clear ledger
             city.resourceLedger.clear();
+            city.resourcesGainedFrom.clear();
+            city.resourcesSentTo.clear();
+            city.primaryProduction.clear();
 
             //Process city demands
             //Create orders from cities that have stuff
@@ -289,12 +296,13 @@ public class GameUpdater extends GameTicker {
                 modifier.incrementTicks(GameRefreshRate);
             }
 
+            //Population upkeep, population events.
             processPopulation(city);
 
             //Calculate jobs filled
             calculateCityJobs(city);
 
-            //Process areas
+            //Process areas and their production
             for (ObjectReference areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 //if not owned, becomes owned by the planet owner
@@ -323,7 +331,45 @@ public class GameUpdater extends GameTicker {
 
             CityType type = classifyCity(city);
             city.setCityType(type);
+
+            //Get what they want to sell, and how many units
+            for (StorableReference ref : city.primaryProduction) {
+                //Check if has resources
+                if (city.resources.containsKey(ref) && city.resourceDemands.containsKey(ref) && (city.resources.get(ref) - city.resourceDemands.get(ref)) > 0) {
+                    //Place sell orders for this
+                    GoodOrder order = new GoodOrder();
+                    order.setAmount((int) (city.resources.get(ref) - city.resourceDemands.get(ref)));
+                    order.setGood(ref);
+                    order.setOwner(cityId);
+                    //Set the price
+                    //Get previous average price
+                    //Then add based on S/D ratio
+                    if (planetMarket.price.containsKey(ref)) {
+                        order.setCost(planetMarket.price.get(ref));
+                    }
+                    planetMarket.addSellOrder(ref, order);
+                }
+            }
+
+            //Add demands
+            for (Map.Entry<StorableReference, Double> entry : city.resourceDemands.entrySet()) {
+                StorableReference key = entry.getKey();
+                Double val = entry.getValue();
+                //if can provide
+                GoodOrder order = new GoodOrder();
+                order.setAmount(val.intValue());
+                order.setGood(key);
+                order.setOwner(cityId);
+
+                if (planetMarket.price.containsKey(key)) {
+                    order.setCost(planetMarket.price.get(key));
+                }
+                planetMarket.addBuyOrder(key, order);
+            }
         }
+
+        //Calculate S/D
+        planetMarket.compileSupplyDemand();
     }
 
     /**
@@ -389,7 +435,8 @@ public class GameUpdater extends GameTicker {
     private void processPopulation(City city) {
         //Process population upkeep
         Population pop = gameState.getObject(city.population, Population.class);
-        for (ObjectReference segid : pop.populations) {
+
+        for (ObjectReference segid : pop.segments) {
             PopulationSegment seg = gameState.getObject(segid, PopulationSegment.class);
             //Request resources
             long amount = (seg.size / 1000);
@@ -536,14 +583,14 @@ public class GameUpdater extends GameTicker {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
 
-            for (Map.Entry<StoreableReference, Double> entry : civilization.resourceList.entrySet()) {
+            for (Map.Entry<StorableReference, Double> entry : civilization.resourceList.entrySet()) {
                 civilization.resourceList.put(entry.getKey(), 0d);
             }
             //Process resources
             for (ResourceStockpile s : civilization.getResourceStorages()) {
                 //Get resource types allowed
 
-                for (StoreableReference type : s.storedTypes()) {
+                for (StorableReference type : s.storedTypes()) {
                     //add to index
                     if (!civilization.resourceList.containsKey(type)) {
                         civilization.resourceList.put(type, 0d);

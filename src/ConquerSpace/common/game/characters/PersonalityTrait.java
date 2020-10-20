@@ -17,19 +17,22 @@
  */
 package ConquerSpace.common.game.characters;
 
+import ConquerSpace.common.Nameable;
 import java.io.Serializable;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PersonalityTrait  implements Serializable{
-    private String name;  
+public class PersonalityTrait implements Serializable, Nameable {
+
+    private String name;
 
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getName() {
         return name;
     }

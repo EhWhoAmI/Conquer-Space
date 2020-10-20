@@ -59,9 +59,15 @@ public class ResearchArea extends ConsumerArea implements ScienceLab {
     public JobType getJobClassification() {
         return (JobType.Educator);
     }
-    
+
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
     }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Research;
+    }
+
 }

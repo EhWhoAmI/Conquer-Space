@@ -28,7 +28,7 @@ public abstract class Good implements Comparable<Good>, Serializable{
     private static int idCounter = 0;
     
     @Serialize("id")
-    StoreableReference id;
+    StorableReference id;
     //On Screen name
     @Serialize("name")
     String name;
@@ -57,7 +57,7 @@ public abstract class Good implements Comparable<Good>, Serializable{
         return name;
     }
 
-    public StoreableReference getId() {
+    public StorableReference getId() {
         return id;
     }
     

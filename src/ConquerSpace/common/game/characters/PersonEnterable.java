@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.characters;
 
+import ConquerSpace.common.Nameable;
 import ConquerSpace.common.game.universe.UniversePath;
 import java.util.ArrayList;
 
@@ -24,8 +25,11 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public interface PersonEnterable {
+public interface PersonEnterable extends Nameable {
+
     public UniversePath getUniversePath();
+
     public String getName();
+
     public ArrayList<Person> getPeopleArrayList();
 }

@@ -20,6 +20,8 @@ package ConquerSpace.common.game.population;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
@@ -27,39 +29,49 @@ import java.util.Iterator;
 
 /**
  * Represents the population in a place.
+ *
  * @author EhWhoAmI
  */
 @SerializeClassName("population")
-public class Population extends ConquerSpaceGameObject{
+public class Population extends ConquerSpaceGameObject {
 
     @Serialize("segments")
-    public final ArrayList<ObjectReference> populations;
+    public final ArrayList<ObjectReference> segments;
 
     private long populationSize = 0;
 
     public Population(GameState gameState) {
         super(gameState);
-        populations = new ArrayList<>();
+        segments = new ArrayList<>();
     }
 
     public ObjectReference getSegment(int index) {
-        return populations.get(index);
+        return segments.get(index);
     }
 
     public void addSegment(ObjectReference seg) {
-        populations.add(seg);
+        segments.add(seg);
     }
 
     public long getPopulationSize() {
         populationSize = 0;
-        for (ObjectReference seg : populations) {
-            populationSize += 
-                    gameState.getObject(seg, PopulationSegment.class).getSize();
+        for (ObjectReference seg : segments) {
+            populationSize
+                    += gameState.getObject(seg, PopulationSegment.class).getSize();
+        }
+        return populationSize;
+    }
+
+    public long getWorkableSize() {
+        long populationSize = 0;
+        for (ObjectReference seg : segments) {
+            populationSize
+                    += gameState.getObject(seg, PopulationSegment.class).workablePopulation;
         }
         return populationSize;
     }
 
     public Iterator<ObjectReference> getIterator() {
-        return populations.iterator();
+        return segments.iterator();
     }
 }

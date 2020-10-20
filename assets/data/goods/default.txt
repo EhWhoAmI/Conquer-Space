@@ -90,7 +90,7 @@
 
         ]
     }
-{
+    {
         name: Concrete
         identifier: building_concrete
         volume: 1
@@ -101,6 +101,17 @@
         tags: [
             construction
             structure
+        ]
+    }
+    {
+        name: Pharmaceutical goods
+        identifier: heal
+        volume: 1
+        mass: 5
+        formula: [
+        ]
+        tags: [
+            heal
         ]
     }
 ]

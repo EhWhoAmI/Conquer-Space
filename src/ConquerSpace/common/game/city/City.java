@@ -25,11 +25,15 @@ import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
+import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -39,6 +43,7 @@ import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 /**
@@ -46,7 +51,8 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 @SerializeClassName("city")
-public class City extends ConquerSpaceGameObject implements PersonEnterable, SupplyNode, Administrable {
+public class City extends ConquerSpaceGameObject implements PersonEnterable, 
+        SupplyNode, Administrable, Trader {
 
     @Serialize("population")
     public ObjectReference population;
@@ -71,17 +77,20 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     public ArrayList<ObjectReference> peopleAtCity;
 
     @Serialize(value = "resources", special = SaveStuff.Good)
-    public HashMap<StoreableReference, Double> resources;
+    public HashMap<StorableReference, Double> resources;
 
     @Serialize(value = "demands", special = SaveStuff.Good)
-    public DoubleHashMap<StoreableReference> resourceDemands;
+    public DoubleHashMap<StorableReference> resourceDemands;
+    
+    public HashMap<ResourceStockpile, DoubleHashMap<StorableReference>> resourcesSentTo;
+    public HashMap<ResourceStockpile, DoubleHashMap<StorableReference>> resourcesGainedFrom;
 
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
-    
+
     private ArrayList<ObjectReference> supplySegments;
-    
+
     private GeographicPoint initialPoint = null;
 
     @Serialize("max-storage")
@@ -90,7 +99,11 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     public ArrayList<ObjectReference> supplyChains;
 
     private int ledgerClearDelta = 0;
-    public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
+    public HashMap<StorableReference, DoubleHashMap<String>> resourceLedger;
+    
+    public HashSet<StorableReference> primaryProduction;
+    
+    public ObjectReference market;
 
     @Serialize("location")
     private ObjectReference location;
@@ -112,15 +125,15 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     //Size in tiles
     @Serialize("tiles")
     private int size;
-    
+
     public ArrayList<CityModifier> cityModifiers;
 
     //Energy needed
     private int energyProvided;
-    
+
     //Energy needed
     private int energyNeeded;
-    
+
     private ObjectReference ownerReference;
 
     public City(GameState gameState, ObjectReference location) {
@@ -130,19 +143,23 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
         resources = new HashMap<>();
+        resourcesSentTo = new HashMap<>();
+        resourcesGainedFrom = new HashMap<>();
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
-        
+
         supplySegments = new ArrayList<>();
 
         Population population = new Population(gameState);
         this.population = population.getReference();
-
+        
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityModifiers = new ArrayList<>();
+        primaryProduction = new HashSet<>();
+        
         cityType = CityType.Generic;
         size = 0;
 
@@ -212,17 +229,17 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     }
 
     @Override
-    public void addResourceTypeStore(StoreableReference type) {
+    public void addResourceTypeStore(StorableReference type) {
         resources.put(type, 0d);
     }
 
     @Override
-    public Double getResourceAmount(StoreableReference type) {
+    public Double getResourceAmount(StorableReference type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(StoreableReference type, Double amount) {
+    public void addResource(StorableReference type, Double amount) {
         if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
@@ -239,17 +256,17 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     }
 
     @Override
-    public boolean canStore(StoreableReference type) {
+    public boolean canStore(StorableReference type) {
         return true;//(resources.containsKey(type));
     }
 
     @Override
-    public StoreableReference[] storedTypes() {
-        Iterator<StoreableReference> res = resources.keySet().iterator();
-        StoreableReference[] arr = new StoreableReference[resources.size()];
+    public StorableReference[] storedTypes() {
+        Iterator<StorableReference> res = resources.keySet().iterator();
+        StorableReference[] arr = new StorableReference[resources.size()];
         int i = 0;
         while (res.hasNext()) {
-            StoreableReference next = res.next();
+            StorableReference next = res.next();
             arr[i] = next;
             i++;
         }
@@ -257,7 +274,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     }
 
     @Override
-    public boolean removeResource(StoreableReference type, Double amount) {
+    public boolean removeResource(StorableReference type, Double amount) {
         //Get the amount in the place
         if (!resources.containsKey(type)) {
             //Remove stuff for now
@@ -344,7 +361,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
             currentlyWorking += area.getCurrentlyManningJobs();
         }
         //return (population)
-        long populationSize = gameState.getObject(population, Population.class).getPopulationSize();
+        long populationSize = gameState.getObject(population, Population.class).getWorkableSize();
         return ((double) (populationSize - currentlyWorking) / (double) populationSize);
     }
 
@@ -376,5 +393,29 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
 
     public ObjectReference getLocation() {
         return location;
+    }
+
+    @Override
+    public int getWealth() {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<GoodOrder> getRequests() {
+        //IDK process?
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<GoodOrder> getSellOrders() {
+        return new ArrayList<>();
+    }
+
+    public ObjectReference getMarket() {
+        return market;
+    }
+
+    public void setMarket(ObjectReference market) {
+        this.market = market;
     }
 }

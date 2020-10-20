@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -45,5 +46,10 @@ public class ResidentialArea extends ConsumerArea {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.Infrastructure);
     }
 }

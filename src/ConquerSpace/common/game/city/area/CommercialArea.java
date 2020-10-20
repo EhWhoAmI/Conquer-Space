@@ -19,14 +19,17 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
- * Symbolizes all the smaller businesses and normal day to day trade in 
+ * Symbolizes all the smaller businesses and normal day to day trade in
+ *
  * @author EhWhoAmI
  */
 @SerializeClassName("commercial-area")
-public class CommercialArea extends Area{
+public class CommercialArea extends Area {
+
     private int tradeValue;
     private ObjectReference currency;
 
@@ -34,7 +37,7 @@ public class CommercialArea extends Area{
         super(gameState);
         priority = 10;
     }
-    
+
     public void setTradeValue(int tradeValue) {
         this.tradeValue = tradeValue;
     }
@@ -47,9 +50,19 @@ public class CommercialArea extends Area{
     public String toString() {
         return "Commercial Area";
     }
-    
+
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Independent;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Commercial;
     }
 }

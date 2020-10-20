@@ -41,7 +41,7 @@ public class Star extends StarSystemBody {
 
     /**
      * @param state
-     * @see StarTypes
+     * @see StarType
      * @param type type of star
      * @param starSize size of star
      */

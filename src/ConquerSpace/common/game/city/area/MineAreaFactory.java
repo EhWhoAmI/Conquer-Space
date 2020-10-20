@@ -20,7 +20,7 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 
 /**
  *
@@ -28,7 +28,7 @@ import ConquerSpace.common.game.resources.StoreableReference;
  */
 public class MineAreaFactory extends AreaFactory{
 
-    private StoreableReference resourceMined;
+    private StorableReference resourceMined;
     private ObjectReference miningStratum;
     private float productivity;
     
@@ -40,7 +40,7 @@ public class MineAreaFactory extends AreaFactory{
         this.miningStratum = miningStratum;
     }
 
-    public void setResourceMined(StoreableReference resourceMined) {
+    public void setResourceMined(StorableReference resourceMined) {
         this.resourceMined = resourceMined;
     }
 

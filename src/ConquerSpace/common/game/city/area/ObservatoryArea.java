@@ -20,6 +20,7 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.SerializeClassName;
 
@@ -72,5 +73,15 @@ public class ObservatoryArea extends Area implements VisionPoint {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+    
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Researcher;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Research;
     }
 }

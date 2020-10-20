@@ -16,15 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ConquerSpace.common.game.resources;
-
-import java.io.Serializable;
-
+package ConquerSpace.common;
 
 /**
  *
  * @author EhWhoAmI
  */
-public abstract class StoreableReference implements Serializable{
-    public abstract String getName();
+public interface Nameable {
+    public String getName();
 }

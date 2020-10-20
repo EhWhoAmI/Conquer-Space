@@ -44,10 +44,10 @@ public class Organization extends ConquerSpaceGameObject {
     protected String name;
     protected ObjectReference behavior;
 
-    public Organization(GameState gameState, String name) {
+    public Organization(GameState gameState) {
         super(gameState);
         
-        this.name = name;
+        name = "";
         children = new ArrayList<>();
         actionList = new ArrayList<>();
         region = new AdministrativeRegion();
@@ -56,6 +56,10 @@ public class Organization extends ConquerSpaceGameObject {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ObjectReference[] getChildren() {

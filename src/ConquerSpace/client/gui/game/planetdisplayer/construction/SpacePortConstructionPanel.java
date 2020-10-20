@@ -37,40 +37,37 @@ import javax.swing.SpinnerNumberModel;
  * @author EhWhoAmI
  */
 public class SpacePortConstructionPanel extends AreaDesignPanel {
-    
+
     private JLabel amount;
     private JSpinner maxLaunchTubes;
     private JLabel launchTypes;
     private JComboBox<LaunchSystem> launchTypesValue;
-    
-    private GameState gameState;
-    
+
     SpacePortAreaFactory factory;
-    
+
     private final int defaultPortsCount = 3;
-    
+
     public SpacePortConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
         super(gameState, p, c, civ);
-        this.gameState = gameState;
         factory = new SpacePortAreaFactory(civ);
         factory.setLaunchSystemCount(defaultPortsCount);
-        
+
         setLayout(new GridBagLayout());
         amount = new JLabel("Amount of launch ports");
-        
+
         launchTypes = new JLabel("Launch types");
-        
+
         SpinnerNumberModel model = new SpinnerNumberModel(defaultPortsCount, 1, 5000, 1);
-        
+
         maxLaunchTubes = new JSpinner(model);
         maxLaunchTubes.addChangeListener(l -> {
-            factory.setLaunchSystemCount((Integer)maxLaunchTubes.getValue());
+            factory.setLaunchSystemCount((Integer) maxLaunchTubes.getValue());
         });
-        
+
         ((JSpinner.DefaultEditor) maxLaunchTubes.getEditor()).getTextField().setEditable(false);
-        
+
         launchTypesValue = new JComboBox<>();
-        
+
         for (ObjectReference id : civ.launchSystems) {
             launchTypesValue.addItem(gameState.getObject(id, LaunchSystem.class));
         }
@@ -78,7 +75,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
         launchTypesValue.addActionListener(l -> {
             factory.setLaunchSystem(((LaunchSystem) launchTypesValue.getSelectedItem()).getReference());
         });
-        
+
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -87,15 +84,15 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.fill = GridBagConstraints.BOTH;
         add(amount, constraints);
-        
+
         constraints.gridx = 1;
         constraints.gridy = 0;
         add(maxLaunchTubes, constraints);
-        
+
         constraints.gridx = 0;
         constraints.gridy = 1;
         add(launchTypes, constraints);
-        
+
         constraints.gridx = 1;
         constraints.gridy = 1;
         add(launchTypesValue, constraints);

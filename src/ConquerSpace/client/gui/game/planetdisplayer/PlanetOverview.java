@@ -78,6 +78,7 @@ public class PlanetOverview extends JPanel {
     private JLabel planetName;
     private JLabel planetPath;
     private JLabel planetSize;
+    private JLabel cityCount;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
 
@@ -117,6 +118,7 @@ public class PlanetOverview extends JPanel {
         planetName = new JLabel();
         planetPath = new JLabel();
         planetSize = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.radiusinfo", p.getPlanetSize() * 100));
+        cityCount = new JLabel(p.cities.size() + " cities");
         ownerLabel = new JLabel();
         PolarCoordinate pos = p.orbit.toPolarCoordinate();
         orbitDistance = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.distanceinfo", pos.getDistance(), ((double) pos.getDistance() / 149598000d)));
@@ -144,7 +146,7 @@ public class PlanetOverview extends JPanel {
 
         population = 0;
 
-        populationCount = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.population", Utilities.longToHumanString(p.population)));
+        populationCount = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.population", Utilities.longToHumanString(p.population), p.cities.size()));
         currentStats.add(populationCount);
 
         averagePlanetPopGrowthLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.averagegrowth", p.population));

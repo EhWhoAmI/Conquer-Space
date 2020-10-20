@@ -32,6 +32,8 @@ import ConquerSpace.common.game.city.area.LogisticsHubArea;
 import ConquerSpace.common.game.city.area.ManufacturerArea;
 import ConquerSpace.common.game.city.area.MineArea;
 import ConquerSpace.common.game.city.area.ObservatoryArea;
+import ConquerSpace.common.game.city.area.PopulationUpkeepArea;
+import ConquerSpace.common.game.city.area.PortArea;
 import ConquerSpace.common.game.city.area.PowerPlantArea;
 import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.ResidentialArea;
@@ -116,7 +118,7 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
 
     @Override
     public void dispatch(PowerPlantArea area) {
-
+        panel = new PowerPlantAreaInformationPanel(area, gameState);
     }
 
     @Override
@@ -144,5 +146,13 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
             panel = new EmptyAreaPanel(area, gameState);
         }
         return panel;
+    }
+
+    @Override
+    public void dispatch(PortArea area) {
+    }
+
+    @Override
+    public void dispatch(PopulationUpkeepArea area) {
     }
 }

@@ -19,7 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import java.util.HashMap;
 
 /**
@@ -41,10 +41,10 @@ public abstract class AreaFactory {
         this.builder = builder;
     }
 
-    public HashMap<StoreableReference, Double> getCost() {
+    public HashMap<StorableReference, Double> getCost() {
         if (builder != null) {
             //Add basic construction stuff
-            HashMap<StoreableReference, Double> constructionCost = new HashMap<>();
+            HashMap<StorableReference, Double> constructionCost = new HashMap<>();
             constructionCost.put(builder.taggedGoods.get("structure"), 1000d);
             return constructionCost;
         }

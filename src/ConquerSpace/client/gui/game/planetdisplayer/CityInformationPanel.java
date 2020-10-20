@@ -33,17 +33,23 @@ import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
+import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.util.DoubleHashMap;
 import ConquerSpace.common.util.Utilities;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -61,14 +67,17 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.UUID;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -82,6 +91,7 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jfree.chart.ChartFactory;
@@ -90,7 +100,10 @@ import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.LegendItemEntity;
 import org.jfree.chart.entity.PieSectionEntity;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -207,36 +220,22 @@ public class CityInformationPanel extends JPanel {
     private class CitySkylinePanel extends JPanel {
 
         Image bg = null;
+        int imageCounter = 0;
 
         public CitySkylinePanel() {
             int height = 150;
-            long start = System.currentTimeMillis();
-            Thread t = new Thread(() -> {
-                try {
-                    //Choose random image from dir
-                    File panoFiles = new File("assets/img/pano/");
-                    File[] imageList = panoFiles.listFiles();
-                    File imgfile = imageList[selectedCity.getReference().getId() % imageList.length];
-                    Image img = ImageIO.read(imgfile);
+            if (imageCount > 0) {
+                int id = selectedCity.getReference().getId() % imageCount;
 
-                    double ratio = height / (double) img.getHeight(null);
-                    int width = (int) ((double) img.getWidth(null) * ratio);
-                    bg = new BufferedImage(500, height, BufferedImage.TYPE_INT_ARGB);
-                    long end = System.currentTimeMillis();
-                    Graphics2D graphics = (Graphics2D) bg.getGraphics();
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                    graphics.drawImage(img.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
-                    GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
+                double ratio = height / (double) citySkylineImageMap.get(id).getHeight(null);
+                int width = (int) ((double) citySkylineImageMap.get(id).getWidth(null) * ratio);
+                bg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+                Graphics2D graphics = (Graphics2D) bg.getGraphics();
+                graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                graphics.drawImage(citySkylineImageMap.get(id).getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
+                GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
 
-                } catch (IOException ex) {
-                    //System.out.println("no file");
-                    //Ignore for now 
-                    //FIXME
-                }
-                long end = System.currentTimeMillis();
-
-            });
-            t.start();
+            }
             setPreferredSize(new Dimension(500, height));
         }
 
@@ -245,6 +244,8 @@ public class CityInformationPanel extends JPanel {
             //Draw background
             if (bg != null) {
                 g.drawImage(bg, 0, 0, null);
+            } else {
+                //Load image...
             }
 
         }
@@ -273,6 +274,15 @@ public class CityInformationPanel extends JPanel {
             JLabel priindustry = new JLabel(
                     LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selectedCity.getCityType()));
             add(priindustry);
+            
+            JLabel mainProduction = new JLabel("");
+            StringJoiner joiner = new StringJoiner(", ");
+
+            for(StorableReference ref : selectedCity.primaryProduction) {
+                joiner.add(gameState.getGood(ref).toString());
+            }
+            mainProduction.setText("Produces Goods: " + joiner.toString());
+            add(mainProduction);
 
             //Get the number of powerplants leading to it
             //Energy usage
@@ -286,7 +296,9 @@ public class CityInformationPanel extends JPanel {
 
             double unemploymentRate = selectedCity.getUnemploymentRate();
             JLabel unemployment = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.unempoymentrate", Math.round(unemploymentRate * 100)));
-            unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
+            if (unemploymentRate < 1f && unemploymentRate > 0f) {
+                unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
+            }
             add(unemployment);
 
             //Max population
@@ -396,17 +408,6 @@ public class CityInformationPanel extends JPanel {
                         mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
                         mapGraphics.fill(rect);
 
-                        //Draw image
-//                            Image[] list = districtImages.get(c.getCityType().name());
-//                            if (list != null) {
-//                                int listSize = list.length;
-//                                //Id helps make sure that image is the same
-//                                Image im = list[point.hashCode() % listSize];
-//                                mapGraphics.drawImage(im, (xPos), (yPos), null);
-//                            }
-//                            //Draw background
-//                            mapGraphics.setColor(Color.black);
-                        //Get font stats
                         float fontSize = 16;
                         Font derivedFont = getFont().deriveFont(fontSize);
                         int width = getFontMetrics(derivedFont).stringWidth(c.getName());
@@ -424,7 +425,7 @@ public class CityInformationPanel extends JPanel {
 
         HashMap<JobType, Integer> populationCount;
         private long currentlyWorking;
-        private long population;
+        private long populationLaborForceSize;
 
         JTabbedPane tabs;
 
@@ -438,17 +439,60 @@ public class CityInformationPanel extends JPanel {
             JobTableModel jobTableModel = new JobTableModel();
             JTable jobTable = new JTable(jobTableModel);
 
+            JPanel jobTablePanel = new JPanel(new BorderLayout());
+            HashMap<JobType, JCheckBox> checkBoxes = new HashMap<>();
+            JPanel checkBoxPanels = new JPanel();
+            checkBoxPanels.setLayout(new VerticalFlowLayout());
+
+            checkBoxPanels.add(new JLabel("Labor Force: " + new DecimalFormat("###,###").format(gameState.getObject(selectedCity.population, Population.class).getWorkableSize())));
+
             DefaultPieDataset dataset = new DefaultPieDataset();
             for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
                 JobType key = entry.getKey();
                 Integer val = entry.getValue();
-                dataset.setValue(key, val);
+                if (val > 0) {
+                    dataset.setValue(key, val);
+                    JCheckBox box = new JCheckBox(key.getName());
+                    box.addActionListener(l -> {
+                        if (box.isSelected()) {
+                            //Add thing back
+                            dataset.setValue(key, val);
+                        } else {
+                            //Remove thing
+                            dataset.remove(key);
+                        }
+                    });
+                    box.setSelected(true);
+                    //Add
+                    JPanel boxContainerPanel = new JPanel(new HorizontalFlowLayout());
+                    boxContainerPanel.add(box);
+                    int boxHeight = getFontMetrics(box.getFont()).getHeight();
+
+                    BufferedImage img = new BufferedImage(boxHeight, boxHeight, BufferedImage.TYPE_3BYTE_BGR);
+                    Graphics2D g2d = (Graphics2D) img.getGraphics();
+
+                    Color keyColor = key.getColor();
+                    g2d.setColor(keyColor);
+                    g2d.fillRect(0, 0, boxHeight, boxHeight);
+
+                    g2d.setColor(Color.lightGray);
+                    g2d.drawRect(0, 0, boxHeight, boxHeight);
+                    boxContainerPanel.add(new JLabel(new ImageIcon(img)));
+
+                    checkBoxes.put(key, box);
+                    checkBoxPanels.add(boxContainerPanel);
+
+                }
             }
 
             JFreeChart chart = ChartFactory.createPieChart(LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs"), dataset, true, true, false);
-            for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
-                JobType key = entry.getKey();
-                Integer val = entry.getValue();
+            PiePlot piePlot = (PiePlot) chart.getPlot();
+
+            PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
+                    "{0}: {1} ({2})", new DecimalFormat("###,###"), new DecimalFormat("0%"));
+            piePlot.setLabelGenerator(gen);
+
+            for (JobType key : populationCount.keySet()) {
                 ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
             }
 
@@ -461,7 +505,15 @@ public class CityInformationPanel extends JPanel {
                     if (entity instanceof PieSectionEntity) {
                         //System.out.println(((PieSectionEntity) entity).getSectionKey());
                         //System.out.println(((PieSectionEntity) entity).getSectionKey().getClass());
-                    } 
+                        //Remove segment
+                        if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
+                            dataset.remove(((PieSectionEntity) entity).getSectionKey());
+                            //Uncheck checkbox
+                            checkBoxes.get(((PieSectionEntity) entity).getSectionKey()).setSelected(false);
+                        }
+                    } else if (entity instanceof LegendItemEntity) {
+
+                    }
                 }
 
                 @Override
@@ -470,9 +522,23 @@ public class CityInformationPanel extends JPanel {
                 }
             });
 
-            //XChartPanel<PieChart> chartPanel = new XChartPanel<>(chart);
-            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), chartPanel);
+            jobTablePanel.add(chartPanel, BorderLayout.CENTER);
+            jobTablePanel.add(checkBoxPanels, BorderLayout.EAST);
+
+            //Population segments chart
+            DefaultPieDataset populationSegmentDataset = new DefaultPieDataset();
+            //Fill up
+            Population cityPopulation = gameState.getObject(selectedCity.population, Population.class);
+            for (ObjectReference segmentReference : cityPopulation.segments) {
+                PopulationSegment segment = gameState.getObject(segmentReference, PopulationSegment.class);
+                populationSegmentDataset.setValue(new Long(segment.tier), (double) segment.size);
+            }
+            JFreeChart segmentChart = ChartFactory.createPieChart("Segments", populationSegmentDataset, true, true, false);
+            ChartPanel segmentChartPanel = new ChartPanel(segmentChart);
+            segmentChartPanel.setPopupMenu(null);
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobTablePanel);
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
+            tabs.add("Segments", segmentChartPanel);
             add(tabs, BorderLayout.CENTER);
             setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
         }
@@ -480,7 +546,7 @@ public class CityInformationPanel extends JPanel {
         public void initPopulationInfo() {
             currentlyWorking = 0;
             populationCount.clear();
-            population = gameState.getObject(selectedCity.population, Population.class).getPopulationSize();
+            populationLaborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
             //Get population job
             for (ObjectReference areaId : selectedCity.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
@@ -495,10 +561,10 @@ public class CityInformationPanel extends JPanel {
                 }
             }
             if (!populationCount.containsKey(JobType.Jobless)) {
-                populationCount.put(JobType.Jobless, (int) (population - currentlyWorking));
+                populationCount.put(JobType.Jobless, (int) (populationLaborForceSize - currentlyWorking));
             } else {
                 int count = populationCount.get(JobType.Jobless);
-                count += (int) (population - currentlyWorking);
+                count += (int) (populationLaborForceSize - currentlyWorking);
                 populationCount.put(JobType.Jobless, count);
             }
         }
@@ -586,8 +652,7 @@ public class CityInformationPanel extends JPanel {
                 AreaClassification key = entry.getKey();
                 Integer val = entry.getValue();
 
-                JXTaskPane pane = new JXTaskPane(key.toString());
-                pane.add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.areas.type", val.toString())));
+                JXTaskPane pane = new JXTaskPane(key.toString() + " - " + val.toString());
                 //List all areas of this type
                 for (int i = 0; i < selectedCity.areas.size(); i++) {
                     Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
@@ -631,6 +696,9 @@ public class CityInformationPanel extends JPanel {
 
         JTabbedPane tabs;
         JTable resourceTable;
+        JTable resourceDemandTable;
+        JTable resourceInputTable;
+        JTable resourceOutputTable;
         JList<String> modifierList;
         JList<String> connectedCityList;
 
@@ -674,10 +742,19 @@ public class CityInformationPanel extends JPanel {
             });
 
             resourceTable = new JTable(new StockpileStorageModel());
+            resourceTable.getColumnModel().getColumn(2).setCellRenderer(new StockpileResourceDeltaCellRenderer());
+
+            resourceDemandTable = new JTable(new ResourceDemandModel());
+
+            resourceInputTable = new JTable(new StockpileInModel());
+            resourceOutputTable = new JTable(new StockpileOutModel());
 
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.linked"), new JScrollPane(connectedCityList));
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.ledger"), new JScrollPane(resourceTable));
+            tabs.add("Resource Demands", new JScrollPane(resourceDemandTable));
+            tabs.add("Input", new JScrollPane(resourceInputTable));
+            tabs.add("Output", new JScrollPane(resourceOutputTable));
 
             //Show table of resources
             add(tabs, BorderLayout.CENTER);
@@ -707,18 +784,25 @@ public class CityInformationPanel extends JPanel {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                StoreableReference storedValue = selectedCity.storedTypes()[rowIndex];
-
+                StorableReference storedValue = selectedCity.storedTypes()[rowIndex];
+                DecimalFormat df = new DecimalFormat("###.##");
                 if (selectedCity != null) {
                     switch (columnIndex) {
                         case 0:
                             return gameState.getGood(storedValue);
                         case 1:
-                            return selectedCity.getResourceAmount(storedValue)
-                                    + "u/"
+
+                            String unitCount = df.format(selectedCity.getResourceAmount(storedValue));
+
+                            if (selectedCity.getResourceAmount(storedValue) > 10000) {
+                                unitCount = Utilities.longToHumanString(selectedCity.getResourceAmount(storedValue).longValue());
+                            }
+
+                            return unitCount
+                                    + " units/"
                                     //Get mass in kg...
-                                    + (selectedCity.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass())
-                                    + " kg";
+                                    + Utilities.longToHumanString((long) ((selectedCity.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass()) / 1000))
+                                    + " tons";
                         case 2:
                             HashMap<String, Double> ledger = selectedCity.resourceLedger.get(storedValue);
                             double change = 0;
@@ -737,6 +821,238 @@ public class CityInformationPanel extends JPanel {
             public String getColumnName(int column) {
                 return colunmNames[column];
             }
+        }
+
+        private class ResourceDemandModel extends AbstractTableModel {
+
+            String[] colunmNames = {
+                LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
+                LOCALE_MESSAGES.getMessage("game.planet.resources.table.count")
+            };
+
+            @Override
+            public int getRowCount() {
+                if (selectedCity == null) {
+                    return 0;
+                } else {
+                    return selectedCity.resourceDemands.size();
+                }
+            }
+
+            @Override
+            public int getColumnCount() {
+                return colunmNames.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                //Lol needs to be efficient
+                StorableReference storedValue = new ArrayList<StorableReference>(selectedCity.resourceDemands.keySet()).get(rowIndex);
+
+                if (selectedCity != null) {
+                    switch (columnIndex) {
+                        case 0:
+                            return gameState.getGood(storedValue);
+                        case 1:
+                            return selectedCity.resourceDemands.get(storedValue).toString()
+                                    + "u/"
+                                    //Get mass in kg...
+                                    + (selectedCity.resourceDemands.get(storedValue) * gameState.getGood(storedValue).getMass())
+                                    + " kg";
+                    }
+                }
+                return 0;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return colunmNames[column];
+            }
+        }
+
+        class StockpileResourceDeltaCellRenderer extends DefaultTableCellRenderer {
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                //Cells are by default rendered as a JLabel.
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                //Get the status for the current row.
+                if (col == 2) {
+                    String stringValue = String.valueOf(value);
+                    try {
+                        double doubleValue = Double.parseDouble(stringValue);
+                        //Set bold...
+                        if (isSelected) {
+                            if (doubleValue > 0) {
+                                //Stonks
+                                l.setForeground(Color.green);
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText("+" + l.getText() + "\u21e7"); //Stonks!
+                            } else if (doubleValue < 0) {
+                                //Not stonks
+                                l.setForeground(Color.red);
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                            }
+                        } else {
+                            if (doubleValue > 0) {
+                                //Stonks
+                                l.setForeground(new Color(15, 157, 88));
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText("+" + l.getText() + "\u21e7"); //Stonks!
+                            } else if (doubleValue < 0) {
+                                //Not stonks
+                                l.setForeground(new Color(230, 74, 25));
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                            }
+                        }
+
+                        DoubleHashMap<String> map = selectedCity.resourceLedger.get(selectedCity.storedTypes()[row]);
+                        if (map != null) {
+                            String text = "<html>";
+                            for (Map.Entry<String, Double> object : map.entrySet()) {
+                                Object key = object.getKey();
+                                Double val = object.getValue();
+
+                                text += key + ": ";
+                                if (Math.signum(val) == -1) {
+                                    text += "-";
+                                }
+                                text += Utilities.longToHumanString(Math.abs(val.longValue()));
+                                text += "<br/>";
+                            }
+                            text += "</html>";
+                            l.setToolTipText(text);
+                        }
+                    } catch (NumberFormatException nfe) {
+
+                    }
+                }
+                //Return the JLabel which renders the cell.
+                return l;
+            }
+        }
+
+        private class StockpileOutModel extends AbstractTableModel {
+
+            String[] colunmNames = {"City", "Good", "Amount"};
+
+            ArrayList<ResourcesChangeTuple> tuple;
+
+            public StockpileOutModel() {
+                tuple = new ArrayList<>();
+                //Get the city
+                for (Map.Entry<ResourceStockpile, DoubleHashMap<StorableReference>> entry : selectedCity.resourcesSentTo.entrySet()) {
+                    ResourceStockpile resourceStockpile = entry.getKey();
+                    DoubleHashMap<StorableReference> val = entry.getValue();
+
+                    for (Map.Entry<StorableReference, Double> entry1 : val.entrySet()) {
+                        StorableReference reference = entry1.getKey();
+                        Double goodCount = entry1.getValue();
+                        tuple.add(new ResourcesChangeTuple(resourceStockpile, reference, goodCount));
+                    }
+                }
+            }
+
+            @Override
+            public int getRowCount() {
+                return tuple.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return colunmNames.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                //get thingy
+                switch (columnIndex) {
+                    case 0:
+                        return tuple.get(rowIndex).stock;
+                    case 1:
+                        return gameState.getGood(tuple.get(rowIndex).ref).getName();
+                    case 2:
+                        return tuple.get(rowIndex).amount;
+                }
+                return 0;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return colunmNames[column];
+            }
+
+        }
+
+        private class StockpileInModel extends AbstractTableModel {
+
+            String[] colunmNames = {"City", "Good", "Amount"};
+
+            ArrayList<ResourcesChangeTuple> tuple;
+
+            public StockpileInModel() {
+                tuple = new ArrayList<>();
+                //Get the city
+                for (Map.Entry<ResourceStockpile, DoubleHashMap<StorableReference>> entry : selectedCity.resourcesGainedFrom.entrySet()) {
+                    ResourceStockpile resourceStockpile = entry.getKey();
+                    DoubleHashMap<StorableReference> val = entry.getValue();
+
+                    for (Map.Entry<StorableReference, Double> entry1 : val.entrySet()) {
+                        StorableReference reference = entry1.getKey();
+                        Double goodCount = entry1.getValue();
+                        tuple.add(new ResourcesChangeTuple(resourceStockpile, reference, goodCount));
+                    }
+                }
+            }
+
+            @Override
+            public int getRowCount() {
+                return tuple.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return colunmNames.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                //get thingy
+                switch (columnIndex) {
+                    case 0:
+                        return tuple.get(rowIndex).stock;
+                    case 1:
+                        return gameState.getGood(tuple.get(rowIndex).ref).getName();
+                    case 2:
+                        return tuple.get(rowIndex).amount;
+                }
+                return 0;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return colunmNames[column];
+            }
+
+        }
+
+        class ResourcesChangeTuple {
+
+            ResourceStockpile stock;
+            StorableReference ref;
+            Double amount;
+
+            public ResourcesChangeTuple(ResourceStockpile stock, StorableReference ref, Double amount) {
+                this.stock = stock;
+                this.ref = ref;
+                this.amount = amount;
+            }
+
+            public ResourcesChangeTuple() {
+            }
+
         }
     }
 
@@ -804,6 +1120,45 @@ public class CityInformationPanel extends JPanel {
                 shipClassList.updateUI();
             }
         }
+    }
+
+    private static final HashMap<Integer, Image> citySkylineImageMap = new HashMap<>();
+    private static int imageCount = 0;
+
+    static {
+        int height = 150;
+        Thread t = new Thread(() -> {
+            try {
+                //Choose random image from dir
+                File panoFiles = new File("assets/img/pano/");
+                File[] imageList = panoFiles.listFiles();
+                int i = 0;
+                for (File imgfile : imageList) {
+                    Image img = ImageIO.read(imgfile);
+
+                    double ratio = height / (double) img.getHeight(null);
+                    int width = (int) ((double) img.getWidth(null) * ratio);
+                    Image bg = new BufferedImage(500, height, BufferedImage.TYPE_INT_ARGB);
+                    long end = System.currentTimeMillis();
+                    Graphics2D graphics = (Graphics2D) bg.getGraphics();
+                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                    graphics.drawImage(img.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
+
+                    //Save image
+                    citySkylineImageMap.put(i, bg);
+                    i++;
+                }
+                imageCount = i;
+
+            } catch (IOException ex) {
+                //System.out.println("no file");
+                //Ignore for now 
+                //FIXME
+            }
+            long end = System.currentTimeMillis();
+
+        });
+        t.start();
     }
 
 }

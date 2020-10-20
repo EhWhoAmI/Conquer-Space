@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
 
@@ -58,5 +59,10 @@ public class SpacePortArea extends Area {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Engineer;
     }
 }

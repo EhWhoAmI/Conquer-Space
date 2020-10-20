@@ -35,8 +35,10 @@ public class MineAreaInformationPanel extends AreaInformationPanel<MineArea> {
         add(title);
         JLabel resourceMined = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.mine.mined", gameState.getGood(area.getResourceMinedId())));
         JLabel miningVein = new JLabel("Stratum: " + gameState.getObject(area.getStratumMining(), Stratum.class));
+        JLabel amountMined = new JLabel("Productivity: " + area.getProductivity() * gameState.getGood(area.getResourceMinedId()).getMass() * 24 + " kg per day");
         add(resourceMined);
         add(miningVein);
+        add(amountMined);
         genericInformation();
     }
 

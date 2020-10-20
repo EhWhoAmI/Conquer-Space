@@ -19,7 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**
@@ -30,7 +30,7 @@ import ConquerSpace.common.save.SerializeClassName;
 public class PowerPlantArea extends ConsumerArea {
 
     //Needs the attribute 'energy'
-    private StoreableReference usesResource;
+    private StorableReference usesResource;
     //Amount of units needed to get each time
     private int maxVolume;
 
@@ -48,11 +48,16 @@ public class PowerPlantArea extends ConsumerArea {
         return "Power Plant";
     }
 
-    public StoreableReference getUsedResource() {
+    /**
+     * Resources needed to generate power.
+     *
+     * @return
+     */
+    public StorableReference getUsedResource() {
         return usesResource;
     }
 
-    public void setUsedResource(StoreableReference usesResource) {
+    public void setUsedResource(StorableReference usesResource) {
         this.usesResource = usesResource;
     }
 
@@ -77,6 +82,11 @@ public class PowerPlantArea extends ConsumerArea {
         return (JobType.PowerPlantTechnician);
     }
 
+    /**
+     * Production: max amount can generate.
+     *
+     * @return
+     */
     public int getProduction() {
         return production;
     }
@@ -88,5 +98,10 @@ public class PowerPlantArea extends ConsumerArea {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Infrastructure;
     }
 }

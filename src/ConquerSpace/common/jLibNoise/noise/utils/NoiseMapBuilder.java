@@ -133,7 +133,7 @@ public abstract class NoiseMapBuilder {
      * contains a count of the rows that have been completed.  It returns
      * void.  Pass a function with this signature to the SetCallback() method.
      *
-     * @param pCallback The callback function.
+     * @param callback The callback function.
      */
     public void setCallback(NoiseMapCallback callback) {
         this.callback = callback;

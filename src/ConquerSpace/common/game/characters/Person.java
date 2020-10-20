@@ -19,6 +19,7 @@ package ConquerSpace.common.game.characters;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.Nameable;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 @SerializeClassName("person")
-public class Person extends ConquerSpaceGameObject {
+public class Person extends ConquerSpaceGameObject implements Nameable {
 
     @Serialize("name")
     private String name;
@@ -69,6 +70,7 @@ public class Person extends ConquerSpaceGameObject {
         return age;
     }
 
+    @Override
     public String getName() {
         return name;
     }

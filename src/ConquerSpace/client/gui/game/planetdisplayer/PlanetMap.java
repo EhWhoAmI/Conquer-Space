@@ -334,7 +334,6 @@ public class PlanetMap extends JPanel {
                     resourceImage = new BufferedImage((int) (p.getPlanetWidth() * tileSize), (int) (p.getPlanetHeight() * tileSize), BufferedImage.TYPE_INT_ARGB);
 
                     Graphics2D resourceGraphics = resourceImage.createGraphics();
-                    //resourceGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.325f));
 
                     for (int i = 0; i < p.strata.size(); i++) {
                         Stratum v = gameState.getObject(p.strata.get(i), Stratum.class);
@@ -362,82 +361,51 @@ public class PlanetMap extends JPanel {
             //Normal view 
             if (displayedView == NORMAL_VIEW || displayedView == CONSTRUCTION_VIEW || displayedView == BOTH_VIEW) {
                 //Draw buildings
-                if (true) {
-                    //g2d
-                    Graphics2D mapGraphics = g2d;
+                //g2d
+                Graphics2D mapGraphics = g2d;
 
-                    Iterator<GeographicPoint> distIterator = p.cityDistributions.keySet().iterator();
+                Iterator<GeographicPoint> distIterator = p.cityDistributions.keySet().iterator();
 
-                    //for (int i = 0; i < size(); i++) {
-                    Rectangle r = g.getClipBounds();
-                    while (distIterator.hasNext()) {
-                        GeographicPoint point = distIterator.next();
-                        City c = p.getCity(point);
-                        if (c != null) {
-                            int xPos = (int) (point.getX() * tileSize);
-                            int yPos = (int) (point.getY() * tileSize);
-                            if (r.contains(new Point(xPos, yPos))) {
-                                //Draw supply lines
-                                ArrayList<ObjectReference> ref = c.getSupplyConnections();
-                                for (int i = 0; i < ref.size(); i++) {
-                                    SupplySegment segment = gameState.getObject(ref.get(i), SupplySegment.class);
-                                    SupplyNode pt1 = gameState.getObject(segment.getPoint1(), SupplyNode.class);
-                                    SupplyNode pt2 = gameState.getObject(segment.getPoint2(), SupplyNode.class);
-                                    GeographicPoint city1Pt = null;
-                                    GeographicPoint city2Pt = null;
-                                    if (pt1 instanceof City) {
-                                        City originCity = (City) pt1;
-                                        city1Pt = originCity.getInitialPoint();
-                                    }
-                                    if (pt2 instanceof City) {
-                                        City destCity = (City) pt2;
-                                        city2Pt = destCity.getInitialPoint();
-                                    }
-                                    if (city1Pt != null && city2Pt != null) {
-                                        //Draw line
-                                        Line2D.Double line = new Line2D.Double(
-                                                city1Pt.getX() * tileSize + tileSize / 2,
-                                                city1Pt.getY() * tileSize + tileSize / 2,
-                                                city2Pt.getX() * tileSize + tileSize / 2,
-                                                city2Pt.getY() * tileSize + tileSize / 2);
-                                        g2d.setColor(Color.red);
-                                        g2d.draw(line);
-                                    }
+                Rectangle r = g.getClipBounds();
+                while (distIterator.hasNext()) {
+                    GeographicPoint point = distIterator.next();
+                    City c = p.getCity(point);
+                    if (c != null) {
+                        int xPos = (int) (point.getX() * tileSize);
+                        int yPos = (int) (point.getY() * tileSize);
+                        if (r.contains(new Point(xPos, yPos))) {
+                            drawSupplyLines(g2d, c);
+                            //Draw city
+                            Rectangle2D.Double rect = new Rectangle2D.Double(xPos, yPos, tileSize, tileSize);
 
-                                }
+                            //Draw tile color
+                            mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
+                            mapGraphics.fill(rect);
 
-                                //Draw city
-                                Rectangle2D.Double rect = new Rectangle2D.Double(xPos, yPos, tileSize, tileSize);
-
-                                //Draw tile color
-                                mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
-                                mapGraphics.fill(rect);
-
-                                //Draw image
-                                Image[] list = districtImages.get(c.getCityType().name());
-                                if (list != null) {
-                                    int listSize = list.length;
-                                    //Id helps make sure that image is the same
-                                    Image im = list[point.hashCode() % listSize];
-                                    mapGraphics.drawImage(im, (xPos), (yPos), null);
-                                }
-                                //Draw background
-                                mapGraphics.setColor(Color.black);
-
-                                //Get font stats
-                                float fontSize = 12;
-                                Font derivedFont = getFont().deriveFont(fontSize);
-                                int width = getFontMetrics(derivedFont).stringWidth(c.getName());
-
-                                //Draw city name
-                                //Draw fancy text
-                                GraphicsUtil.paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
+                            //Draw image
+                            Image[] list = districtImages.get(c.getCityType().name());
+                            if (list != null) {
+                                int listSize = list.length;
+                                //Id helps make sure that image is the same
+                                Image im = list[point.hashCode() % listSize];
+                                mapGraphics.drawImage(im, (xPos), (yPos), null);
                             }
+                            //Draw background
+                            mapGraphics.setColor(Color.black);
+
+                            //Get font stats
+                            float fontSize = 12;
+                            Font derivedFont = getFont().deriveFont(fontSize);
+                            int width = getFontMetrics(derivedFont).stringWidth(c.getName());
+
+                            //Draw city name
+                            //Draw fancy text
+                            GraphicsUtil.paintTextWithOutline(c.getName(), g, fontSize, xPos - width / 2, yPos + getFontMetrics(derivedFont).getHeight() / 2);
                         }
                     }
 
                     if (constructionActive) {
-                        //Draw it
+                        //Draw construction rectangle
                         Rectangle2D.Double buildingPointOutside = new Rectangle2D.Double((currentlyBuildingPoint.getX() - 1) * tileSize, (currentlyBuildingPoint.getY() - 1) * tileSize, tileSize * 3, tileSize * 3);
                         mapGraphics.setColor(Color.RED);
                         mapGraphics.fill(buildingPointOutside);
@@ -453,6 +421,36 @@ public class PlanetMap extends JPanel {
                 Rectangle2D.Double mouseBox = new Rectangle2D.Double(mouseX * tileSize, mouseY * tileSize, tileSize, tileSize);
                 g2d.setColor(Color.PINK);
                 g2d.fill(mouseBox);
+            }
+        }
+
+        void drawSupplyLines(Graphics2D g2d, City c) {
+            //Draw supply lines
+            ArrayList<ObjectReference> ref = c.getSupplyConnections();
+            for (int i = 0; i < ref.size(); i++) {
+                SupplySegment segment = gameState.getObject(ref.get(i), SupplySegment.class);
+                SupplyNode pt1 = gameState.getObject(segment.getPoint1(), SupplyNode.class);
+                SupplyNode pt2 = gameState.getObject(segment.getPoint2(), SupplyNode.class);
+                GeographicPoint city1Pt = null;
+                GeographicPoint city2Pt = null;
+                if (pt1 instanceof City) {
+                    City originCity = (City) pt1;
+                    city1Pt = originCity.getInitialPoint();
+                }
+                if (pt2 instanceof City) {
+                    City destCity = (City) pt2;
+                    city2Pt = destCity.getInitialPoint();
+                }
+                if (city1Pt != null && city2Pt != null) {
+                    //Draw line
+                    Line2D.Double line = new Line2D.Double(
+                            city1Pt.getX() * tileSize + tileSize / 2,
+                            city1Pt.getY() * tileSize + tileSize / 2,
+                            city2Pt.getX() * tileSize + tileSize / 2,
+                            city2Pt.getY() * tileSize + tileSize / 2);
+                    g2d.setColor(Color.red);
+                    g2d.draw(line);
+                }
             }
         }
 
@@ -581,7 +579,7 @@ public class PlanetMap extends JPanel {
             //Scroll in
             double scroll = (double) e.getUnitsToScroll();
             double scrollBefore = scale;
-            double newScale = (Math.exp(scroll * 0.01) * scale);
+            double newScale = (Math.exp(scroll * 0.05) * scale);
 
             //Limit scale
             if (newScale > 0.1 && newScale < 2d) {

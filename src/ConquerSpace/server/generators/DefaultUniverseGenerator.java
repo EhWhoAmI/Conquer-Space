@@ -27,7 +27,7 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.PolarCoordinate;
 import ConquerSpace.common.game.universe.UniversePath;
@@ -141,7 +141,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Do civs
         //Player civ
-        Civilization playerCiv = new Civilization(gameState, c.civilizationName);
+        Civilization playerCiv = new Civilization(gameState);
+        playerCiv.setName(c.civilizationName);
         playerCiv.setColor(c.civColor);
         playerCiv.setHomePlanetName(c.homePlanetName);
         playerCiv.setSpeciesName(c.speciesName);
@@ -184,7 +185,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         for (int i = 0; i < civCount; i++) {
             //Create civ.
             String name = civNameGenerator.getName(0, rand);
-            Civilization civ = new Civilization(gameState, name);
+            Civilization civ = new Civilization(gameState);
+            civ.setName(name);
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
             civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
             civ.setSpeciesName(name);
@@ -212,7 +214,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         LOGGER.info("Going over civ initializing");
 
         CivilizationInitializer initer = new CivilizationInitializer(state);
-        initer.initGame();
+        initer.initCivilization();
         LOGGER.info("Done with civ initializing");
 
         return universe;
@@ -350,9 +352,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Find the amount of resources to add...
         //Sort through resources, and find suitable
-        ArrayList<StoreableReference> toAdd = new ArrayList<>();
-        for (Map.Entry<StoreableReference, ResourceDistribution> entry : gameState.oreDistributions.entrySet()) {
-            StoreableReference key = entry.getKey();
+        ArrayList<StorableReference> toAdd = new ArrayList<>();
+        for (Map.Entry<StorableReference, ResourceDistribution> entry : gameState.oreDistributions.entrySet()) {
+            StorableReference key = entry.getKey();
             ResourceDistribution val = entry.getValue();
             double rarity = val.rarity;
             if (random.nextDouble() < rarity) {
@@ -369,7 +371,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             Stratum stratum = new Stratum(gameState);
 
             //Add resources
-            for (StoreableReference o : toAdd) {
+            for (StorableReference o : toAdd) {
                 stratum.minerals.put(o, randint(random, 10000, 500_000));
             }
 

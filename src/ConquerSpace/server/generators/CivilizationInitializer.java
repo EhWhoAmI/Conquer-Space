@@ -28,12 +28,17 @@ import ConquerSpace.common.game.city.area.CapitolAreaFactory;
 import ConquerSpace.common.game.city.area.CommercialAreaFactory;
 import ConquerSpace.common.game.city.area.CustomComponentFactoryManufacturerAreaFactory;
 import ConquerSpace.common.game.city.area.FarmFieldFactory;
+import ConquerSpace.common.game.city.area.FinancialAreaFactory;
+import ConquerSpace.common.game.city.area.LeisureAreaFactory;
 import ConquerSpace.common.game.city.area.ManufacturerAreaFactory;
 import ConquerSpace.common.game.city.area.MineAreaFactory;
+import ConquerSpace.common.game.city.area.PopulationUpkeepAreaFactory;
+import ConquerSpace.common.game.city.area.PortAreaFactory;
 import ConquerSpace.common.game.city.area.PowerPlantAreaFactory;
 import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.ResearchAreaFactory;
 import ConquerSpace.common.game.city.area.ResidentialAreaFactory;
+import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
@@ -55,7 +60,7 @@ import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ProductionProcess;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.science.Field;
 import ConquerSpace.common.game.science.Fields;
@@ -95,7 +100,7 @@ public class CivilizationInitializer {
         this.gameState = state;
     }
 
-    public void initGame() {
+    public void initCivilization() {
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random();
@@ -169,10 +174,12 @@ public class CivilizationInitializer {
 
             //Set head of state position
             civilization.government.officials.get(civilization.government.headofState).setPosition(civilization.getCapitalCity());
+            
+            //Proc gen political stuff, progress events behind the scene to generate a little bit of history
         }
     }
 
-    private void initializeCities(Planet starting, Civilization c, Random selector) {
+    private void initializeCities(Planet startingPlanet, Civilization c, Random selector) {
         NameGenerator townNames = null;
         NameGenerator personNames = null;
 
@@ -184,9 +191,9 @@ public class CivilizationInitializer {
         }
         Species food = createEdibleFood(c);
 
-        createResourceMiners(starting, c, c.getFoundingSpecies(), selector, townNames);
-        createFarms(starting, food, c, selector, townNames);
-        createCities(starting, c, selector, townNames);
+        createResourceMiners(startingPlanet, c, c.getFoundingSpecies(), selector, townNames);
+        createFarms(startingPlanet, food, c, selector, townNames);
+        createNormalCities(startingPlanet, c, selector, townNames);
 
         //Initialize namelists
         NameGenerator researchInstitutionGenerator = null;
@@ -196,14 +203,21 @@ public class CivilizationInitializer {
             //Ignore
         }
 
-        for (int i = 0; i < starting.cities.size(); i++) {
-            City city = gameState.getObject(starting.cities.get(i), City.class);
+        //Common market
+        Market market = new Market(gameState);
+        startingPlanet.setPlanetaryMarket(market.getReference());
+        
+        for (int i = 0; i < startingPlanet.cities.size(); i++) {
+            City city = gameState.getObject(startingPlanet.cities.get(i), City.class);
             city.setOwner(c.getReference());
             addInfrastructure(c, city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city, c);
-            addPopulation(city, selector, c);
+            addMoreProcessingToCities(city, selector, c);
             addGovenor(city, c, selector, personNames);
+            
+            //Set market
+            market.addTrader(city);
         }
     }
 
@@ -217,21 +231,52 @@ public class CivilizationInitializer {
         civ.people.add(admin.getReference());
     }
 
-    private void addPopulation(City c, Random selector, Civilization civ) {
+    private void addMoreProcessingToCities(City c, Random selector, Civilization civ) {
+        //Set culture
         Culture culture = new Culture(gameState);
         PopulationSegment seg = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
         seg.size = selector.nextInt(200_000) + 300_000;
         seg.size *= c.areas.size();
+        seg.workablePopulation = (long) (seg.size * 0.3);
+        seg.tier = 0;
 
         seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
         gameState.getObject(c.population, Population.class).addSegment(seg.getReference());
 
+        PopulationSegment seg2 = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
+        seg2.size = selector.nextInt(200_000) + 300_000;
+        seg2.size *= c.areas.size();
+        seg2.workablePopulation = (long) (seg2.size * 0.3);
+        seg2.tier = 1;
+        gameState.getObject(c.population, Population.class).addSegment(seg2.getReference());
+
         ResidentialAreaFactory residentialAreaFactory = new ResidentialAreaFactory(civ);
         c.addArea(residentialAreaFactory.build(gameState).getReference());
+
+        //Add transportation stuff
+        PortAreaFactory factory = new PortAreaFactory(civ);
+        factory.setOperatingJobs(10000);
+        factory.setMaxJobs(50000);
+        c.addArea(factory.build(gameState).getReference());
+
+        PopulationUpkeepAreaFactory upkeepFactory = new PopulationUpkeepAreaFactory(civ);
+        upkeepFactory.setOperatingJobs(50000);
+        upkeepFactory.setMaxJobs((int) ((double) gameState.getObject(c.population, Population.class).getWorkableSize() * 0.12));
+        c.addArea(upkeepFactory.build(gameState).getReference());
+
+        LeisureAreaFactory leisureAreaFactory = new LeisureAreaFactory(civ);
+        leisureAreaFactory.setOperatingJobs(10000);
+        leisureAreaFactory.setMaxJobs(200000);
+        c.addArea(leisureAreaFactory.build(gameState).getReference());
+
+        FinancialAreaFactory financialAreaFactory = new FinancialAreaFactory(civ);
+        financialAreaFactory.setOperatingJobs(10000);
+        financialAreaFactory.setMaxJobs(75000);
+        c.addArea(financialAreaFactory.build(gameState).getReference());
     }
 
     //Cities whose primary industry relies on manufacturing, not mining or farming
-    private void createCities(Planet starting, Civilization civ, Random selector, NameGenerator townGen) {
+    private void createNormalCities(Planet starting, Civilization civ, Random selector, NameGenerator townGen) {
         for (int i = 0; i < 10; i++) {
             City city = new City(gameState, starting.getReference());
             //Add areas
@@ -264,6 +309,12 @@ public class CivilizationInitializer {
             ccfmaf.setWorkingmultiplier(1.2f);
             city.areas.add(ccfmaf.build(gameState).getReference());
 
+            CommercialAreaFactory area = new CommercialAreaFactory(civ);
+            area.setMaxJobs(500_000);
+            area.setOperatingJobs(1_000);
+            area.setTradeValue(50_000);
+            city.addArea(area.build(gameState).getReference());
+
             GeographicPoint pt = getRandomEmptyPoint(starting, selector);
             city.setName(townGen.getName(0, selector));
 
@@ -277,7 +328,7 @@ public class CivilizationInitializer {
             Stratum stratum = gameState.getObject(p.strata.get(k), Stratum.class);
             for (int i = 0; i < 3; i++) {
                 City miner = new City(gameState, p.getReference());
-                for (StoreableReference resource : stratum.minerals.keySet()) {
+                for (StorableReference resource : stratum.minerals.keySet()) {
                     MineAreaFactory mineArea = new MineAreaFactory(c);
 
                     mineArea.setProductivity((float) (10 * (selector.nextDouble() + 0.1)));
@@ -339,7 +390,7 @@ public class CivilizationInitializer {
 
     private void createFarms(Planet starting, Species crop, Civilization civ, Random selector, NameGenerator gen) {
         //Create production process for the food.
-        StoreableReference consumableResources = civ.getFoundingSpecies().getConsumableResource();
+        StorableReference consumableResources = civ.getFoundingSpecies().getConsumableResource();
         ProductionProcess foodProcess = new ProductionProcess(gameState);
 
         foodProcess.input.put(crop.getFoodGood(), 10d);
@@ -366,8 +417,8 @@ public class CivilizationInitializer {
                 //30 days
                 field.setTime(30 * 24);
                 field.setFieldSize(5000);
-                field.setOperatingJobs(10000);
-                field.setMaxJobs(30000);
+                field.setOperatingJobs(1000);
+                field.setMaxJobs(100000);
 
                 faceBook.addArea(field.build(gameState).getReference());
             }
@@ -484,7 +535,8 @@ public class CivilizationInitializer {
 
     //Governmental orgs...
     private void initializeOrgs(Civilization c, Planet planet) {
-        Organization org = new Organization(gameState, "Ministry of Economic Planning");
+        Organization org = new Organization(gameState);
+        org.setName("Ministry of Economic Planning");
         org.setBehavior(new ResourceManagerBehavior(gameState, org));
         //Sort through city
         for (ObjectReference cityId : planet.cities) {
@@ -614,7 +666,7 @@ public class CivilizationInitializer {
 
     private void addCommercialArea(City c, Civilization civ) {
         CommercialAreaFactory area = new CommercialAreaFactory(civ);
-        area.setMaxJobs(100_000);
+        area.setMaxJobs(400_000);
         area.setOperatingJobs(1_000);
         area.setTradeValue(50_000);
         c.addArea(area.build(gameState).getReference());
@@ -627,7 +679,7 @@ public class CivilizationInitializer {
         powerPlant.setUsesResource(civ.taggedGoods.get("energy"));
         powerPlant.setProduction(5000);
         powerPlant.setOperatingJobs(5000);
-        powerPlant.setMaxJobs(6000);
+        powerPlant.setMaxJobs(10000);
 
         city.addArea(powerPlant.build(gameState).getReference());
     }
@@ -637,7 +689,7 @@ public class CivilizationInitializer {
         gen.generate(gameState, p);
     }
 
-    private StoreableReference findGoodByTag(String tagSearched) {
+    private StorableReference findGoodByTag(String tagSearched) {
         Good resource = null;
         for (Good res : gameState.getGoodArrayList()) {
             for (String tag : res.tags) {

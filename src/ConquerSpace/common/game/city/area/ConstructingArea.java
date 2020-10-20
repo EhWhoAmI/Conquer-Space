@@ -19,7 +19,8 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 
@@ -32,7 +33,7 @@ public class ConstructingArea extends Area {
 
     private int ticksLeft;
     private ObjectReference toBuild;
-    private HashMap<StoreableReference, Double> costPerTurn;
+    private HashMap<StorableReference, Double> costPerTurn;
 
     /**
      * This is the only constructor that can be public, because it is supposed to be easy to make
@@ -61,7 +62,7 @@ public class ConstructingArea extends Area {
         this.ticksLeft = ticksLeft;
     }
 
-    public void setCostPerTurn(HashMap<StoreableReference, Double> costPerTurn) {
+    public void setCostPerTurn(HashMap<StorableReference, Double> costPerTurn) {
         this.costPerTurn = costPerTurn;
     }
 
@@ -74,12 +75,22 @@ public class ConstructingArea extends Area {
         return "Constructing " + toBuild.toString();
     }
 
-    public HashMap<StoreableReference, Double> getCostPerTurn() {
+    public HashMap<StorableReference, Double> getCostPerTurn() {
         return costPerTurn;
     }
 
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Construction;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Construction;
     }
 }

@@ -210,7 +210,7 @@ public class DebugStatsWindow extends JInternalFrame {
     /**
      * Get an instance of this class.
      *
-     * @param u Universe
+     * @param state game state
      * @return An instance of a debug stats window.
      */
     public static DebugStatsWindow getInstance(GameState state) {

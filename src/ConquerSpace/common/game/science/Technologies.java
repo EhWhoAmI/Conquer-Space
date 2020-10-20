@@ -20,7 +20,7 @@ package ConquerSpace.common.game.science;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.ResourceLoader;
@@ -274,7 +274,7 @@ public class Technologies implements Serializable {
             String[] text = action.split(":");
             String content = text[1].trim();
 
-            StoreableReference goodId = gameState.getGoodId(content);
+            StorableReference goodId = gameState.getGoodId(content);
             if (goodId != null) {
                 c.mineableGoods.add(goodId);
             }
