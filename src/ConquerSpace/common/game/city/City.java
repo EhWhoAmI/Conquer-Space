@@ -25,6 +25,7 @@ import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
+import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
@@ -79,9 +80,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
     //public ArrayList<PopulationUnit> population;
-    
+
     private ArrayList<ObjectReference> supplySegments;
-    
+
     private GeographicPoint initialPoint = null;
 
     @Serialize("max-storage")
@@ -112,16 +113,18 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     //Size in tiles
     @Serialize("tiles")
     private int size;
-    
+
     public ArrayList<CityModifier> cityModifiers;
 
     //Energy needed
     private int energyProvided;
-    
+
     //Energy needed
     private int energyNeeded;
-    
+
     private ObjectReference ownerReference;
+
+    private ObjectReference trader;
 
     public City(GameState gameState, ObjectReference location) {
         super(gameState);
@@ -133,11 +136,13 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
-        
+
         supplySegments = new ArrayList<>();
 
         Population population = new Population(gameState);
         this.population = population.getReference();
+
+        trader = new Trader(gameState).getReference();
 
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();

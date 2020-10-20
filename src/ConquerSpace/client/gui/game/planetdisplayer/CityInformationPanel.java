@@ -33,6 +33,7 @@ import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
+import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.ships.Ship;
@@ -461,7 +462,7 @@ public class CityInformationPanel extends JPanel {
                     if (entity instanceof PieSectionEntity) {
                         //System.out.println(((PieSectionEntity) entity).getSectionKey());
                         //System.out.println(((PieSectionEntity) entity).getSectionKey().getClass());
-                    } 
+                    }
                 }
 
                 @Override
@@ -470,9 +471,19 @@ public class CityInformationPanel extends JPanel {
                 }
             });
 
-            //XChartPanel<PieChart> chartPanel = new XChartPanel<>(chart);
+            //Population segments chart
+            DefaultPieDataset populationSegmentDataset = new DefaultPieDataset();
+            //Fill up
+            Population cityPopulation = gameState.getObject(selectedCity.population, Population.class);
+            for (ObjectReference segmentReference : cityPopulation.segments) {
+                PopulationSegment segment = gameState.getObject(segmentReference, PopulationSegment.class);
+                populationSegmentDataset.setValue(new Long(segment.getReference().getId()), (double) segment.size);
+            }
+            JFreeChart segmentChart = ChartFactory.createPieChart("Segments", populationSegmentDataset, true, true, false);
+
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), chartPanel);
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
+            tabs.add("Segments", new ChartPanel(segmentChart));
             add(tabs, BorderLayout.CENTER);
             setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
         }

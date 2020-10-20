@@ -471,9 +471,9 @@ public class GameWindow extends JFrame implements WindowListener,
 
         private int currentStarSystemSizeOfAU = 0;
         /**
-         * Scale for the zoom. A scale of 1 is the current universe view, and it
-         * can zoom to a max of 5.
-         *
+         * Scale for the zoom. A scale of 1 is the current universe view, and it can zoom to a max
+         * of 5.
+         * <p>
          */
         private double scale = 1.0f;
 
@@ -494,7 +494,7 @@ public class GameWindow extends JFrame implements WindowListener,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
-            
+
             switch (drawing) {
                 case DRAW_UNIVERSE:
                     setBackground(new Color(0, 0, 255));
@@ -580,11 +580,10 @@ public class GameWindow extends JFrame implements WindowListener,
                         break;
                 }
             }
-            if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
-                if (mainInterfaceWindow != null) {
-                    JPopupMenu popupMenu = generatePopupMenu(e);
-                    popupMenu.show(this, e.getX(), e.getY());
-                }
+            if ((e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) 
+                    && mainInterfaceWindow != null) {
+                JPopupMenu popupMenu = generatePopupMenu(e);
+                popupMenu.show(this, e.getX(), e.getY());
             }
         }
 
@@ -835,7 +834,7 @@ public class GameWindow extends JFrame implements WindowListener,
                 }
 
                 //Add a delete ship action thing
-                JMenuItem deleteShipAction 
+                JMenuItem deleteShipAction
                         = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.actions"));
                 deleteShipAction.addActionListener(l -> {
                     s.commands.clear();
@@ -846,7 +845,7 @@ public class GameWindow extends JFrame implements WindowListener,
             }
 
             //Add a delete all selected ships
-            JMenuItem deleteSelectedShips 
+            JMenuItem deleteSelectedShips
                     = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.ships"));
             deleteSelectedShips.addActionListener(a -> {
                 playerRegister.getSelectedShips().clear();

@@ -389,7 +389,8 @@ public class GameUpdater extends GameTicker {
     private void processPopulation(City city) {
         //Process population upkeep
         Population pop = gameState.getObject(city.population, Population.class);
-        for (ObjectReference segid : pop.populations) {
+        
+        for (ObjectReference segid : pop.segments) {
             PopulationSegment seg = gameState.getObject(segid, PopulationSegment.class);
             //Request resources
             long amount = (seg.size / 1000);
