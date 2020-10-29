@@ -93,7 +93,7 @@ public class GradientColor {
     /**
      * Deletes all the gradient points from this gradient object.
      *
-     * @post All gradient points from this gradient object are deleted.
+     * All gradient points from this gradient object are deleted.
      */
     public void clear() {
         gradientPoints = null;

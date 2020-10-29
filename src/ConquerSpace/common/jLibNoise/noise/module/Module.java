@@ -125,7 +125,7 @@ public abstract class Module {
      * its output values.
      * @param index An index value to assign to this source module.
      * @param sourceModule The source module to attach.
-     * @throws ExceptionInvalidParam An invalid parameter was
+     * @throws IllegalArgumentException An invalid parameter was
      * specified; see the preconditions for more information.
      *  The index value ranges from 0 to one less than the number of
      * source modules required by this noise module.

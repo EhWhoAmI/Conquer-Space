@@ -289,6 +289,7 @@ public class GameUpdater extends GameTicker {
                 modifier.incrementTicks(GameRefreshRate);
             }
 
+            //Population upkeep, population events.
             processPopulation(city);
 
             //Calculate jobs filled
@@ -323,6 +324,11 @@ public class GameUpdater extends GameTicker {
 
             CityType type = classifyCity(city);
             city.setCityType(type);
+            
+            //Do market, get what to buy
+            //Set market price
+            //Food is the most important
+            
         }
     }
 
@@ -389,7 +395,7 @@ public class GameUpdater extends GameTicker {
     private void processPopulation(City city) {
         //Process population upkeep
         Population pop = gameState.getObject(city.population, Population.class);
-        
+
         for (ObjectReference segid : pop.segments) {
             PopulationSegment seg = gameState.getObject(segid, PopulationSegment.class);
             //Request resources

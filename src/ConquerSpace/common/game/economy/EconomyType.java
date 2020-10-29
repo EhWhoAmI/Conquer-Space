@@ -18,19 +18,11 @@
 
 package ConquerSpace.common.game.economy;
 
-import ConquerSpace.common.ConquerSpaceGameObject;
-import java.util.ArrayList;
-
 /**
- * Economy of a place, a place what wants to buy and sell stuff with the outside market
  *
  * @author EhWhoAmI
  */
-public interface Trader {
-
-    public int getWealth();
-
-    public ArrayList<GoodOrder> getRequests();
-
-    public ArrayList<GoodOrder> getSellOrders();
+public enum EconomyType {
+    LassiezFaire,
+    PlannedEconomy;
 }

@@ -104,10 +104,7 @@ public class NoiseMap {
      *
      * @param width The width of the new noise map.
      * @param height The height of the new noise map.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam See the preconditions.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory. The width and
-     * height values are positive. The width and height values do not exceed the maximum possible
-     * width and height for the noise map.
+     * @throws IllegalArgumentException See the preconditions.
      */
     public NoiseMap(int width, int height) {
         InitObj();
@@ -117,7 +114,6 @@ public class NoiseMap {
     /**
      * Copy constructor.
      *
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory.
      */
     public NoiseMap(NoiseMap rhs) {
         InitObj();
@@ -342,10 +338,7 @@ public class NoiseMap {
      *
      * @param width The new width for the noise map.
      * @param height The new height for the noise map.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionInvalidParam See the preconditions.
-     * @throws ConquerSpace.common.jLibNoise.noise.ExceptionOutOfMemory Out of memory. The width and
-     * height values are positive. The width and height values do not exceed the maximum possible
-     * width and height for the noise map.
+     * @throws IllegalArgumentException See the preconditions.
      */
     public void setSize(int width, int height) {
         if (width < 0 || height < 0

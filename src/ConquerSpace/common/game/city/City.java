@@ -124,8 +124,6 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
 
     private ObjectReference ownerReference;
 
-    private ObjectReference trader;
-
     public City(GameState gameState, ObjectReference location) {
         super(gameState);
         workableFor = new ArrayList<>();
@@ -141,9 +139,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
 
         Population population = new Population(gameState);
         this.population = population.getReference();
-
-        trader = new Trader(gameState).getReference();
-
+        
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();

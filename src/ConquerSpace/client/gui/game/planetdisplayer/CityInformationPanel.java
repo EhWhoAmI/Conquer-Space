@@ -41,10 +41,12 @@ import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.util.DoubleHashMap;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -63,7 +65,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -83,6 +84,7 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jfree.chart.ChartFactory;
@@ -208,36 +210,22 @@ public class CityInformationPanel extends JPanel {
     private class CitySkylinePanel extends JPanel {
 
         Image bg = null;
+        int imageCounter = 0;
 
         public CitySkylinePanel() {
             int height = 150;
-            long start = System.currentTimeMillis();
-            Thread t = new Thread(() -> {
-                try {
-                    //Choose random image from dir
-                    File panoFiles = new File("assets/img/pano/");
-                    File[] imageList = panoFiles.listFiles();
-                    File imgfile = imageList[selectedCity.getReference().getId() % imageList.length];
-                    Image img = ImageIO.read(imgfile);
+            if (imageCount > 0) {
+                int id = selectedCity.getReference().getId() % imageCount;
 
-                    double ratio = height / (double) img.getHeight(null);
-                    int width = (int) ((double) img.getWidth(null) * ratio);
-                    bg = new BufferedImage(500, height, BufferedImage.TYPE_INT_ARGB);
-                    long end = System.currentTimeMillis();
-                    Graphics2D graphics = (Graphics2D) bg.getGraphics();
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                    graphics.drawImage(img.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
-                    GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
+                double ratio = height / (double) citySkylineImageMap.get(id).getHeight(null);
+                int width = (int) ((double) citySkylineImageMap.get(id).getWidth(null) * ratio);
+                bg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+                Graphics2D graphics = (Graphics2D) bg.getGraphics();
+                graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                graphics.drawImage(citySkylineImageMap.get(id).getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
+                GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
 
-                } catch (IOException ex) {
-                    //System.out.println("no file");
-                    //Ignore for now 
-                    //FIXME
-                }
-                long end = System.currentTimeMillis();
-
-            });
-            t.start();
+            }
             setPreferredSize(new Dimension(500, height));
         }
 
@@ -246,6 +234,8 @@ public class CityInformationPanel extends JPanel {
             //Draw background
             if (bg != null) {
                 g.drawImage(bg, 0, 0, null);
+            } else {
+                //Load image...
             }
 
         }
@@ -397,17 +387,6 @@ public class CityInformationPanel extends JPanel {
                         mapGraphics.setColor(CityType.getDistrictColor(c.getCityType()));
                         mapGraphics.fill(rect);
 
-                        //Draw image
-//                            Image[] list = districtImages.get(c.getCityType().name());
-//                            if (list != null) {
-//                                int listSize = list.length;
-//                                //Id helps make sure that image is the same
-//                                Image im = list[point.hashCode() % listSize];
-//                                mapGraphics.drawImage(im, (xPos), (yPos), null);
-//                            }
-//                            //Draw background
-//                            mapGraphics.setColor(Color.black);
-                        //Get font stats
                         float fontSize = 16;
                         Font derivedFont = getFont().deriveFont(fontSize);
                         int width = getFontMetrics(derivedFont).stringWidth(c.getName());
@@ -642,6 +621,7 @@ public class CityInformationPanel extends JPanel {
 
         JTabbedPane tabs;
         JTable resourceTable;
+        JTable resourceDemandTable;
         JList<String> modifierList;
         JList<String> connectedCityList;
 
@@ -685,10 +665,14 @@ public class CityInformationPanel extends JPanel {
             });
 
             resourceTable = new JTable(new StockpileStorageModel());
+            resourceTable.getColumnModel().getColumn(2).setCellRenderer(new StockpileResourceDeltaCellRenderer());
+            
+            resourceDemandTable = new JTable(new ResourceDemandModel());
 
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.linked"), new JScrollPane(connectedCityList));
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.ledger"), new JScrollPane(resourceTable));
+            tabs.add("Resource Demands", new JScrollPane(resourceDemandTable));
 
             //Show table of resources
             add(tabs, BorderLayout.CENTER);
@@ -749,6 +733,104 @@ public class CityInformationPanel extends JPanel {
                 return colunmNames[column];
             }
         }
+
+        private class ResourceDemandModel extends AbstractTableModel {
+
+            String[] colunmNames = {
+                LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
+                LOCALE_MESSAGES.getMessage("game.planet.resources.table.count")
+            };
+
+            @Override
+            public int getRowCount() {
+                if (selectedCity == null) {
+                    return 0;
+                } else {
+                    return selectedCity.resourceDemands.size();
+                }
+            }
+
+            @Override
+            public int getColumnCount() {
+                return colunmNames.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                //Lol needs to be efficient
+                StoreableReference storedValue = new ArrayList<StoreableReference>(selectedCity.resourceDemands.keySet()).get(rowIndex);
+
+                if (selectedCity != null) {
+                    switch (columnIndex) {
+                        case 0:
+                            return gameState.getGood(storedValue);
+                        case 1:
+                            return selectedCity.resourceDemands.get(storedValue).toString()
+                                    + "u/"
+                                    //Get mass in kg...
+                                    + (selectedCity.resourceDemands.get(storedValue) * gameState.getGood(storedValue).getMass())
+                                    + " kg";
+                    }
+                }
+                return 0;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return colunmNames[column];
+            }
+        }
+
+        class StockpileResourceDeltaCellRenderer extends DefaultTableCellRenderer {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                //Cells are by default rendered as a JLabel.
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                //Get the status for the current row.
+                if (col == 2) {
+                    String stringValue = String.valueOf(value);
+                    try {
+                        double doubleValue = Double.parseDouble(stringValue);
+                        //Set bold...
+                        if (isSelected) {
+                            if (doubleValue > 0) {
+                                //Stonks
+                                l.setForeground(Color.green);
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText("+" + l.getText() + "\u21e7"); //Stonks!
+                            } else if (doubleValue < 0) {
+                                //Not stonks
+                                l.setForeground(Color.red);
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                            }
+                        } else {
+                            if (doubleValue > 0) {
+                                //Stonks
+                                l.setForeground(new Color(15, 157, 88));
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText("+" + l.getText() + "\u21e7"); //Stonks!
+                            } else if (doubleValue < 0) {
+                                //Not stonks
+                                l.setForeground(new Color(230, 74, 25));
+                                l.setFont(l.getFont().deriveFont(Font.BOLD));
+                                l.setText(l.getText() + "\u21e9"); //Add downwards arrow :(
+                            }
+                        }
+
+                        DoubleHashMap map = selectedCity.resourceLedger.get(selectedCity.storedTypes()[row]);
+                        if (map != null) {
+                            l.setToolTipText(map.toString());
+                        }
+                    } catch (NumberFormatException nfe) {
+
+                    }
+                }
+                //Return the JLabel which renders the cell.
+                return l;
+            }
+        }
+
     }
 
     /**
@@ -815,6 +897,45 @@ public class CityInformationPanel extends JPanel {
                 shipClassList.updateUI();
             }
         }
+    }
+
+    private static final HashMap<Integer, Image> citySkylineImageMap = new HashMap<>();
+    private static int imageCount = 0;
+
+    static {
+        int height = 150;
+        Thread t = new Thread(() -> {
+            try {
+                //Choose random image from dir
+                File panoFiles = new File("assets/img/pano/");
+                File[] imageList = panoFiles.listFiles();
+                int i = 0;
+                for (File imgfile : imageList) {
+                    Image img = ImageIO.read(imgfile);
+
+                    double ratio = height / (double) img.getHeight(null);
+                    int width = (int) ((double) img.getWidth(null) * ratio);
+                    Image bg = new BufferedImage(500, height, BufferedImage.TYPE_INT_ARGB);
+                    long end = System.currentTimeMillis();
+                    Graphics2D graphics = (Graphics2D) bg.getGraphics();
+                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                    graphics.drawImage(img.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
+
+                    //Save image
+                    citySkylineImageMap.put(i, bg);
+                    i++;
+                }
+                imageCount = i;
+
+            } catch (IOException ex) {
+                //System.out.println("no file");
+                //Ignore for now 
+                //FIXME
+            }
+            long end = System.currentTimeMillis();
+
+        });
+        t.start();
     }
 
 }

@@ -20,6 +20,8 @@ package ConquerSpace.common.game.population;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;
@@ -30,13 +32,13 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 @SerializeClassName("population")
-public class Population extends ConquerSpaceGameObject{
+public class Population extends ConquerSpaceGameObject {
 
     @Serialize("segments")
     public final ArrayList<ObjectReference> segments;
 
     private long populationSize = 0;
-
+    
     public Population(GameState gameState) {
         super(gameState);
         segments = new ArrayList<>();

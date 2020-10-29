@@ -20,33 +20,47 @@ package ConquerSpace.common.game.population;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.save.SerializeClassName;
+import java.util.ArrayList;
 
 /**
  *
  * @author EhWhoAmI
  */
 @SerializeClassName("population-segment")
-public class PopulationSegment extends ConquerSpaceGameObject{
+public class PopulationSegment extends ConquerSpaceGameObject implements Trader {
+
     public long size = 0;
-    
+
     public ObjectReference species;
-    
+
     public ObjectReference culture;
-    
+
     //Placeholder value for now...
     public int tier;
-    
+
     /**
      * Population increase every tick
      */
     public float populationIncrease;
 
-    
+    private int wealth = 0;
+
+    private ArrayList<GoodOrder> buyOrders;
+    private ArrayList<GoodOrder> sellOrders;
+
+    private ArrayList<ObjectReference> resourceStorages;
+    private ArrayList<ObjectReference> ownedMeansOfProduction;
+
     public PopulationSegment(GameState gameState, ObjectReference species, ObjectReference culture) {
         super(gameState);
         this.species = species;
         this.culture = culture;
+        buyOrders = new ArrayList<>();
+        sellOrders = new ArrayList<>();
+        resourceStorages = new ArrayList<>();
     }
 
     public ObjectReference getCulture() {
@@ -59,5 +73,32 @@ public class PopulationSegment extends ConquerSpaceGameObject{
 
     public ObjectReference getSpecies() {
         return species;
+    }
+
+    @Override
+    public int getWealth() {
+        return wealth;
+    }
+
+    public void setWealth(int wealth) {
+        this.wealth = wealth;
+    }
+
+    @Override
+    public ArrayList<GoodOrder> getRequests() {
+        return buyOrders;
+    }
+
+    @Override
+    public ArrayList<GoodOrder> getSellOrders() {
+        return sellOrders;
+    }
+
+    public ArrayList<ObjectReference> getResourceStorages() {
+        return resourceStorages;
+    }
+
+    public ArrayList<ObjectReference> getOwnedMeansOfProduction() {
+        return ownedMeansOfProduction;
     }
 }

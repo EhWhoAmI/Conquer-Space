@@ -6,17 +6,17 @@ The general idea: Conquer Space!
 
 Will feature detailed 4x and grand strategy gameplay.
 
-##### Links
-- Discord: <https://discord.gg/h5r77Sa>
-- Website: <https://ehwhoami.itch.io/conquer-space>
-- Planning: <https://github.com/EhWhoAmI/Conquer-Space/projects/12>
+## Links
+ - Discord: <https://discord.gg/h5r77Sa>
+ - Website: <https://ehwhoami.itch.io/conquer-space>
+ - Planning: <https://github.com/EhWhoAmI/Conquer-Space/projects/12>
  
-### Compiling
+## Compiling
 `git clone https://github.com/EhWhoAmI/Conquer-Space.git` to clone this repo.
 
 This uses [Netbeans](https://netbeans.org/) to compile, but [Apache Ant](http://ant.apache.org/) will do. However, for the UI, it's better if you use Netbeans. We use their UI layout tool.
 
-### Libraries that we use - incomplete
+## Libraries that we use - incomplete
 | Library Name      | Description                       | Website                                   |
 | ------------      | -----------                       | -------                                   |
 | Log4J2            | Logging                           | <https://logging.apache.org/log4j/2.x/>   |
@@ -31,13 +31,13 @@ This uses [Netbeans](https://netbeans.org/) to compile, but [Apache Ant](http://
 | Xchart            | Charts                            | <https://knowm.org/open-source/xchart/>   |
 | SwingX            | UI                                | <https://github.com/ebourg/swingx>        |
 
-### Helping
+## Helping
 If you are excited to help, you need to know Java. If you know both, great!
 
 Check out the [projects page](https://github.com/EhWhoAmI/Conquer-Space/projects) to figure what we are doing next.
 
 Branches:
-- Dev Branch - In development
-- Master Branch - Latest stable
+ - Dev Branch - In development
+ - Master Branch - Latest stable
 
 If you want to report an issue, just go to the [issues page](https://github.com/EhWhoAmI/Conquer-Space/issues) to report that. Just paste the stacktrace and what you did before everything went wrong.

@@ -25,6 +25,7 @@ import ConquerSpace.common.game.resources.GoodReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -40,6 +41,12 @@ public class Market extends ConquerSpaceGameObject {
 
     //The price history
     public HashMap<GoodReference, Double> historicPrices;
+    
+    /**
+     * Person who taxes go to lol
+     */
+    ObjectReference controller;
+    EconomyType economyType = EconomyType.LassiezFaire;
 
     public Market(GameState gameState) {
         super(gameState);
@@ -58,7 +65,7 @@ public class Market extends ConquerSpaceGameObject {
             Trader trader = gameState.getObject(reference, Trader.class);
 
             //Sort buy orders
-            for (GoodOrder order : trader.buyOrders) {
+            for (GoodOrder order : trader.getRequests()) {
                 //Get good
                 initializeGoodIfNonExistant(order.getGood(), buyOrders);
                 //Get hash map
@@ -68,7 +75,7 @@ public class Market extends ConquerSpaceGameObject {
             }
 
             //Sort sell orders
-            for (GoodOrder order : trader.sellOrders) {
+            for (GoodOrder order : trader.getSellOrders()) {
                 //Get good
                 initializeGoodIfNonExistant(order.getGood(), sellOrders);
                 //Get hash map
@@ -95,8 +102,59 @@ public class Market extends ConquerSpaceGameObject {
         //Done compiling
     }
 
+    public void compileSupplyDemand() {
+        HashMap<GoodReference, Integer> demand = new HashMap<>();
+        HashMap<GoodReference, Integer> supply = new HashMap<>();
+        HashSet<GoodReference> goods = new HashSet<>();
+        //Calculate demand
+        for (Map.Entry<GoodReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
+            GoodReference key = entry.getKey();
+            ArrayList<GoodOrder> val = entry.getValue();
+            int demandCount = 0;
+            for (GoodOrder r : val) {
+                demandCount += r.amount;
+            }
+            demand.put(key, demandCount);
+            goods.add(key);
+        }
+
+        //Calculate supply
+        for (Map.Entry<GoodReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
+            GoodReference key = entry.getKey();
+            ArrayList<GoodOrder> val = entry.getValue();
+            int supplyCount = 0;
+            for (GoodOrder r : val) {
+                supplyCount += r.amount;
+            }
+            supply.put(key, supplyCount);
+            goods.add(key);
+        }
+
+        //Ratio between supply and demand
+        //supply/demand
+        //values less than 1 means a high supply, which means prices go down
+        //Values above 1 means a high demand, which means prices go up
+        for (GoodReference ref : goods) {
+            double supplyDemand = 1;
+            if (!supply.containsKey(ref)) {
+                //Then 0 supply, so infinite demand
+                supplyDemand = Double.MIN_VALUE;
+                continue;
+            }
+            if (!demand.containsKey(ref)) {
+                //no demand so infinite supply
+                supplyDemand = Double.MAX_VALUE;
+                continue;
+            }
+            supplyDemand = supply.get(ref)/demand.get(ref);
+            //So recommended price is that
+        }
+    }
+
     public void compileStats() {
         historicPrices.clear();
+
+        //Get current prices
         
     }
 
