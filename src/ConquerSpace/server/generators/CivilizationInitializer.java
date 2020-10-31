@@ -222,9 +222,16 @@ public class CivilizationInitializer {
         PopulationSegment seg = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
         seg.size = selector.nextInt(200_000) + 300_000;
         seg.size *= c.areas.size();
+        seg.tier = 0;
 
         seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
         gameState.getObject(c.population, Population.class).addSegment(seg.getReference());
+        
+        PopulationSegment seg2 = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
+        seg2.size = selector.nextInt(200_000) + 300_000;
+        seg2.size *= c.areas.size();
+        seg2.tier = 1;
+        gameState.getObject(c.population, Population.class).addSegment(seg2.getReference());
 
         ResidentialAreaFactory residentialAreaFactory = new ResidentialAreaFactory(civ);
         c.addArea(residentialAreaFactory.build(gameState).getReference());
@@ -484,7 +491,8 @@ public class CivilizationInitializer {
 
     //Governmental orgs...
     private void initializeOrgs(Civilization c, Planet planet) {
-        Organization org = new Organization(gameState, "Ministry of Economic Planning");
+        Organization org = new Organization(gameState);
+        org.setName("Ministry of Economic Planning");
         org.setBehavior(new ResourceManagerBehavior(gameState, org));
         //Sort through city
         for (ObjectReference cityId : planet.cities) {

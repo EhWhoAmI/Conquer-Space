@@ -18,20 +18,31 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.population.jobs.JobType;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class LogisticsHubArea extends Area{
+public class LogisticsHubArea extends Area {
 
     LogisticsHubArea(GameState gameState) {
         super(gameState);
     }
-    
+
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
     }
-    
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Infrastructure;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Infrastructure;
+    }
+
 }

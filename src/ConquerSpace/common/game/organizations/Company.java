@@ -31,18 +31,12 @@ import ConquerSpace.common.save.SerializeClassName;
  */
 @SerializeClassName("company")
 public class Company extends Organization implements Employer{
-    private String name;
     private int affiliation;
     private ObjectReference cityBasedIn;
     private ObjectReference planetBasedIn;
 
-    public Company(GameState gameState, String name) {
-        super(gameState, name);
-    }
-    
-
-    public String getName() {
-        return name;
+    public Company(GameState gameState) {
+        super(gameState);
     }
 
     public int getAffiliation() {

@@ -29,7 +29,7 @@ public class LiveGood extends Good{
     @Serialize("species")
     ObjectReference species;
     public LiveGood(Species s, double volume, double mass) {
-        super(s.getName(), "l_" + s.getName() + "_" + s.getReference().getId(), volume, mass);
+        super(s.getName() + " Live", "l_" + s.getName() + "_" + s.getReference().getId(), volume, mass);
         this.species = s.getReference();
     }
 }

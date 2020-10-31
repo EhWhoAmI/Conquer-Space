@@ -15,41 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.city.area;
+
+package ConquerSpace.client.gui.game.planetdisplayer.areas;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.save.SerializeClassName;
+import ConquerSpace.common.game.city.area.PowerPlantArea;
+import javax.swing.JLabel;
 
 /**
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("residential-area")
-public class ResidentialArea extends ConsumerArea {
+public class PowerPlantAreaInformationPanel extends AreaInformationPanel<PowerPlantArea>{
 
-    int maxPopulation;
-
-    ResidentialArea(GameState gameState) {
-        super(gameState);
-    }
-
-    public AreaClassification getAreaType() {
-        return AreaClassification.Residential;
-    }
-
-    @Override
-    public String toString() {
-        return "Residential Area";
+    public PowerPlantAreaInformationPanel(PowerPlantArea area, GameState gameState) {
+        super(area, gameState);
+        add(new JLabel("Power Plant"));
+        add(new JLabel("Production: " + area.getProduction()));
+        add(new JLabel("Used Resource: " + area.getUsedResource().getName()));
+        genericInformation();
     }
     
-    @Override
-    public void accept(AreaDispatcher dispatcher) {
-        dispatcher.dispatch(this);
-    }
-
-    @Override
-    public JobType getJobClassification() {
-        return (JobType.Infrastructure);
-    }
 }

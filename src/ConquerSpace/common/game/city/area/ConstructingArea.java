@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
@@ -81,5 +82,15 @@ public class ConstructingArea extends Area {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Construction;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Construction;
     }
 }

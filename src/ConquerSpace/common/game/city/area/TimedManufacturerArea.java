@@ -18,6 +18,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.save.SerializeClassName;
 import java.io.Serializable;
@@ -113,5 +114,15 @@ public class TimedManufacturerArea extends Area {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Manufacturing;
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return (JobType.FactoryWorker);
     }
 }

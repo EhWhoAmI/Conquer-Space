@@ -141,7 +141,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Do civs
         //Player civ
-        Civilization playerCiv = new Civilization(gameState, c.civilizationName);
+        Civilization playerCiv = new Civilization(gameState);
+        playerCiv.setName(c.civilizationName);
         playerCiv.setColor(c.civColor);
         playerCiv.setHomePlanetName(c.homePlanetName);
         playerCiv.setSpeciesName(c.speciesName);
@@ -184,7 +185,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         for (int i = 0; i < civCount; i++) {
             //Create civ.
             String name = civNameGenerator.getName(0, rand);
-            Civilization civ = new Civilization(gameState, name);
+            Civilization civ = new Civilization(gameState);
+            civ.setName(name);
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
             civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
             civ.setSpeciesName(name);

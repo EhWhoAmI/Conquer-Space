@@ -37,7 +37,8 @@ public enum JobType {
     FactoryWorker("Factory Worker", Color.GRAY),
     Researcher("Researcher", Color.cyan),
     Educator("Teacher", new Color(210, 105, 30)), //Brown
-    Imaginary("Imaginary", Color.red);
+    Imaginary("Imaginary", Color.red),
+    Independent("Independent", Color.magenta);
 
     private final String name;
     private final Color color;

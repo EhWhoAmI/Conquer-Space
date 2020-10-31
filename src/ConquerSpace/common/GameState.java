@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -51,7 +52,7 @@ public final class GameState implements Serializable {
     //All game objects
     //May need to be thread safe in the future
     EntityManager entities;
-    
+
     @Serialize("seed")
     private long seed;
 
@@ -79,7 +80,7 @@ public final class GameState implements Serializable {
     public ArrayList<PersonalityTrait> personalityTraits;
 
     @Serialize("species")
-    public ArrayList<ObjectReference> species;
+    public HashSet<ObjectReference> species;
 
     public ArrayList<ShipType> shipTypes;
     public HashMap<String, Integer> shipTypeClasses;
@@ -92,7 +93,7 @@ public final class GameState implements Serializable {
     public DualHashBidiMap<String, StoreableReference> goodIdentifiers;
 
     public HashMap<String, ProductionProcess> prodProcesses;
-    
+
     public Properties constants;
 
     @Serialize("player")
@@ -108,13 +109,13 @@ public final class GameState implements Serializable {
     //private GameUpdater updater;
     public GameState(int seed) {
         this.seed = seed;
-        
+
         entities = new EntityManager();
-        
+
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
 
-        species = new ArrayList<>();
+        species = new HashSet<>();
 
         goodIdentifiers = new DualHashBidiMap<>();
         goodHashMap = new HashMap<>();
@@ -122,7 +123,7 @@ public final class GameState implements Serializable {
         date = new StarDate(1l);
 
         random = new Random(seed);
-        
+
         constants = new Properties();
 
         //Create new galaxy
@@ -255,7 +256,7 @@ public final class GameState implements Serializable {
         entities = gameState.entities;
 
         universeId = gameState.universeId;
-        
+
         date = gameState.date;
         launchSystems = gameState.launchSystems;
         civilizations = gameState.civilizations;
@@ -281,9 +282,9 @@ public final class GameState implements Serializable {
 
         fieldNodeRoot = gameState.fieldNodeRoot;
         techonologies = gameState.techonologies;
-        
+
         constants = gameState.constants;
 
-        random = gameState.random;        
+        random = gameState.random;
     }
 }

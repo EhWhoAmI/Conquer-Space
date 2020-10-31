@@ -20,6 +20,7 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.logistics.ResourcePermissions;
+import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.resources.StoreableReference;
@@ -142,5 +143,15 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Infrastructure;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Infrastructure;
     }
 }

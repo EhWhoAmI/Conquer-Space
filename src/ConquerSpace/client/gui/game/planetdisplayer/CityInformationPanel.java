@@ -64,13 +64,16 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -93,7 +96,10 @@ import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.LegendItemEntity;
 import org.jfree.chart.entity.PieSectionEntity;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -418,18 +424,46 @@ public class CityInformationPanel extends JPanel {
             JobTableModel jobTableModel = new JobTableModel();
             JTable jobTable = new JTable(jobTableModel);
 
+            JPanel jobTablePanel = new JPanel(new BorderLayout());
+            HashMap<JobType, JCheckBox> checkBoxes = new HashMap<>();
+            JPanel checkBoxPanels = new JPanel();
+            checkBoxPanels.setLayout(new VerticalFlowLayout());
             DefaultPieDataset dataset = new DefaultPieDataset();
             for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
                 JobType key = entry.getKey();
                 Integer val = entry.getValue();
-                dataset.setValue(key, val);
+                if (val > 0) {
+                    dataset.setValue(key, val);
+                    JCheckBox box = new JCheckBox(key.getName());
+                    box.addActionListener(l -> {
+                        if (box.isSelected()) {
+                            //Add thing back
+                            dataset.setValue(key, val);
+                        } else {
+                            //Remove thing
+                            dataset.remove(key);
+                        }
+                    });
+                    box.setSelected(true);
+                    //Add
+                    checkBoxPanels.add(box);
+                    checkBoxes.put(key, box);
+                }
             }
 
             JFreeChart chart = ChartFactory.createPieChart(LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs"), dataset, true, true, false);
-            for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
-                JobType key = entry.getKey();
-                Integer val = entry.getValue();
+            PiePlot piePlot = (PiePlot) chart.getPlot();
+
+            PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
+                    "{0}({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+            piePlot.setLabelGenerator(gen);
+
+            for (JobType key : populationCount.keySet()) {
                 ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
+
+                if (checkBoxes.containsKey(key)) {
+                    checkBoxes.get(key).setBackground(key.getColor());
+                }
             }
 
             ChartPanel chartPanel = new ChartPanel(chart);
@@ -441,6 +475,12 @@ public class CityInformationPanel extends JPanel {
                     if (entity instanceof PieSectionEntity) {
                         //System.out.println(((PieSectionEntity) entity).getSectionKey());
                         //System.out.println(((PieSectionEntity) entity).getSectionKey().getClass());
+                        //Remove segment
+                        if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
+                            dataset.remove(((PieSectionEntity) entity).getSectionKey());
+                        }
+                    } else if (entity instanceof LegendItemEntity) {
+
                     }
                 }
 
@@ -450,19 +490,23 @@ public class CityInformationPanel extends JPanel {
                 }
             });
 
+            jobTablePanel.add(chartPanel, BorderLayout.CENTER);
+            jobTablePanel.add(checkBoxPanels, BorderLayout.EAST);
+
             //Population segments chart
             DefaultPieDataset populationSegmentDataset = new DefaultPieDataset();
             //Fill up
             Population cityPopulation = gameState.getObject(selectedCity.population, Population.class);
             for (ObjectReference segmentReference : cityPopulation.segments) {
                 PopulationSegment segment = gameState.getObject(segmentReference, PopulationSegment.class);
-                populationSegmentDataset.setValue(new Long(segment.getReference().getId()), (double) segment.size);
+                populationSegmentDataset.setValue(new Long(segment.tier), (double) segment.size);
             }
             JFreeChart segmentChart = ChartFactory.createPieChart("Segments", populationSegmentDataset, true, true, false);
-
-            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), chartPanel);
+            ChartPanel segmentChartPanel = new ChartPanel(segmentChart);
+            segmentChartPanel.setPopupMenu(null);
+            tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobTablePanel);
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
-            tabs.add("Segments", new ChartPanel(segmentChart));
+            tabs.add("Segments", segmentChartPanel);
             add(tabs, BorderLayout.CENTER);
             setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
         }
@@ -474,6 +518,9 @@ public class CityInformationPanel extends JPanel {
             //Get population job
             for (ObjectReference areaId : selectedCity.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
+                if (area.getJobClassification() == JobType.Imaginary) {
+                    System.out.println(area.getClass());
+                }
                 if (!populationCount.containsKey(area.getJobClassification())) {
                     populationCount.put(area.getJobClassification(), area.getCurrentlyManningJobs());
                     currentlyWorking += area.getCurrentlyManningJobs();
@@ -576,8 +623,7 @@ public class CityInformationPanel extends JPanel {
                 AreaClassification key = entry.getKey();
                 Integer val = entry.getValue();
 
-                JXTaskPane pane = new JXTaskPane(key.toString());
-                pane.add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.areas.type", val.toString())));
+                JXTaskPane pane = new JXTaskPane(key.toString() + " - " + val.toString());
                 //List all areas of this type
                 for (int i = 0; i < selectedCity.areas.size(); i++) {
                     Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
@@ -666,7 +712,7 @@ public class CityInformationPanel extends JPanel {
 
             resourceTable = new JTable(new StockpileStorageModel());
             resourceTable.getColumnModel().getColumn(2).setCellRenderer(new StockpileResourceDeltaCellRenderer());
-            
+
             resourceDemandTable = new JTable(new ResourceDemandModel());
 
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
@@ -782,6 +828,7 @@ public class CityInformationPanel extends JPanel {
         }
 
         class StockpileResourceDeltaCellRenderer extends DefaultTableCellRenderer {
+
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
                 //Cells are by default rendered as a JLabel.

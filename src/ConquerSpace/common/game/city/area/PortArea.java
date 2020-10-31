@@ -15,54 +15,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.save.SerializeClassName;
 
 /**
- * Symbolizes all the smaller businesses and normal day to day trade in
+ * Area that allows for the transport of goods
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("commercial-area")
-public class CommercialArea extends Area {
+public class PortArea extends Area {
 
-    private int tradeValue;
-    private ObjectReference currency;
+    /**
+     * Amount of tons of goods able to ship per month or something.
+     */
+    int volume;
 
-    CommercialArea(GameState gameState) {
+    public PortArea(GameState gameState) {
         super(gameState);
-        priority = 10;
     }
 
-    public void setTradeValue(int tradeValue) {
-        this.tradeValue = tradeValue;
-    }
-
-    public int getTradeValue() {
-        return tradeValue;
-    }
-
-    @Override
-    public String toString() {
-        return "Commercial Area";
+    public int getVolume() {
+        return volume;
     }
 
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
-    }
-
-    @Override
-    public JobType getJobClassification() {
-        return JobType.Independent;
-    }
-
-    @Override
-    public AreaClassification getAreaType() {
-        return AreaClassification.Commercial;
     }
 }

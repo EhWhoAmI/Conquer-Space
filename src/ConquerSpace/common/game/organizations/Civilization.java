@@ -129,8 +129,8 @@ public class Civilization extends Organization implements Employer {
 
     public Government government;
 
-    public Civilization(GameState gameState, String name) {
-        super(gameState, name);
+    public Civilization(GameState gameState) {
+        super(gameState);
 
         //Set a temp starting point as in 0:0:0
         vision = new HashMap<>();

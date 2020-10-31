@@ -48,6 +48,11 @@ public class PowerPlantArea extends ConsumerArea {
         return "Power Plant";
     }
 
+    /**
+     * Resources needed to generate power.
+     *
+     * @return
+     */
     public StoreableReference getUsedResource() {
         return usesResource;
     }
@@ -77,6 +82,11 @@ public class PowerPlantArea extends ConsumerArea {
         return (JobType.PowerPlantTechnician);
     }
 
+    /**
+     * Production: max amount can generate.
+     *
+     * @return
+     */
     public int getProduction() {
         return production;
     }
@@ -88,5 +98,10 @@ public class PowerPlantArea extends ConsumerArea {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Infrastructure;
     }
 }
