@@ -31,5 +31,6 @@ public enum AreaClassification {
     Farm,
     Mine,
     Commercial,
-    Construction;
+    Construction,
+    Transport;
 }

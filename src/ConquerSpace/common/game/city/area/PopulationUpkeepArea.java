@@ -15,31 +15,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.save.SerializeClassName;
-import java.util.HashMap;
 
 /**
- * An area that does not generate resources, and only has resource intake.
+ * Hospital or something like that.
+ *
  * @author EhWhoAmI
  */
-@SerializeClassName("consumer-area")
-public class ConsumerArea extends Area{
-    /**
-     * Consumed per tick
-     */
-    public HashMap<Integer, Double> consumed;
+public class PopulationUpkeepArea extends Area {
     
-    ConsumerArea(GameState gameState) {
+    public PopulationUpkeepArea(GameState gameState) {
         super(gameState);
-        consumed = new HashMap<>();
     }
     
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.HealthCareWorker;
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Infrastructure;
     }
 }

@@ -81,7 +81,7 @@ public class FarmFieldArea extends TimedManufacturerArea {
 
     @Override
     public JobType getJobClassification() {
-        return (JobType.Farmer);
+        return (JobType.Agriculture);
     }
 
     @Override

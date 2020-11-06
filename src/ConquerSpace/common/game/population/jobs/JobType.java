@@ -26,20 +26,26 @@ import java.awt.Color;
 public enum JobType {
     Miner("Miner", new Color(140, 3, 252)),
     Jobless("Jobless", Color.red),
-    Administrator("Administrator", new Color(252, 98, 3)),
-    Farmer("Farmer", Color.green),
+    Administrator("Administrator", new Color(252, 98, 3)), //Govt work
+    Agriculture("Agriculture worker", Color.green),
     Construction("Construction", Color.darkGray),
     Infrastructure("Infrastructure", Color.WHITE),
-    AeronauticalEngineer("Aeronautical Engineer", Color.orange),
+    Engineer("Engineer", Color.orange),
     PopUpkeepWorker("Population Upkeep Worker", new Color(255, 0, 255)),
-    SpacePortEngineer("Space Port Engineer", Color.pink),
     PowerPlantTechnician("Power Plant Technician", Color.yellow),
     FactoryWorker("Factory Worker", Color.GRAY),
     Researcher("Researcher", Color.cyan),
-    Educator("Teacher", new Color(210, 105, 30)), //Brown
+    Educator("Education", new Color(210, 105, 30)), //Brown
     Imaginary("Imaginary", Color.red),
-    Independent("Independent", Color.magenta);
-
+    Independent("Independent", Color.magenta),
+    Transport("Transportation", Color.black),
+    HealthCareWorker("Healthcare", Color.pink),
+    Retail("Retail", Color.BLUE.brighter()),
+    Buisness("Buisness", Color.lightGray),
+    Leisure("Leisure", Color.BLACK.brighter()),
+    Finance("Finance", Color.green.brighter()),
+    LawEnforcement("Law Enforcement", Color.blue),
+    Military("Military", Color.red);
     private final String name;
     private final Color color;
 

@@ -43,6 +43,7 @@ import ConquerSpace.common.game.universe.Vector;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.DoubleHashMap;
 import ConquerSpace.common.util.Utilities;
+import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -283,7 +284,9 @@ public class CityInformationPanel extends JPanel {
 
             double unemploymentRate = selectedCity.getUnemploymentRate();
             JLabel unemployment = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.cities.unempoymentrate", Math.round(unemploymentRate * 100)));
-            unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
+            if (unemploymentRate < 1f && unemploymentRate > 0f) {
+                unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
+            }
             add(unemployment);
 
             //Max population
@@ -410,7 +413,7 @@ public class CityInformationPanel extends JPanel {
 
         HashMap<JobType, Integer> populationCount;
         private long currentlyWorking;
-        private long population;
+        private long populationLaborForceSize;
 
         JTabbedPane tabs;
 
@@ -428,6 +431,9 @@ public class CityInformationPanel extends JPanel {
             HashMap<JobType, JCheckBox> checkBoxes = new HashMap<>();
             JPanel checkBoxPanels = new JPanel();
             checkBoxPanels.setLayout(new VerticalFlowLayout());
+
+            checkBoxPanels.add(new JLabel("Labor Force: " + new DecimalFormat("###,###").format(gameState.getObject(selectedCity.population, Population.class).getWorkableSize())));
+
             DefaultPieDataset dataset = new DefaultPieDataset();
             for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
                 JobType key = entry.getKey();
@@ -446,8 +452,24 @@ public class CityInformationPanel extends JPanel {
                     });
                     box.setSelected(true);
                     //Add
-                    checkBoxPanels.add(box);
+                    JPanel boxContainerPanel = new JPanel(new HorizontalFlowLayout());
+                    boxContainerPanel.add(box);
+                    int boxHeight = getFontMetrics(box.getFont()).getHeight();
+
+                    BufferedImage img = new BufferedImage(boxHeight, boxHeight, BufferedImage.TYPE_3BYTE_BGR);
+                    Graphics2D g2d = (Graphics2D) img.getGraphics();
+
+                    Color keyColor = key.getColor();
+                    g2d.setColor(keyColor);
+                    g2d.fillRect(0, 0, boxHeight, boxHeight);
+
+                    g2d.setColor(Color.lightGray);
+                    g2d.drawRect(0, 0, boxHeight, boxHeight);
+                    boxContainerPanel.add(new JLabel(new ImageIcon(img)));
+
                     checkBoxes.put(key, box);
+                    checkBoxPanels.add(boxContainerPanel);
+
                 }
             }
 
@@ -455,15 +477,11 @@ public class CityInformationPanel extends JPanel {
             PiePlot piePlot = (PiePlot) chart.getPlot();
 
             PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
-                    "{0}({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+                    "{0}: {1} ({2})", new DecimalFormat("###,###"), new DecimalFormat("0%"));
             piePlot.setLabelGenerator(gen);
 
             for (JobType key : populationCount.keySet()) {
                 ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
-
-                if (checkBoxes.containsKey(key)) {
-                    checkBoxes.get(key).setBackground(key.getColor());
-                }
             }
 
             ChartPanel chartPanel = new ChartPanel(chart);
@@ -478,6 +496,8 @@ public class CityInformationPanel extends JPanel {
                         //Remove segment
                         if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
                             dataset.remove(((PieSectionEntity) entity).getSectionKey());
+                            //Uncheck checkbox
+                            checkBoxes.get(((PieSectionEntity) entity).getSectionKey()).setSelected(false);
                         }
                     } else if (entity instanceof LegendItemEntity) {
 
@@ -514,13 +534,10 @@ public class CityInformationPanel extends JPanel {
         public void initPopulationInfo() {
             currentlyWorking = 0;
             populationCount.clear();
-            population = gameState.getObject(selectedCity.population, Population.class).getPopulationSize();
+            populationLaborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
             //Get population job
             for (ObjectReference areaId : selectedCity.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
-                if (area.getJobClassification() == JobType.Imaginary) {
-                    System.out.println(area.getClass());
-                }
                 if (!populationCount.containsKey(area.getJobClassification())) {
                     populationCount.put(area.getJobClassification(), area.getCurrentlyManningJobs());
                     currentlyWorking += area.getCurrentlyManningJobs();
@@ -532,10 +549,10 @@ public class CityInformationPanel extends JPanel {
                 }
             }
             if (!populationCount.containsKey(JobType.Jobless)) {
-                populationCount.put(JobType.Jobless, (int) (population - currentlyWorking));
+                populationCount.put(JobType.Jobless, (int) (populationLaborForceSize - currentlyWorking));
             } else {
                 int count = populationCount.get(JobType.Jobless);
-                count += (int) (population - currentlyWorking);
+                count += (int) (populationLaborForceSize - currentlyWorking);
                 populationCount.put(JobType.Jobless, count);
             }
         }

@@ -295,7 +295,7 @@ public class GameUpdater extends GameTicker {
             //Calculate jobs filled
             calculateCityJobs(city);
 
-            //Process areas
+            //Process areas and their production
             for (ObjectReference areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 //if not owned, becomes owned by the planet owner
@@ -324,11 +324,10 @@ public class GameUpdater extends GameTicker {
 
             CityType type = classifyCity(city);
             city.setCityType(type);
-            
+
             //Do market, get what to buy
             //Set market price
             //Food is the most important
-            
         }
     }
 

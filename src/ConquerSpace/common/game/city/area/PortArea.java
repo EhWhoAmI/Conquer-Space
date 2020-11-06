@@ -19,6 +19,7 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.game.population.jobs.JobType;
 
 /**
  * Area that allows for the transport of goods
@@ -43,5 +44,15 @@ public class PortArea extends Area {
     @Override
     public void accept(AreaDispatcher dispatcher) {
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public AreaClassification getAreaType() {
+        return AreaClassification.Transport;
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.Transport;
     }
 }

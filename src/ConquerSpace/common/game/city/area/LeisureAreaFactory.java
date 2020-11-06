@@ -15,31 +15,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.save.SerializeClassName;
-import java.util.HashMap;
+import ConquerSpace.common.game.organizations.Civilization;
 
 /**
- * An area that does not generate resources, and only has resource intake.
+ *
  * @author EhWhoAmI
  */
-@SerializeClassName("consumer-area")
-public class ConsumerArea extends Area{
-    /**
-     * Consumed per tick
-     */
-    public HashMap<Integer, Double> consumed;
-    
-    ConsumerArea(GameState gameState) {
-        super(gameState);
-        consumed = new HashMap<>();
+public class LeisureAreaFactory extends AreaFactory{
+
+    public LeisureAreaFactory(Civilization builder) {
+        super(builder);
     }
-    
+
     @Override
-    public void accept(AreaDispatcher dispatcher) {
-        dispatcher.dispatch(this);
+    public Area build(GameState gameState) {
+        LeisureArea area = new LeisureArea(gameState);
+        setDefaultInformation(gameState, area);
+        return area;
     }
+    
+    
+    
 }

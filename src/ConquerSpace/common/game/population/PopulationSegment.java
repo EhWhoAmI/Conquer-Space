@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class PopulationSegment extends ConquerSpaceGameObject implements Trader {
 
     public long size = 0;
+    public long workablePopulation = 0;
 
     public ObjectReference species;
 

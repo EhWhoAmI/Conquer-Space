@@ -345,7 +345,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
             currentlyWorking += area.getCurrentlyManningJobs();
         }
         //return (population)
-        long populationSize = gameState.getObject(population, Population.class).getPopulationSize();
+        long populationSize = gameState.getObject(population, Population.class).getWorkableSize();
         return ((double) (populationSize - currentlyWorking) / (double) populationSize);
     }
 

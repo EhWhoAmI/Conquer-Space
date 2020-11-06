@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 /**
  * Represents the population in a place.
+ *
  * @author EhWhoAmI
  */
 @SerializeClassName("population")
@@ -38,7 +39,7 @@ public class Population extends ConquerSpaceGameObject {
     public final ArrayList<ObjectReference> segments;
 
     private long populationSize = 0;
-    
+
     public Population(GameState gameState) {
         super(gameState);
         segments = new ArrayList<>();
@@ -55,8 +56,17 @@ public class Population extends ConquerSpaceGameObject {
     public long getPopulationSize() {
         populationSize = 0;
         for (ObjectReference seg : segments) {
-            populationSize += 
-                    gameState.getObject(seg, PopulationSegment.class).getSize();
+            populationSize
+                    += gameState.getObject(seg, PopulationSegment.class).getSize();
+        }
+        return populationSize;
+    }
+
+    public long getWorkableSize() {
+        long populationSize = 0;
+        for (ObjectReference seg : segments) {
+            populationSize
+                    += gameState.getObject(seg, PopulationSegment.class).workablePopulation;
         }
         return populationSize;
     }

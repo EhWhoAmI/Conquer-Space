@@ -63,6 +63,6 @@ public class SpacePortArea extends Area {
 
     @Override
     public JobType getJobClassification() {
-        return JobType.AeronauticalEngineer;
+        return JobType.Engineer;
     }
 }

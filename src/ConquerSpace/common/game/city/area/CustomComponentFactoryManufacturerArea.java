@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.game.population.jobs.JobType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,6 +65,11 @@ public class CustomComponentFactoryManufacturerArea extends Area {
     @Override
     public AreaClassification getAreaType() {
         return AreaClassification.Manufacturing;
+    }
+
+    @Override
+    public JobType getJobClassification() {
+        return JobType.FactoryWorker;
     }
 
     @Override

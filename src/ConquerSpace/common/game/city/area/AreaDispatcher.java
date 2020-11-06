@@ -59,4 +59,6 @@ public interface AreaDispatcher {
     void dispatch(CapitolArea area);
     
     void dispatch(PortArea area);
+    
+    void dispatch(PopulationUpkeepArea area);
 }
