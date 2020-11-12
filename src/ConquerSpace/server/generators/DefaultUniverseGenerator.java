@@ -214,7 +214,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         LOGGER.info("Going over civ initializing");
 
         CivilizationInitializer initer = new CivilizationInitializer(state);
-        initer.initGame();
+        initer.initCivilization();
         LOGGER.info("Done with civ initializing");
 
         return universe;

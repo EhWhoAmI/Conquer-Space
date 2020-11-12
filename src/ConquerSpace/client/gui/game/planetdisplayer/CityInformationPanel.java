@@ -35,6 +35,8 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
@@ -685,6 +687,8 @@ public class CityInformationPanel extends JPanel {
         JTabbedPane tabs;
         JTable resourceTable;
         JTable resourceDemandTable;
+        JTable resourceInputTable;
+        JTable resourceOutputTable;
         JList<String> modifierList;
         JList<String> connectedCityList;
 
@@ -732,10 +736,15 @@ public class CityInformationPanel extends JPanel {
 
             resourceDemandTable = new JTable(new ResourceDemandModel());
 
+            resourceInputTable = new JTable(new StockpileInModel());
+            resourceOutputTable = new JTable(new StockpileOutModel());
+
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.linked"), new JScrollPane(connectedCityList));
             tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.ledger"), new JScrollPane(resourceTable));
             tabs.add("Resource Demands", new JScrollPane(resourceDemandTable));
+            tabs.add("Input", new JScrollPane(resourceInputTable));
+            tabs.add("Output", new JScrollPane(resourceOutputTable));
 
             //Show table of resources
             add(tabs, BorderLayout.CENTER);
@@ -766,17 +775,24 @@ public class CityInformationPanel extends JPanel {
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 StoreableReference storedValue = selectedCity.storedTypes()[rowIndex];
-
+                DecimalFormat df = new DecimalFormat("###.##");
                 if (selectedCity != null) {
                     switch (columnIndex) {
                         case 0:
                             return gameState.getGood(storedValue);
                         case 1:
-                            return selectedCity.getResourceAmount(storedValue)
-                                    + "u/"
+
+                            String unitCount = df.format(selectedCity.getResourceAmount(storedValue));
+
+                            if (selectedCity.getResourceAmount(storedValue) > 10000) {
+                                unitCount = Utilities.longToHumanString(selectedCity.getResourceAmount(storedValue).longValue());
+                            }
+
+                            return unitCount
+                                    + " units/"
                                     //Get mass in kg...
-                                    + (selectedCity.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass())
-                                    + " kg";
+                                    + Utilities.longToHumanString((long) ((selectedCity.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass()) / 1000))
+                                    + " tons";
                         case 2:
                             HashMap<String, Double> ledger = selectedCity.resourceLedger.get(storedValue);
                             double change = 0;
@@ -882,9 +898,22 @@ public class CityInformationPanel extends JPanel {
                             }
                         }
 
-                        DoubleHashMap map = selectedCity.resourceLedger.get(selectedCity.storedTypes()[row]);
+                        DoubleHashMap<String> map = selectedCity.resourceLedger.get(selectedCity.storedTypes()[row]);
                         if (map != null) {
-                            l.setToolTipText(map.toString());
+                            String text = "<html>";
+                            for (Map.Entry<String, Double> object : map.entrySet()) {
+                                Object key = object.getKey();
+                                Double val = object.getValue();
+
+                                text += key + ": ";
+                                if (Math.signum(val) == -1) {
+                                    text += "-";
+                                }
+                                text += Utilities.longToHumanString(Math.abs(val.longValue()));
+                                text += "<br/>";
+                            }
+                            text += "</html>";
+                            l.setToolTipText(text);
                         }
                     } catch (NumberFormatException nfe) {
 
@@ -895,6 +924,126 @@ public class CityInformationPanel extends JPanel {
             }
         }
 
+        private class StockpileOutModel extends AbstractTableModel {
+
+            String[] colunmNames = {"City", "Good", "Amount"};
+
+            ArrayList<ResourcesChangeTuple> tuple;
+
+            public StockpileOutModel() {
+                tuple = new ArrayList<>();
+                //Get the city
+                for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.resourcesSentTo.entrySet()) {
+                    ResourceStockpile resourceStockpile = entry.getKey();
+                    DoubleHashMap<StoreableReference> val = entry.getValue();
+
+                    for (Map.Entry<StoreableReference, Double> entry1 : val.entrySet()) {
+                        StoreableReference reference = entry1.getKey();
+                        Double goodCount = entry1.getValue();
+                        tuple.add(new ResourcesChangeTuple(resourceStockpile, reference, goodCount));
+                    }
+                }
+            }
+
+            @Override
+            public int getRowCount() {
+                return tuple.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return colunmNames.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                //get thingy
+                switch (columnIndex) {
+                    case 0:
+                        return tuple.get(rowIndex).stock;
+                    case 1:
+                        return gameState.getGood(tuple.get(rowIndex).ref).getName();
+                    case 2:
+                        return tuple.get(rowIndex).amount;
+                }
+                return 0;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return colunmNames[column];
+            }
+
+        }
+
+        private class StockpileInModel extends AbstractTableModel {
+
+            String[] colunmNames = {"City", "Good", "Amount"};
+
+            ArrayList<ResourcesChangeTuple> tuple;
+
+            public StockpileInModel() {
+                tuple = new ArrayList<>();
+                //Get the city
+                for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.resourcesGainedFrom.entrySet()) {
+                    ResourceStockpile resourceStockpile = entry.getKey();
+                    DoubleHashMap<StoreableReference> val = entry.getValue();
+
+                    for (Map.Entry<StoreableReference, Double> entry1 : val.entrySet()) {
+                        StoreableReference reference = entry1.getKey();
+                        Double goodCount = entry1.getValue();
+                        tuple.add(new ResourcesChangeTuple(resourceStockpile, reference, goodCount));
+                    }
+                }
+            }
+
+            @Override
+            public int getRowCount() {
+                return tuple.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return colunmNames.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                //get thingy
+                switch (columnIndex) {
+                    case 0:
+                        return tuple.get(rowIndex).stock;
+                    case 1:
+                        return gameState.getGood(tuple.get(rowIndex).ref).getName();
+                    case 2:
+                        return tuple.get(rowIndex).amount;
+                }
+                return 0;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return colunmNames[column];
+            }
+
+        }
+
+        class ResourcesChangeTuple {
+
+            ResourceStockpile stock;
+            StoreableReference ref;
+            Double amount;
+
+            public ResourcesChangeTuple(ResourceStockpile stock, StoreableReference ref, Double amount) {
+                this.stock = stock;
+                this.ref = ref;
+                this.amount = amount;
+            }
+
+            public ResourcesChangeTuple() {
+            }
+
+        }
     }
 
     /**

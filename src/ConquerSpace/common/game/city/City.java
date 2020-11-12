@@ -25,10 +25,11 @@ import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
-import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
+import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -76,6 +77,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
 
     @Serialize(value = "demands", special = SaveStuff.Good)
     public DoubleHashMap<StoreableReference> resourceDemands;
+    
+    public HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesSentTo;
+    public HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesGainedFrom;
 
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
@@ -131,6 +135,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
         resources = new HashMap<>();
+        resourcesSentTo = new HashMap<>();
+        resourcesGainedFrom = new HashMap<>();
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();

@@ -99,7 +99,7 @@ public class CivilizationInitializer {
         this.gameState = state;
     }
 
-    public void initGame() {
+    public void initCivilization() {
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         Random selector = new Random();
@@ -173,6 +173,8 @@ public class CivilizationInitializer {
 
             //Set head of state position
             civilization.government.officials.get(civilization.government.headofState).setPosition(civilization.getCapitalCity());
+            
+            //Proc gen political stuff, progress events behind the scene to generate a little bit of history
         }
     }
 
