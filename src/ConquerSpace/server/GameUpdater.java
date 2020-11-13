@@ -278,6 +278,7 @@ public class GameUpdater extends GameTicker {
             city.resourceLedger.clear();
             city.resourcesGainedFrom.clear();
             city.resourcesSentTo.clear();
+            city.primaryProduction.clear();
 
             //Process city demands
             //Create orders from cities that have stuff

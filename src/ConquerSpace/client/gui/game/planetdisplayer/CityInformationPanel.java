@@ -72,6 +72,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -273,6 +274,15 @@ public class CityInformationPanel extends JPanel {
             JLabel priindustry = new JLabel(
                     LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selectedCity.getCityType()));
             add(priindustry);
+            
+            JLabel mainProduction = new JLabel("");
+            StringJoiner joiner = new StringJoiner(", ");
+
+            for(StoreableReference ref : selectedCity.primaryProduction) {
+                joiner.add(gameState.getGood(ref).toString());
+            }
+            mainProduction.setText("Produces Goods: " + joiner.toString());
+            add(mainProduction);
 
             //Get the number of powerplants leading to it
             //Energy usage

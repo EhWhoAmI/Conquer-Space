@@ -108,6 +108,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 Double val = entry.getValue();
 
                 //Get percentage
+                city.primaryProduction.add(key);
                 storeResource(key, val * removed, city);
             });
         }
@@ -130,7 +131,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             process.output.entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
-
+                city.primaryProduction.add(key);
                 storeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
             });
             ((ManufacturerArea) area).setProducedLastTick(true);
@@ -149,7 +150,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             });
 
             double multiplier = getMultiplier(area);
-
+            city.primaryProduction.add(area.getResourceMinedId());
             storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * GameRefreshRate) * multiplier, city);
         }
     }
@@ -179,6 +180,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
         int removed = area.tick(GameRefreshRate);
         if (removed > 0 && areaIsProducing(area)) {
             //Calculate percentage
+             city.primaryProduction.add(area.getGrown().getFoodGood());
             storeResource(area.getGrown().getFoodGood(), (removed * (double) area.getFieldSize()), city);
 
             area.grow();
@@ -251,7 +253,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
         }
         return multiplier;
     }
-    
+
     @Override
     public void dispatch(PortArea area) {
         //Do stuff
@@ -259,6 +261,6 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(PopulationUpkeepArea area) {
-        
+
     }
 }

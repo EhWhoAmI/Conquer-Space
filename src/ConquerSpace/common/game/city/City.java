@@ -96,6 +96,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
 
     private int ledgerClearDelta = 0;
     public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
+    
+    public ArrayList<StoreableReference> primaryProduction;
 
     @Serialize("location")
     private ObjectReference location;
@@ -150,6 +152,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityModifiers = new ArrayList<>();
+        primaryProduction = new ArrayList<>();
+        
         cityType = CityType.Generic;
         size = 0;
 

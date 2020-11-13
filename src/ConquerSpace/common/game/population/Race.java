@@ -55,8 +55,8 @@ public class Race extends Species{
         this.foodPerMonth = foodPerMonth;
         this.breedingRate = breedingRate;
         
-        //Set food good
-        Good food = new Element(name + " consumable", 1, 1);
+        //Set food good, need better name lol
+        Good food = new Element(name + " food", 1, 1);
         gameState.addGood(food);
         this.food = food.getId();
     }
