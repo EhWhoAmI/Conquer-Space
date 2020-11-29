@@ -84,6 +84,8 @@ public class Planet extends StarSystemBody implements Administrable {
 
     private ObjectReference governor;
 
+    private ObjectReference planetaryMarket;
+
     /**
      * If this is empty, the planet does not have life.
      */
@@ -272,5 +274,13 @@ public class Planet extends StarSystemBody implements Administrable {
             cityList.add(c);
         }
         return cityList;
+    }
+
+    public ObjectReference getPlanetaryMarket() {
+        return planetaryMarket;
+    }
+
+    public void setPlanetaryMarket(ObjectReference planetaryMarket) {
+        this.planetaryMarket = planetaryMarket;
     }
 }

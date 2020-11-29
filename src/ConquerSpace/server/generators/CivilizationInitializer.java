@@ -38,6 +38,7 @@ import ConquerSpace.common.game.city.area.PowerPlantAreaFactory;
 import ConquerSpace.common.game.city.area.ResearchArea;
 import ConquerSpace.common.game.city.area.ResearchAreaFactory;
 import ConquerSpace.common.game.city.area.ResidentialAreaFactory;
+import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.life.LifeTrait;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
@@ -178,7 +179,7 @@ public class CivilizationInitializer {
         }
     }
 
-    private void initializeCities(Planet starting, Civilization c, Random selector) {
+    private void initializeCities(Planet startingPlanet, Civilization c, Random selector) {
         NameGenerator townNames = null;
         NameGenerator personNames = null;
 
@@ -190,9 +191,9 @@ public class CivilizationInitializer {
         }
         Species food = createEdibleFood(c);
 
-        createResourceMiners(starting, c, c.getFoundingSpecies(), selector, townNames);
-        createFarms(starting, food, c, selector, townNames);
-        createNormalCities(starting, c, selector, townNames);
+        createResourceMiners(startingPlanet, c, c.getFoundingSpecies(), selector, townNames);
+        createFarms(startingPlanet, food, c, selector, townNames);
+        createNormalCities(startingPlanet, c, selector, townNames);
 
         //Initialize namelists
         NameGenerator researchInstitutionGenerator = null;
@@ -202,14 +203,21 @@ public class CivilizationInitializer {
             //Ignore
         }
 
-        for (int i = 0; i < starting.cities.size(); i++) {
-            City city = gameState.getObject(starting.cities.get(i), City.class);
+        //Common market
+        Market market = new Market(gameState);
+        startingPlanet.setPlanetaryMarket(market.getReference());
+        
+        for (int i = 0; i < startingPlanet.cities.size(); i++) {
+            City city = gameState.getObject(startingPlanet.cities.get(i), City.class);
             city.setOwner(c.getReference());
             addInfrastructure(c, city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
             addCommercialArea(city, c);
-            addPopulation(city, selector, c);
+            addMoreProcessingToCities(city, selector, c);
             addGovenor(city, c, selector, personNames);
+            
+            //Set market
+            market.addTrader(city);
         }
     }
 
@@ -223,7 +231,8 @@ public class CivilizationInitializer {
         civ.people.add(admin.getReference());
     }
 
-    private void addPopulation(City c, Random selector, Civilization civ) {
+    private void addMoreProcessingToCities(City c, Random selector, Civilization civ) {
+        //Set culture
         Culture culture = new Culture(gameState);
         PopulationSegment seg = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
         seg.size = selector.nextInt(200_000) + 300_000;

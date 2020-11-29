@@ -38,6 +38,8 @@ import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.city.modifier.RiotModifier;
 import ConquerSpace.common.game.city.modifier.StarvationModifier;
 import ConquerSpace.common.game.city.modifier.UnemployedModifier;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
@@ -272,6 +274,8 @@ public class GameUpdater extends GameTicker {
      * @param delta
      */
     private void processCities(Planet planet) {
+        Market planetMarket = gameState.getObject(planet.getPlanetaryMarket(), Market.class);
+        planetMarket.clearOrders();
         for (ObjectReference cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
             //Clear ledger
@@ -331,6 +335,27 @@ public class GameUpdater extends GameTicker {
             //Do market, get what to buy
             //Set market price
             //Food is the most important
+            //Get what they want to sell, and how many units
+            for (StoreableReference ref : city.primaryProduction) {
+                //Check if has resources
+                if (city.resources.containsKey(ref) && city.resourceDemands.containsKey(ref)) {
+                    //Place sell orders for this
+                    if ((city.resources.get(ref) - city.resourceDemands.get(ref)) > 0) {
+                        GoodOrder order = new GoodOrder();
+                        order.setAmount((int) (city.resources.get(ref) - city.resourceDemands.get(ref)));
+                        order.setGood(ref);
+                        order.setOwner(cityId);
+                        planetMarket.addSellOrder(ref, order);
+                    }
+                }
+            }
+            //Add demands
+            for (Map.Entry<StoreableReference, Double> entry : city.resourceDemands.entrySet()) {
+                StoreableReference key = entry.getKey();
+                Double val = entry.getValue();
+                //if can provide
+                //planetMarket
+            }
         }
     }
 

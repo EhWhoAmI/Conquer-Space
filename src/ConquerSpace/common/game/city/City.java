@@ -25,6 +25,8 @@ import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.modifier.CityModifier;
+import ConquerSpace.common.game.economy.GoodOrder;
+import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
@@ -41,6 +43,7 @@ import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 /**
@@ -48,7 +51,8 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 @SerializeClassName("city")
-public class City extends ConquerSpaceGameObject implements PersonEnterable, SupplyNode, Administrable {
+public class City extends ConquerSpaceGameObject implements PersonEnterable, 
+        SupplyNode, Administrable, Trader {
 
     @Serialize("population")
     public ObjectReference population;
@@ -97,7 +101,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
     private int ledgerClearDelta = 0;
     public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
     
-    public ArrayList<StoreableReference> primaryProduction;
+    public HashSet<StoreableReference> primaryProduction;
+    
+    public ObjectReference market;
 
     @Serialize("location")
     private ObjectReference location;
@@ -152,7 +158,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityModifiers = new ArrayList<>();
-        primaryProduction = new ArrayList<>();
+        primaryProduction = new HashSet<>();
         
         cityType = CityType.Generic;
         size = 0;
@@ -387,5 +393,29 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable, Sup
 
     public ObjectReference getLocation() {
         return location;
+    }
+
+    @Override
+    public int getWealth() {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<GoodOrder> getRequests() {
+        //IDK process?
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<GoodOrder> getSellOrders() {
+        return new ArrayList<>();
+    }
+
+    public ObjectReference getMarket() {
+        return market;
+    }
+
+    public void setMarket(ObjectReference market) {
+        this.market = market;
     }
 }

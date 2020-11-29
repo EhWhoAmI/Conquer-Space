@@ -579,7 +579,7 @@ public class PlanetMap extends JPanel {
             //Scroll in
             double scroll = (double) e.getUnitsToScroll();
             double scrollBefore = scale;
-            double newScale = (Math.exp(scroll * 0.01) * scale);
+            double newScale = (Math.exp(scroll * 0.05) * scale);
 
             //Limit scale
             if (newScale > 0.1 && newScale < 2d) {

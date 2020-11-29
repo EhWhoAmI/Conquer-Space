@@ -50,6 +50,7 @@ public class PlanetInfoSheet extends JPanel {
     PlanetEconomy planetEconomy;
     PlanetGeology planetGeology;
     PlanetResources planetResources;
+    PlanetMarket planetMarket;
 
     private Image planetImage;
 
@@ -83,6 +84,7 @@ public class PlanetInfoSheet extends JPanel {
         planetMap = new PlanetMap(gameState, p, civilization, this, provider);
         planetEconomy = new PlanetEconomy();
         planetResources = new PlanetResources(gameState, p, civilization, this);
+        planetMarket = new PlanetMarket(gameState, p);
 
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.overview"), overview);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.map"), planetMap);
@@ -93,6 +95,7 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.industry"), industry);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.locallife"), localLifeMenu);
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.resources"), planetResources);
+        tpane.add("Market", planetMarket);
 
         ImageIcon overview = ResourceLoader.getIcon("overview.icon");
         ImageIcon map = ResourceLoader.getIcon("globe.icon");

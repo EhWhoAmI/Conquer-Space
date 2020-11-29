@@ -15,30 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.characters;
 
-import ConquerSpace.common.Nameable;
-import java.io.Serializable;
+package ConquerSpace.common;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PersonalityTrait implements Serializable, Nameable {
-
-    private String name;
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
+public interface Nameable {
+    public String getName();
 }

@@ -22,6 +22,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,12 +37,12 @@ public class Market extends ConquerSpaceGameObject {
 
     private ArrayList<ObjectReference> traders;
 
-    public HashMap<GoodReference, ArrayList<GoodOrder>> buyOrders;
-    public HashMap<GoodReference, ArrayList<GoodOrder>> sellOrders;
+    public HashMap<StoreableReference, ArrayList<GoodOrder>> buyOrders;
+    public HashMap<StoreableReference, ArrayList<GoodOrder>> sellOrders;
 
-    //The price history
-    public HashMap<GoodReference, Double> historicPrices;
-    
+    //The price history, now it's the current average price
+    public HashMap<StoreableReference, Double> historicPrices;
+
     /**
      * Person who taxes go to lol
      */
@@ -67,7 +68,7 @@ public class Market extends ConquerSpaceGameObject {
             //Sort buy orders
             for (GoodOrder order : trader.getRequests()) {
                 //Get good
-                initializeGoodIfNonExistant(order.getGood(), buyOrders);
+                initializeGoodIfNonExistent(order.getGood(), buyOrders);
                 //Get hash map
                 ArrayList<GoodOrder> orderList = buyOrders.get(order.getGood());
                 //Add order
@@ -77,7 +78,7 @@ public class Market extends ConquerSpaceGameObject {
             //Sort sell orders
             for (GoodOrder order : trader.getSellOrders()) {
                 //Get good
-                initializeGoodIfNonExistant(order.getGood(), sellOrders);
+                initializeGoodIfNonExistent(order.getGood(), sellOrders);
                 //Get hash map
                 ArrayList<GoodOrder> orderList = sellOrders.get(order.getGood());
                 //Add order
@@ -86,14 +87,14 @@ public class Market extends ConquerSpaceGameObject {
         }
 
         //Then sort the maps
-        for (Map.Entry<GoodReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
-            Object key = entry.getKey();
+        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
+            StoreableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             Collections.sort(val);
         }
 
-        for (Map.Entry<GoodReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
-            Object key = entry.getKey();
+        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
+            StoreableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             Collections.sort(val);
             Collections.reverse(val);
@@ -103,12 +104,12 @@ public class Market extends ConquerSpaceGameObject {
     }
 
     public void compileSupplyDemand() {
-        HashMap<GoodReference, Integer> demand = new HashMap<>();
-        HashMap<GoodReference, Integer> supply = new HashMap<>();
-        HashSet<GoodReference> goods = new HashSet<>();
+        HashMap<StoreableReference, Integer> demand = new HashMap<>();
+        HashMap<StoreableReference, Integer> supply = new HashMap<>();
+        HashSet<StoreableReference> goods = new HashSet<>();
         //Calculate demand
-        for (Map.Entry<GoodReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
-            GoodReference key = entry.getKey();
+        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
+            StoreableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             int demandCount = 0;
             for (GoodOrder r : val) {
@@ -119,8 +120,8 @@ public class Market extends ConquerSpaceGameObject {
         }
 
         //Calculate supply
-        for (Map.Entry<GoodReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
-            GoodReference key = entry.getKey();
+        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
+            StoreableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             int supplyCount = 0;
             for (GoodOrder r : val) {
@@ -134,7 +135,7 @@ public class Market extends ConquerSpaceGameObject {
         //supply/demand
         //values less than 1 means a high supply, which means prices go down
         //Values above 1 means a high demand, which means prices go up
-        for (GoodReference ref : goods) {
+        for (StoreableReference ref : goods) {
             double supplyDemand = 1;
             if (!supply.containsKey(ref)) {
                 //Then 0 supply, so infinite demand
@@ -146,7 +147,7 @@ public class Market extends ConquerSpaceGameObject {
                 supplyDemand = Double.MAX_VALUE;
                 continue;
             }
-            supplyDemand = supply.get(ref)/demand.get(ref);
+            supplyDemand = supply.get(ref) / demand.get(ref);
             //So recommended price is that
         }
     }
@@ -155,12 +156,32 @@ public class Market extends ConquerSpaceGameObject {
         historicPrices.clear();
 
         //Get current prices
-        
     }
 
-    private void initializeGoodIfNonExistant(GoodReference reference, HashMap<GoodReference, ArrayList<GoodOrder>> map) {
+    public void clearOrders() {
+        buyOrders.clear();
+        sellOrders.clear();
+    }
+
+    private void initializeGoodIfNonExistent(StoreableReference reference, HashMap<StoreableReference, ArrayList<GoodOrder>> map) {
         if (!map.containsKey(reference)) {
             map.put(reference, new ArrayList<>());
+        }
+    }
+
+    public void addSellOrder(StoreableReference reference, GoodOrder order) {
+        initializeGoodIfNonExistent(reference, sellOrders);
+        sellOrders.get(reference).add(order);
+    }
+
+    public void addBuyOrder(StoreableReference reference, GoodOrder order) {
+        initializeGoodIfNonExistent(reference, buyOrders);
+        buyOrders.get(reference).add(order);
+    }
+
+    public void addTrader(Trader trader) {
+        if (trader instanceof ConquerSpaceGameObject) {
+            traders.add(((ConquerSpaceGameObject) trader).getReference());
         }
     }
 }
