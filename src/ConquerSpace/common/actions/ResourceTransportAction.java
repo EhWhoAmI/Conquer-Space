@@ -19,7 +19,7 @@ package ConquerSpace.common.actions;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 
 /**
  * Org transports good.
@@ -30,9 +30,9 @@ public class ResourceTransportAction extends OrganizationAction {
     private ResourceStockpile from;
     private ResourceStockpile to;
     private double amount;
-    private StoreableReference good;
+    private StorableReference good;
 
-    public ResourceTransportAction(StoreableReference good, double amount, ResourceStockpile from, ResourceStockpile to) {
+    public ResourceTransportAction(StorableReference good, double amount, ResourceStockpile from, ResourceStockpile to) {
         this.from = from;
         this.to = to;
         this.good = good;

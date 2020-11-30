@@ -25,6 +25,6 @@ import java.io.Serializable;
  *
  * @author EhWhoAmI
  */
-public abstract class StoreableReference implements Serializable{
+public abstract class StorableReference implements Serializable{
     public abstract String getName();
 }

@@ -23,7 +23,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.Nameable;
 import ConquerSpace.common.game.economy.GoodOrder;
 import ConquerSpace.common.game.economy.Market;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
@@ -39,9 +39,7 @@ import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.statistics.HistogramDataset;
 
 /**
  *
@@ -51,7 +49,7 @@ public class PlanetMarket extends JPanel {
 
     private GameState gameState;
     private JList<String> tradedGoods;
-    private ObjectListModel<StoreableReference> tradedGoodsModel;
+    private ObjectListModel<StorableReference> tradedGoodsModel;
 
     private JTable goodOrderSellingTable;
     private DefaultTableModel goodOrderSellingTableModel;
@@ -78,13 +76,13 @@ public class PlanetMarket extends JPanel {
         planetMarket = gameState.getObject(planet.getPlanetaryMarket(), Market.class);
 
         tradedGoodsModel = new ObjectListModel<>();
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> en : planetMarket.sellOrders.entrySet()) {
-            StoreableReference key = en.getKey();
+        for (Map.Entry<StorableReference, ArrayList<GoodOrder>> en : planetMarket.sellOrders.entrySet()) {
+            StorableReference key = en.getKey();
             tradedGoodsModel.addElement(key);
         }
 
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> en : planetMarket.buyOrders.entrySet()) {
-            StoreableReference key = en.getKey();
+        for (Map.Entry<StorableReference, ArrayList<GoodOrder>> en : planetMarket.buyOrders.entrySet()) {
+            StorableReference key = en.getKey();
 
             if (!tradedGoodsModel.contains(key)) {
                 tradedGoodsModel.addElement(key);
@@ -143,7 +141,7 @@ public class PlanetMarket extends JPanel {
 
     private void update() {
         goodOrderSellingTableModel.setRowCount(0);
-        StoreableReference ref = tradedGoodsModel.getObject(tradedGoods.getSelectedIndex());
+        StorableReference ref = tradedGoodsModel.getObject(tradedGoods.getSelectedIndex());
 
         demandLabel.setText("Demand: 0");
         supplyLabel.setText("Supply: 0");

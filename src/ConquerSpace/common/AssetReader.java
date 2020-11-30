@@ -23,7 +23,7 @@ import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.NonElement;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.EngineTechnology;
 import ConquerSpace.common.game.ships.ShipType;
@@ -245,7 +245,7 @@ public class AssetReader {
         String name = obj.getString("name");
         String identifier = obj.getString("identifier");
 
-        HashMap<StoreableReference, Double> input = new HashMap<>();
+        HashMap<StorableReference, Double> input = new HashMap<>();
 
         JSONArray inputArray = obj.getJSONArray("input");
 
@@ -253,7 +253,7 @@ public class AssetReader {
             String s = inputArray.getString(i);
             String[] content = s.split(":");
 
-            StoreableReference resourceId = state.getGoodId(content[0]);
+            StorableReference resourceId = state.getGoodId(content[0]);
 
             if (resourceId != null) {
                 //Parse things
@@ -262,7 +262,7 @@ public class AssetReader {
             }
         }
 
-        HashMap<StoreableReference, Double> output = new HashMap<>();
+        HashMap<StorableReference, Double> output = new HashMap<>();
 
         JSONArray outputArray = obj.getJSONArray("output");
 
@@ -270,7 +270,7 @@ public class AssetReader {
             String s = outputArray.getString(i);
             String[] content = s.split(":");
             
-            StoreableReference resourceId = state.getGoodId(content[0]);
+            StorableReference resourceId = state.getGoodId(content[0]);
             if (resourceId != null) {
                 //Parse things
                 Double value = Double.parseDouble(content[1]);
@@ -389,7 +389,7 @@ public class AssetReader {
                         String amount = text[1];
 
                         double goodAmount = Double.parseDouble(amount);
-                        StoreableReference goodId = state.getGoodId(goodIdentifier);
+                        StorableReference goodId = state.getGoodId(goodIdentifier);
                         resource.recipie.put(goodId, goodAmount);
                     }
                 }

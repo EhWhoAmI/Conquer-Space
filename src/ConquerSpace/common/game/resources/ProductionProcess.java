@@ -34,8 +34,8 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
     private int id;
     public String name;
     public String identifier;
-    public HashMap<StoreableReference, Double> input;
-    public HashMap<StoreableReference, Double> output;
+    public HashMap<StorableReference, Double> input;
+    public HashMap<StorableReference, Double> output;
     /**
      * Can add the stuff you need to construct this
      */
@@ -51,7 +51,7 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
         id = idCounter++;
     }
 
-    public ProductionProcess(GameState gameState, StoreableReference outputGood) {
+    public ProductionProcess(GameState gameState, StorableReference outputGood) {
         super(gameState);
         input = new HashMap<>();
         output = new HashMap<>();

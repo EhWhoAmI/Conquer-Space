@@ -24,7 +24,7 @@ import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.science.FieldNode;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.EngineTechnology;
@@ -86,11 +86,11 @@ public final class GameState implements Serializable {
     public HashMap<String, Integer> shipTypeClasses;
 
     //Can theoratically delete this after universe generation is finished. Only needed for generating a star system
-    public HashMap<StoreableReference, ResourceDistribution> oreDistributions = new HashMap<>();
+    public HashMap<StorableReference, ResourceDistribution> oreDistributions = new HashMap<>();
 
     //Handles goods
-    private HashMap<StoreableReference, Good> goodHashMap;
-    public DualHashBidiMap<String, StoreableReference> goodIdentifiers;
+    private HashMap<StorableReference, Good> goodHashMap;
+    public DualHashBidiMap<String, StorableReference> goodIdentifiers;
 
     public HashMap<String, ProductionProcess> prodProcesses;
 
@@ -140,7 +140,7 @@ public final class GameState implements Serializable {
         species.add(speciesToAdd.getReference());
     }
 
-    public Good getGood(StoreableReference id) {
+    public Good getGood(StorableReference id) {
         return goodHashMap.get(id);
     }
 
@@ -166,7 +166,7 @@ public final class GameState implements Serializable {
         return entities.getObject(id);
     }
 
-    public StoreableReference getGoodId(String identifier) {
+    public StorableReference getGoodId(String identifier) {
         return goodIdentifiers.get(identifier);
     }
 

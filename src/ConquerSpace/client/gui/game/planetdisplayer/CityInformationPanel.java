@@ -37,7 +37,7 @@ import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipClass;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -278,7 +278,7 @@ public class CityInformationPanel extends JPanel {
             JLabel mainProduction = new JLabel("");
             StringJoiner joiner = new StringJoiner(", ");
 
-            for(StoreableReference ref : selectedCity.primaryProduction) {
+            for(StorableReference ref : selectedCity.primaryProduction) {
                 joiner.add(gameState.getGood(ref).toString());
             }
             mainProduction.setText("Produces Goods: " + joiner.toString());
@@ -784,7 +784,7 @@ public class CityInformationPanel extends JPanel {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                StoreableReference storedValue = selectedCity.storedTypes()[rowIndex];
+                StorableReference storedValue = selectedCity.storedTypes()[rowIndex];
                 DecimalFormat df = new DecimalFormat("###.##");
                 if (selectedCity != null) {
                     switch (columnIndex) {
@@ -847,7 +847,7 @@ public class CityInformationPanel extends JPanel {
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 //Lol needs to be efficient
-                StoreableReference storedValue = new ArrayList<StoreableReference>(selectedCity.resourceDemands.keySet()).get(rowIndex);
+                StorableReference storedValue = new ArrayList<StorableReference>(selectedCity.resourceDemands.keySet()).get(rowIndex);
 
                 if (selectedCity != null) {
                     switch (columnIndex) {
@@ -943,12 +943,12 @@ public class CityInformationPanel extends JPanel {
             public StockpileOutModel() {
                 tuple = new ArrayList<>();
                 //Get the city
-                for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.resourcesSentTo.entrySet()) {
+                for (Map.Entry<ResourceStockpile, DoubleHashMap<StorableReference>> entry : selectedCity.resourcesSentTo.entrySet()) {
                     ResourceStockpile resourceStockpile = entry.getKey();
-                    DoubleHashMap<StoreableReference> val = entry.getValue();
+                    DoubleHashMap<StorableReference> val = entry.getValue();
 
-                    for (Map.Entry<StoreableReference, Double> entry1 : val.entrySet()) {
-                        StoreableReference reference = entry1.getKey();
+                    for (Map.Entry<StorableReference, Double> entry1 : val.entrySet()) {
+                        StorableReference reference = entry1.getKey();
                         Double goodCount = entry1.getValue();
                         tuple.add(new ResourcesChangeTuple(resourceStockpile, reference, goodCount));
                     }
@@ -995,12 +995,12 @@ public class CityInformationPanel extends JPanel {
             public StockpileInModel() {
                 tuple = new ArrayList<>();
                 //Get the city
-                for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.resourcesGainedFrom.entrySet()) {
+                for (Map.Entry<ResourceStockpile, DoubleHashMap<StorableReference>> entry : selectedCity.resourcesGainedFrom.entrySet()) {
                     ResourceStockpile resourceStockpile = entry.getKey();
-                    DoubleHashMap<StoreableReference> val = entry.getValue();
+                    DoubleHashMap<StorableReference> val = entry.getValue();
 
-                    for (Map.Entry<StoreableReference, Double> entry1 : val.entrySet()) {
-                        StoreableReference reference = entry1.getKey();
+                    for (Map.Entry<StorableReference, Double> entry1 : val.entrySet()) {
+                        StorableReference reference = entry1.getKey();
                         Double goodCount = entry1.getValue();
                         tuple.add(new ResourcesChangeTuple(resourceStockpile, reference, goodCount));
                     }
@@ -1041,10 +1041,10 @@ public class CityInformationPanel extends JPanel {
         class ResourcesChangeTuple {
 
             ResourceStockpile stock;
-            StoreableReference ref;
+            StorableReference ref;
             Double amount;
 
-            public ResourcesChangeTuple(ResourceStockpile stock, StoreableReference ref, Double amount) {
+            public ResourcesChangeTuple(ResourceStockpile stock, StorableReference ref, Double amount) {
                 this.stock = stock;
                 this.ref = ref;
                 this.amount = amount;

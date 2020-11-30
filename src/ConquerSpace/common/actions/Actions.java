@@ -22,7 +22,7 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.ships.Launchable;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.universe.bodies.Body;
@@ -82,7 +82,7 @@ public class Actions {
         what.setGoingToY(y);
     }
 
-    public static void storeResource(StoreableReference resourceType, Double amount, ResourceStockpile from) {
+    public static void storeResource(StorableReference resourceType, Double amount, ResourceStockpile from) {
         if (resourceType != null && amount > 0) {
             if (from.canStore(resourceType)) {
                 //Store resource
@@ -93,7 +93,7 @@ public class Actions {
         }
     }
 
-    public static boolean removeResource(StoreableReference resourceType, Double amount, ResourceStockpile from) {
+    public static boolean removeResource(StorableReference resourceType, Double amount, ResourceStockpile from) {
         if (resourceType != null && amount != 0) {
             if (from.canStore(resourceType)) {
                 //Store resource
@@ -110,7 +110,7 @@ public class Actions {
         return false;
     }
 
-    public static boolean sendResources(StoreableReference resourceType, Double amount, ResourceStockpile from, ResourceStockpile to) {
+    public static boolean sendResources(StorableReference resourceType, Double amount, ResourceStockpile from, ResourceStockpile to) {
         if (removeResource(resourceType, amount, from)) {
             //Track where the resources are going to and from
             if (from instanceof City) {

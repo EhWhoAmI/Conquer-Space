@@ -19,7 +19,7 @@
 package ConquerSpace.common.game.economy;
 
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 
 /**
  *
@@ -27,17 +27,17 @@ import ConquerSpace.common.game.resources.StoreableReference;
  */
 public class GoodOrder implements Comparable<GoodOrder> {
 
-    StoreableReference good;
-    int amount;
-    int cost;
-    int age;
-    ObjectReference owner;
+    private StorableReference good;
+    private int amount;
+    private double cost;
+    private int age;
+    private ObjectReference owner;
 
     public GoodOrder() {
         age = 0;
     }
 
-    public StoreableReference getGood() {   
+    public StorableReference getGood() {   
         return good;
     }
 
@@ -45,11 +45,11 @@ public class GoodOrder implements Comparable<GoodOrder> {
         return amount;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setGood(StoreableReference good) {
+    public void setGood(StorableReference good) {
         this.good = good;
     }
 
@@ -57,7 +57,7 @@ public class GoodOrder implements Comparable<GoodOrder> {
         this.amount = amount;
     }
 
-    public void setCost(int cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
@@ -75,7 +75,7 @@ public class GoodOrder implements Comparable<GoodOrder> {
 
     @Override
     public int compareTo(GoodOrder o) {
-        return Integer.compare(cost, o.getCost());
+        return Double.compare(cost, o.getCost());
     }
 
     public void setOwner(ObjectReference owner) {

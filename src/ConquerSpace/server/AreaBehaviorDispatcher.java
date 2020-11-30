@@ -46,7 +46,7 @@ import ConquerSpace.common.game.city.area.TimedManufacturerArea;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.resources.ProductionProcess;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,9 +79,9 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
     @Override
     public void dispatch(ConstructingArea area) {
         //Remove resources
-        HashMap<StoreableReference, Double> cost = area.getCostPerTurn();
-        for (Map.Entry<StoreableReference, Double> entry : cost.entrySet()) {
-            StoreableReference key = entry.getKey();
+        HashMap<StorableReference, Double> cost = area.getCostPerTurn();
+        for (Map.Entry<StorableReference, Double> entry : cost.entrySet()) {
+            StorableReference key = entry.getKey();
             Double val = entry.getValue();
             removeResource(key, val * GameRefreshRate, city);
         }
@@ -104,7 +104,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
         ProductionProcess factoryProcess = area.getProcess();
         if (areaIsProducing(area)) {
             factoryProcess.output.entrySet().forEach(entry -> {
-                StoreableReference key = entry.getKey();
+                StorableReference key = entry.getKey();
                 Double val = entry.getValue();
 
                 //Get percentage
@@ -121,7 +121,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
         if (areaIsProducing(area)) {
             //Query resources
             process.input.entrySet().forEach(entry -> {
-                StoreableReference key = entry.getKey();
+                StorableReference key = entry.getKey();
                 Double val = entry.getValue();
                 Double amountInCity = city.resources.get(key);
                 removeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
@@ -129,7 +129,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             });
 
             process.output.entrySet().forEach(entry -> {
-                StoreableReference key = entry.getKey();
+                StorableReference key = entry.getKey();
                 Double val = entry.getValue();
                 city.primaryProduction.add(key);
                 storeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
@@ -144,7 +144,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
     public void dispatch(MineArea area) {
         if (areaIsProducing(area)) {
             area.getNecessaryGoods().entrySet().forEach(entry -> {
-                StoreableReference key = entry.getKey();
+                StorableReference key = entry.getKey();
                 Double val = entry.getValue();
                 removeResource(key, val * GameRefreshRate, city);
             });

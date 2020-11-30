@@ -21,8 +21,7 @@ package ConquerSpace.common.game.economy;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.resources.GoodReference;
-import ConquerSpace.common.game.resources.StoreableReference;
+import ConquerSpace.common.game.resources.StorableReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,16 +36,16 @@ public class Market extends ConquerSpaceGameObject {
 
     private ArrayList<ObjectReference> traders;
 
-    public HashMap<StoreableReference, ArrayList<GoodOrder>> buyOrders;
-    public HashMap<StoreableReference, ArrayList<GoodOrder>> sellOrders;
+    public HashMap<StorableReference, ArrayList<GoodOrder>> buyOrders;
+    public HashMap<StorableReference, ArrayList<GoodOrder>> sellOrders;
 
     //The price history, now it's the current average price
-    public HashMap<StoreableReference, Double> historicPrices;
+    public HashMap<StorableReference, Double> price;
 
-    public HashMap<StoreableReference, Integer> demandMap;
-    public HashMap<StoreableReference, Integer> supplyMap;
+    public HashMap<StorableReference, Integer> demandMap;
+    public HashMap<StorableReference, Integer> supplyMap;
 
-    public HashMap<StoreableReference, ArrayList<Double>> historicSDRatio;
+    public HashMap<StorableReference, ArrayList<Double>> historicSDRatio;
     /**
      * Person who taxes go to lol
      */
@@ -58,7 +57,7 @@ public class Market extends ConquerSpaceGameObject {
         traders = new ArrayList<>();
         buyOrders = new HashMap<>();
         sellOrders = new HashMap<>();
-        historicPrices = new HashMap<>();
+        price = new HashMap<>();
         demandMap = new HashMap<>();
         supplyMap = new HashMap<>();
         historicSDRatio = new HashMap<>();
@@ -94,14 +93,14 @@ public class Market extends ConquerSpaceGameObject {
         }
 
         //Then sort the maps
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
-            StoreableReference key = entry.getKey();
+        for (Map.Entry<StorableReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
+            StorableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             Collections.sort(val);
         }
 
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
-            StoreableReference key = entry.getKey();
+        for (Map.Entry<StorableReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
+            StorableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             Collections.sort(val);
             Collections.reverse(val);
@@ -111,16 +110,16 @@ public class Market extends ConquerSpaceGameObject {
     }
 
     public void compileSupplyDemand() {
-        HashMap<StoreableReference, Integer> demand = new HashMap<>();
-        HashMap<StoreableReference, Integer> supply = new HashMap<>();
-        HashSet<StoreableReference> goods = new HashSet<>();
+        HashMap<StorableReference, Integer> demand = new HashMap<>();
+        HashMap<StorableReference, Integer> supply = new HashMap<>();
+        HashSet<StorableReference> goods = new HashSet<>();
         //Calculate demand
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
-            StoreableReference key = entry.getKey();
+        for (Map.Entry<StorableReference, ArrayList<GoodOrder>> entry : buyOrders.entrySet()) {
+            StorableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             int demandCount = 0;
             for (GoodOrder r : val) {
-                demandCount += r.amount;
+                demandCount += r.getAmount();
             }
             demand.put(key, demandCount);
             goods.add(key);
@@ -128,23 +127,30 @@ public class Market extends ConquerSpaceGameObject {
         }
 
         //Calculate supply
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
-            StoreableReference key = entry.getKey();
+        for (Map.Entry<StorableReference, ArrayList<GoodOrder>> entry : sellOrders.entrySet()) {
+            StorableReference key = entry.getKey();
             ArrayList<GoodOrder> val = entry.getValue();
             int supplyCount = 0;
             for (GoodOrder r : val) {
-                supplyCount += r.amount;
+                supplyCount += r.getAmount();
             }
             supply.put(key, supplyCount);
             goods.add(key);
             supplyMap.put(key, supplyCount);
+        }
+        //Set cost if its not in the map
+        
+        for(StorableReference key : goods) {
+            if(!price.containsKey(key)) {
+                price.put(key, 100d);
+            }
         }
 
         //Ratio between supply and demand
         //supply/demand
         //values less than 1 means a high supply, which means prices go down
         //Values above 1 means a high demand, which means prices go up
-        for (StoreableReference ref : goods) {
+        for (StorableReference ref : goods) {
             double supplyDemand = 1;
             if (!supply.containsKey(ref)) {
                 //Then 0 supply, so infinite demand
@@ -165,7 +171,7 @@ public class Market extends ConquerSpaceGameObject {
     }
 
     public void compileStats() {
-        historicPrices.clear();
+        price.clear();
 
         //Get current prices
     }
@@ -175,25 +181,25 @@ public class Market extends ConquerSpaceGameObject {
         sellOrders.clear();
     }
 
-    private void initializeGoodIfNonExistent(StoreableReference reference, HashMap<StoreableReference, ArrayList<GoodOrder>> map) {
+    private void initializeGoodIfNonExistent(StorableReference reference, HashMap<StorableReference, ArrayList<GoodOrder>> map) {
         if (!map.containsKey(reference)) {
             map.put(reference, new ArrayList<>());
         }
     }
     
-    private void initializeGoodRatioIfNonExistent(StoreableReference reference, HashMap<StoreableReference, ArrayList<Double>> map) {
+    private void initializeGoodRatioIfNonExistent(StorableReference reference, HashMap<StorableReference, ArrayList<Double>> map) {
         if (!map.containsKey(reference)) {
             map.put(reference, new ArrayList<>());
         }
     }
     
 
-    public void addSellOrder(StoreableReference reference, GoodOrder order) {
+    public void addSellOrder(StorableReference reference, GoodOrder order) {
         initializeGoodIfNonExistent(reference, sellOrders);
         sellOrders.get(reference).add(order);
     }
 
-    public void addBuyOrder(StoreableReference reference, GoodOrder order) {
+    public void addBuyOrder(StorableReference reference, GoodOrder order) {
         initializeGoodIfNonExistent(reference, buyOrders);
         buyOrders.get(reference).add(order);
     }
