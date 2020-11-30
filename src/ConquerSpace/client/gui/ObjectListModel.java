@@ -68,6 +68,10 @@ public class ObjectListModel<E> extends AbstractListModel<String> {
     public void clear() {
         elements.clear();
     }
+    
+    public boolean contains(E object) {
+        return elements.contains(object);
+    }
 
     private static String defaultHandler(Object object) {
         return object.toString();

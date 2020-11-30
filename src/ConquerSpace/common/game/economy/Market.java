@@ -43,6 +43,10 @@ public class Market extends ConquerSpaceGameObject {
     //The price history, now it's the current average price
     public HashMap<StoreableReference, Double> historicPrices;
 
+    public HashMap<StoreableReference, Integer> demandMap;
+    public HashMap<StoreableReference, Integer> supplyMap;
+
+    public HashMap<StoreableReference, ArrayList<Double>> historicSDRatio;
     /**
      * Person who taxes go to lol
      */
@@ -55,6 +59,9 @@ public class Market extends ConquerSpaceGameObject {
         buyOrders = new HashMap<>();
         sellOrders = new HashMap<>();
         historicPrices = new HashMap<>();
+        demandMap = new HashMap<>();
+        supplyMap = new HashMap<>();
+        historicSDRatio = new HashMap<>();
     }
 
     public void compileOrders() {
@@ -69,7 +76,7 @@ public class Market extends ConquerSpaceGameObject {
             for (GoodOrder order : trader.getRequests()) {
                 //Get good
                 initializeGoodIfNonExistent(order.getGood(), buyOrders);
-                //Get hash map
+
                 ArrayList<GoodOrder> orderList = buyOrders.get(order.getGood());
                 //Add order
                 orderList.add(order);
@@ -117,6 +124,7 @@ public class Market extends ConquerSpaceGameObject {
             }
             demand.put(key, demandCount);
             goods.add(key);
+            demandMap.put(key, demandCount);
         }
 
         //Calculate supply
@@ -129,6 +137,7 @@ public class Market extends ConquerSpaceGameObject {
             }
             supply.put(key, supplyCount);
             goods.add(key);
+            supplyMap.put(key, supplyCount);
         }
 
         //Ratio between supply and demand
@@ -149,6 +158,9 @@ public class Market extends ConquerSpaceGameObject {
             }
             supplyDemand = supply.get(ref) / demand.get(ref);
             //So recommended price is that
+            //historicSDRatio.put(ref, supplyDemand);
+            initializeGoodRatioIfNonExistent(ref, historicSDRatio);
+            historicSDRatio.get(ref).add(supplyDemand);
         }
     }
 
@@ -168,6 +180,13 @@ public class Market extends ConquerSpaceGameObject {
             map.put(reference, new ArrayList<>());
         }
     }
+    
+    private void initializeGoodRatioIfNonExistent(StoreableReference reference, HashMap<StoreableReference, ArrayList<Double>> map) {
+        if (!map.containsKey(reference)) {
+            map.put(reference, new ArrayList<>());
+        }
+    }
+    
 
     public void addSellOrder(StoreableReference reference, GoodOrder order) {
         initializeGoodIfNonExistent(reference, sellOrders);

@@ -338,25 +338,32 @@ public class GameUpdater extends GameTicker {
             //Get what they want to sell, and how many units
             for (StoreableReference ref : city.primaryProduction) {
                 //Check if has resources
-                if (city.resources.containsKey(ref) && city.resourceDemands.containsKey(ref)) {
+                if (city.resources.containsKey(ref) && city.resourceDemands.containsKey(ref) && (city.resources.get(ref) - city.resourceDemands.get(ref)) > 0) {
                     //Place sell orders for this
-                    if ((city.resources.get(ref) - city.resourceDemands.get(ref)) > 0) {
-                        GoodOrder order = new GoodOrder();
-                        order.setAmount((int) (city.resources.get(ref) - city.resourceDemands.get(ref)));
-                        order.setGood(ref);
-                        order.setOwner(cityId);
-                        planetMarket.addSellOrder(ref, order);
-                    }
+                    GoodOrder order = new GoodOrder();
+                    order.setAmount((int) (city.resources.get(ref) - city.resourceDemands.get(ref)));
+                    order.setGood(ref);
+                    order.setOwner(cityId);
+                    planetMarket.addSellOrder(ref, order);
                 }
             }
+
             //Add demands
             for (Map.Entry<StoreableReference, Double> entry : city.resourceDemands.entrySet()) {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 //if can provide
-                //planetMarket
+                GoodOrder order = new GoodOrder();
+                order.setAmount(val.intValue());
+                order.setGood(key);
+                order.setOwner(cityId);
+
+                planetMarket.addBuyOrder(key, order);
             }
         }
+        
+        //Calculate S/D
+        planetMarket.compileSupplyDemand();
     }
 
     /**
