@@ -86,6 +86,11 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader 
     }
 
     @Override
+    public void changeWealth(int amount) {
+        wealth += amount;
+    }
+
+    @Override
     public ArrayList<GoodOrder> getRequests() {
         return buyOrders;
     }

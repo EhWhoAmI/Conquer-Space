@@ -18,7 +18,7 @@
 
 package ConquerSpace.common.game.economy;
 
-import ConquerSpace.common.ConquerSpaceGameObject;
+import ConquerSpace.common.ObjectReference;
 import java.util.ArrayList;
 
 /**
@@ -29,8 +29,12 @@ import java.util.ArrayList;
 public interface Trader {
 
     public int getWealth();
-
+    
+    public void changeWealth(int amount);
+    
     public ArrayList<GoodOrder> getRequests();
 
     public ArrayList<GoodOrder> getSellOrders();
+    
+    public ObjectReference getReference();
 }

@@ -284,12 +284,7 @@ public class CityInformationPanel extends JPanel {
             mainProduction.setText("Produces Goods: " + joiner.toString());
             add(mainProduction);
 
-            //Get the number of powerplants leading to it
-            //Energy usage
-//            JLabel energyUsageLabel = new JLabel(
-//                    LOCALE_MESSAGES.getMessage("game.planet.cities.energyusage", energyUsage, energyProvided));
-//            add(energyUsageLabel);
-            //Growth
+            
             JLabel growthAmount = new JLabel(
                     LOCALE_MESSAGES.getMessage("game.planet.cities.growth", 0));//new JLabel("Growth: " + (selected.getPopulationUnitPercentage()) + "% done, " + increment + "% within the next 40 days.");
             add(growthAmount);
@@ -300,11 +295,10 @@ public class CityInformationPanel extends JPanel {
                 unemployment.setForeground(new Color((float) unemploymentRate, 0f, 0f));
             }
             add(unemployment);
-
-            //Max population
-//            JLabel maxPopulation = new JLabel(
-//                    LOCALE_MESSAGES.getMessage("game.planet.cities.popcap", Utilities.longToHumanString(maxPop)));
-//            add(maxPopulation);
+            
+            JLabel wealth = new JLabel("Wealth: " + Utilities.longToHumanString(selectedCity.getWealth()));
+            add(wealth);
+            
             //Check for govenor
             if (selectedCity.getGovernor() != null) {
                 JLabel governorLabel = new JLabel(

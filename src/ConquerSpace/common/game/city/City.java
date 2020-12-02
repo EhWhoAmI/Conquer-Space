@@ -135,6 +135,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     private int energyNeeded;
 
     private ObjectReference ownerReference;
+    
+    private int wealth = 0;
 
     public City(GameState gameState, ObjectReference location) {
         super(gameState);
@@ -212,11 +214,6 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     public void doneResettingJobs() {
         resetJobs = false;
-    }
-
-    public int getPopulationSize() {
-        int i = 0;
-        return i;
     }
 
     @Override
@@ -397,7 +394,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     @Override
     public int getWealth() {
-        return 0;
+        return wealth;
     }
 
     @Override
@@ -417,5 +414,10 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     public void setMarket(ObjectReference market) {
         this.market = market;
+    }
+
+    @Override
+    public void changeWealth(int amount) {
+        wealth += amount;
     }
 }

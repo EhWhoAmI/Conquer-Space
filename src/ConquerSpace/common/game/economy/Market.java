@@ -20,6 +20,7 @@ package ConquerSpace.common.game.economy;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.Nameable;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.resources.StorableReference;
 import java.util.ArrayList;
@@ -139,9 +140,9 @@ public class Market extends ConquerSpaceGameObject {
             supplyMap.put(key, supplyCount);
         }
         //Set cost if its not in the map
-        
-        for(StorableReference key : goods) {
-            if(!price.containsKey(key)) {
+
+        for (StorableReference key : goods) {
+            if (!price.containsKey(key)) {
                 price.put(key, 100d);
             }
         }
@@ -186,13 +187,12 @@ public class Market extends ConquerSpaceGameObject {
             map.put(reference, new ArrayList<>());
         }
     }
-    
+
     private void initializeGoodRatioIfNonExistent(StorableReference reference, HashMap<StorableReference, ArrayList<Double>> map) {
         if (!map.containsKey(reference)) {
             map.put(reference, new ArrayList<>());
         }
     }
-    
 
     public void addSellOrder(StorableReference reference, GoodOrder order) {
         initializeGoodIfNonExistent(reference, sellOrders);
@@ -204,9 +204,27 @@ public class Market extends ConquerSpaceGameObject {
         buyOrders.get(reference).add(order);
     }
 
-    public void addTrader(Trader trader) {
-        if (trader instanceof ConquerSpaceGameObject) {
-            traders.add(((ConquerSpaceGameObject) trader).getReference());
+    public double getSDRatio(StorableReference ref) {
+        double ratio = 0;
+
+        if (supplyMap.containsKey(ref)) {
+            ratio = (double) supplyMap.get(ref);
+        } else {
+            //Zero supply
+            ratio = Double.NaN;
         }
+
+        if (demandMap.get(ref) > 0 && demandMap.containsKey(ref)) {
+            ratio /= (double) demandMap.get(ref);
+        } else {
+            //Infinite supply
+            ratio = Double.POSITIVE_INFINITY;
+        }
+
+        return ratio;
+    }
+
+    public void addTrader(Trader trader) {
+        traders.add(trader.getReference());
     }
 }
