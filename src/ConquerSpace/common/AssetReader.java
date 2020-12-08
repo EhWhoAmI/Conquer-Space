@@ -103,7 +103,7 @@ public class AssetReader {
         }
         return elements;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static <T> ArrayList<T> readHjsonFromDirInArray(String dir, Class<T> x, GameState state, AssetPasserWithGameState assetReader) {
         ArrayList<T> elements = new ArrayList<>();
@@ -154,18 +154,18 @@ public class AssetReader {
         }
         return elements;
     }
-    
+
     public static Object processShipType(JSONObject obj) {
         String identifier = obj.getString("identifier");
         JSONArray tags = obj.getJSONArray("tags");
         ShipType shipType = new ShipType();
         shipType.setIdentifier(identifier);
         ArrayList<String> tagsArrayList = new ArrayList<>();
-        for(int i = 0; i < tags.length(); i++) {
+        for (int i = 0; i < tags.length(); i++) {
             tagsArrayList.add(tags.getString(i));
         }
         shipType.setTags(Arrays.copyOf(tagsArrayList.toArray(), tagsArrayList.size(), String[].class));
-        
+
         return shipType;
     }
 
@@ -269,7 +269,7 @@ public class AssetReader {
         for (int i = 0; i < outputArray.length(); i++) {
             String s = outputArray.getString(i);
             String[] content = s.split(":");
-            
+
             StorableReference resourceId = state.getGoodId(content[0]);
             if (resourceId != null) {
                 //Parse things
@@ -313,10 +313,9 @@ public class AssetReader {
         distribution.density = resourceDistDensity;
         return distribution;
     }
-    
+
     /**
-     * We need a separate function for reading goods, because you need to
-     * iterate through it twice.
+     * We need a separate function for reading goods, because you need to iterate through it twice.
      */
     public static void processGoods(GameState state) {
         ArrayList<Good> goods = new ArrayList<>();
@@ -400,10 +399,12 @@ public class AssetReader {
     }
 
     public static interface AssetPasser {
+
         public Object parseJSONObject(JSONObject obj);
     }
-    
+
     public static interface AssetPasserWithGameState {
+
         public Object parseJSONObject(JSONObject obj, GameState gameState);
     }
 }

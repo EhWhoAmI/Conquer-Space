@@ -440,7 +440,8 @@ public class GameUpdater extends GameTicker {
             PopulationSegment seg = gameState.getObject(segid, PopulationSegment.class);
             //Request resources
             long amount = (seg.size / 1000);
-            double consume = ((double) amount) * 0.5d;
+            //Each person eats about 250 kg of food a year , so 
+            double consume = ((double) amount) * 4d;
 
             double foodAmount = 0;
             Race race = gameState.getObject(seg.species, Race.class);

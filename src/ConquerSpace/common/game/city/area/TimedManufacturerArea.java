@@ -40,8 +40,6 @@ public class TimedManufacturerArea extends Area {
     protected ArrayList<ProductionTimer> queue;
     private ProductionProcess process;
 
-    float productivity = 0;
-
     TimedManufacturerArea(GameState gameState, ProductionProcess process) {
         super(gameState);
         queue = new ArrayList<>();

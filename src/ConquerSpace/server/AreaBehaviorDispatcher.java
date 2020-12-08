@@ -101,15 +101,16 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
     @Override
     public void dispatch(TimedManufacturerArea area) {
         int removed = area.tick(GameRefreshRate);
-        ProductionProcess factoryProcess = area.getProcess();
-        if (areaIsProducing(area)) {
+
+        if (areaIsProducing(area) && removed > 0) {
+            ProductionProcess factoryProcess = area.getProcess();
             factoryProcess.output.entrySet().forEach(entry -> {
                 StorableReference key = entry.getKey();
                 Double val = entry.getValue();
 
                 //Get percentage
                 city.primaryProduction.add(key);
-                storeResource(key, val * removed, city);
+                storeResource(key, val, city);
             });
         }
     }
@@ -124,7 +125,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 StorableReference key = entry.getKey();
                 Double val = entry.getValue();
                 Double amountInCity = city.resources.get(key);
-                removeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
+                removeResource(key, val * GameRefreshRate * area.getProductivity(), city);
                 city.resourceDemands.addValue(key, val);
             });
 
@@ -132,11 +133,11 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 StorableReference key = entry.getKey();
                 Double val = entry.getValue();
                 city.primaryProduction.add(key);
-                storeResource(key, val * GameRefreshRate * ((ManufacturerArea) area).getProductivity(), city);
+                storeResource(key, val * GameRefreshRate * area.getProductivity(), city);
             });
-            ((ManufacturerArea) area).setProducedLastTick(true);
+            area.setProducedLastTick(true);
         } else {
-            ((ManufacturerArea) area).setProducedLastTick(false);
+            area.setProducedLastTick(false);
         }
     }
 
@@ -178,11 +179,10 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
     @Override
     public void dispatch(FarmFieldArea area) {
         int removed = area.tick(GameRefreshRate);
-        if (removed > 0 && areaIsProducing(area)) {
+        if (removed <= 0 && areaIsProducing(area)) {
             //Calculate percentage
-             city.primaryProduction.add(area.getGrown().getFoodGood());
-            storeResource(area.getGrown().getFoodGood(), (removed * (double) area.getFieldSize()), city);
-
+            city.primaryProduction.add(area.getGrown().getFoodGood());
+            storeResource(area.getGrown().getFoodGood(), (area.getProductivity() * (double) area.getFieldSize()), city);
             area.grow();
         }
     }

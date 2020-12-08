@@ -33,8 +33,20 @@ import ConquerSpace.common.save.SerializeClassName;
 public class FarmFieldArea extends TimedManufacturerArea {
 
     private ObjectReference grown;
+    /**
+     * Time until next harvest.
+     */
     private int time;
+
+    /**
+     * Size of fields in km^2.
+     */
     private int fieldSize;
+
+    /**
+     * metric tons of food per km^ of land per harvest.
+     */
+    private int productivity;
 
     FarmFieldArea(GameState gameState, ObjectReference grownSpecies) {
         super(gameState, new ProductionProcess(gameState,
@@ -62,6 +74,14 @@ public class FarmFieldArea extends TimedManufacturerArea {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public int getProductivity() {
+        return productivity;
+    }
+
+    public void setProductivity(int productivity) {
+        this.productivity = productivity;
     }
 
     public void grow() {

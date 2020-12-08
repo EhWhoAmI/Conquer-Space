@@ -26,46 +26,67 @@ import ConquerSpace.common.game.organizations.Civilization;
  * @author EhWhoAmI
  */
 public class FarmFieldFactory extends AreaFactory {
-    
+
     private ObjectReference grownCrop;
+
+    /**
+     * Time until next harvest.
+     */
     private int time;
+
+    /**
+     * Size of fields in km^2.
+     */
     private int fieldSize;
-    
+
+    /**
+     * metric tons of food per km^ of land per harvest.
+     */
+    private int productivity;
+
     public FarmFieldFactory(Civilization builder) {
         super(builder);
     }
-    
+
     public void setGrownCrop(ObjectReference grown) {
         this.grownCrop = grown;
     }
-    
+
     public ObjectReference getGrownCrop() {
         return grownCrop;
     }
-    
+
     public void setFieldSize(int fieldSize) {
         this.fieldSize = fieldSize;
     }
-    
+
     public int getFieldSize() {
         return fieldSize;
     }
-    
+
     public void setTime(int time) {
         this.time = time;
     }
-    
+
     public int getTime() {
         return time;
     }
-    
+
     @Override
     public Area build(GameState gameState) {
         FarmFieldArea area = new FarmFieldArea(gameState, grownCrop);
         setDefaultInformation(gameState, area);
         area.setTime(time);
         area.setFieldSize(fieldSize);
+        area.setProductivity(productivity);
         return area; //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public int getProductivity() {
+        return productivity;
+    }
+
+    public void setProductivity(int productivity) {
+        this.productivity = productivity;
+    }
 }

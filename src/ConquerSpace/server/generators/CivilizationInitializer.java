@@ -414,12 +414,13 @@ public class CivilizationInitializer {
             City faceBook = new City(gameState, starting.getReference());
 
             //Add farm fields...
-            for (int k = 0; k < 15; k++) {
+            for (int k = 0; k < 5; k++) {
                 FarmFieldFactory field = new FarmFieldFactory(civ);
 
                 field.setGrownCrop(crop.getReference());
                 //30 days
                 field.setTime(30 * 24);
+                field.setProductivity(1);
                 field.setFieldSize(5000);
                 field.setOperatingJobs(1000);
                 field.setMaxJobs(100000);
@@ -429,7 +430,7 @@ public class CivilizationInitializer {
 
             //Add factory that is quite productive at giving food
             ManufacturerAreaFactory factory = new ManufacturerAreaFactory(civ);
-            factory.setProductivity(5000);
+            factory.setProductivity(50);
             factory.setProcess(foodProcess);
 
             factory.setMaxJobs(10000);

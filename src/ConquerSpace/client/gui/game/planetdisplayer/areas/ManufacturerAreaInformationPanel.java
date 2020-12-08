@@ -35,7 +35,10 @@ public class ManufacturerAreaInformationPanel extends AreaInformationPanel<Manuf
         super(area, gameState);
         JLabel title = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.title"));
         add(title);
-
+        
+        JLabel productivityLabel = new JLabel("Productivity: " + area.getProductivity());
+        add(productivityLabel);
+        
 
         if (!area.producedLastTick()) {
             JLabel notProductive = new JLabel("Not functioning");

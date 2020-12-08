@@ -22,15 +22,11 @@ import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Administrator;
 import ConquerSpace.common.game.characters.Person;
 import ConquerSpace.common.game.characters.PersonEnterable;
-import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.government.GovernmentPosition;
 import ConquerSpace.common.game.organizations.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.common.game.population.Race;
-import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
-import ConquerSpace.common.game.universe.bodies.Planet;
-import ConquerSpace.common.game.universe.bodies.StarSystem;
 
 /**
  *
@@ -45,29 +41,6 @@ public class PeopleProcessor {
     private StarDate before;
 
     public void createPeople() {
-        //Iterate through planets and check for peopl
-        for (int starSystemCount = 0; starSystemCount < universe.getStarSystemCount(); starSystemCount++) {
-            StarSystem starSystem = universe.getStarSystemObject(starSystemCount);
-            //Check for ships or whatever
-            for (int i = 0; i < starSystem.getBodyCount(); i++) {
-                Body body = starSystem.getBodyObject(i);
-                if (body instanceof Planet) {
-                    Planet planet = (Planet) body;
-                    //If city is populated
-                    if (planet.isHabitated()) {
-                        for (City c : planet.getCities()) {
-                            //Process cities
-                            //Depending on the population size, add things
-                            int populationSize = c.getPopulationSize();
-                            //Calculate the percentage chance to create someone
-                            int peopleCount = (int) ((double) populationSize * 0.05d);
-                            //Create people
-                            //TODO
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public Person createPerson(Race s) {
