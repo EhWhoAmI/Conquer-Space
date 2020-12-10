@@ -1,0 +1,110 @@
+[
+    {
+        name: Machinery
+        identifier: machinery
+        volume: 1
+        mass: 10000
+        formula: [
+        ]
+        tags: [
+        ]
+    }
+    {
+        name: Circuits
+        identifier: circuits
+        volume: 1
+        mass: 6500
+        formula: [
+        ]
+        tags: [
+        ]
+    }
+    {
+        name: Electronics
+        identifier: electronics
+        volume: 1
+        mass: 9000
+        formula: [
+        ]
+        tags: [
+        ]
+    }
+    {
+        name: Semiconductors
+        identifier: semiconductors
+        volume: 1
+        mass: 8000
+        formula: [
+        ]
+        tags: [
+        ]
+    }
+    {
+        name: Chemicals
+        identifier: chemicals
+        volume: 1
+        mass: 11000
+        formula: [
+        ]
+        tags: [
+        ]
+    }
+    {
+        name: Plastic
+        identifier: plastic
+        volume: 1
+        mass: 950
+        formula: [
+            "e_carbon:3"
+            "e_oxygen:5"
+            "e_chlorine:1"
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Magnets
+        identifier: magnets
+        volume: 1
+        mass: 8000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Glass
+        identifier: glass
+        volume: 1
+        mass: 8000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Stainless Steel
+        identifier: stainless_steel
+        volume: 1
+        mass: 7000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Steel Pipes
+        identifier: pipes_steel
+        volume: 1
+        mass: 6000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
+]

@@ -8,11 +8,10 @@
         name: Iron Ore Smelting
         identifier: smelting_o_iron
         input: [
-            "o_iron:1"
+            "o_iron:3"
         ]
         output: [
             "e_iron:1"
-            "e_oxygen:2"
         ]
         diff: 1
         catalysts: [
@@ -50,7 +49,6 @@
     {
         name:Consumer Good Making
         identifier: consumer_good_making
-         //It produces Aluminium oxide, but to prevent complexity, I'll make it make Al straight
         input: [
             "plastic:1"
             "steel_low_grade:1"
@@ -87,6 +85,104 @@
         //Eh makes sense I guess
         output: [
             "water:5"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Copper ore smelting
+        identifier: smelting_o_copper
+        input: [
+            "o_copper:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_copper:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Gold ore smelting
+        identifier: smelting_o_gold
+        input: [
+            "o_gold:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_gold:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Titanium ore smelting
+        identifier: smelting_o_titanium
+        input: [
+            "o_titanium:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_titanium:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Aluminum ore smelting
+        identifier: smelting_o_aluminum
+        input: [
+            "o_aluminum:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_aluminum:1"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Nickel ore smelting
+        identifier: smelting_o_nickel
+        input: [
+            "o_nickel:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_nickel:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Cobalt ore smelting
+        identifier: smelting_o_cobalt
+        input: [
+            "o_cobalt:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_cobalt:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Uranium ore smelting
+        identifier: smelting_o_uranium
+        input: [
+            "o_uranium:3"
+        ]
+        //Eh makes sense I guess
+        output: [
+            "e_uranium:2"
         ]
         diff: 1
         catalysts: [

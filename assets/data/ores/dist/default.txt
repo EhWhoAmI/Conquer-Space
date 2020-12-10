@@ -33,4 +33,157 @@
 
         ]
     }
+    {
+        name: o_iron
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 50000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_aluminium
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_copper
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_gold
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_titanium
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_nickel
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_cobalt
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: o_uranium
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
+    {
+        name: sandstone
+        distribution: [
+            30
+            60
+        ]
+        depth: [
+            1
+            30
+        ]
+        rarity: 1
+        abundance: 60000
+        dist-density: 32
+        tags: [
+
+        ]
+    }
 ]

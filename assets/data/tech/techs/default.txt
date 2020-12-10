@@ -571,7 +571,15 @@
     type: UNLOCK
     upgradable: false
     difficulty: 1
-    action: []
+    action: [
+      process:smelting_o_iron
+      process:smelting_o_aluminum
+      process:smelting_o_titanium
+      process:smelting_o_gold
+      process:smelting_o_copper
+      process:smelting_o_cobalt
+      process:smelting_o_uranium
+    ]
     fields:
     [
       Metallurgy
@@ -582,30 +590,6 @@
     ]
     floor: 15
     id: 26
-  }
-  {
-    name: Basic Iron Smelting
-    deps:
-    [
-      Knowledge
-    ]
-    level: 0
-    type: UNLOCK
-    upgradable: false
-    difficulty: 1
-    action: [
-        process:smelting_o_iron
-    ]
-    fields:
-    [
-      Metallurgy
-    ]
-    tags:
-    [
-      Starting
-    ]
-    floor: 15
-    id: 27
   }
   {
     name: Iron Mining
@@ -654,30 +638,6 @@
     ]
     floor: 15
     id: 28
-  }
-  {
-    name: Aluminium Smelting
-    deps:
-    [
-      Knowledge
-    ]
-    level: 0
-    type: UNLOCK
-    upgradable: false
-    difficulty: 1
-    action: [
-        process:smelting_o_aluminium
-    ]
-    fields:
-    [
-      Metallurgy
-    ]
-    tags:
-    [
-      Starting
-    ]
-    floor: 15
-    id: 29
   }
   {
     name: Steel Making

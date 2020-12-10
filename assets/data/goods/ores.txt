@@ -1,0 +1,142 @@
+//Where all ores should go
+[
+    {
+        name: Aluminium Ore
+        identifier: o_aluminium
+        volume: 1
+        mass: 3000
+        formula: [
+            "e_aluminium:1"
+            "e_oxygen:2"
+            "e_hydrogen:2"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Iron Ore
+        identifier: o_iron
+        volume: 1
+        mass: 5300
+        formula: [
+            "e_iron:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Copper Ore
+        identifier: o_copper
+        volume: 1
+        mass: 4190
+        formula: [
+            "e_copper:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Gold Ore
+        identifier: o_gold
+        volume: 1
+        mass: 6300
+        formula: [
+            "e_gold:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Titanium Ore
+        identifier: o_titanium
+        volume: 1
+        mass: 4500
+        formula: [
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Aluminum Ore
+        identifier: o_aluminum
+        volume: 1
+        mass: 5300
+        formula: [
+            "e_aluminum:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Nickel Ore
+        identifier: o_nickel
+        volume: 1
+        mass: 5300
+        formula: [
+            "e_nickel:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Cobalt Ore
+        identifier: o_cobalt
+        volume: 1
+        mass: 4900
+        formula: [
+            "e_cobalt:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Uranium Ore
+        identifier: o_uranium
+        volume: 1
+        mass: 7300
+        formula: [
+            "e_uranium:2"
+            "e_oxygen:3"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Graphite
+        identifier: graphite
+        volume: 1
+        mass: 2260
+        formula: [
+            "e_carbon:1"
+        ]
+        tags: [
+            ore
+        ]
+    }
+    {
+        name: Sandstone
+        identifier: sandstone
+        volume: 1
+        mass: 2260
+        formula: [
+        ]
+        tags: [
+            ore
+        ]
+    }
+]

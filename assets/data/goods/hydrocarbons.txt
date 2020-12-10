@@ -3,7 +3,7 @@
         name: Propane
         identifier: hc_propane
         volume: 1
-        mass: 2.0098
+        mass: 200
         formula: [
             "e_hydrogen:8"
             "e_carbon:3"
@@ -16,7 +16,7 @@
         name: Hexadecane
         identifier: hc_hexadecane
         volume: 1
-        mass: 0.77
+        mass: 770
         formula: [
             "e_hydrogen:34"
             "e_carbon:16"
@@ -29,7 +29,7 @@
         name: Octane
         identifier: hc_octane
         volume: 1
-        mass: 0.703
+        mass: 703
         formula: [
             "e_hydrogen:18"
             "e_carbon:8"
@@ -43,7 +43,7 @@
         name: Sweet Crude Oil
         identifier: crude_oil_sweet
         volume: 4
-        mass: 5.7
+        mass: 5400
         formula: [
             "hc_octane:2"
             "hc_hexadecane:1"

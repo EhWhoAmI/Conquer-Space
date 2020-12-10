@@ -177,7 +177,7 @@ public class AssetReader {
         //if null, put 0
         double density = 0;
         if (densityT instanceof Double) {
-            density = (Double) densityT;
+            density = (Double) densityT * 1000d;
         }
         Element e = new Element(name, 1d, density);
         e.setElementNumber(id);

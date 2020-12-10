@@ -1,16 +1,5 @@
+//All the important goods
 [
-    {
-        name: Graphite
-        identifier: graphite
-        volume: 1
-        mass: 2.26
-        formula: [
-            "e_carbon:1"
-        ]
-        tags: [
-
-        ]
-    }
     {
         name: Low Grade Steel
         identifier: steel_low_grade
@@ -33,33 +22,6 @@
         formula: [
             "e_oxygen:1"
             "e_hydrogen:2"
-        ]
-        tags: [
-
-        ]
-    }
-    {
-        name: Aluminium Oxide
-        identifier: aluminium_oxide
-        volume: 1
-        mass: 3.987
-        formula: [
-            "e_oxygen:3"
-            "e_aluminium:2"
-        ]
-        tags: [
-
-        ]
-    }
-    {
-        name: Plastic
-        identifier: plastic
-        volume: 1
-        mass: 0.95
-        formula: [
-            "e_carbon:3"
-            "e_oxygen:5"
-            "e_chlorine:1"
         ]
         tags: [
 
@@ -94,7 +56,6 @@
         name: Concrete
         identifier: building_concrete
         volume: 1
-        //Extra dense, so no one can move it
         mass: 2400
         formula: [
         ]
