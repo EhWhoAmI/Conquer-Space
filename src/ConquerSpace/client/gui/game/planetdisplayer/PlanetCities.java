@@ -17,6 +17,7 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer;
 
+import ConquerSpace.client.gui.game.planetdisplayer.city.CityInformationPanel;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
 import ConquerSpace.common.GameState;
