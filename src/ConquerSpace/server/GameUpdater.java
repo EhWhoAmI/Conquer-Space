@@ -50,7 +50,7 @@ import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.Ship;
@@ -333,39 +333,39 @@ public class GameUpdater extends GameTicker {
             city.setCityType(type);
 
             //Get what they want to sell, and how many units
-            for (StorableReference ref : city.primaryProduction) {
-                //Check if has resources
-                if (city.resources.containsKey(ref) && city.resourceDemands.containsKey(ref) && (city.resources.get(ref) - city.resourceDemands.get(ref)) > 0) {
-                    //Place sell orders for this
-                    GoodOrder order = new GoodOrder();
-                    order.setAmount((int) (city.resources.get(ref) - city.resourceDemands.get(ref)));
-                    order.setGood(ref);
-                    order.setOwner(cityId);
-                    //Set the price
-                    //Get previous average price
-                    //Then add based on S/D ratio
-                    if (planetMarket.price.containsKey(ref)) {
-                        order.setCost(planetMarket.price.get(ref));
-                    }
-                    planetMarket.addSellOrder(ref, order);
-                }
-            }
-
-            //Add demands
-            for (Map.Entry<StorableReference, Double> entry : city.resourceDemands.entrySet()) {
-                StorableReference key = entry.getKey();
-                Double val = entry.getValue();
-                //if can provide
-                GoodOrder order = new GoodOrder();
-                order.setAmount(val.intValue());
-                order.setGood(key);
-                order.setOwner(cityId);
-
-                if (planetMarket.price.containsKey(key)) {
-                    order.setCost(planetMarket.price.get(key));
-                }
-                planetMarket.addBuyOrder(key, order);
-            }
+//            for (StorableReference ref : city.primaryProduction) {
+//                //Check if has resources
+//                if (city.resources.containsKey(ref) && city.resourceDemands.containsKey(ref) && (city.resources.get(ref) - city.resourceDemands.get(ref)) > 0) {
+//                    //Place sell orders for this
+//                    GoodOrder order = new GoodOrder();
+//                    order.setAmount((int) (city.resources.get(ref) - city.resourceDemands.get(ref)));
+//                    order.setGood(ref);
+//                    order.setOwner(cityId);
+//                    //Set the price
+//                    //Get previous average price
+//                    //Then add based on S/D ratio
+//                    if (planetMarket.price.containsKey(ref)) {
+//                        order.setCost(planetMarket.price.get(ref));
+//                    }
+//                    planetMarket.addSellOrder(ref, order);
+//                }
+//            }
+//
+//            //Add demands
+//            for (Map.Entry<StorableReference, Double> entry : city.resourceDemands.entrySet()) {
+//                StorableReference key = entry.getKey();
+//                Double val = entry.getValue();
+//                //if can provide
+//                GoodOrder order = new GoodOrder();
+//                order.setAmount(val.intValue());
+//                order.setGood(key);
+//                order.setOwner(cityId);
+//
+//                if (planetMarket.price.containsKey(key)) {
+//                    order.setCost(planetMarket.price.get(key));
+//                }
+//                planetMarket.addBuyOrder(key, order);
+//            }
         }
 
         //Calculate S/D
@@ -453,7 +453,9 @@ public class GameUpdater extends GameTicker {
             //Request food
             //Append resources
             city.resourceDemands.addValue(race.getConsumableResource(), consume);
-
+            
+            //Add demand to race too
+            seg.upkeep.addValue(race.getConsumableResource(), consume);
             boolean success = removeResource(race.getConsumableResource(), consume, city);
             //Not enough food
             boolean starving = false;
@@ -584,14 +586,14 @@ public class GameUpdater extends GameTicker {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
 
-            for (Map.Entry<StorableReference, Double> entry : civilization.resourceList.entrySet()) {
+            for (Map.Entry<StoreableReference, Double> entry : civilization.resourceList.entrySet()) {
                 civilization.resourceList.put(entry.getKey(), 0d);
             }
             //Process resources
             for (ResourceStockpile s : civilization.getResourceStorages()) {
                 //Get resource types allowed
 
-                for (StorableReference type : s.storedTypes()) {
+                for (StoreableReference type : s.storedTypes()) {
                     //add to index
                     if (!civilization.resourceList.containsKey(type)) {
                         civilization.resourceList.put(type, 0d);

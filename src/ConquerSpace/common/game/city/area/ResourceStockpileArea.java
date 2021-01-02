@@ -23,7 +23,7 @@ import ConquerSpace.common.game.logistics.ResourcePermissions;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
@@ -41,11 +41,11 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     private ResourcePermissions defaultPermissions;
     private HashMap<ObjectReference, ResourcePermissions> allPermissions;
 
-    public HashMap<StorableReference, Double> resources;
-    public DoubleHashMap<StorableReference> resourceDemands;
+    public HashMap<StoreableReference, Double> resources;
+    public DoubleHashMap<StoreableReference> resourceDemands;
 
     public ArrayList<StorageNeeds> storageNeeds;
-    public HashMap<StorableReference, DoubleHashMap<String>> resourceLedger;
+    public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
     public UniversePath path;
 
     ResourceStockpileArea(GameState gameState) {
@@ -68,17 +68,17 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     }
 
     @Override
-    public void addResourceTypeStore(StorableReference type) {
+    public void addResourceTypeStore(StoreableReference type) {
         resources.put(type, 0d);
     }
 
     @Override
-    public Double getResourceAmount(StorableReference type) {
+    public Double getResourceAmount(StoreableReference type) {
         return resources.get(type);
     }
 
     @Override
-    public void addResource(StorableReference type, Double amount) {
+    public void addResource(StoreableReference type, Double amount) {
         if (!resources.containsKey(type)) {
             resources.put(type, 0d);
         }
@@ -95,17 +95,17 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     }
 
     @Override
-    public boolean canStore(StorableReference type) {
+    public boolean canStore(StoreableReference type) {
         return true;//(resources.containsKey(type));
     }
 
     @Override
-    public StorableReference[] storedTypes() {
-        Iterator<StorableReference> res = resources.keySet().iterator();
-        StorableReference[] arr = new StorableReference[resources.size()];
+    public StoreableReference[] storedTypes() {
+        Iterator<StoreableReference> res = resources.keySet().iterator();
+        StoreableReference[] arr = new StoreableReference[resources.size()];
         int i = 0;
         while (res.hasNext()) {
-            StorableReference next = res.next();
+            StoreableReference next = res.next();
             arr[i] = next;
             i++;
         }
@@ -113,7 +113,7 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     }
 
     @Override
-    public boolean removeResource(StorableReference type, Double amount) {
+    public boolean removeResource(StoreableReference type, Double amount) {
         //Get the amount in the place
         if (!resources.containsKey(type)) {
             //Remove stuff for now

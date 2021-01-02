@@ -22,7 +22,7 @@ import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceDistribution;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Fields;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.EngineTechnology;
@@ -87,7 +87,7 @@ public class GameLoader {
 
         //Sort through the list
         for (ResourceDistribution dist : res) {
-            StorableReference identifier = gameState.getGoodId(dist.resourceName);
+            StoreableReference identifier = gameState.getGoodId(dist.resourceName);
             gameState.oreDistributions.put(identifier, dist);
         }
         gameState.prodProcesses = new HashMap<>();

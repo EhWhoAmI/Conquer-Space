@@ -30,7 +30,7 @@ import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Field;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
@@ -96,9 +96,9 @@ public class Civilization extends Organization implements Employer {
     /**
      * Resources that they possess.
      */
-    public HashMap<StorableReference, Double> resourceList;
+    public HashMap<StoreableReference, Double> resourceList;
 
-    public HashMap<String, StorableReference> taggedGoods;
+    public HashMap<String, StoreableReference> taggedGoods;
 
     public ArrayList<ObjectReference> habitatedPlanets;
 
@@ -106,7 +106,7 @@ public class Civilization extends Organization implements Employer {
 
     public ArrayList<ProductionProcess> productionProcesses;
 
-    public ArrayList<StorableReference> mineableGoods;
+    public ArrayList<StoreableReference> mineableGoods;
 
     public ArrayList<ObjectReference> scienceLabs;
 

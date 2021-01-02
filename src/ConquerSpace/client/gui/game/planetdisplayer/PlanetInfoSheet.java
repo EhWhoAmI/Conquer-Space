@@ -47,7 +47,6 @@ public class PlanetInfoSheet extends JPanel {
     PlanetIndustry industry;
     LocalLifeMenu localLifeMenu;
     PlanetMap planetMap;
-    PlanetEconomy planetEconomy;
     PlanetGeology planetGeology;
     PlanetResources planetResources;
     PlanetMarket planetMarket;
@@ -82,7 +81,6 @@ public class PlanetInfoSheet extends JPanel {
         industry = new PlanetIndustry(gameState, p, civilization);
         localLifeMenu = new LocalLifeMenu(p, civilization);
         planetMap = new PlanetMap(gameState, p, civilization, this, provider);
-        planetEconomy = new PlanetEconomy();
         planetResources = new PlanetResources(gameState, p, civilization, this);
         planetMarket = new PlanetMarket(gameState, p);
 

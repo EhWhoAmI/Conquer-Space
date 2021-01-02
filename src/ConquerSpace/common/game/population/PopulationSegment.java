@@ -22,7 +22,9 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.economy.GoodOrder;
 import ConquerSpace.common.game.economy.Trader;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
+import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +32,7 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 @SerializeClassName("population-segment")
-public class PopulationSegment extends ConquerSpaceGameObject implements Trader {
+public class PopulationSegment extends ConquerSpaceGameObject implements Trader, Comparable<PopulationSegment>{
 
     public long size = 0;
     public long workablePopulation = 0;
@@ -55,6 +57,9 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader 
     private ArrayList<ObjectReference> resourceStorages;
     private ArrayList<ObjectReference> ownedMeansOfProduction;
 
+    //Demands
+    public DoubleHashMap<StoreableReference> upkeep;
+
     public PopulationSegment(GameState gameState, ObjectReference species, ObjectReference culture) {
         super(gameState);
         this.species = species;
@@ -62,6 +67,8 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader 
         buyOrders = new ArrayList<>();
         sellOrders = new ArrayList<>();
         resourceStorages = new ArrayList<>();
+        
+        upkeep = new DoubleHashMap<>();
     }
 
     public ObjectReference getCulture() {
@@ -107,4 +114,11 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader 
     public ArrayList<ObjectReference> getOwnedMeansOfProduction() {
         return ownedMeansOfProduction;
     }
+
+    @Override
+    public int compareTo(PopulationSegment o) {
+        return Long.compare(this.tier, o.tier);
+    }
+    
+    
 }

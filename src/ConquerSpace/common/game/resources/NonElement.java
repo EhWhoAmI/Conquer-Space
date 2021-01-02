@@ -28,7 +28,7 @@ import java.util.HashMap;
 public class NonElement extends Good{
     
     @Serialize(value = "recipie", special = SaveStuff.Good)
-    public HashMap<StorableReference, Double> recipie;
+    public HashMap<StoreableReference, Double> recipie;
 
     public NonElement(String name, String identifier, double volume, double mass) {
         super(name, identifier, volume, mass);

@@ -26,6 +26,7 @@ import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -46,9 +47,8 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -74,6 +74,7 @@ class JobInformationPanel extends JPanel {
     private JTabbedPane tabs;
     private City selectedCity;
     private GameState gameState;
+    private JPanel segmentInformationPanel;
 
     private static int selectedTab = 0;
 
@@ -84,93 +85,21 @@ class JobInformationPanel extends JPanel {
         populationCount = new HashMap<>();
         initPopulationInfo();
         tabs = new JTabbedPane();
+
+        //Job pie chart
+        JPanel jobChartPanel = createJobChartPanel();
+
+        //Job table
         JobTableModel jobTableModel = new JobTableModel();
         JTable jobTable = new JTable(jobTableModel);
-        JPanel jobTablePanel = new JPanel(new BorderLayout());
-        HashMap<JobType, JCheckBox> checkBoxes = new HashMap<>();
-        JPanel checkBoxPanels = new JPanel();
-        checkBoxPanels.setLayout(new VerticalFlowLayout());
-        long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
-        checkBoxPanels.add(new JLabel("Labor Force: " + new DecimalFormat("###,###").format(laborForceSize)));
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
-            JobType key = entry.getKey();
-            Integer val = entry.getValue();
-            if (val > 0) {
-                dataset.setValue(key, val);
-                JCheckBox box = new JCheckBox(key.getName());
-                box.addActionListener(l -> {
-                    if (box.isSelected()) {
-                        //Add thing back
-                        dataset.setValue(key, val);
-                    } else {
-                        //Remove thing
-                        dataset.remove(key);
-                    }
-                });
-                box.setSelected(true);
-                //Add
-                JPanel boxContainerPanel = new JPanel(new HorizontalFlowLayout());
-                boxContainerPanel.add(box);
-                int boxHeight = getFontMetrics(box.getFont()).getHeight();
-                BufferedImage img = new BufferedImage(boxHeight, boxHeight, BufferedImage.TYPE_3BYTE_BGR);
-                Graphics2D g2d = (Graphics2D) img.getGraphics();
-                Color keyColor = key.getColor();
-                g2d.setColor(keyColor);
-                g2d.fillRect(0, 0, boxHeight, boxHeight);
-                g2d.setColor(Color.lightGray);
-                g2d.drawRect(0, 0, boxHeight, boxHeight);
-                boxContainerPanel.add(new JLabel(new ImageIcon(img)));
-                checkBoxes.put(key, box);
-                checkBoxPanels.add(boxContainerPanel);
-            }
-        }
-        JFreeChart chart = ChartFactory.createPieChart(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs"), dataset, true, true, false);
-        PiePlot piePlot = (PiePlot) chart.getPlot();
-        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{0}: {1} ({2})", new DecimalFormat("###,###"), new DecimalFormat("0%"));
-        piePlot.setLabelGenerator(gen);
-        for (JobType key : populationCount.keySet()) {
-            ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
-        }
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPopupMenu(null);
-        chartPanel.addChartMouseListener(new ChartMouseListener() {
-            @Override
-            public void chartMouseClicked(ChartMouseEvent cme) {
-                ChartEntity entity = cme.getEntity();
-                if (entity instanceof PieSectionEntity) {
-                    //System.out.println(((PieSectionEntity) entity).getSectionKey());
-                    //System.out.println(((PieSectionEntity) entity).getSectionKey().getClass());
-                    //Remove segment
-                    if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
-                        dataset.remove(((PieSectionEntity) entity).getSectionKey());
-                        //Uncheck checkbox
-                        checkBoxes.get(((PieSectionEntity) entity).getSectionKey()).setSelected(false);
-                    }
-                } else if (entity instanceof LegendItemEntity) {
-                }
-            }
 
-            @Override
-            public void chartMouseMoved(ChartMouseEvent cme) {
-            }
-        });
-        jobTablePanel.add(chartPanel, BorderLayout.CENTER);
-        jobTablePanel.add(checkBoxPanels, BorderLayout.EAST);
         //Population segments chart
-        DefaultPieDataset populationSegmentDataset = new DefaultPieDataset();
-        //Fill up
-        Population cityPopulation = gameState.getObject(selectedCity.population, Population.class);
-        for (ObjectReference segmentReference : cityPopulation.segments) {
-            PopulationSegment segment = gameState.getObject(segmentReference, PopulationSegment.class);
-            populationSegmentDataset.setValue(new Long(segment.tier), (double) segment.size);
-        }
-        JFreeChart segmentChart = ChartFactory.createPieChart("Segments", populationSegmentDataset, true, true, false);
-        ChartPanel segmentChartPanel = new ChartPanel(segmentChart);
-        segmentChartPanel.setPopupMenu(null);
-        tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobTablePanel);
+        JPanel segmentChartPanel = createPopulationSegmentChartPanel();
+        segmentInformationPanel = new JPanel(new VerticalFlowLayout());
+        tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobChartPanel);
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
         tabs.add("Segments", segmentChartPanel);
+        tabs.add("Segment information", segmentInformationPanel);
 
         tabs.setSelectedIndex(selectedTab);
         tabs.addChangeListener(l -> {
@@ -205,6 +134,168 @@ class JobInformationPanel extends JPanel {
             count += (int) (populationLaborForceSize - currentlyWorking);
             populationCount.put(JobType.Jobless, count);
         }
+    }
+
+    private JPanel createJobChartPanel() {
+        JPanel jobChartPanel = new JPanel(new BorderLayout());
+
+        JPanel checkBoxPanels = new JPanel();
+        checkBoxPanels.setLayout(new VerticalFlowLayout());
+        long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
+        checkBoxPanels.add(new JLabel("Labor Force: " + new DecimalFormat("###,###").format(laborForceSize)));
+
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        HashMap<JobType, JCheckBox> checkBoxes = new HashMap<>(); //Checkboxes to set the various segments visible or not
+        for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
+            JobType key = entry.getKey();
+            Integer val = entry.getValue();
+            if (val > 0) {
+                dataset.setValue(key, val);
+                JCheckBox box = new JCheckBox(key.getName());
+                box.addActionListener(l -> {
+                    if (box.isSelected()) {
+                        //Add thing back
+                        dataset.setValue(key, val);
+                    } else {
+                        //Remove thing
+                        dataset.remove(key);
+                    }
+                });
+                box.setSelected(true);
+                //Add
+                JPanel boxContainerPanel = new JPanel(new HorizontalFlowLayout());
+                boxContainerPanel.add(box);
+                int boxHeight = getFontMetrics(box.getFont()).getHeight();
+                BufferedImage img = new BufferedImage(boxHeight, boxHeight, BufferedImage.TYPE_3BYTE_BGR);
+                Graphics2D g2d = (Graphics2D) img.getGraphics();
+                Color keyColor = key.getColor();
+                g2d.setColor(keyColor);
+                g2d.fillRect(0, 0, boxHeight, boxHeight);
+                g2d.setColor(Color.lightGray);
+                g2d.drawRect(0, 0, boxHeight, boxHeight);
+                boxContainerPanel.add(new JLabel(new ImageIcon(img)));
+                checkBoxes.put(key, box);
+                checkBoxPanels.add(boxContainerPanel);
+            }
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs"), dataset, true, true, false);
+        PiePlot piePlot = (PiePlot) chart.getPlot();
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{0}: {1} ({2})", new DecimalFormat("###,###"), new DecimalFormat("0%"));
+        piePlot.setLabelGenerator(gen);
+        for (JobType key : populationCount.keySet()) {
+            ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
+        }
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPopupMenu(null);
+        chartPanel.addChartMouseListener(new ChartMouseListener() {
+            @Override
+            public void chartMouseClicked(ChartMouseEvent cme) {
+                ChartEntity entity = cme.getEntity();
+                if (entity instanceof PieSectionEntity) {
+                    //Remove segment
+                    if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
+                        dataset.remove(((PieSectionEntity) entity).getSectionKey());
+                        //Uncheck checkbox
+                        checkBoxes.get(((PieSectionEntity) entity).getSectionKey()).setSelected(false);
+                    }
+                } else if (entity instanceof LegendItemEntity) {
+                }
+            }
+
+            @Override
+            public void chartMouseMoved(ChartMouseEvent cme) {
+            }
+        });
+        jobChartPanel.add(chartPanel, BorderLayout.CENTER);
+        jobChartPanel.add(checkBoxPanels, BorderLayout.EAST);
+        return jobChartPanel;
+    }
+
+    private JPanel createPopulationSegmentChartPanel() {
+        DefaultPieDataset populationSegmentDataset = new DefaultPieDataset();
+        //Fill up
+        Population cityPopulation = gameState.getObject(selectedCity.population, Population.class);
+        for (ObjectReference segmentReference : cityPopulation.segments) {
+            PopulationSegment segment = gameState.getObject(segmentReference, PopulationSegment.class);
+            populationSegmentDataset.setValue(segment, (double) segment.size);
+        }
+        JFreeChart segmentChart = ChartFactory.createPieChart("Segments", populationSegmentDataset, true, true, false);
+        ChartPanel segmentChartPanel = new ChartPanel(segmentChart);
+        segmentChartPanel.addChartMouseListener(new ChartMouseListener() {
+            @Override
+            public void chartMouseClicked(ChartMouseEvent cme) {
+                ChartEntity entity = cme.getEntity();
+                if (entity instanceof PieSectionEntity) {
+                    if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
+                        PopulationSegment segment = (PopulationSegment) ((PieSectionEntity) entity).getSectionKey();
+                        if (segment != null) {
+                            segmentInformationPanel.removeAll();
+                            segmentInformationPanel.add(new JLabel(segment.toString()));
+                            segmentInformationPanel.add(new JLabel("Wealth: " + Integer.toString(segment.getWealth())));
+
+                            //Set demands
+                            ResourceDemandTableModel model = new ResourceDemandTableModel(segment);
+
+                            JTable resourceDemandTable = new JTable(model);
+                            segmentInformationPanel.add(new JScrollPane(resourceDemandTable));
+                            tabs.setSelectedIndex(3);
+                        }
+                    }
+                } else if (entity instanceof LegendItemEntity) {
+                }
+            }
+
+            @Override
+            public void chartMouseMoved(ChartMouseEvent cme) {
+
+            }
+
+            class ResourceDemandTableModel extends DefaultTableModel {
+
+                PopulationSegment segment;
+                String[] colunms = new String[]{
+                    "Resource",
+                    "Amount"
+                };
+
+                public ResourceDemandTableModel(PopulationSegment segment) {
+                    this.segment = segment;
+                }
+
+                @Override
+                public String getColumnName(int column) {
+                    return colunms[column];
+                }
+
+                @Override
+                public int getColumnCount() {
+                    return colunms.length;
+                }
+
+                @Override
+                public Object getValueAt(int row, int column) {
+                    switch (column) {
+                        case 0:
+                            return gameState.getGood((StoreableReference) segment.upkeep.keySet().toArray()[row]).getName();
+                        case 1:
+                            return segment.upkeep.get(segment.upkeep.keySet().toArray()[row]);
+                    }
+                    return "";
+                }
+
+                @Override
+                public int getRowCount() {
+                    if (segment != null) {
+                        return segment.upkeep.size();
+                    }
+                    return 0;
+                }
+
+            }
+        });
+        segmentChartPanel.setPopupMenu(null);
+        return segmentChartPanel;
     }
 
     private class JobTableModel extends AbstractTableModel {

@@ -29,7 +29,7 @@ import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.GeographicPoint;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.Utilities;
@@ -223,7 +223,9 @@ public class CityInformationPanel extends JPanel {
 
             //Population
             JLabel popCount = new JLabel(
-                    LOCALE_MESSAGES.getMessage("game.planet.cities.population", Utilities.longToHumanString(gameState.getObject(selectedCity.population, Population.class).getPopulationSize())));
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.population", 
+                            Utilities.longToHumanString(gameState.getObject(selectedCity.population,
+                                    Population.class).getPopulationSize())));
             add(popCount);
 
             JLabel priindustry = new JLabel(
@@ -234,7 +236,7 @@ public class CityInformationPanel extends JPanel {
             StringJoiner joiner = new StringJoiner(", ");
 
             int i = 0;
-            for (StorableReference ref : selectedCity.primaryProduction) {
+            for (StoreableReference ref : selectedCity.primaryProduction) {
                 joiner.add(gameState.getGood(ref).toString());
                 i++;
                 if (i > 3) {
@@ -412,7 +414,6 @@ public class CityInformationPanel extends JPanel {
                 //FIXME
             }
             long end = System.currentTimeMillis();
-
         });
         t.start();
     }

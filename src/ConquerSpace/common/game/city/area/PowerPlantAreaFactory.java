@@ -19,7 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 
 /**
  *
@@ -27,7 +27,7 @@ import ConquerSpace.common.game.resources.StorableReference;
  */
 public class PowerPlantAreaFactory extends AreaFactory {
     
-    private StorableReference usesResource;
+    private StoreableReference usesResource;
     //Amount of units needed to get each time
     private int maxVolume;
     
@@ -48,7 +48,7 @@ public class PowerPlantAreaFactory extends AreaFactory {
         this.production = production;
     }
     
-    public void setUsesResource(StorableReference usesResource) {
+    public void setUsesResource(StoreableReference usesResource) {
         this.usesResource = usesResource;
     }
     
@@ -60,7 +60,7 @@ public class PowerPlantAreaFactory extends AreaFactory {
         return production;
     }
     
-    public StorableReference getUsesResource() {
+    public StoreableReference getUsesResource() {
         return usesResource;
     }
     

@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @author EhWhoAmI
  */
-public class GameObjectStorageReference extends StorableReference {
+public class GameObjectStorageReference extends StoreableReference {
 
     private final ObjectReference reference;
 

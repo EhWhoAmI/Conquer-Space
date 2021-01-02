@@ -21,7 +21,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.NonElement;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -150,8 +150,8 @@ public class ResourceViewer extends JFrame {
 
                 if (selected instanceof NonElement) {
                     NonElement ne = (NonElement) selected;
-                    for (Map.Entry<StorableReference, Double> entry : ne.recipie.entrySet()) {
-                        StorableReference key = entry.getKey();
+                    for (Map.Entry<StoreableReference, Double> entry : ne.recipie.entrySet()) {
+                        StoreableReference key = entry.getKey();
                         Double val = entry.getValue();
                         //forumlaTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
                     }

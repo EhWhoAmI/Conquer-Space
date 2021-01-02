@@ -23,7 +23,7 @@ import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.ManufacturerAreaFactory;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridBagConstraints;
@@ -67,8 +67,8 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             processName.setText(process.name);
             String inputString = "Input: ";
 
-            for (Map.Entry<StorableReference, Double> entry : process.input.entrySet()) {
-                StorableReference key = entry.getKey();
+            for (Map.Entry<StoreableReference, Double> entry : process.input.entrySet()) {
+                StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 inputString = inputString + gameState.getGood(key).getName();
                 inputString = inputString + " amount " + val;
@@ -77,8 +77,8 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             input.setText(inputString);
 
             String outputString = "Output: ";
-            for (Map.Entry<StorableReference, Double> entry : process.output.entrySet()) {
-                StorableReference key = entry.getKey();
+            for (Map.Entry<StoreableReference, Double> entry : process.output.entrySet()) {
+                StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 outputString = outputString + gameState.getGood(key).getName();
                 outputString = outputString + " amount " + val;

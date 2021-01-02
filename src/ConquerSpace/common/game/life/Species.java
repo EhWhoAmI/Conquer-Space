@@ -21,7 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.FoodGood;
 import ConquerSpace.common.game.resources.LiveGood;
-import ConquerSpace.common.game.resources.StorableReference;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SaveStuff;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
@@ -39,13 +39,13 @@ public class Species extends ConquerSpaceGameObject {
     public ArrayList<LifeTrait> lifeTraits;
 
     @Serialize(value = "live-good", special = SaveStuff.Good)
-    private StorableReference speciesGood;
+    private StoreableReference speciesGood;
 
     /**
      * Id of the food when it's dead
      */
     @Serialize(value = "food-good", special = SaveStuff.Good)
-    private StorableReference foodGood;
+    private StoreableReference foodGood;
     //Breeding rate
 
     @Serialize("breeding-rate")
@@ -88,19 +88,19 @@ public class Species extends ConquerSpaceGameObject {
         this.baseBreedingRate = baseBreedingRate;
     }
 
-    public StorableReference getFoodGood() {
+    public StoreableReference getFoodGood() {
         return foodGood;
     }
 
-    public StorableReference getLiveSpeciesGood() {
+    public StoreableReference getLiveSpeciesGood() {
         return speciesGood;
     }
 
-    public void setFoodGood(StorableReference foodGood) {
+    public void setFoodGood(StoreableReference foodGood) {
         this.foodGood = foodGood;
     }
 
-    public void setSpeciesGood(StorableReference speciesGood) {
+    public void setSpeciesGood(StoreableReference speciesGood) {
         this.speciesGood = speciesGood;
     }
 
