@@ -50,9 +50,9 @@ public class ShrinkedPlanetSheet extends JPanel {
     private JLabel orbitDistance;
     private JLabel disclaimerLabel;
 
-    private Planet p;
+    private Planet planet;
     private GameState gameState;
-    private Galaxy u;
+    private Galaxy universe;
     //private ButtonGroup resourceButtonGroup;
     //private JRadioButton[] showResources;
 
@@ -62,8 +62,8 @@ public class ShrinkedPlanetSheet extends JPanel {
 
     public ShrinkedPlanetSheet(GameState gameState, Planet p, Civilization c, PlayerRegister register) {
         this.gameState = gameState;
-        this.u = gameState.getUniverse();
-        this.p = p;
+        this.universe = gameState.getUniverse();
+        this.planet = p;
         infoPane = new JTabbedPane();
 
         JPanel planetOverviewPanel = new JPanel();
@@ -77,36 +77,36 @@ public class ShrinkedPlanetSheet extends JPanel {
         disclaimerLabel = new JLabel("You need to survey this planet before you can see the resources!");
         planetName = new JLabel();
         planetPath = new JLabel();
-        planetType = new JLabel("Planet type: " + p.getPlanetType());
+        planetType = new JLabel("Planet type: " + planet.getPlanetType());
         ownerLabel = new JLabel();
         PolarCoordinate pos = p.orbit.toPolarCoordinate();
         orbitDistance = new JLabel("Distance: " + (pos.getDistance()) + " km, " + ((double) pos.getDistance() / 149598000d) + " AU");
 
         //Init planetname
-        if (p.getName().equals("")) {
+        if (planet.getName().equals("")) {
             planetName.setText("Unnamed Planet");
         } else {
-            planetName.setText(p.getName());
+            planetName.setText(planet.getName());
         }
 
         //Init planetPath
         StringBuilder name = new StringBuilder();
         name.append("Star System ");
-        name.append(Integer.toString(p.getParentIndex()));
+        name.append(Integer.toString(planet.getParentIndex()));
         name.append(" Planet id ");
-        name.append(p.getReference());
+        name.append(planet.getReference());
         planetPath.setText(name.toString());
 
         //Init owner
-        if (p.getOwnerReference() != ObjectReference.INVALID_REFERENCE) {
+        if (planet.getOwnerReference() != ObjectReference.INVALID_REFERENCE) {
             ownerLabel.setText("Owner: " + c.getName());
         } else {
             ownerLabel.setText("No owner");
         }
 
         planetSectors = new JPanel();
-        PlanetMapProvider planetMapProvider = new PlanetMapProvider(p);
-        PlanetMinimapViewer planetMinimapViewer = new PlanetMinimapViewer(planetMapProvider, gameState, p, c);
+        PlanetMapProvider planetMapProvider = new PlanetMapProvider(planet);
+        PlanetMinimapViewer planetMinimapViewer = new PlanetMinimapViewer(planetMapProvider, gameState, planet, c);
         JPanel wrapper = new JPanel();
         wrapper.add(planetMinimapViewer);
         JTabbedPane buildingPanel = new JTabbedPane();
@@ -137,7 +137,7 @@ public class ShrinkedPlanetSheet extends JPanel {
         infoPane.add("Planet Overview", planetOverviewPanel);
 
         //Add atmosphere info
-        atmosphereInfo = new AtmosphereInfo(p, c, register);
+        atmosphereInfo = new AtmosphereInfo(planet, c, register);
         infoPane.add("Atmosphere Info", atmosphereInfo);
         add(infoPane);
         //Add empty panel

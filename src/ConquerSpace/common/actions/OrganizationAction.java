@@ -26,11 +26,9 @@ import ConquerSpace.common.GameState;
  */
 public abstract class OrganizationAction {
 
-    public OrganizationAction() {
-    }
-
     /**
      * Do the action
+     *
      * @param gameState GameState
      * @return what happened.
      */

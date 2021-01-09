@@ -52,6 +52,7 @@ public class ShipUnloadAction extends ShipAction {
 
     @Override
     public void initAction(GameState gameState) {
+        //Empty
     }
 
     @Override

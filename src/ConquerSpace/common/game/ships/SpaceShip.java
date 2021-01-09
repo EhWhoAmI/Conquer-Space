@@ -34,7 +34,6 @@ import java.util.ArrayList;
 @SerializeClassName("space-ship")
 public abstract class SpaceShip extends ConquerSpaceGameObject implements Orbitable{
 
-    private static int ticker = 0;
     protected String name = "";
     protected double X;
     protected double Y;

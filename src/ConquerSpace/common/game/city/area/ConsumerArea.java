@@ -18,7 +18,6 @@
 package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
 

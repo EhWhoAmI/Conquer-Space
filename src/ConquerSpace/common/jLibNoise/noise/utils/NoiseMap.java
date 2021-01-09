@@ -94,7 +94,7 @@ public class NoiseMap {
     private int width;
 
     public NoiseMap() {
-        InitObj();
+        initObj();
     }
 
     /**
@@ -107,7 +107,7 @@ public class NoiseMap {
      * @throws IllegalArgumentException See the preconditions.
      */
     public NoiseMap(int width, int height) {
-        InitObj();
+        initObj();
         setSize(width, height);
     }
 
@@ -116,7 +116,7 @@ public class NoiseMap {
      *
      */
     public NoiseMap(NoiseMap rhs) {
-        InitObj();
+        initObj();
         copyNoiseMap(rhs);
     }
 
@@ -407,7 +407,7 @@ public class NoiseMap {
 
         // Now that the source buffer is assigned to this noise map, reset the
         // source noise map object.
-        source.InitObj();
+        source.initObj();
     }
 
     /**
@@ -471,7 +471,7 @@ public class NoiseMap {
      * noise map.
      */
     private void deleteNoiseMapAndReset() {
-        InitObj();
+        initObj();
     }
 
     /**
@@ -479,7 +479,7 @@ public class NoiseMap {
      * <p>
      * Must be called during object construction. The noise map buffer must not exist.
      */
-    private void InitObj() {
+    private void initObj() {
         noiseMap = null;
         height = 0;
         width = 0;

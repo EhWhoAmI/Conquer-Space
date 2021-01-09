@@ -96,6 +96,7 @@ public class MainMenu extends JFrame implements WindowListener {
 
     @Override
     public void windowOpened(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
@@ -107,22 +108,27 @@ public class MainMenu extends JFrame implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowIconified(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowDeiconified(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowActivated(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowDeactivated(WindowEvent arg0) {
+        //Empty
     }
 
     /**

@@ -37,5 +37,6 @@ public class EmptyBehavior extends Behavior{
 
     @Override
     public void initBehavior() {
+        //No init
     }
 }

@@ -165,7 +165,7 @@ public class CivilizationInitializer {
             initalizeRecruitedPeople(civilization, gen, selector);
 
             //Add unrecruited people
-            createUnrecruitedPeople(civilization, startingPlanet, gen, selector);
+            createUnrecruitedPeople(civilization, gen, selector);
 
             initializeGovernment(civilization, gen, selector);
 
@@ -245,6 +245,7 @@ public class CivilizationInitializer {
         seg.size = selector.nextInt(200_000) + 300_000;
         seg.size *= city.areas.size();
         seg.workablePopulation = (long) (seg.size * 0.3);
+        seg.setWealth(100000);
         seg.tier = 0;
 
         seg.populationIncrease = civ.getFoundingSpecies().getBreedingRate();
@@ -255,6 +256,7 @@ public class CivilizationInitializer {
         seg2.size *= city.areas.size();
         seg2.workablePopulation = (long) (seg2.size * 0.3);
         seg2.tier = 1;
+        seg2.setWealth(100000);
         population.addSegment(seg2.getReference());
 
         ResidentialAreaFactory residentialAreaFactory = new ResidentialAreaFactory(civ);
@@ -461,7 +463,7 @@ public class CivilizationInitializer {
         }*/
     }
 
-    private void createUnrecruitedPeople(Civilization c, Planet homePlanet, NameGenerator gen, Random selector) {
+    private void createUnrecruitedPeople(Civilization c, NameGenerator gen, Random selector) {
         c.unrecruitedPeople.clear();
         int peopleCount = selector.nextInt(5) + 5;
 
@@ -577,7 +579,6 @@ public class CivilizationInitializer {
     //Test, will change in the future with a more robust system
     private void initializeGovernment(Civilization c, NameGenerator gen, Random selector) {
         //Create person
-        int age = selector.nextInt(40) + 20;
         String person = "name";
         person = gen.getName(selector.nextInt(gen.getRulesCount()), selector);
         Administrator dude = new Administrator(gameState, person, 400);

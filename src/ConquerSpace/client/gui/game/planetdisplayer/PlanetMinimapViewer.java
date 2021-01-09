@@ -49,8 +49,6 @@ public class PlanetMinimapViewer extends JPanel {
     static final int PLANET_BUILDINGS = 0;
     static final int PLANET_RESOURCES = 1;
     static final int SHOW_ALL_RESOURCES = 2;
-    private JPopupMenu menu;
-    private Civilization civ;
     private Color color;
     private Point point;
     private Point lastClicked;
@@ -65,13 +63,11 @@ public class PlanetMinimapViewer extends JPanel {
         
         this.planet = p;
 
-        this.civ = c;
         if (p.getPlanetType() == PlanetTypes.GAS) {
             scale = .5;
         }
         setPreferredSize(
                 new Dimension((int) (p.getPlanetSize() * 2 * scale), (int) (p.getPlanetSize() * scale)));
-        menu = new JPopupMenu();
     }
 
     @Override

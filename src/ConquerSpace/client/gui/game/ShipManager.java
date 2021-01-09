@@ -43,7 +43,7 @@ public class ShipManager extends JPanel {
 
     private GameState gameState;
 
-    public ShipManager(GameState gameState, Civilization c, PlayerRegister register, SpaceShipOverview shipController) {
+    public ShipManager(GameState gameState, Civilization c, SpaceShipOverview shipController) {
         this.c = c;
         this.gameState = gameState;
 

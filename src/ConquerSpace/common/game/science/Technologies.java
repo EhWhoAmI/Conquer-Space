@@ -22,7 +22,7 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.ships.EngineTechnology;
-import ConquerSpace.common.game.ships.launch.LaunchSystem;
+import ConquerSpace.common.game.ships.LaunchSystem;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
@@ -140,7 +140,7 @@ public class Technologies implements Serializable {
     }
 
     public static Technology getTechByName(GameState state, String s) {
-        return (state.techonologies.stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
+        return (state.techonologies.stream().filter(e -> e.getName().equalsIgnoreCase(s))).findFirst().get();
     }
 
     public static Technology[] getTechsByTag(GameState state, String tag) {
@@ -163,7 +163,7 @@ public class Technologies implements Serializable {
             int amount = Integer.parseInt(splitAction[2]);
             Technology tech = getTechByName(gameState, techtoboost);
             if (c.civTechs.containsKey(tech)) {
-                if (!(c.civTechs.get(tech) > 100)) {
+                if (c.civTechs.get(tech) <= 100) {
                     //Then add
                     if (c.civTechs.get(tech) > (100 - amount)) {
                         c.civTechs.put(tech, 100);
@@ -190,8 +190,8 @@ public class Technologies implements Serializable {
             c.values.put(splitAction[0], Integer.parseInt(splitAction[1]));
         } else if (action.startsWith("field")) {
             //Add the field that is mentioned
-            action = action.toLowerCase();
-            String[] text = action.split(":");
+            String field = action.toLowerCase();
+            String[] text = field.split(":");
             //Loop through the things
             //Use recursion
             c.upgradeField(text[1], Double.parseDouble(text[2]));
@@ -237,7 +237,7 @@ public class Technologies implements Serializable {
 
             action.getChars("component".length() + 1, action.length() - 1, dst, 0);
 
-            String compName = (new String(dst).trim());
+            //String compName = (new String(dst).trim());
 
             //if (s != null) {
             //TODO add preinstalled templates
@@ -279,7 +279,8 @@ public class Technologies implements Serializable {
                 c.mineableGoods.add(goodId);
             }
         } else if (action.startsWith("energy")) {
-
+            //Add Energy source
+            action.split(":");
         }
     }
 

@@ -33,8 +33,6 @@ public class ShipMoveAction extends ShipAction {
     private SpacePoint position;
     private int starSystem;
 
-    private boolean done = false;
-
     public ShipMoveAction(Ship ship) {
         super(ship);
     }

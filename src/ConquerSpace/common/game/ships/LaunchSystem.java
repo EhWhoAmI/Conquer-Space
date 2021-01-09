@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.ships.launch;
+package ConquerSpace.common.game.ships;
 
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
@@ -111,5 +111,9 @@ public class LaunchSystem extends ConquerSpaceGameObject {
     @Override
     public String toString() {
         return name;
+    }
+
+    public boolean isReusable() {
+        return reusability;
     }
 }

@@ -28,10 +28,6 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 public class ProductionProcess extends ConquerSpaceGameObject implements Serializable {
-
-    private static int idCounter = 0;
-
-    private int id;
     public String name;
     public String identifier;
     public HashMap<StoreableReference, Double> input;
@@ -48,7 +44,6 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
         input = new HashMap<>();
         output = new HashMap<>();
         catalyst = new ArrayList<>();
-        id = idCounter++;
     }
 
     public ProductionProcess(GameState gameState, StoreableReference outputGood) {
@@ -57,7 +52,6 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
         output = new HashMap<>();
         output.put(outputGood, 1d);
         catalyst = new ArrayList<>();
-        id = idCounter++;
     }
 
     @Override

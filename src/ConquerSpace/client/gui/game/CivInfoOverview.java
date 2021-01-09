@@ -41,7 +41,6 @@ import javax.swing.JTabbedPane;
 public class CivInfoOverview extends JPanel {
 
     private JPanel mainPanel;
-    private JPanel resourcesPanel;
     private JPanel populationPanel;
     private JPanel governmentPanel;
     private JTabbedPane mainTabs;
@@ -50,7 +49,7 @@ public class CivInfoOverview extends JPanel {
 
     Civilization civ;
 
-    public CivInfoOverview(GameState gameState, Civilization civ, Galaxy u) {
+    public CivInfoOverview(GameState gameState, Civilization civ) {
         this.civ = civ;
         setLayout(new BorderLayout());
         //Civ name
@@ -73,8 +72,6 @@ public class CivInfoOverview extends JPanel {
         mainPanel.add(civFoundingSpecies);
         mainPanel.add(capital);
         mainPanel.add(currency);
-
-        resourcesPanel = new JPanel();
 
         populationPanel = new JPanel();
         //Add population count and stuff

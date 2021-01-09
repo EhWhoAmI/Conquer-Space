@@ -103,13 +103,13 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     private ObjectReference toOrbitEngineType;
     //What the engine is
     private ObjectReference toOrbitEngineSelection;
-    private int toOrbitEngineAmount;
+    //private int toOrbitEngineAmount;
     private boolean designToOrbitEngineOrNot;
 
-    private JLabel fuelCapacityLabel;
-    private JLabel fuelCapacityValue;
-    private JLabel fuelCapacityUnit;
-    private JButton fuelCapicityConfig;
+//    private JLabel fuelCapacityLabel;
+//    private JLabel fuelCapacityValue;
+//    private JLabel fuelCapacityUnit;
+//    private JButton fuelCapicityConfig;
 
     private JLabel shipSensorsLabel;
     private JButton shipSensorButton;
@@ -119,7 +119,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
     JList<String> shipComponents;
     JList<String> alreadyAddedShipComponentList;
 
-    private JTabbedPane mainTabs;
+    private final JTabbedPane mainTabs;
     private JPanel componentRoughDesignPanel;
 
     //Hull is null means it is self designed
@@ -388,7 +388,8 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                         panel, "Engine Chooser",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (close == JOptionPane.OK_OPTION) {
-
+                    //Then select engine
+                    ObjectReference engine = panel.selectedEngine;
                 }
             });
             engineTypeIndicatorLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.engines.none"));
@@ -404,7 +405,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                     designToOrbitEngineOrNot = panel.getToDesign();
                     if (designToOrbitEngineOrNot) {
                         //If designing
-                        toOrbitEngineAmount = panel.getAmountToOrbit();
+                        //toOrbitEngineAmount = panel.getAmountToOrbit();
                         toOrbitEngineType = panel.getEngineTech();
                     } else {
                         toOrbitEngineSelection = panel.getShipComponent();
@@ -417,10 +418,10 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             toOrbitEngineEnableButton.addActionListener(l -> {
                 toOrbitEngineCustomizeButton.setEnabled(toOrbitEngineEnableButton.isSelected());
             });
-            fuelCapacityLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.label"));
-            fuelCapacityValue = new JLabel("0");
-            fuelCapacityUnit = new JLabel("<html>m<sup>3</sup></html");
-            fuelCapicityConfig = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.configure"));
+//            fuelCapacityLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.label"));
+//            fuelCapacityValue = new JLabel("0");
+//            fuelCapacityUnit = new JLabel("<html>m<sup>3</sup></html");
+//            fuelCapicityConfig = new JButton(LOCALE_MESSAGES.getMessage("game.engineering.ship.fuel.configure"));
 
             constraints.gridx = 0;
             constraints.gridy = 0;

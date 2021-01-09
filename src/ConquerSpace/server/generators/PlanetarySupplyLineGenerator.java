@@ -50,13 +50,11 @@ public class PlanetarySupplyLineGenerator {
         //Connect cities
         for (City c : p.getCities()) {
             for (City c2 : p.getCities()) {
-                if (c != c2) {
+                if (!c.equals(c2) && !alreadyConnected.contains(c2.getReference())) {
                     //Check if connected, reduces parallel edges
-                    if (!alreadyConnected.contains(c2.getReference())) {
-                        edges.add(new Edge(cityIds.getKey(c.getReference()),
-                                cityIds.getKey(c2.getReference()),
-                                c.getInitialPoint().distance(c2.getInitialPoint())));
-                    }
+                    edges.add(new Edge(cityIds.getKey(c.getReference()),
+                            cityIds.getKey(c2.getReference()),
+                            c.getInitialPoint().distance(c2.getInitialPoint())));
                 }
             }
             alreadyConnected.add(c.getReference());
@@ -67,9 +65,9 @@ public class PlanetarySupplyLineGenerator {
             //Add edges
             g.edges.add(edge);
         }
-        
+
         //Do mst
-        g.KruskalMST();
+        g.kruskalMST();
 
         for (int k = 0; k < g.resultCount; k++) {
             //Connect cities
@@ -80,10 +78,11 @@ public class PlanetarySupplyLineGenerator {
         }
     }
 
-    class Edge implements Comparable<Edge> {
+    private class Edge implements Comparable<Edge> {
 
-        Integer src, dest;
-        double weight;
+        private Integer src;
+        private Integer dest;
+        private double weight;
 
         public Edge(Integer src, Integer dest, double weight) {
             this.src = src;
@@ -98,22 +97,23 @@ public class PlanetarySupplyLineGenerator {
         }
     };
 
-    class Graph {
+    private class Graph {
         // A class to represent a graph edge 
 
+        private int V;
+        private int E;    // V-> no. of vertices & E->no.of edges 
+        private int resultCount = 0;
+        private ArrayList<Edge> edges; // collection of all edges 
+        private Edge result[];
+
         // A class to represent a subset for union-find 
-        class subset {
+        private class Subset {
 
             int parent, rank;
         };
 
-        int V, E;    // V-> no. of vertices & E->no.of edges 
-        int resultCount = 0;
-        ArrayList<Edge> edges; // collection of all edges 
-        Edge result[];
-
         // Creates a graph with V vertices and E edges 
-        Graph(int v, int e) {
+        private Graph(int v, int e) {
             V = v;
             E = e;
             edges = new ArrayList<>();
@@ -122,7 +122,7 @@ public class PlanetarySupplyLineGenerator {
 
         // A utility function to find set of an element i 
         // (uses path compression technique) 
-        int find(subset subsets[], int i) {
+        private int find(Subset subsets[], int i) {
             // find root and make root as parent of i (path compression) 
             if (subsets[i].parent != i) {
                 subsets[i].parent = find(subsets, subsets[i].parent);
@@ -133,7 +133,7 @@ public class PlanetarySupplyLineGenerator {
 
         // A function that does union of two sets of x and y 
         // (uses union by rank) 
-        void Union(subset subsets[], int x, int y) {
+        private void union(Subset subsets[], int x, int y) {
             int xroot = find(subsets, x);
             int yroot = find(subsets, y);
 
@@ -152,7 +152,7 @@ public class PlanetarySupplyLineGenerator {
         }
 
         // The main function to construct MST using Kruskal's algorithm 
-        void KruskalMST() {
+        private void kruskalMST() {
             int e = 0;  // An index variable, used for result[] 
             int i = 0;  // An index variable, used for sorted edges 
 
@@ -162,9 +162,9 @@ public class PlanetarySupplyLineGenerator {
             Collections.sort(edges);
 
             // Allocate memory for creating V ssubsets 
-            subset subsets[] = new subset[V];
+            Subset subsets[] = new Subset[V];
             for (i = 0; i < V; ++i) {
-                subsets[i] = new subset();
+                subsets[i] = new Subset();
             }
 
             // Create V subsets with single elements 
@@ -189,7 +189,7 @@ public class PlanetarySupplyLineGenerator {
                 // of result for next edge 
                 if (x != y) {
                     result[e++] = next_edge;
-                    Union(subsets, x, y);
+                    union(subsets, x, y);
                 }
                 // Else discard the next_edge 
             }

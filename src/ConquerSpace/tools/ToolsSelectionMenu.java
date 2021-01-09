@@ -49,7 +49,7 @@ public class ToolsSelectionMenu extends JFrame implements WindowListener {
             switch (text) {
                 default:
                 case GOODS_STRING:
-                    new ResourceViewer(state);
+                    new ResourceViewer();
                     selectedTools = true;
                     this.dispose();
                     break;

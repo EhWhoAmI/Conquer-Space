@@ -37,7 +37,7 @@ public class ShipInformationMenu extends JPanel {
     private JButton selectButton;
 
     //Actions buttons. 
-    public ShipInformationMenu(Ship ship, Civilization c, PlayerRegister playerRegister) {
+    public ShipInformationMenu(Ship ship, PlayerRegister playerRegister) {
         setLayout(new GridLayout(3, 2));
         shipNameLabel = new JLabel("Name: ");
         add(shipNameLabel);

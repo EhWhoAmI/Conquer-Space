@@ -60,7 +60,7 @@ public class ExitStarSystemAction extends ShipAction {
 
     @Override
     public void initAction(GameState gameState) {
-
+        //Empty
     }
 
     @Override

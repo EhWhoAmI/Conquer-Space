@@ -35,21 +35,13 @@ import javax.swing.SpinnerNumberModel;
  */
 public class ObservatoryConstructionPanel extends AreaDesignPanel {
 
-    JLabel lensSizeLabel;
-    JSpinner lensSizeSpinner;
-    JLabel telescopeRangeLabel;
-    JLabel telescopeRangeValueLabel;
-
-    Planet p;
-    Civilization civ;
-    
-    private GameState gameState;
+    private JLabel lensSizeLabel;
+    private JSpinner lensSizeSpinner;
+    private JLabel telescopeRangeLabel;
+    private JLabel telescopeRangeValueLabel;
 
     public ObservatoryConstructionPanel(GameState gameState, Planet p, City c, Civilization civ) {
-        super(gameState,p, c, civ);
-        this.p = p;
-        this.civ = civ;
-        this.gameState = gameState;
+        super(gameState, p, c, civ);
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);

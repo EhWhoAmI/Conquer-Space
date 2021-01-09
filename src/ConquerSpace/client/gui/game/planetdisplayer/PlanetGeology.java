@@ -23,15 +23,24 @@ import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class PlanetGeology extends javax.swing.JPanel {
+public class PlanetGeology extends JPanel {
 
     private Planet planet;
     private DefaultListModel<Stratum> stratumListModel;
@@ -39,8 +48,20 @@ public class PlanetGeology extends javax.swing.JPanel {
 
     private final GameState gameState;
 
+    private JLabel depthLabel;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel6;
+    private JPanel jPanel2;
+    private JScrollPane jScrollPane2;
+    private JScrollPane jScrollPane3;
+    private JLabel radiusLabel;
+    private JList<String> resourceList;
+    private JList<Stratum> strataList;
+
     /**
      * Creates new form PlanetGeology
+     *
      * @param gameState
      * @param p
      */
@@ -48,7 +69,7 @@ public class PlanetGeology extends javax.swing.JPanel {
         this.gameState = gameState;
         this.planet = p;
         stratumListModel = new DefaultListModel<>();
-        for (ObjectReference stratumId : p.strata) {
+        for (ObjectReference stratumId : planet.strata) {
             Stratum stratum = gameState.getObject(stratumId, Stratum.class);
 
             stratumListModel.addElement(stratum);
@@ -59,29 +80,30 @@ public class PlanetGeology extends javax.swing.JPanel {
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+        GridBagConstraints gridBagConstraints;
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        strataList = new javax.swing.JList<>();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        resourceList = new javax.swing.JList<>();
-        jLabel6 = new javax.swing.JLabel();
-        depthLabel = new javax.swing.JLabel();
-        radiusLabel = new javax.swing.JLabel();
+        jScrollPane2 = new JScrollPane();
+        strataList = new JList<>();
+        jPanel2 = new JPanel();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        jScrollPane3 = new JScrollPane();
+        resourceList = new JList<>();
+        jLabel6 = new JLabel();
+        depthLabel = new JLabel();
+        radiusLabel = new JLabel();
 
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new GridBagLayout());
 
         strataList.setModel(stratumListModel);
         strataList.setName(""); // NOI18N
-        strataList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                strataListMouseClicked(evt);
+        strataList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                strataListMouseClicked();
             }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                strataListMouseReleased(evt);
+
+            public void mouseReleased(MouseEvent evt) {
+                strataListMouseReleased();
             }
         });
         strataList.addListSelectionListener(l -> {
@@ -90,8 +112,8 @@ public class PlanetGeology extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(strataList);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(jScrollPane2, gridBagConstraints);
@@ -105,52 +127,52 @@ public class PlanetGeology extends javax.swing.JPanel {
 
         jLabel6.setText(LOCALE_MESSAGES.getMessage("game.planet.geology.resources"));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(depthLabel))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(radiusLabel))
-                    .addComponent(jLabel6))
-                .addContainerGap(110, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(depthLabel))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel4)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(radiusLabel))
+                                        .addComponent(jLabel6))
+                                .addContainerGap(110, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(depthLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(radiusLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel3)
+                                        .addComponent(depthLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel4)
+                                        .addComponent(radiusLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE))
         );
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(jPanel2, gridBagConstraints);
     }
 
-    private void strataListMouseClicked(MouseEvent evt) {
+    private void strataListMouseClicked() {
         itemSelected();
     }
 
-    private void strataListMouseReleased(MouseEvent evt) {
+    private void strataListMouseReleased() {
         itemSelected();
     }
 
@@ -171,15 +193,4 @@ public class PlanetGeology extends javax.swing.JPanel {
 
         }
     }
-    
-    private javax.swing.JLabel depthLabel;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JLabel radiusLabel;
-    private javax.swing.JList<String> resourceList;
-    private javax.swing.JList<Stratum> strataList;
 }

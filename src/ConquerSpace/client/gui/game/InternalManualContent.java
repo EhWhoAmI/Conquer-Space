@@ -51,41 +51,44 @@ public class InternalManualContent extends JInternalFrame {
         text.setEditable(false);
         setResizable(true);
         setClosable(true);
-        
-        JScrollPane pane = new JScrollPane(text);
 
+        JScrollPane pane = new JScrollPane(text);
         add(pane);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        String textContent = file;
+
         try {
             //Parse text so that images show
             Builder b = new Builder();
             Document d = b.build(file, null);
             Element e = d.getRootElement();
+
             //Get all img tags.
             Elements imgs = e.getChildElements("img");
             for (int i = 0; i < imgs.size(); i++) {
                 Element imgE = imgs.get(i);
                 Attribute attri = imgE.getAttribute("src");
-                String imgPathName = USER_DIR 
-                        + File.separator + "assets" 
-                        + File.separator + "manuals" 
+                String imgPathName = USER_DIR
+                        + File.separator + "assets"
+                        + File.separator + "manuals"
                         + File.separator + attri.getValue();
-                if(System.getProperty("os.name").toLowerCase().contains("win")) {
+                if (System.getProperty("os.name").toLowerCase().contains("win")) {
                     //Windows, remove the disk
                     imgPathName = imgPathName.replaceAll(".*:", "");
                 }
                 attri.setValue("file://" + imgPathName);
             }
-            file = e.toXML();
+            textContent = e.toXML();
         } catch (ParsingException ex) {
             LOGGER.warn("Parsing exception:" + ex.toString(), ex);
-            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
+            ExceptionHandling.exceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
         } catch (IOException ex) {
             LOGGER.warn("IO Exception:" + ex.getMessage(), ex);
-            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
+            ExceptionHandling.exceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
         }
-        this.setText(file);
+        this.setText(textContent);
     }
 
     private void setText(String content) {

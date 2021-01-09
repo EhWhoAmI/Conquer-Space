@@ -102,7 +102,7 @@ public class GameController {
                         updater.tick(1);
                     }
                 } catch (Exception e) {
-                    ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
+                    ExceptionHandling.exceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
                 }
 
                 long end = System.currentTimeMillis();

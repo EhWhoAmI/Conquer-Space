@@ -40,7 +40,6 @@ import javax.swing.border.TitledBorder;
  */
 public class AtmosphereInfo extends JPanel {
 
-    private JPanel atmosphereInfoPanel;
     private JPanel stuffInOrbitPanel;
     private ShipInformationMenu shipInformationMenu;
     private JList<Orbitable> shipsInOrbitList;
@@ -70,7 +69,7 @@ public class AtmosphereInfo extends JPanel {
         //Display ship info....
         shipsInOrbitList.addListSelectionListener(a -> {
             if (shipsInOrbitList.getSelectedValue() instanceof Ship) {
-                shipInformationMenu = new ShipInformationMenu((Ship) shipsInOrbitList.getSelectedValue(), c, register);
+                shipInformationMenu = new ShipInformationMenu((Ship) shipsInOrbitList.getSelectedValue(), register);
                 shipInfoContainer.removeAll();
                 shipInfoContainer.add(shipInformationMenu);
             }
@@ -78,14 +77,17 @@ public class AtmosphereInfo extends JPanel {
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent arg0) {
+                //Empty
             }
 
             @Override
             public void componentMoved(ComponentEvent arg0) {
+                //Empty
             }
 
             @Override
             public void componentShown(ComponentEvent arg0) {
+                //Empty
             }
 
             @Override

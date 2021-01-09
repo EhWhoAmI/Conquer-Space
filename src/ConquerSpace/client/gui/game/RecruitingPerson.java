@@ -53,8 +53,6 @@ public class RecruitingPerson extends JPanel {
 
     private JButton recruitButton;
     private JPanel container;
-
-    private Civilization c;
     
     private GameState gameState;
     
@@ -63,7 +61,6 @@ public class RecruitingPerson extends JPanel {
     public RecruitingPerson(GameState gameState, Civilization c) {
         this.gameState = gameState;
         this.galaxy = gameState.getUniverse();
-        this.c = c;
         setLayout(new HorizontalFlowLayout());
         //Generate people and things like that
         personListModel = new PersonListModel(c.unrecruitedPeople);

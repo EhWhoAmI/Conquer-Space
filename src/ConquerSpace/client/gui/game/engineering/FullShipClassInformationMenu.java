@@ -34,11 +34,10 @@ import javax.swing.JScrollPane;
  */
 public class FullShipClassInformationMenu extends JPanel {
 
-    JList<String> shipList;
-    JList<String> componentList;
+    private JList<String> shipList;
+    private JList<String> componentList;
 
-    ShipClass selectedShipClass;
-    ObjectListModel<ObjectReference> shipComponentList;
+    private ObjectListModel<ObjectReference> shipComponentList;
 
     public FullShipClassInformationMenu(GameState gameState, Civilization civilization) {
         setLayout(new HorizontalFlowLayout());

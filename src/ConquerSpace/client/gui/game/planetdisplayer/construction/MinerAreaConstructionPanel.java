@@ -56,14 +56,12 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     private Stratum miningStratum = null;
     private float amountMining = 10;
 
-    private GameState gameState;
     private MineAreaFactory factory;
-    
+
     public MinerAreaConstructionPanel(GameState gameState, Planet planet, City c, Civilization civ) {
         super(gameState, planet, c, civ);
         factory = new MineAreaFactory(civ);
         factory.setProductivity(amountMining);
-        this.gameState = gameState;
 
         setLayout(new HorizontalFlowLayout());
 
@@ -174,5 +172,9 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
     @Override
     public AreaFactory getAreaToConstruct() {
         return factory;
+    }
+
+    public Stratum getMiningStratum() {
+        return miningStratum;
     }
 }

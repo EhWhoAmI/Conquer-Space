@@ -30,7 +30,6 @@ import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.resources.StoreableReference;
@@ -223,6 +222,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     }
 
     public void incrementPopulation(StarDate date, long delta) {
+        //Handled somewhere else, if i'm not wrong
     }
 
     @Override

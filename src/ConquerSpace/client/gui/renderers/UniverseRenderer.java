@@ -129,6 +129,7 @@ public class UniverseRenderer {
                             if (civ != null) {
                                 g2d.setColor(civ.getColor());
                             }
+                            break;
                     }
                     //Control, if any...
                     Ellipse2D.Double control = new Ellipse2D.Double(
@@ -220,42 +221,17 @@ public class UniverseRenderer {
                     previousY = move.getPositionY();
                     //Get current location and draw
 
-                }/* else if (act instanceof ToOrbitAction) {
-                    ToOrbitAction move = (ToOrbitAction) act;
-                    Line2D.Double line = new Line2D.Double(
-                            (translateX + previousX * sizeOfLTYR / 10_000_000 + bounds.width / 2) / scale,
-                            (translateY + previousY * sizeOfLTYR / 10_000_000 + bounds.width / 2) / scale,
-                            (translateX + move.getPosition().getX() * sizeOfLTYR / 10_000_000 + bounds.width / 2) / scale,
-                            (translateY + move.getPosition().getY() * sizeOfLTYR / 10_000_000 + bounds.width / 2) / scale);
-                    g2d.setColor(Color.cyan);
-                    g2d.draw(line);
-                    previousX = move.getPosition().getX();
-                    previousY = move.getPosition().getY();
                 }
-            }*/
             }
-            //ship.getName();
         }
         //Draw scale line
         // TODO: MAKE ACCURATE
+        //63241 is numbers of AU in a light year.
         Line2D.Double line = new Line2D.Double(10, 20, (sizeOfLTYR * 30 * 63241 / scale + 10), 20);
 
         g2d.setColor(Color.YELLOW);
         g2d.draw(line);
         g2d.drawString("30 light years", 10, 10);
-
-        /*Ellipse2D.Double system = new Ellipse2D.Double(
-                (-632410 * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                (632410 * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
-        g2d.fill(system);
-        system = new Ellipse2D.Double(
-                (632410 * sizeOfLTYR + translateX + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                (-632410 * sizeOfLTYR + translateY + bounds.height / 2) / scale - (GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR / 2),
-                GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR, GameWindow.CQSPDesktop.SIZE_OF_STAR_ON_SECTOR);
-        g2d.setColor(Color.blue);
-
-        g2d.fill(system);*/
     }
 
     private double convertPointToScreen(double position, double translate, double scale) {

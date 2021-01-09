@@ -26,8 +26,8 @@ import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.ships.EngineTechnology;
+import ConquerSpace.common.game.ships.LaunchSystem;
 import ConquerSpace.common.game.ships.ShipType;
-import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import java.io.File;
@@ -199,7 +199,7 @@ public class AssetReader {
     public static Object processLaunchSystem(JSONObject obj, GameState state) {
         String name = obj.getString("name");
 
-        String techName = obj.getString("tech").split(":")[0];
+        //String techName = obj.getString("tech").split(":")[0];
         //The tech id will be the second value.
         int id = Integer.parseInt(obj.getString("tech").split(":")[1]);
 

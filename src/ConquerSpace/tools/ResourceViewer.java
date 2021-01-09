@@ -17,11 +17,8 @@
  */
 package ConquerSpace.tools;
 
-import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.Element;
 import ConquerSpace.common.game.resources.Good;
-import ConquerSpace.common.game.resources.NonElement;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.util.ResourceLoader;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -36,7 +33,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -100,7 +96,7 @@ public class ResourceViewer extends JFrame {
 
     private JSONArray currentlySelectedArray;
 
-    public ResourceViewer(GameState gameState) {
+    public ResourceViewer() {
         setTitle("Resource Config");
 
         //Open resource file
@@ -148,15 +144,15 @@ public class ResourceViewer extends JFrame {
                 //do formula
                 forumlaTableModel.setRowCount(0);
 
-                if (selected instanceof NonElement) {
-                    NonElement ne = (NonElement) selected;
-                    for (Map.Entry<StoreableReference, Double> entry : ne.recipie.entrySet()) {
-                        StoreableReference key = entry.getKey();
-                        Double val = entry.getValue();
-                        //forumlaTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
-                    }
-                    
-                }
+//                if (selected instanceof NonElement) {
+//                    NonElement ne = (NonElement) selected;
+//                    for (Map.Entry<StoreableReference, Double> entry : ne.recipie.entrySet()) {
+//                        StoreableReference key = entry.getKey();
+//                        Double val = entry.getValue();
+//                        //forumlaTableModel.addRow(new Object[]{gameState.goodHashMap.get(key).getName(), val});
+//                    }
+//                    
+//                }
                 //Add tags
                 tagsListModel.removeAllElements();
                 for (String s : selected.tags) {
@@ -349,7 +345,7 @@ public class ResourceViewer extends JFrame {
 
                 //Read file
                 ArrayList<Good> nonElements = new ArrayList<>();
-                readFile(file, nonElements);
+                readFile(file);
                 resources = nonElements;
                 loadGoodsFromList();
                 everythingLoaded = false;
@@ -394,7 +390,7 @@ public class ResourceViewer extends JFrame {
         }
     }
 
-    private void readFile(File file, ArrayList<Good> goods) {
+    private void readFile(File file) {
         FileInputStream fis = null;
         try {
             //If it is readme, continue
@@ -458,7 +454,7 @@ public class ResourceViewer extends JFrame {
                     try {
                         JSONObject obj = root.getJSONObject(i);
                         //Because periodic table number is the id
-                        int id = obj.getInt("number");
+                        //int id = obj.getInt("number");
                         String name = obj.getString("name");
                         Object densityT = obj.get("density");
                         //if null, put 0

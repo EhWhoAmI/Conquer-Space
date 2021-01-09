@@ -19,7 +19,6 @@ package ConquerSpace.client.gui.start;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -98,39 +97,29 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
             UniverseGenerationConfig config = new UniverseGenerationConfig();
             //This button will only be pressed by the `done` button.
             //Read all the info, pass to scripts.
-            config.universeSize = (UniverseGenerationConfig.UniverseSize) universeConfigPanel.universeSizeBox.getSelectedItem();
-            config.universeShape = ((UniverseGenerationConfig.UniverseShape) universeConfigPanel.universeTypeComboBox.getSelectedItem());
-            config.universeAge = ((UniverseGenerationConfig.UniverseAge) universeConfigPanel.universeHistoryComboBox.getSelectedItem());
-            config.civilizationCount = ((UniverseGenerationConfig.CivilizationCount) universeConfigPanel.civilizationCountComboBox.getSelectedItem());
-            config.planetCommonality = ((UniverseGenerationConfig.PlanetRarity) universeConfigPanel.planetCommonalityComboBox.getSelectedItem());
+            config.universeSize = universeConfigPanel.getUniverseSize();
+            config.universeShape = universeConfigPanel.getUniverseShape();
+            config.universeAge = universeConfigPanel.getUniverseAge();
+            config.civilizationCount = universeConfigPanel.getCivCount();
+            config.planetCommonality = universeConfigPanel.getPlanetRarity();
 
-            long seed;
-            LOGGER.trace("Parsing seed.");
-            try {
-                seed = Long.parseLong(universeConfigPanel.seedText.getText()); // This will pass a nfe.
-                LOGGER.trace("Seed is long value.");
-            } catch (NumberFormatException nfe) {
-                seed = universeConfigPanel.seedText.getText().hashCode();
-                LOGGER.trace("Seed is string literal.");
-            }
-            LOGGER.info("Seed: " + seed);
-
-            config.seed = seed;
-
+            config.seed = universeConfigPanel.getSeed();
+            LOGGER.info("Seed: " + config.seed);
+            
             //Set the player Civ options
             CivilizationConfig civilizationConfig = new CivilizationConfig();
-            civilizationConfig.civColor = (civColor);
-            civilizationConfig.civSymbol = ((String) universeConfigPanel.civSymbolSpinner.getValue());
-            civilizationConfig.civilizationName = (universeConfigPanel.civNameTextField.getText());
-            civilizationConfig.civilizationPreferredClimate = ((RacePreferredClimateTpe) universeConfigPanel.civTempResistanceComboBox.getSelectedItem());
-            civilizationConfig.homePlanetName = (universeConfigPanel.civHomePlanetName.getText());
-            civilizationConfig.speciesName = (universeConfigPanel.speciesNameField.getText());
-            civilizationConfig.civCurrencyName = (universeConfigPanel.currencyNameTextField.getText());
-            civilizationConfig.civCurrencySymbol = (universeConfigPanel.currencySymbolTextField.getText());
+            civilizationConfig.civColor = civColor;
+            civilizationConfig.civSymbol = universeConfigPanel.getCivSymbol();
+            civilizationConfig.civilizationName = universeConfigPanel.getCivCurrencyName();
+            civilizationConfig.civilizationPreferredClimate = universeConfigPanel.getCivPreferredClimate();
+            civilizationConfig.homePlanetName = universeConfigPanel.getHomePlanet();
+            civilizationConfig.speciesName = universeConfigPanel.getSpeciesName();
+            civilizationConfig.civCurrencyName = universeConfigPanel.getCivCurrencyName();
+            civilizationConfig.civCurrencySymbol = universeConfigPanel.getCivCurrencySymbol();
             config.civConfig = civilizationConfig;
 
             //Create generator
-            DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, seed);
+            DefaultUniverseGenerator gen = new DefaultUniverseGenerator(config, civilizationConfig, config.seed);
             ConquerSpace.generator = gen;
 
             //Tell main thread that game works
@@ -145,6 +134,7 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
     @Override
     public void windowOpened(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
@@ -154,21 +144,26 @@ public class NewGame extends JFrame implements ActionListener, WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowIconified(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowDeiconified(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowActivated(WindowEvent arg0) {
+        //Empty
     }
 
     @Override
     public void windowDeactivated(WindowEvent arg0) {
+        //Empty
     }
 }

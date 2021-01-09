@@ -24,12 +24,12 @@ import ConquerSpace.common.GameState;
  * @author EhWhoAmI
  */
 public class FuelTankComponent extends ShipComponent{
-    Integer fuelType;
+    private Integer fuelType;
     
     /**
      * Kilos of fuel
      */
-    int capacity;
+    private int capacity;
 
     public FuelTankComponent(GameState gameState) {
         super(gameState);

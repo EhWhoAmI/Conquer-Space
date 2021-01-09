@@ -23,7 +23,7 @@ import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.AreaFactory;
 import ConquerSpace.common.game.city.area.SpacePortAreaFactory;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.game.ships.launch.LaunchSystem;
+import ConquerSpace.common.game.ships.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -43,7 +43,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
     private JLabel launchTypes;
     private JComboBox<LaunchSystem> launchTypesValue;
 
-    SpacePortAreaFactory factory;
+    private SpacePortAreaFactory factory;
 
     private final int defaultPortsCount = 3;
 

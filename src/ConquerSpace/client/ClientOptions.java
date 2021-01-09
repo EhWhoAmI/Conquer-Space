@@ -42,7 +42,7 @@ public class ClientOptions {
 
     private final String LAF_VERSION_STRING = "version";
     private Version version;
-    private final Version DEFAULT_VERSION = ConquerSpace.VERSION;
+    private final Version DEFAULT_VERSION = VERSION;
 
     private final String LAF_MUSIC_STRING = "music";
     private boolean playMusic;

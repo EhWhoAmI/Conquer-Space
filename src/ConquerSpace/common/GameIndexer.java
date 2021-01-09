@@ -47,6 +47,6 @@ public class GameIndexer {
      * @param c 
      */
     public void takeCensus(Civilization c) {
-        
+        //Take census, do later...
     }
 }

@@ -36,13 +36,11 @@ import org.json.JSONObject;
  */
 public class NameGenerator {
 
-    private File source;
     private JSONObject nameGeneratorObject;
     private String[] rules;
     private HashMap<String, Integer> counters;
 
     public NameGenerator(File source) throws FileNotFoundException, IOException {
-        this.source = source;
         //Process
         FileInputStream fis = new FileInputStream(source);
         byte[] data = new byte[(int) source.length()];

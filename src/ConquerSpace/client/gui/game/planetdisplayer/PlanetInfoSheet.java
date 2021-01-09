@@ -28,7 +28,6 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.ResourceLoader;
 import java.awt.BorderLayout;
-import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -50,10 +49,6 @@ public class PlanetInfoSheet extends JPanel {
     PlanetGeology planetGeology;
     PlanetResources planetResources;
     PlanetMarket planetMarket;
-
-    private Image planetImage;
-
-    private PlanetMapProvider planetMapProvider;
 
     private Civilization civilization;
     private Planet planet;
@@ -78,8 +73,8 @@ public class PlanetInfoSheet extends JPanel {
         spacePortMenu = new SpacePortMenu(gameState, planet, civilization);
         planetGeology = new PlanetGeology(gameState, p);
         //building = new ConstructionMenu(u, p, c);
-        industry = new PlanetIndustry(gameState, p, civilization);
-        localLifeMenu = new LocalLifeMenu(p, civilization);
+        industry = new PlanetIndustry(gameState, p);
+        localLifeMenu = new LocalLifeMenu(p);
         planetMap = new PlanetMap(gameState, p, civilization, this, provider);
         planetResources = new PlanetResources(gameState, p, civilization, this);
         planetMarket = new PlanetMarket(gameState, p);

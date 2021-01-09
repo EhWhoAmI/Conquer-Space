@@ -25,14 +25,14 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
  *
  * @author EhWhoAmI
  */
-public enum RacePreferredClimateTpe {
+public enum RacePreferredClimateType {
     Varied("civ.climate.varied"),
     Hot("civ.climate.hot"),
     Cold("civ.climate.cold");
 
     String text;
 
-    private RacePreferredClimateTpe(String text) {
+    private RacePreferredClimateType(String text) {
         this.text = text;
     }
 

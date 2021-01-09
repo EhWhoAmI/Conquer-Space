@@ -17,9 +17,9 @@
  */
 package ConquerSpace.client.gui.game.planetdisplayer;
 
-import ConquerSpace.client.gui.game.planetdisplayer.city.CityInformationPanel;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.planetdisplayer.areas.AreaInformationPanel;
+import ConquerSpace.client.gui.game.planetdisplayer.city.CityInformationPanel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
@@ -57,8 +57,6 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  */
 public class PlanetCities extends JPanel {
 
-    private JTabbedPane tabs;
-
     private JPanel growthPanel;
     private JPanel currentStats;
     private JLabel populationCount;
@@ -74,13 +72,12 @@ public class PlanetCities extends JPanel {
 
     CityInformationPanel cityInformationPanel;
 
-    private int citySelectedTab = 0;
+    //private int citySelectedTab = 0;
     //So that the tab for the employment and things stay the same as you change your selection
     boolean isBuildingUi = false;
 
     private City currentlySelectedCity;
 
-    private Galaxy universe;
     private Civilization owner;
 
     private PlanetInfoSheet parent;
@@ -92,13 +89,11 @@ public class PlanetCities extends JPanel {
     PlanetMapProvider provider;
 
     public PlanetCities(GameState gameState, Planet p, Civilization civ, PlanetInfoSheet parent, PlanetMapProvider provider) {
-        this.universe = gameState.getUniverse();
         this.gameState = gameState;
         this.planet = p;
         this.owner = civ;
         this.parent = parent;
         this.provider = provider;
-        tabs = new JTabbedPane();
         setLayout(new VerticalFlowLayout());
 
         growthPanel = new JPanel();
@@ -203,9 +198,9 @@ public class PlanetCities extends JPanel {
     private void selectCity() {
         isBuildingUi = true;
 
-        if (cityInformationPanel != null) {
-            //citySelectedTab = cityInformationPanel.getSelectedTab();
-        }
+//        if (cityInformationPanel != null) {
+//            citySelectedTab = cityInformationPanel.getSelectedTab();
+//        }
 
         cityData.removeAll();
 

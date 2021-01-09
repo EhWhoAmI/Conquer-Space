@@ -44,6 +44,6 @@ public abstract class Behavior extends ConquerSpaceGameObject implements Seriali
 
     //Purely for the player civ
     public void alert(Alert alert) {
-
+        //No default behavior
     }
 }

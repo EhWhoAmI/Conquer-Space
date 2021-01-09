@@ -35,7 +35,7 @@ import java.util.Arrays;
 @SerializeClassName("organization")
 public class Organization extends ConquerSpaceGameObject {
 
-    @Serialize("children")
+    //Subsidaries/sub orgs
     private ArrayList<ObjectReference> children;
     public ArrayList<OrganizationAction> actionList;
     public AdministrativeRegion region;
@@ -43,6 +43,8 @@ public class Organization extends ConquerSpaceGameObject {
     @Serialize("name")
     protected String name;
     protected ObjectReference behavior;
+    //The property they own
+    public ArrayList<ObjectReference> ownedProperty;
 
     public Organization(GameState gameState) {
         super(gameState);
@@ -50,6 +52,7 @@ public class Organization extends ConquerSpaceGameObject {
         name = "";
         children = new ArrayList<>();
         actionList = new ArrayList<>();
+        ownedProperty = new ArrayList<>();
         region = new AdministrativeRegion();
         behavior = new EmptyBehavior(gameState, this).getReference();
     }

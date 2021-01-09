@@ -26,7 +26,7 @@ import ConquerSpace.common.game.economy.Currency;
 import ConquerSpace.common.game.events.Event;
 import ConquerSpace.common.game.organizations.civilization.government.Government;
 import ConquerSpace.common.game.population.Race;
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.population.RacePreferredClimateType;
 import ConquerSpace.common.game.population.jobs.Employer;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.ResourceStockpile;
@@ -55,7 +55,7 @@ public class Civilization extends Organization implements Employer {
     public static final int CIV_TECH_RESEARCH_AMOUNT = 1;
 
     private Color color;
-    private RacePreferredClimateTpe civilizationPreferedClimate;
+    private RacePreferredClimateType civilizationPreferedClimate;
     private String civilizationSymbol;
 
     @Serialize("speciesName")
@@ -198,11 +198,11 @@ public class Civilization extends Organization implements Employer {
         this.speciesName = speciesName;
     }
 
-    public void setCivilizationPreferredClimate(RacePreferredClimateTpe civilizationPreferedClimate) {
+    public void setCivilizationPreferredClimate(RacePreferredClimateType civilizationPreferedClimate) {
         this.civilizationPreferedClimate = civilizationPreferedClimate;
     }
 
-    public RacePreferredClimateTpe getCivilizationPreferredClimate() {
+    public RacePreferredClimateType getCivilizationPreferredClimate() {
         return civilizationPreferedClimate;
     }
 
@@ -240,7 +240,7 @@ public class Civilization extends Organization implements Employer {
     }
 
     public Technology getTechByName(String s) {
-        return (civTechs.keySet().stream().filter(e -> e.getName().toLowerCase().equals(s.toLowerCase()))).findFirst().get();
+        return (civTechs.keySet().stream().filter(e -> e.getName().equalsIgnoreCase(s))).findFirst().get();
     }
 
     public Technology[] getTechsByTag(String tag) {

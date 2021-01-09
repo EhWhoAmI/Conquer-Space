@@ -204,7 +204,6 @@ public class PlanetOverview extends JPanel {
         private Point lastClicked;
         private TerrainRenderer renderer;
         double scale = 1;
-        private Point scrollPoint = new Point();
         double translateX = 0;
         double translateY = 0;
         private Point startPoint = new Point();
@@ -269,8 +268,8 @@ public class PlanetOverview extends JPanel {
                 //Light grey rectangle so you can see stuff
                 if (showPlanetTerrain) {
                     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-                    Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
-                    g2d.setColor(Color.lightGray);
+                    //Rectangle2D.Float background = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
+                    //g2d.setColor(Color.lightGray);
                     //g2d.fill(background);
                 }
 
@@ -301,6 +300,7 @@ public class PlanetOverview extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            //Leave empty
         }
 
         @Override
@@ -356,9 +356,9 @@ public class PlanetOverview extends JPanel {
             if (newScale > 0.05) {
                 if (newScale > 0) {
                     //scale = newScale;
-                    double msX = ((e.getX() * scale));
-                    double msY = ((e.getY() * scale));
-                    double scaleChanged = scale - scrollBefore;
+//                    double msX = ((e.getX() * scale));
+//                    double msY = ((e.getY() * scale));
+//                    double scaleChanged = scale - scrollBefore;
 
                     //scrollPoint.x += ((msX * scaleChanged)) / scale;
                     //scrollPoint.y += ((msY * scaleChanged)) / scale;

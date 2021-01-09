@@ -59,14 +59,14 @@ import ConquerSpace.common.jLibNoise.noise.Misc;
 public class GradientColor {
 
     // Number of gradient points.
-    int gradientPointCount;
+    private int gradientPointCount;
 
     /// Array that stores the gradient points.
-    GradientPoint[] gradientPoints;
+    private GradientPoint[] gradientPoints;
 
     // A color object that is used by a gradient object to store a temporary value.
     /*mutable*/
-    Color workingColor;
+    private Color workingColor;
 
     public GradientColor() {
         workingColor = new Color();

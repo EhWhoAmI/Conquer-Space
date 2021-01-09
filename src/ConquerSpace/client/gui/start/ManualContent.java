@@ -57,6 +57,7 @@ public class ManualContent extends JFrame {
         if (instance == null) {
             instance = new ManualContent();
         }
+        String text = "";
         try {
             //Parse text so that images show
             Builder b = new Builder();
@@ -77,15 +78,15 @@ public class ManualContent extends JFrame {
                 }
                 attri.setValue("file://" + imgPathName);
             }
-            file = e.toXML();
+            text = e.toXML();
         } catch (ParsingException ex) {
             LOGGER.warn("Parsing exception:" + ex.toString(), ex);
-            ExceptionHandling.ExceptionMessageBox(LOCALE_MESSAGES.getMessage("manual.open.fail"), ex);
+            ExceptionHandling.exceptionMessageBox(LOCALE_MESSAGES.getMessage("manual.open.fail"), ex);
         } catch (IOException ex) {
             LOGGER.warn("IO Exception:" + ex.getMessage(), ex);
-            ExceptionHandling.ExceptionMessageBox(LOCALE_MESSAGES.getMessage("manual.open.fail"), ex);
+            ExceptionHandling.exceptionMessageBox(LOCALE_MESSAGES.getMessage("manual.open.fail"), ex);
         }
-        instance.setText(file);
+        instance.setText(text);
         return instance;
 
     }

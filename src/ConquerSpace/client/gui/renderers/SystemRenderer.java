@@ -60,7 +60,6 @@ public class SystemRenderer {
     public static final int PLANET_DIVISOR = 27;
     private Dimension bounds;
 
-    private Galaxy universe;
     private StarSystem sys;
     public int sizeofAU;
 
@@ -103,7 +102,6 @@ public class SystemRenderer {
     public SystemRenderer(GameState gameState, StarSystem sys, Galaxy u, Dimension bounds) {
         this.gameState = gameState;
         this.bounds = bounds;
-        universe = u;
         this.sys = sys;
 
         //Terrain
@@ -236,7 +234,7 @@ public class SystemRenderer {
                 accuracy = smallestAccuracy;
             }
             //Need to do less calculations when not visible
-            GeneralPath orbitPath = createGeneralPath(planet, boundsRectangle, scale, translateX, translateY, accuracy);
+            GeneralPath orbitPath = createGeneralPath(planet, scale, translateX, translateY, accuracy);
             g2d.setColor(Color.WHITE);
             g2d.draw(orbitPath);
         }
@@ -333,6 +331,7 @@ public class SystemRenderer {
                         break;
                     default:
                         c = Color.BLACK;
+                        break;
                 }
                 g2d.setColor(c);
                 g2d.fill(starCircle);
@@ -523,7 +522,7 @@ public class SystemRenderer {
                 theta, new RendererMath.Point(0, 0), 1);
     }
 
-    private GeneralPath createGeneralPath(Body planet, Rectangle drawingBounds, double scale, double translateX, double translateY, double accuracy) {
+    private GeneralPath createGeneralPath(Body planet, double scale, double translateX, double translateY, double accuracy) {
         GeneralPath circlePath = new GeneralPath();
 
         //Do the same thing that we do for calculating position
@@ -553,10 +552,6 @@ public class SystemRenderer {
         return circlePath;
     }
 
-    private int pointQuardrant(long x, long y) {
-        y = (y >>> 63L);
-        return (int) (((x >>> 63L) ^ y) + y + y + 1L);
-    }
 
     private double convertPointX(double position, double translate, double scale) {
         return (translate + position * distanceRatio + bounds.width / 2) / scale;

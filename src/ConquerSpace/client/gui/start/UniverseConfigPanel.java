@@ -19,7 +19,7 @@ package ConquerSpace.client.gui.start;
 
 import static ConquerSpace.ConquerSpace.DEBUG;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.population.RacePreferredClimateType;
 import ConquerSpace.server.generators.UniverseGenerationConfig;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -41,37 +41,37 @@ import javax.swing.border.LineBorder;
  */
 public class UniverseConfigPanel extends JPanel implements ActionListener {
 
-    JLabel universeSizeLabel;
-    JComboBox<UniverseGenerationConfig.UniverseSize> universeSizeBox;
-    JLabel universeTypeLabel;
-    JComboBox<UniverseGenerationConfig.UniverseShape> universeTypeComboBox;
-    JLabel universeHistoryLabel;
-    JComboBox<UniverseGenerationConfig.UniverseAge> universeHistoryComboBox;
-    JLabel planetCommonalityLabel;
-    JComboBox<UniverseGenerationConfig.PlanetRarity> planetCommonalityComboBox;
-    JLabel civilizationCountLabel;
-    JComboBox<UniverseGenerationConfig.CivilizationCount> civilizationCountComboBox;
-    JLabel seedLabel;
-    JTextField seedText;
+    private JLabel universeSizeLabel;
+    private JComboBox<UniverseGenerationConfig.UniverseSize> universeSizeBox;
+    private JLabel universeTypeLabel;
+    private JComboBox<UniverseGenerationConfig.UniverseShape> universeTypeComboBox;
+    private JLabel universeHistoryLabel;
+    private JComboBox<UniverseGenerationConfig.UniverseAge> universeHistoryComboBox;
+    private JLabel planetCommonalityLabel;
+    private JComboBox<UniverseGenerationConfig.PlanetRarity> planetCommonalityComboBox;
+    private JLabel civilizationCountLabel;
+    private JComboBox<UniverseGenerationConfig.CivilizationCount> civilizationCountComboBox;
+    private JLabel seedLabel;
+    private JTextField seedText;
 
-    JLabel civNameLabel;
-    JTextField civNameTextField;
-    JLabel civColorLabel;
-    JButton civColorChooserButton;
-    JLabel civSymbolLabel;
-    JSpinner civSymbolSpinner;
-    JLabel civHomePlanetNameLabel;
-    JTextField civHomePlanetName;
-    JLabel civTempResistanceLabel;
-    JComboBox<RacePreferredClimateTpe> civTempResistanceComboBox;
-    JLabel speciesNameLabel;
-    JTextField speciesNameField;
-    JLabel currencyNameLabel;
-    JTextField currencyNameTextField;
-    JLabel currencySymbolLabel;
-    JTextField currencySymbolTextField;
+    private JLabel civNameLabel;
+    private JTextField civNameTextField;
+    private JLabel civColorLabel;
+    private JButton civColorChooserButton;
+    private JLabel civSymbolLabel;
+    private JSpinner civSymbolSpinner;
+    private JLabel civHomePlanetNameLabel;
+    private JTextField civHomePlanetName;
+    private JLabel civTempResistanceLabel;
+    private JComboBox<RacePreferredClimateType> civTempResistanceComboBox;
+    private JLabel speciesNameLabel;
+    private JTextField speciesNameField;
+    private JLabel currencyNameLabel;
+    private JTextField currencyNameTextField;
+    private JLabel currencySymbolLabel;
+    private JTextField currencySymbolTextField;
 
-    Color civColor = Color.CYAN;
+    private Color civColor = Color.CYAN;
 
     public UniverseConfigPanel() {
         setLayout(new GridLayout(2, 1, 10, 10));
@@ -135,7 +135,7 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         civHomePlanetName = new JTextField("Earth");
 
         civTempResistanceLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.climate"));
-        civTempResistanceComboBox = new JComboBox<>(RacePreferredClimateTpe.values());
+        civTempResistanceComboBox = new JComboBox<>(RacePreferredClimateType.values());
 
         speciesNameLabel = new JLabel(LOCALE_MESSAGES.getMessage("universe.civ.config.name.species"));
         speciesNameField = new JTextField("Human");
@@ -190,4 +190,61 @@ public class UniverseConfigPanel extends JPanel implements ActionListener {
         }
     }
 
+    public UniverseGenerationConfig.UniverseSize getUniverseSize() {
+        return (UniverseGenerationConfig.UniverseSize) universeSizeBox.getSelectedItem();
+    }
+
+    public UniverseGenerationConfig.UniverseShape getUniverseShape() {
+        return (UniverseGenerationConfig.UniverseShape) universeTypeComboBox.getSelectedItem();
+    }
+
+    public UniverseGenerationConfig.UniverseAge getUniverseAge() {
+        return (UniverseGenerationConfig.UniverseAge) universeHistoryComboBox.getSelectedItem();
+    }
+
+    public UniverseGenerationConfig.CivilizationCount getCivCount() {
+        return (UniverseGenerationConfig.CivilizationCount) civilizationCountComboBox.getSelectedItem();
+    }
+
+    public UniverseGenerationConfig.PlanetRarity getPlanetRarity() {
+        return (UniverseGenerationConfig.PlanetRarity) planetCommonalityComboBox.getSelectedItem();
+    }
+
+    public long getSeed() {
+        long seed;
+        try {
+            seed = Long.parseLong(seedText.getText()); // This will pass a nfe.
+        } catch (NumberFormatException nfe) {
+            seed = seedText.getText().hashCode();
+        }
+        return seed;
+    }
+
+    public String getCivSymbol() {
+        return (String) civSymbolSpinner.getValue();
+    }
+
+    public String getCivName() {
+        return civNameTextField.getText();
+    }
+
+    public RacePreferredClimateType getCivPreferredClimate() {
+        return (RacePreferredClimateType) civTempResistanceComboBox.getSelectedItem();
+    }
+
+    public String getHomePlanet() {
+        return civHomePlanetName.getText();
+    }
+
+    public String getSpeciesName() {
+        return speciesNameField.getText();
+    }
+
+    public String getCivCurrencyName() {
+        return currencyNameTextField.getText();
+    }
+
+    public String getCivCurrencySymbol() {
+        return currencySymbolTextField.getText();
+    }
 }

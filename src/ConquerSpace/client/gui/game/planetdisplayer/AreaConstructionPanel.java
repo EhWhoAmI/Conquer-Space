@@ -49,15 +49,16 @@ import javax.swing.border.LineBorder;
  */
 public class AreaConstructionPanel extends JPanel {
 
-    private Planet planet;
-    private City city;
-
     private DefaultListModel<AreaListNames> areaTypeListModel;
     private JList<AreaListNames> areaTypeList;
 
     private JButton constructButton;
 
     private JPanel areaConstructionInfo;
+
+    private AreaDesignPanel areaDesignPanel = null;
+
+    private Civilization civilization;
 
     private enum AreaListNames {
         Mine("game.planet.construction.mine"),
@@ -78,10 +79,6 @@ public class AreaConstructionPanel extends JPanel {
             return LOCALE_MESSAGES.getMessage(text);
         }
     }
-
-    private AreaDesignPanel areaDesignPanel = null;
-
-    private Civilization civilization;
 
     public AreaConstructionPanel(GameState gameState,
             Planet planet,
@@ -173,7 +170,7 @@ public class AreaConstructionPanel extends JPanel {
     }
 
     public void update() {
-
+        //Nothing so far
     }
 
     public void configureAvailableBuildings() {

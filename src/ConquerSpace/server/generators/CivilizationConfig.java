@@ -17,7 +17,7 @@
  */
 package ConquerSpace.server.generators;
 
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.population.RacePreferredClimateType;
 import java.awt.Color;
 
 /**
@@ -30,7 +30,7 @@ public class CivilizationConfig {
     public String homePlanetName;
     public String speciesName;
     public String civilizationName;
-    public RacePreferredClimateTpe civilizationPreferredClimate;
+    public RacePreferredClimateType civilizationPreferredClimate;
     
     public String civCurrencyName;
     public String civCurrencySymbol;

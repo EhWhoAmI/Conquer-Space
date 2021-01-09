@@ -25,7 +25,7 @@ import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Race;
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.population.RacePreferredClimateType;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.Stratum;
@@ -58,14 +58,13 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
     public static final double AU_IN_LTYR = 63241.1;
     /**
-     * Percentage that life happens on all planets. Only planets with life will
-     * start of with life.
+     * Percentage that life happens on all planets. Only planets with life will start of with life.
      */
     public static final double LIFE_OCCURANCE = 1;
 
-    UniverseGenerationConfig u;
-    CivilizationConfig c;
-    long seed;
+    private UniverseGenerationConfig u;
+    private CivilizationConfig c;
+    private long seed;
     private GameState gameState;
 
     private Random random;
@@ -96,6 +95,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             case Medium:
                 starSystemCount = (rand.nextInt(150) + 200);
                 break;
+            default:
             case Large:
                 starSystemCount = (rand.nextInt(150) + 300);
                 break;
@@ -129,7 +129,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
                 long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
                 lastDistance = orbitalDistance;
                 int planetSize = getRandomPlanetSize(planetType, rand);
-                Planet p = generatePlanet(planetType, orbitalDistance, planetSize, planetIndex, rand);
+                Planet p = generatePlanet(planetType, orbitalDistance, planetSize, rand);
                 sys.addBody(p);
                 //Set name
                 if (planetNameGenerator != null) {
@@ -190,7 +190,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             civ.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
             civ.setHomePlanetName(homePlanetNameGenerator.getName(0, rand));
             civ.setSpeciesName(name);
-            RacePreferredClimateTpe civPreferredClimate1 = RacePreferredClimateTpe.values()[rand.nextInt(RacePreferredClimateTpe.values().length)];
+            RacePreferredClimateType civPreferredClimate1 = RacePreferredClimateType.values()[rand.nextInt(RacePreferredClimateType.values().length)];
             civ.setCivilizationPreferredClimate(civPreferredClimate1);
             UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, planetNameGenerator);
             starSystemCount++;
@@ -248,17 +248,15 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         for (k = 0; k < planetCount; k++) {
             //Add planets
             int planetType = Math.round(rand.nextFloat());
-            
+
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;
 
             int planetSize = getRandomPlanetSize(planetType, rand);
-            Planet p = generatePlanet(planetType, orbitalDistance, planetSize, k, rand);
+            Planet p = generatePlanet(planetType, orbitalDistance, planetSize, rand);
 
-            if (planetType == PlanetTypes.ROCK) {
-                if (living == null) {
-                    living = p;
-                }
+            if (planetType == PlanetTypes.ROCK && living == null) {
+                living = p;
             }
             //Set name
             if (planetNameGenerator != null) {
@@ -275,7 +273,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             long orbitalDistance = (long) (lastDistance * (rand.nextDouble() + 1.5d));
             lastDistance = orbitalDistance;
             int planetSize = getRandomPlanetSize(planetType, rand);
-            Planet p = generatePlanet(planetType, orbitalDistance, planetSize, k, rand);
+            Planet p = generatePlanet(planetType, orbitalDistance, planetSize, rand);
 
             //Set name
             if (planetNameGenerator != null) {
@@ -322,8 +320,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         return star;
     }
 
-    private Planet generatePlanet(int planetType, double orbitalDistance, int planetSize, int id, Random rand) {
-        Planet p = new Planet(gameState, planetType, planetSize, id);
+    private Planet generatePlanet(int planetType, double orbitalDistance, int planetSize, Random rand) {
+        Planet p = new Planet(gameState, planetType, planetSize);
 
         generateResourceVeins(p);
         if (planetType == PlanetTypes.ROCK) {
@@ -337,9 +335,9 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         //Set changin degrees
         p.modDegrees(rand.nextInt(360));
-        
+
         p.setSemiMajorAxis((double) orbitalDistance);
-        
+
         //Seed life
         if (rand.nextDouble() <= (LIFE_OCCURANCE)) {
             generateLocalLife(p);

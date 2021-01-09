@@ -25,7 +25,7 @@ import java.util.ArrayList;
  *
  * @author EhWhoAmI
  */
-public class Field implements Serializable{
+public class Field implements Serializable {
 
     private String name;
     private double level;
@@ -93,11 +93,11 @@ public class Field implements Serializable{
     }
 
     public Field findNode(Field node) {
-        if (this.name.toLowerCase().equals(node.name.toLowerCase())) {
+        if (this.name.equalsIgnoreCase(node.name)) {
             return this;
         }
         for (Field f : nodes) {
-            if (f.name.toLowerCase().equals(node.name.toLowerCase())) {
+            if (f.name.equalsIgnoreCase(node.name)) {
                 return f;
             } else {
                 //Search children
@@ -111,7 +111,7 @@ public class Field implements Serializable{
     }
 
     public Field findNode(String node) {
-        if (this.name.toLowerCase().equals(node.toLowerCase())) {
+        if (this.name.equalsIgnoreCase(node)) {
             return this;
         }
         for (Field f : nodes) {

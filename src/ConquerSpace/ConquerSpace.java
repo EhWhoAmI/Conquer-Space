@@ -24,7 +24,7 @@ import ConquerSpace.client.gui.start.MainMenu;
 import ConquerSpace.client.i18n.Messages;
 import ConquerSpace.common.GameLoader;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.game.population.RacePreferredClimateTpe;
+import ConquerSpace.common.game.population.RacePreferredClimateType;
 import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.common.util.Checksum;
 import ConquerSpace.common.util.ExceptionHandling;
@@ -178,7 +178,7 @@ public final class ConquerSpace {
                 runGame();
             } catch (Exception e) {
                 //Catch exceptions...
-                ExceptionHandling.ExceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
+                ExceptionHandling.exceptionMessageBox("Exception: " + e.getClass() + ", " + e.getMessage(), e);
                 //Clean up, however we do that
             }
         }
@@ -223,7 +223,7 @@ public final class ConquerSpace {
         try {
             generator.generate(gameState);
         } catch (Exception ex) {
-            ExceptionHandling.ExceptionMessageBox(ex.getClass().toString() + " while loading universe!", ex);
+            ExceptionHandling.exceptionMessageBox(ex.getClass().toString() + " while loading universe!", ex);
         }
         long loadingEnd = System.currentTimeMillis();
         LOGGER.info("Took " + (loadingEnd - loadingStart) + " ms to generate universe, or about " + ((loadingEnd - loadingStart) / 1000d) + " seconds");
@@ -236,6 +236,8 @@ public final class ConquerSpace {
 
     public static void configureSettings() {
         //Init settings, and read from file if possible        
+        processManifestData();
+        
         settings = new ClientOptions();
         //Check for the existance of the settings file
         if (SETTINGS_FILE.exists()) {
@@ -273,6 +275,10 @@ public final class ConquerSpace {
         ConquerSpace.locale = LocaleUtils.toLocale(System.getProperty("user.language"));
         Version version = settings.getVersion();
         //Check if not equal
+        if(version.compareTo(settings.getVersion()) != 0) {
+            //Do something
+            LOGGER.warn("Wrong version");
+        }
     }
 
     private static void generateChecksum() {
@@ -367,7 +373,7 @@ public final class ConquerSpace {
         }
     }
 
-    static void configureMusic() {
+    private static void configureMusic() {
         GameController.musicPlayer = new MusicPlayer();
         if (settings.isPlayMusic()) {
             GameController.musicPlayer.playMusic();
@@ -383,7 +389,7 @@ public final class ConquerSpace {
         }
     }
 
-    static void setDebugUniverseGenerator() {
+    private static void setDebugUniverseGenerator() {
         UniverseGenerationConfig config = new UniverseGenerationConfig();
 
         config.universeSize = UniverseGenerationConfig.UniverseSize.Medium;
@@ -400,7 +406,7 @@ public final class ConquerSpace {
         civilizationConfig.civColor = (Color.CYAN);
         civilizationConfig.civSymbol = ("A");
         civilizationConfig.civilizationName = ("Humans");
-        civilizationConfig.civilizationPreferredClimate = RacePreferredClimateTpe.Varied;
+        civilizationConfig.civilizationPreferredClimate = RacePreferredClimateType.Varied;
         civilizationConfig.homePlanetName = ("Earth");
         civilizationConfig.speciesName = ("Human");
         civilizationConfig.civCurrencyName = ("Dollar");
@@ -413,7 +419,7 @@ public final class ConquerSpace {
     }
 
     public static void exitGame() {
-
+        //Just in case
     }
 
     /**
@@ -425,7 +431,7 @@ public final class ConquerSpace {
             try {
                 super.dispatchEvent(newEvent);
             } catch (Throwable t) {
-                ExceptionHandling.ExceptionMessageBox("Exception!", t);
+                ExceptionHandling.exceptionMessageBox("Exception!", t);
             }
         }
     }

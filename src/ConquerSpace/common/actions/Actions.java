@@ -29,7 +29,6 @@ import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.DoubleHashMap;
-import java.util.HashMap;
 
 /**
  * This is like a driver to do all the actions. All methods must be static.

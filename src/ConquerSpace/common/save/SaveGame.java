@@ -21,7 +21,6 @@ import ConquerSpace.ConquerSpace;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
-import ConquerSpace.common.util.Version;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,8 +29,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -43,12 +40,7 @@ import org.json.JSONObject;
  * @author EhWhoAmI
  */
 public class SaveGame {
-
-    private Version earliestCompatableVersion = new Version(0, 0, 3);
-
     private File saveFile;
-
-    private Class[] primitives = new Class[]{Integer.class, Boolean.class, Double.class, Float.class, Long.class, String.class, List.class, Map.class};
 
     private JSONObject saveData;
 

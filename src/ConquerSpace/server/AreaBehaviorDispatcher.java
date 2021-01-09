@@ -73,7 +73,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(CommercialArea area) {
-
+        //Empty
     }
 
     @Override
@@ -90,12 +90,12 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(ConsumerArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(CustomComponentFactoryManufacturerArea area) {
-
+        //Empty
     }
 
     @Override
@@ -124,7 +124,6 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             process.input.entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
-                Double amountInCity = city.resources.get(key);
                 removeResource(key, val * GameRefreshRate * area.getProductivity(), city);
                 city.resourceDemands.addValue(key, val);
             });
@@ -158,22 +157,22 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(SpacePortArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(LogisticsHubArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(ObservatoryArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(ResourceStockpileArea area) {
-
+        //Empty
     }
 
     @Override
@@ -217,17 +216,17 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(ResidentialArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(InfrastructureArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(CapitolArea area) {
-
+        //Empty
     }
 
     private boolean areaIsProducing(Area area) {
@@ -261,6 +260,10 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(PopulationUpkeepArea area) {
-
+        //Empty
     }
+
+    public Planet getPlanet() {
+        return planet;    }
+
 }

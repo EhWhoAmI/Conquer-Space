@@ -26,8 +26,8 @@ import java.io.Serializable;
 public abstract class ConquerSpaceGameObject implements Serializable {
 
     protected final GameState gameState;
-    
-    private final ObjectReference reference; 
+
+    private final ObjectReference reference;
 
     public ConquerSpaceGameObject(GameState gameState) {
         this.gameState = gameState;
@@ -52,10 +52,7 @@ public abstract class ConquerSpaceGameObject implements Serializable {
             return false;
         }
         final ConquerSpaceGameObject other = (ConquerSpaceGameObject) obj;
-        if (!this.reference.equals(other.reference)) {
-            return false;
-        }
-        return true;
+        return this.reference.equals(other.reference);
     }
 
     protected final GameState getGameState() {

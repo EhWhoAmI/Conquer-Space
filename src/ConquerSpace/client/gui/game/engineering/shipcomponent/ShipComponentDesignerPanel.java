@@ -24,17 +24,16 @@ import javax.swing.JPanel;
  *
  * @author EhWhoAmI
  */
-public class ShipComponentDesignerPanel extends JPanel {
+public abstract class ShipComponentDesignerPanel extends JPanel {
 
     ShipComponent generateComponent() {
         return null;
     }
-    
-    public void clearUI() {
-        
-    }
-    
+
+    public abstract void clearUI();
+
     public void loadComponent(ShipComponent comp) {
-        
+        //Leave empty
     }
+
 }

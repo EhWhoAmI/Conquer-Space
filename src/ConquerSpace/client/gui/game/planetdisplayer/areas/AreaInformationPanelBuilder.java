@@ -48,8 +48,8 @@ import javax.swing.JPanel;
  */
 public class AreaInformationPanelBuilder implements AreaDispatcher {
 
-    JPanel panel;
-    GameState gameState;
+    private JPanel panel;
+    private GameState gameState;
 
     public AreaInformationPanelBuilder(GameState gameState) {
         this.gameState = gameState;
@@ -68,7 +68,7 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
 
     @Override
     public void dispatch(ConsumerArea area) {
-
+        //Empty
     }
 
     @Override
@@ -78,7 +78,7 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
 
     @Override
     public void dispatch(TimedManufacturerArea area) {
-
+        //Empty
     }
 
     @Override
@@ -98,17 +98,17 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
 
     @Override
     public void dispatch(LogisticsHubArea area) {
-        
+        //Empty
     }
 
     @Override
     public void dispatch(ObservatoryArea area) {
-
+        //Empty
     }
 
     @Override
     public void dispatch(ResourceStockpileArea area) {
-
+        //Empty
     }
 
     @Override
@@ -142,7 +142,7 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
     }
 
     public JPanel getPanel(Area area) {
-        if(panel == null) {
+        if (panel == null) {
             panel = new EmptyAreaPanel(area, gameState);
         }
         return panel;
@@ -150,9 +150,11 @@ public class AreaInformationPanelBuilder implements AreaDispatcher {
 
     @Override
     public void dispatch(PortArea area) {
+        //Empty
     }
 
     @Override
     public void dispatch(PopulationUpkeepArea area) {
+        //Empty
     }
 }

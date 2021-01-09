@@ -28,8 +28,8 @@ import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.FieldNode;
 import ConquerSpace.common.game.science.Technology;
 import ConquerSpace.common.game.ships.EngineTechnology;
+import ConquerSpace.common.game.ships.LaunchSystem;
 import ConquerSpace.common.game.ships.ShipType;
-import ConquerSpace.common.game.ships.launch.LaunchSystem;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.save.Serialize;
 import java.io.File;
@@ -75,6 +75,8 @@ public final class GameState implements Serializable {
 
     @Serialize("orgs")
     private ArrayList<ObjectReference> organizations;
+    
+    private ArrayList<ObjectReference> characters;
 
     public ArrayList<EngineTechnology> engineTechnologys;
     public ArrayList<PersonalityTrait> personalityTraits;
@@ -115,6 +117,7 @@ public final class GameState implements Serializable {
         civilizations = new ArrayList<>();
         organizations = new ArrayList<>();
 
+        characters = new ArrayList<>();
         species = new HashSet<>();
 
         goodIdentifiers = new DualHashBidiMap<>();
@@ -245,6 +248,10 @@ public final class GameState implements Serializable {
         return new ArrayList<>(goodHashMap.values());
     }
 
+    public ArrayList<ObjectReference> getCharacters() {
+        return characters;
+    }
+
     /**
      * Set itself to the gamestate
      *
@@ -284,6 +291,8 @@ public final class GameState implements Serializable {
         techonologies = gameState.techonologies;
 
         constants = gameState.constants;
+        
+        characters = gameState.characters;
 
         random = gameState.random;
     }

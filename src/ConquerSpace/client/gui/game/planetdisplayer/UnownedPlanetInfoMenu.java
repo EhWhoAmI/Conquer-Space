@@ -22,7 +22,6 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.PolarCoordinate;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.GridLayout;
@@ -49,11 +48,7 @@ public class UnownedPlanetInfoMenu extends JPanel {
     private JLabel planetType;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
-    private JLabel disclaimerLabel;
-
-    private Planet planet;
-    private Galaxy u;
-    private GameState gameState;
+    
     //private ButtonGroup resourceButtonGroup;
     //private JRadioButton[] showResources;
 
@@ -63,9 +58,6 @@ public class UnownedPlanetInfoMenu extends JPanel {
     private NumberFormat numberFormatter;
 
     public UnownedPlanetInfoMenu(GameState gameState, Planet p, Civilization c, PlayerRegister register) {
-        this.planet = p;
-        this.gameState = gameState;
-        this.u = gameState.getUniverse();
         infoPane = new JTabbedPane();
 
         JPanel planetOverviewPanel = new JPanel();

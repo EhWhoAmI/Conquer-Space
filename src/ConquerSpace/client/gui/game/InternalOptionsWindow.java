@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -61,9 +60,6 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
     private static InternalOptionsWindow instance;
 
     //Components
-    private JPanel logsPanel;
-    private JLabel deleteLogsLabel;
-    private JButton deleteLogsButton;
     private JPanel musicPanel;
     private JCheckBox musicOnButton;
     private JSlider musicVolumeSlider;
@@ -122,7 +118,9 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
             }
             //lafComboBoxModel.(lafProperties.stringPropertyNames());
         } catch (FileNotFoundException ex) {
+            //No need to care
         } catch (IOException ex) {
+            //No need to care
         }
         lafComboBoxModel.setSelectedItem(ConquerSpace.settings.getLaf());
 
@@ -190,6 +188,7 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
 
     @Override
     public void internalFrameOpened(InternalFrameEvent e) {
+        //Empty
     }
 
     @Override
@@ -205,21 +204,26 @@ public class InternalOptionsWindow extends JInternalFrame implements InternalFra
 
     @Override
     public void internalFrameClosed(InternalFrameEvent e) {
+        //Empty
     }
 
     @Override
     public void internalFrameIconified(InternalFrameEvent e) {
+        //Empty
     }
 
     @Override
     public void internalFrameDeiconified(InternalFrameEvent e) {
+        //Empty
     }
 
     @Override
     public void internalFrameActivated(InternalFrameEvent e) {
+        //Empty
     }
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
+        //Empty
     }
 }

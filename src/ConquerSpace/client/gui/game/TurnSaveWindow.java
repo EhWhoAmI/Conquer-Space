@@ -21,7 +21,6 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameSpeeds;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.StarDate;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.save.SaveGame;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
@@ -75,22 +74,23 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
     };
     private boolean isPaused = true;
     private StarDate date;
-    private Galaxy universe;
+    
+    private GameState state;
 
     public TurnSaveWindow(GameState state) {
-        universe = state.getUniverse();
         this.date = state.date;
+        this.state = state;
         JPanel pan = new JPanel();
 
         //Init components
         turnLabel = new JLabel();
         statusProgressBar = new JProgressBar();
-        pausePlayButton = new JButton(LOCALE_MESSAGES.getMessage("game.already.paused"));
+        pausePlayButton = initPausePlayButton();
         speedComboBox = new JComboBox<>(speeds);
-        alertsButton = new JButton(LOCALE_MESSAGES.getMessage("game.alerts"));
+        alertsButton = initAlertsButton();
         manualButton = new JButton(LOCALE_MESSAGES.getMessage("manual.title"));
-        saveGameButton = new JButton(LOCALE_MESSAGES.getMessage("game.save"));
-        exitGameButton = new JButton(LOCALE_MESSAGES.getMessage("game.exit"));
+        saveGameButton = initSaveButton();
+        exitGameButton = initExitGameButton();
         //Copy youtube's
         runningstatsButton = new JButton(LOCALE_MESSAGES.getMessage("game.debug"));
         optionsWindowButton = new JButton(LOCALE_MESSAGES.getMessage("options.title"));
@@ -99,55 +99,13 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
 
         statusProgressBar.setIndeterminate(false);
 
-        pausePlayButton.addActionListener(this);
-        pausePlayButton.setForeground(Color.red);
-        pausePlayButton.setFocusable(false);
-        pausePlayButton.getActionMap().put("doPause", new AbstractAction("Pause") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pausePlayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
-
         speedComboBox.setSelectedItem(LOCALE_MESSAGES.getMessage("game.speed.normal"));
         speedComboBox.setFocusable(false);
-
-        alertsButton.setFocusable(false);
-        alertsButton.addActionListener((e) -> {
-            AlertDisplayer disp = AlertDisplayer.getInstance();
-            disp.toFront();
-        });
-
-        exitGameButton.setFocusable(false);
-        exitGameButton.addActionListener((e) -> {
-            if (GameController.musicPlayer != null) {
-                GameController.musicPlayer.clean();
-            }
-            System.exit(0);
-        });
 
         manualButton.setFocusable(false);
         manualButton.addActionListener((e) -> {
             InternalManual manual = new InternalManual();
             getDesktopPane().add(manual);
-        });
-
-        saveGameButton.setFocusable(false);
-        saveGameButton.addActionListener(e -> {
-            this.getTopLevelAncestor().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            SaveGame game = new SaveGame(SaveGame.getSaveFolder());
-            long before = System.currentTimeMillis();
-            try {
-                game.save(state);
-            } catch (IOException ex) {
-                ExceptionHandling.ExceptionMessageBox("IO exception while saving!", ex);
-            } catch (IllegalArgumentException ex) {
-                ExceptionHandling.ExceptionMessageBox("Illegal Argument exception while saving!", ex);
-            } catch (IllegalAccessException ex) {
-                ExceptionHandling.ExceptionMessageBox("Illegal Access exception while saving!", ex);
-            }
-            LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
-            this.getTopLevelAncestor().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         });
 
         runningstatsButton.setFocusable(false);
@@ -196,6 +154,71 @@ public class TurnSaveWindow extends JInternalFrame implements ActionListener {
         pack();
         setResizable(false);
         setVisible(true);
+    }
+
+    private JButton initPausePlayButton() {
+        JButton button = new JButton(LOCALE_MESSAGES.getMessage("game.already.paused"));
+        button.addActionListener(this);
+        button.setForeground(Color.red);
+        button.setFocusable(false);
+        button.getActionMap().put("doPause", new AbstractAction("Pause") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "doPause");
+
+        return button;
+    }
+
+    private JButton initSaveButton() {
+        JButton button = new JButton(LOCALE_MESSAGES.getMessage("game.save"));
+
+        button.setFocusable(false);
+        button.addActionListener(e -> {
+            this.getTopLevelAncestor().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            SaveGame game = new SaveGame(SaveGame.getSaveFolder());
+            long before = System.currentTimeMillis();
+            try {
+                game.save(state);
+            } catch (IOException ex) {
+                ExceptionHandling.exceptionMessageBox("IO exception while saving!", ex);
+            } catch (IllegalArgumentException ex) {
+                ExceptionHandling.exceptionMessageBox("Illegal Argument exception while saving!", ex);
+            } catch (IllegalAccessException ex) {
+                ExceptionHandling.exceptionMessageBox("Illegal Access exception while saving!", ex);
+            }
+            LOGGER.info("Time to save " + (System.currentTimeMillis() - before));
+            this.getTopLevelAncestor().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        });
+
+        return button;
+    }
+
+    private JButton initAlertsButton() {
+        JButton button = new JButton(LOCALE_MESSAGES.getMessage("game.save"));
+
+        button.setFocusable(false);
+        button.addActionListener((e) -> {
+            AlertDisplayer disp = AlertDisplayer.getInstance();
+            disp.toFront();
+        });
+
+        return button;
+    }
+
+    private JButton initExitGameButton() {
+        JButton button = new JButton(LOCALE_MESSAGES.getMessage("game.exit"));
+
+        button.setFocusable(false);
+        button.addActionListener((e) -> {
+            if (GameController.musicPlayer != null) {
+                GameController.musicPlayer.clean();
+            }
+            System.exit(0);
+        });
+
+        return button;
     }
 
     @Override

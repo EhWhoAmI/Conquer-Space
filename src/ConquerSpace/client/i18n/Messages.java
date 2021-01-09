@@ -74,7 +74,7 @@ public class Messages {
             bundle = new IncompleteResourceBundle(in);
         } catch (Exception ex) {
             LOGGER.error(ex);
-            ExceptionHandling.FatalExceptionMessageBox("Failed to load backup application messages!", ex);
+            ExceptionHandling.fatalExceptionMessageBox("Failed to load backup application messages!", ex);
         }
     }
 

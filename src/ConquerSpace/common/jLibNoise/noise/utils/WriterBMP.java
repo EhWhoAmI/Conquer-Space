@@ -51,9 +51,6 @@ public class WriterBMP {
     // A pointer to the image object that will be written to the file.
     protected Image sourceImage;
 
-    public WriterBMP() {
-    }
-
     /**
      * Returns the name of the file to write.
      *
@@ -110,7 +107,7 @@ public class WriterBMP {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 int pos = x + (y * width);
-                ConquerSpace.common.jLibNoise.noise.utils.Color clr = sourceImage.image[pos];
+                Color clr = sourceImage.image[pos];
                 pixels[index] = new java.awt.Color(clr.red, clr.green, clr.blue, clr.alpha).getRGB();
                 index++;
 

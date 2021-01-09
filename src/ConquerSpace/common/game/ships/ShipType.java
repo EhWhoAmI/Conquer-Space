@@ -26,11 +26,8 @@ import java.util.Objects;
  */
 public class ShipType implements Serializable{
 
-    String identifier;
-    String[] tags;
-
-    public ShipType() {
-    }
+    private String identifier;
+    private String[] tags;
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;

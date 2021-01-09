@@ -45,12 +45,11 @@ public class EconomyWindow extends JPanel {
     private JLabel currencyInflationRate;
 
     private Civilization c;
-    private Galaxy u;
 
-    public EconomyWindow(Civilization c, Galaxy u) {
+    public EconomyWindow(Civilization civilization, Galaxy galaxy) {
         setLayout(new BorderLayout());
-        this.c = c;
-        this.u = u;
+        this.c = civilization;
+        galaxy.getReference();
         tabs = new JTabbedPane();
         //Create the components
         civilizationEconomy = new JPanel();

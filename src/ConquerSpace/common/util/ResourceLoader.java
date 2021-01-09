@@ -49,10 +49,10 @@ public class ResourceLoader {
         } catch (FileNotFoundException ex) {
             //Fatal, can't live without it...
             LOGGER.error(ex);
-            ExceptionHandling.FatalExceptionMessageBox("Failed to load asset properties!", ex);
+            ExceptionHandling.fatalExceptionMessageBox("Failed to load asset properties!", ex);
         } catch (IOException ex) {
             LOGGER.error(ex);
-            ExceptionHandling.FatalExceptionMessageBox("Failed to load asset properties!", ex);
+            ExceptionHandling.fatalExceptionMessageBox("Failed to load asset properties!", ex);
         }
     }
 

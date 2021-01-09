@@ -29,7 +29,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -77,8 +76,6 @@ public class EncyclopediaWindow extends JInternalFrame {
         pane.addHyperlinkListener((s) -> {
             if (s.getInputEvent() instanceof MouseEvent) {
                 MouseEvent me = (MouseEvent) s.getInputEvent();
-                if (SwingUtilities.isLeftMouseButton(me)) {
-                }
             }
         });
         

@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -62,9 +61,6 @@ public class OptionsWindow extends JFrame implements WindowListener {
     private static OptionsWindow instance;
 
     //Components
-    private JPanel logsPanel;
-    private JLabel deleteLogsLabel;
-    private JButton deleteLogsButton;
     private JPanel musicPanel;
     private JCheckBox musicOnButton;
     private JSlider musicVolumeSlider;
@@ -120,7 +116,6 @@ public class OptionsWindow extends JFrame implements WindowListener {
             for (String s : lafProperties.stringPropertyNames()) {
                 lafComboBoxModel.addElement(s);
             }
-            //lafComboBoxModel.(lafProperties.stringPropertyNames());
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         }
@@ -190,6 +185,7 @@ public class OptionsWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowOpened(WindowEvent e) {
+        //Empty
     }
 
     @Override
@@ -206,21 +202,26 @@ public class OptionsWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent e) {
+        //Empty
     }
 
     @Override
     public void windowIconified(WindowEvent e) {
+        //Empty
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
+        //Empty
     }
 
     @Override
     public void windowActivated(WindowEvent e) {
+        //Empty
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
+        //Empty
     }
 }

@@ -68,20 +68,19 @@ import javax.swing.border.TitledBorder;
  */
 public class CityInformationPanel extends JPanel {
 
-    City selectedCity;
-    Civilization civilization;
-    GameState gameState;
-    PlanetMapProvider provider;
-    GridBagLayout layout;
-    Planet planet;
-    PlanetCities parent;
+    private City selectedCity;
+    private Civilization civilization;
+    private GameState gameState;
+    private PlanetMapProvider provider;
+    private GridBagLayout layout;
+    private Planet planet;
 
-    CitySkylinePanel citySkylinePanel;
-    CityOverviewPanel cityOverviewPanel;
-    MapMinimap mapMinimap;
-    JobInformationPanel jobInformationPanel;
-    CityIndustryPanel cityIndustryPanel;
-    CityEconomyPanel cityEconomyPanel;
+    private CitySkylinePanel citySkylinePanel;
+    private CityOverviewPanel cityOverviewPanel;
+    private MapMinimap mapMinimap;
+    private JobInformationPanel jobInformationPanel;
+    private CityIndustryPanel cityIndustryPanel;
+    private CityEconomyPanel cityEconomyPanel;
 
     public CityInformationPanel(GameState gameState, PlanetCities parent, City selectedCity, Planet planet, Civilization owner, PlanetMapProvider provider) {
         this.selectedCity = selectedCity;
@@ -89,12 +88,9 @@ public class CityInformationPanel extends JPanel {
         this.provider = provider;
         this.planet = planet;
         this.civilization = owner;
-        this.parent = parent;
 
         layout = new GridBagLayout();
         setLayout(layout);
-
-        long start = System.currentTimeMillis();
 
         //Init components
         citySkylinePanel = new CitySkylinePanel();
@@ -148,8 +144,6 @@ public class CityInformationPanel extends JPanel {
         constraints.gridheight = 1;
         constraints.gridwidth = 2;
         add(cityEconomyPanel, constraints);
-
-        long end = System.currentTimeMillis();
     }
 
     //Draws the borders of the borderlayout
@@ -174,8 +168,7 @@ public class CityInformationPanel extends JPanel {
 
     private class CitySkylinePanel extends JPanel {
 
-        Image bg = null;
-        int imageCounter = 0;
+        private Image bg = null;
 
         public CitySkylinePanel() {
             int height = 150;
@@ -397,7 +390,6 @@ public class CityInformationPanel extends JPanel {
                     double ratio = height / (double) img.getHeight(null);
                     int width = (int) ((double) img.getWidth(null) * ratio);
                     Image bg = new BufferedImage(500, height, BufferedImage.TYPE_INT_ARGB);
-                    long end = System.currentTimeMillis();
                     Graphics2D graphics = (Graphics2D) bg.getGraphics();
                     graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                     graphics.drawImage(img.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
@@ -409,11 +401,9 @@ public class CityInformationPanel extends JPanel {
                 imageCount = i;
 
             } catch (IOException ex) {
-                //System.out.println("no file");
                 //Ignore for now 
                 //FIXME
             }
-            long end = System.currentTimeMillis();
         });
         t.start();
     }

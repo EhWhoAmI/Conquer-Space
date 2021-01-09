@@ -93,8 +93,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     private Planet selectedPlanet = null;
 
-    private boolean toShowResources = true;
-
     private final int planetinfotab = 1;
 
     private PlayerRegister register;
@@ -154,7 +152,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         planetInfoSheetContainer.setLayout(new BorderLayout());
 
         //Space ship tabs
-        spaceShipOverview = new SpaceShipOverview(gameState, civilization, register);
+        spaceShipOverview = new SpaceShipOverview(gameState, civilization);
 
         //Engineering tabs
         JPanel shipComponentsOverview = new JPanel(new BorderLayout());
@@ -182,7 +180,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         recruitingPerson = new RecruitingPerson(gameState, civilization);
         peopleTabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.people.recruitment"), recruitingPerson);
 
-        civInfoOverview = new CivInfoOverview(gameState, civilization, universe);
+        civInfoOverview = new CivInfoOverview(gameState, civilization);
 
         resourceManager = new ResourceManager(civilization);
 
@@ -203,6 +201,17 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.events"), eventViewer);
         tabs.add(LOCALE_MESSAGES.getMessage("game.mainwindow.tabs.orgs"), organizationsOrganizer);
 
+        initTabIcons();
+
+        add(universeBreakdown, BorderLayout.WEST);
+        add(tabs, BorderLayout.CENTER);
+
+        addListeners();
+        
+        updateComponents();
+    }
+
+    private void initTabIcons() {
         ImageIcon tab1Icon = ResourceLoader.getIcon("science.icon");
         ImageIcon econ = ResourceLoader.getIcon("economy.icon");
         ImageIcon engineering = ResourceLoader.getIcon("engineering.icon");
@@ -224,18 +233,15 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         tabs.setIconAt(7, econ);
         tabs.setIconAt(8, events);
         tabs.setIconAt(9, orgs);
+    }
 
-        add(universeBreakdown, BorderLayout.WEST);
-        add(tabs, BorderLayout.CENTER);
-
+    private void addListeners() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 update();
             }
         });
-
-        updateComponents();
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -348,18 +354,22 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     @Override
     public void internalFrameClosing(InternalFrameEvent e) {
+        //Leave empty
     }
 
     @Override
     public void internalFrameClosed(InternalFrameEvent e) {
+        //Leave empty
     }
 
     @Override
     public void internalFrameIconified(InternalFrameEvent e) {
+        //Leave empty
     }
 
     @Override
     public void internalFrameDeiconified(InternalFrameEvent e) {
+        //Leave empty
     }
 
     @Override
@@ -369,18 +379,22 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
+        //Leave empty
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        //Leave empty
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        //Leave empty
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        //Leave empty
     }
 
     @Override
@@ -390,5 +404,6 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
 
     @Override
     public void mouseExited(MouseEvent e) {
+        //Leave empty
     }
 }

@@ -37,18 +37,18 @@ public class NoiseGen {
     public static final int SHIFT_NOISE_GEN = 8;
 
     /**
-     * Generates a gradient-coherent-noise value from the coordinates of a
-     * three-dimensional input value.
-     * 
+     * Generates a gradient-coherent-noise value from the coordinates of a three-dimensional input
+     * value.
+     * <p>
      * The return value ranges from -1.0 to +1.0.
-     * 
+     * <p>
      * For an explanation of the difference between <i>gradient</i> noise and
      * <i>value</i> noise, see the comments for the GradientNoise3D() function.
      *
-     * @param x            The @a x coordinate of the input value.
-     * @param y            The @a y coordinate of the input value.
-     * @param z            The @a z coordinate of the input value.
-     * @param seed         The random number seed.
+     * @param x The @a x coordinate of the input value.
+     * @param y The @a y coordinate of the input value.
+     * @param z The @a z coordinate of the input value.
+     * @param seed The random number seed.
      * @param noiseQuality The quality of the coherent-noise.
      * @return The generated gradient-coherent-noise value.
      */
@@ -64,13 +64,16 @@ public class NoiseGen {
 
         // Map the difference between the coordinates of the input value and the
         // coordinates of the cube's outer-lower-left vertex onto an S-curve.
-        double xs = 0, ys = 0, zs = 0;
+        double xs = 0;
+        double ys = 0;
+        double zs = 0;
         switch (noiseQuality) {
             case QUALITY_FAST:
                 xs = (x - (double) x0);
                 ys = (y - (double) y0);
                 zs = (z - (double) z0);
                 break;
+            default:
             case QUALITY_STD:
                 xs = Interp.sCurve3(x - (double) x0);
                 ys = Interp.sCurve3(y - (double) y0);
@@ -115,49 +118,43 @@ public class NoiseGen {
     }
 
     /**
-     * Generates a gradient-noise value from the coordinates of a
-     * three-dimensional input value and the integer coordinates of a
-     * nearby three-dimensional value.
-     * 
+     * Generates a gradient-noise value from the coordinates of a three-dimensional input value and
+     * the integer coordinates of a nearby three-dimensional value.
+     * <p>
      * A <i>gradient</i>-noise function generates better-quality noise than a
-     * <i>value</i>-noise function.  Most noise modules use gradient noise for
-     * this reason, although it takes much longer to calculate.
-     * 
+     * <i>value</i>-noise function. Most noise modules use gradient noise for this reason, although
+     * it takes much longer to calculate.
+     * <p>
      * The return value ranges from -1.0 to +1.0.
-     * 
-     * This function generates a gradient-noise value by performing the
-     * following steps:
-     * - It first calculates a random normalized vector based on the
-     * nearby integer value passed to this function.
-     * - It then calculates a new value by adding this vector to the
-     * nearby integer value passed to this function.
-     * - It then calculates the dot product of the above-generated value
+     * <p>
+     * This function generates a gradient-noise value by performing the following steps: - It first
+     * calculates a random normalized vector based on the nearby integer value passed to this
+     * function. - It then calculates a new value by adding this vector to the nearby integer value
+     * passed to this function. - It then calculates the dot product of the above-generated value
      * and the floating-point input value passed to this function.
-     * 
-     * A noise function differs from a random-number generator because it
-     * always returns the same output value if the same input value is passed to it.
+     * <p>
+     * A noise function differs from a random-number generator because it always returns the same
+     * output value if the same input value is passed to it.
      *
-     * @param fx   The floating-point @a x coordinate of the input value.
-     * @param fy   The floating-point @a y coordinate of the input value.
-     * @param fz   The floating-point @a z coordinate of the input value.
-     * @param ix   The integer @a x coordinate of a nearby value.
-     * @param iy   The integer @a y coordinate of a nearby value.
-     * @param iz   The integer @a z coordinate of a nearby value.
+     * @param fx The floating-point @a x coordinate of the input value.
+     * @param fy The floating-point @a y coordinate of the input value.
+     * @param fz The floating-point @a z coordinate of the input value.
+     * @param ix The integer @a x coordinate of a nearby value.
+     * @param iy The integer @a y coordinate of a nearby value.
+     * @param iz The integer @a z coordinate of a nearby value.
      * @param seed The random number seed.
-     * @return The generated gradient-noise value.
-     *  The difference between @a fx and @a ix must be less than or equal to one.
-     *  The difference between @a fy and @a iy must be less than or equal to one.
-     *  The difference between @a fz and @a iz must be less than or equal to one.
+     * @return The generated gradient-noise value. The difference between @a fx and @a ix must be
+     * less than or equal to one. The difference between @a fy and @a iy must be less than or equal
+     * to one. The difference between @a fz and @a iz must be less than or equal to one.
      */
     public static double gradientNoise3D(double fx, double fy, double fz, int ix, int iy, int iz, int seed) {
         // Randomly generate a gradient vector given the integer coordinates of the
         // input value.  This implementation generates a random number and uses it
         // as an index into a normalized-vector lookup table.
-        int vectorIndex = (
-                X_NOISE_GEN * ix
-                        + Y_NOISE_GEN * iy
-                        + Z_NOISE_GEN * iz
-                        + SEED_NOISE_GEN * seed)
+        int vectorIndex = (X_NOISE_GEN * ix
+                + Y_NOISE_GEN * iy
+                + Z_NOISE_GEN * iz
+                + SEED_NOISE_GEN * seed)
                 & 0xffffffff;
         vectorIndex ^= (vectorIndex >> SHIFT_NOISE_GEN);
         vectorIndex &= 0xff;
@@ -185,29 +182,26 @@ public class NoiseGen {
     }
 
     /**
-     * Generates an integer-noise value from the coordinates of a
-     * three-dimensional input value.
-     * 
+     * Generates an integer-noise value from the coordinates of a three-dimensional input value.
+     * <p>
      * The return value ranges from 0 to 2147483647.
-     * 
-     * A noise function differs from a random-number generator because it
-     * always returns the same output value if the same input value is passed
-     * to it.
+     * <p>
+     * A noise function differs from a random-number generator because it always returns the same
+     * output value if the same input value is passed to it.
      *
-     * @param x    The integer @a x coordinate of the input value.
-     * @param y    The integer @a y coordinate of the input value.
-     * @param z    The integer @a z coordinate of the input value.
+     * @param x The integer @a x coordinate of the input value.
+     * @param y The integer @a y coordinate of the input value.
+     * @param z The integer @a z coordinate of the input value.
      * @param seed A random number seed.
      * @return The generated integer-noise value.
      */
     public static int intValueNoise3D(int x, int y, int z, int seed) {
         // All constants are primes and must remain prime in order for this noise
         // function to work correctly.
-        int n = (
-                X_NOISE_GEN * x
-                        + Y_NOISE_GEN * y
-                        + Z_NOISE_GEN * z
-                        + SEED_NOISE_GEN * seed)
+        int n = (X_NOISE_GEN * x
+                + Y_NOISE_GEN * y
+                + Z_NOISE_GEN * z
+                + SEED_NOISE_GEN * seed)
                 & 0x7fffffff;
         n = (n >> 13) ^ n;
         return (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
@@ -218,19 +212,17 @@ public class NoiseGen {
     }
 
     /**
-     * Modifies a floating-point value so that it can be stored in a
-     * noise::int32 variable.
-     * 
+     * Modifies a floating-point value so that it can be stored in a noise::int32 variable.
+     * <p>
      * This function does not modify @a n.
-     * 
-     * In libnoise, the noise-generating algorithms are all integer-based;
-     * they use variables of type noise::int32.  Before calling a noise
-     * function, pass the @a x, @a y, and @a z coordinates to this function to
-     * ensure that these coordinates can be cast to a noise::int32 value.
-     * 
-     * Although you could do a straight cast from double to noise::int32, the
-     * resulting value may differ between platforms.  By using this function,
-     * you ensure that the resulting value is identical between platforms.
+     * <p>
+     * In libnoise, the noise-generating algorithms are all integer-based; they use variables of
+     * type noise::int32. Before calling a noise function, pass the @a x, @a y, and @a z coordinates
+     * to this function to ensure that these coordinates can be cast to a noise::int32 value.
+     * <p>
+     * Although you could do a straight cast from double to noise::int32, the resulting value may
+     * differ between platforms. By using this function, you ensure that the resulting value is
+     * identical between platforms.
      *
      * @param n A floating-point number.
      * @return The modified floating-point number.
@@ -324,16 +316,15 @@ public class NoiseGen {
 
     /**
      * Generates a value-noise value from the coordinates of a three-dimensional input value.
-     * 
+     * <p>
      * The return value ranges from -1.0 to +1.0.
-     * 
-     * A noise function differs from a random-number generator because it
-     * always returns the same output value if the same input value is passed
-     * to it.
+     * <p>
+     * A noise function differs from a random-number generator because it always returns the same
+     * output value if the same input value is passed to it.
      *
-     * @param x    The @a x coordinate of the input value.
-     * @param y    The @a y coordinate of the input value.
-     * @param z    The @a z coordinate of the input value.
+     * @param x The @a x coordinate of the input value.
+     * @param y The @a y coordinate of the input value.
+     * @param z The @a z coordinate of the input value.
      * @param seed A random number seed.
      * @return The generated value-noise value.
      */

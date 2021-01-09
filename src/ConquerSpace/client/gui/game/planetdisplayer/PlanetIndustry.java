@@ -64,8 +64,8 @@ public class PlanetIndustry extends JPanel {
     
     private GameState gameState;
     
-    public PlanetIndustry(GameState gameState, Planet p, Civilization c) {
-        this.p = p;
+    public PlanetIndustry(GameState gameState, Planet planet) {
+        this.p = planet;
         this.gameState = gameState;
         setLayout(new VerticalFlowLayout());
         add(new JLabel(LOCALE_MESSAGES.getMessage("game.planet.industry.title")));
@@ -78,8 +78,8 @@ public class PlanetIndustry extends JPanel {
         areaContainer.setLayout(new GridBagLayout());
         areaDefaultListModel = new DefaultListModel<>();
         
-        for (int i = 0; i < p.cities.size(); i++) {
-            City city = gameState.getObject(p.cities.get(i), City.class);
+        for (int i = 0; i < planet.cities.size(); i++) {
+            City city = gameState.getObject(planet.cities.get(i), City.class);
             for (ObjectReference areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
                 areaDefaultListModel.addElement(area);

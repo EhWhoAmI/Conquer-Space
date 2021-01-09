@@ -86,9 +86,9 @@ public class Image {
      * The amount of memory allocated for the image. This value is equal to the number of Color
      * objects allocated for the image, not the number of bytes.
      */
-    long memUsed;
+    private long memUsed;
     // A pointer to the image buffer.
-    Color[] image;
+    public Color[] image;
     // The stride amount of the image.
     private int stride;
     // The current width of the image.

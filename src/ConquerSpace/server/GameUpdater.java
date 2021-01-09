@@ -38,7 +38,6 @@ import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.city.modifier.RiotModifier;
 import ConquerSpace.common.game.city.modifier.StarvationModifier;
 import ConquerSpace.common.game.city.modifier.UnemployedModifier;
-import ConquerSpace.common.game.economy.GoodOrder;
 import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Civilization;
@@ -160,7 +159,7 @@ public class GameUpdater extends GameTicker {
                     OrganizationAction act = org.actionList.get(k);
                     ActionStatus status = act.doAction(gameState); //???
                 } catch (Exception e) {
-                    ExceptionHandling.ExceptionMessageBox("Exception while executing actions!", e);
+                    ExceptionHandling.exceptionMessageBox("Exception while executing actions!", e);
                 }
             }
             org.actionList.clear();
@@ -672,7 +671,6 @@ public class GameUpdater extends GameTicker {
     }
 
     public void updateObjectPositions() {
-        long start = System.currentTimeMillis();
         //Loop through star systems
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystemObject(i);
@@ -683,13 +681,11 @@ public class GameUpdater extends GameTicker {
                 body.setPoint(body.getOrbit().toSpacePoint());
             }
         }
-        long end = System.currentTimeMillis();
-        //System.out.println((end - start));
     }
 
     private void createPeople() {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-            Civilization civ = gameState.getCivilizationObject(i);
+            //Civilization civ = gameState.getCivilizationObject(i);
 
             //Because people stay now, will ignore them for now
         }

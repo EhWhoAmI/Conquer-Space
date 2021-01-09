@@ -98,37 +98,12 @@ public class HullCreator extends JPanel {
         //setTitle("Create Hull");
         setLayout(new BorderLayout());
         //Set menubar
-        menubar = new JMenuBar();
-        //Add all the things
-        JMenu newStuff = new JMenu("Hulls");
-        JMenuItem newHull = new JMenuItem("New Hull");
-        JMenuItem saveHull = new JMenuItem("Save Hull");
-        saveHull.addActionListener(a -> {
-            saveHull();
-        });
-        newStuff.add(newHull);
-        newStuff.add(saveHull);
-        menubar.add(newStuff);
-        add(menubar, BorderLayout.NORTH);
-        //setJMenuBar(menubar);
+        createMenuBar();
 
         rootContainer = new JPanel();
         rootContainer.setLayout(new HorizontalFlowLayout(10));
 
-        NumberFormat longFormat = NumberFormat.getIntegerInstance();
-
-        NumberFormatter formatter = new NumberFormatter(longFormat) {
-            @Override
-            public Object stringToValue(String text) throws ParseException {
-                if (text.equals("")) {
-                    return null;
-                }
-                return super.stringToValue(text);
-            }
-        };
-        formatter.setAllowsInvalid(false);
-        formatter.setValueClass(Long.class);
-
+        createHullViewer();
         //Set components
         //Ship class list
         hullListContainer = new JPanel();
@@ -137,22 +112,13 @@ public class HullCreator extends JPanel {
 
         for (ObjectReference sc : c.hulls) {
             Hull shipClass = gameState.getObject(sc, Hull.class);
-
             hullListModel.addElement(shipClass);
         }
         shipHullList = new JList<>(hullListModel);
         shipHullList.setVisibleRowCount(16);
 
         shipHullList.addListSelectionListener(l -> {
-            //Selected hull
-            Hull h = shipHullList.getSelectedValue();
-            //Set the various values
-            massTextField.setText("" + h.getMass());
-            spaceBox.setText("" + h.getSpace());
-            estThrustField.setText("" + h.getThrust());
-            shipTypecomboBox.setSelectedItem(h.getShipType());
-            
-            className.setText(h.getName());
+            shipHullListSelectionAction();
         });
 
         hullScrollPane = new JScrollPane(shipHullList);
@@ -163,7 +129,18 @@ public class HullCreator extends JPanel {
 
         hullListContainer.setPreferredSize(new Dimension(100, hullScrollPane.getHeight() + 10));
         hullListContainer.setBorder(new TitledBorder(new LineBorder(Color.gray), "Classes"));
+
         rootContainer.add(hullListContainer);
+        rootContainer.add(hullViewer);
+
+        rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
+        add(rootContainer, BorderLayout.CENTER);
+        setVisible(true);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void createHullViewer() {
+        NumberFormatter formatter = createNumberFormatter();
 
         hullViewer = new JPanel();
 
@@ -187,8 +164,6 @@ public class HullCreator extends JPanel {
         massUnitText = new JLabel("kg");
 
         hullComboBoxLabel = new JLabel("Hull for type: ");
-        //Vector v = new Vector((gameState.shipTypes.keySet()));
-        //v.sort(Comparator.naturalOrder());
         shipTypecomboBox = new JComboBox<>(Arrays.copyOf(gameState.shipTypes.toArray(), gameState.shipTypes.size(), ShipType[].class));
         shipTypecomboBox.setFocusable(false);
         JLabel emptyLabel2 = new JLabel("");
@@ -226,16 +201,51 @@ public class HullCreator extends JPanel {
 
         hullViewer.setLayout(new GridLayout(6, 3));
         hullViewer.setBorder(new TitledBorder(new LineBorder(Color.gray), "Hull Designer"));
-        rootContainer.add(hullViewer);
+    }
 
-        rootContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
-        add(rootContainer, BorderLayout.CENTER);
-        //const
-        //setClosable(true);
-        setVisible(true);
-        //setResizable(true);
-        //setSize(100, 100);
-        //pack();
+    @SuppressWarnings("unchecked")
+    private NumberFormatter createNumberFormatter() {
+        NumberFormat longFormat = NumberFormat.getIntegerInstance();
+
+        NumberFormatter formatter = new NumberFormatter(longFormat) {
+            @Override
+            public Object stringToValue(String text) throws ParseException {
+                if (text.equals("")) {
+                    return null;
+                }
+                return super.stringToValue(text);
+            }
+        };
+        formatter.setAllowsInvalid(false);
+        formatter.setValueClass(Long.class);
+        return formatter;
+    }
+
+    private void shipHullListSelectionAction() {
+        //Selected hull
+        Hull h = shipHullList.getSelectedValue();
+        //Set the various values
+        massTextField.setText("" + h.getMass());
+        spaceBox.setText("" + h.getSpace());
+        estThrustField.setText("" + h.getThrust());
+        shipTypecomboBox.setSelectedItem(h.getShipType());
+
+        className.setText(h.getName());
+    }
+
+    private void createMenuBar() {
+        menubar = new JMenuBar();
+        //Add all the things
+        JMenu newStuff = new JMenu("Hulls");
+        JMenuItem newHull = new JMenuItem("New Hull");
+        JMenuItem saveHull = new JMenuItem("Save Hull");
+        saveHull.addActionListener(a -> {
+            saveHull();
+        });
+        newStuff.add(newHull);
+        newStuff.add(saveHull);
+        menubar.add(newStuff);
+        add(menubar, BorderLayout.NORTH);
     }
 
     private void saveHull() {

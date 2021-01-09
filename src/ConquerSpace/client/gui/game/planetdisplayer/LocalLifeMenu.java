@@ -49,7 +49,7 @@ public class LocalLifeMenu extends JPanel {
     private DefaultListModel<LifeTrait> lifeTraitListModel;
     private JList<LifeTrait> lifeTraitList;
     
-    public LocalLifeMenu(Planet p, Civilization c) {
+    public LocalLifeMenu(Planet p) {
         this.p = p;
         localLifeListModel = new DefaultListModel<>();
         localLifeList = new JList<>(localLifeListModel);

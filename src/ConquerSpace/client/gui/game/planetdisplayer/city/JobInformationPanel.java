@@ -205,6 +205,7 @@ class JobInformationPanel extends JPanel {
 
             @Override
             public void chartMouseMoved(ChartMouseEvent cme) {
+                //Empty
             }
         });
         jobChartPanel.add(chartPanel, BorderLayout.CENTER);
@@ -242,19 +243,18 @@ class JobInformationPanel extends JPanel {
                             tabs.setSelectedIndex(3);
                         }
                     }
-                } else if (entity instanceof LegendItemEntity) {
                 }
             }
 
             @Override
             public void chartMouseMoved(ChartMouseEvent cme) {
-
+                //Empty
             }
 
             class ResourceDemandTableModel extends DefaultTableModel {
 
-                PopulationSegment segment;
-                String[] colunms = new String[]{
+                private PopulationSegment segment;
+                private String[] colunms = new String[]{
                     "Resource",
                     "Amount"
                 };
@@ -280,8 +280,9 @@ class JobInformationPanel extends JPanel {
                             return gameState.getGood((StoreableReference) segment.upkeep.keySet().toArray()[row]).getName();
                         case 1:
                             return segment.upkeep.get(segment.upkeep.keySet().toArray()[row]);
+                        default:
+                            return 0;
                     }
-                    return "";
                 }
 
                 @Override
@@ -336,8 +337,9 @@ class JobInformationPanel extends JPanel {
                     return ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.table.personcounter", Utilities.longToHumanString(i));
                 case 2:
                     return String.format("%.2f%%", ((double) i / (double) population) * 100);
+                default:
+                    return 0;
             }
-            return "";
         }
 
         @Override

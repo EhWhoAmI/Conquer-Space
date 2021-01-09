@@ -20,6 +20,7 @@ package ConquerSpace.client.gui.game;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.organizations.Civilization;
+import ConquerSpace.common.util.Utilities;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.server.GameController;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -28,7 +29,6 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -186,8 +186,8 @@ public class DebugStatsWindow extends JInternalFrame {
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
         return LOCALE_MESSAGES.getMessage("game.debug.memoryused",
-                byteCountToDisplaySize(totalMemory - freeMemory),
-                byteCountToDisplaySize(totalMemory),
+                Utilities.byteCountToDisplaySize(totalMemory - freeMemory),
+                Utilities.byteCountToDisplaySize(totalMemory),
                 calculatePercentage((double) totalMemory, (double) freeMemory));
     }
 
@@ -222,140 +222,8 @@ public class DebugStatsWindow extends JInternalFrame {
     }
 
     //The following code is taken from the apache commons io library.
-    /**
-     * The number of bytes in a kilobyte.
-     */
-    public static final long ONE_KB = 1024;
-
-    /**
-     * The number of bytes in a kilobyte.
-     *
-     * @since 2.4
-     */
-    public static final BigInteger ONE_KB_BI = BigInteger.valueOf(ONE_KB);
-
-    /**
-     * The number of bytes in a megabyte.
-     */
-    public static final long ONE_MB = ONE_KB * ONE_KB;
-
-    /**
-     * The number of bytes in a megabyte.
-     *
-     * @since 2.4
-     */
-    public static final BigInteger ONE_MB_BI = ONE_KB_BI.multiply(ONE_KB_BI);
-
-    /**
-     * The number of bytes in a gigabyte.
-     */
-    public static final long ONE_GB = ONE_KB * ONE_MB;
-
-    /**
-     * The number of bytes in a gigabyte.
-     *
-     * @since 2.4
-     */
-    public static final BigInteger ONE_GB_BI = ONE_KB_BI.multiply(ONE_MB_BI);
-
-    /**
-     * The number of bytes in a terabyte.
-     */
-    public static final long ONE_TB = ONE_KB * ONE_GB;
-
-    /**
-     * The number of bytes in a terabyte.
-     *
-     * @since 2.4
-     */
-    public static final BigInteger ONE_TB_BI = ONE_KB_BI.multiply(ONE_GB_BI);
-
-    /**
-     * The number of bytes in a petabyte.
-     */
-    public static final long ONE_PB = ONE_KB * ONE_TB;
-
-    /**
-     * The number of bytes in a petabyte.
-     *
-     * @since 2.4
-     */
-    public static final BigInteger ONE_PB_BI = ONE_KB_BI.multiply(ONE_TB_BI);
-
-    /**
-     * The number of bytes in an exabyte.
-     */
-    public static final long ONE_EB = ONE_KB * ONE_PB;
-
-    /**
-     * The number of bytes in an exabyte.
-     *
-     * @since 2.4
-     */
-    public static final BigInteger ONE_EB_BI = ONE_KB_BI.multiply(ONE_PB_BI);
-
-    /**
-     * The number of bytes in a zettabyte.
-     */
-    public static final BigInteger ONE_ZB = BigInteger.valueOf(ONE_KB).multiply(BigInteger.valueOf(ONE_EB));
-
-    /**
-     * The number of bytes in a yottabyte.
-     */
-    public static final BigInteger ONE_YB = ONE_KB_BI.multiply(ONE_ZB);
-
-    public static String byteCountToDisplaySize(final BigInteger size) {
-        String displaySize;
-
-        if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_EB_BI)) + " EB";
-        } else if (size.divide(ONE_PB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_PB_BI)) + " PB";
-        } else if (size.divide(ONE_TB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_TB_BI)) + " TB";
-        } else if (size.divide(ONE_GB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_GB_BI)) + " GB";
-        } else if (size.divide(ONE_MB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_MB_BI)) + " MB";
-        } else if (size.divide(ONE_KB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_KB_BI)) + " KB";
-        } else {
-            displaySize = String.valueOf(size) + " b";
-        }
-        return displaySize;
-    }
-
-    public static double byteCountToDisplaySizeNumber(final BigInteger size) {
-        double displaySize;
-
-        if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = size.divide(ONE_EB_BI).doubleValue();
-        } else if (size.divide(ONE_PB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = size.divide(ONE_PB_BI).doubleValue();
-        } else if (size.divide(ONE_TB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = size.divide(ONE_TB_BI).doubleValue();
-        } else if (size.divide(ONE_GB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = size.divide(ONE_GB_BI).doubleValue();
-        } else if (size.divide(ONE_MB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = size.divide(ONE_MB_BI).doubleValue();
-        } else if (size.divide(ONE_KB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = size.divide(ONE_KB_BI).doubleValue();
-        } else {
-            displaySize = size.doubleValue();
-        }
-        return displaySize;
-    }
-
-    public static String byteCountToDisplaySize(final long size) {
-        return byteCountToDisplaySize(BigInteger.valueOf(size));
-    }
-
-    public static String byteCountToDisplaySize(final double size) {
-        return byteCountToDisplaySize(BigInteger.valueOf((long) size));
-    }
-
     //Runtime exception so that it doesn't have to be caught
-    public static class ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything 
+    public static class ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything
             extends RuntimeException {
 
         public ConquerSpaceExceptionRouletteExceptionThatDoesntReallyDoAnything() {

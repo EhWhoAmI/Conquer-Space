@@ -30,9 +30,6 @@ public class LocalLife implements Serializable {
 
     private Species species;
 
-    public LocalLife() {
-    }
-
     public void setBiomass(int biomass) {
         this.biomass = biomass;
     }

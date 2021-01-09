@@ -66,7 +66,7 @@ public class InternalManual extends JInternalFrame implements ListSelectionListe
                 prop.put(values[0], values[1]);
             }
         } catch (IOException ioe) {
-            ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.\nReason: Cannot open manual list.", ioe);
+            ExceptionHandling.exceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.\nReason: Cannot open manual list.", ioe);
             LOGGER.warn("Cannot open manual list. " + ioe.getMessage(), ioe);
         }
 
@@ -105,7 +105,7 @@ public class InternalManual extends JInternalFrame implements ListSelectionListe
                     value.setVisible(true);
                     break;
                 } catch (IOException ex) {
-                    ExceptionHandling.ExceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
+                    ExceptionHandling.exceptionMessageBox("We could not open the manual. Not a problem.\nJust don\'t use it.", ex);
                     LOGGER.warn("Unable to open manual", ex);
                 }
             }

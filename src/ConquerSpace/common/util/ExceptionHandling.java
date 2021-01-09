@@ -19,7 +19,6 @@ package ConquerSpace.common.util;
 
 import ConquerSpace.ConquerSpace;
 import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
-import static ConquerSpace.client.gui.game.DebugStatsWindow.byteCountToDisplaySize;
 import ConquerSpace.common.GameState;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.io.File;
@@ -41,8 +40,8 @@ import javax.swing.JTextArea;
  */
 public class ExceptionHandling {
 
-    public static void ExceptionMessageBox(String what, Throwable ex) {
-        ExceptionMessageBox(what, ex, null);
+    public static void exceptionMessageBox(String what, Throwable ex) {
+        exceptionMessageBox(what, ex, null);
     }
 
     /**
@@ -51,10 +50,10 @@ public class ExceptionHandling {
      * @param what Your own message.
      * @param ex Exception that caused it.
      */
-    public static void ExceptionMessageBox(String what, Throwable ex, GameState gameState) {
+    public static void exceptionMessageBox(String what, Throwable ex, GameState gameState) {
         int exit = 1;
 
-        JPanel optionPanel = createOptionPanel(what, ex);
+        JPanel optionPanel = createOptionPanel(ex);
 
         exit = JOptionPane.showConfirmDialog(null,
                 optionPanel,
@@ -67,12 +66,12 @@ public class ExceptionHandling {
         }
     }
 
-    public static void FatalExceptionMessageBox(String what, Throwable ex) {
-        FatalExceptionMessageBox(what, ex, null);
+    public static void fatalExceptionMessageBox(String what, Throwable ex) {
+        ExceptionHandling.fatalExceptionMessageBox(what, ex, null);
     }
 
-    public static void FatalExceptionMessageBox(String what, Throwable ex, GameState gameState) {
-        JPanel optionPanel = createOptionPanel(what, ex);
+    public static void fatalExceptionMessageBox(String what, Throwable ex, GameState gameState) {
+        JPanel optionPanel = createOptionPanel(ex);
 
         JOptionPane.showMessageDialog(null,
                 optionPanel,
@@ -81,7 +80,7 @@ public class ExceptionHandling {
         System.exit(1);
     }
 
-    private static JPanel createOptionPanel(String what, Throwable ex) {
+    private static JPanel createOptionPanel(Throwable ex) {
         JPanel optionPanel = new JPanel(new VerticalFlowLayout());
         String text = String.format(LOCALE_MESSAGES.getMessage("errorhandlingheader"),
                 ConquerSpace.VERSION,
@@ -102,10 +101,6 @@ public class ExceptionHandling {
 
         optionPanel.add(new JLabel("Do you want to quit the game?"));
         return optionPanel;
-    }
-
-    private static void writeErrorLog(Throwable ex, String header) {
-        writeErrorLog(ex, header, null);
     }
 
     private static void writeErrorLog(Throwable ex, String header, GameState gameState) {
@@ -148,7 +143,9 @@ public class ExceptionHandling {
             }
 
             writer.println();
-            writer.println("Memory used: " + byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory()) + "/" + byteCountToDisplaySize(runtime.totalMemory()));
+            writer.println("Memory used: " 
+                    + Utilities.byteCountToDisplaySize(runtime.totalMemory() - runtime.freeMemory())
+                    + "/" + Utilities.byteCountToDisplaySize(runtime.totalMemory()));
 
             writer.println();
             writer.print(header.replace("\n", System.getProperty("line.separator")));

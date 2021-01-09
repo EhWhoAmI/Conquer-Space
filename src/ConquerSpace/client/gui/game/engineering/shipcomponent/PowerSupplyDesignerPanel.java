@@ -30,5 +30,9 @@ public class PowerSupplyDesignerPanel extends ShipComponentDesignerPanel {
         setLayout(new VerticalFlowLayout());
         add(new JLabel("Power Supply"));
     }
-    
+
+    @Override
+    public void clearUI() {
+        //Nothing to clear...
+    }
 }

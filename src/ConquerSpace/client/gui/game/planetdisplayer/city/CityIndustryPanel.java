@@ -51,13 +51,9 @@ class CityIndustryPanel extends JPanel {
     boolean hasChangedSize = false;
     AreaConstructionPanel areaConstructionPanel;
     JTabbedPane tabs;
-    private City selectedCity;
-    private GameState gameState;
     private static int selectedTab = 0;
 
     public CityIndustryPanel(City selectedCity, Civilization civilization, Planet planet, GameState gameState) {
-        this.selectedCity = selectedCity;
-        this.gameState = gameState;
         setLayout(new BorderLayout());
         //Do industry and areas
         JXTaskPaneContainer industriesList = new JXTaskPaneContainer();

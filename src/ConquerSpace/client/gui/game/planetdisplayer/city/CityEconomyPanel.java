@@ -60,18 +60,18 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class CityEconomyPanel extends JPanel {
 
-    City selectedCity;
-    GameState gameState;
+    private City selectedCity;
+    private GameState gameState;
 
-    JTabbedPane tabs;
-    JTable resourceTable;
-    JTable resourceDemandTable;
-    JTable resourceInputTable;
-    JTable resourceOutputTable;
-    JList<String> modifierList;
-    JList<String> connectedCityList;
+    private JTabbedPane tabs;
+    private JTable resourceTable;
+    private JTable resourceDemandTable;
+    private JTable resourceInputTable;
+    private JTable resourceOutputTable;
+    private JList<String> modifierList;
+    private JList<String> connectedCityList;
 
-    static int selectedTab = 0;
+    private static int selectedTab = 0;
 
     public CityEconomyPanel(PlanetCities parent, City selectedCity, GameState gameState) {
         this.selectedCity = selectedCity;

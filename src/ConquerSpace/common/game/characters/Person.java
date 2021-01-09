@@ -104,7 +104,7 @@ public class Person extends ConquerSpaceGameObject implements Nameable {
             this.location = ((ConquerSpaceGameObject) position).getReference();
         }
     }
-    
+
     public void setPosition(ObjectReference reference) {
         this.location = reference;
     }
@@ -123,5 +123,13 @@ public class Person extends ConquerSpaceGameObject implements Nameable {
 
     public void setDead(boolean dead) {
         this.dead = dead;
+    }
+
+    public int getWealth() {
+        return wealth;
+    }
+
+    public void setWealth(int wealth) {
+        this.wealth = wealth;
     }
 }

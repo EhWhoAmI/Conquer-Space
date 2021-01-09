@@ -38,5 +38,12 @@ public class FoodGood extends Good {
         super(s.getName() + " Food", "f_" + s.getName() + "_" + s.getReference().getId(), volume, mass);
         this.species = s.getReference();
     }
-    
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
 }

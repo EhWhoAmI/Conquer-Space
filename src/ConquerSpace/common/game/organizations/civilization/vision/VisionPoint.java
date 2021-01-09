@@ -27,15 +27,6 @@ import ConquerSpace.common.game.universe.UniversePath;
  */
 public interface VisionPoint {
 
-    /**
-     * Range in light years.
-     *
-     * @return range.
-     */
-    public int getRange();
-    public ObjectReference getCivilization();
-    public UniversePath getPosition();
-    
     public static final int GAMMA = 0;
     public static final int XRAY = 1;
     public static final int ULTRAVIOLET = 2;
@@ -44,4 +35,16 @@ public interface VisionPoint {
     public static final int TERAHERTZ = 5;
     public static final int MICROWAVE = 6;
     public static final int RADIO_WAVE = 7;
+
+    /**
+     * Range in light years.
+     *
+     * @return range.
+     */
+    public int getRange();
+
+    public ObjectReference getCivilization();
+
+    public UniversePath getPosition();
+
 }

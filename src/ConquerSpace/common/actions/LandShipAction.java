@@ -39,10 +39,12 @@ public class LandShipAction extends ShipAction {
 
     @Override
     public void doAction(GameState gameState) {
+        //Need to be above planet, so no need to initialize
     }
 
     @Override
     public void initAction(GameState gameState) {
+        //Init, nothing needed.
     }
 
     @Override

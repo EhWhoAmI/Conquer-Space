@@ -65,4 +65,12 @@ public class CommercialArea extends Area {
     public AreaClassification getAreaType() {
         return AreaClassification.Commercial;
     }
+
+    public ObjectReference getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(ObjectReference currency) {
+        this.currency = currency;
+    }
 }

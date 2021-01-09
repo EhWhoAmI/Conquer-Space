@@ -28,7 +28,6 @@ import ConquerSpace.common.game.logistics.SupplySegment;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Stratum;
 import ConquerSpace.common.game.universe.GeographicPoint;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.ResourceLoader;
 import ConquerSpace.common.util.Utilities;
@@ -36,7 +35,6 @@ import ConquerSpace.common.util.logging.CQSPLogger;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -44,7 +42,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -87,23 +84,18 @@ public class PlanetMap extends JPanel {
     private PlanetInfoSheet parent;
 
     private Planet p;
-    private Civilization c;
-    private Galaxy u;
 
     private double tileSize = 8;
     private double scale = 0.5;
     private double translateX = 0;
     private double translateY = 0;
-    private int mapWidth;
-    private int mapHeight;
     private Point startPoint = new Point();
-    private boolean isDragging = false;
 
     private PopupFactory popupFactory = PopupFactory.getSharedInstance();
     private Popup popup;
     private JToolTip toolTip = this.createToolTip();
 
-    MapPanel map;
+    private MapPanel map;
 
     private JMenuBar menuBar;
 
@@ -135,18 +127,12 @@ public class PlanetMap extends JPanel {
     public PlanetMap(GameState gameState, Planet p, Civilization c, PlanetInfoSheet parent, PlanetMapProvider planetMap) {
         this.gameState = gameState;
         this.p = p;
-        this.c = c;
-        this.u = gameState.getUniverse();
         this.planetMap = planetMap;
 
         this.parent = parent;
 
         setLayout(new BorderLayout());
-        //Render map
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        // mapWidth = planetMap.getWidth(null);
-        // mapHeight = planetMap.getHeight(null);
         menuBar = new JMenuBar();
 
         viewMenu = new JMenu(LOCALE_MESSAGES.getMessage("game.planet.map.view"));
@@ -258,17 +244,17 @@ public class PlanetMap extends JPanel {
         private HashMap<String, Image[]> districtImages;
 
         //Pre save images...
-        boolean needRefresh = false;
+        private boolean needRefresh = false;
 
-        boolean isLoaded = false;
+        private boolean isLoaded = false;
 
-        GeographicPoint currentlyBuildingPoint;
-        boolean constructionActive = false;
+        private GeographicPoint currentlyBuildingPoint;
+        private boolean constructionActive = false;
 
-        int mouseX = 0;
-        int mouseY = 0;
+        private int mouseX = 0;
+        private int mouseY = 0;
 
-        int enlargementSize = 2;
+        private int enlargementSize = 2;
 
         public MapPanel() {
             setBackground(Color.white);
@@ -424,7 +410,7 @@ public class PlanetMap extends JPanel {
             }
         }
 
-        void drawSupplyLines(Graphics2D g2d, City c) {
+        private void drawSupplyLines(Graphics2D g2d, City c) {
             //Draw supply lines
             ArrayList<ObjectReference> ref = c.getSupplyConnections();
             for (int i = 0; i < ref.size(); i++) {
@@ -520,6 +506,7 @@ public class PlanetMap extends JPanel {
                     showBuildingInfo(b);
                 }
             } else if (SwingUtilities.isRightMouseButton(e) && displayedView == CONSTRUCTION_VIEW) {
+                //Construction view
                 //Create construction panel, and Check if point is within bounds
                 if (mouseX > 0 && mouseY > 0 && mouseX < (p.getPlanetSize() * 2) && mouseY < p.getPlanetSize() && !constructionActive) {
                     GeographicPoint pt = new GeographicPoint(mouseX, mouseY);
@@ -544,6 +531,7 @@ public class PlanetMap extends JPanel {
                     constructionActive = false;
                     //Switch to normal view
                 }
+                LOGGER.trace("Done construction");
             }
         }
 
@@ -552,16 +540,12 @@ public class PlanetMap extends JPanel {
             if (SwingUtilities.isLeftMouseButton(e)) {
                 //Start dragging
                 startPoint = e.getPoint();
-                isDragging = true;
             }
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                //End Dragging
-                isDragging = false;
-            }
+            //Leave empty
         }
 
         @Override

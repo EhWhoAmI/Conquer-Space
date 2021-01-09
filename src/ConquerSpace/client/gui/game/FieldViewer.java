@@ -180,6 +180,7 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
 
     @Override
     public void mouseMoved(MouseEvent arg0) {
+        //Leave empty
     }
 
     @Override
@@ -201,10 +202,12 @@ public class FieldViewer extends JPanel implements MouseMotionListener, MouseLis
 
     @Override
     public void mouseEntered(MouseEvent arg0) {
+        //Leave empty
     }
 
     @Override
     public void mouseExited(MouseEvent arg0) {
+        //Leave empty
     }
 
     class Rectangle {

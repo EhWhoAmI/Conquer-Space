@@ -87,18 +87,16 @@ public class ShipControllerPanel extends JPanel {
                 //Then get the component and add it to the thing
                 ObjectReference selectedComponent = shipComponentListModel.getObject(selected);
                 //Then create mission to dock to it
-                if (currentShip != null) {
+                if (currentShip != null && currentShip.isOrbiting()) {
                     //Create cargo mission, then attach
                     //Needs to be orbiting place...
-                    
-                    if(currentShip.isOrbiting()) {
-                        Planet p = gameState.getObject(gameState.getUniverse().getSpaceObject(currentShip.getOrbiting()), Planet.class);
-                        if(p.isHabitated()) {
-                            //Then can be habitated
-                            //Add component, etc...
-                            currentShip.components.add(selectedComponent);
-                        }
+                    Planet p = gameState.getObject(gameState.getUniverse().getSpaceObject(currentShip.getOrbiting()), Planet.class);
+                    if (p.isHabitated()) {
+                        //Then can be habitated
+                        //Add component, etc...
+                        currentShip.components.add(selectedComponent);
                     }
+
                 }
 
                 shipcomponents.updateUI();

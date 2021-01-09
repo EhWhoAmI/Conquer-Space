@@ -102,7 +102,7 @@ public class Version implements Comparable<Version> {
         return builder.toString();
     }
 
-    static boolean isGreater(Version v1, Version v2) {
+    public static boolean isGreater(Version v1, Version v2) {
         if (v1.major > v2.major) {
             return true;
         } else if (v1.major == v2.major) {
@@ -118,8 +118,8 @@ public class Version implements Comparable<Version> {
         return false;
     }
 
-    //Ultra lazy with this one
-    static boolean isLess(Version v1, Version v2) {
+    //Ultra lazy with this one, probably bugged
+    public static boolean isLess(Version v1, Version v2) {
         return (!isGreater(v1, v2));
     }
 

@@ -57,7 +57,7 @@ public class CQSPConsole extends JInternalFrame {
             //Split it and split it into argc and argv
             String[] command = text.getText().split(" ");
             //Search it
-            if (command[0].toLowerCase().equals("help")) {
+            if (command[0].equalsIgnoreCase("help")) {
                 try {
                     //Display console help text
                     Scanner scan = new Scanner(new File(ConquerSpace.USER_DIR + "/assets/data/console/helptext.txt"));
@@ -66,7 +66,7 @@ public class CQSPConsole extends JInternalFrame {
                     }
                 } catch (FileNotFoundException ex) {
                 }
-            } else if (command[0].toLowerCase().replaceAll(" ", "").equals("research") || command[0].toLowerCase().replaceAll(" ", "").equals("resh")) {
+            } else if (command[0].replaceAll(" ", "").equalsIgnoreCase("research") || command[0].replaceAll(" ", "").equalsIgnoreCase("resh")) {
                 //Research tech
                 //Get tech
                 if (command.length != 2) {

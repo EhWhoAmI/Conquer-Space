@@ -113,6 +113,7 @@ public class EnglishNumberToWord {
             default:
                 tradBillions = convertLessThanOneThousand(billions)
                         + " billion ";
+                break;
         }
         String result = tradBillions;
 
@@ -142,6 +143,7 @@ public class EnglishNumberToWord {
             default:
                 tradHundredThousands = convertLessThanOneThousand(hundredThousands)
                         + " thousand ";
+                break;
         }
         result = result + tradHundredThousands;
 

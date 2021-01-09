@@ -31,10 +31,10 @@ import javax.swing.SpinnerNumberModel;
  */
 public class BuildObservatoryMenu extends JPanel {
 
-    JLabel lensSizeLabel;
-    JSpinner lensSizeSpinner;
-    JLabel telescopeRangeLabel;
-    JLabel telescopeRangeValueLabel;
+    private JLabel lensSizeLabel;
+    private JSpinner lensSizeSpinner;
+    private JLabel telescopeRangeLabel;
+    private JLabel telescopeRangeValueLabel;
     
     public BuildObservatoryMenu() {
         GridBagLayout layout = new GridBagLayout();

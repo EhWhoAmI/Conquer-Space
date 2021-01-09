@@ -33,7 +33,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
@@ -51,7 +50,6 @@ public class PlanetMarket extends JPanel {
     private JList<String> tradedGoods;
     private ObjectListModel<StoreableReference> tradedGoodsModel;
 
-    private JTable goodOrderSellingTable;
     private DefaultTableModel goodOrderSellingTableModel;
     private JPanel sellOrdersContainer;
 
@@ -61,7 +59,6 @@ public class PlanetMarket extends JPanel {
 
     private JPanel chartContainer;
 
-    private JTabbedPane tabs;
     private Market planetMarket;
 
     private JLabel demandLabel;

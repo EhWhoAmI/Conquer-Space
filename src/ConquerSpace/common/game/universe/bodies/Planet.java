@@ -100,9 +100,8 @@ public class Planet extends StarSystemBody implements Administrable {
      * @param gameState
      * @param planetType Type of planet. See <code>PlanetTypes</code>
      * @param planetSize size of planet
-     * @param id planet id
      */
-    public Planet(GameState gameState, int planetType, int planetSize, int id) {
+    public Planet(GameState gameState, int planetType, int planetSize) {
         super(gameState);
         this.planetType = planetType;
         this.planetSize = planetSize;

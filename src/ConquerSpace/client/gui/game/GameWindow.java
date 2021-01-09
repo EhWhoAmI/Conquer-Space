@@ -36,7 +36,6 @@ import ConquerSpace.common.game.ships.Hull;
 import ConquerSpace.common.game.ships.Ship;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.universe.SpacePoint;
-import ConquerSpace.common.game.universe.UniversePath;
 import ConquerSpace.common.game.universe.bodies.Body;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.game.universe.bodies.Planet;
@@ -156,8 +155,75 @@ public class GameWindow extends JFrame implements WindowListener,
     @SuppressWarnings("deprecation")
     public void init() {
         desktopPane = new CQSPDesktop();
-        menuBar = new JMenuBar();
 
+        initMainInterfaceWindow();
+
+        tsWindow = new TurnSaveWindow(gameState);
+
+        //Remove mouse listeners for the turnsave window so that it 
+        //can't be moved
+        for (MouseListener listener
+                : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI())
+                        .getNorthPane().getMouseListeners()) {
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI())
+                    .getNorthPane().removeMouseListener(listener);
+        }
+
+        addFrame(tsWindow);
+
+        initMenus();
+
+        //Set timer
+        gameUIUpdater = new Timer(500, a -> {
+            if (this.isActive()) {
+                try {
+                    //Only update when visible, and mouse is moving into it, 
+                    //saves performance
+                    if (mainInterfaceWindow != null
+                            && mainInterfaceWindow.isVisible()) {
+                        mainInterfaceWindow.update();
+                        mainInterfaceWindow.validate();
+                        mainInterfaceWindow.repaint();
+                    }
+                    if (allowTick()) {
+                        desktopPane.repaint();
+                    }
+                } catch (Exception e) {
+                    LOGGER.warn("Exception!", e);
+                }
+            }
+        });
+
+        gameUIUpdater.setRepeats(true);
+
+        desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
+
+        //Listeners
+        addComponentListener(this);
+
+        //desktopPane.setBackground(Color.cyan);
+        setJMenuBar(menuBar);
+        setContentPane(desktopPane);
+
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().
+                getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+        setSize(rect.width, rect.height);
+
+        //Set Icon
+        setIconImage(ResourceLoader.getIcon("game.icon").getImage());
+
+        setVisible(true);
+
+        gameUIUpdater.start();
+        changeTurnSaveWindowPosition();
+        //See home planet
+        desktopPane.see(civController.getStartingPlanet().getSystemIndex());
+    }
+
+    /**
+     * Because the main interface window takes a long time to start up
+     */
+    private void initMainInterfaceWindow() {
         AtomicLong mainInterfaceWindowInitStart = new AtomicLong();
         SwingWorker<MainInterfaceWindow, Void> interfaceWorker
                 = new SwingWorker<MainInterfaceWindow, Void>() {
@@ -185,7 +251,7 @@ public class GameWindow extends JFrame implements WindowListener,
                 }
                 long end = System.currentTimeMillis();
                 LOGGER.info(
-                        "Done with making interface "
+                        "Done with making interface in "
                         + (end - mainInterfaceWindowInitStart.get())
                         + " ms");
             }
@@ -201,21 +267,11 @@ public class GameWindow extends JFrame implements WindowListener,
         };
 
         interfaceWorker.execute();
+    }
 
-        tsWindow = new TurnSaveWindow(gameState);
+    private void initMenus() {
+        menuBar = new JMenuBar();
 
-        //Remove mouse listeners for the turnsave window so that it 
-        //can't be moved
-        for (MouseListener listener
-                : ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI())
-                        .getNorthPane().getMouseListeners()) {
-            ((javax.swing.plaf.basic.BasicInternalFrameUI) tsWindow.getUI())
-                    .getNorthPane().removeMouseListener(listener);
-        }
-
-        addFrame(tsWindow);
-
-        //addFrame(newsWindow);
         JMenu windows = new JMenu(
                 LOCALE_MESSAGES.getMessage("game.main.windows"));
 
@@ -273,7 +329,7 @@ public class GameWindow extends JFrame implements WindowListener,
                 LOCALE_MESSAGES
                         .getMessage("game.view.background.universe.view"));
         setToUniverseView.addActionListener(a -> {
-            desktopPane.drawing = CQSPDesktop.DRAW_UNIVERSE;
+            desktopPane.currentView = CQSPDesktop.DRAW_UNIVERSE;
             desktopPane.repaint();
         });
         setToUniverseView.setAccelerator(
@@ -303,54 +359,6 @@ public class GameWindow extends JFrame implements WindowListener,
         menuBar.add(windows);
         menuBar.add(game);
         menuBar.add(views);
-
-        //Set timer
-        gameUIUpdater = new Timer(500, a -> {
-            long start = System.currentTimeMillis();
-            if (this.isActive()) {
-                try {
-                    //Only update when visible, and mouse is moving into it, 
-                    //saves performance
-                    if (mainInterfaceWindow != null
-                            && mainInterfaceWindow.isVisible()) {
-                        mainInterfaceWindow.update();
-                        mainInterfaceWindow.validate();
-                        mainInterfaceWindow.repaint();
-                    }
-                    if (allowTick()) {
-                        desktopPane.repaint();
-                    }
-                } catch (Exception e) {
-                    LOGGER.warn("Exception!", e);
-                }
-            }
-            long end = System.currentTimeMillis();
-        });
-
-        gameUIUpdater.setRepeats(true);
-
-        desktopPane.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
-
-        //Listeners
-        addComponentListener(this);
-
-        //desktopPane.setBackground(Color.cyan);
-        setJMenuBar(menuBar);
-        setContentPane(desktopPane);
-
-        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().
-                getDefaultScreenDevice().getDefaultConfiguration().getBounds();
-        setSize(rect.width, rect.height);
-
-        //Set Icon
-        setIconImage(ResourceLoader.getIcon("game.icon").getImage());
-
-        setVisible(true);
-
-        gameUIUpdater.start();
-        changeTurnSaveWindowPosition();
-        //See home planet
-        desktopPane.see(civController.getStartingPlanet().getSystemIndex());
     }
 
     public void reload() {
@@ -359,6 +367,7 @@ public class GameWindow extends JFrame implements WindowListener,
 
     @Override
     public void windowOpened(WindowEvent arg0) {
+        //Window open behavior
     }
 
     @Override
@@ -374,13 +383,13 @@ public class GameWindow extends JFrame implements WindowListener,
             try {
                 game.save(gameState);
             } catch (IOException ex) {
-                ExceptionHandling.ExceptionMessageBox(
+                ExceptionHandling.exceptionMessageBox(
                         "IO exception while saving!", ex);
             } catch (IllegalArgumentException ex) {
-                ExceptionHandling.ExceptionMessageBox(
+                ExceptionHandling.exceptionMessageBox(
                         "Illegal Argument exception while saving!", ex);
             } catch (IllegalAccessException ex) {
-                ExceptionHandling.ExceptionMessageBox(
+                ExceptionHandling.exceptionMessageBox(
                         "Illegal Access exception while saving!", ex);
             }
             LOGGER.info(
@@ -400,18 +409,22 @@ public class GameWindow extends JFrame implements WindowListener,
 
     @Override
     public void windowIconified(WindowEvent arg0) {
+        //Window icon behavior
     }
 
     @Override
     public void windowDeiconified(WindowEvent arg0) {
+        //Window reopen behavior
     }
 
     @Override
     public void windowActivated(WindowEvent arg0) {
+        //Window activate behavior
     }
 
     @Override
     public void windowDeactivated(WindowEvent arg0) {
+        //Window deactivated behavior
     }
 
     @Override
@@ -421,14 +434,17 @@ public class GameWindow extends JFrame implements WindowListener,
 
     @Override
     public void componentMoved(ComponentEvent e) {
+        //Window moved behavior
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
+        //Window shown behavior
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
+        //Window hidden behavior
     }
 
     public boolean allowTick() {
@@ -457,16 +473,16 @@ public class GameWindow extends JFrame implements WindowListener,
             MouseMotionListener, MouseListener, MouseWheelListener {
 
         public static final int SIZE_OF_STAR_ON_SECTOR = 10;
-        UniverseRenderer universeRenderer;
+        private UniverseRenderer universeRenderer;
         private boolean isDragging = false;
         private Point startPoint;
         private double translateX = 0;
         private double translateY = 0;
         static final int DRAW_UNIVERSE = 0;
         static final int DRAW_STAR_SYSTEM = 1;
-        int drawing = DRAW_UNIVERSE;
-        private int drawingStarSystem = 0;
-        SystemRenderer systemRenderer;
+        private int currentView = DRAW_UNIVERSE;
+        private int starSystemDisplayed = 0;
+        private SystemRenderer systemRenderer;
         public static final int BOUNDS_SIZE = 1500;
 
         private int currentStarSystemSizeOfAU = 0;
@@ -495,7 +511,7 @@ public class GameWindow extends JFrame implements WindowListener,
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
 
-            switch (drawing) {
+            switch (currentView) {
                 case DRAW_UNIVERSE:
                     setBackground(new Color(0, 0, 255));
                     universeRenderer.drawUniverse(g, translateX, translateY, scale);
@@ -522,7 +538,7 @@ public class GameWindow extends JFrame implements WindowListener,
             } else if (isDragging && SwingUtilities.isRightMouseButton(e)) {
                 //Measure distance
                 //Set point of the start and end
-                if (drawing == DRAW_STAR_SYSTEM) {
+                if (currentView == DRAW_STAR_SYSTEM) {
                     systemRenderer.setMeasureDistance(startPoint, e.getPoint());
                     repaint();
                 }
@@ -531,17 +547,17 @@ public class GameWindow extends JFrame implements WindowListener,
 
         @Override
         public void mouseMoved(MouseEvent e) {
+            //Mouse move event
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e) && mainInterfaceWindow != null) {
                 //If universe, click
-                switch (drawing) {
+                switch (currentView) {
                     case DRAW_UNIVERSE:
                         //Get sector..
                         LOGGER.info("Checking for click");
-                        sectorit:
                         for (int i = 0; i < universe.getStarSystemCount(); i++) {
                             //Check for vision
                             StarSystem sys = universe.getStarSystemObject(i);
@@ -556,7 +572,7 @@ public class GameWindow extends JFrame implements WindowListener,
                         }
                         break;
                     case DRAW_STAR_SYSTEM:
-                        StarSystem selected = universe.getStarSystemObject(drawingStarSystem);
+                        StarSystem selected = universe.getStarSystemObject(starSystemDisplayed);
                         for (int i = 0; i < selected.getBodyCount(); i++) {
                             Body body = selected.getBodyObject(i);
                             if (body instanceof Planet) {
@@ -580,7 +596,7 @@ public class GameWindow extends JFrame implements WindowListener,
                         break;
                 }
             }
-            if ((e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) 
+            if ((e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e))
                     && mainInterfaceWindow != null) {
                 JPopupMenu popupMenu = generatePopupMenu(e);
                 popupMenu.show(this, e.getX(), e.getY());
@@ -600,7 +616,7 @@ public class GameWindow extends JFrame implements WindowListener,
             if (SwingUtilities.isRightMouseButton(e)) {
                 //Distance measuring
                 //Set point of the start and end
-                if (drawing == DRAW_STAR_SYSTEM) {
+                if (currentView == DRAW_STAR_SYSTEM) {
                     systemRenderer.endMeasureDistance();
                     repaint();
                 }
@@ -609,16 +625,18 @@ public class GameWindow extends JFrame implements WindowListener,
 
         @Override
         public void mouseEntered(MouseEvent e) {
+            //Mouse entered event
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
+            //Mouse exited event
         }
 
         void see(int system) {
-            drawingStarSystem = system;
-            drawing = DRAW_STAR_SYSTEM;
-            systemRenderer = new SystemRenderer(gameState, universe.getStarSystemObject(drawingStarSystem), universe, new Dimension(1500, 1500));
+            starSystemDisplayed = system;
+            currentView = DRAW_STAR_SYSTEM;
+            systemRenderer = new SystemRenderer(gameState, universe.getStarSystemObject(starSystemDisplayed), universe, new Dimension(1500, 1500));
             currentStarSystemSizeOfAU = systemRenderer.sizeofAU;
             scale = 1;
             //Get Star position and position it like that...
@@ -663,40 +681,38 @@ public class GameWindow extends JFrame implements WindowListener,
             boolean overPlanet = false;
             Planet overWhat = null;
             //Show info and specific information of the sectors and stuff
-            switch (drawing) {
+            switch (currentView) {
                 case DRAW_UNIVERSE:
                     //Get sector..
-                    LOGGER.info("Checking for click");
-                    sectorit:
+                    LOGGER.trace("Checking for click on star system");
                     for (int i = 0; i < universe.getStarSystemCount(); i++) {
                         //Check for vision
                         StarSystem sys = universe.getStarSystemObject(i);
 
-                        if (Math.hypot((convertPointUniverse(sys.getX(), translateX) - e.getX()),
-                                (convertPointUniverse(sys.getY(), translateY) - e.getY())) < (SIZE_OF_STAR_ON_SECTOR / scale)) {
-
-                            if (civController.vision.containsKey(new UniversePath(sys.getIndex()))
-                                    && civController.vision.get(new UniversePath(sys.getIndex())) > VisionTypes.UNDISCOVERED) {
-                                JMenuItem systemInfo
-                                        = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.starsystem"), sys.getIndex()));
-                                systemInfo.addActionListener(a -> {
-                                    see(sys.getIndex());
-                                    repaint();
-                                });
-                                popupMenu.add(systemInfo);
-                                break sectorit;
-
-                            }
+                        if (Math.hypot(convertPointUniverse(sys.getX(), translateX) - e.getX(),
+                                convertPointUniverse(sys.getY(), translateY) - e.getY())
+                                < (SIZE_OF_STAR_ON_SECTOR / scale)
+                                && civController.vision.containsKey(sys.getUniversePath())
+                                && civController.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
+                            //View star system menu
+                            JMenuItem systemInfo
+                                    = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.starsystem"), sys.getIndex()));
+                            systemInfo.addActionListener(a -> {
+                                see(sys.getIndex());
+                                repaint();
+                            });
+                            popupMenu.add(systemInfo);
+                            break;
                         }
                     }
                     break;
                 case DRAW_STAR_SYSTEM:
-                    StarSystem selected = universe.getStarSystemObject(drawingStarSystem);
+                    StarSystem selected = universe.getStarSystemObject(starSystemDisplayed);
                     for (int i = 0; i < selected.getBodyCount(); i++) {
                         Body body = selected.getBodyObject(i);
                         if (body instanceof Planet) {
                             Planet planet = (Planet) body;
-                            //Convert point...
+                            //Convert point to screen point
                             double x = (translateX + (planet.getX()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale;
                             double y = (translateY - (planet.getY()) * currentStarSystemSizeOfAU / 10_000_000 + BOUNDS_SIZE / 2) / scale;
 
@@ -722,129 +738,18 @@ public class GameWindow extends JFrame implements WindowListener,
                         }
                     }
                     break;
-                //Also get ship
                 default:
                     break;
             }
 
+            //Ship actions
             JMenu selectedShips = new JMenu(LOCALE_MESSAGES.getMessage("game.click.popup.ship.selected"));
             //Get currently selected ships
-            //Need to add a register...
-            for (Ship s : playerRegister.getSelectedShips()) {
-                JMenu men = new JMenu(s.toString());
-                JMenuItem gohereMenu = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.goto"));
-                gohereMenu.addActionListener(a -> {
-                    //Move position
-                    //Convert
-                    //Check the location and where it is
-                    if (drawing == DRAW_UNIVERSE) {
-                        //Check if inside star system
-                        //Convert
-                        double gotoX = (e.getX() * scale - translateX - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
-                        double gotoY = (e.getY() * scale - translateY - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
-
-                        if (s.getLocation().getSystemIndex() > -1) {
-                            //Then get quickest route to out of system, and do the things
-                            //Ah well, get slope because the path can be direct...
-                            StarSystem system = universe.getStarSystemObject(s.getLocation().getSystemIndex());
-                            double slopeX = gotoX - system.getX();
-                            double slopeY = gotoY - system.getY();
-                            double slope = (slopeY / slopeX);
-                            //Add move action
-
-                            //Get distance to intersect
-                            long x = (long) (slope * 10_000_000_000l);
-                            //Get distance of ship to 
-                            ShipMoveAction action = new ShipMoveAction(s);
-
-                            //TODO: FIX SHIPS
-                            action.setPosition(new SpacePoint(100l, x));
-
-                            s.addAction(gameState, action);
-                            //Add exit star system action
-                            ExitStarSystemAction act = new ExitStarSystemAction(s);
-                            s.addAction(gameState, act);
-                        }
-                        InterstellarTravelAction action = new InterstellarTravelAction(s);
-                        action.setPositionX(gotoX);
-                        action.setPositionY(gotoY);
-                        s.addAction(gameState, action);
-                    } else if (drawing == DRAW_STAR_SYSTEM) {
-                        //Check if in star system
-                        //Then check the goto position
-
-                        long gotoX = (long) ((((e.getX() * scale) - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU);
-                        long gotoY = (long) ((((e.getY() * scale) - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
-
-                        //Get Location
-                        ShipMoveAction action = new ShipMoveAction(s);
-                        action.setPosition(new SpacePoint(gotoX, gotoY));
-
-                        s.addAction(gameState, action);
-
-                        //Add an extra action to move...
-                        StarSystem sys = universe.getStarSystemObject(drawingStarSystem);
-                        //if (Math.hypot(gotoX, gotoY) > (sys.getPlanet(sys.getPlanetCount() - 1).getOrbitalDistance() + 10 * 10_000_000)) {
-                        // ExitStarSystemAction act = new ExitStarSystemAction(s);
-                        //s.addAction(act);
-                        //}
-                    }
-                });
-                men.add(gohereMenu);
-
-                //Check if orbiting a planet...
-                if (overPlanet && overWhat != null) {
-                    //Orbit it! 
-                    JMenuItem orbiting = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.ship.orbit"), overWhat.getName()));
-                    final Planet p = overWhat;
-                    orbiting.addActionListener(a -> {
-                        //Move position
-                        //Convert
-
-                        //Get Location
-                        ShipToOrbitAction action = new ShipToOrbitAction(s);
-                        action.setPlanet(p);
-                        s.addAction(gameState, action);
-                    });
-                    men.add(orbiting);
-                }
-                //If science ship
-                ShipType stype = gameState.getObject(s.getHull(), Hull.class).getShipType();
-                //Survey ship and over planet, 
-                if (stype.containsTag("science") && overPlanet && !overWhat.hasScanned(civController.getReference())) {
-                    JMenuItem surveryor = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.survey"));
-                    final Planet p = overWhat;
-
-                    surveryor.addActionListener(a -> {
-                        //Move position
-                        //Get Location
-                        ShipToOrbitAction orbitAction = new ShipToOrbitAction(s);
-                        orbitAction.setPlanet(p);
-
-                        ShipSurveyAction survey = new ShipSurveyAction(s);
-                        survey.setProgressPerTick(5);
-                        survey.setFinishedProgress(100);
-                        survey.setToSurvey(p);
-                        survey.setCivReference(civController.getReference());
-
-                        s.addAction(gameState, orbitAction);
-                        s.addAction(gameState, survey);
-                    });
-                    men.add(surveryor);
-                }
-
-                //Add a delete ship action thing
-                JMenuItem deleteShipAction
-                        = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.actions"));
-                deleteShipAction.addActionListener(l -> {
-                    s.commands.clear();
-                });
-                men.add(deleteShipAction);
-
-                selectedShips.add(men);
+            for (Ship ship : playerRegister.getSelectedShips()) {
+                createShipMenu(selectedShips, ship, e, overPlanet, overWhat);
             }
 
-            //Add a delete all selected ships
+            //Clear selected ships
             JMenuItem deleteSelectedShips
                     = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.ships"));
             deleteSelectedShips.addActionListener(a -> {
@@ -854,6 +759,119 @@ public class GameWindow extends JFrame implements WindowListener,
             popupMenu.add(selectedShips);
             popupMenu.add(deleteSelectedShips);
             return popupMenu;
+        }
+
+        private void createShipMenu(JMenu selectedShips, Ship ship, MouseEvent e, boolean isOverPlanet, Planet overWhatPlanet) {
+            JMenu men = new JMenu(ship.toString());
+            JMenuItem gohereMenu = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.goto"));
+            gohereMenu.addActionListener(a -> {
+                //Move position
+                if (currentView == DRAW_UNIVERSE) {
+                    //Check if inside star system
+                    //Convert to world point
+                    double gotoX = (e.getX() * scale - translateX - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
+                    double gotoY = (e.getY() * scale - translateY - BOUNDS_SIZE / 2) / universeRenderer.sizeOfLTYR;
+
+                    if (ship.getLocation().getSystemIndex() > -1) {
+                        //Then get quickest route to out of system, and do the things
+                        //Ah well, get slope because the path can be direct...
+                        StarSystem system = universe.getStarSystemObject(ship.getLocation().getSystemIndex());
+                        double slopeX = gotoX - system.getX();
+                        double slopeY = gotoY - system.getY();
+                        double slope = (slopeY / slopeX);
+                        //Add move action
+
+                        //Get distance to intersect
+                        long x = (long) (slope * 10_000_000_000l);
+                        //Get distance of ship to 
+                        ShipMoveAction action = new ShipMoveAction(ship);
+
+                        //TODO: FIX SHIPS
+                        action.setPosition(new SpacePoint(100l, x));
+
+                        ship.addAction(gameState, action);
+                        //Add exit star system action
+                        ExitStarSystemAction act = new ExitStarSystemAction(ship);
+                        ship.addAction(gameState, act);
+                    }
+                    InterstellarTravelAction action = new InterstellarTravelAction(ship);
+                    action.setPositionX(gotoX);
+                    action.setPositionY(gotoY);
+                    ship.addAction(gameState, action);
+                } else if (currentView == DRAW_STAR_SYSTEM) {
+                    //Check the goto position
+                    //Convert to world position
+                    long gotoX = (long) (((e.getX() * scale - BOUNDS_SIZE / 2 - translateX) * 10_000_000) / currentStarSystemSizeOfAU);
+                    long gotoY = (long) (((e.getY() * scale - BOUNDS_SIZE / 2 - translateY) * 10_000_000) / currentStarSystemSizeOfAU);
+
+                    //Get Location
+                    ShipMoveAction action = new ShipMoveAction(ship);
+                    action.setPosition(new SpacePoint(gotoX, gotoY));
+
+                    ship.addAction(gameState, action);
+
+                    //Add an extra action to move, todo because removed star systme 
+                    /* StarSystem sys = universe.getStarSystemObject(starSystemDisplayed);
+                        if (Math.hypot(gotoX, gotoY) > (sys.getPlanet(sys.getPlanetCount() - 1).getOrbitalDistance() + 10 * 10_000_000)) {
+                         ExitStarSystemAction act = new ExitStarSystemAction(s);
+                        s.addAction(act);
+                        }*/
+                }
+            });
+            men.add(gohereMenu);
+
+            //Check if orbiting a planet...
+            if (isOverPlanet && overWhatPlanet != null) {
+                //Orbit it! 
+                JMenuItem orbiting = new JMenuItem(String.format(LOCALE_MESSAGES.getMessage("game.click.popup.ship.orbit"), overWhatPlanet.getName()));
+                final Planet p = overWhatPlanet;
+                orbiting.addActionListener(a -> {
+                    //Move to orbit
+                    ShipToOrbitAction action = new ShipToOrbitAction(ship);
+                    action.setPlanet(p);
+                    ship.addAction(gameState, action);
+                });
+                men.add(orbiting);
+            }
+            //If science ship
+            ShipType stype = gameState.getObject(ship.getHull(), Hull.class).getShipType();
+            if (stype.containsTag("science") && isOverPlanet && !overWhatPlanet.hasScanned(civController.getReference())) {
+                JMenuItem surveryor = createSurveyorMenu(ship, overWhatPlanet);
+                men.add(surveryor);
+            }
+
+            //Add a delete ship action thing
+            JMenuItem deleteShipAction
+                    = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.remove.actions"));
+            deleteShipAction.addActionListener(l -> {
+                ship.commands.clear();
+            });
+            men.add(deleteShipAction);
+
+            selectedShips.add(men);
+        }
+
+        private JMenuItem createSurveyorMenu(Ship ship, Planet planet) {
+            JMenuItem surveryorMenu = new JMenuItem(LOCALE_MESSAGES.getMessage("game.click.popup.ship.survey"));
+            final Planet p = planet;
+
+            surveryorMenu.addActionListener(a -> {
+                //Move position
+                //Get Location
+                ShipToOrbitAction orbitAction = new ShipToOrbitAction(ship);
+                orbitAction.setPlanet(p);
+
+                ShipSurveyAction survey = new ShipSurveyAction(ship);
+                survey.setProgressPerTick(5);
+                survey.setFinishedProgress(100);
+                survey.setToSurvey(p);
+                survey.setCivReference(civController.getReference());
+
+                ship.addAction(gameState, orbitAction);
+                ship.addAction(gameState, survey);
+            });
+
+            return surveryorMenu;
         }
 
         private double convertPointUniverse(double pos, double translate) {
@@ -897,7 +915,7 @@ public class GameWindow extends JFrame implements WindowListener,
         }
 
         private void setAngle() {
-            StarSystem sys = universe.getStarSystemObject(desktopPane.drawingStarSystem);
+            StarSystem sys = universe.getStarSystemObject(desktopPane.starSystemDisplayed);
             for (int i = 0; i < sys.getBodyCount(); i++) {
                 Body planet = sys.getBodyObject(i);
                 planet.orbit.setDegrees(degree);

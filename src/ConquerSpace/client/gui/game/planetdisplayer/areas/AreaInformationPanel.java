@@ -22,12 +22,10 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
-import ConquerSpace.common.util.logging.CQSPLogger;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -35,7 +33,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class AreaInformationPanel<T extends Area> extends JPanel {
 
-    private static final Logger LOGGER = CQSPLogger.getLogger(AreaInformationPanel.class.getName());
     protected T area;
     protected GameState gameState;
 

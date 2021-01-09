@@ -18,6 +18,7 @@
 package ConquerSpace.server;
 
 import ConquerSpace.common.GameState;
+import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.characters.Administrator;
 import ConquerSpace.common.game.characters.Person;
@@ -26,20 +27,26 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.civilization.government.GovernmentPosition;
 import ConquerSpace.common.game.organizations.civilization.government.HeritableGovernmentPosition;
 import ConquerSpace.common.game.population.Race;
-import ConquerSpace.common.game.universe.bodies.Galaxy;
 
 /**
  *
  * @author EhWhoAmI
  */
 public class PeopleProcessor {
-    
-    GameState gameState;
 
-    Galaxy universe;
-    StarDate date;
+    private GameState gameState;
+
+    //private Galaxy universe;
+    private StarDate date;
     private StarDate before;
 
+    public PeopleProcessor(GameState gameState) {
+        //this.universe = gameState.getUniverse();
+        this.date = gameState.date;
+        this.gameState = gameState;
+        resetDate();
+    }
+    
     public void createPeople() {
     }
 
@@ -52,30 +59,28 @@ public class PeopleProcessor {
     }
 
     public void processPeople(int delta) {
-//        for(Person person: gameState.people) {
-//            if (!person.isDead()) {                    
-//                    //Increment age
-//                    person.age += (int) delta;
-//                    
-//                    if (person.age > 50_000) {
-//                        processDeath(person);
-//                    }
-//                }
-//        }
-//TODO process people
-        //Set previous date
-        resetDate();
-    }
+        for (ObjectReference personRef : gameState.getCharacters()) {
+            Person person = gameState.getObject(personRef, Person.class);
+            if (!person.isDead()) {
+                //Increment age
+                person.age += (int) delta;
 
-    public PeopleProcessor(GameState gameState) {
-        this.universe = gameState.getUniverse();
-        this.date = gameState.date;
-        this.gameState = gameState;
+                if (person.age > 50_000) {
+                    processDeath(person);
+                }
+            }
+        }
+        //TODO process people
+        //Set previous date
         resetDate();
     }
 
     private void resetDate() {
         before = new StarDate(date);
+    }
+    
+    public int getDifference() {
+        return (int) (date.getDate() - before.getDate());
     }
 
     public static void placePerson(PersonEnterable enter, Person who) {

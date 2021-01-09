@@ -20,8 +20,6 @@ package ConquerSpace.common.game.population;
 import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.game.economy.GoodOrder;
-import ConquerSpace.common.game.economy.Trader;
 import ConquerSpace.common.save.Serialize;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.ArrayList;

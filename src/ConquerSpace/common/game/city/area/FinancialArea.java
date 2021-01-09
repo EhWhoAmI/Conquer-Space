@@ -43,6 +43,6 @@ public class FinancialArea extends Area {
 
     @Override
     public void accept(AreaDispatcher dispatcher) {
-
+        //dispatcher.dispatch(this); // When we add it...
     }
 }
