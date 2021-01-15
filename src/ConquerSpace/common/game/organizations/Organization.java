@@ -88,4 +88,8 @@ public class Organization extends ConquerSpaceGameObject {
     public ObjectReference getBehaviorId(){
         return behavior;
     }
+    
+    public void own() {
+        
+    }
 }
