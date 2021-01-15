@@ -37,6 +37,9 @@ public class Galaxy extends ConquerSpaceGameObject {
 
     @Serialize("systems")
     private ArrayList<ObjectReference> starSystems;
+    
+    //All the bodies, space ships are also stored here...
+    private ArrayList<ObjectReference> bodies;
 
     @Serialize("control")
     //Star only add star systems
@@ -53,6 +56,7 @@ public class Galaxy extends ConquerSpaceGameObject {
         control = new HashMap<>();
         starSystems = new ArrayList<>();
         spaceShips = new ArrayList<>();
+        bodies = new ArrayList<>();
     }
 
     public void addStarSystem(StarSystem s) {
@@ -102,5 +106,9 @@ public class Galaxy extends ConquerSpaceGameObject {
             return systemReference;
         }
 
+    }
+    
+    public void addBody(Body body) {
+        bodies.add(body.getReference());
     }
 }

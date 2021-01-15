@@ -32,6 +32,7 @@ public class StarSystemBody extends Body{
     
     private int parentIndex;
     
+    private int diameter;
     private ObjectReference parentId;
 
     public StarSystemBody(GameState gameState) {
@@ -70,6 +71,12 @@ public class StarSystemBody extends Body{
     public UniversePath getUniversePath() {
         return new UniversePath(getParentIndex(), index);
     }
-    
-    
+
+    public int getDiameter() {
+        return diameter;
+    }
+
+    public void setDiameter(int diameter) {
+        this.diameter = diameter;
+    }
 }

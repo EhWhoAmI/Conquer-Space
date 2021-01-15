@@ -104,4 +104,22 @@ public class Orbit implements Serializable {
         degrees += degs;
         degrees %= 360;
     }
+
+    /**
+     * Farthest point from the center of orbit
+     *
+     * @return
+     */
+    public double getApoapsis() {
+        return eccentricity * semiMajorAxis + semiMajorAxis;
+    }
+
+    /**
+     * Closest point from center of orbit
+     *
+     * @return
+     */
+    public double getPeriapsis() {
+        return semiMajorAxis - eccentricity * semiMajorAxis;
+    }
 }

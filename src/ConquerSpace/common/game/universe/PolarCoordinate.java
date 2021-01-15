@@ -89,13 +89,10 @@ public class PolarCoordinate implements Serializable{
     }
 
     public SpacePoint toSpacePoint() {
-        double xpos;
-        double ypos;
-
         double opp = (Math.sin(Math.toRadians(degrees)) * distance);
         double adj = (Math.cos(Math.toRadians(degrees)) * distance);
-        xpos = (adj);
-        ypos = (opp);
+        long xpos = (long) (adj);
+        long ypos = (long) (opp);
 
         return (new SpacePoint(xpos, ypos));
     }

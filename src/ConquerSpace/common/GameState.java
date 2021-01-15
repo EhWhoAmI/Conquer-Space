@@ -58,6 +58,7 @@ public final class GameState implements Serializable {
 
     @Serialize("universe")
     private ObjectReference universeId;
+    private transient Galaxy universe = null;
 
     @Serialize("date")
     public StarDate date;
@@ -75,7 +76,7 @@ public final class GameState implements Serializable {
 
     @Serialize("orgs")
     private ArrayList<ObjectReference> organizations;
-    
+
     private ArrayList<ObjectReference> characters;
 
     public ArrayList<EngineTechnology> engineTechnologys;
@@ -237,7 +238,10 @@ public final class GameState implements Serializable {
     }
 
     public Galaxy getUniverse() {
-        return getObject(universeId, Galaxy.class);
+        if (universe == null) {
+            universe = getObject(universeId, Galaxy.class);
+        }
+        return universe;
     }
 
     public ObjectReference getUniverseId() {
@@ -291,7 +295,7 @@ public final class GameState implements Serializable {
         techonologies = gameState.techonologies;
 
         constants = gameState.constants;
-        
+
         characters = gameState.characters;
 
         random = gameState.random;

@@ -22,20 +22,22 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.universe.Orbit;
 import ConquerSpace.common.game.universe.SpacePoint;
 import ConquerSpace.common.game.universe.UniversePath;
-import ConquerSpace.common.save.Serialize;
-import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("body")
 public class Body extends ConquerSpaceGameObject{
-    @Serialize("orbit")
+    /**
+     * Describes the orbit around the reference body.
+     */
     public Orbit orbit = new Orbit(0, 0, 0, 0);
 
     //Not serialized because it's based on orbit
     public SpacePoint point = new SpacePoint(0, 0);
+    
+    //Body it's orbiting
+    public Body referenceBody;
     
     public Body(GameState gameState) {
         super(gameState);
@@ -103,6 +105,14 @@ public class Body extends ConquerSpaceGameObject{
 
     public double getOrbitalDistance() {
         return orbit.toPolarCoordinate().getDistance();
+    }
+
+    public Body getReferenceBody() {
+        return referenceBody;
+    }
+
+    public void setReferenceBody(Body referenceBody) {
+        this.referenceBody = referenceBody;
     }
 
     public UniversePath getUniversePath() {
