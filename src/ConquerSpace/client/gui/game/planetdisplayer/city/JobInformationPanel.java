@@ -32,15 +32,17 @@ import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -54,15 +56,21 @@ import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.ChartEntity;
-import org.jfree.chart.entity.LegendItemEntity;
 import org.jfree.chart.entity.PieSectionEntity;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.StackedBarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleInsets;
 
 /**
+ * Does demographics and information about jobs
  *
  * @author EhWhoAmI
  */
@@ -75,6 +83,8 @@ class JobInformationPanel extends JPanel {
     private City selectedCity;
     private GameState gameState;
     private JPanel segmentInformationPanel;
+
+    private JPanel jobInformationPanel;
 
     private static int selectedTab = 0;
 
@@ -98,7 +108,7 @@ class JobInformationPanel extends JPanel {
         segmentInformationPanel = new JPanel(new VerticalFlowLayout());
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobChartPanel);
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
-        tabs.add("Segments", segmentChartPanel);
+        //tabs.add("Segments", segmentChartPanel);
         tabs.add("Segment information", segmentInformationPanel);
 
         tabs.setSelectedIndex(selectedTab);
@@ -139,30 +149,30 @@ class JobInformationPanel extends JPanel {
     private JPanel createJobChartPanel() {
         JPanel jobChartPanel = new JPanel(new BorderLayout());
 
-        JPanel checkBoxPanels = new JPanel();
+        JMenu checkBoxPanels = new JMenu("Selected");
         checkBoxPanels.setLayout(new VerticalFlowLayout());
-        long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
-        checkBoxPanels.add(new JLabel("Labor Force: " + new DecimalFormat("###,###").format(laborForceSize)));
 
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        HashMap<JobType, JCheckBox> checkBoxes = new HashMap<>(); //Checkboxes to set the various segments visible or not
+        DefaultCategoryDataset catdataset = new DefaultCategoryDataset();
+
+        HashMap<JobType, JRadioButtonMenuItem> checkBoxes = new HashMap<>(); //Checkboxes to set the various segments visible or not
         for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
             JobType key = entry.getKey();
             Integer val = entry.getValue();
             if (val > 0) {
-                dataset.setValue(key, val);
-                JCheckBox box = new JCheckBox(key.getName());
+                catdataset.setValue(val, key, "");
+                JRadioButtonMenuItem box = new JRadioButtonMenuItem(key.getName());
                 box.addActionListener(l -> {
                     if (box.isSelected()) {
                         //Add thing back
-                        dataset.setValue(key, val);
+                        catdataset.setValue(val, key, "");
                     } else {
                         //Remove thing
-                        dataset.remove(key);
+                        catdataset.removeValue(key, "");
                     }
                 });
                 box.setSelected(true);
-                //Add
+
+                //Add icon
                 JPanel boxContainerPanel = new JPanel(new HorizontalFlowLayout());
                 boxContainerPanel.add(box);
                 int boxHeight = getFontMetrics(box.getFont()).getHeight();
@@ -179,27 +189,50 @@ class JobInformationPanel extends JPanel {
             }
         }
 
-        JFreeChart chart = ChartFactory.createPieChart(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs"), dataset, true, true, false);
-        PiePlot piePlot = (PiePlot) chart.getPlot();
-        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{0}: {1} ({2})", new DecimalFormat("###,###"), new DecimalFormat("0%"));
-        piePlot.setLabelGenerator(gen);
-        for (JobType key : populationCount.keySet()) {
-            ((PiePlot) chart.getPlot()).setSectionPaint(key, key.getColor());
+        JFreeChart barchart = ChartFactory.createStackedBarChart("", "Domain axis", "Range Axis", catdataset);
+        barchart.removeLegend();
+        CategoryPlot plot = (CategoryPlot) barchart.getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+        plot.getRangeAxis().setVisible(false);
+        plot.getDomainAxis().setVisible(false);
+        plot.setInsets(RectangleInsets.ZERO_INSETS);
+        plot.getDomainAxis().setCategoryMargin(0);
+        plot.getRangeAxis().setLowerMargin(0);
+        plot.getRangeAxis().setUpperMargin(0);
+
+        StackedBarRenderer renderer = (StackedBarRenderer) plot.getRenderer();
+
+        renderer.setBarPainter(new StandardBarPainter());
+        renderer.setMaximumBarWidth(1);
+        renderer.setItemMargin(-2);
+        renderer.setRenderAsPercentages(true);
+        renderer.setDrawBarOutline(false);
+        renderer.setBaseItemLabelsVisible(true);
+        StandardCategoryItemLabelGenerator gen = new StandardCategoryItemLabelGenerator("", new DecimalFormat("###,###"), new DecimalFormat("0%"));
+        renderer.setBaseItemLabelGenerator(gen);
+        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator("{0}: {2} ({3})", new DecimalFormat("###,###")));
+
+        for (int i = 0; i < catdataset.getRowCount(); i++) {
+            Comparable<?> rowKey = catdataset.getRowKey(i);
+            //Get a custom paint for our series key
+            Color p = ((JobType) rowKey).getColor();
+            //set the new paint to the renderer
+            renderer.setSeriesPaint(i, p);
         }
-        ChartPanel chartPanel = new ChartPanel(chart);
+
+        ChartPanel chartPanel = new ChartPanel(barchart);
+
         chartPanel.setPopupMenu(null);
         chartPanel.addChartMouseListener(new ChartMouseListener() {
             @Override
             public void chartMouseClicked(ChartMouseEvent cme) {
                 ChartEntity entity = cme.getEntity();
-                if (entity instanceof PieSectionEntity) {
-                    //Remove segment
-                    if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
-                        dataset.remove(((PieSectionEntity) entity).getSectionKey());
-                        //Uncheck checkbox
-                        checkBoxes.get(((PieSectionEntity) entity).getSectionKey()).setSelected(false);
-                    }
-                } else if (entity instanceof LegendItemEntity) {
+                if (entity instanceof CategoryItemEntity) {
+                    JobType jobType = (JobType) ((CategoryItemEntity) entity).getRowKey();
+                    //Add UI
+                    jobInformationPanel.removeAll();
+                    jobInformationPanel.add(new JLabel(jobType.getName()));
+                    jobInformationPanel.add(new JLabel("Amount: " + Utilities.longToHumanString(catdataset.getValue(jobType, "").longValue())));
                 }
             }
 
@@ -208,8 +241,23 @@ class JobInformationPanel extends JPanel {
                 //Empty
             }
         });
-        jobChartPanel.add(chartPanel, BorderLayout.CENTER);
-        jobChartPanel.add(checkBoxPanels, BorderLayout.EAST);
+        chartPanel.setDomainZoomable(false);
+        chartPanel.setRangeZoomable(false);
+        chartPanel.setMaximumDrawHeight(40);
+        chartPanel.setPreferredSize(new Dimension(chartPanel.getPreferredSize().width, 40));
+
+        JPanel containerPanel = new JPanel(new VerticalFlowLayout());
+        long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
+        containerPanel.add(new JLabel("Labor Force: " + Utilities.longToHumanString(laborForceSize)));
+
+        jobInformationPanel = new JPanel(new VerticalFlowLayout());
+        containerPanel.add(jobInformationPanel);
+
+        JPanel chartPanelContainer = new JPanel();
+        chartPanelContainer.add(chartPanel);
+
+        jobChartPanel.add(containerPanel, BorderLayout.NORTH);
+        jobChartPanel.add(chartPanelContainer, BorderLayout.SOUTH);
         return jobChartPanel;
     }
 

@@ -22,6 +22,6 @@ package ConquerSpace.common.game.ownership;
  * Something that can own something. You go to the owner to own something.
  * @author EhWhoAmI
  */
-public class Owner {
+public interface Owner {
     public void addOwnership(Ownable ownable);
 }

@@ -36,6 +36,7 @@ import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -46,6 +47,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -59,6 +62,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -118,30 +122,37 @@ public class CityInformationPanel extends JPanel {
         constraints.gridy = 1;
         constraints.gridx = 0;
         constraints.gridwidth = 2;
+        constraints.ipady = 40;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         add(cityOverviewPanel, constraints);
 
         constraints.anchor = GridBagConstraints.NORTHWEST;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 0;
-        constraints.weighty = 0;
-        constraints.gridy = 2;
-        constraints.gridx = 2;
-        constraints.gridwidth = 1;
-        add(jobInformationPanel, constraints);
-
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridy = 0;
         constraints.gridx = 2;
         constraints.weightx = 1;
         constraints.weighty = 0;
-        constraints.gridheight = 2;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 4;
+        constraints.ipady = 90;
         add(cityIndustryPanel, constraints);
 
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.gridy = 4;
+        constraints.gridx = 2;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.ipady = -90;
+        add(jobInformationPanel, constraints);
+
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.gridy = 2;
         constraints.gridx = 0;
         constraints.weightx = 1;
         constraints.weighty = 1;
-        constraints.gridheight = 1;
+        constraints.gridheight = 4;
         constraints.gridwidth = 2;
         add(cityEconomyPanel, constraints);
     }
@@ -150,7 +161,7 @@ public class CityInformationPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (false) {
+        if (true) {
             int[][] dims = layout.getLayoutDimensions();
             g.setColor(Color.BLUE);
             int x = 0;
@@ -170,8 +181,41 @@ public class CityInformationPanel extends JPanel {
 
         private Image bg = null;
 
+        private boolean loaded = false;
+        private Timer timer;
+
+        private final int height = 150;
+
         public CitySkylinePanel() {
-            int height = 150;
+            loadImage();
+
+            setPreferredSize(new Dimension(500, height));
+
+            timer = new Timer(10, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    loadImage();
+                }
+            });
+            timer.setRepeats(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            //Draw background
+            if (bg != null) {
+                g.drawImage(bg, 0, 0, null);
+            } else if (!loaded) {
+                //Load image...
+                //Schedule a reload
+
+                loaded = true;
+                timer.start();
+            }
+
+        }
+
+        private void loadImage() {
             if (imageCount > 0) {
                 int id = selectedCity.getReference().getId() % imageCount;
 
@@ -182,20 +226,7 @@ public class CityInformationPanel extends JPanel {
                 graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                 graphics.drawImage(citySkylineImageMap.get(id).getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
                 GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
-
             }
-            setPreferredSize(new Dimension(500, height));
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            //Draw background
-            if (bg != null) {
-                g.drawImage(bg, 0, 0, null);
-            } else {
-                //Load image...
-            }
-
         }
     }
 
@@ -216,7 +247,7 @@ public class CityInformationPanel extends JPanel {
 
             //Population
             JLabel popCount = new JLabel(
-                    LOCALE_MESSAGES.getMessage("game.planet.cities.population", 
+                    LOCALE_MESSAGES.getMessage("game.planet.cities.population",
                             Utilities.longToHumanString(gameState.getObject(selectedCity.population,
                                     Population.class).getPopulationSize())));
             add(popCount);
@@ -369,9 +400,6 @@ public class CityInformationPanel extends JPanel {
             }
         }
     }
-
-
-
 
     private static final HashMap<Integer, Image> citySkylineImageMap = new HashMap<>();
     private static int imageCount = 0;
