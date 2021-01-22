@@ -62,13 +62,13 @@ import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
-import static ConquerSpace.server.generators.DefaultUniverseGenerator.AU_IN_LTYR;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
+import static ConquerSpace.server.generators.DefaultUniverseGenerator.KM_IN_LTYR;
 
 /**
  * This controls the game.
@@ -222,9 +222,9 @@ public class GameUpdater extends GameTicker {
                             double dist = Math.hypot(pos.getY() - universe.getStarSystemObject(g).getY(),
                                     pos.getX() - universe.getStarSystemObject(g).getX());
 
-                            if (dist < (range * AU_IN_LTYR)) {
+                            if (dist < (range * KM_IN_LTYR)) {
                                 //Its in!
-                                int amount = ((int) ((1 - (dist / (double) (range * AU_IN_LTYR))) * 100));
+                                int amount = ((int) ((1 - (dist / (double) (range * KM_IN_LTYR))) * 100));
 
                                 civil.vision.put(universe.getStarSystemObject(g).getUniversePath(),
                                         (amount > 100) ? 100 : (amount));
@@ -674,11 +674,13 @@ public class GameUpdater extends GameTicker {
         //Loop through star systems
         for (int i = 0; i < universe.getStarSystemCount(); i++) {
             StarSystem system = universe.getStarSystemObject(i);
-
-            system.setPoint(system.getOrbit().toSpacePoint());
+            SpacePoint starSystemPosition = system.getOrbit().toSpacePoint();
+            system.setPoint(starSystemPosition);
             for (int k = 0; k < system.getBodyCount(); k++) {
                 Body body = system.getBodyObject(k);
-                body.setPoint(body.getOrbit().toSpacePoint());
+                
+                SpacePoint pt = body.getOrbit().toSpacePoint();
+                body.setPoint(new SpacePoint(pt.getX() + starSystemPosition.getX(), pt.getY() + starSystemPosition.getY()));
             }
         }
     }

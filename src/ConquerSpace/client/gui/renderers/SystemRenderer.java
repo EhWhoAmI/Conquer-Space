@@ -155,7 +155,7 @@ public class SystemRenderer {
         };
 
         rendererThread = new Thread(r);
-        rendererThread.setName("system " + sys.getIndex()+ " renderer");
+        rendererThread.setName("system " + sys.getIndex() + " renderer");
         sizeofAU = 15;
         distanceRatio = sizeofAU / 10_000_000d;
 
@@ -339,7 +339,7 @@ public class SystemRenderer {
         }
 
         //Interstellar boundary...
-        /*long interstellardistance = sys.getPlanet(sys.getPlanetCount() - 1).();
+        long interstellardistance = (long) sys.getBoundary();
         interstellardistance += 10 * 10_000_000;
         Ellipse2D.Double boundaryCircle = new Ellipse2D.Double(
                 (translateX + bounds.width / 2 - interstellardistance * distanceRatio) / scale,
@@ -347,7 +347,7 @@ public class SystemRenderer {
                 (interstellardistance) * distanceRatio * 2 / scale,
                 (interstellardistance) * distanceRatio * 2 / scale);
         g2d.setColor(new Color(0, 127, 255));
-        g2d.draw(boundaryCircle);*/
+        g2d.draw(boundaryCircle);
         //draw spaceships
         for (ObjectReference id : sys.spaceShips) {
             SpaceShip ship = gameState.getObject(id, SpaceShip.class);
@@ -551,7 +551,6 @@ public class SystemRenderer {
 
         return circlePath;
     }
-
 
     private double convertPointX(double position, double translate, double scale) {
         return (translate + position * distanceRatio + bounds.width / 2) / scale;

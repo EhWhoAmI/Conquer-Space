@@ -37,6 +37,11 @@ public class StarSystem extends Body {
     
     public int planetCount = 0;
     
+    /**
+     * Body which the star system is centered around.
+     */
+    private ObjectReference centralBody;
+    
     @Serialize("bodies")
     private ArrayList<ObjectReference> bodies;
 
@@ -45,6 +50,8 @@ public class StarSystem extends Body {
     
     @Serialize("name")
     private String name = "";
+    
+    private long boundary = 0;
 
     /**
      * Creates a new star system.
@@ -93,6 +100,7 @@ public class StarSystem extends Body {
         b.setIndex(bodies.size());
         b.setParentIndex(this.index);
         b.setParentId(this.getReference());
+        gameState.getUniverse().addBody(b);
         
         if(b instanceof Planet) {
             planetCount++;
@@ -118,5 +126,27 @@ public class StarSystem extends Body {
 
     public int getIndex() {
         return index;
+    }
+
+    public long getBoundary() {
+        return boundary;
+    }
+    
+    public void calculateBoundary() {
+        boundary = -1;
+        for(int i = 0; i < getBodyCount(); i++) {
+            StarSystemBody body = getBodyObject(i);
+            if(body.getOrbit().getApoapsis() > boundary) {
+                boundary = (long) body.getOrbit().getApoapsis();
+            }
+        }
+    }
+
+    public void setCentralBody(ObjectReference centralBody) {
+        this.centralBody = centralBody;
+    }
+
+    public ObjectReference getCentralBody() {
+        return centralBody;
     }
 }

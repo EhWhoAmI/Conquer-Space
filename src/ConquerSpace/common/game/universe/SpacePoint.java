@@ -25,18 +25,18 @@ import java.io.Serializable;
  */
 public class SpacePoint implements Serializable{
 
-    private double x;
-    private double y;
+    private long x;
+    private long y;
 
-    public double getX() {
+    public long getX() {
         return x;
     }
 
-    public double getY() {
+    public long getY() {
         return y;
     }
 
-    public SpacePoint(double x, double y) {
+    public SpacePoint(long x, long y) {
         this.x = x;
         this.y = y;
     }
