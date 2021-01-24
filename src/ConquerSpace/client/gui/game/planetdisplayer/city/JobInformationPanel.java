@@ -44,6 +44,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -104,11 +105,9 @@ class JobInformationPanel extends JPanel {
         JTable jobTable = new JTable(jobTableModel);
 
         //Population segments chart
-        JPanel segmentChartPanel = createPopulationSegmentChartPanel();
         segmentInformationPanel = new JPanel(new VerticalFlowLayout());
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobChartPanel);
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
-        //tabs.add("Segments", segmentChartPanel);
         tabs.add("Segment information", segmentInformationPanel);
 
         tabs.setSelectedIndex(selectedTab);
@@ -233,6 +232,10 @@ class JobInformationPanel extends JPanel {
                     jobInformationPanel.removeAll();
                     jobInformationPanel.add(new JLabel(jobType.getName()));
                     jobInformationPanel.add(new JLabel("Amount: " + Utilities.longToHumanString(catdataset.getValue(jobType, "").longValue())));
+                    long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
+                    //Get percentage
+                    double percentage = ((double) catdataset.getValue(jobType, "").longValue() / (double) laborForceSize) * 100;
+                    jobInformationPanel.add(new JLabel("Percentage: " + percentage + "%"));
                 }
             }
 
@@ -249,7 +252,10 @@ class JobInformationPanel extends JPanel {
         JPanel containerPanel = new JPanel(new VerticalFlowLayout());
         long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
         containerPanel.add(new JLabel("Labor Force: " + Utilities.longToHumanString(laborForceSize)));
-
+        containerPanel.add(new JLabel("Economic Complexity: "));
+        containerPanel.add(new JLabel("Total Economic Output: "));
+        containerPanel.add(new JLabel("Economic Output per worker: "));
+        containerPanel.add(new JSeparator());
         jobInformationPanel = new JPanel(new VerticalFlowLayout());
         containerPanel.add(jobInformationPanel);
 
@@ -259,92 +265,6 @@ class JobInformationPanel extends JPanel {
         jobChartPanel.add(containerPanel, BorderLayout.NORTH);
         jobChartPanel.add(chartPanelContainer, BorderLayout.SOUTH);
         return jobChartPanel;
-    }
-
-    private JPanel createPopulationSegmentChartPanel() {
-        DefaultPieDataset populationSegmentDataset = new DefaultPieDataset();
-        //Fill up
-        Population cityPopulation = gameState.getObject(selectedCity.population, Population.class);
-        for (ObjectReference segmentReference : cityPopulation.segments) {
-            PopulationSegment segment = gameState.getObject(segmentReference, PopulationSegment.class);
-            populationSegmentDataset.setValue(segment, (double) segment.size);
-        }
-        JFreeChart segmentChart = ChartFactory.createPieChart("Segments", populationSegmentDataset, true, true, false);
-        ChartPanel segmentChartPanel = new ChartPanel(segmentChart);
-        segmentChartPanel.addChartMouseListener(new ChartMouseListener() {
-            @Override
-            public void chartMouseClicked(ChartMouseEvent cme) {
-                ChartEntity entity = cme.getEntity();
-                if (entity instanceof PieSectionEntity) {
-                    if (SwingUtilities.isRightMouseButton(cme.getTrigger())) {
-                        PopulationSegment segment = (PopulationSegment) ((PieSectionEntity) entity).getSectionKey();
-                        if (segment != null) {
-                            segmentInformationPanel.removeAll();
-                            segmentInformationPanel.add(new JLabel(segment.toString()));
-                            segmentInformationPanel.add(new JLabel("Wealth: " + Integer.toString(segment.getWealth())));
-
-                            //Set demands
-                            ResourceDemandTableModel model = new ResourceDemandTableModel(segment);
-
-                            JTable resourceDemandTable = new JTable(model);
-                            segmentInformationPanel.add(new JScrollPane(resourceDemandTable));
-                            tabs.setSelectedIndex(3);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void chartMouseMoved(ChartMouseEvent cme) {
-                //Empty
-            }
-
-            class ResourceDemandTableModel extends DefaultTableModel {
-
-                private PopulationSegment segment;
-                private String[] colunms = new String[]{
-                    "Resource",
-                    "Amount"
-                };
-
-                public ResourceDemandTableModel(PopulationSegment segment) {
-                    this.segment = segment;
-                }
-
-                @Override
-                public String getColumnName(int column) {
-                    return colunms[column];
-                }
-
-                @Override
-                public int getColumnCount() {
-                    return colunms.length;
-                }
-
-                @Override
-                public Object getValueAt(int row, int column) {
-                    switch (column) {
-                        case 0:
-                            return gameState.getGood((StoreableReference) segment.upkeep.keySet().toArray()[row]).getName();
-                        case 1:
-                            return segment.upkeep.get(segment.upkeep.keySet().toArray()[row]);
-                        default:
-                            return 0;
-                    }
-                }
-
-                @Override
-                public int getRowCount() {
-                    if (segment != null) {
-                        return segment.upkeep.size();
-                    }
-                    return 0;
-                }
-
-            }
-        });
-        segmentChartPanel.setPopupMenu(null);
-        return segmentChartPanel;
     }
 
     private class JobTableModel extends AbstractTableModel {
