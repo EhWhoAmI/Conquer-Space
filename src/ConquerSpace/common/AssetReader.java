@@ -285,7 +285,7 @@ public class AssetReader {
         process.identifier = identifier;
         process.input = input;
         process.output = output;
-        process.diff = diff;
+        process.difficulty = diff;
         return process;
     }
 

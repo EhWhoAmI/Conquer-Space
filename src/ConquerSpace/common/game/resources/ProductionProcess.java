@@ -37,7 +37,7 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
      */
     public ArrayList<Integer> catalyst;
     //How difficult it is to extract. Will replace with the parts for the factory in the futute.
-    public int diff;
+    public int difficulty;
 
     public ProductionProcess(GameState gameState) {
         super(gameState);
@@ -65,5 +65,13 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
     }
 }

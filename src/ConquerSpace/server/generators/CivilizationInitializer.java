@@ -303,8 +303,8 @@ public class CivilizationInitializer {
                 factory.setProcess(proc);
                 factory.setProductivity(1);
 
-                factory.setMaxJobs(proc.diff * 10000);
-                factory.setOperatingJobs(proc.diff * 5000);
+                factory.setMaxJobs(proc.difficulty * 10000);
+                factory.setOperatingJobs(proc.difficulty * 5000);
                 factory.setWorkingmultiplier(1.2f);
                 city.areas.add(factory.build(gameState).getReference());
             }
@@ -356,8 +356,8 @@ public class CivilizationInitializer {
                 ManufacturerAreaFactory factory = new ManufacturerAreaFactory(c);
                 factory.setProcess(proc);
                 factory.setProductivity(1);
-                factory.setMaxJobs(proc.diff * 10000);
-                factory.setOperatingJobs(proc.diff * 5000);
+                factory.setMaxJobs(proc.difficulty * 10000);
+                factory.setOperatingJobs(proc.difficulty * 5000);
                 factory.setWorkingmultiplier(1.2f);
                 miner.areas.add(factory.build(gameState).getReference());
 

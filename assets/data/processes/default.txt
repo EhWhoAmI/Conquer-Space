@@ -37,10 +37,8 @@
         input: [
             "o_aluminium:1"
         ]
-        //Eh makes sense I guess
         output: [
             "e_aluminium:1"
-            "water:2"
         ]
         diff: 1
         catalysts: [
@@ -53,7 +51,6 @@
             "plastic:1"
             "steel_low_grade:1"
         ]
-        //Eh makes sense I guess
         output: [
             "generic_consumer_good:1"
         ]
@@ -69,7 +66,6 @@
             "water:3"
             "o_iron:1"
         ]
-        //Eh makes sense I guess
         output: [
             "building_concrete:1"
         ]
@@ -82,7 +78,6 @@
         identifier: water_making
         input: [
         ]
-        //Eh makes sense I guess
         output: [
             "water:5"
         ]
@@ -96,7 +91,6 @@
         input: [
             "o_copper:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_copper:2"
         ]
@@ -110,7 +104,6 @@
         input: [
             "o_gold:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_gold:2"
         ]
@@ -124,7 +117,6 @@
         input: [
             "o_titanium:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_titanium:1"
         ]
@@ -138,7 +130,6 @@
         input: [
             "o_aluminum:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_aluminum:1"
         ]
@@ -152,7 +143,6 @@
         input: [
             "o_nickel:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_nickel:2"
         ]
@@ -166,7 +156,6 @@
         input: [
             "o_cobalt:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_cobalt:2"
         ]
@@ -180,9 +169,35 @@
         input: [
             "o_uranium:3"
         ]
-        //Eh makes sense I guess
         output: [
             "e_uranium:2"
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Machinery creation
+        identifier: machinery_creation
+        input: [
+            "e_iron:3"
+            "stainless_steel:5"
+        ]
+        output: [
+            "machinery:1"
+        ]
+        diff: 5
+        catalysts: [
+        ]
+    }
+    {
+        name:Stainless steel smelting
+        identifier: stainless_steel_smelting
+        input: [
+            "e_iron:3"
+        ]
+        output: [
+            "stainless_steel:2"
         ]
         diff: 1
         catalysts: [

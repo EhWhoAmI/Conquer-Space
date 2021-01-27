@@ -161,7 +161,7 @@ public class CityInformationPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (true) {
+        if (false) {
             int[][] dims = layout.getLayoutDimensions();
             g.setColor(Color.BLUE);
             int x = 0;

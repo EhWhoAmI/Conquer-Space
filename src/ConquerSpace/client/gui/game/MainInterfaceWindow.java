@@ -21,6 +21,7 @@ import static ConquerSpace.ConquerSpace.LOCALE_MESSAGES;
 import ConquerSpace.client.gui.game.engineering.BuildSpaceShipAutomationMenu;
 import ConquerSpace.client.gui.game.engineering.FullShipClassInformationMenu;
 import ConquerSpace.client.gui.game.engineering.HullCreator;
+import ConquerSpace.client.gui.game.engineering.ProductionProcessViewer;
 import ConquerSpace.client.gui.game.engineering.shipcomponent.ShipComponentDesigner;
 import ConquerSpace.client.gui.game.planetdisplayer.PlanetInfoSheet;
 import ConquerSpace.client.gui.game.planetdisplayer.ShrinkedPlanetSheet;
@@ -72,6 +73,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
     JTabbedPane shipsComponentsOverviewPanel;
     private BuildSpaceShipAutomationMenu buildSpaceShipAutomationMenu;
     private FullShipClassInformationMenu fullShipClassInformationMenu;
+    private ProductionProcessViewer productionProcessViewer;
 
     private CivInfoOverview civInfoOverview;
 
@@ -171,6 +173,9 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         hullCreator = new HullCreator(gameState, civilization);
         shipsComponentsOverviewPanel.add(LOCALE_MESSAGES.getMessage("game.mainwindow.engineering.tabs.hulls"), hullCreator);
 
+        productionProcessViewer = new ProductionProcessViewer(gameState, civilization);
+        shipsComponentsOverviewPanel.add("Production process viewer", productionProcessViewer);
+
         shipComponentsOverview.add(shipsComponentsOverviewPanel, BorderLayout.CENTER);
 
         JTabbedPane peopleTabs = new JTabbedPane();
@@ -207,7 +212,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         add(tabs, BorderLayout.CENTER);
 
         addListeners();
-        
+
         updateComponents();
     }
 

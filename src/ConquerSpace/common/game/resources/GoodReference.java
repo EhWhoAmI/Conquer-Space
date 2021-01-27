@@ -36,9 +36,7 @@ public class GoodReference extends StoreableReference {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 13 * hash + this.id;
-        return hash;
+        return this.id;
     }
 
     @Override
