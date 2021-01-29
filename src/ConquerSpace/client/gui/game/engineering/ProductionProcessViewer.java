@@ -24,6 +24,7 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.StoreableReference;
 import com.alee.extended.layout.HorizontalFlowLayout;
+import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,12 @@ public class ProductionProcessViewer extends JPanel {
     private JPanel productionProcessInformationPanel;
 
     private JTable inputTable;
+    private JTable outputTable;
+
+    private ObjectListModel<ProductionProcess> inputProcessListModel;
+    private ObjectListModel<ProductionProcess> outputProcessListModel;
+    private JList<String> inputProcessesList;
+    private JList<String> outputProcessesList;
 
     public ProductionProcessViewer(GameState gameState, Civilization civ) {
         this.gameState = gameState;
@@ -63,14 +70,14 @@ public class ProductionProcessViewer extends JPanel {
         productionProcessListModel.setElements(civ.productionProcesses);
         productionProcessList = new JList<>(productionProcessListModel);
         productionProcessList.addListSelectionListener(l -> {
-            productionProcessInformationPanel.removeAll();
+            //productionProcessInformationPanel.removeAll();
             ProductionProcess process = productionProcessListModel.getObject(productionProcessList.getSelectedIndex());
-            inputTable = new JTable(new ResourceTableModel(process.input));
-            productionProcessInformationPanel.add(new JScrollPane(inputTable));
-            productionProcessInformationPanel.add(new JLabel("Becomes ->"));
-            inputTable = new JTable(new ResourceTableModel(process.output));
-            productionProcessInformationPanel.add(new JScrollPane(inputTable));
-            productionProcessInformationPanel.add(new JLabel("Difficulty: " + process.getDifficulty()));
+            inputTable.setModel(new ResourceTableModel(process.input));
+            //productionProcessInformationPanel.add(new JScrollPane(inputTable));
+            //productionProcessInformationPanel.add(new JLabel("Becomes ->"));
+            outputTable.setModel(new ResourceTableModel(process.output));
+            //productionProcessInformationPanel.add(new JScrollPane(inputTable));
+            //productionProcessInformationPanel.add(new JLabel("Difficulty: " + process.getDifficulty()));
 
             //Get production processes that lead up to this
             ArrayList<ProductionProcess> input = new ArrayList<>();
@@ -85,7 +92,7 @@ public class ProductionProcessViewer extends JPanel {
                         break;
                     }
                 }
-                
+
                 //Look for things that this can lead into 
                 for (Map.Entry<StoreableReference, Double> entry : processSelection.input.entrySet()) {
                     StoreableReference key = entry.getKey();
@@ -96,16 +103,51 @@ public class ProductionProcessViewer extends JPanel {
                 }
             }
 
-            ObjectListModel<ProductionProcess> productionProcessInputListModel = new ObjectListModel<>();
-            productionProcessInputListModel.setElements(input);
-            productionProcessInformationPanel.add(new JScrollPane(new JList(productionProcessInputListModel)));
-            ObjectListModel<ProductionProcess> productionProcessOutputListModel = new ObjectListModel<>();
-            productionProcessOutputListModel.setElements(output);
-            productionProcessInformationPanel.add(new JScrollPane(new JList(productionProcessOutputListModel)));
+            inputProcessListModel.setElements(input);
+            inputProcessesList.updateUI();
+            outputProcessListModel.setElements(output);
+            outputProcessesList.updateUI();
         });
 
         productionProcessInformationPanel = new JPanel(new HorizontalFlowLayout());
         //All information about the production process
+        inputTable = new JTable();
+        outputTable = new JTable();
+
+        JPanel inputPanel = new JPanel(new VerticalFlowLayout());
+        inputPanel.add(new JLabel("Input"));
+        inputPanel.add(new JScrollPane(inputTable));
+
+        productionProcessInformationPanel.add(inputPanel);
+
+        JPanel becomesPanel = new JPanel();
+        becomesPanel.add(new JLabel("Becomes \u2192"));
+        productionProcessInformationPanel.add(becomesPanel);
+
+        JPanel outputPanel = new JPanel(new VerticalFlowLayout());
+        outputPanel.add(new JLabel("Output"));
+        outputPanel.add(new JScrollPane(outputTable));
+        productionProcessInformationPanel.add(outputPanel);
+
+        //List the processes that lead up to this process.
+        inputProcessListModel = new ObjectListModel<>();
+        inputProcessesList = new JList<>(inputProcessListModel);
+        inputProcessesList.setVisibleRowCount(10);
+
+        outputProcessListModel = new ObjectListModel<>();
+        outputProcessesList = new JList<>(outputProcessListModel);
+        outputProcessesList.setVisibleRowCount(10);
+
+        JPanel intoProcessPanel = new JPanel(new VerticalFlowLayout());
+        intoProcessPanel.add(new JLabel("Processes which products are input to this process"));
+        intoProcessPanel.add(new JScrollPane(inputProcessesList));
+
+        JPanel outputProcessPanel = new JPanel(new VerticalFlowLayout());
+        outputProcessPanel.add(new JLabel("Processes which inputs are products of this process"));
+        outputProcessPanel.add(new JScrollPane(outputProcessesList));
+
+        productionProcessInformationPanel.add(intoProcessPanel);
+        productionProcessInformationPanel.add(outputProcessPanel);
 
         add(new JScrollPane(productionProcessList), BorderLayout.WEST);
         add(productionProcessInformationPanel, BorderLayout.CENTER);
