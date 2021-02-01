@@ -62,13 +62,13 @@ import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import static ConquerSpace.server.generators.DefaultUniverseGenerator.KM_IN_LTYR;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
-import static ConquerSpace.server.generators.DefaultUniverseGenerator.KM_IN_LTYR;
 
 /**
  * This controls the game.

@@ -36,7 +36,6 @@ import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -256,19 +255,23 @@ public class CityInformationPanel extends JPanel {
                     LOCALE_MESSAGES.getMessage("game.planet.cities.table.priindustry", selectedCity.getCityType()));
             add(priindustry);
 
-            JLabel mainProduction = new JLabel("");
+            JLabel mainProduction = new JLabel("Produces Goods: ");
             StringJoiner joiner = new StringJoiner(", ");
 
+            //Number of goods counter
             int i = 0;
+
+            final int GOODS_TO_COUNT = 3;
             for (StoreableReference ref : selectedCity.primaryProduction) {
                 joiner.add(gameState.getGood(ref).toString());
                 i++;
-                if (i > 3) {
-                    break;
+                if (i == GOODS_TO_COUNT) {
+                    mainProduction.setText("Produces Goods: " + joiner.toString()
+                            + ", and " + (selectedCity.primaryProduction.size() - GOODS_TO_COUNT) + " more");
                 }
             }
-            //Limit length of the goods
-            mainProduction.setText("Produces Goods: " + joiner.toString());
+            mainProduction.setToolTipText(joiner.toString());
+
             add(mainProduction);
 
             JLabel growthAmount = new JLabel(

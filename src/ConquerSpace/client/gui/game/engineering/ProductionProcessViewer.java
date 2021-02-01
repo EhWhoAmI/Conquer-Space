@@ -28,7 +28,6 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -36,8 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import org.jdesktop.swingx.JXBusyLabel;
 
 /**
  * So that you can see what each production process uses, and what processes lead up to this

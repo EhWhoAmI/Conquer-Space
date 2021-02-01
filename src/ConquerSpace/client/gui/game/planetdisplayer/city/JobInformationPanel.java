@@ -24,9 +24,7 @@ import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
-import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -43,15 +41,10 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -59,7 +52,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.ChartEntity;
-import org.jfree.chart.entity.PieSectionEntity;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -67,7 +59,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleInsets;
 
 /**
@@ -81,13 +72,14 @@ class JobInformationPanel extends JPanel {
     private long currentlyWorking;
     private long populationLaborForceSize;
     private JTabbedPane tabs;
-    private City selectedCity;
-    private GameState gameState;
     private JPanel segmentInformationPanel;
 
     private JPanel jobInformationPanel;
 
     private static int selectedTab = 0;
+
+    private City selectedCity;
+    private GameState gameState;
 
     public JobInformationPanel(City selectedCity, GameState gameState) {
         this.selectedCity = selectedCity;
@@ -100,14 +92,9 @@ class JobInformationPanel extends JPanel {
         //Job pie chart
         JPanel jobChartPanel = createJobChartPanel();
 
-        //Job table
-        JobTableModel jobTableModel = new JobTableModel();
-        JTable jobTable = new JTable(jobTableModel);
-
         //Population segments chart
         segmentInformationPanel = new JPanel(new VerticalFlowLayout());
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobChartPanel);
-        tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.table"), new JScrollPane(jobTable));
         tabs.add("Segment information", segmentInformationPanel);
 
         tabs.setSelectedIndex(selectedTab);
@@ -119,7 +106,7 @@ class JobInformationPanel extends JPanel {
         setBorder(new TitledBorder(new LineBorder(Color.gray), ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
     }
 
-    public void initPopulationInfo() {
+    private void initPopulationInfo() {
         currentlyWorking = 0;
         populationCount.clear();
         populationLaborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
@@ -191,6 +178,8 @@ class JobInformationPanel extends JPanel {
         JFreeChart barchart = ChartFactory.createStackedBarChart("", "Domain axis", "Range Axis", catdataset);
         barchart.removeLegend();
         CategoryPlot plot = (CategoryPlot) barchart.getPlot();
+        
+        //Remove all space and labels
         plot.setOrientation(PlotOrientation.HORIZONTAL);
         plot.getRangeAxis().setVisible(false);
         plot.getDomainAxis().setVisible(false);
@@ -207,6 +196,8 @@ class JobInformationPanel extends JPanel {
         renderer.setRenderAsPercentages(true);
         renderer.setDrawBarOutline(false);
         renderer.setBaseItemLabelsVisible(true);
+        
+        //Empty label
         StandardCategoryItemLabelGenerator gen = new StandardCategoryItemLabelGenerator("", new DecimalFormat("###,###"), new DecimalFormat("0%"));
         renderer.setBaseItemLabelGenerator(gen);
         renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator("{0}: {2} ({3})", new DecimalFormat("###,###")));
@@ -249,6 +240,7 @@ class JobInformationPanel extends JPanel {
         chartPanel.setMaximumDrawHeight(40);
         chartPanel.setPreferredSize(new Dimension(chartPanel.getPreferredSize().width, 40));
 
+        //Other panel for more details
         JPanel containerPanel = new JPanel(new VerticalFlowLayout());
         long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
         containerPanel.add(new JLabel("Labor Force: " + Utilities.longToHumanString(laborForceSize)));
@@ -266,54 +258,4 @@ class JobInformationPanel extends JPanel {
         jobChartPanel.add(chartPanelContainer, BorderLayout.SOUTH);
         return jobChartPanel;
     }
-
-    private class JobTableModel extends AbstractTableModel {
-
-        private long population;
-        private final String[] jobListTableColunmNames = {ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.table.jobname"), ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.table.count"), ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.table.percentage")};
-
-        public JobTableModel() {
-        }
-
-        @Override
-        public int getRowCount() {
-            return populationCount.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return jobListTableColunmNames.length;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            //Get the colunm index text and stuff
-            int i = 0;
-            JobType jobType = null;
-            for (Map.Entry<JobType, Integer> entry : populationCount.entrySet()) {
-                if (i == rowIndex) {
-                    i = entry.getValue();
-                    jobType = entry.getKey();
-                    break;
-                }
-                i++;
-            }
-            switch (columnIndex) {
-                case 0:
-                    return jobType.getName();
-                case 1:
-                    return ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.table.personcounter", Utilities.longToHumanString(i));
-                case 2:
-                    return String.format("%.2f%%", ((double) i / (double) population) * 100);
-                default:
-                    return 0;
-            }
-        }
-
-        @Override
-        public String getColumnName(int column) {
-            return jobListTableColunmNames[column];
-        }
-    }
-
 }

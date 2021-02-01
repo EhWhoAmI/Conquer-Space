@@ -34,7 +34,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
 /**
  *

@@ -17,7 +17,6 @@
  */
 package ConquerSpace.client.gui.renderers;
 
-import static ConquerSpace.client.gui.renderers.SystemRenderer.PLANET_DIVISOR;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.actions.InterstellarTravelAction;

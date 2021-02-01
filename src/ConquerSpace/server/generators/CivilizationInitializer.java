@@ -405,6 +405,7 @@ public class CivilizationInitializer {
         foodProcess.input.put(crop.getFoodGood(), 10d);
         foodProcess.output.put(consumableResources, 10d);
         foodProcess.setName(crop.getName() + " to food");
+        foodProcess.setDifficulty(1);
 
         civ.productionProcesses.add(foodProcess);
 

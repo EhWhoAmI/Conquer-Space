@@ -23,7 +23,6 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.HorizontalFlowLayout;
 import com.alee.extended.layout.VerticalFlowLayout;
