@@ -324,7 +324,7 @@ public class CityEconomyPanel extends JPanel {
         public StockpileOutModel() {
             tuple = new ArrayList<>();
             //Get the city
-            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.resourcesSentTo.entrySet()) {
+            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.getResourcesSentTo().entrySet()) {
                 ResourceStockpile resourceStockpile = entry.getKey();
                 DoubleHashMap<StoreableReference> val = entry.getValue();
 
@@ -376,7 +376,7 @@ public class CityEconomyPanel extends JPanel {
         public StockpileInModel() {
             tuple = new ArrayList<>();
             //Get the city
-            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.resourcesGainedFrom.entrySet()) {
+            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.getResourcesGainedFrom().entrySet()) {
                 ResourceStockpile resourceStockpile = entry.getKey();
                 DoubleHashMap<StoreableReference> val = entry.getValue();
 

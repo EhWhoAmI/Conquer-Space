@@ -50,7 +50,7 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 @SerializeClassName("city")
-public class City extends ConquerSpaceGameObject implements PersonEnterable, 
+public class City extends ConquerSpaceGameObject implements PersonEnterable,
         SupplyNode, Administrable, Trader {
 
     @Serialize("population")
@@ -80,9 +80,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     @Serialize(value = "demands", special = SaveStuff.Good)
     public DoubleHashMap<StoreableReference> resourceDemands;
-    
-    public HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesSentTo;
-    public HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesGainedFrom;
+
+    private HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesSentTo;
+    private HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesGainedFrom;
 
     @Serialize("storage-needs")
     public ArrayList<StorageNeeds> storageNeeds;
@@ -99,9 +99,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     private int ledgerClearDelta = 0;
     public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
-    
+
     public HashSet<StoreableReference> primaryProduction;
-    
+
     public ObjectReference market;
 
     @Serialize("location")
@@ -134,7 +134,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     private int energyNeeded;
 
     private ObjectReference ownerReference;
-    
+
     private int wealth = 0;
 
     public City(GameState gameState, ObjectReference location) {
@@ -154,13 +154,13 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
         Population population = new Population(gameState);
         this.population = population.getReference();
-        
+
         resourceLedger = new HashMap<>();
         resourceDemands = new DoubleHashMap<>();
         tags = new HashMap<>();
         cityModifiers = new ArrayList<>();
         primaryProduction = new HashSet<>();
-        
+
         cityType = CityType.Generic;
         size = 0;
 
@@ -419,5 +419,13 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     @Override
     public void changeWealth(int amount) {
         wealth += amount;
+    }
+
+    public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourcesGainedFrom() {
+        return resourcesGainedFrom;
+    }
+
+    public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourcesSentTo() {
+        return resourcesSentTo;
     }
 }

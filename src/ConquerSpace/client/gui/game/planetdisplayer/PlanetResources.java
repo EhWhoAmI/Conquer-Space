@@ -29,6 +29,7 @@ import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.DoubleHashMap;
+import ConquerSpace.common.util.Utilities;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -229,7 +230,7 @@ public class PlanetResources extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel3.add(jPanel1, gridBagConstraints);
 
-        jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.individual"), jPanel3);
+        //jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.individual"), jPanel3);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -600,14 +601,14 @@ public class PlanetResources extends javax.swing.JPanel {
             if (planetResource.keySet().toArray()[rowIndex] instanceof StoreableReference) {
                 planetResourceId = (StoreableReference) planetResource.keySet().toArray()[rowIndex];
             }
-
             if (!planetResourceId.equals(GoodReference.INVALID_REFERENCE)) {
                 switch (columnIndex) {
                     case 0:
                         return gameState.getGood(planetResourceId);
                     case 1:
-                        return planetResource.get(planetResourceId) + ", or "
-                                + (planetResource.get(planetResourceId) * gameState.getGood(planetResourceId).getMass()) + " kg";
+                        int mass = (int) (((planetResource.get(planetResourceId) * gameState.getGood(planetResourceId).getMass())) / 1000);
+                        return Utilities.longToHumanString(planetResource.get(planetResourceId).intValue()) +  " units, or "
+                                + Utilities.longToHumanString(mass) + " tonnes";
                     case 2:
                         //Return the stuff
                         HashMap<String, Double> ledger = planetLedger.get(planetResourceId);
@@ -750,7 +751,6 @@ public class PlanetResources extends javax.swing.JPanel {
                     for (Map.Entry<String, Double> entry : city.resourceLedger.get(g).entrySet()) {
                         String key = entry.getKey();
                         Double val = entry.getValue();
-
                         if (ledger.containsKey(key)) {
                             Double amt = ledger.get(key);
                             ledger.put(key, val + amt);
@@ -772,8 +772,8 @@ public class PlanetResources extends javax.swing.JPanel {
             storageModel.fireTableDataChanged();
         }
 
-        if (planetResourceTable != null 
-                && planetResourceRow > -1 
+        if (planetResourceTable != null
+                && planetResourceRow > -1
                 && planetResourceTable.getRowCount() > planetResourceRow) {
             planetResourceTable.setRowSelectionInterval(planetResourceRow, planetResourceRow);
         }

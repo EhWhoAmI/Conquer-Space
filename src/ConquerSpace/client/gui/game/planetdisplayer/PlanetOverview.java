@@ -175,13 +175,6 @@ public class PlanetOverview extends JPanel {
 
         overviewPanel2 = new JPanel();
 
-        jobListPanel = new JPanel();
-        jobListTableModel = new JobTableModel();
-        jobListTable = new JTable(jobListTableModel);
-        jobListPanel.add(new JScrollPane(jobListTable));
-
-        overviewPanel2.add(jobListPanel);
-
         add(overviewPanel1);
         add(overviewPanel2);
     }

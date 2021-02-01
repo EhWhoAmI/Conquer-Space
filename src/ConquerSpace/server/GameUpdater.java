@@ -279,8 +279,8 @@ public class GameUpdater extends GameTicker {
             City city = gameState.getObject(cityId, City.class);
             //Clear ledger
             city.resourceLedger.clear();
-            city.resourcesGainedFrom.clear();
-            city.resourcesSentTo.clear();
+            city.getResourcesSentTo().clear();
+            city.getResourcesGainedFrom().clear();
             city.primaryProduction.clear();
 
             //Process city demands

@@ -114,17 +114,17 @@ public class Actions {
             //Track where the resources are going to and from
             if (from instanceof City) {
                 City toCity = ((City) to);
-                if (!toCity.resourcesGainedFrom.containsKey(from)) {
-                    toCity.resourcesGainedFrom.put(from, new DoubleHashMap<>());
+                if (!toCity.getResourcesGainedFrom().containsKey(from)) {
+                    toCity.getResourcesGainedFrom().put(from, new DoubleHashMap<>());
                 }
-                toCity.resourcesGainedFrom.get(from).addValue(resourceType, amount);
+                toCity.getResourcesGainedFrom().get(from).addValue(resourceType, amount);
             }
             if (to instanceof City) {
                 City fromCity = ((City) from);
-                if (!fromCity.resourcesSentTo.containsKey(to)) {
-                    fromCity.resourcesSentTo.put(to, new DoubleHashMap<>());
+                if (!fromCity.getResourcesSentTo().containsKey(to)) {
+                    fromCity.getResourcesSentTo().put(to, new DoubleHashMap<>());
                 }
-                fromCity.resourcesSentTo.get(to).addValue(resourceType, -amount);
+                fromCity.getResourcesSentTo().get(to).addValue(resourceType, -amount);
             }
             storeResource(resourceType, amount, to);
             return true;

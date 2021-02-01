@@ -51,7 +51,7 @@ public class GoodReference extends StoreableReference {
             return false;
         }
         final GoodReference other = (GoodReference) obj;
-        return this.id != other.id;
+        return this.id == other.id;
     }
 
     @Override
