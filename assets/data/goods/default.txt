@@ -18,7 +18,7 @@
         name: Water
         identifier: water
         volume: 1
-        mass: 1
+        mass: 1000
         formula: [
             "e_oxygen:1"
             "e_hydrogen:2"
@@ -28,16 +28,28 @@
         ]
     }
     {
-        name: Generic Consumer Good
+        name: Generic Consumer Goods
         identifier: generic_consumer_good
         volume: 1
-        mass: 2.3
+        mass: 2300
         formula: [
             "plastic:1"
             "steel_low_grade:1"
         ]
         tags: [
-
+            consumer
+        ]
+    }
+    {
+        name: Luxury Consumer Goods
+        identifier: complex_consumer_good
+        volume: 1
+        mass: 2000
+        formula: [
+        ]
+        tags: [
+            consumer
+            luxury
         ]
     }
     {
@@ -68,7 +80,7 @@
         name: Pharmaceutical goods
         identifier: heal
         volume: 1
-        mass: 5
+        mass: 5000
         formula: [
         ]
         tags: [

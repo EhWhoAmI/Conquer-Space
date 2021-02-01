@@ -8,10 +8,10 @@
         name: Iron Ore Smelting
         identifier: smelting_o_iron
         input: [
-            "o_iron:3"
+            o_iron:3
         ]
         output: [
-            "e_iron:1"
+            e_iron:1
         ]
         diff: 1
         catalysts: [
@@ -21,11 +21,11 @@
         name: Low Grade Steel Making
         identifier: steel_low_grade_making
         input: [
-            "e_iron:1"
-            "e_carbon:0.1"
+            e_iron:1
+            e_carbon:0.1
         ]
         output: [
-            "steel_low_grade:1"
+            steel_low_grade:1
         ]
         diff: 1
         catalysts: [
@@ -35,10 +35,10 @@
         name: Aluminium ore smelting
         identifier: smelting_o_aluminium
         input: [
-            "o_aluminium:1"
+            o_aluminium:1
         ]
         output: [
-            "e_aluminium:1"
+            e_aluminium:1
         ]
         diff: 1
         catalysts: [
@@ -48,11 +48,26 @@
         name:Consumer Good Making
         identifier: consumer_good_making
         input: [
-            "plastic:1"
-            "steel_low_grade:1"
+            plastic:1
+            steel_low_grade:1
+            textile:1
         ]
         output: [
-            "generic_consumer_good:1"
+            generic_consumer_good:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Complex Consumer Good Making
+        identifier: consumer_good_making2
+        input: [
+            glass:1
+            electronics:1
+        ]
+        output: [
+            complex_consumer_good:1
         ]
         diff: 1
         catalysts: [
@@ -61,13 +76,12 @@
     {
         name:Concrete Combination
         identifier: concrete_making
-        // Just copy factorio for now
         input: [
-            "water:3"
-            "o_iron:1"
+            water:3
+            o_iron:1
         ]
         output: [
-            "building_concrete:1"
+            building_concrete:1
         ]
         diff: 1
         catalysts: [
@@ -79,7 +93,7 @@
         input: [
         ]
         output: [
-            "water:5"
+            water:5
         ]
         diff: 1
         catalysts: [
@@ -89,10 +103,10 @@
         name:Copper ore smelting
         identifier: smelting_o_copper
         input: [
-            "o_copper:3"
+            o_copper:3
         ]
         output: [
-            "e_copper:2"
+            e_copper:2
         ]
         diff: 1
         catalysts: [
@@ -102,10 +116,10 @@
         name:Gold ore smelting
         identifier: smelting_o_gold
         input: [
-            "o_gold:3"
+            o_gold:3
         ]
         output: [
-            "e_gold:2"
+            e_gold:2
         ]
         diff: 1
         catalysts: [
@@ -115,10 +129,10 @@
         name:Titanium ore smelting
         identifier: smelting_o_titanium
         input: [
-            "o_titanium:3"
+            o_titanium:3
         ]
         output: [
-            "e_titanium:1"
+            e_titanium:1
         ]
         diff: 1
         catalysts: [
@@ -128,10 +142,10 @@
         name:Aluminum ore smelting
         identifier: smelting_o_aluminum
         input: [
-            "o_aluminum:3"
+            o_aluminum:3
         ]
         output: [
-            "e_aluminum:1"
+            e_aluminum:1
         ]
         diff: 1
         catalysts: [
@@ -141,10 +155,10 @@
         name:Nickel ore smelting
         identifier: smelting_o_nickel
         input: [
-            "o_nickel:3"
+            o_nickel:3
         ]
         output: [
-            "e_nickel:2"
+            e_nickel:2
         ]
         diff: 1
         catalysts: [
@@ -154,37 +168,37 @@
         name:Cobalt ore smelting
         identifier: smelting_o_cobalt
         input: [
-            "o_cobalt:3"
+            o_cobalt:3
         ]
         output: [
-            "e_cobalt:2"
+            e_cobalt:2
         ]
         diff: 1
         catalysts: [
         ]
     }
     {
-        name:Uranium ore smelting
+        name:Uranium enrichment
         identifier: smelting_o_uranium
         input: [
-            "o_uranium:3"
+            o_uranium:3
         ]
         output: [
-            "e_uranium:2"
+            e_uranium:2
         ]
         diff: 1
         catalysts: [
         ]
     }
     {
-        name:Machinery creation
-        identifier: machinery_creation
+        name:Machinery assembly
+        identifier: machinery_assembly
         input: [
-            "e_iron:3"
-            "stainless_steel:5"
+            e_iron:3
+            stainless_steel:5
         ]
         output: [
-            "machinery:1"
+            machinery:1
         ]
         diff: 5
         catalysts: [
@@ -194,10 +208,166 @@
         name:Stainless steel smelting
         identifier: stainless_steel_smelting
         input: [
-            "e_iron:3"
+            e_iron:3
         ]
         output: [
-            "stainless_steel:2"
+            stainless_steel:2
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Silicon reduction
+        identifier: silicon_reduction
+        input: [
+            sandstone:1
+        ]
+        output: [
+            e_silicon:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Electronics maunfacturing
+        identifier: electronic_manufacturing
+        input: [
+            semiconductors:1
+        ]
+        output: [
+            electronics:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Circuit maunfacturing
+        identifier: circuit_manufacturing
+        input: [
+            semiconductors:1
+        ]
+        output: [
+            circuits:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Semiconductor fabrication
+        identifier: semiconductor_fabrication
+        input: [
+            e_silicon:3
+        ]
+        output: [
+            semiconductors:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Magnet fabrication
+        identifier: magnet_fabrication
+        input: [
+            e_iron:3
+        ]
+        output: [
+            magnets:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Steel pipe fabrication
+        identifier: pipes_steel_fabrication
+        input: [
+            steel_low_grade:3
+        ]
+        output: [
+            pipes_steel:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Precision Parts fabrication
+        identifier: precision_part_fabrication
+        input: [
+            e_iron:2
+            e_copper:1
+        ]
+        output: [
+            precision_parts:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Crude Oil Cracking
+        identifier: crude_oil_cracking
+        input: [
+            crude_oil_sweet:2
+        ]
+        output: [
+            chemicals:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Plastic synthesis
+        identifier: plastic_synthesis
+        input: [
+            chemicals:2
+        ]
+        output: [
+            plastic:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Glass production
+        identifier: glass_production
+        input: [
+            sandstone:2
+        ]
+        output: [
+            glass:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name:Textile weaving
+        identifier: textile_weaving
+        input: [
+        ]
+        output: [
+            textiles:1
+        ]
+        diff: 1
+        catalysts: [
+        ]
+    }
+    {
+        name: Pharmaceutical drugs maunfacturing
+        identifier: pharmaceutical_drug_maunfacturing
+        input: [
+            chemicals:3
+        ]
+        output: [
+            heal:2
         ]
         diff: 1
         catalysts: [

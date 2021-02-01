@@ -82,61 +82,70 @@ public class Technologies implements Serializable {
         //Iterate over the techonologies
         for (int i = 0; i < techList.length(); i++) {
             JSONObject techonology = techList.getJSONObject(i);
-            String name = techonology.getString("name");
-            JSONArray deplist = techonology.getJSONArray("deps");
-            //Loop over deps
-            String[] deps = new String[deplist.length()];
-            for (int j = 0; j < deplist.length(); j++) {
-                deps[j] = deplist.getString(j);
+
+            //Catch exceptions
+            try {
+                Technology t = parseTechnology(techonology);
+                techs.add(t);
+            } catch (JSONException jsone) {
+                LOGGER.warn("Issue with " + techonology.getString("name"), jsone);
             }
-
-            //Tech level
-            int level = techonology.getInt("level");
-
-            int type = -1;
-            switch (techonology.getString("type")) {
-                default:
-                case "UNLOCK":
-                    type = TechonologyTypes.UNLOCK;
-                    break;
-                case "UPGRADE":
-                    type = TechonologyTypes.UPGRADE;
-                    break;
-            }
-
-            //Difficulty
-            int difficulty = techonology.getInt("difficulty");
-
-            JSONArray fieldsArray = techonology.getJSONArray("fields");
-
-            //Loop over fields
-            String[] fields = new String[fieldsArray.length()];
-            for (int j = 0; j < fieldsArray.length(); j++) {
-                fields[j] = fieldsArray.getString(j);
-            }
-
-            JSONArray tagsArray = techonology.getJSONArray("tags");
-
-            String[] tags = new String[tagsArray.length()];
-            for (int j = 0; j < tagsArray.length(); j++) {
-                tags[j] = tagsArray.getString(j);
-            }
-
-            JSONArray actionsarry = techonology.getJSONArray("action");
-
-            String[] actions = new String[actionsarry.length()];
-            for (int j = 0; j < actionsarry.length(); j++) {
-                actions[j] = actionsarry.getString(j);
-            }
-
-            //Floor
-            int floor = techonology.getInt("floor");
-
-            //ID
-            int id = techonology.getInt("id");
-            Technology t = new Technology(name, id, deps, type, level, fields, tags, actions, floor, difficulty);
-            techs.add(t);
         }
+    }
+
+    public static Technology parseTechnology(JSONObject techonology) {
+        String name = techonology.getString("name");
+        JSONArray deplist = techonology.getJSONArray("deps");
+        //Loop over deps
+        String[] deps = new String[deplist.length()];
+        for (int j = 0; j < deplist.length(); j++) {
+            deps[j] = deplist.getString(j);
+        }
+
+        //Tech level
+        int level = techonology.getInt("level");
+
+        int type = -1;
+        switch (techonology.getString("type")) {
+            default:
+            case "UNLOCK":
+                type = TechonologyTypes.UNLOCK;
+                break;
+            case "UPGRADE":
+                type = TechonologyTypes.UPGRADE;
+                break;
+        }
+
+        //Difficulty
+        int difficulty = techonology.getInt("difficulty");
+
+        JSONArray fieldsArray = techonology.getJSONArray("fields");
+
+        //Loop over fields
+        String[] fields = new String[fieldsArray.length()];
+        for (int j = 0; j < fieldsArray.length(); j++) {
+            fields[j] = fieldsArray.getString(j);
+        }
+
+        JSONArray tagsArray = techonology.getJSONArray("tags");
+
+        String[] tags = new String[tagsArray.length()];
+        for (int j = 0; j < tagsArray.length(); j++) {
+            tags[j] = tagsArray.getString(j);
+        }
+
+        JSONArray actionsarry = techonology.getJSONArray("action");
+
+        String[] actions = new String[actionsarry.length()];
+        for (int j = 0; j < actionsarry.length(); j++) {
+            actions[j] = actionsarry.getString(j);
+        }
+
+        //Floor
+        int floor = techonology.getInt("floor");
+
+        Technology t = new Technology(name, deps, type, level, fields, tags, actions, floor, difficulty);
+        return t;
     }
 
     public static Technology getTechByName(GameState state, String s) {
@@ -238,7 +247,6 @@ public class Technologies implements Serializable {
             action.getChars("component".length() + 1, action.length() - 1, dst, 0);
 
             //String compName = (new String(dst).trim());
-
             //if (s != null) {
             //TODO add preinstalled templates
             //c.addShipComponent(s);

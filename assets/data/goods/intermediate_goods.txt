@@ -107,4 +107,27 @@
 
         ]
     }
+    {
+        name: Precision Parts
+        identifier: precision_parts
+        volume: 1
+        mass: 6000
+        formula: [
+        ]
+        tags: [
+
+        ]
+    }
+    {
+        name: Textiles
+        identifier: Textiles
+        volume:1
+        mass: 3000
+        formula: [
+
+        ]
+        tags: [
+            
+        ]
+    }
 ]

@@ -36,10 +36,10 @@ public class Technology implements Serializable{
     private int floor;
     private int difficulty;
     private int id;
+    private static int idcounter = 0;
 
-    public Technology(String name, int id, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
+    public Technology(String name, String[] deps, int type, int level, String[] fields, String[] tags, String[] actions, int floor, int difficulty) {
         this.name = name;
-        this.id = id;
         this.deps = deps;
         this.type = type;
         this.level = level;
@@ -48,6 +48,7 @@ public class Technology implements Serializable{
         this.actions = actions;
         this.floor = floor;
         this.difficulty = difficulty;
+        id = idcounter++;
     }
 
     public String[] getDeps() {
@@ -100,7 +101,7 @@ public class Technology implements Serializable{
 
     @Override
     public int hashCode() {
-        return ((name + floor + level + type + id).hashCode());
+        return ((name + floor + level + type).hashCode());
     }
 
     @Override

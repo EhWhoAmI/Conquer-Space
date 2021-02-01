@@ -39,7 +39,6 @@
         ]
     }
     {
-        //This crude oil is really danm sweet
         name: Sweet Crude Oil
         identifier: crude_oil_sweet
         volume: 4

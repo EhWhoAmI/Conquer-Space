@@ -19,7 +19,6 @@
             Starting
         ]
         floor: 0
-        id: 0
     }
     {
         name: hunting and gathering
@@ -41,7 +40,6 @@
             Starting
         ]
         floor: 1
-        id: 2
     }
     {
         name: primitive farming
@@ -63,7 +61,6 @@
             Starting
         ]
         floor: 2
-        id: 3
     }
     {
         name: primitive houses
@@ -84,8 +81,7 @@
         [
             Starting
         ]
-        floor: 3
-        id: 5
+        floor:2
     }
     {
         name: primitive mining
@@ -107,7 +103,6 @@
             Starting
         ]
         floor: 4
-        id: 6
     }
     {
         name: primitive power
@@ -151,7 +146,6 @@
             Starting
         ]
         floor: 6
-        id: 8
     }
     {
         name: Basic science
@@ -187,7 +181,68 @@
             Starting
         ]
         floor: 7
-        id: 9
+    }
+    {
+        name: Basic maunfacturing
+        deps:
+        [
+            life
+        ]
+        level: 1
+        type: UNLOCK
+        upgradable: true
+        onupgrade: []
+        difficulty: 0
+        action:
+        [
+            process:crude_oil_cracking
+            process:plastic_synthesis
+            process:precision_part_fabrication
+            process:pipes_steel_fabrication
+            process:magnet_fabrication
+            process:semiconductor_fabrication
+            process:silicon_reduction
+            process:machinery_assembly
+            process:glass_production
+            process:stainless_steel_smelting
+            process:textile_weaving
+            process:circuit_manufacturing
+            process:electronic_manufacturing
+        ]
+        fields:
+        [
+            Knowledge
+        ]
+        tags:
+        [
+            Starting
+        ]
+        floor: 7
+    }
+    {
+        name: Basic fission energy
+        deps:
+        [
+            life
+        ]
+        level: 1
+        type: UNLOCK
+        upgradable: true
+        onupgrade: []
+        difficulty: 0
+        action:
+        [
+            process:smelting_o_uranium
+        ]
+        fields:
+        [
+            Knowledge
+        ]
+        tags:
+        [
+            Starting
+        ]
+        floor: 7
     }
     {
         name: Chemical propulsion
@@ -212,7 +267,6 @@
             Propulsion
         ]
         floor: 7
-        id: 10
     }
     {
         name: Electrothermal propulsion
@@ -237,7 +291,6 @@
             Propulsion
         ]
         floor: 7
-        id: 11
     }
     {
         name: Ion propulsion
@@ -262,7 +315,6 @@
             Propulsion
         ]
         floor: 7
-        id: 12
     }
     {
         name: Plasma propulsion
@@ -287,7 +339,6 @@
             Propulsion
         ]
         floor: 7
-        id: 13
     }
     {
         name: Nuclear propulsion
@@ -312,7 +363,6 @@
             Propulsion
         ]
         floor: 7
-        id: 14
     }
     {
         name: flight
@@ -338,7 +388,6 @@
             space travel base
         ]
         floor: 8
-        id: 15
     }
     {
         name: space planes
@@ -365,7 +414,6 @@
             space travel
         ]
         floor: 9
-        id: 16
     }
     {
         name: rocket science
@@ -391,7 +439,6 @@
             space travel base
         ]
         floor: 8
-        id: 17
     }
     {
         name: rocketery
@@ -418,7 +465,6 @@
             space travel
         ]
         floor: 9
-        id: 18
     }
     {
         name: astronomy
@@ -444,7 +490,6 @@
             astronomy
         ]
         floor: 10
-        id: 19
     }
     {
         name: optics
@@ -471,7 +516,6 @@
             astronomy
         ]
         floor: 11
-        id: 20
     }
     {
         name: telescopes
@@ -493,7 +537,6 @@
             astronomy
         ]
         floor: 12
-        id: 21
     }
     {
         name: radio telescopes
@@ -515,7 +558,6 @@
             astronomy
         ]
         floor: 13
-        id: 22
     }
     {
         name: x-ray telescopes
@@ -537,7 +579,6 @@
             astronomy
         ]
         floor: 14
-        id: 24
     }
     {
         name: space telescopes
@@ -559,8 +600,7 @@
             astronomy
         ]
         floor: 15
-        id: 25
-    },
+    }
     {
         name: Metallurgy
         deps:
@@ -579,6 +619,7 @@
             process:smelting_o_copper
             process:smelting_o_cobalt
             process:smelting_o_uranium
+            process:smelting_o_nickel
         ]
         fields:
         [
@@ -589,7 +630,6 @@
             Starting
         ]
         floor: 15
-        id: 26
     }
     {
         name: Iron Mining
@@ -613,7 +653,6 @@
             Starting
         ]
         floor: 15
-        id: 28
     }
     {
         name: Aluminium Mining
@@ -637,7 +676,6 @@
             Starting
         ]
         floor: 15
-        id: 28
     }
     {
         name: Steel Making
@@ -661,7 +699,6 @@
             Starting
         ]
         floor: 15
-        id: 30
     }
     {
         name:Making Consumer Goods
@@ -675,6 +712,7 @@
         difficulty: 1
         action: [
             process:consumer_good_making
+            process:consumer_good_making2
         ]
         fields:
         [
@@ -685,7 +723,6 @@
             Starting
         ]
         floor: 16
-        id: 31
     }
     {
         name: Energy Processing
@@ -705,7 +742,6 @@
             Starting
         ]
         floor: 17
-        id: 32
     }
     {
         name: Concrete Making
@@ -726,7 +762,6 @@
             Starting
         ]
         floor: 17
-        id: 33
     }
     {
         name: Water Making
@@ -747,6 +782,5 @@
             Starting
         ]
         floor: 17
-        id: 34
     }
 ]
