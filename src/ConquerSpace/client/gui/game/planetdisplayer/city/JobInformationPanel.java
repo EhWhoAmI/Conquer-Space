@@ -208,6 +208,10 @@ class JobInformationPanel extends JPanel {
             renderer.setSeriesPaint(i, p);
         }
 
+        JPanel chartPanelContainer = new JPanel(new VerticalFlowLayout());
+        JLabel currentHoverLabel = new JLabel();
+        chartPanelContainer.add(currentHoverLabel);
+        
         ChartPanel chartPanel = new ChartPanel(barchart);
 
         chartPanel.setPopupMenu(null);
@@ -231,6 +235,13 @@ class JobInformationPanel extends JPanel {
             @Override
             public void chartMouseMoved(ChartMouseEvent cme) {
                 //Empty
+                ChartEntity entity = cme.getEntity();
+                if (entity instanceof CategoryItemEntity) {
+                    JobType jobType = (JobType) ((CategoryItemEntity) entity).getRowKey();
+                    currentHoverLabel.setText(jobType.getName());
+                } else {
+                    currentHoverLabel.setText("");
+                }
             }
         });
         chartPanel.setDomainZoomable(false);
@@ -249,7 +260,6 @@ class JobInformationPanel extends JPanel {
         jobInformationPanel = new JPanel(new VerticalFlowLayout());
         containerPanel.add(jobInformationPanel);
 
-        JPanel chartPanelContainer = new JPanel();
         chartPanelContainer.add(chartPanel);
 
         jobChartPanel.add(containerPanel, BorderLayout.NORTH);
