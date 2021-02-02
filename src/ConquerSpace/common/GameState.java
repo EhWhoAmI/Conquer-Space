@@ -32,6 +32,7 @@ import ConquerSpace.common.game.ships.LaunchSystem;
 import ConquerSpace.common.game.ships.ShipType;
 import ConquerSpace.common.game.universe.bodies.Galaxy;
 import ConquerSpace.common.save.Serialize;
+import ConquerSpace.common.util.profiler.Profiler;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public final class GameState implements Serializable {
 
     //All game objects
     //May need to be thread safe in the future
-    EntityManager entities;
+    protected EntityManager entities;
 
     @Serialize("seed")
     private long seed;
@@ -109,6 +110,8 @@ public final class GameState implements Serializable {
 
     public transient File saveFile;
 
+    private transient Profiler profiler;
+
     //private GameUpdater updater;
     public GameState(int seed) {
         this.seed = seed;
@@ -132,6 +135,8 @@ public final class GameState implements Serializable {
 
         //Create new galaxy
         universeId = new Galaxy(this).getReference();
+
+        profiler = new Profiler();
     }
 
     public void addGood(Good good) {
@@ -254,6 +259,10 @@ public final class GameState implements Serializable {
 
     public ArrayList<ObjectReference> getCharacters() {
         return characters;
+    }
+
+    public Profiler getProfiler() {
+        return profiler;
     }
 
     /**

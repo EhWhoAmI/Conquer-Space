@@ -62,6 +62,7 @@ import ConquerSpace.common.game.universe.bodies.Star;
 import ConquerSpace.common.game.universe.bodies.StarSystem;
 import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
+import ConquerSpace.common.util.profiler.Profiler;
 import static ConquerSpace.server.generators.DefaultUniverseGenerator.KM_IN_LTYR;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -92,12 +93,17 @@ public class GameUpdater extends GameTicker {
     private GameIndexer indexer;
     private PeopleProcessor peopleProcessor;
 
+    private Profiler profiler;
+
     public GameUpdater(GameState gameState) {
         universe = gameState.getUniverse();
         starDate = gameState.date;
         this.gameState = gameState;
+        profiler = gameState.getProfiler();
+
         indexer = new GameIndexer(gameState.getUniverse());
         peopleProcessor = new PeopleProcessor(gameState);
+
         this.GameRefreshRate = gameState.GameRefreshRate;
         ledgerClearInterval = GameRefreshRate * 10;
     }
@@ -109,38 +115,56 @@ public class GameUpdater extends GameTicker {
         starDate.increment(tickIncrement);
 
         //Execute org actions
+        profiler.push("organization-actions");
         performActions();
+        profiler.pop();
 
+        profiler.push("ship-moving");
         //Move ships
         moveShips();
+        profiler.pop();
 
+        profiler.push("control");
         calculateControl();
-        calculateVision();
+        profiler.pop();
 
-        //Check for month increase            
+        profiler.push("vision");
+        calculateVision();
+        profiler.pop();
+
+        //Check for month increase
         if (starDate.getDate() % GameRefreshRate == 1) {
             updateGame();
+
+            profiler.push("positions");
             updateObjectPositions();
+            profiler.pop();
         }
         //Process people and generate every 1000 ticks, which is about every 41 days
         if (starDate.getDate() % (GameRefreshRate * 2) == 1) {
             createPeople();
         }
+
+        profiler.reset();
     }
 
     public synchronized void updateGame() {
         updateUniverse();
 
         //Increment tech
+        profiler.push("research");
         processResearch(GameRefreshRate);
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             gameState.getCivilizationObject(i).calculateTechLevel();
         }
+        profiler.pop();
 
         //Increment resources
         processResources();
 
+        profiler.push("people");
         peopleProcessor.processPeople(GameRefreshRate);
+        profiler.pop();
     }
 
     //Will have to check for actions that contradict each other or something in the future..
@@ -297,11 +321,16 @@ public class GameUpdater extends GameTicker {
             }
 
             //Population upkeep, population events.
+            profiler.push("population");
             processPopulation(city);
+            profiler.pop();
 
+            profiler.push("jobs");
             //Calculate jobs filled
             calculateCityJobs(city);
+            profiler.pop();
 
+            profiler.push("area-processing");
             //Process areas and their production
             for (ObjectReference areaId : city.areas) {
                 Area area = gameState.getObject(areaId, Area.class);
@@ -311,7 +340,9 @@ public class GameUpdater extends GameTicker {
                 }
                 processArea(planet, city, area);
             }
+            profiler.pop();
 
+            profiler.push("area-construction");
             //Replace constructing areas
             Iterator<ObjectReference> areaIterator = city.areas.iterator();
             ArrayList<ObjectReference> areasToAdd = new ArrayList<>();
@@ -328,6 +359,7 @@ public class GameUpdater extends GameTicker {
             }
             //May have to fill up jobs...
             city.areas.addAll(areasToAdd);
+            profiler.pop();
 
             CityType type = classifyCity(city);
             city.setCityType(type);
@@ -369,7 +401,9 @@ public class GameUpdater extends GameTicker {
         }
 
         //Calculate S/D
+        profiler.push("supply-demand");
         planetMarket.compileSupplyDemand();
+        profiler.pop();
     }
 
     /**
@@ -453,7 +487,7 @@ public class GameUpdater extends GameTicker {
             //Request food
             //Append resources
             city.resourceDemands.addValue(race.getConsumableResource(), consume);
-            
+
             //Add demand to race too
             seg.upkeep.addValue(race.getConsumableResource(), consume);
             boolean success = removeResource(race.getConsumableResource(), consume, city);
@@ -526,6 +560,7 @@ public class GameUpdater extends GameTicker {
     }
 
     private void doPlanetCensus(Planet p) {
+        profiler.push("planet-census");
         //Index panet population
         long total = 0;
         for (ObjectReference cityId : p.cities) {
@@ -533,6 +568,7 @@ public class GameUpdater extends GameTicker {
             total += gameState.getObject(city.population, Population.class).getPopulationSize();
         }
         p.population = total;
+        profiler.pop();
     }
 
     private void processArea(Planet planet, City city, Area area) {
@@ -679,7 +715,7 @@ public class GameUpdater extends GameTicker {
             system.setPoint(starSystemPosition);
             for (int k = 0; k < system.getBodyCount(); k++) {
                 Body body = system.getBodyObject(k);
-                
+
                 SpacePoint pt = body.getOrbit().toSpacePoint();
                 body.setPoint(new SpacePoint(pt.getX() + starSystemPosition.getX(), pt.getY() + starSystemPosition.getY()));
             }
