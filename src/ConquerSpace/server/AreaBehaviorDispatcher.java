@@ -110,6 +110,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
                 //Get percentage
                 city.primaryProduction.add(key);
+                city.getPreviousQuarterProduction().addValue(key, val);
                 storeResource(key, val, city);
             });
         }
@@ -132,6 +133,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 city.primaryProduction.add(key);
+                city.getPreviousQuarterProduction().addValue(key, val);
                 storeResource(key, val * GameRefreshRate * area.getProductivity(), city);
             });
             area.setProducedLastTick(true);
@@ -151,6 +153,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
             double multiplier = getMultiplier(area);
             city.primaryProduction.add(area.getResourceMinedId());
+            city.getPreviousQuarterProduction().addValue(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * GameRefreshRate) * multiplier);
             storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * GameRefreshRate) * multiplier, city);
         }
     }
@@ -182,6 +185,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             //Calculate percentage
             city.primaryProduction.add(area.getGrown().getFoodGood());
             storeResource(area.getGrown().getFoodGood(), (area.getProductivity() * (double) area.getFieldSize()), city);
+            city.getPreviousQuarterProduction().addValue(area.getGrown().getFoodGood(), (area.getProductivity() * (double) area.getFieldSize()));
             area.grow();
         }
     }
@@ -264,6 +268,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
     }
 
     public Planet getPlanet() {
-        return planet;    }
+        return planet;
+    }
 
 }

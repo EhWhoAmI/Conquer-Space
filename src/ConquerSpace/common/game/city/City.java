@@ -101,6 +101,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
 
     public HashSet<StoreableReference> primaryProduction;
+    private DoubleHashMap<StoreableReference> previousQuarterProduction;
 
     public ObjectReference market;
 
@@ -160,6 +161,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
         tags = new HashMap<>();
         cityModifiers = new ArrayList<>();
         primaryProduction = new HashSet<>();
+        
+        previousQuarterProduction = new DoubleHashMap<>();
 
         cityType = CityType.Generic;
         size = 0;
@@ -427,5 +430,9 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourcesSentTo() {
         return resourcesSentTo;
+    }
+
+    public synchronized DoubleHashMap<StoreableReference> getPreviousQuarterProduction() {
+        return previousQuarterProduction;
     }
 }

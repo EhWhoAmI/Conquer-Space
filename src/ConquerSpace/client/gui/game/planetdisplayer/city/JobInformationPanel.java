@@ -72,7 +72,6 @@ class JobInformationPanel extends JPanel {
     private long currentlyWorking;
     private long populationLaborForceSize;
     private JTabbedPane tabs;
-    private JPanel segmentInformationPanel;
 
     private JPanel jobInformationPanel;
 
@@ -84,6 +83,8 @@ class JobInformationPanel extends JPanel {
     public JobInformationPanel(City selectedCity, GameState gameState) {
         this.selectedCity = selectedCity;
         this.gameState = gameState;
+        setBorder(new TitledBorder(new LineBorder(Color.gray), ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
+
         setLayout(new BorderLayout());
         populationCount = new HashMap<>();
         initPopulationInfo();
@@ -93,9 +94,7 @@ class JobInformationPanel extends JPanel {
         JPanel jobChartPanel = createJobChartPanel();
 
         //Population segments chart
-        segmentInformationPanel = new JPanel(new VerticalFlowLayout());
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobChartPanel);
-        tabs.add("Segment information", segmentInformationPanel);
 
         tabs.setSelectedIndex(selectedTab);
         tabs.addChangeListener(l -> {
@@ -103,7 +102,6 @@ class JobInformationPanel extends JPanel {
         });
 
         add(tabs, BorderLayout.CENTER);
-        setBorder(new TitledBorder(new LineBorder(Color.gray), ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
     }
 
     private void initPopulationInfo() {
@@ -178,7 +176,7 @@ class JobInformationPanel extends JPanel {
         JFreeChart barchart = ChartFactory.createStackedBarChart("", "Domain axis", "Range Axis", catdataset);
         barchart.removeLegend();
         CategoryPlot plot = (CategoryPlot) barchart.getPlot();
-        
+
         //Remove all space and labels
         plot.setOrientation(PlotOrientation.HORIZONTAL);
         plot.getRangeAxis().setVisible(false);
@@ -196,7 +194,7 @@ class JobInformationPanel extends JPanel {
         renderer.setRenderAsPercentages(true);
         renderer.setDrawBarOutline(false);
         renderer.setBaseItemLabelsVisible(true);
-        
+
         //Empty label
         StandardCategoryItemLabelGenerator gen = new StandardCategoryItemLabelGenerator("", new DecimalFormat("###,###"), new DecimalFormat("0%"));
         renderer.setBaseItemLabelGenerator(gen);
@@ -222,7 +220,7 @@ class JobInformationPanel extends JPanel {
                     //Add UI
                     jobInformationPanel.removeAll();
                     jobInformationPanel.add(new JLabel(jobType.getName()));
-                    jobInformationPanel.add(new JLabel("Amount: " + Utilities.longToHumanString(catdataset.getValue(jobType, "").longValue())));
+                    jobInformationPanel.add(new JLabel("Workers: " + Utilities.longToHumanString(catdataset.getValue(jobType, "").longValue())));
                     long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
                     //Get percentage
                     double percentage = ((double) catdataset.getValue(jobType, "").longValue() / (double) laborForceSize) * 100;

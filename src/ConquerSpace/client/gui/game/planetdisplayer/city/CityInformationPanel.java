@@ -136,14 +136,14 @@ public class CityInformationPanel extends JPanel {
         constraints.ipady = 90;
         add(cityIndustryPanel, constraints);
 
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 0;
-        constraints.weighty = 0;
+        constraints.weighty = 1;
         constraints.gridy = 4;
         constraints.gridx = 2;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
-        constraints.ipady = -90;
+        constraints.ipady = 0;
         add(jobInformationPanel, constraints);
 
         constraints.fill = GridBagConstraints.BOTH;

@@ -1,4 +1,5 @@
- /*
+
+/*
  * Conquer Space - Conquer Space!
  * Copyright (C) 2019 EhWhoAmI
  * 
@@ -100,10 +101,9 @@ public class CivilizationInitializer {
         this.gameState = state;
     }
 
-    public void initCivilization() {
+    public void initCivilization(Random selector) {
         //All the home planets of the civs are theirs.
         //Set home planet and sector
-        Random selector = new Random();
         NameGenerator gen = null;
         try {
             gen = NameGenerator.getNameGenerator("us.names");
@@ -367,16 +367,14 @@ public class CivilizationInitializer {
                 int x = (int) (Math.cos(theta) * randR) + stratum.getX();
                 int y = (int) (Math.sin(theta) * randR) + stratum.getY();
 
-                if (x < 0) {
-                    x = 0;
-                } else if (x >= p.getPlanetWidth()) {
-                    x = (p.getPlanetWidth() - 1);
-                }
+                x %= p.getPlanetWidth();
+                y %= p.getPlanetHeight();
 
+                if (x < 0) {
+                    x = p.getPlanetHeight() - x;
+                }
                 if (y < 0) {
-                    y = 0;
-                } else if (y >= p.getPlanetHeight()) {
-                    y = (p.getPlanetHeight() - 1);
+                    y = p.getPlanetHeight() - y;
                 }
 
                 GeographicPoint pt = new GeographicPoint(x, y);

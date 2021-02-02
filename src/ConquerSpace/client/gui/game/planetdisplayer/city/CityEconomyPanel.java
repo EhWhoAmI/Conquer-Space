@@ -68,6 +68,7 @@ public class CityEconomyPanel extends JPanel {
     private JTable resourceDemandTable;
     private JTable resourceInputTable;
     private JTable resourceOutputTable;
+    private JTable resourceGenerationTable;
     private JList<String> modifierList;
     private JList<String> connectedCityList;
 
@@ -122,11 +123,13 @@ public class CityEconomyPanel extends JPanel {
 
         resourceInputTable = new JTable(new StockpileInModel());
         resourceOutputTable = new JTable(new StockpileOutModel());
+        resourceGenerationTable = new JTable(new ResourceGenerationTable());
 
         tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
         tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.linked"), new JScrollPane(connectedCityList));
         tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.ledger"), new JScrollPane(resourceTable));
         tabs.add("Resource Demands", new JScrollPane(resourceDemandTable));
+        tabs.add("Resources Manufactured", new JScrollPane(resourceGenerationTable));
         tabs.add("Imports", new JScrollPane(resourceInputTable));
         tabs.add("Exports", new JScrollPane(resourceOutputTable));
         tabs.setSelectedIndex(selectedTab);
@@ -239,6 +242,53 @@ public class CityEconomyPanel extends JPanel {
                                 + "u/"
                                 //Get mass in kg...
                                 + (selectedCity.resourceDemands.get(storedValue) * gameState.getGood(storedValue).getMass())
+                                + " kg";
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return colunmNames[column];
+        }
+    }
+
+    private class ResourceGenerationTable extends AbstractTableModel {
+
+        String[] colunmNames = {
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
+            LOCALE_MESSAGES.getMessage("game.planet.resources.table.count")
+        };
+
+        @Override
+        public int getRowCount() {
+            if (selectedCity == null) {
+                return 0;
+            } else {
+                return selectedCity.getPreviousQuarterProduction().size();
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            return colunmNames.length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            //Lol needs to be efficient
+            StoreableReference storedValue = new ArrayList<>(selectedCity.getPreviousQuarterProduction().keySet()).get(rowIndex);
+
+            if (selectedCity != null) {
+                switch (columnIndex) {
+                    case 0:
+                        return gameState.getGood(storedValue);
+                    case 1:
+                        return selectedCity.getPreviousQuarterProduction().get(storedValue).toString()
+                                + "u/"
+                                //Get mass in kg...
+                                + (selectedCity.getPreviousQuarterProduction().get(storedValue) * gameState.getGood(storedValue).getMass())
                                 + " kg";
                 }
             }

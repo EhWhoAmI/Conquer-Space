@@ -44,7 +44,7 @@ import javax.swing.JScrollPane;
  */
 public class CityProductionPanel extends JPanel {
 
-    JList<String> shipClassList;
+    private JList<String> shipClassList;
 
     public CityProductionPanel(Civilization civilization, Planet planet, GameState gameState) {
         setLayout(new VerticalFlowLayout());
@@ -91,13 +91,7 @@ public class CityProductionPanel extends JPanel {
             JOptionPane.showInternalMessageDialog(this, ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.needport"));
         });
         add(createButton);
-    } //Create new space ship menu
-    //Find the space ports on this planet...
-    //Get selected ship
-    //Add selected ship class
-    //UI to create ship
-    //Set random name for now
-    //Deselect
+    }
 
     @Override
     public void setVisible(boolean aFlag) {
@@ -106,5 +100,5 @@ public class CityProductionPanel extends JPanel {
             shipClassList.updateUI();
         }
     }
-    
+
 }

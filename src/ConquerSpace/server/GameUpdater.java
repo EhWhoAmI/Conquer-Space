@@ -277,10 +277,11 @@ public class GameUpdater extends GameTicker {
         planetMarket.clearOrders();
         for (ObjectReference cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
-            //Clear ledger
+            //Clear ledgers
             city.resourceLedger.clear();
             city.getResourcesSentTo().clear();
             city.getResourcesGainedFrom().clear();
+            city.getPreviousQuarterProduction().clear();
             city.primaryProduction.clear();
 
             //Process city demands
