@@ -21,6 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -32,6 +33,8 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
     public String identifier;
     public HashMap<StoreableReference, Double> input;
     public HashMap<StoreableReference, Double> output;
+    public String[] tags;
+    
     /**
      * Can add the stuff you need to construct this
      */
@@ -73,5 +76,9 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
 
     public int getDifficulty() {
         return difficulty;
+    }
+    
+    public boolean containsTag(String tag) {
+        return Arrays.stream(tags).anyMatch(tag::equals);
     }
 }

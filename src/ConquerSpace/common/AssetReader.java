@@ -280,12 +280,23 @@ public class AssetReader {
 
         int diff = obj.getInt("diff");
 
+        //Tags
+        JSONArray tagsArray = obj.getJSONArray("tags");
+
+        String[] tags = new String[tagsArray.length()];
+
+        for (int i = 0; i < tagsArray.length(); i++) {
+            String s = tagsArray.getString(i);
+            tags[i] = s;
+        }
+
         ProductionProcess process = new ProductionProcess(state);
         process.name = name;
         process.identifier = identifier;
         process.input = input;
         process.output = output;
         process.difficulty = diff;
+        process.tags = tags;
         return process;
     }
 
