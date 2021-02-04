@@ -59,7 +59,7 @@ import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.Good;
-import ConquerSpace.common.game.resources.GoodReference;
+import ConquerSpace.common.game.resources.GoodUtil;
 import ConquerSpace.common.game.resources.ProductionProcess;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.Stratum;
@@ -79,6 +79,7 @@ import ConquerSpace.common.util.names.NameGenerator;
 import ConquerSpace.server.PeopleProcessor;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import org.apache.logging.log4j.Logger;
 
@@ -101,7 +102,7 @@ public class CivilizationInitializer {
         this.gameState = state;
     }
 
-    public void initCivilization(Random selector) {
+    public void initCivilizations(Random selector) {
         //All the home planets of the civs are theirs.
         //Set home planet and sector
         NameGenerator gen = null;
@@ -121,8 +122,8 @@ public class CivilizationInitializer {
             }
 
             //Add resources for the civ
-            civilization.taggedGoods.put("structure", findGoodByTag("structure"));
-            civilization.taggedGoods.put("energy", findGoodByTag("energy"));
+            civilization.taggedGoods.put("structure", GoodUtil.findGoodByTag(gameState, "structure"));
+            civilization.taggedGoods.put("energy", GoodUtil.findGoodByTag(gameState, "energy"));
 
             initVision(civilization, universe);
 
@@ -130,6 +131,8 @@ public class CivilizationInitializer {
             initializeTech(civilization, selector);
 
             initalizeCivValues(civilization);
+
+            getIndustryChains(civilization);
 
             HullMaterial material = new HullMaterial(gameState, "Testing Hull Material", 100, 5, 12);
             civilization.hullMaterials.add(material.getReference());
@@ -503,6 +506,16 @@ public class CivilizationInitializer {
     private void initializeTech(Civilization c, Random selector) {
         //Add fields
         c.fields = (Fields.toField(gameState.fieldNodeRoot));
+
+        addStartingTechnologies(c, selector);
+
+        //Add starting tech points...
+        c.setTechPoints(CIV_STARTING_TECH_PTS);
+
+        c.calculateTechLevel();
+    }
+
+    private void addStartingTechnologies(Civilization c, Random selector) {
         //Add all starting techs            
         for (Technology tech : Technologies.getTechsByTag(gameState, "Starting")) {
             c.researchTech(gameState, tech);
@@ -518,11 +531,6 @@ public class CivilizationInitializer {
         teks = Technologies.getTechsByTag(gameState, "Propulsion");
         //To research this
         c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
-
-        //Add starting tech points...
-        c.setTechPoints(CIV_STARTING_TECH_PTS);
-
-        c.calculateTechLevel();
     }
 
     private void initalizeRecruitedPeople(Civilization c, NameGenerator gen, Random selector) {
@@ -697,20 +705,42 @@ public class CivilizationInitializer {
         gen.generate(gameState, p);
     }
 
-    private StoreableReference findGoodByTag(String tagSearched) {
-        Good resource = null;
-        for (Good res : gameState.getGoodArrayList()) {
-            for (String tag : res.tags) {
-                if (tag.equals(tagSearched)) {
-                    resource = res;
+    private void getIndustryChains(Civilization civ) {
+        //Get consumer goods
+        ArrayList<StoreableReference> consumerGoods = GoodUtil.findGoodsByTag(gameState, "consumer");
+        for (StoreableReference consumerGood : consumerGoods) {
+            Good good = gameState.getGood(consumerGood);
+            //Idk do stuff
+            //Get production processes that do this
+
+            ProductionProcess generation = null;
+            //Then it's a chain!
+            for (ProductionProcess productionProcesse : civ.productionProcesses) {
+                if (productionProcesse.output.containsKey(good.getId())) {
+                    //Then it's the starting point
+                    generation = productionProcesse;
                     break;
                 }
             }
+            System.out.println(generation.getName());
+            System.out.println(findInputs(generation, civ));
+            //Get children until it's raw material refining I guess...
         }
-        if (resource != null) {
-            return resource.getId();
-        } else {
-            return GoodReference.INVALID_REFERENCE;
+    }
+
+    private ArrayList<ProductionProcess> findInputs(ProductionProcess process, Civilization civ) {
+        ArrayList<ProductionProcess> inputs = new ArrayList<>();
+        for (Map.Entry<StoreableReference, Double> en : process.input.entrySet()) {
+            StoreableReference key = en.getKey();
+            Double val = en.getValue();
+            //Get ratios too I guess...
+            for (ProductionProcess civProcess : civ.productionProcesses) {
+                if (civProcess.output.containsKey(key)) {
+                    //Then the inputs are these
+                    inputs.add(civProcess);
+                }
+            }
         }
+        return inputs;
     }
 }
