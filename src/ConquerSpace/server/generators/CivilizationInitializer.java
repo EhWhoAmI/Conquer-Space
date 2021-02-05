@@ -729,7 +729,11 @@ public class CivilizationInitializer {
     }
 
     private ArrayList<ProductionProcess> findInputs(ProductionProcess process, Civilization civ) {
+        
         ArrayList<ProductionProcess> inputs = new ArrayList<>();
+        if(process.containsTag("raw_processing")) {
+            return inputs;
+        }
         for (Map.Entry<StoreableReference, Double> en : process.input.entrySet()) {
             StoreableReference key = en.getKey();
             Double val = en.getValue();
@@ -738,6 +742,9 @@ public class CivilizationInitializer {
                 if (civProcess.output.containsKey(key)) {
                     //Then the inputs are these
                     inputs.add(civProcess);
+                    
+                    //Also process the children
+                    inputs.addAll(findInputs(civProcess, civ));
                 }
             }
         }
