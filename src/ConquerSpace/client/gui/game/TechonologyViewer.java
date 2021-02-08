@@ -42,8 +42,8 @@ public class TechonologyViewer extends JPanel {
         setLayout(new BorderLayout());
         c = civ;
         model = new DefaultListModel<>();
-        for (Technology t : c.civTechs.keySet()) {
-            if (c.civTechs.get(t) == Technologies.RESEARCHED) {
+        for (Technology t : c.getCivTechs().keySet()) {
+            if (c.getCivTechs().get(t) == Technologies.RESEARCHED) {
                 model.addElement(t);
             }
         }
@@ -62,8 +62,8 @@ public class TechonologyViewer extends JPanel {
     }
 
     public void update() {
-        for (Technology t : c.civTechs.keySet()) {
-            if (c.civTechs.get(t) == Technologies.RESEARCHED && !model.contains(t)) {
+        for (Technology t : c.getCivTechs().keySet()) {
+            if (c.getCivTechs().get(t) == Technologies.RESEARCHED && !model.contains(t)) {
                 model.addElement(t);
             }
         }

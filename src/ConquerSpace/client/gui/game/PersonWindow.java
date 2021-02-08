@@ -65,7 +65,7 @@ public class PersonWindow extends JPanel {
         this.gameState = gameState;
         setLayout(new HorizontalFlowLayout());
         listModel = new DefaultListModel<>();
-        for (ObjectReference id : c.people) {
+        for (ObjectReference id : c.getPeople()) {
             Person person = gameState.getObject(id, Person.class);
             listModel.addElement(person);
         }
@@ -143,7 +143,7 @@ public class PersonWindow extends JPanel {
     public void update() {
         previouslySelected = personList.getSelectedIndex();
         listModel.clear();
-        for (ObjectReference id : c.people) {
+        for (ObjectReference id : c.getPeople()) {
             Person person = gameState.getObject(id, Person.class);
             listModel.addElement(person);
         }

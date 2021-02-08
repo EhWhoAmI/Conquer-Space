@@ -122,8 +122,8 @@ public class CivilizationInitializer {
             }
 
             //Add resources for the civ
-            civilization.taggedGoods.put("structure", GoodUtil.findGoodByTag(gameState, "structure"));
-            civilization.taggedGoods.put("energy", GoodUtil.findGoodByTag(gameState, "energy"));
+            civilization.getTaggedGoods().put("structure", GoodUtil.findGoodByTag(gameState, "structure"));
+            civilization.getTaggedGoods().put("energy", GoodUtil.findGoodByTag(gameState, "energy"));
 
             initVision(civilization, universe);
 
@@ -135,7 +135,7 @@ public class CivilizationInitializer {
             getIndustryChains(civilization);
 
             HullMaterial material = new HullMaterial(gameState, "Testing Hull Material", 100, 5, 12);
-            civilization.hullMaterials.add(material.getReference());
+            civilization.getHullMaterials().add(material.getReference());
 
             UniversePath path = civilization.getStartingPlanet();
 
@@ -156,7 +156,7 @@ public class CivilizationInitializer {
             startingPlanet.setHabitated(true);
             startingPlanet.setName(civilization.getHomePlanetName());
 
-            civilization.habitatedPlanets.add(startingPlanet.getReference());
+            civilization.getHabitatedPlanets().add(startingPlanet.getReference());
 
             //Add resources
 //                for (Good res : GameController.ores) {
@@ -176,7 +176,7 @@ public class CivilizationInitializer {
             initializeOrgs(civilization, startingPlanet);
 
             //Set head of state position
-            civilization.government.officials.get(civilization.government.headofState).setPosition(civilization.getCapitalCity());
+            civilization.getGovernment().officials.get(civilization.getGovernment().headofState).setPosition(civilization.getCapitalCity());
 
             //Proc gen political stuff, progress events behind the scene to generate a little bit of history
         }
@@ -236,7 +236,7 @@ public class CivilizationInitializer {
         admin.setPosition(c);
         c.setGovernor(admin);
         c.peopleAtCity.add(admin.getReference());
-        civ.people.add(admin.getReference());
+        civ.getPeople().add(admin.getReference());
     }
 
     private void addMoreProcessingToCities(City city, Random selector, Civilization civ) {
@@ -298,9 +298,9 @@ public class CivilizationInitializer {
                 city.addArea(area.build(gameState).getReference());
             }
 
-            for (int k = 0; k < civ.productionProcesses.size(); k++) {
+            for (int k = 0; k < civ.getProductionProcesses().size(); k++) {
                 //Add random thing
-                ProductionProcess proc = civ.productionProcesses.get(k);
+                ProductionProcess proc = civ.getProductionProcesses().get(k);
                 //Add new factory
                 ManufacturerAreaFactory factory = new ManufacturerAreaFactory(civ);
                 factory.setProcess(proc);
@@ -353,7 +353,7 @@ public class CivilizationInitializer {
                 }
 
                 //Add random production process
-                ProductionProcess proc = c.productionProcesses.get(selector.nextInt(c.productionProcesses.size()));
+                ProductionProcess proc = c.getProductionProcesses().get(selector.nextInt(c.getProductionProcesses().size()));
                 //Add new factory
 
                 ManufacturerAreaFactory factory = new ManufacturerAreaFactory(c);
@@ -403,12 +403,12 @@ public class CivilizationInitializer {
         StoreableReference consumableResources = civ.getFoundingSpecies().getConsumableResource();
         ProductionProcess foodProcess = new ProductionProcess(gameState);
 
-        foodProcess.input.put(crop.getFoodGood(), 10d);
-        foodProcess.output.put(consumableResources, 10d);
+        foodProcess.getInput().put(crop.getFoodGood(), 10d);
+        foodProcess.getOutput().put(consumableResources, 10d);
         foodProcess.setName(crop.getName() + " to food");
         foodProcess.setDifficulty(1);
 
-        civ.productionProcesses.add(foodProcess);
+        civ.getProductionProcesses().add(foodProcess);
 
         //Add local life for the crop
         LocalLife localLife = new LocalLife();
@@ -466,7 +466,7 @@ public class CivilizationInitializer {
     }
 
     private void createUnrecruitedPeople(Civilization c, NameGenerator gen, Random selector) {
-        c.unrecruitedPeople.clear();
+        c.getUnrecruitedPeople().clear();
         int peopleCount = selector.nextInt(5) + 5;
 
         for (int peep = 0; peep < peopleCount; peep++) {
@@ -480,7 +480,7 @@ public class CivilizationInitializer {
             //Set location
             nerd.setPosition(c.getCapitalCity());
 
-            c.unrecruitedPeople.add(nerd.getReference());
+            c.getUnrecruitedPeople().add(nerd.getReference());
         }
 
         //Admins
@@ -495,7 +495,7 @@ public class CivilizationInitializer {
             dude.traits.add(getRandomPersonalityTrait(selector));
             dude.setPosition(c.getCapitalCity());
 
-            c.unrecruitedPeople.add(dude.getReference());
+            c.getUnrecruitedPeople().add(dude.getReference());
         }
     }
 
@@ -525,12 +525,12 @@ public class CivilizationInitializer {
         Technology[] teks = Technologies.getTechsByTag(gameState, "space travel base");
 
         //To research this
-        c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
+        c.getCivTechs().put(teks[selector.nextInt(teks.length)], 100);
 
         //Propulsion
         teks = Technologies.getTechsByTag(gameState, "Propulsion");
         //To research this
-        c.civTechs.put(teks[selector.nextInt(teks.length)], 100);
+        c.getCivTechs().put(teks[selector.nextInt(teks.length)], 100);
     }
 
     private void initalizeRecruitedPeople(Civilization c, NameGenerator gen, Random selector) {
@@ -547,7 +547,7 @@ public class CivilizationInitializer {
         r.traits.add(getRandomPersonalityTrait(selector));
         PeopleProcessor.placePerson(gameState.getObject(c.getCapitalCity(), PersonEnterable.class), r);
 
-        c.people.add(r.getReference());
+        c.getPeople().add(r.getReference());
     }
 
     //Governmental orgs...
@@ -594,16 +594,16 @@ public class CivilizationInitializer {
         dude.setPosition(c.getCapitalCity());
         dude.setRole("Ruling " + c.getSpeciesName());
 
-        c.government = new Government();
+        c.setGovernment(new Government());
         //Because democracy is for noobs
-        c.government.politicalPowerSource = PoliticalPowerSource.Autocracy;
+        c.getGovernment().politicalPowerSource = PoliticalPowerSource.Autocracy;
         //Set leader
         HeritableGovernmentPosition leader = new HeritableGovernmentPosition();
         leader.setName("God-Emperor");
         leader.setMethod(PoliticalPowerTransitionMethod.Inherit);
-        c.government.officials.put(leader, dude);
-        c.government.headofGovernment = leader;
-        c.government.headofState = leader;
+        c.getGovernment().officials.put(leader, dude);
+        c.getGovernment().headofGovernment = leader;
+        c.getGovernment().headofState = leader;
         PeopleProcessor.placePerson(gameState.getObject(c.getCapitalCity(), PersonEnterable.class), dude);
         dude.governmentPosition = leader;
         c.employ(dude.getReference());
@@ -618,7 +618,7 @@ public class CivilizationInitializer {
         //Add heir to the throne of the GOD EMPEROR
 
         GovernmentPosition crownPrincePosition = new GovernmentPosition();
-        c.government.officials.put(crownPrincePosition, crownPrince);
+        c.getGovernment().officials.put(crownPrincePosition, crownPrince);
         crownPrincePosition.setName("Crown Prince");
         leader.nextInLine = crownPrincePosition;
         crownPrince.governmentPosition = crownPrincePosition;
@@ -630,12 +630,12 @@ public class CivilizationInitializer {
     private void initVision(Civilization c, Galaxy u) {
         for (int i = 0; i < u.getStarSystemCount(); i++) {
             StarSystem s = u.getStarSystemObject(i);
-            c.vision.put(new UniversePath(i), VisionTypes.UNDISCOVERED);
+            c.getVision().put(new UniversePath(i), VisionTypes.UNDISCOVERED);
             for (int h = 0; h < s.getBodyCount(); h++) {
                 StarSystemBody b = s.getBodyObject(h);
                 //Add planets
 
-                c.vision.put(new UniversePath(i, b.getIndex()), VisionTypes.UNDISCOVERED);
+                c.getVision().put(new UniversePath(i, b.getIndex()), VisionTypes.UNDISCOVERED);
             }
         }
     }
@@ -674,7 +674,7 @@ public class CivilizationInitializer {
         Field toAdd = fields.get(selector.nextInt(fields.size()));
         area.focusFields.put(toAdd.getName(), 1d);
 
-        civilization.scienceLabs.add(area.getReference());
+        civilization.getScienceLabs().add(area.getReference());
 
         //Choose random fields
         city.addArea(area.getReference());
@@ -692,7 +692,7 @@ public class CivilizationInitializer {
         PowerPlantAreaFactory powerPlant = new PowerPlantAreaFactory(civ);
 
         powerPlant.setMaxVolume(5);
-        powerPlant.setUsesResource(civ.taggedGoods.get("energy"));
+        powerPlant.setUsesResource(civ.getTaggedGoods().get("energy"));
         powerPlant.setProduction(5000);
         powerPlant.setOperatingJobs(5000);
         powerPlant.setMaxJobs(10000);
@@ -715,8 +715,8 @@ public class CivilizationInitializer {
 
             ProductionProcess generation = null;
             //Then it's a chain!
-            for (ProductionProcess productionProcesse : civ.productionProcesses) {
-                if (productionProcesse.output.containsKey(good.getId())) {
+            for (ProductionProcess productionProcesse : civ.getProductionProcesses()) {
+                if (productionProcesse.getOutput().containsKey(good.getId())) {
                     //Then it's the starting point
                     generation = productionProcesse;
                     break;
@@ -729,20 +729,20 @@ public class CivilizationInitializer {
     }
 
     private ArrayList<ProductionProcess> findInputs(ProductionProcess process, Civilization civ) {
-        
+
         ArrayList<ProductionProcess> inputs = new ArrayList<>();
-        if(process.containsTag("raw_processing")) {
+        if (process.containsTag("raw_processing")) {
             return inputs;
         }
-        for (Map.Entry<StoreableReference, Double> en : process.input.entrySet()) {
+        for (Map.Entry<StoreableReference, Double> en : process.getInput().entrySet()) {
             StoreableReference key = en.getKey();
             Double val = en.getValue();
             //Get ratios too I guess...
-            for (ProductionProcess civProcess : civ.productionProcesses) {
-                if (civProcess.output.containsKey(key)) {
+            for (ProductionProcess civProcess : civ.getProductionProcesses()) {
+                if (civProcess.getOutput().containsKey(key)) {
                     //Then the inputs are these
                     inputs.add(civProcess);
-                    
+
                     //Also process the children
                     inputs.addAll(findInputs(civProcess, civ));
                 }

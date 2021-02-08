@@ -49,7 +49,7 @@ public class ToOrbitEngineDesignerPanel extends ShipComponentDesignerPanel {
         this.civ = civ;
         this.gameState = gameState;
         comboBoxModel = new DefaultComboBoxModel<>();
-        for (ObjectReference or : civ.launchSystems) {
+        for (ObjectReference or : civ.getLaunchSystems()) {
             comboBoxModel.addElement(gameState.getObject(or, LaunchSystem.class));
         }
         launchSystemTypeComboBox = new JComboBox<>(comboBoxModel);
@@ -78,7 +78,7 @@ public class ToOrbitEngineDesignerPanel extends ShipComponentDesignerPanel {
         if (aFlag) {
             comboBoxModel.removeAllElements();
             //Re-add all elements
-            for (ObjectReference or : civ.launchSystems) {
+            for (ObjectReference or : civ.getLaunchSystems()) {
                 comboBoxModel.addElement(gameState.getObject(or, LaunchSystem.class));
             }
         }

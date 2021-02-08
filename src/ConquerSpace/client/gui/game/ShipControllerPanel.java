@@ -72,7 +72,7 @@ public class ShipControllerPanel extends JPanel {
         //Another panel to add random ship components
         JPanel addRandomShipComponentPanel = new JPanel();
         shipComponentListModel = new ObjectListModel<>();
-        shipComponentListModel.setElements(civilization.shipComponentList);
+        shipComponentListModel.setElements(civilization.getShipComponentList());
         shipComponentListModel.setHandler(l -> {
             return gameState.getObject(l, ShipComponent.class).getName();
         });

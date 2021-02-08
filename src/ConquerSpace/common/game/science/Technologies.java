@@ -171,32 +171,32 @@ public class Technologies implements Serializable {
             String techtoboost = splitAction[1];
             int amount = Integer.parseInt(splitAction[2]);
             Technology tech = getTechByName(gameState, techtoboost);
-            if (c.civTechs.containsKey(tech)) {
-                if (c.civTechs.get(tech) <= 100) {
+            if (c.getCivTechs().containsKey(tech)) {
+                if (c.getCivTechs().get(tech) <= 100) {
                     //Then add
-                    if (c.civTechs.get(tech) > (100 - amount)) {
-                        c.civTechs.put(tech, 100);
+                    if (c.getCivTechs().get(tech) > (100 - amount)) {
+                        c.getCivTechs().put(tech, 100);
                     } else {
-                        c.civTechs.put(tech, c.civTechs.get(tech) + amount);
+                        c.getCivTechs().put(tech, c.getCivTechs().get(tech) + amount);
                     }
                 }
             } else {
-                c.civTechs.put(tech, amount);
+                c.getCivTechs().put(tech, amount);
             }
         } else if (action.startsWith("boost")) {
             //Boosts a certain multiplier
             //Get civ multiplier
             String[] splitAction = action.split(":");
-            if (c.multipliers.containsKey(splitAction[1])) {
+            if (c.getMultipliers().containsKey(splitAction[1])) {
                 //Then add
-                c.multipliers.put(splitAction[1], c.multipliers.get(splitAction[0]) + Double.parseDouble(splitAction[1]));
+                c.getMultipliers().put(splitAction[1], c.getMultipliers().get(splitAction[0]) + Double.parseDouble(splitAction[1]));
             } else {
-                c.multipliers.put(splitAction[1], Double.parseDouble(splitAction[1]));
+                c.getMultipliers().put(splitAction[1], Double.parseDouble(splitAction[1]));
             }
         } else if (action.startsWith("value")) {
             //Sets a certain value
             String[] splitAction = action.split(":");
-            c.values.put(splitAction[0], Integer.parseInt(splitAction[1]));
+            c.getValues().put(splitAction[0], Integer.parseInt(splitAction[1]));
         } else if (action.startsWith("field")) {
             //Add the field that is mentioned
             String field = action.toLowerCase();
@@ -206,7 +206,7 @@ public class Technologies implements Serializable {
             c.upgradeField(text[1], Double.parseDouble(text[2]));
         } else if (action.startsWith("launch")) {
             //Set civ has launchpads
-            c.values.put("haslaunch", 1);
+            c.getValues().put("haslaunch", 1);
             //unlocks a launch system
             //Get the launch system
             String[] text = action.split(":");
@@ -216,7 +216,7 @@ public class Technologies implements Serializable {
 
             LaunchSystem launchSystem = gameState.launchSystems.stream().filter(e -> e.getName().equals(launchName)).findFirst().orElse(null);
             if (launchSystem != null) {
-                c.launchSystems.add(launchSystem.getReference());
+                c.getLaunchSystems().add(launchSystem.getReference());
             }
 
         } else if (action.startsWith("orbit")) {
@@ -264,7 +264,7 @@ public class Technologies implements Serializable {
                     a -> gameState.getObject(a.getReference(), EngineTechnology.class)
                             .getIdentifier().equals(compName)).findFirst().orElse(null);
             if (t != null) {
-                c.engineTechs.add(t.getReference());
+                c.getEngineTechs().add(t.getReference());
             }
         } else if (action.startsWith("process")) {
             //Unlocks process
@@ -273,7 +273,7 @@ public class Technologies implements Serializable {
 
             ProductionProcess process = gameState.prodProcesses.get(content);
             if (process != null) {
-                c.productionProcesses.add(process);
+                c.getProductionProcesses().add(process);
             } else {
                 LOGGER.trace("Could not find process " + content);
             }
@@ -284,7 +284,7 @@ public class Technologies implements Serializable {
 
             StoreableReference goodId = gameState.getGoodId(content);
             if (goodId != null) {
-                c.mineableGoods.add(goodId);
+                c.getMineableGoods().add(goodId);
             }
         } else if (action.startsWith("energy")) {
             //Add Energy source

@@ -198,7 +198,7 @@ public class GameUpdater extends GameTicker {
                 Civilization civil = gameState.getObject(civReferene, Civilization.class);
                 //Deal with later...
                 Body bod = gameState.getObject(p, Body.class);
-                civil.vision.put(bod.getUniversePath(), VisionTypes.KNOWS_ALL);
+                civil.getVision().put(bod.getUniversePath(), VisionTypes.KNOWS_ALL);
             }
         }
 
@@ -206,7 +206,7 @@ public class GameUpdater extends GameTicker {
         for (int civ = 0; civ < gameState.getCivilizationCount(); civ++) {
             ObjectReference civid = gameState.getCivilization(civ);
             Civilization civil = gameState.getObject(civid, Civilization.class);
-            for (ObjectReference ptref : civil.visionPoints) {
+            for (ObjectReference ptref : civil.getVisionPoints()) {
                 ConquerSpaceGameObject object = gameState.getObject(ptref);
                 if (object instanceof VisionPoint) {
                     VisionPoint pt = (VisionPoint) object;
@@ -226,7 +226,7 @@ public class GameUpdater extends GameTicker {
                                 //Its in!
                                 int amount = ((int) ((1 - (dist / (double) (range * KM_IN_LTYR))) * 100));
 
-                                civil.vision.put(universe.getStarSystemObject(g).getUniversePath(),
+                                civil.getVision().put(universe.getStarSystemObject(g).getUniversePath(),
                                         (amount > 100) ? 100 : (amount));
                             }
                         }
@@ -556,27 +556,27 @@ public class GameUpdater extends GameTicker {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
 
-            Iterator<Technology> tech = civilization.currentlyResearchingTechonologys.keySet().iterator();
+            Iterator<Technology> tech = civilization.getCurrentlyResearchingTechonologys().keySet().iterator();
 
             while (tech.hasNext()) {
                 Technology t = tech.next();
 
-                if ((Technologies.estFinishTime(t) - civilization.civResearch.get(t)) <= 0) {
+                if ((Technologies.estFinishTime(t) - civilization.getCivResearch().get(t)) <= 0) {
                     //Then tech is finished
                     civilization.researchTech(gameState, t);
-                    civilization.civResearch.remove(t);
+                    civilization.getCivResearch().remove(t);
                     //c.currentlyResearchingTechonologys.remove(t);
                     tech.remove();
 
                     civilization.getBehavior().alert(new Alert(0, 0, "Tech " + t.getName() + " is finished"));
                 } else {
                     //Increment by number of ticks
-                    civilization.civResearch.put(t, civilization.civResearch.get(t) + civilization.currentlyResearchingTechonologys.get(t).getSkill() * delta);
+                    civilization.getCivResearch().put(t, civilization.getCivResearch().get(t) + civilization.getCurrentlyResearchingTechonologys().get(t).getSkill() * delta);
                 }
             }
 
             //Process science labs
-            for (ObjectReference scienceLab : civilization.scienceLabs) {
+            for (ObjectReference scienceLab : civilization.getScienceLabs()) {
                 //TODO...
             }
         }
@@ -586,8 +586,8 @@ public class GameUpdater extends GameTicker {
         for (int i = 0; i < gameState.getCivilizationCount(); i++) {
             Civilization civilization = gameState.getCivilizationObject(i);
 
-            for (Map.Entry<StoreableReference, Double> entry : civilization.resourceList.entrySet()) {
-                civilization.resourceList.put(entry.getKey(), 0d);
+            for (Map.Entry<StoreableReference, Double> entry : civilization.getResourceList().entrySet()) {
+                civilization.getResourceList().put(entry.getKey(), 0d);
             }
             //Process resources
             for (ResourceStockpile s : civilization.getResourceStorages()) {
@@ -595,11 +595,11 @@ public class GameUpdater extends GameTicker {
 
                 for (StoreableReference type : s.storedTypes()) {
                     //add to index
-                    if (!civilization.resourceList.containsKey(type)) {
-                        civilization.resourceList.put(type, 0d);
+                    if (!civilization.getResourceList().containsKey(type)) {
+                        civilization.getResourceList().put(type, 0d);
                     }
-                    Double amountToAdd = (civilization.resourceList.get(type) + s.getResourceAmount(type));
-                    civilization.resourceList.put(type, amountToAdd);
+                    Double amountToAdd = (civilization.getResourceList().get(type) + s.getResourceAmount(type));
+                    civilization.getResourceList().put(type, amountToAdd);
                 }
             }
         }
@@ -658,7 +658,7 @@ public class GameUpdater extends GameTicker {
             Civilization civilization = gameState.getCivilizationObject(i);
 
             //Process ship actions
-            for (ObjectReference shipId : civilization.spaceships) {
+            for (ObjectReference shipId : civilization.getSpaceships()) {
                 Ship ship = gameState.getObject(shipId, Ship.class);
                 ShipAction sa = ship.getActionAndPopIfDone(gameState);
                 if (!sa.checkIfDone(gameState)) {

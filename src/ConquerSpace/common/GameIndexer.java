@@ -36,7 +36,7 @@ public class GameIndexer {
     }
     
     public void compileResourceStorages(Civilization c) {
-        c.resourceStorages.clear();
+        c.getResourceStorages().clear();
         //for(Planet p : c.habitatedPlanets) {
             //p.cities.stream().forEach(cty -> {c.resourceStorages.add(cty);});
         //}

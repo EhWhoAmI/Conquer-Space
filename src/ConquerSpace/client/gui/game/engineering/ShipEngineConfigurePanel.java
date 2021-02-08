@@ -83,7 +83,7 @@ public class ShipEngineConfigurePanel extends JPanel {
             setLayout(new BorderLayout());
             engineListModel = new ObjectListModel<>();
             //Fill list	
-            for (ObjectReference obj : civ.shipComponentList) {
+            for (ObjectReference obj : civ.getShipComponentList()) {
                 ShipComponent template = gameState.getObject(obj, ShipComponent.class);
                 if (template instanceof EngineComponent) {
                     engineListModel.addElement((EngineComponent) template);
@@ -134,7 +134,7 @@ public class ShipEngineConfigurePanel extends JPanel {
             DefaultComboBoxModel<EngineTechnology> engineTechBoxModel = new DefaultComboBoxModel<>();
 
             //Add the civ info
-            for (ObjectReference t : civ.engineTechs) {
+            for (ObjectReference t : civ.getEngineTechs()) {
                 EngineTechnology technology = gameState.getObject(t, EngineTechnology.class);
 
                 engineTechBoxModel.addElement(technology);

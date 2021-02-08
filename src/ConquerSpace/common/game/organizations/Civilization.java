@@ -63,52 +63,52 @@ public class Civilization extends Organization implements Employer {
 
     private String homePlanetName;
 
-    public HashMap<UniversePath, Integer> vision;
+    private HashMap<UniversePath, Integer> vision;
 
     private UniversePath startingPlanet;
 
-    public HashMap<Technology, Integer> civTechs;
-    public HashMap<Technology, Integer> civResearch;
-    public HashMap<Technology, Scientist> currentlyResearchingTechonologys;
+    private HashMap<Technology, Integer> civTechs;
+    private HashMap<Technology, Integer> civResearch;
+    private HashMap<Technology, Scientist> currentlyResearchingTechonologys;
 
-    public HashMap<String, Double> multipliers;
-    public HashMap<String, Integer> values;
+    private HashMap<String, Double> multipliers;
+    private HashMap<String, Integer> values;
 
     private int techLevel = 0;
 
-    public ArrayList<ObjectReference> people;
-    public ArrayList<ObjectReference> unrecruitedPeople;
+    private ArrayList<ObjectReference> people;
+    private ArrayList<ObjectReference> unrecruitedPeople;
 
-    public ArrayList<ObjectReference> launchSystems;
+    private ArrayList<ObjectReference> launchSystems;
 
-    public ArrayList<ObjectReference> visionPoints;
-    public ArrayList<ObjectReference> resourceStorages;
+    private ArrayList<ObjectReference> visionPoints;
+    private ArrayList<ObjectReference> resourceStorages;
 
-    public ArrayList<ObjectReference> spaceships;
-    public ArrayList<ObjectReference> shipClasses;
-    public ArrayList<ObjectReference> hullMaterials;
-    public ArrayList<ObjectReference> hulls;
+    private ArrayList<ObjectReference> spaceships;
+    private ArrayList<ObjectReference> shipClasses;
+    private ArrayList<ObjectReference> hullMaterials;
+    private ArrayList<ObjectReference> hulls;
     public Field fields;
-    public ArrayList<ObjectReference> shipComponentList;
-    public ArrayList<ObjectReference> engineTechs;
-    public ArrayList<ObjectReference> launchVehicles;
+    private ArrayList<ObjectReference> shipComponentList;
+    private ArrayList<ObjectReference> engineTechs;
+    private ArrayList<ObjectReference> launchVehicles;
 
     /**
      * Resources that they possess.
      */
-    public HashMap<StoreableReference, Double> resourceList;
+    private HashMap<StoreableReference, Double> resourceList;
 
-    public HashMap<String, StoreableReference> taggedGoods;
+    private HashMap<String, StoreableReference> taggedGoods;
 
-    public ArrayList<ObjectReference> habitatedPlanets;
+    private ArrayList<ObjectReference> habitatedPlanets;
 
-    public ArrayList<Event> events;
+    private ArrayList<Event> events;
 
-    public ArrayList<ProductionProcess> productionProcesses;
+    private ArrayList<ProductionProcess> productionProcesses;
 
-    public ArrayList<StoreableReference> mineableGoods;
+    private ArrayList<StoreableReference> mineableGoods;
 
-    public ArrayList<ObjectReference> scienceLabs;
+    private ArrayList<ObjectReference> scienceLabs;
 
     private ArrayList<ObjectReference> cities;
 
@@ -125,9 +125,9 @@ public class Civilization extends Organization implements Employer {
     //Amount of money in millions of isk of their national currency ^
     private long moneyReserves = 0;
 
-    public ArrayList<Integer> contacts;
+    private ArrayList<Integer> contacts;
 
-    public Government government;
+    private Government government;
 
     public Civilization(GameState gameState) {
         super(gameState);
@@ -235,16 +235,16 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void addTech(Technology t) {
-        civTechs.put(t, 0);
-        civResearch.put(t, 0);
+        getCivTechs().put(t, 0);
+        getCivResearch().put(t, 0);
     }
 
     public Technology getTechByName(String s) {
-        return (civTechs.keySet().stream().filter(e -> e.getName().equalsIgnoreCase(s))).findFirst().get();
+        return (getCivTechs().keySet().stream().filter(e -> e.getName().equalsIgnoreCase(s))).findFirst().get();
     }
 
     public Technology[] getTechsByTag(String tag) {
-        Object[] techList = civTechs.keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e -> civTechs.get(e) == Technologies.RESEARCHED).toArray();
+        Object[] techList = getCivTechs().keySet().stream().filter(e -> Arrays.asList(e.getTags()).contains(tag)).filter(e -> getCivTechs().get(e) == Technologies.RESEARCHED).toArray();
         return (Arrays.copyOf(techList, techList.length, Technology[].class));
     }
 
@@ -253,18 +253,18 @@ public class Civilization extends Organization implements Employer {
         for (String act : t.getActions()) {
             Technologies.parseAction(act, gameState, this);
         }
-        civTechs.put(t, Technologies.RESEARCHED);
+        getCivTechs().put(t, Technologies.RESEARCHED);
         //Delete the tech because it has been researhed
-        civResearch.remove(t);
+        getCivResearch().remove(t);
     }
 
     public void assignResearch(Technology t, Person p) {
-        if (people.contains(p.getReference()) && p instanceof Scientist) {
+        if (getPeople().contains(p.getReference()) && p instanceof Scientist) {
             //Then do it...
-            currentlyResearchingTechonologys.put(t, (Scientist) p);
-            civResearch.put(t, 0);
+            getCurrentlyResearchingTechonologys().put(t, (Scientist) p);
+            getCivResearch().put(t, 0);
             //Hide because it is researching
-            civTechs.put(t, -1);
+            getCivTechs().put(t, -1);
         }
     }
 
@@ -274,29 +274,29 @@ public class Civilization extends Organization implements Employer {
 
     public void calculateTechLevel() {
         techLevel = 0;
-        civTechs.keySet().stream().filter((t) -> (civTechs.get(t) == Technologies.RESEARCHED)).forEachOrdered((t) -> {
+        getCivTechs().keySet().stream().filter((t) -> (getCivTechs().get(t) == Technologies.RESEARCHED)).forEachOrdered((t) -> {
             techLevel += t.getLevel();
         });
     }
 
     public void addShipComponent(ObjectReference s) {
-        shipComponentList.add(s);
+        getShipComponentList().add(s);
     }
 
     public void putValue(String key, Integer value) {
-        values.put(key, value);
+        getValues().put(key, value);
     }
 
     public void putValue(String key, int value) {
-        values.put(key, value);
+        getValues().put(key, value);
     }
 
     public void putMultiplier(String key, Double value) {
-        multipliers.put(key, value);
+        getMultipliers().put(key, value);
     }
 
     public void putMultiplier(String key, double value) {
-        multipliers.put(key, value);
+        getMultipliers().put(key, value);
     }
 
     public void setFoundingSpecies(Race foundingSpecies) {
@@ -385,7 +385,7 @@ public class Civilization extends Organization implements Employer {
     }
 
     public void employ(ObjectReference p) {
-        people.add(p);
+        getPeople().add(p);
         gameState.getObject(p, Person.class).employer = getReference();
     }
 
@@ -402,9 +402,213 @@ public class Civilization extends Organization implements Employer {
     }
 
     public boolean civValueIsGreaterThan(String key, Integer i) {
-        if (values.containsKey(key)) {
-            return values.get(key) > i;
+        if (getValues().containsKey(key)) {
+            return getValues().get(key) > i;
         }
         return false;
+    }
+
+    /**
+     * @return the unrecruitedPeople
+     */
+    public ArrayList<ObjectReference> getUnrecruitedPeople() {
+        return unrecruitedPeople;
+    }
+
+    /**
+     * @return the launchSystems
+     */
+    public ArrayList<ObjectReference> getLaunchSystems() {
+        return launchSystems;
+    }
+
+    /**
+     * @return the visionPoints
+     */
+    public ArrayList<ObjectReference> getVisionPoints() {
+        return visionPoints;
+    }
+
+    /**
+     * @return the spaceships
+     */
+    public ArrayList<ObjectReference> getSpaceships() {
+        return spaceships;
+    }
+
+    /**
+     * @return the shipClasses
+     */
+    public ArrayList<ObjectReference> getShipClasses() {
+        return shipClasses;
+    }
+
+    /**
+     * @return the hullMaterials
+     */
+    public ArrayList<ObjectReference> getHullMaterials() {
+        return hullMaterials;
+    }
+
+    /**
+     * @return the hulls
+     */
+    public ArrayList<ObjectReference> getHulls() {
+        return hulls;
+    }
+
+    /**
+     * @return the shipComponentList
+     */
+    public ArrayList<ObjectReference> getShipComponentList() {
+        return shipComponentList;
+    }
+
+    /**
+     * @return the engineTechs
+     */
+    public ArrayList<ObjectReference> getEngineTechs() {
+        return engineTechs;
+    }
+
+    /**
+     * @return the launchVehicles
+     */
+    public ArrayList<ObjectReference> getLaunchVehicles() {
+        return launchVehicles;
+    }
+
+    /**
+     * @return the resourceList
+     */
+    public HashMap<StoreableReference, Double> getResourceList() {
+        return resourceList;
+    }
+
+    /**
+     * @return the taggedGoods
+     */
+    public HashMap<String, StoreableReference> getTaggedGoods() {
+        return taggedGoods;
+    }
+
+    /**
+     * @return the habitatedPlanets
+     */
+    public ArrayList<ObjectReference> getHabitatedPlanets() {
+        return habitatedPlanets;
+    }
+
+    /**
+     * @return the events
+     */
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
+
+    /**
+     * @return the productionProcesses
+     */
+    public ArrayList<ProductionProcess> getProductionProcesses() {
+        return productionProcesses;
+    }
+
+    /**
+     * @return the mineableGoods
+     */
+    public ArrayList<StoreableReference> getMineableGoods() {
+        return mineableGoods;
+    }
+
+    /**
+     * @return the scienceLabs
+     */
+    public ArrayList<ObjectReference> getScienceLabs() {
+        return scienceLabs;
+    }
+
+    /**
+     * @return the cities
+     */
+    public ArrayList<ObjectReference> getCities() {
+        return cities;
+    }
+
+    /**
+     * @return the contacts
+     */
+    public ArrayList<Integer> getContacts() {
+        return contacts;
+    }
+
+    /**
+     * @return the government
+     */
+    public Government getGovernment() {
+        return government;
+    }
+
+    /**
+     * Sets the government, AKA maybe a coup lol.
+     * @param government
+     */
+    public void setGovernment(Government government) {
+        this.government = government;
+    }
+
+    /**
+     * @return the vision
+     */
+    public HashMap<UniversePath, Integer> getVision() {
+        return vision;
+    }
+
+    /**
+     * @return the civTechs
+     */
+    public HashMap<Technology, Integer> getCivTechs() {
+        return civTechs;
+    }
+
+    /**
+     * @return the civResearch
+     */
+    public HashMap<Technology, Integer> getCivResearch() {
+        return civResearch;
+    }
+
+    /**
+     * @return the currentlyResearchingTechonologys
+     */
+    public HashMap<Technology, Scientist> getCurrentlyResearchingTechonologys() {
+        return currentlyResearchingTechonologys;
+    }
+
+    /**
+     * @return the multipliers
+     */
+    public HashMap<String, Double> getMultipliers() {
+        return multipliers;
+    }
+
+    /**
+     * @return the values
+     */
+    public HashMap<String, Integer> getValues() {
+        return values;
+    }
+
+    /**
+     * @return the people
+     */
+    public ArrayList<ObjectReference> getPeople() {
+        return people;
+    }
+
+    /**
+     * @param people the people to set
+     */
+    public void setPeople(ArrayList<ObjectReference> people) {
+        this.people = people;
     }
 }

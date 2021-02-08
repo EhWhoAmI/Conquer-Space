@@ -52,7 +52,7 @@ public class CityProductionPanel extends JPanel {
         //Create new space ship menu
         add(new JLabel(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.spaceship")));
         ObjectListModel<ObjectReference> shipList = new ObjectListModel<>();
-        shipList.setElements(civilization.shipClasses);
+        shipList.setElements(civilization.getShipClasses());
         shipList.setHandler(l -> {
             return gameState.getObject(l, ShipClass.class).getName();
         });
@@ -80,7 +80,7 @@ public class CityProductionPanel extends JPanel {
                         //Set random name for now
                         ship.setName(UUID.randomUUID().toString());
                         port.landedShips.add(ship.getReference());
-                        civilization.spaceships.add(ship.getReference());
+                        civilization.getSpaceships().add(ship.getReference());
                         JOptionPane.showInternalMessageDialog(this, ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.launch.alert", shipClass.getName(), ship.getName()));
                         //Deselect
                         shipClassList.clearSelection();

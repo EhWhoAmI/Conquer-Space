@@ -98,8 +98,8 @@ public class PeopleProcessor {
                 HeritableGovernmentPosition pos = (HeritableGovernmentPosition) admin.governmentPosition;
                 GovernmentPosition nextPosition = pos.nextInLine;
                 //Get person
-                Person next = gameState.getObject(admin.employer, Civilization.class).government.officials.get(nextPosition);
-                gameState.getObject(admin.employer, Civilization.class).government.officials.put(pos, next);
+                Person next = gameState.getObject(admin.employer, Civilization.class).getGovernment().officials.get(nextPosition);
+                gameState.getObject(admin.employer, Civilization.class).getGovernment().officials.put(pos, next);
                 next.setRole("GOT EM");
             }
         }

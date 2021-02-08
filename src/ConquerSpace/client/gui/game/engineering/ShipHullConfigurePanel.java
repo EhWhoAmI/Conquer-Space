@@ -47,7 +47,7 @@ public class ShipHullConfigurePanel extends JPanel {
     public ShipHullConfigurePanel(GameState gameState, Civilization civ) {
         setLayout(new GridLayout(1, 2));
         hullListModel = new DefaultListModel<>();
-        for (ObjectReference obj : civ.hulls) {
+        for (ObjectReference obj : civ.getHulls()) {
             Hull hull = gameState.getObject(obj, Hull.class);
             hullListModel.addElement(hull);
         }

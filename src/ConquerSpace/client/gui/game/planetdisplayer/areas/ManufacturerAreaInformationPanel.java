@@ -49,7 +49,7 @@ public class ManufacturerAreaInformationPanel extends AreaInformationPanel<Manuf
         JLabel processName = new JLabel(area.getProcess().name);
         StringBuilder inputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.input"));
 
-        for (Map.Entry<StoreableReference, Double> entry : area.getProcess().input.entrySet()) {
+        for (Map.Entry<StoreableReference, Double> entry : area.getProcess().getInput().entrySet()) {
             StoreableReference key = entry.getKey();
             Double val = entry.getValue();
             inputString.append(gameState.getGood(key).getName());
@@ -62,7 +62,7 @@ public class ManufacturerAreaInformationPanel extends AreaInformationPanel<Manuf
         JLabel input = new JLabel(inputString.toString());
 
         StringBuilder outputString = new StringBuilder(LOCALE_MESSAGES.getMessage("game.planet.areas.factory.output"));
-        for (Map.Entry<StoreableReference, Double> entry : area.getProcess().output.entrySet()) {
+        for (Map.Entry<StoreableReference, Double> entry : area.getProcess().getOutput().entrySet()) {
             StoreableReference key = entry.getKey();
             Double val = entry.getValue();
             outputString.append(gameState.getGood(key).getName());

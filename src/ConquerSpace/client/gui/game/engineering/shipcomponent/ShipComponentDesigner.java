@@ -80,7 +80,7 @@ public class ShipComponentDesigner extends JPanel {
                     if (ref != null && !shipComponentName.getText().isEmpty()) {
                         ref.setName(shipComponentName.getText());
                         //Add ship component
-                        c.shipComponentList.add(ref.getReference());
+                        c.getShipComponentList().add(ref.getReference());
                         shipComponentList.updateUI();
 
                         clearUI();
@@ -97,7 +97,7 @@ public class ShipComponentDesigner extends JPanel {
         toolBar.add(newComponentButton);
 
         shipComponentListModel = new ObjectListModel<>();
-        shipComponentListModel.setElements(c.shipComponentList);
+        shipComponentListModel.setElements(c.getShipComponentList());
         shipComponentListModel.setHandler(l -> {
             return gameState.getObject(l, ShipComponent.class).getName();
         });

@@ -77,7 +77,7 @@ public class ShipManager extends JPanel {
         //Populate table
         int selected = table.getSelectedRow();
         //model.empty();
-        for (ObjectReference shipId : c.spaceships) {
+        for (ObjectReference shipId : c.getSpaceships()) {
             Ship s = gameState.getObject(shipId, Ship.class);
             //process
             if (!model.objects.contains(s)) {

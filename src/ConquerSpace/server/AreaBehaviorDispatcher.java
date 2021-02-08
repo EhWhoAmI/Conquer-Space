@@ -104,7 +104,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
         if (areaIsProducing(area) && removed > 0) {
             ProductionProcess factoryProcess = area.getProcess();
-            factoryProcess.output.entrySet().forEach(entry -> {
+            factoryProcess.getOutput().entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
 
@@ -122,14 +122,16 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
         ProductionProcess process = area.getProcess();
         if (areaIsProducing(area)) {
             //Query resources
-            process.input.entrySet().forEach(entry -> {
+            process.getInput().entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
+                
+                //Resource gained by each manufacturer is recipe amount * game refresh rate * productivity.
                 removeResource(key, val * GameRefreshRate * area.getProductivity(), city);
                 city.resourceDemands.addValue(key, val);
             });
 
-            process.output.entrySet().forEach(entry -> {
+            process.getOutput().entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 city.primaryProduction.add(key);

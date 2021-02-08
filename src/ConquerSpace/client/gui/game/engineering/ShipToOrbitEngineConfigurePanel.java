@@ -79,7 +79,7 @@ public class ShipToOrbitEngineConfigurePanel extends JPanel {
             setLayout(new BorderLayout());
             engineListModel = new ObjectListModel<>();
             //Fill list	
-            for (ObjectReference obj : civ.shipComponentList) {
+            for (ObjectReference obj : civ.getShipComponentList()) {
                 ShipComponent template = gameState.getObject(obj, ShipComponent.class);
                 if (template instanceof ToOrbitEngineComponent) {
                     engineListModel.addElement((ToOrbitEngineComponent) template);
@@ -122,7 +122,7 @@ public class ShipToOrbitEngineConfigurePanel extends JPanel {
         public CreateEngineConfigurePanel() {
             setLayout(new VerticalFlowLayout());
             comboBoxModel = new DefaultComboBoxModel<>();
-            for (ObjectReference or : civ.launchSystems) {
+            for (ObjectReference or : civ.getLaunchSystems()) {
                 comboBoxModel.addElement(gameState.getObject(or, LaunchSystem.class));
             }
             launchSystemTypeComboBox = new JComboBox<>(comboBoxModel);
@@ -146,7 +146,7 @@ public class ShipToOrbitEngineConfigurePanel extends JPanel {
             if (aFlag) {
                 comboBoxModel.removeAllElements();
                 //Re-add all elements
-                for (ObjectReference or : civ.launchSystems) {
+                for (ObjectReference or : civ.getLaunchSystems()) {
                     comboBoxModel.addElement(gameState.getObject(or, LaunchSystem.class));
                 }
             }

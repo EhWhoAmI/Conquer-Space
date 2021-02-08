@@ -42,7 +42,7 @@ public class FullShipClassInformationMenu extends JPanel {
     public FullShipClassInformationMenu(GameState gameState, Civilization civilization) {
         setLayout(new HorizontalFlowLayout());
         ObjectListModel<ObjectReference> shipClassList = new ObjectListModel<>();
-        shipClassList.setElements(civilization.shipClasses);
+        shipClassList.setElements(civilization.getShipClasses());
         shipClassList.setHandler(l -> {
             return gameState.getObject(l, ShipClass.class).getName();
         });

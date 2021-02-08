@@ -190,7 +190,7 @@ public class UniverseRenderer {
 
     private void drawStarSystemDot(Graphics2D g2d, StarSystem sys, Point systemPosition) {
         // Check vision
-        if (civViewer.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
+        if (civViewer.getVision().get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED) {
             drawControl(g2d, sys, systemPosition);
 
             //Set star color
@@ -215,7 +215,7 @@ public class UniverseRenderer {
 
     private void drawControl(Graphics2D g2d, StarSystem system, Point systemPosition) {
         if (universe.control.get(system.getReference()) != ObjectReference.INVALID_REFERENCE) {
-            switch (civViewer.vision.get(system.getUniversePath())) {
+            switch (civViewer.getVision().get(system.getUniversePath())) {
                 case VisionTypes.EXISTS:
                     g2d.setColor(Color.gray);
                     break;

@@ -51,7 +51,7 @@ public class Actions {
         what.setLocation(planet.getUniversePath());
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
-        civ.spaceships.add(what.getReference());
+        civ.getSpaceships().add(what.getReference());
     }
 
     public static void launchLaunchable(Launchable launch, Planet planet) {

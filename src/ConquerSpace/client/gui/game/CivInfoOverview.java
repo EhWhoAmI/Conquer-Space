@@ -79,8 +79,8 @@ public class CivInfoOverview extends JPanel {
 
         governmentPanel = new JPanel(new VerticalFlowLayout());
 
-        Person p = civ.government.officials.get(civ.government.headofState);
-        civLeaderLabel = new JLabel(civ.government.headofState.getTitleName() + " " + p.getName());
+        Person p = civ.getGovernment().officials.get(civ.getGovernment().headofState);
+        civLeaderLabel = new JLabel(civ.getGovernment().headofState.getTitleName() + " " + p.getName());
         governmentPanel.add(civLeaderLabel);
 
         mainTabs.addTab(LOCALE_MESSAGES.getMessage("game.civinfo.tabs.civ"), mainPanel);
@@ -107,9 +107,9 @@ public class CivInfoOverview extends JPanel {
     }
 
     private void updateLeaderLabel() {
-        Person p = civ.government.officials.get(civ.government.headofState);
+        Person p = civ.getGovernment().officials.get(civ.getGovernment().headofState);
 
         //populationLabel.setText("Population: " + (c.population.size() * 10) + " million");
-        civLeaderLabel.setText(LOCALE_MESSAGES.getMessage("game.civinfo.headofstate", civ.government.headofState.getTitleName(), p.getName()));
+        civLeaderLabel.setText(LOCALE_MESSAGES.getMessage("game.civinfo.headofstate", civ.getGovernment().headofState.getTitleName(), p.getName()));
     }
 }

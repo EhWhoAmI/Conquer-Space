@@ -272,7 +272,7 @@ public class MainInterfaceWindow extends JInternalFrame implements MouseListener
         universeBreakdownTreeModel.removeAllChildren();
         //get owned star systems
 
-        for (ObjectReference p : civilization.habitatedPlanets) {
+        for (ObjectReference p : civilization.getHabitatedPlanets()) {
             Planet planet = gameState.getObject(p, Planet.class);
             DefaultMutableTreeNode system = new DefaultMutableTreeNode(Integer.toString(planet.getParentIndex()));
             DefaultMutableTreeNode dm = new DefaultMutableTreeNode(planet);

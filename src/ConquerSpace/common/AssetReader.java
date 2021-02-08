@@ -293,8 +293,8 @@ public class AssetReader {
         ProductionProcess process = new ProductionProcess(state);
         process.name = name;
         process.identifier = identifier;
-        process.input = input;
-        process.output = output;
+        process.getInput().putAll(input);
+        process.getOutput().putAll(output);
         process.difficulty = diff;
         process.tags = tags;
         return process;
