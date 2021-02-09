@@ -82,7 +82,7 @@ public class CityEconomyPanel extends JPanel {
         tabs.setFocusable(false);
 
         ObjectListModel<CityModifier> modifierListModel = new ObjectListModel<>();
-        modifierListModel.setElements(selectedCity.cityModifiers);
+        modifierListModel.setElements(selectedCity.getCityModifiers());
         modifierListModel.setHandler(l -> {
             return (l.toString());
         });
@@ -188,7 +188,7 @@ public class CityEconomyPanel extends JPanel {
                                 + Utilities.longToHumanString((long) ((selectedCity.getResourceAmount(storedValue) * gameState.getGood(storedValue).getMass()) / 1000))
                                 + " tons";
                     case 2:
-                        HashMap<String, Double> ledger = selectedCity.resourceLedger.get(storedValue);
+                        HashMap<String, Double> ledger = selectedCity.getResourceLedger().get(storedValue);
                         double change = 0;
                         if (ledger != null) {
                             for (Double d : ledger.values()) {
@@ -339,7 +339,7 @@ public class CityEconomyPanel extends JPanel {
                         }
                     }
 
-                    DoubleHashMap<String> map = selectedCity.resourceLedger.get(selectedCity.storedTypes()[row]);
+                    DoubleHashMap<String> map = selectedCity.getResourceLedger().get(selectedCity.storedTypes()[row]);
                     if (map != null) {
                         String text = "<html>";
                         for (Map.Entry<String, Double> object : map.entrySet()) {

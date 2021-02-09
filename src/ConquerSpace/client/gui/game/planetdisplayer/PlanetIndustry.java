@@ -79,7 +79,7 @@ public class PlanetIndustry extends JPanel {
         
         for (int i = 0; i < planet.cities.size(); i++) {
             City city = gameState.getObject(planet.cities.get(i), City.class);
-            for (ObjectReference areaId : city.areas) {
+            for (ObjectReference areaId : city.getAreas()) {
                 Area area = gameState.getObject(areaId, Area.class);
                 areaDefaultListModel.addElement(area);
             }
@@ -139,7 +139,7 @@ public class PlanetIndustry extends JPanel {
         areaDefaultListModel.clear();
         for (int i = 0; i < p.cities.size(); i++) {
             City city = gameState.getObject(p.cities.get(i), City.class);
-            Iterator<ObjectReference> iterator = city.areas.iterator();
+            Iterator<ObjectReference> iterator = city.getAreas().iterator();
             while (iterator.hasNext()) {
                 ObjectReference in = iterator.next();
                 Area area = gameState.getObject(in, Area.class);

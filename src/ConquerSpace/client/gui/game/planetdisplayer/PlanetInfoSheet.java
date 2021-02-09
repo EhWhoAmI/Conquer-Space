@@ -134,7 +134,7 @@ public class PlanetInfoSheet extends JPanel {
         cityloop:
         for (ObjectReference cityId : planet.cities) {
             City city = gameState.getObject(cityId, City.class);
-            for (ObjectReference areaId : city.areas) {
+            for (ObjectReference areaId : city.getAreas()) {
                 Area areaObject = gameState.getObject(areaId, Area.class);
 
                 if (areaObject instanceof SpacePortArea) {

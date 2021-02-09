@@ -17,9 +17,12 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.ConstantStarDate;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
+import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
 import java.util.HashMap;
@@ -29,12 +32,17 @@ import java.util.HashMap;
  * @author EhWhoAmI
  */
 @SerializeClassName("mine-area")
-public class MineArea extends Area {
+public class MineArea extends Area implements ResourceStockpile {
 
     private ObjectReference miningStratum;
     private float productivity;
     private HashMap<StoreableReference, Double> necessaryGoods;
     private StoreableReference resourceMined;
+
+    /**
+     * Last date where this thing mined. Used to calculate resources.
+     */
+    private ConstantStarDate lastStarDateRemoved;
 
     MineArea(GameState gameState, ObjectReference mining, StoreableReference resourceMined, float productivity) {
         super(gameState);
@@ -42,6 +50,7 @@ public class MineArea extends Area {
         this.productivity = productivity;
         this.resourceMined = resourceMined;
         necessaryGoods = new HashMap<>();
+        lastStarDateRemoved = new ConstantStarDate(0);
     }
 
     @Override
@@ -77,6 +86,57 @@ public class MineArea extends Area {
 
     @Override
     public void accept(AreaDispatcher dispatcher) {
+        //Get last time 
         dispatcher.dispatch(this);
+    }
+
+    @Override
+    public void addResourceTypeStore(StoreableReference type) {
+    }
+
+    @Override
+    public Double getResourceAmount(StoreableReference type) {
+        if (type == resourceMined) {
+            return Double.valueOf(productivity) * (double) (gameState.date.getDate() - lastStarDateRemoved.getDate());
+        }
+        return 0d;
+    }
+
+    @Override
+    public void addResource(StoreableReference type, Double amount) {
+        //Void
+    }
+
+    @Override
+    public boolean canStore(StoreableReference type) {
+        return true;
+    }
+
+    @Override
+    public boolean hasResource(StoreableReference type) {
+        return (type == resourceMined);
+    }
+
+    @Override
+    public StoreableReference[] storedTypes() {
+        return new StoreableReference[]{resourceMined};
+    }
+
+    @Override
+    public boolean removeResource(StoreableReference type, Double amount) {
+        if (type == resourceMined && amount <= getResourceAmount(type)) {
+            //Reset date
+            lastStarDateRemoved = gameState.date.getConstantDate();
+            return true;
+        }
+        return false;
+    }
+
+    public ConstantStarDate getLastStarDateRemoved() {
+        return lastStarDateRemoved;
+    }
+
+    public void setLastStarDateRemoved(ConstantStarDate lastStarDateRemoved) {
+        this.lastStarDateRemoved = lastStarDateRemoved;
     }
 }

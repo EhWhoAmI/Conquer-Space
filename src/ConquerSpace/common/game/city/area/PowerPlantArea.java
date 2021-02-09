@@ -19,6 +19,7 @@ package ConquerSpace.common.game.city.area;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
 
@@ -27,7 +28,7 @@ import ConquerSpace.common.save.SerializeClassName;
  * @author EhWhoAmI
  */
 @SerializeClassName("power-plant-area")
-public class PowerPlantArea extends ConsumerArea {
+public class PowerPlantArea extends ConsumerArea implements ResourceStockpile {
 
     //Needs the attribute 'energy'
     private StoreableReference usesResource;
@@ -103,5 +104,40 @@ public class PowerPlantArea extends ConsumerArea {
     @Override
     public AreaClassification getAreaType() {
         return AreaClassification.Infrastructure;
+    }
+
+    @Override
+    public void addResourceTypeStore(StoreableReference type) {
+        //Do nothing, because it can't store anything
+    }
+
+    @Override
+    public Double getResourceAmount(StoreableReference type) {
+        return 0d;
+    }
+
+    @Override
+    public void addResource(StoreableReference type, Double amount) {
+        //Void the resources, so ignore
+    }
+
+    @Override
+    public boolean canStore(StoreableReference type) {
+        return true;
+    }
+
+    @Override
+    public boolean hasResource(StoreableReference type) {
+        return false;
+    }
+
+    @Override
+    public StoreableReference[] storedTypes() {
+        return new StoreableReference[0];
+    }
+
+    @Override
+    public boolean removeResource(StoreableReference type, Double amount) {
+        return false;
     }
 }

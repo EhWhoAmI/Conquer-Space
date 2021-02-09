@@ -59,8 +59,8 @@ class CityIndustryPanel extends JPanel {
         JXTaskPaneContainer industriesList = new JXTaskPaneContainer();
         //Get list of industries
         HashMap<AreaClassification, Integer> industriesMap = new HashMap<>();
-        for (int i = 0; i < selectedCity.areas.size(); i++) {
-            Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
+        for (int i = 0; i < selectedCity.getAreas().size(); i++) {
+            Area area = gameState.getObject(selectedCity.getAreas().get(i), Area.class);
             if (area != null) {
                 if (industriesMap.containsKey(area.getAreaType())) {
                     industriesMap.put(area.getAreaType(), industriesMap.get(area.getAreaType()) + 1);
@@ -74,8 +74,8 @@ class CityIndustryPanel extends JPanel {
             Integer val = entry.getValue();
             JXTaskPane pane = new JXTaskPane(key.toString() + " - " + val.toString());
             //List all areas of this type
-            for (int i = 0; i < selectedCity.areas.size(); i++) {
-                Area area = gameState.getObject(selectedCity.areas.get(i), Area.class);
+            for (int i = 0; i < selectedCity.getAreas().size(); i++) {
+                Area area = gameState.getObject(selectedCity.getAreas().get(i), Area.class);
                 if (area.getAreaType().equals(key)) {
                     //Then add to list I guess
                     AreaInformationPanelBuilder builder = new AreaInformationPanelBuilder(gameState);

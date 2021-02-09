@@ -69,7 +69,7 @@ public class CityProductionPanel extends JPanel {
             int launchPadCount = 0;
             for (ObjectReference cityIndex : planet.cities) {
                 City city = gameState.getObject(cityIndex, City.class);
-                for (ObjectReference areaIndex : city.areas) {
+                for (ObjectReference areaIndex : city.getAreas()) {
                     Area area = gameState.getObject(areaIndex, Area.class);
                     if (area instanceof SpacePortArea) {
                         SpacePortArea port = (SpacePortArea) area;

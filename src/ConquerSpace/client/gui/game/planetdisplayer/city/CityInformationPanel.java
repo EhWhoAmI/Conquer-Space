@@ -247,7 +247,7 @@ public class CityInformationPanel extends JPanel {
             //Population
             JLabel popCount = new JLabel(
                     LOCALE_MESSAGES.getMessage("game.planet.cities.population",
-                            Utilities.longToHumanString(gameState.getObject(selectedCity.population,
+                            Utilities.longToHumanString(gameState.getObject(selectedCity.getPopulation(),
                                     Population.class).getPopulationSize())));
             add(popCount);
 
@@ -262,12 +262,12 @@ public class CityInformationPanel extends JPanel {
             int i = 0;
 
             final int GOODS_TO_COUNT = 3;
-            for (StoreableReference ref : selectedCity.primaryProduction) {
+            for (StoreableReference ref : selectedCity.getPrimaryProduction()) {
                 joiner.add(gameState.getGood(ref).toString());
                 i++;
                 if (i == GOODS_TO_COUNT) {
                     mainProduction.setText("Produces Goods: " + joiner.toString()
-                            + ", and " + (selectedCity.primaryProduction.size() - GOODS_TO_COUNT) + " more");
+                            + ", and " + (selectedCity.getPrimaryProduction().size() - GOODS_TO_COUNT) + " more");
                 }
             }
             mainProduction.setToolTipText(joiner.toString());

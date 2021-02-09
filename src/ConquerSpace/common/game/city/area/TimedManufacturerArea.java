@@ -17,12 +17,17 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.ConstantStarDate;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
+import ConquerSpace.common.util.DoubleHashMap;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -31,7 +36,7 @@ import java.util.Iterator;
  * @author EhWhoAmI
  */
 @SerializeClassName("timed-manufacturer-area")
-public class TimedManufacturerArea extends Area {
+public class TimedManufacturerArea extends Area implements ResourceStockpile {
 
     /**
      * Limit of number of processes.
@@ -40,15 +45,22 @@ public class TimedManufacturerArea extends Area {
     protected ArrayList<ProductionTimer> queue;
     private ProductionProcess process;
 
+    private DoubleHashMap<StoreableReference> resources;
+    private ConstantStarDate lastTick;
+
     TimedManufacturerArea(GameState gameState, ProductionProcess process) {
         super(gameState);
         queue = new ArrayList<>();
+        resources = new DoubleHashMap<>();
         this.process = process;
+        lastTick = gameState.date.getConstantDate();
     }
 
-    public int tick(int delta) {
+    public int tick() {
+        //Get difference
+        long change = gameState.date.getDate() - lastTick.getDate();
         for (int i = 0; i < queue.size(); i++) {
-            queue.get(i).decrement(delta);
+            queue.get(i).decrement((int) change);
         }
         Iterator<ProductionTimer> it = queue.iterator();
         int removed = 0;
@@ -56,9 +68,14 @@ public class TimedManufacturerArea extends Area {
             ProductionTimer time = it.next();
             if (time.timeLeft <= 0) {
                 it.remove();
+                //Add the resources
+                process.getOutput().keySet().stream().forEach(key -> {
+                    resources.addValue(key, process.getOutput().get(key));
+                });
                 removed++;
             }
         }
+        lastTick = gameState.date.getConstantDate();
         return removed;
     }
 
@@ -80,6 +97,45 @@ public class TimedManufacturerArea extends Area {
 
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    @Override
+    public void addResourceTypeStore(StoreableReference type) {
+        //Do nothing
+    }
+
+    @Override
+    public Double getResourceAmount(StoreableReference type) {
+        return resources.get(type);
+    }
+
+    @Override
+    public void addResource(StoreableReference type, Double amount) {
+    }
+
+    @Override
+    public boolean canStore(StoreableReference type) {
+        return true;
+    }
+
+    @Override
+    public boolean hasResource(StoreableReference type) {
+        return resources.containsKey(type);
+    }
+
+    @Override
+    public StoreableReference[] storedTypes() {
+        return resources.keySet().toArray(new StoreableReference[0]);
+    }
+
+    @Override
+    public boolean removeResource(StoreableReference type, Double amount) {
+        if (resources.containsKey(type) && resources.get(type) > amount) {
+            //Check if it's enough and add. 
+            resources.addValue(type, -amount);
+
+        }
+        return false;
     }
 
     public static class ProductionTimer implements Serializable {

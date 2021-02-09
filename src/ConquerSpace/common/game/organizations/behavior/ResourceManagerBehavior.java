@@ -50,8 +50,8 @@ public class ResourceManagerBehavior extends Behavior {
                 for (Map.Entry<StoreableReference, Double> entry : fromCity.resourceDemands.entrySet()) {
                     StoreableReference key = entry.getKey();
                     Double val = entry.getValue();
-                    if (fromCity.resources.containsKey(key)) {
-                        double amount = fromCity.resources.get(key) - val;
+                    if (fromCity.getResources().containsKey(key)) {
+                        double amount = fromCity.getResources().get(key) - val;
                         if (amount > 0) {
                             resourcesToSpend.put(key, amount);
                         }

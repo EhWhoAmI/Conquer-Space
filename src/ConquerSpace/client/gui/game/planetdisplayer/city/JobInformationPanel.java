@@ -107,9 +107,9 @@ class JobInformationPanel extends JPanel {
     private void initPopulationInfo() {
         currentlyWorking = 0;
         populationCount.clear();
-        populationLaborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
+        populationLaborForceSize = gameState.getObject(selectedCity.getPopulation(), Population.class).getWorkableSize();
         //Get population job
-        for (ObjectReference areaId : selectedCity.areas) {
+        for (ObjectReference areaId : selectedCity.getAreas()) {
             Area area = gameState.getObject(areaId, Area.class);
             if (!populationCount.containsKey(area.getJobClassification())) {
                 populationCount.put(area.getJobClassification(), area.getCurrentlyManningJobs());
@@ -225,7 +225,7 @@ class JobInformationPanel extends JPanel {
                     jobInformationPanel.removeAll();
                     jobInformationPanel.add(new JLabel(jobType.getName()));
                     jobInformationPanel.add(new JLabel("Workers: " + Utilities.longToHumanString(catdataset.getValue(jobType, "").longValue())));
-                    long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
+                    long laborForceSize = gameState.getObject(selectedCity.getPopulation(), Population.class).getWorkableSize();
                     //Get percentage
                     double percentage = ((double) catdataset.getValue(jobType, "").longValue() / (double) laborForceSize) * 100;
                     jobInformationPanel.add(new JLabel("Percentage: " + percentage + "%"));
@@ -251,7 +251,7 @@ class JobInformationPanel extends JPanel {
 
         //Other panel for more details
         JPanel containerPanel = new JPanel(new VerticalFlowLayout());
-        long laborForceSize = gameState.getObject(selectedCity.population, Population.class).getWorkableSize();
+        long laborForceSize = gameState.getObject(selectedCity.getPopulation(), Population.class).getWorkableSize();
         containerPanel.add(new JLabel("Labor Force: " + Utilities.longToHumanString(laborForceSize)));
         containerPanel.add(new JLabel("Economic Complexity: "));
         containerPanel.add(new JLabel("Total Economic Output: "));

@@ -19,8 +19,6 @@
 package ConquerSpace.server;
 
 import ConquerSpace.common.GameState;
-import static ConquerSpace.common.actions.Actions.removeResource;
-import static ConquerSpace.common.actions.Actions.storeResource;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.city.area.AreaDispatcher;
@@ -46,6 +44,7 @@ import ConquerSpace.common.game.city.area.TimedManufacturerArea;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.organizations.Organization;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.game.resources.ResourceTransfer;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.util.HashMap;
@@ -59,14 +58,11 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     private GameState gameState;
 
-    private final int GameRefreshRate;
-
     private City city;
     private Planet planet;
 
-    public AreaBehaviorDispatcher(GameState gameState, int GameRefreshRate, City city, Planet planet) {
+    public AreaBehaviorDispatcher(GameState gameState, City city, Planet planet) {
         this.gameState = gameState;
-        this.GameRefreshRate = GameRefreshRate;
         this.city = city;
         this.planet = planet;
     }
@@ -83,9 +79,11 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
         for (Map.Entry<StoreableReference, Double> entry : cost.entrySet()) {
             StoreableReference key = entry.getKey();
             Double val = entry.getValue();
-            removeResource(key, val * GameRefreshRate, city);
+            //Drain resources somehow
+            ResourceTransfer resourceTransferer = new ResourceTransfer(city, city, key, val);
+            resourceTransferer.doTransferResource();
         }
-        area.tickConstruction(GameRefreshRate);
+        area.tickConstruction();
     }
 
     @Override
@@ -100,7 +98,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(TimedManufacturerArea area) {
-        int removed = area.tick(GameRefreshRate);
+        int removed = area.tick();
 
         if (areaIsProducing(area) && removed > 0) {
             ProductionProcess factoryProcess = area.getProcess();
@@ -109,9 +107,13 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 Double val = entry.getValue();
 
                 //Get percentage
-                city.primaryProduction.add(key);
+                city.getPrimaryProduction().add(key);
                 city.getPreviousQuarterProduction().addValue(key, val);
-                storeResource(key, val, city);
+                ResourceTransfer transferer = new ResourceTransfer(area, city, key, val);
+                if (transferer.canTransferResources() == ResourceTransfer.ResourceTransferViability.TRANSFER_POSSIBLE) {
+                    //Transfer resources
+                    transferer.doTransferResource();
+                }
             });
         }
     }
@@ -125,18 +127,20 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             process.getInput().entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
-                
+                //Transfer resources from city to area
+                ResourceTransfer resourceTransferer = new ResourceTransfer(city, area, key, val * area.getProductivity());
+                resourceTransferer.doTransferResource();
                 //Resource gained by each manufacturer is recipe amount * game refresh rate * productivity.
-                removeResource(key, val * GameRefreshRate * area.getProductivity(), city);
                 city.resourceDemands.addValue(key, val);
             });
-
+            //Check recipes, create resources
             process.getOutput().entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
-                city.primaryProduction.add(key);
+                city.getPrimaryProduction().add(key);
                 city.getPreviousQuarterProduction().addValue(key, val);
-                storeResource(key, val * GameRefreshRate * area.getProductivity(), city);
+                ResourceTransfer resourceTransferer = new ResourceTransfer(area, city, key, area.getResourceAmount(key));
+                resourceTransferer.doTransferResource();
             });
             area.setProducedLastTick(true);
         } else {
@@ -150,13 +154,18 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
             area.getNecessaryGoods().entrySet().forEach(entry -> {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
-                removeResource(key, val * GameRefreshRate, city);
+
+                ResourceTransfer transferer = new ResourceTransfer(city, area, key, val);
+                //Check viability
+                transferer.doTransferResource();
             });
 
             double multiplier = getMultiplier(area);
-            city.primaryProduction.add(area.getResourceMinedId());
-            city.getPreviousQuarterProduction().addValue(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * GameRefreshRate) * multiplier);
-            storeResource(area.getResourceMinedId(), Double.valueOf(area.getProductivity() * GameRefreshRate) * multiplier, city);
+            city.getPrimaryProduction().add(area.getResourceMinedId());
+            city.getPreviousQuarterProduction().addValue(area.getResourceMinedId(), area.getResourceAmount(area.getResourceMinedId()));
+
+            ResourceTransfer transferer = new ResourceTransfer(area, city, area.getResourceMinedId(), area.getResourceAmount(area.getResourceMinedId()));
+            transferer.doTransferResource();
         }
     }
 
@@ -182,11 +191,12 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
 
     @Override
     public void dispatch(FarmFieldArea area) {
-        int removed = area.tick(GameRefreshRate);
+        int removed = area.tick();
         if (removed <= 0 && areaIsProducing(area)) {
             //Calculate percentage
-            city.primaryProduction.add(area.getGrown().getFoodGood());
-            storeResource(area.getGrown().getFoodGood(), (area.getProductivity() * (double) area.getFieldSize()), city);
+            city.getPrimaryProduction().add(area.getGrown().getFoodGood());
+            //storeResource(area.getGrown().getFoodGood(), (area.getProductivity() * (double) area.getFieldSize()), city);
+            //Add resources to area, then transfer it to somewhere else
             city.getPreviousQuarterProduction().addValue(area.getGrown().getFoodGood(), (area.getProductivity() * (double) area.getFieldSize()));
             area.grow();
         }
@@ -195,8 +205,9 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
     @Override
     public void dispatch(PowerPlantArea area) {
         if (areaIsProducing(area)) {
-            if (removeResource(area.getUsedResource(), Double.valueOf(area.getMaxVolume()), city)) {
-                //Add energy to the city
+            ResourceTransfer transferer = new ResourceTransfer(city, area, area.getUsedResource(), Double.valueOf(area.getMaxVolume()));
+            if (transferer.canTransferResources() == ResourceTransfer.ResourceTransferViability.TRANSFER_POSSIBLE) {
+                transferer.doTransferResource();
                 city.incrementEnergy(area.getProduction());
             }
         }

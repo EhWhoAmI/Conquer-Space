@@ -110,4 +110,16 @@ public class StarDate implements Serializable{
     public long getDate() {
         return date;
     }
+    
+    /**
+     * Clones the current date so that it does not change. 
+     * @return 
+     */
+    public StarDate getNewDate(){
+        return new StarDate(date);
+    }
+    
+    public ConstantStarDate getConstantDate() {
+        return new ConstantStarDate(date);
+    }
 }

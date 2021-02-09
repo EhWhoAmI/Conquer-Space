@@ -220,12 +220,12 @@ public class CivilizationInitializer {
             addGovenor(city, c, selector, personNames);
 
             //Set market for all populations
-            for (ObjectReference ref : gameState.getObject(city.population, Population.class).segments) {
+            for (ObjectReference ref : gameState.getObject(city.getPopulation(), Population.class).segments) {
                 market.addTrader(gameState.getObject(ref, PopulationSegment.class));
             }
 
             //Set preinitialized wealth based on population or something
-            city.changeWealth((int) gameState.getObject(city.population, Population.class).getPopulationSize() * 10);
+            city.changeWealth((int) gameState.getObject(city.getPopulation(), Population.class).getPopulationSize() * 10);
         }
     }
 
@@ -235,18 +235,18 @@ public class CivilizationInitializer {
         admin.setRole("Governing " + c.getName());
         admin.setPosition(c);
         c.setGovernor(admin);
-        c.peopleAtCity.add(admin.getReference());
+        c.getPeopleAtCity().add(admin.getReference());
         civ.getPeople().add(admin.getReference());
     }
 
     private void addMoreProcessingToCities(City city, Random selector, Civilization civ) {
         //Set culture
-        Population population = gameState.getObject(city.population, Population.class);
+        Population population = gameState.getObject(city.getPopulation(), Population.class);
 
         Culture culture = new Culture(gameState);
         PopulationSegment seg = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
         seg.size = selector.nextInt(200_000) + 300_000;
-        seg.size *= city.areas.size();
+        seg.size *= city.getAreas().size();
         seg.workablePopulation = (long) (seg.size * 0.3);
         seg.setWealth(100000);
         seg.tier = 0;
@@ -256,7 +256,7 @@ public class CivilizationInitializer {
 
         PopulationSegment seg2 = new PopulationSegment(gameState, civ.getFoundingSpecies().getReference(), culture.getReference());
         seg2.size = selector.nextInt(200_000) + 300_000;
-        seg2.size *= city.areas.size();
+        seg2.size *= city.getAreas().size();
         seg2.workablePopulation = (long) (seg2.size * 0.3);
         seg2.tier = 1;
         seg2.setWealth(100000);
@@ -309,7 +309,7 @@ public class CivilizationInitializer {
                 factory.setMaxJobs(proc.difficulty * 10000);
                 factory.setOperatingJobs(proc.difficulty * 5000);
                 factory.setWorkingmultiplier(1.2f);
-                city.areas.add(factory.build(gameState).getReference());
+                city.getAreas().add(factory.build(gameState).getReference());
             }
 
             //Add a custom constructor for fun
@@ -319,7 +319,7 @@ public class CivilizationInitializer {
             ccfmaf.setMaxJobs(10000);
             ccfmaf.setOperatingJobs(5000);
             ccfmaf.setWorkingmultiplier(1.2f);
-            city.areas.add(ccfmaf.build(gameState).getReference());
+            city.getAreas().add(ccfmaf.build(gameState).getReference());
 
             CommercialAreaFactory area = new CommercialAreaFactory(civ);
             area.setMaxJobs(500_000);
@@ -362,7 +362,7 @@ public class CivilizationInitializer {
                 factory.setMaxJobs(proc.difficulty * 10000);
                 factory.setOperatingJobs(proc.difficulty * 5000);
                 factory.setWorkingmultiplier(1.2f);
-                miner.areas.add(factory.build(gameState).getReference());
+                miner.getAreas().add(factory.build(gameState).getReference());
 
                 double randR = (stratum.getRadius() * Math.sqrt(selector.nextDouble()));
                 double theta = (selector.nextDouble() * 2 * Math.PI);
@@ -443,7 +443,7 @@ public class CivilizationInitializer {
             factory.setMaxJobs(10000);
             factory.setOperatingJobs(5000);
             factory.setWorkingmultiplier(1.2f);
-            faceBook.areas.add(factory.build(gameState).getReference());
+            faceBook.getAreas().add(factory.build(gameState).getReference());
 
             faceBook.setName(gen.getName(0, selector));
             //Add a farm
