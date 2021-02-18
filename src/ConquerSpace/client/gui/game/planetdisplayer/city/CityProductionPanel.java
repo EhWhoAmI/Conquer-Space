@@ -67,7 +67,7 @@ public class CityProductionPanel extends JPanel {
                 return;
             }
             int launchPadCount = 0;
-            for (ObjectReference cityIndex : planet.cities) {
+            for (ObjectReference cityIndex : planet.getCities()) {
                 City city = gameState.getObject(cityIndex, City.class);
                 for (ObjectReference areaIndex : city.getAreas()) {
                     Area area = gameState.getObject(areaIndex, Area.class);

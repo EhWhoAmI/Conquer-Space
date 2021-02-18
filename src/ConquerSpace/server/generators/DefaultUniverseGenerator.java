@@ -385,7 +385,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             stratum.setX(random.nextInt(p.getPlanetWidth()));
             stratum.setY(random.nextInt(p.getPlanetHeight()));
             stratum.setDepth(random.nextInt(planetSize / 2) + 1);
-            p.strata.add(stratum.getReference());
+            p.getStrata().add(stratum.getReference());
         }
     }
 
@@ -411,7 +411,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         LocalLife life = new LocalLife();
         life.setSpecies(micro);
 
-        p.localLife.add(life);
+        p.getLocalLife().add(life);
 
         for (int i = 0; i < lifeLength; i++) {
             //Evolve

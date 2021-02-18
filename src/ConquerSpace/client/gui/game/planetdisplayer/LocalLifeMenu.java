@@ -87,7 +87,7 @@ public class LocalLifeMenu extends JPanel {
     }
 
     public void update() {
-        for (LocalLife life : p.localLife) {
+        for (LocalLife life : p.getLocalLife()) {
             localLifeListModel.addElement(life);
         }
     }

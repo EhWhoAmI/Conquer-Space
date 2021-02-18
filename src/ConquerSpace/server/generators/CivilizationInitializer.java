@@ -210,8 +210,8 @@ public class CivilizationInitializer {
         Market market = new Market(gameState);
         startingPlanet.setPlanetaryMarket(market.getReference());
 
-        for (int i = 0; i < startingPlanet.cities.size(); i++) {
-            City city = gameState.getObject(startingPlanet.cities.get(i), City.class);
+        for (int i = 0; i < startingPlanet.getCities().size(); i++) {
+            City city = gameState.getObject(startingPlanet.getCities().get(i), City.class);
             city.setOwner(c.getReference());
             addInfrastructure(c, city);
             addResearchInstitution(city, c, researchInstitutionGenerator, selector);
@@ -336,8 +336,8 @@ public class CivilizationInitializer {
 
     private void createResourceMiners(Planet p, Civilization c, Race founding, Random selector, NameGenerator townGen) {
         //Find if vein exists on the planet
-        for (int k = 0; k < p.strata.size(); k++) {
-            Stratum stratum = gameState.getObject(p.strata.get(k), Stratum.class);
+        for (int k = 0; k < p.getStrata().size(); k++) {
+            Stratum stratum = gameState.getObject(p.getStrata().get(k), Stratum.class);
             for (int i = 0; i < 3; i++) {
                 City miner = new City(gameState, p.getReference());
                 for (StoreableReference resource : stratum.minerals.keySet()) {
@@ -414,7 +414,7 @@ public class CivilizationInitializer {
         LocalLife localLife = new LocalLife();
         localLife.setSpecies(crop);
         localLife.setBiomass(100_000);
-        starting.localLife.add(localLife);
+        starting.getLocalLife().add(localLife);
 
         //Get the thing...
         for (int i = 0; i < 10; i++) {
@@ -556,7 +556,7 @@ public class CivilizationInitializer {
         org.setName("Ministry of Economic Planning");
         org.setBehavior(new ResourceManagerBehavior(gameState, org));
         //Sort through city
-        for (ObjectReference cityId : planet.cities) {
+        for (ObjectReference cityId : planet.getCities()) {
             City city = gameState.getObject(cityId, City.class);
 
             org.region.bodies.add(city.getReference());
@@ -579,7 +579,7 @@ public class CivilizationInitializer {
             int x = (selector.nextInt(planet.getPlanetWidth() - 2) + 1);
             int y = (selector.nextInt(planet.getPlanetHeight() - 2) + 1);
             pt = new GeographicPoint(x, y);
-        } while (planet.cityDistributions.containsKey(pt));
+        } while (planet.getCityDistributions().containsKey(pt));
         return pt;
     }
 
@@ -647,7 +647,7 @@ public class CivilizationInitializer {
         } catch (IOException ex) {
             //Ignore
         }
-        for (ObjectReference strata : p.strata) {
+        for (ObjectReference strata : p.getStrata()) {
             Stratum stratum = gameState.getObject(strata, Stratum.class);
             stratum.setName(gen.getName(0, selector));
         }

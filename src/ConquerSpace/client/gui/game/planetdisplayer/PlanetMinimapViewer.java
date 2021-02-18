@@ -89,7 +89,7 @@ public class PlanetMinimapViewer extends JPanel {
             //Set opacity
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
             //Draw the circles
-            for (ObjectReference strataId : planet.strata) {
+            for (ObjectReference strataId : planet.getStrata()) {
                 Stratum v = gameState.getObject(strataId, Stratum.class);
                 //Draw...
                 if (resourceToShow == SHOW_ALL) {
@@ -102,8 +102,8 @@ public class PlanetMinimapViewer extends JPanel {
         if (whatToShow == PLANET_BUILDINGS || whatToShow == SHOW_ALL_RESOURCES) {
             //Draw buildings
 
-            if (planet.cityDistributions != null) {
-                for (Map.Entry<GeographicPoint, ObjectReference> en : planet.cityDistributions.entrySet()) {
+            if (planet.getCityDistributions() != null) {
+                for (Map.Entry<GeographicPoint, ObjectReference> en : planet.getCityDistributions().entrySet()) {
                     GeographicPoint point = en.getKey();
 
                     //Draw

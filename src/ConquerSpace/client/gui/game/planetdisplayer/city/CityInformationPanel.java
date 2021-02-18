@@ -344,7 +344,7 @@ public class CityInformationPanel extends JPanel {
             //g2d
             Graphics2D mapGraphics = g2d;
 
-            Iterator<GeographicPoint> distIterator = planet.cityDistributions.keySet().iterator();
+            Iterator<GeographicPoint> distIterator = planet.getCityDistributions().keySet().iterator();
 
             //for (int i = 0; i < size(); i++) {
             Rectangle r = g.getClipBounds();

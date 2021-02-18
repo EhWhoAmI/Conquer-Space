@@ -735,7 +735,7 @@ public class PlanetResources extends javax.swing.JPanel {
             stockpileRow = storageResources.getSelectedRow();
             stockpileColunm = storageResources.getSelectedColumn();
         }
-        for (ObjectReference cityId : p.cities) {
+        for (ObjectReference cityId : p.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             StoreableReference[] goods = city.storedTypes();
             //Sort through stuff

@@ -104,17 +104,17 @@ public class PlanetCities extends JPanel {
                         LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.currentstats")));
 
         populationCount = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.population", Utilities.longToHumanString(p.population)));
+                LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.population", Utilities.longToHumanString(p.getPopulation())));
         currentStats.add(populationCount);
 
         averagePlanetPopGrowthLabel = new JLabel(
-                LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.averagegrowth", p.populationIncrease));
+                LOCALE_MESSAGES.getMessage("game.planet.cities.planetoverview.averagegrowth", p.getPopulationIncrease()));
 
         cityListPanel = new JPanel();
         cityListPanel.setLayout(new BorderLayout(5, 5));
 
         cityListModel = new DefaultListModel<>();
-        for (ObjectReference cityId : p.cities) {
+        for (ObjectReference cityId : p.getCities()) {
             City city = gameState.getObject(cityId, City.class);
 
             cityListModel.addElement(city);
@@ -224,9 +224,9 @@ public class PlanetCities extends JPanel {
 
     public void update() {
         //Rewrite cities
-        if (cityListModel.size() != planet.cities.size()) {
+        if (cityListModel.size() != planet.getCities().size()) {
             cityListModel.clear();
-            for (ObjectReference cityId : planet.cities) {
+            for (ObjectReference cityId : planet.getCities()) {
                 City city = gameState.getObject(cityId, City.class);
                 if (city != null) {
                     cityListModel.addElement(city);

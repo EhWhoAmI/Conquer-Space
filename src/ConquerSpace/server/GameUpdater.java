@@ -275,7 +275,7 @@ public class GameUpdater extends GameTicker {
     private void processCities(Planet planet) {
         Market planetMarket = gameState.getObject(planet.getPlanetaryMarket(), Market.class);
         planetMarket.clearOrders();
-        for (ObjectReference cityId : planet.cities) {
+        for (ObjectReference cityId : planet.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             //Clear ledgers
             city.getResourceLedger().clear();
@@ -531,11 +531,11 @@ public class GameUpdater extends GameTicker {
     private void doPlanetCensus(Planet p) {
         //Index panet population
         long total = 0;
-        for (ObjectReference cityId : p.cities) {
+        for (ObjectReference cityId : p.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             total += gameState.getObject(city.getPopulation(), Population.class).getPopulationSize();
         }
-        p.population = total;
+        p.setPopulation(total);
     }
 
     private void processArea(Planet planet, City city, Area area) {
@@ -544,7 +544,7 @@ public class GameUpdater extends GameTicker {
 
     private void processLocalLife(Planet p) {
         //Process locallife
-        for (LocalLife localLife : p.localLife) {
+        for (LocalLife localLife : p.getLocalLife()) {
             int biomass = localLife.getBiomass();
             float breedingRate = localLife.getSpecies().getBaseBreedingRate();
             localLife.setBiomass((int) (breedingRate * biomass) + biomass);

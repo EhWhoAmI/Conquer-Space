@@ -132,7 +132,7 @@ public class PlanetInfoSheet extends JPanel {
 
         //Check if planet contains space port
         cityloop:
-        for (ObjectReference cityId : planet.cities) {
+        for (ObjectReference cityId : planet.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             for (ObjectReference areaId : city.getAreas()) {
                 Area areaObject = gameState.getObject(areaId, Area.class);

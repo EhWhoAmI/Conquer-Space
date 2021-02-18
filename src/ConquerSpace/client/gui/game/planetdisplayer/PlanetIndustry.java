@@ -77,8 +77,8 @@ public class PlanetIndustry extends JPanel {
         areaContainer.setLayout(new GridBagLayout());
         areaDefaultListModel = new DefaultListModel<>();
         
-        for (int i = 0; i < planet.cities.size(); i++) {
-            City city = gameState.getObject(planet.cities.get(i), City.class);
+        for (int i = 0; i < planet.getCities().size(); i++) {
+            City city = gameState.getObject(planet.getCities().get(i), City.class);
             for (ObjectReference areaId : city.getAreas()) {
                 Area area = gameState.getObject(areaId, Area.class);
                 areaDefaultListModel.addElement(area);
@@ -137,8 +137,8 @@ public class PlanetIndustry extends JPanel {
     public void update() {
         int selectedArea = areaList.getSelectedIndex();
         areaDefaultListModel.clear();
-        for (int i = 0; i < p.cities.size(); i++) {
-            City city = gameState.getObject(p.cities.get(i), City.class);
+        for (int i = 0; i < p.getCities().size(); i++) {
+            City city = gameState.getObject(p.getCities().get(i), City.class);
             Iterator<ObjectReference> iterator = city.getAreas().iterator();
             while (iterator.hasNext()) {
                 ObjectReference in = iterator.next();

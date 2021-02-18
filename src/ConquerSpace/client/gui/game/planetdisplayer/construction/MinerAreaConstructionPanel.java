@@ -65,16 +65,16 @@ public class MinerAreaConstructionPanel extends AreaDesignPanel {
 
         setLayout(new HorizontalFlowLayout());
 
-        Iterator<GeographicPoint> cityDist = planet.cityDistributions.keySet().iterator();
+        Iterator<GeographicPoint> cityDist = planet.getCityDistributions().keySet().iterator();
         DefaultListModel<Stratum> strataListModel = new DefaultListModel<>();
         while (cityDist.hasNext()) {
             GeographicPoint nextElement = cityDist.next();
             City city = planet.getCity(nextElement);
             if (city != null && city.equals(c)) {
                 //Get point, search area
-                for (int k = 0; k < planet.strata.size(); k++) {
+                for (int k = 0; k < planet.getStrata().size(); k++) {
 
-                    Stratum stratum = gameState.getObject(planet.strata.get(k), Stratum.class);
+                    Stratum stratum = gameState.getObject(planet.getStrata().get(k), Stratum.class);
                     if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), nextElement.getX(), nextElement.getY())) {
                         //Is inside
                         if (!strataListModel.contains(stratum)) {
