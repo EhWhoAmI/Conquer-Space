@@ -161,7 +161,7 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
         tags = new HashMap<>();
         cityModifiers = new ArrayList<>();
         primaryProduction = new HashSet<>();
-        
+
         previousQuarterProduction = new DoubleHashMap<>();
 
         cityType = CityType.Generic;
@@ -516,5 +516,13 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
      */
     public ArrayList<CityModifier> getCityModifiers() {
         return cityModifiers;
+    }
+
+    public void clearLedgers() {
+        getResourceLedger().clear();
+        getResourcesSentTo().clear();
+        getResourcesGainedFrom().clear();
+        getPreviousQuarterProduction().clear();
+        getPrimaryProduction().clear();
     }
 }

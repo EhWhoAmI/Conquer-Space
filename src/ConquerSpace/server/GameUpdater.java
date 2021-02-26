@@ -278,11 +278,7 @@ public class GameUpdater extends GameTicker {
         for (ObjectReference cityId : planet.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             //Clear ledgers
-            city.getResourceLedger().clear();
-            city.getResourcesSentTo().clear();
-            city.getResourcesGainedFrom().clear();
-            city.getPreviousQuarterProduction().clear();
-            city.getPrimaryProduction().clear();
+            city.clearLedgers();
 
             //Process city demands
             //Create orders from cities that have stuff
@@ -299,15 +295,12 @@ public class GameUpdater extends GameTicker {
             //Population upkeep, population events.
             processPopulation(city);
 
-            //Calculate jobs filled
-            calculateCityJobs(city);
-
             //Process areas and their production
             for (ObjectReference areaId : city.getAreas()) {
                 Area area = gameState.getObject(areaId, Area.class);
                 //if not owned, becomes owned by the planet owner
                 if (area.getOwner() == ObjectReference.INVALID_REFERENCE) {
-                    area.setOwner(planet.getOwnerReference());
+                    area.setOwner(city.getOwner());
                 }
                 processArea(planet, city, area);
             }
@@ -326,6 +319,10 @@ public class GameUpdater extends GameTicker {
                     }
                 }
             }
+            
+            //Calculate jobs filled
+            calculateCityJobs(city);
+            
             //May have to fill up jobs...
             city.getAreas().addAll(areasToAdd);
 
@@ -381,7 +378,7 @@ public class GameUpdater extends GameTicker {
     private void calculateCityJobs(City city) {
         long maxJobsProviding = 0;
         long necessaryJobsProviding = 0;
-        long size = gameState.getObject(city.getPopulation(), Population.class).getPopulationSize();
+        long population = gameState.getObject(city.getPopulation(), Population.class).getPopulationSize();
 
         //Sort them out based off piority
         //Get the area list and sort
@@ -392,31 +389,33 @@ public class GameUpdater extends GameTicker {
         }
         Collections.sort(areaTemp);
 
+        //Get all the total jobs
         for (Area area : areaTemp) {
             necessaryJobsProviding += area.operatingJobsNeeded();
             maxJobsProviding += area.getMaxJobsProvided();
         }
 
-        if (maxJobsProviding < size) {
+        if (maxJobsProviding < population) {
             //Fill necessary jobs if there are not enough people to get the max amount of people
             for (Area area : areaTemp) {
                 area.setCurrentlyManningJobs(area.getMaxJobsProvided());
             }
-        } else if (necessaryJobsProviding < size) {
+            
+        } else if (necessaryJobsProviding < population) {
             //Fill all the jobs needed to operate
-
             for (Area area : areaTemp) {
-                size -= area.operatingJobsNeeded();
+                population -= area.operatingJobsNeeded();
                 area.setCurrentlyManningJobs(area.operatingJobsNeeded());
             }
+            
             //Go through again, and add the jobs
             for (Area area : areaTemp) {
                 int toFill = area.getMaxJobsProvided() - area.operatingJobsNeeded();
 
-                if ((size - toFill) > 0) {
+                if ((population - toFill) > 0) {
                     area.setCurrentlyManningJobs(area.getMaxJobsProvided());
                 } else {
-                    area.setCurrentlyManningJobs((area.operatingJobsNeeded() + (int) size));
+                    area.setCurrentlyManningJobs((area.operatingJobsNeeded() + (int) population));
                     break;
                 }
             }
@@ -424,9 +423,12 @@ public class GameUpdater extends GameTicker {
             //Not enough jobs, so fill stuff according to piority
             for (Area area : areaTemp) {
                 int jobsToAdd = area.operatingJobsNeeded();
-                if ((size - jobsToAdd) > 0) {
-                    size -= jobsToAdd;
+                if ((population - jobsToAdd) > 0) {
+                    population -= jobsToAdd;
                     area.setCurrentlyManningJobs(jobsToAdd);
+                } else {
+                    area.setCurrentlyManningJobs((int) population);
+                    break;
                 }
             }
         }
@@ -576,11 +578,6 @@ public class GameUpdater extends GameTicker {
                     //Increment by number of ticks
                     civilization.getCivResearch().put(t, civilization.getCivResearch().get(t) + civilization.getCurrentlyResearchingTechonologys().get(t).getSkill() * delta);
                 }
-            }
-
-            //Process science labs
-            for (ObjectReference scienceLab : civilization.getScienceLabs()) {
-                //TODO...
             }
         }
     }

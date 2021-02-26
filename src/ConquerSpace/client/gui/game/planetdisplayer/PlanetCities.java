@@ -160,8 +160,8 @@ public class PlanetCities extends JPanel {
         cityList.setCellRenderer(new CityListRenderer());
 
         cityList.addListSelectionListener(l -> {
-            selectCity();
-        });
+            selectCity(); 
+       });
 
         cityListScrollPane = new JScrollPane(cityList);
         cityList.setVisibleRowCount(50);

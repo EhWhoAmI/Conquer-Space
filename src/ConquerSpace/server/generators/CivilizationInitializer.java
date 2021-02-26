@@ -722,8 +722,6 @@ public class CivilizationInitializer {
                     break;
                 }
             }
-            System.out.println(generation.getName());
-            System.out.println(findInputs(generation, civ));
             //Get children until it's raw material refining I guess...
         }
     }
