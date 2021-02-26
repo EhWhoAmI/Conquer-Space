@@ -40,7 +40,7 @@ public class ManufacturerAreaInformationPanel extends AreaInformationPanel<Manuf
         add(productivityLabel);
         
 
-        if (!area.producedLastTick()) {
+        if (!area.isProducedLastTick()){
             JLabel notProductive = new JLabel("Not functioning");
             notProductive.setForeground(Color.red);
             add(notProductive);

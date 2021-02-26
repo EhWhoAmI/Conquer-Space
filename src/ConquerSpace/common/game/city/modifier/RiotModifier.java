@@ -17,19 +17,20 @@
  */
 package ConquerSpace.common.game.city.modifier;
 
+import ConquerSpace.common.StarDate;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class RiotModifier extends CityModifier {
 
-    public RiotModifier() {
-        super("Riots");
+    public RiotModifier(StarDate currentDate) {
+        super("Riots", currentDate);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof RiotModifier);
+    public int hashCode() {
+        return 1;
     }
-
 }

@@ -50,9 +50,11 @@ public abstract class Area extends ConquerSpaceGameObject implements Workable, C
     @Serialize("owner")
     private ObjectReference owner = ObjectReference.INVALID_REFERENCE;
 
-    //Resource request
+    //Resource request and job priority
     @Serialize("resource-priority")
     protected int priority = Integer.MAX_VALUE;
+
+    private boolean producedLastTick;
 
     /**
      * This is how productive the area is when it is at only <code> currentlyManningJobs</code>.
@@ -62,6 +64,7 @@ public abstract class Area extends ConquerSpaceGameObject implements Workable, C
 
     Area(GameState gameState) {
         super(gameState);
+        producedLastTick = false;
     }
 
     public AreaClassification getAreaType() {
@@ -134,6 +137,14 @@ public abstract class Area extends ConquerSpaceGameObject implements Workable, C
 
     public ObjectReference getOwner() {
         return owner;
+    }
+
+    public void setProducedLastTick(boolean producedLastTick) {
+        this.producedLastTick = producedLastTick;
+    }
+
+    public boolean isProducedLastTick() {
+        return producedLastTick;
     }
 
     public abstract void accept(AreaDispatcher dispatcher);

@@ -142,6 +142,7 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 ResourceTransfer resourceTransferer = new ResourceTransfer(area, city, key, area.getResourceAmount(key));
                 resourceTransferer.doTransferResource();
             });
+            //Gonna produce next tick   
             area.setProducedLastTick(true);
         } else {
             area.setProducedLastTick(false);

@@ -682,7 +682,7 @@ public class CivilizationInitializer {
 
     private void addCommercialArea(City c, Civilization civ) {
         CommercialAreaFactory area = new CommercialAreaFactory(civ);
-        area.setMaxJobs(400_000);
+        area.setMaxJobs(5_000_000);
         area.setOperatingJobs(1_000);
         area.setTradeValue(50_000);
         c.addArea(area.build(gameState).getReference());

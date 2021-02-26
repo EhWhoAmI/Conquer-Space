@@ -480,9 +480,5 @@ public class CityEconomyPanel extends JPanel {
             this.ref = ref;
             this.amount = amount;
         }
-
-        public ResourcesChangeTuple() {
-        }
-
     }
 }

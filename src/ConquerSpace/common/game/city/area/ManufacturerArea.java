@@ -37,13 +37,11 @@ public class ManufacturerArea extends Area implements ResourceStockpile {
     //How much of that production process per round...
     float productivity;
 
-    private boolean producedLastTick;
 
     private ConstantStarDate lastStarDateExtracted;
 
     ManufacturerArea(GameState gameState, ProductionProcess process, float productivity) {
         super(gameState);
-        this.producedLastTick = false;
         this.process = process;
         this.productivity = productivity;
         lastStarDateExtracted = new ConstantStarDate(0);
@@ -74,14 +72,6 @@ public class ManufacturerArea extends Area implements ResourceStockpile {
     @Override
     public JobType getJobClassification() {
         return (JobType.FactoryWorker);
-    }
-
-    public boolean producedLastTick() {
-        return producedLastTick;
-    }
-
-    public void setProducedLastTick(boolean producedLastTick) {
-        this.producedLastTick = producedLastTick;
     }
 
     @Override
