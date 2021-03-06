@@ -64,15 +64,15 @@ public class ProductionProcessViewer extends JPanel {
         setLayout(new BorderLayout());
 
         productionProcessListModel = new ObjectListModel<>();
-        productionProcessListModel.setElements(civ.productionProcesses);
+        productionProcessListModel.setElements(civ.getProductionProcesses());
         productionProcessList = new JList<>(productionProcessListModel);
         productionProcessList.addListSelectionListener(l -> {
             //productionProcessInformationPanel.removeAll();
             ProductionProcess process = productionProcessListModel.getObject(productionProcessList.getSelectedIndex());
-            inputTable.setModel(new ResourceTableModel(process.input));
+            inputTable.setModel(new ResourceTableModel(process.getInput()));
             //productionProcessInformationPanel.add(new JScrollPane(inputTable));
             //productionProcessInformationPanel.add(new JLabel("Becomes ->"));
-            outputTable.setModel(new ResourceTableModel(process.output));
+            outputTable.setModel(new ResourceTableModel(process.getOutput()));
             //productionProcessInformationPanel.add(new JScrollPane(inputTable));
             //productionProcessInformationPanel.add(new JLabel("Difficulty: " + process.getDifficulty()));
 
@@ -80,20 +80,20 @@ public class ProductionProcessViewer extends JPanel {
             ArrayList<ProductionProcess> input = new ArrayList<>();
             ArrayList<ProductionProcess> output = new ArrayList<>();
 
-            for (ProductionProcess processSelection : civ.productionProcesses) {
+            for (ProductionProcess processSelection : civ.getProductionProcesses()) {
                 //Look for processes that lead to this
-                for (Map.Entry<StoreableReference, Double> entry : processSelection.output.entrySet()) {
+                for (Map.Entry<StoreableReference, Double> entry : processSelection.getOutput().entrySet()) {
                     StoreableReference key = entry.getKey();
-                    if (process.input.containsKey(key)) {
+                    if (process.getInput().containsKey(key)) {
                         input.add(processSelection);
                         break;
                     }
                 }
 
                 //Look for things that this can lead into 
-                for (Map.Entry<StoreableReference, Double> entry : processSelection.input.entrySet()) {
+                for (Map.Entry<StoreableReference, Double> entry : processSelection.getInput().entrySet()) {
                     StoreableReference key = entry.getKey();
-                    if (process.output.containsKey(key)) {
+                    if (process.getOutput().containsKey(key)) {
                         output.add(processSelection);
                         break;
                     }

@@ -559,8 +559,8 @@ public class GameWindow extends JFrame implements WindowListener,
                     if (Math.hypot((universeRenderer.convertPointToScreen(sys.getX(), translateX, scale) - e.getX()),
                             (universeRenderer.convertPointToScreen(sys.getY(), translateY, scale) - e.getY())) < (universeRenderer.getSizeOfStar() / scale)
                             //If you can see it
-                            && civController.vision.containsKey(sys.getUniversePath())
-                            && civController.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED
+                            && civController.getVision().containsKey(sys.getUniversePath())
+                            && civController.getVision().get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED
                             && !universeRenderer.drawingStarSystemDetails(scale)) {
                         see(sys);
                         //Zoom into the star system, zoom is good enough, is about 1/1 billion
@@ -687,8 +687,8 @@ public class GameWindow extends JFrame implements WindowListener,
                 if (Math.hypot(universeRenderer.convertPointToScreen(sys.getX(), translateX, scale) - e.getX(),
                         universeRenderer.convertPointToScreen(sys.getY(), translateY, scale) - e.getY())
                         < (double) universeRenderer.getSizeOfStar()
-                        && civController.vision.containsKey(sys.getUniversePath())
-                        && civController.vision.get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED
+                        && civController.getVision().containsKey(sys.getUniversePath())
+                        && civController.getVision().get(sys.getUniversePath()) > VisionTypes.UNDISCOVERED
                         && !universeRenderer.drawingStarSystemDetails(scale)) {
                     //View star system menu
                     JMenuItem systemInfo

@@ -122,9 +122,9 @@ public class SpacePortMenu extends JPanel {
         launchableListModel.clear();
         //Get the amount of launch pads
         int launchPadCount = 0;
-        for (ObjectReference cityIndex : planet.cities) {
+        for (ObjectReference cityIndex : planet.getCities()) {
             City city = gameState.getObject(cityIndex, City.class);
-            for (ObjectReference areaIndex : city.areas) {
+            for (ObjectReference areaIndex : city.getAreas()) {
                 Area area = gameState.getObject(areaIndex, Area.class);
                 if (area instanceof SpacePortArea) {
                     SpacePortArea port = (SpacePortArea) area;
@@ -147,9 +147,9 @@ public class SpacePortMenu extends JPanel {
 
     public void removeShipFromPlanet(ObjectReference reference) {
         planetloop:
-        for (ObjectReference cityIndex : planet.cities) {
+        for (ObjectReference cityIndex : planet.getCities()) {
             City city = gameState.getObject(cityIndex, City.class);
-            for (ObjectReference areaIndex : city.areas) {
+            for (ObjectReference areaIndex : city.getAreas()) {
                 Area area = gameState.getObject(areaIndex, Area.class);
                 if (area instanceof SpacePortArea) {
                     SpacePortArea port = (SpacePortArea) area;

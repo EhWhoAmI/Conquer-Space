@@ -53,7 +53,7 @@ public class EngineDesignerPanel extends ShipComponentDesignerPanel {
         this.civilization = civilization;
         setLayout(new VerticalFlowLayout());
         engineTechonolgyLabel = new JLabel("Propulsion Type");
-        engineTechnologyComboBox = new JComboBox<>(civilization.engineTechs.toArray());
+        engineTechnologyComboBox = new JComboBox<>(civilization.getEngineTechs().toArray());
         thrustLabel = new JLabel("Max Thrust");
         thrustSpinner = new JSpinner(new SpinnerNumberModel(0d, 0d, Double.MAX_VALUE, 1d));
 
@@ -118,7 +118,7 @@ public class EngineDesignerPanel extends ShipComponentDesignerPanel {
 
     private void refreshEngineTechs() {
         engineTechnologyComboBox.removeAllItems();
-        for (ObjectReference or : civilization.engineTechs) {
+        for (ObjectReference or : civilization.getEngineTechs()) {
             engineTechnologyComboBox.addItem(or);
         }
 

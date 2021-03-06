@@ -63,7 +63,7 @@ public class RecruitingPerson extends JPanel {
         this.galaxy = gameState.getUniverse();
         setLayout(new HorizontalFlowLayout());
         //Generate people and things like that
-        personListModel = new PersonListModel(c.unrecruitedPeople);
+        personListModel = new PersonListModel(c.getUnrecruitedPeople());
 
         probablePersonList = new JList<>(personListModel);
         probablePersonList.setSelectedIndex(1);
@@ -114,8 +114,8 @@ public class RecruitingPerson extends JPanel {
                 int previousSelection = probablePersonList.getSelectedIndex();
                 
                 Person p = probablePersonList.getSelectedValue();
-                c.unrecruitedPeople.remove(p.getReference());
-                c.people.add(p.getReference());
+                c.getUnrecruitedPeople().remove(p.getReference());
+                c.getPeople().add(p.getReference());
                 //Set selected value
                 probablePersonList.setSelectedIndex(previousSelection);
             }

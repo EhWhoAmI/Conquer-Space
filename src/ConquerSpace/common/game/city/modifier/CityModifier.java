@@ -17,42 +17,60 @@
  */
 package ConquerSpace.common.game.city.modifier;
 
+import ConquerSpace.common.ConstantStarDate;
+import ConquerSpace.common.StarDate;
 import java.io.Serializable;
 
 /**
  *
  * @author EhWhoAmI
  */
-public class CityModifier implements Serializable{
-    String name;
-    int ticks;
+public class CityModifier implements Serializable {
 
-    public CityModifier() {
-        name = "";
-        ticks = 0;
+    public static enum CityModifierEnum {
+        RIOT_MODIFIER(1),
+        STARVATION_MODIFIER(2),
+        UNEMPLOYED_MODIFIER(3);
+
+        int id;
+
+        private CityModifierEnum(int id) {
+            this.id = id;
+        }
+    };
+
+    private String name;
+    private ConstantStarDate date;
+
+    public CityModifier(StarDate currentDate) {
+        this("", currentDate);
     }
 
-    public CityModifier(String name) {
+    public CityModifier(String name, StarDate currentDate) {
         this.name = name;
-        ticks = 0;
+        date = currentDate.getConstantDate();
     }
 
     public String getName() {
         return name;
     }
 
-    public int getTicks() {
-        return ticks;
-    }
-    
-    public void incrementTicks(int tickIncremnt) {
-        ticks += tickIncremnt;
+    public ConstantStarDate getStartDate() {
+        return date;
     }
 
     @Override
     public String toString() {
-        return name + " for " + ticks;
+        return name;
     }
-    
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof CityModifier && obj.hashCode() == hashCode()) || obj instanceof CityModifierEnum && hashCode() == ((CityModifierEnum) obj).id;
+    }
+
+    @Override
+    public int hashCode() {
+        return -1;
+    }
 }

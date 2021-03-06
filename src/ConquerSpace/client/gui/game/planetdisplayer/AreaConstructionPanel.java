@@ -178,7 +178,7 @@ public class AreaConstructionPanel extends JPanel {
         for (int i = 0; i < AreaListNames.values().length; i++) {
             //Has launch capability
             if (AreaListNames.values()[i].equals(AreaListNames.SpacePort)) {
-                if (civilization.values.containsKey("haslaunch") && civilization.values.get("haslaunch") == 1) {
+                if (civilization.getValues().containsKey("haslaunch") && civilization.getValues().get("haslaunch") == 1) {
                     areaTypeListModel.addElement(AreaListNames.values()[i]);
                 }
             } else {

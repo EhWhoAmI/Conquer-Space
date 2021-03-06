@@ -44,14 +44,14 @@ public class Actions {
     }
 
     public static void addArea(Planet on, City city, Area a) {
-        city.areas.add(a.getReference());
+        city.getAreas().add(a.getReference());
     }
 
     public static void launchShip(Ship what, Planet planet, Civilization civ) {
         what.setLocation(planet.getUniversePath());
         what.setIsOrbiting(true);
         planet.putShipInOrbit(what);
-        civ.spaceships.add(what.getReference());
+        civ.getSpaceships().add(what.getReference());
     }
 
     public static void launchLaunchable(Launchable launch, Planet planet) {
@@ -79,56 +79,5 @@ public class Actions {
         }
         what.setGoingToX(x);
         what.setGoingToY(y);
-    }
-
-    public static void storeResource(StoreableReference resourceType, Double amount, ResourceStockpile from) {
-        if (resourceType != null && amount > 0) {
-            if (from.canStore(resourceType)) {
-                //Store resource
-                from.addResource(resourceType, amount);
-            } else {
-                //Do something
-            }
-        }
-    }
-
-    public static boolean removeResource(StoreableReference resourceType, Double amount, ResourceStockpile from) {
-        if (resourceType != null && amount != 0) {
-            if (from.canStore(resourceType)) {
-                //Store resource
-                return from.removeResource(resourceType, amount);
-            } else {
-                //Store somewhere else
-                //removeResource(resourceType, amount, owner, from.getUniversePath());
-            }
-        }
-        return false;
-    }
-
-    public static boolean hasSufficientResources(Integer resourceType, Double amount, ResourceStockpile from) {
-        return false;
-    }
-
-    public static boolean sendResources(StoreableReference resourceType, Double amount, ResourceStockpile from, ResourceStockpile to) {
-        if (removeResource(resourceType, amount, from)) {
-            //Track where the resources are going to and from
-            if (from instanceof City) {
-                City toCity = ((City) to);
-                if (!toCity.getResourcesGainedFrom().containsKey(from)) {
-                    toCity.getResourcesGainedFrom().put(from, new DoubleHashMap<>());
-                }
-                toCity.getResourcesGainedFrom().get(from).addValue(resourceType, amount);
-            }
-            if (to instanceof City) {
-                City fromCity = ((City) from);
-                if (!fromCity.getResourcesSentTo().containsKey(to)) {
-                    fromCity.getResourcesSentTo().put(to, new DoubleHashMap<>());
-                }
-                fromCity.getResourcesSentTo().get(to).addValue(resourceType, -amount);
-            }
-            storeResource(resourceType, amount, to);
-            return true;
-        }
-        return false;
     }
 }

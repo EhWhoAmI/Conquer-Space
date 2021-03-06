@@ -321,8 +321,8 @@ public class PlanetMap extends JPanel {
 
                     Graphics2D resourceGraphics = resourceImage.createGraphics();
 
-                    for (int i = 0; i < p.strata.size(); i++) {
-                        Stratum v = gameState.getObject(p.strata.get(i), Stratum.class);
+                    for (int i = 0; i < p.getStrata().size(); i++) {
+                        Stratum v = gameState.getObject(p.getStrata().get(i), Stratum.class);
                         //Draw stratum
                         Ellipse2D.Double circe = new Ellipse2D.Double((v.getX() - v.getRadius()) * tileSize,
                                 (v.getY() - v.getRadius()) * tileSize,
@@ -335,8 +335,8 @@ public class PlanetMap extends JPanel {
                 if (resourceImage != null) {
                     g2d.drawImage(resourceImage, 0, 0, null);
                 }
-                for (int i = 0; i < p.strata.size(); i++) {
-                    Stratum v = gameState.getObject(p.strata.get(i), Stratum.class);
+                for (int i = 0; i < p.getStrata().size(); i++) {
+                    Stratum v = gameState.getObject(p.getStrata().get(i), Stratum.class);
                     float fontSize = 35;
                     Font derivedFont = getFont().deriveFont(fontSize);
                     int width = getFontMetrics(derivedFont).stringWidth(v.getName());
@@ -350,7 +350,7 @@ public class PlanetMap extends JPanel {
                 //g2d
                 Graphics2D mapGraphics = g2d;
 
-                Iterator<GeographicPoint> distIterator = p.cityDistributions.keySet().iterator();
+                Iterator<GeographicPoint> distIterator = p.getCityDistributions().keySet().iterator();
 
                 Rectangle r = g.getClipBounds();
                 while (distIterator.hasNext()) {
@@ -605,8 +605,8 @@ public class PlanetMap extends JPanel {
             } else if (displayedView == RESOURCE_VIEW || displayedView == CONSTRUCTION_VIEW) {
                 //Check if lying on strata
                 ArrayList<Stratum> strataToShow = new ArrayList<>();
-                for (int i = 0; i < p.strata.size(); i++) {
-                    Stratum stratum = gameState.getObject(p.strata.get(i), Stratum.class);
+                for (int i = 0; i < p.getStrata().size(); i++) {
+                    Stratum stratum = gameState.getObject(p.getStrata().get(i), Stratum.class);
                     if (inCircle(stratum.getX(), stratum.getY(), stratum.getRadius(), mapX, mapY)) {
                         strataToShow.add(stratum);
                     }

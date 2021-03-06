@@ -19,6 +19,7 @@ package ConquerSpace.common.actions;
 
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.ResourceTransfer;
 import ConquerSpace.common.game.resources.StoreableReference;
 
 /**
@@ -41,8 +42,8 @@ public class ResourceTransportAction extends OrganizationAction {
 
     @Override
     public ActionStatus doAction(GameState gameState) {
-        //public static boolean sendResources(Integer resourceType, Double amount, int owner, City from, City to) {
-        return Actions.sendResources(good, amount, from, to) ? ActionStatus.Success : ActionStatus.Failure;
+        ResourceTransfer transferer = new ResourceTransfer(from, to, good, amount);
+        return transferer.doTransferResource() == ResourceTransfer.ResourceTransferViability.TRANSFER_POSSIBLE ? ActionStatus.Success : ActionStatus.Failure;
     }
 
     @Override

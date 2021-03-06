@@ -22,6 +22,7 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.economy.GoodOrder;
 import ConquerSpace.common.game.economy.Trader;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.save.SerializeClassName;
 import ConquerSpace.common.util.DoubleHashMap;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
  * @author EhWhoAmI
  */
 @SerializeClassName("population-segment")
-public class PopulationSegment extends ConquerSpaceGameObject implements Trader, Comparable<PopulationSegment>{
+public class PopulationSegment extends ConquerSpaceGameObject implements Trader, Comparable<PopulationSegment>, ResourceStockpile {
 
     public long size = 0;
     public long workablePopulation = 0;
@@ -67,7 +68,7 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader,
         buyOrders = new ArrayList<>();
         sellOrders = new ArrayList<>();
         resourceStorages = new ArrayList<>();
-        
+
         upkeep = new DoubleHashMap<>();
     }
 
@@ -119,6 +120,39 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader,
     public int compareTo(PopulationSegment o) {
         return Long.compare(this.tier, o.tier);
     }
-    
-    
+
+    @Override
+    public void addResourceTypeStore(StoreableReference type) {
+        //Store resources, they only consume
+    }
+
+    @Override
+    public Double getResourceAmount(StoreableReference type) {
+        return 0d;
+    }
+
+    @Override
+    public void addResource(StoreableReference type, Double amount) {
+        //Resources go to nowhere
+    }
+
+    @Override
+    public boolean canStore(StoreableReference type) {
+        return true;
+    }
+
+    @Override
+    public boolean hasResource(StoreableReference type) {
+        return false;
+    }
+
+    @Override
+    public StoreableReference[] storedTypes() {
+        return new StoreableReference[0];
+    }
+
+    @Override
+    public boolean removeResource(StoreableReference type, Double amount) {
+        return false;
+    }
 }

@@ -165,7 +165,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         //The panel that you cant really change the stuff inside
         shipListModel = new ObjectListModel<>();
-        shipListModel.setElements(civ.shipClasses);
+        shipListModel.setElements(civ.getShipClasses());
 
         shipListModel.setHandler(l -> {
             return gameState.getObject(l, ShipClass.class).getName();
@@ -542,7 +542,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //Another panel to add random ship components
             JPanel addRandomShipComponentPanel = new JPanel();
             ObjectListModel<ObjectReference> shipComponentListModel = new ObjectListModel<>();
-            shipComponentListModel.setElements(c.shipComponentList);
+            shipComponentListModel.setElements(c.getShipComponentList());
             shipComponentListModel.setHandler(l -> {
                 return gameState.getObject(l, ShipComponent.class).getName();
             });
@@ -657,9 +657,9 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
             //Need to make hull material...
             //Get hull material
             selectedHull = new Hull(gameState, 100, 100,
-                    civ.hullMaterials.get(0),
+                    civ.getHullMaterials().get(0),
                     (ShipType) shipTypeComboBox.getSelectedItem(), 100, shipName + " Hull");
-            civ.hulls.add(selectedHull.getReference());
+            civ.getHulls().add(selectedHull.getReference());
         }
 
         //Add hull
@@ -686,7 +686,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
                 engineComponent.setLaunchSystemType(toOrbitEngineType);
                 engineComponent.setName("Launch system");
                 sc.components.add(engineComponent.getReference());
-                civ.shipComponentList.add(engineComponent.getReference());
+                civ.getShipComponentList().add(engineComponent.getReference());
             } else if (toOrbitEngineSelection != null) {
                 sc.components.add(toOrbitEngineSelection);
             }
@@ -695,7 +695,7 @@ public class BuildSpaceShipAutomationMenu extends JPanel {
 
         //And other components
         //Autogenerate engine, etc...
-        civ.shipClasses.add(sc.getReference());
+        civ.getShipClasses().add(sc.getReference());
         shipList.updateUI();
 
         //Reset the UI

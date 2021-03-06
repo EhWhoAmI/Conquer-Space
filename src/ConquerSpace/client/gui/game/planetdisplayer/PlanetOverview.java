@@ -80,8 +80,9 @@ public class PlanetOverview extends JPanel {
     private JLabel cityCount;
     private JLabel ownerLabel;
     private JLabel orbitDistance;
+    private JLabel infrastructureIndexLabel;
 
-    private JPanel currentStats;
+    private JPanel currentPopulationStats;
     private JLabel populationCount;
     private JLabel averagePlanetPopGrowthLabel;
 
@@ -117,11 +118,12 @@ public class PlanetOverview extends JPanel {
         planetName = new JLabel();
         planetPath = new JLabel();
         planetSize = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.radiusinfo", p.getPlanetSize() * 100));
-        cityCount = new JLabel(p.cities.size() + " cities");
+        cityCount = new JLabel(p.getCities().size() + " cities");
         ownerLabel = new JLabel();
         PolarCoordinate pos = p.orbit.toPolarCoordinate();
         orbitDistance = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.distanceinfo", pos.getDistance(), ((double) pos.getDistance() / 149598000d)));
-
+        infrastructureIndexLabel = new JLabel("Infrastructure: " + p.getInfrastructureIndex());
+        
         //Init planetname
         if (p.getName().equals("")) {
             planetName.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.unnamedplanet"));
@@ -139,17 +141,17 @@ public class PlanetOverview extends JPanel {
             ownerLabel.setText(LOCALE_MESSAGES.getMessage("game.planet.overview.noowner"));
         }
 
-        currentStats = new JPanel(new VerticalFlowLayout());
+        currentPopulationStats = new JPanel(new VerticalFlowLayout());
 
-        currentStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("game.planet.overview.populationstatstitle")));
+        currentPopulationStats.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.GRAY), LOCALE_MESSAGES.getMessage("game.planet.overview.populationstatstitle")));
 
         population = 0;
 
-        populationCount = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.population", Utilities.longToHumanString(p.population), p.cities.size()));
-        currentStats.add(populationCount);
+        populationCount = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.population", Utilities.longToHumanString(p.getPopulation()), p.getCities().size()));
+        currentPopulationStats.add(populationCount);
 
-        averagePlanetPopGrowthLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.averagegrowth", p.population));
-        currentStats.add(averagePlanetPopGrowthLabel);
+        averagePlanetPopGrowthLabel = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.overview.averagegrowth", p.getPopulation()));
+        currentPopulationStats.add(averagePlanetPopGrowthLabel);
 
         //Map
         planetSectors = new JPanel(new VerticalFlowLayout());
@@ -167,9 +169,10 @@ public class PlanetOverview extends JPanel {
         planetOverview.add(planetSize);
         planetOverview.add(ownerLabel);
         planetOverview.add(orbitDistance);
+        planetOverview.add(infrastructureIndexLabel);
 
         overviewPanel1.add(planetOverview);
-        overviewPanel1.add(currentStats);
+        overviewPanel1.add(currentPopulationStats);
         overviewPanel1.add(planetSectors);
 
         overviewPanel2 = new JPanel();
@@ -243,7 +246,7 @@ public class PlanetOverview extends JPanel {
                 //Set opacity
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
                 //Draw the circles
-                for (ObjectReference strataId : p.strata) {
+                for (ObjectReference strataId : p.getStrata()) {
                     Stratum v = gameState.getObject(strataId, Stratum.class);
                     //Draw...
                     if (resourceToShow == SHOW_ALL) {
@@ -266,7 +269,7 @@ public class PlanetOverview extends JPanel {
                 }
 
                 //Draw buildings
-                for (Map.Entry<GeographicPoint, ObjectReference> en : p.cityDistributions.entrySet()) {
+                for (Map.Entry<GeographicPoint, ObjectReference> en : p.getCityDistributions().entrySet()) {
                     GeographicPoint p = en.getKey();
 
                     //Draw

@@ -41,23 +41,25 @@ public class PlanetarySupplyLineGenerator {
         //Init references for better indexing
         BidiMap<Integer, ObjectReference> cityIds = new DualHashBidiMap<>();
         int i = 0;
-        for (City c : p.getCities()) {
-            cityIds.put(i, c.getReference());
+        for (ObjectReference c : p.getCities()) {
+            cityIds.put(i, c);
             i++;
         }
 
         ArrayList<ObjectReference> alreadyConnected = new ArrayList<>();
         //Connect cities
-        for (City c : p.getCities()) {
-            for (City c2 : p.getCities()) {
-                if (!c.equals(c2) && !alreadyConnected.contains(c2.getReference())) {
+        for (ObjectReference c : p.getCities()) {
+            City city = gameState.getObject(c, City.class);
+            for (ObjectReference c2 : p.getCities()) {
+                City city2 = gameState.getObject(c2, City.class);
+                if (!c.equals(c2) && !alreadyConnected.contains(c2)) {
                     //Check if connected, reduces parallel edges
-                    edges.add(new Edge(cityIds.getKey(c.getReference()),
-                            cityIds.getKey(c2.getReference()),
-                            c.getInitialPoint().distance(c2.getInitialPoint())));
+                    edges.add(new Edge(cityIds.getKey(c),
+                            cityIds.getKey(c2),
+                            city.getInitialPoint().distance(city2.getInitialPoint())));
                 }
             }
-            alreadyConnected.add(c.getReference());
+            alreadyConnected.add(c);
         }
 
         Graph g = new Graph(p.getCities().size(), edges.size());

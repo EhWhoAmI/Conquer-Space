@@ -37,12 +37,12 @@ public class ConstructionAreaInformationPanel extends AreaInformationPanel<Const
 
         JLabel constructingArea = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.what", area.getToBuild().toString()));
         add(constructingArea);
-        timeLeft = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getTicksLeft()));
+        timeLeft = new JLabel(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getConstructionTimeLeft()));
         add(timeLeft);
         genericInformation();
     }
 
     public void update() {
-        timeLeft.setText(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getTicksLeft()));
+        timeLeft.setText(LOCALE_MESSAGES.getMessage("game.planet.areas.construction.left", area.getConstructionTimeLeft()));
     }
 }

@@ -15,22 +15,45 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package ConquerSpace.common.game.city.modifier;
 
-import ConquerSpace.common.StarDate;
+package ConquerSpace.common;
+
+import java.io.Serializable;
 
 /**
+ * Star date that does not change, used for science
  *
  * @author EhWhoAmI
  */
-public class RiotModifier extends CityModifier {
+public class ConstantStarDate implements Serializable{
 
-    public RiotModifier(StarDate currentDate) {
-        super("Riots", currentDate);
+    private final long date;
+
+    public ConstantStarDate(long date) {
+        this.date = date;
+    }
+
+    public ConstantStarDate(StarDate date) {
+        this.date = date.getDate();
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ConstantStarDate) {
+            return ((ConstantStarDate) obj).getDate() == date;
+        } else if (obj instanceof StarDate) {
+            return ((StarDate) obj).getDate() == date;
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return 1;
+        return (int) date;
     }
+
 }

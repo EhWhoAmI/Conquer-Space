@@ -26,6 +26,7 @@ import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.resources.Good;
 import ConquerSpace.common.game.resources.GoodReference;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.ResourceTransfer;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import ConquerSpace.common.util.DoubleHashMap;
@@ -40,6 +41,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
@@ -231,7 +233,6 @@ public class PlanetResources extends javax.swing.JPanel {
         jPanel3.add(jPanel1, gridBagConstraints);
 
         //jTabbedPane1.addTab(LOCALE_MESSAGES.getMessage("game.planet.resources.tabs.individual"), jPanel3);
-
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         resourceToTakeComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Empty!"}));
@@ -418,11 +419,16 @@ public class PlanetResources extends javax.swing.JPanel {
             //resourceId,
             //(Double) resourcesToTransferSpinner.getValue());
             //c.actionList.add(act);
-            Actions.sendResources(
-                    resourceId,
-                    (Double) resourcesToTransferSpinner.getValue(),
+            ResourceTransfer transferer = new ResourceTransfer(
                     stockpiles.get(resourceSendCityFromComboBox.getSelectedIndex()),
-                    stockpiles.get(resourceSendCityToComboBox.getSelectedIndex()));
+                    stockpiles.get(resourceSendCityToComboBox.getSelectedIndex()),
+                    resourceId, (Double) resourcesToTransferSpinner.getValue());
+            if (transferer.canTransferResources() == ResourceTransfer.ResourceTransferViability.TRANSFER_POSSIBLE) {
+                transferer.doTransferResource();
+            } else {
+                JOptionPane.showMessageDialog(this, "Insufficient resources to transfer: " + transferer.canTransferResources().toString());
+            }
+
             //Reload things
             loadSelectedResourceStockpile();
         }
@@ -487,7 +493,7 @@ public class PlanetResources extends javax.swing.JPanel {
                     case 2:
                         if (selectedStockpile instanceof City) {
                             City c = (City) selectedStockpile;
-                            HashMap<String, Double> ledger = c.resourceLedger.get(storedValue);
+                            HashMap<String, Double> ledger = c.getResourceLedger().get(storedValue);
                             double change = 0;
                             if (ledger != null) {
                                 for (Double d : ledger.values()) {
@@ -549,7 +555,7 @@ public class PlanetResources extends javax.swing.JPanel {
                     }
                     if (selectedStockpile instanceof City) {
                         City c = (City) selectedStockpile;
-                        DoubleHashMap map = c.resourceLedger.get(selectedStockpile.storedTypes()[row]);
+                        DoubleHashMap map = c.getResourceLedger().get(selectedStockpile.storedTypes()[row]);
                         if (map != null) {
                             l.setToolTipText(map.toString());
                         }
@@ -607,7 +613,7 @@ public class PlanetResources extends javax.swing.JPanel {
                         return gameState.getGood(planetResourceId);
                     case 1:
                         int mass = (int) (((planetResource.get(planetResourceId) * gameState.getGood(planetResourceId).getMass())) / 1000);
-                        return Utilities.longToHumanString(planetResource.get(planetResourceId).intValue()) +  " units, or "
+                        return Utilities.longToHumanString(planetResource.get(planetResourceId).intValue()) + " units, or "
                                 + Utilities.longToHumanString(mass) + " tonnes";
                     case 2:
                         //Return the stuff
@@ -729,7 +735,7 @@ public class PlanetResources extends javax.swing.JPanel {
             stockpileRow = storageResources.getSelectedRow();
             stockpileColunm = storageResources.getSelectedColumn();
         }
-        for (ObjectReference cityId : p.cities) {
+        for (ObjectReference cityId : p.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             StoreableReference[] goods = city.storedTypes();
             //Sort through stuff
@@ -747,8 +753,8 @@ public class PlanetResources extends javax.swing.JPanel {
                 }
 
                 HashMap<String, Double> ledger = planetLedger.get(g);
-                if (city.resourceLedger.get(g) != null) {
-                    for (Map.Entry<String, Double> entry : city.resourceLedger.get(g).entrySet()) {
+                if (city.getResourceLedger().get(g) != null) {
+                    for (Map.Entry<String, Double> entry : city.getResourceLedger().get(g).entrySet()) {
                         String key = entry.getKey();
                         Double val = entry.getValue();
                         if (ledger.containsKey(key)) {
@@ -797,8 +803,8 @@ public class PlanetResources extends javax.swing.JPanel {
         int preselected = resourceToTakeComboBox.getSelectedIndex();
         resourceToTakeComboBox.removeAllItems();
         resourceToTakeComboBox.setModel(valueComboBoxModel);
-        resourceToTakeComboBox.setSelectedIndex(0);
-        if (preselected != -1) {
+        if (pile.storedTypes().length > 0 && preselected != -1) {
+            resourceToTakeComboBox.setSelectedIndex(0);
             resourceToTakeComboBox.setSelectedIndex(preselected);
         }
     }

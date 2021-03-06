@@ -22,6 +22,7 @@ import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ProductionProcess;
+import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.save.SerializeClassName;
 
 /**

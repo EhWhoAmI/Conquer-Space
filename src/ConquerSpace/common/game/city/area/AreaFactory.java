@@ -45,7 +45,7 @@ public abstract class AreaFactory {
         if (builder != null) {
             //Add basic construction stuff
             HashMap<StoreableReference, Double> constructionCost = new HashMap<>();
-            constructionCost.put(builder.taggedGoods.get("structure"), 1000d);
+            constructionCost.put(builder.getTaggedGoods().get("structure"), 1000d);
             return constructionCost;
         }
         return new HashMap<>();

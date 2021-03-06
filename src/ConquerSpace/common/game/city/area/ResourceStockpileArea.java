@@ -41,12 +41,12 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     private ResourcePermissions defaultPermissions;
     private HashMap<ObjectReference, ResourcePermissions> allPermissions;
 
-    public HashMap<StoreableReference, Double> resources;
-    public DoubleHashMap<StoreableReference> resourceDemands;
+    private HashMap<StoreableReference, Double> resources;
+    private DoubleHashMap<StoreableReference> resourceDemands;
 
-    public ArrayList<StorageNeeds> storageNeeds;
-    public HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
-    public UniversePath path;
+    private ArrayList<StorageNeeds> storageNeeds;
+    private HashMap<StoreableReference, DoubleHashMap<String>> resourceLedger;
+    private UniversePath path;
 
     ResourceStockpileArea(GameState gameState) {
         super(gameState);
@@ -69,28 +69,28 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
 
     @Override
     public void addResourceTypeStore(StoreableReference type) {
-        resources.put(type, 0d);
+        getResources().put(type, 0d);
     }
 
     @Override
     public Double getResourceAmount(StoreableReference type) {
-        return resources.get(type);
+        return getResources().get(type);
     }
 
     @Override
     public void addResource(StoreableReference type, Double amount) {
         if (!resources.containsKey(type)) {
-            resources.put(type, 0d);
+            getResources().put(type, 0d);
         }
-        resources.put(type, resources.get(type) + amount);
+        getResources().put(type, getResources().get(type) + amount);
         //Add to ledger
-        if (resourceLedger.containsKey(type)) {
-            DoubleHashMap<String> resource = resourceLedger.get(type);
+        if (getResourceLedger().containsKey(type)) {
+            DoubleHashMap<String> resource = getResourceLedger().get(type);
             resource.addValue("added", (amount));
         } else {
             DoubleHashMap<String> resource = new DoubleHashMap<>();
             resource.put("added", amount);
-            resourceLedger.put(type, resource);
+            getResourceLedger().put(type, resource);
         }
     }
 
@@ -101,8 +101,8 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
 
     @Override
     public StoreableReference[] storedTypes() {
-        Iterator<StoreableReference> res = resources.keySet().iterator();
-        StoreableReference[] arr = new StoreableReference[resources.size()];
+        Iterator<StoreableReference> res = getResources().keySet().iterator();
+        StoreableReference[] arr = new StoreableReference[getResources().size()];
         int i = 0;
         while (res.hasNext()) {
             StoreableReference next = res.next();
@@ -120,22 +120,22 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
             //resources.put(type, amount);
             return false;
         }
-        Double currentlyStored = resources.get(type);
+        Double currentlyStored = getResources().get(type);
 
         if (amount > currentlyStored) {
             return false;
         }
 
-        resources.put(type, (currentlyStored - amount));
+        getResources().put(type, (currentlyStored - amount));
         //Add to ledger
-        if (resourceLedger.containsKey(type)) {
-            DoubleHashMap<String> resource = resourceLedger.get(type);
+        if (getResourceLedger().containsKey(type)) {
+            DoubleHashMap<String> resource = getResourceLedger().get(type);
             resource.addValue("removed", -amount);
-            resourceLedger.put(type, resource);
+            getResourceLedger().put(type, resource);
         } else {
             DoubleHashMap<String> resource = new DoubleHashMap<>();
             resource.addValue("removed", -amount);
-            resourceLedger.put(type, resource);
+            getResourceLedger().put(type, resource);
         }
         return true;
     }
@@ -153,5 +153,45 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     @Override
     public AreaClassification getAreaType() {
         return AreaClassification.Infrastructure;
+    }
+
+    @Override
+    public boolean hasResource(StoreableReference type) {
+        return getResources().containsKey(type);
+    }
+
+    /**
+     * @return the resources
+     */
+    public HashMap<StoreableReference, Double> getResources() {
+        return resources;
+    }
+
+    /**
+     * @return the resourceDemands
+     */
+    public DoubleHashMap<StoreableReference> getResourceDemands() {
+        return resourceDemands;
+    }
+
+    /**
+     * @return the storageNeeds
+     */
+    public ArrayList<StorageNeeds> getStorageNeeds() {
+        return storageNeeds;
+    }
+
+    /**
+     * @return the resourceLedger
+     */
+    public HashMap<StoreableReference, DoubleHashMap<String>> getResourceLedger() {
+        return resourceLedger;
+    }
+
+    /**
+     * @return the path
+     */
+    public UniversePath getPath() {
+        return path;
     }
 }

@@ -17,6 +17,7 @@
  */
 package ConquerSpace.common.game.city.area;
 
+import ConquerSpace.common.ConstantStarDate;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.population.jobs.JobType;
@@ -31,9 +32,11 @@ import java.util.HashMap;
 @SerializeClassName("construction-area")
 public class ConstructingArea extends Area {
 
-    private int ticksLeft;
+    private int constructionTimeLeft;
     private ObjectReference toBuild;
     private HashMap<StoreableReference, Double> costPerTurn;
+
+    private ConstantStarDate lastTickDate;
 
     /**
      * This is the only constructor that can be public, because it is supposed to be easy to make
@@ -45,29 +48,32 @@ public class ConstructingArea extends Area {
      */
     public ConstructingArea(GameState gameState, int ticks, Area toBuild) {
         super(gameState);
-        this.ticksLeft = ticks;
+        this.constructionTimeLeft = ticks;
         this.toBuild = toBuild.getReference();
         costPerTurn = new HashMap<>();
+
+        lastTickDate = gameState.date.getConstantDate();
     }
 
     public ObjectReference getToBuild() {
         return toBuild;
     }
 
-    public int getTicksLeft() {
-        return ticksLeft;
+    public int getConstructionTimeLeft() {
+        return constructionTimeLeft;
     }
 
-    public void setTicksLeft(int ticksLeft) {
-        this.ticksLeft = ticksLeft;
+    public void setConstructionTimeLeft(int constructionTimeLeft) {
+        this.constructionTimeLeft = constructionTimeLeft;
     }
 
     public void setCostPerTurn(HashMap<StoreableReference, Double> costPerTurn) {
         this.costPerTurn = costPerTurn;
     }
 
-    public void tickConstruction(int value) {
-        ticksLeft -= value;
+    public void tickConstruction() {
+        long value = gameState.date.getDate() - lastTickDate.getDate();
+        constructionTimeLeft -= value;
     }
 
     @Override

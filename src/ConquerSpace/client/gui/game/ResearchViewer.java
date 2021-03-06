@@ -103,8 +103,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         //Get the list of researched tech
         list = new DefaultListModel<>();
         //list.addElement(element);
-        for (Technology t : civilization.civTechs.keySet()) {
-            if (civilization.civTechs.get(t) == Technologies.REVEALED) {
+        for (Technology t : civilization.getCivTechs().keySet()) {
+            if (civilization.getCivTechs().get(t) == Technologies.REVEALED) {
                 list.addElement(t);
             }
         }
@@ -212,11 +212,11 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         techResearcher.add(techInfoPanel);
         pane.addChangeListener((e) -> {
             techTableModel.setRowCount(0);
-            for (Technology t : civilization.currentlyResearchingTechonologys.keySet()) {
+            for (Technology t : civilization.getCurrentlyResearchingTechonologys().keySet()) {
                 //researchingTech.setText(t.getName());
                 //researcher.setText("Researcher: " + c.currentlyResearchingTechonologys.get(t).getName());
                 //estTimeLeft.setText("Estimated time left: " + ((Technologies.estFinishTime(t) - c.civResearch.get(t) / c.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months");
-                techTableModel.addRow(new String[]{t.getName(), civilization.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
+                techTableModel.addRow(new String[]{t.getName(), civilization.getCurrentlyResearchingTechonologys().get(t).getName(), ((Technologies.estFinishTime(t) - civilization.getCivResearch().get(t) / civilization.getCurrentlyResearchingTechonologys().get(t).getSkill()) / 720) + " months"});
             }
             personComboBoxModel.removeAllElements();
             fillComboBox();
@@ -239,12 +239,12 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
     }
 
     public void update() {
-        for (Technology t : civilization.currentlyResearchingTechonologys.keySet()) {
-            if ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) > 0) {
+        for (Technology t : civilization.getCurrentlyResearchingTechonologys().keySet()) {
+            if ((Technologies.estFinishTime(t) - civilization.getCivResearch().get(t) / civilization.getCurrentlyResearchingTechonologys().get(t).getSkill()) > 0) {
                 researchingTech.setText(t.getName());
-                researcher.setText(LOCALE_MESSAGES.getMessage("game.research.researching.researcher", civilization.currentlyResearchingTechonologys.get(t).getName()));
+                researcher.setText(LOCALE_MESSAGES.getMessage("game.research.researching.researcher", civilization.getCurrentlyResearchingTechonologys().get(t).getName()));
                 //720 is number of ticks in a month
-                estTimeLeft.setText(LOCALE_MESSAGES.getMessage("game.research.researching.timeleft", ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) / 720)));
+                estTimeLeft.setText(LOCALE_MESSAGES.getMessage("game.research.researching.timeleft", ((Technologies.estFinishTime(t) - civilization.getCivResearch().get(t) / civilization.getCurrentlyResearchingTechonologys().get(t).getSkill()) / 720)));
 
                 //Get the text
                 fieldListModel.clear();
@@ -261,8 +261,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
             }
         }
         //Add all techs
-        for (Technology t : civilization.civTechs.keySet()) {
-            if (civilization.civTechs.get(t) == Technologies.REVEALED && !list.contains(t)) {
+        for (Technology t : civilization.getCivTechs().keySet()) {
+            if (civilization.getCivTechs().get(t) == Technologies.REVEALED && !list.contains(t)) {
                 list.addElement(t);
             }
         }
@@ -270,8 +270,8 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
         //Update table
         int selectedTech = techTable.getSelectedRow();
         techTableModel.setRowCount(0);
-        for (Technology t : civilization.currentlyResearchingTechonologys.keySet()) {
-            techTableModel.addRow(new String[]{t.getName(), civilization.currentlyResearchingTechonologys.get(t).getName(), ((Technologies.estFinishTime(t) - civilization.civResearch.get(t) / civilization.currentlyResearchingTechonologys.get(t).getSkill()) / 720) + " months"});
+        for (Technology t : civilization.getCurrentlyResearchingTechonologys().keySet()) {
+            techTableModel.addRow(new String[]{t.getName(), civilization.getCurrentlyResearchingTechonologys().get(t).getName(), ((Technologies.estFinishTime(t) - civilization.getCivResearch().get(t) / civilization.getCurrentlyResearchingTechonologys().get(t).getSkill()) / 720) + " months"});
         }
 
         if (selectedTech > -1 && techTable.getRowCount() < selectedTech) {
@@ -320,7 +320,7 @@ public class ResearchViewer extends JPanel implements ListSelectionListener, Pro
     }
 
     public void fillComboBox() {
-        for (ObjectReference id : civilization.people) {
+        for (ObjectReference id : civilization.getPeople()) {
             Person p = gameState.getObject(id, Person.class);
             if (p instanceof Scientist) {
                 personComboBoxModel.addElement(p);

@@ -90,25 +90,25 @@ public class PlanetInfoSheet extends JPanel {
         tpane.add(LOCALE_MESSAGES.getMessage("game.planet.tab.resources"), planetResources);
         tpane.add("Market", planetMarket);
 
-        ImageIcon overview = ResourceLoader.getIcon("overview.icon");
-        ImageIcon map = ResourceLoader.getIcon("globe.icon");
-        ImageIcon geo = ResourceLoader.getIcon("rock.icon");
-        ImageIcon indus = ResourceLoader.getIcon("factory.icon");
-        ImageIcon city = ResourceLoader.getIcon("city.icon");
-        ImageIcon life = ResourceLoader.getIcon("life.icon");
-        ImageIcon spaceport = ResourceLoader.getIcon("spaceport.icon");
-        ImageIcon atmosphereIco = ResourceLoader.getIcon("atmosphere.icon");
-        ImageIcon goods = ResourceLoader.getIcon("goods.icon");
+        ImageIcon overviewIcon = ResourceLoader.getIcon("overview.icon");
+        ImageIcon mapIcon = ResourceLoader.getIcon("globe.icon");
+        ImageIcon geoIcon = ResourceLoader.getIcon("rock.icon");
+        ImageIcon indusIcon = ResourceLoader.getIcon("factory.icon");
+        ImageIcon cityIcon = ResourceLoader.getIcon("city.icon");
+        ImageIcon lifeIcon = ResourceLoader.getIcon("life.icon");
+        ImageIcon spaceportIcon = ResourceLoader.getIcon("spaceport.icon");
+        ImageIcon atmosphereIcon = ResourceLoader.getIcon("atmosphere.icon");
+        ImageIcon goodsIcon = ResourceLoader.getIcon("goods.icon");
 
-        tpane.setIconAt(0, overview);
-        tpane.setIconAt(1, map);
-        tpane.setIconAt(2, geo);
-        tpane.setIconAt(3, city);
-        tpane.setIconAt(4, spaceport);
-        tpane.setIconAt(5, atmosphereIco);
-        tpane.setIconAt(6, indus);
-        tpane.setIconAt(7, life);
-        tpane.setIconAt(8, goods);
+        tpane.setIconAt(0, overviewIcon);
+        tpane.setIconAt(1, mapIcon);
+        tpane.setIconAt(2, geoIcon);
+        tpane.setIconAt(3, cityIcon);
+        tpane.setIconAt(4, spaceportIcon);
+        tpane.setIconAt(5, atmosphereIcon);
+        tpane.setIconAt(6, indusIcon);
+        tpane.setIconAt(7, lifeIcon);
+        tpane.setIconAt(8, goodsIcon);
 
         checkSpacePortTab();
 
@@ -132,9 +132,9 @@ public class PlanetInfoSheet extends JPanel {
 
         //Check if planet contains space port
         cityloop:
-        for (ObjectReference cityId : planet.cities) {
+        for (ObjectReference cityId : planet.getCities()) {
             City city = gameState.getObject(cityId, City.class);
-            for (ObjectReference areaId : city.areas) {
+            for (ObjectReference areaId : city.getAreas()) {
                 Area areaObject = gameState.getObject(areaId, Area.class);
 
                 if (areaObject instanceof SpacePortArea) {
@@ -144,9 +144,8 @@ public class PlanetInfoSheet extends JPanel {
             }
         }
         //Check if civ has launch capability
-        if (civilization.values.get("haslaunch") != 1) {
-
-            //Disable
+        if (civilization.getValues().get("haslaunch") != 1) {
+            //Disable tab
             tpane.setEnabledAt(spacePortIndex, false);
         }
     }

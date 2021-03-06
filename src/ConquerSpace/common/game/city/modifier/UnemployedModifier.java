@@ -17,23 +17,20 @@
  */
 package ConquerSpace.common.game.city.modifier;
 
+import ConquerSpace.common.StarDate;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class UnemployedModifier extends CityModifier{
 
-    public UnemployedModifier() {
-        super("employment");
+    public UnemployedModifier(StarDate currentDate) {
+        super("Rampant Unemployment", currentDate);
     }
 
     @Override
     public int hashCode() {
-        return 1;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof UnemployedModifier);
+        return 3;
     }
 }

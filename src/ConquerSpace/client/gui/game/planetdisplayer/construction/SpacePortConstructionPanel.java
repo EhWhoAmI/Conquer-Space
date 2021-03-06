@@ -68,7 +68,7 @@ public class SpacePortConstructionPanel extends AreaDesignPanel {
 
         launchTypesValue = new JComboBox<>();
 
-        for (ObjectReference id : civ.launchSystems) {
+        for (ObjectReference id : civ.getLaunchSystems()) {
             launchTypesValue.addItem(gameState.getObject(id, LaunchSystem.class));
         }
         factory.setLaunchSystem(((LaunchSystem) launchTypesValue.getSelectedItem()).getReference());

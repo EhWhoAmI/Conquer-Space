@@ -17,24 +17,19 @@
  */
 package ConquerSpace.common.game.city.modifier;
 
+import ConquerSpace.common.StarDate;
+
 /**
  *
  * @author EhWhoAmI
  */
 public class StarvationModifier extends CityModifier{
-    public StarvationModifier() {
-        super("starvation");
+    public StarvationModifier(StarDate currentDate) {
+        super("Starvation", currentDate);
     }
 
     @Override
     public int hashCode() {
         return 2;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof StarvationModifier);
-    }
-    
-    
 }

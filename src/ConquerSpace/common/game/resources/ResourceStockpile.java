@@ -26,6 +26,7 @@ public interface ResourceStockpile {
     public Double getResourceAmount(StoreableReference type);
     public void addResource(StoreableReference type, Double amount);
     public boolean canStore(StoreableReference type);
+    public boolean hasResource(StoreableReference type);
     
     public StoreableReference[] storedTypes();
     

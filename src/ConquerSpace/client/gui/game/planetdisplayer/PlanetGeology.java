@@ -69,7 +69,7 @@ public class PlanetGeology extends JPanel {
         this.gameState = gameState;
         this.planet = p;
         stratumListModel = new DefaultListModel<>();
-        for (ObjectReference stratumId : planet.strata) {
+        for (ObjectReference stratumId : planet.getStrata()) {
             Stratum stratum = gameState.getObject(stratumId, Stratum.class);
 
             stratumListModel.addElement(stratum);

@@ -53,8 +53,8 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
         factory.setOperatingJobs(5000);
         setLayout(new GridBagLayout());
         productionProcessListModel = new DefaultListModel<>();
-        for (int i = 0; i < civ.productionProcesses.size(); i++) {
-            productionProcessListModel.addElement(civ.productionProcesses.get(i));
+        for (int i = 0; i < civ.getProductionProcesses().size(); i++) {
+            productionProcessListModel.addElement(civ.getProductionProcesses().get(i));
         }
 
         list = new JList<>(productionProcessListModel);
@@ -67,7 +67,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             processName.setText(process.name);
             String inputString = "Input: ";
 
-            for (Map.Entry<StoreableReference, Double> entry : process.input.entrySet()) {
+            for (Map.Entry<StoreableReference, Double> entry : process.getInput().entrySet()) {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 inputString = inputString + gameState.getGood(key).getName();
@@ -77,7 +77,7 @@ public class IndustrialFactoryConstructionPanel extends AreaDesignPanel {
             input.setText(inputString);
 
             String outputString = "Output: ";
-            for (Map.Entry<StoreableReference, Double> entry : process.output.entrySet()) {
+            for (Map.Entry<StoreableReference, Double> entry : process.getOutput().entrySet()) {
                 StoreableReference key = entry.getKey();
                 Double val = entry.getValue();
                 outputString = outputString + gameState.getGood(key).getName();

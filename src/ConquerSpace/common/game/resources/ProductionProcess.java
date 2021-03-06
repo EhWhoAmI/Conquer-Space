@@ -21,6 +21,7 @@ import ConquerSpace.common.ConquerSpaceGameObject;
 import ConquerSpace.common.GameState;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -30,13 +31,16 @@ import java.util.HashMap;
 public class ProductionProcess extends ConquerSpaceGameObject implements Serializable {
     public String name;
     public String identifier;
-    public HashMap<StoreableReference, Double> input;
-    public HashMap<StoreableReference, Double> output;
+    private HashMap<StoreableReference, Double> input;
+    private HashMap<StoreableReference, Double> output;
+    public String[] tags;
+    
     /**
-     * Can add the stuff you need to construct this
+     * Can add the stuff you need to construct this, these stuff are not replaced
      */
     public ArrayList<Integer> catalyst;
-    //How difficult it is to extract. Will replace with the parts for the factory in the futute.
+    
+    //How difficult it is to extract. Will replace with the parts for the factory in the future.
     public int difficulty;
 
     public ProductionProcess(GameState gameState) {
@@ -73,5 +77,23 @@ public class ProductionProcess extends ConquerSpaceGameObject implements Seriali
 
     public int getDifficulty() {
         return difficulty;
+    }
+    
+    public boolean containsTag(String tag) {
+        return Arrays.stream(tags).anyMatch(tag::equals);
+    }
+
+    /**
+     * @return the input
+     */
+    public HashMap<StoreableReference, Double> getInput() {
+        return input;
+    }
+
+    /**
+     * @return the output
+     */
+    public HashMap<StoreableReference, Double> getOutput() {
+        return output;
     }
 }

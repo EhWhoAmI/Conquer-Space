@@ -110,7 +110,7 @@ public class HullCreator extends JPanel {
         hullListContainer.setLayout(new VerticalFlowLayout());
         hullListModel = new DefaultListModel<>();
 
-        for (ObjectReference sc : c.hulls) {
+        for (ObjectReference sc : c.getHulls()) {
             Hull shipClass = gameState.getObject(sc, Hull.class);
             hullListModel.addElement(shipClass);
         }
@@ -153,7 +153,7 @@ public class HullCreator extends JPanel {
         selectRandomNameButton.setFocusable(false);
 
         hullMaterialLabel = new JLabel("Material: ");
-        Vector hullMatVector = new Vector(c.hullMaterials);
+        Vector hullMatVector = new Vector(c.getHullMaterials());
         hullMatVector.sort(Comparator.naturalOrder());
         hullMaterialComboBox = new JComboBox<>(hullMatVector);
         hullMaterialComboBox.setFocusable(false);
@@ -258,6 +258,6 @@ public class HullCreator extends JPanel {
 
         Hull hull = new Hull(gameState, mass, space, material, shipType, thrust, className.getText());
         hullListModel.addElement(hull);
-        c.hulls.add(hull.getReference());
+        c.getHulls().add(hull.getReference());
     }
 }
