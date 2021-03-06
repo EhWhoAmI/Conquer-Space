@@ -81,7 +81,7 @@ public class CityInformationPanel extends JPanel {
     private CitySkylinePanel citySkylinePanel;
     private CityOverviewPanel cityOverviewPanel;
     private MapMinimap mapMinimap;
-    private JobInformationPanel jobInformationPanel;
+    private CityPopulationPanel jobInformationPanel;
     private CityIndustryPanel cityIndustryPanel;
     private CityEconomyPanel cityEconomyPanel;
 
@@ -104,7 +104,7 @@ public class CityInformationPanel extends JPanel {
         minimapContainer.add(mapMinimap, BorderLayout.CENTER);
         minimapContainer.setBorder(new TitledBorder(new LineBorder(Color.gray), "Position on Map"));
 
-        jobInformationPanel = new JobInformationPanel(selectedCity, gameState);
+        jobInformationPanel = new CityPopulationPanel(selectedCity, gameState);
         cityIndustryPanel = new CityIndustryPanel(selectedCity, civilization, planet, gameState);
         cityEconomyPanel = new CityEconomyPanel(parent, selectedCity, gameState);
 

@@ -47,15 +47,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Does economic stats and resources.
  * @author EhWhoAmI
  */
 public class CityEconomyPanel extends JPanel {
@@ -123,7 +125,7 @@ public class CityEconomyPanel extends JPanel {
 
         resourceInputTable = new JTable(new StockpileInModel());
         resourceOutputTable = new JTable(new StockpileOutModel());
-        resourceGenerationTable = new JTable(new ResourceGenerationTable());
+        resourceGenerationTable = new JTable(new ResourceManufacturedTable());
 
         tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
         tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.linked"), new JScrollPane(connectedCityList));
@@ -139,10 +141,17 @@ public class CityEconomyPanel extends JPanel {
                 selectedTab = tabs.getSelectedIndex();
             }
         });
-
+        
         //Show table of resources
         add(tabs, BorderLayout.CENTER);
         setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.economy")));
+        
+        Timer time = new Timer(1000, l -> {
+            resourceGenerationTable.updateUI();
+        });
+        
+        time.setRepeats(true);
+        time.start();
     }
 
     private class StockpileStorageModel extends AbstractTableModel {
@@ -254,9 +263,9 @@ public class CityEconomyPanel extends JPanel {
         }
     }
 
-    private class ResourceGenerationTable extends AbstractTableModel {
+    private class ResourceManufacturedTable extends DefaultTableModel {
 
-        String[] colunmNames = {
+        private final String[] colunmNames = {
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.good"),
             LOCALE_MESSAGES.getMessage("game.planet.resources.table.count")
         };

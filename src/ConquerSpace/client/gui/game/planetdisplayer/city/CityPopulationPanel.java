@@ -19,11 +19,13 @@
 package ConquerSpace.client.gui.game.planetdisplayer.city;
 
 import ConquerSpace.ConquerSpace;
+import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
 import ConquerSpace.common.game.city.City;
 import ConquerSpace.common.game.city.area.Area;
 import ConquerSpace.common.game.population.Population;
+import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.util.Utilities;
 import com.alee.extended.layout.HorizontalFlowLayout;
@@ -38,9 +40,11 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
@@ -66,7 +70,7 @@ import org.jfree.ui.RectangleInsets;
  *
  * @author EhWhoAmI
  */
-class JobInformationPanel extends JPanel {
+class CityPopulationPanel extends JPanel {
 
     private HashMap<JobType, Integer> populationCount;
     private long currentlyWorking;
@@ -80,7 +84,7 @@ class JobInformationPanel extends JPanel {
     private City selectedCity;
     private GameState gameState;
 
-    public JobInformationPanel(City selectedCity, GameState gameState) {
+    public CityPopulationPanel(City selectedCity, GameState gameState) {
         this.selectedCity = selectedCity;
         this.gameState = gameState;
         setBorder(new TitledBorder(new LineBorder(Color.gray), ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.chart.jobs")));
@@ -92,9 +96,11 @@ class JobInformationPanel extends JPanel {
 
         //Job pie chart
         JPanel jobChartPanel = createJobChartPanel();
+        JPanel populationSegmentPanel = createPopulationSegmentPanel();
 
         //Population segments chart
         tabs.add(ConquerSpace.LOCALE_MESSAGES.getMessage("game.planet.cities.tab.chart"), jobChartPanel);
+        tabs.add("Segments", populationSegmentPanel);
 
         tabs.setSelectedIndex(selectedTab);
         tabs.addChangeListener(l -> {
@@ -211,7 +217,7 @@ class JobInformationPanel extends JPanel {
         JPanel chartPanelContainer = new JPanel(new VerticalFlowLayout());
         JLabel currentHoverLabel = new JLabel();
         chartPanelContainer.add(currentHoverLabel);
-        
+
         ChartPanel chartPanel = new ChartPanel(barchart);
 
         chartPanel.setPopupMenu(null);
@@ -265,5 +271,32 @@ class JobInformationPanel extends JPanel {
         jobChartPanel.add(containerPanel, BorderLayout.NORTH);
         jobChartPanel.add(chartPanelContainer, BorderLayout.SOUTH);
         return jobChartPanel;
+    }
+
+    private JPanel createPopulationSegmentPanel() {
+        JPanel panel = new JPanel();
+        
+        JPanel segmentInformationPanel = new JPanel();
+        JLabel segmentWealthLabel = new JLabel();
+        
+        //List the stuff
+        Population population = gameState.getObject(selectedCity.getPopulation(), Population.class);
+        ObjectListModel<ObjectReference> listModel = new ObjectListModel<>();
+        listModel.setElements(population.segments);
+        listModel.setHandler(l -> {
+            return "Segment";
+        });
+        
+        //Get wealth
+        JList<String> list = new JList<>(listModel);
+        list.addListSelectionListener(l -> {
+            PopulationSegment segment = gameState.getObject(listModel.getObject(list.getSelectedIndex()), PopulationSegment.class);
+            segmentWealthLabel.setText("Wealth: " + segment.getWealth());
+        });
+        panel.add(new JScrollPane(list));
+        
+        segmentInformationPanel.add(segmentWealthLabel);
+        panel.add(segmentInformationPanel);
+        return panel;
     }
 }

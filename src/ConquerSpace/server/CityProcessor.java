@@ -34,6 +34,7 @@ import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.ResourceTransfer;
+import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -178,6 +179,25 @@ public class CityProcessor {
             }
         }
 
+        //Add wealth from the resources generated last tick
+        //city.getPreviousQuarterProduction()
+        Population cityPopulation = gameState.getObject(city.getPopulation(), Population.class);
+        
+        ArrayList<PopulationSegment> populationSegments = new ArrayList<>();
+        //Iterate through population segments
+        for (ObjectReference ref : cityPopulation.segments) {
+            populationSegments.add(gameState.getObject(ref, PopulationSegment.class));
+        }
+        for (Map.Entry<StoreableReference, Double> entry : city.getPreviousQuarterProduction().entrySet()) {
+            StoreableReference key = entry.getKey();
+            Double val = entry.getValue();
+
+            //Add to each segment
+            for(PopulationSegment seg : populationSegments) {
+                seg.changeWealth((int) (val * 1000));
+            } 
+        }
+
         //Tax, the tax is paid to population
         long popSize = pop.getPopulationSize();
         long tax = popSize * 5;
@@ -275,27 +295,34 @@ public class CityProcessor {
                 highestArea = key;
             }
         }
-        CityType cityType;
+        CityType cityType = CityType.Generic;
         switch (highestArea) {
             case Financial:
                 cityType = CityType.City;
+                break;
             case Generic:
                 cityType = CityType.Generic;
+                break;
             case Infrastructure:
                 cityType = CityType.Infrastructure;
+                break;
             case Research:
                 cityType = CityType.Research;
+                break;
             case Residential:
                 cityType = CityType.City;
+                break;
             case Manufacturing:
                 //City because it represents it better
                 cityType = CityType.City;
+                break;
             case Farm:
                 cityType = CityType.Farm;
+                break;
             case Mine:
                 cityType = CityType.Mine;
+                break;
         }
-        cityType = CityType.Generic;
 
         city.setCityType(cityType);
     }
