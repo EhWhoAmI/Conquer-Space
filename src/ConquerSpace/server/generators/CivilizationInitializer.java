@@ -226,6 +226,8 @@ public class CivilizationInitializer {
 
             //Set preinitialized wealth based on population or something
             city.changeWealth((int) gameState.getObject(city.getPopulation(), Population.class).getPopulationSize() * 10);
+
+            city.setMarket(market.getReference());
         }
     }
 

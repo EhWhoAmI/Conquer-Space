@@ -27,16 +27,7 @@ import ConquerSpace.common.actions.ActionStatus;
 import ConquerSpace.common.actions.Alert;
 import ConquerSpace.common.actions.OrganizationAction;
 import ConquerSpace.common.actions.ShipAction;
-import ConquerSpace.common.game.characters.PersonalityTrait;
 import ConquerSpace.common.game.city.City;
-import ConquerSpace.common.game.city.CityType;
-import ConquerSpace.common.game.city.area.Area;
-import ConquerSpace.common.game.city.area.AreaClassification;
-import ConquerSpace.common.game.city.area.ConstructingArea;
-import ConquerSpace.common.game.city.modifier.CityModifier;
-import ConquerSpace.common.game.city.modifier.RiotModifier;
-import ConquerSpace.common.game.city.modifier.StarvationModifier;
-import ConquerSpace.common.game.city.modifier.UnemployedModifier;
 import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.life.LocalLife;
 import ConquerSpace.common.game.organizations.Civilization;
@@ -45,10 +36,7 @@ import ConquerSpace.common.game.organizations.behavior.Behavior;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionPoint;
 import ConquerSpace.common.game.organizations.civilization.vision.VisionTypes;
 import ConquerSpace.common.game.population.Population;
-import ConquerSpace.common.game.population.PopulationSegment;
-import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.ResourceStockpile;
-import ConquerSpace.common.game.resources.ResourceTransfer;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.science.Technologies;
 import ConquerSpace.common.game.science.Technology;
@@ -64,9 +52,6 @@ import ConquerSpace.common.util.ExceptionHandling;
 import ConquerSpace.common.util.logging.CQSPLogger;
 import ConquerSpace.common.util.profiler.Profiler;
 import static ConquerSpace.server.generators.DefaultUniverseGenerator.KM_IN_LTYR;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
@@ -297,18 +282,12 @@ public class GameUpdater extends GameTicker {
      * @param delta
      */
     private void processCities(Planet planet) {
-        Market planetMarket = gameState.getObject(planet.getPlanetaryMarket(), Market.class);
-        planetMarket.clearOrders();
+        //Process market stuff...
         for (ObjectReference cityId : planet.getCities()) {
             City city = gameState.getObject(cityId, City.class);
             CityProcessor processor = new CityProcessor(city, planet, gameState, GameRefreshRate);
             processor.process();
         }
-
-        //Calculate S/D
-        profiler.push("supply-demand");
-        planetMarket.compileSupplyDemand();
-        profiler.pop();
     }
 
     private void doPlanetCensus(Planet p) {
@@ -423,9 +402,5 @@ public class GameUpdater extends GameTicker {
 
             //Because people stay now, will ignore them for now
         }
-    }
-
-    private PersonalityTrait getRandomPersonalityTrait() {
-        return gameState.personalityTraits.get((int) (gameState.personalityTraits.size() * Math.random()));
     }
 }

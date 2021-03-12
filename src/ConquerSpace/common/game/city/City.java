@@ -81,8 +81,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     @Serialize(value = "demands", special = SaveStuff.Good)
     public DoubleHashMap<StoreableReference> resourceDemands;
 
-    private HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesSentTo;
-    private HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourcesGainedFrom;
+    private HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourceExports;
+    private HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> resourceImports;
 
     @Serialize("storage-needs")
     private ArrayList<StorageNeeds> storageNeeds;
@@ -145,8 +145,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
         areas = new ArrayList<>();
         storageNeeds = new ArrayList<>();
         resources = new HashMap<>();
-        resourcesSentTo = new HashMap<>();
-        resourcesGainedFrom = new HashMap<>();
+        resourceExports = new HashMap<>();
+        resourceImports = new HashMap<>();
         //jobProcessor = new JobProcessor();
         this.location = location;
         peopleAtCity = new ArrayList<>();
@@ -429,12 +429,12 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
         wealth += amount;
     }
 
-    public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourcesGainedFrom() {
-        return resourcesGainedFrom;
+    public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourceImports() {
+        return resourceImports;
     }
 
-    public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourcesSentTo() {
-        return resourcesSentTo;
+    public synchronized HashMap<ResourceStockpile, DoubleHashMap<StoreableReference>> getResourceExports() {
+        return resourceExports;
     }
 
     public synchronized DoubleHashMap<StoreableReference> getPreviousQuarterProduction() {
@@ -520,8 +520,8 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     public void clearLedgers() {
         getResourceLedger().clear();
-        getResourcesSentTo().clear();
-        getResourcesGainedFrom().clear();
+        getResourceExports().clear();
+        getResourceImports().clear();
         getPreviousQuarterProduction().clear();
         getPrimaryProduction().clear();
     }

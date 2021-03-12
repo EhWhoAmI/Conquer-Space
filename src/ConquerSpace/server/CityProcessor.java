@@ -29,6 +29,7 @@ import ConquerSpace.common.game.city.modifier.CityModifier;
 import ConquerSpace.common.game.city.modifier.RiotModifier;
 import ConquerSpace.common.game.city.modifier.StarvationModifier;
 import ConquerSpace.common.game.city.modifier.UnemployedModifier;
+import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.population.PopulationSegment;
@@ -36,6 +37,7 @@ import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.resources.ResourceTransfer;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
+import ConquerSpace.common.util.DoubleHashMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -86,6 +88,9 @@ public class CityProcessor {
         processPopulationEvents();
 
         allocateCityJobs();
+
+        //Buy stuff
+        buyResources();
 
         classifyCity();
     }
@@ -182,7 +187,7 @@ public class CityProcessor {
         //Add wealth from the resources generated last tick
         //city.getPreviousQuarterProduction()
         Population cityPopulation = gameState.getObject(city.getPopulation(), Population.class);
-        
+
         ArrayList<PopulationSegment> populationSegments = new ArrayList<>();
         //Iterate through population segments
         for (ObjectReference ref : cityPopulation.segments) {
@@ -193,9 +198,9 @@ public class CityProcessor {
             Double val = entry.getValue();
 
             //Add to each segment
-            for(PopulationSegment seg : populationSegments) {
+            for (PopulationSegment seg : populationSegments) {
                 seg.changeWealth((int) (val * 1000));
-            } 
+            }
         }
 
         //Tax, the tax is paid to population
@@ -347,4 +352,29 @@ public class CityProcessor {
 
     }
 
+    private void buyResources() {
+        //Get the cash and get what people want to buy on the market
+        //Buy all resource demands, and subtract from population
+        Market market = gameState.getObject(city.getMarket(), Market.class);
+        for (Map.Entry<StoreableReference, Double> entry : city.resourceDemands.entrySet()) {
+            StoreableReference key = entry.getKey();
+            Double val = entry.getValue();
+
+            //Buy from market
+            market.buyResource(key, val);
+            //Add to city
+
+            //Add to ledger
+            DoubleHashMap<StoreableReference> map;
+            if (city.getResourceImports().containsKey(market)) {
+                map = city.getResourceImports().get(market);
+            } else {
+                map = new DoubleHashMap<>();
+            }
+            
+            city.addResource(key, val);
+            map.addValue(key, val);
+            city.getResourceImports().put(market, map);
+        }
+    }
 }

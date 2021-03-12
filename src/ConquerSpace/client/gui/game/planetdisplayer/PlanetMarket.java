@@ -20,25 +20,17 @@ package ConquerSpace.client.gui.game.planetdisplayer;
 
 import ConquerSpace.client.gui.ObjectListModel;
 import ConquerSpace.common.GameState;
-import ConquerSpace.common.Nameable;
-import ConquerSpace.common.game.economy.GoodOrder;
 import ConquerSpace.common.game.economy.Market;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.bodies.Planet;
 import com.alee.extended.layout.VerticalFlowLayout;
 import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -73,18 +65,6 @@ public class PlanetMarket extends JPanel {
         planetMarket = gameState.getObject(planet.getPlanetaryMarket(), Market.class);
 
         tradedGoodsModel = new ObjectListModel<>();
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> en : planetMarket.sellOrders.entrySet()) {
-            StoreableReference key = en.getKey();
-            tradedGoodsModel.addElement(key);
-        }
-
-        for (Map.Entry<StoreableReference, ArrayList<GoodOrder>> en : planetMarket.buyOrders.entrySet()) {
-            StoreableReference key = en.getKey();
-
-            if (!tradedGoodsModel.contains(key)) {
-                tradedGoodsModel.addElement(key);
-            }
-        }
 
         tradedGoodsModel.setHandler(r -> {
             return gameState.getGood(r).getName();
@@ -137,7 +117,7 @@ public class PlanetMarket extends JPanel {
     }
 
     private void update() {
-        goodOrderSellingTableModel.setRowCount(0);
+        /*goodOrderSellingTableModel.setRowCount(0);
         StoreableReference ref = tradedGoodsModel.getObject(tradedGoods.getSelectedIndex());
 
         demandLabel.setText("Demand: 0");
@@ -197,6 +177,6 @@ public class PlanetMarket extends JPanel {
 
             ChartPanel panel = new ChartPanel(chart);
             chartContainer.add(panel);
-        }
+        }*/
     }
 }

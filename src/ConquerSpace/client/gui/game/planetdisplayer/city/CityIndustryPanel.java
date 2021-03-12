@@ -47,10 +47,10 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  */
 class CityIndustryPanel extends JPanel {
 
-    JScrollPane scrollPane;
-    boolean hasChangedSize = false;
-    AreaConstructionPanel areaConstructionPanel;
-    JTabbedPane tabs;
+    private JScrollPane scrollPane;
+    private boolean hasChangedSize = false;
+    private AreaConstructionPanel areaConstructionPanel;
+    private JTabbedPane tabs;
     private static int selectedTab = 0;
 
     public CityIndustryPanel(City selectedCity, Civilization civilization, Planet planet, GameState gameState) {

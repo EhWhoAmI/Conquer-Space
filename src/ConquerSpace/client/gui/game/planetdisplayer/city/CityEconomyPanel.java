@@ -58,6 +58,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * Does economic stats and resources.
+ *
  * @author EhWhoAmI
  */
 public class CityEconomyPanel extends JPanel {
@@ -123,8 +124,8 @@ public class CityEconomyPanel extends JPanel {
 
         resourceDemandTable = new JTable(new ResourceDemandModel());
 
-        resourceInputTable = new JTable(new StockpileInModel());
-        resourceOutputTable = new JTable(new StockpileOutModel());
+        resourceInputTable = new JTable(new StockpileImport());
+        resourceOutputTable = new JTable(new StockpileExport());
         resourceGenerationTable = new JTable(new ResourceManufacturedTable());
 
         tabs.add(LOCALE_MESSAGES.getMessage("game.planet.cities.modifiers"), new JScrollPane(modifierList));
@@ -141,17 +142,10 @@ public class CityEconomyPanel extends JPanel {
                 selectedTab = tabs.getSelectedIndex();
             }
         });
-        
+
         //Show table of resources
         add(tabs, BorderLayout.CENTER);
         setBorder(new TitledBorder(new LineBorder(Color.gray), LOCALE_MESSAGES.getMessage("game.planet.cities.economy")));
-        
-        Timer time = new Timer(1000, l -> {
-            resourceGenerationTable.updateUI();
-        });
-        
-        time.setRepeats(true);
-        time.start();
     }
 
     private class StockpileStorageModel extends AbstractTableModel {
@@ -163,11 +157,7 @@ public class CityEconomyPanel extends JPanel {
 
         @Override
         public int getRowCount() {
-            if (selectedCity == null) {
-                return 0;
-            } else {
-                return selectedCity.storedTypes().length;
-            }
+            return selectedCity.storedTypes().length;
         }
 
         @Override
@@ -281,7 +271,10 @@ public class CityEconomyPanel extends JPanel {
 
         @Override
         public int getColumnCount() {
-            return colunmNames.length;
+            if (colunmNames != null) {
+                return colunmNames.length;
+            }
+            return 0;
         }
 
         @Override
@@ -374,16 +367,16 @@ public class CityEconomyPanel extends JPanel {
         }
     }
 
-    private class StockpileOutModel extends AbstractTableModel {
+    private class StockpileExport extends AbstractTableModel {
 
         String[] colunmNames = {"City", "Good", "Amount"};
 
         ArrayList<ResourcesChangeTuple> tuple;
 
-        public StockpileOutModel() {
+        public StockpileExport() {
             tuple = new ArrayList<>();
             //Get the city
-            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.getResourcesSentTo().entrySet()) {
+            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.getResourceExports().entrySet()) {
                 ResourceStockpile resourceStockpile = entry.getKey();
                 DoubleHashMap<StoreableReference> val = entry.getValue();
 
@@ -426,16 +419,16 @@ public class CityEconomyPanel extends JPanel {
 
     }
 
-    private class StockpileInModel extends AbstractTableModel {
+    private class StockpileImport extends AbstractTableModel {
 
         String[] colunmNames = {"City", "Good", "Amount"};
 
         ArrayList<ResourcesChangeTuple> tuple;
 
-        public StockpileInModel() {
+        public StockpileImport() {
             tuple = new ArrayList<>();
             //Get the city
-            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.getResourcesGainedFrom().entrySet()) {
+            for (Map.Entry<ResourceStockpile, DoubleHashMap<StoreableReference>> entry : selectedCity.getResourceImports().entrySet()) {
                 ResourceStockpile resourceStockpile = entry.getKey();
                 DoubleHashMap<StoreableReference> val = entry.getValue();
 
@@ -462,7 +455,7 @@ public class CityEconomyPanel extends JPanel {
             //get thingy
             switch (columnIndex) {
                 case 0:
-                    return tuple.get(rowIndex).stock;
+                    return tuple.get(rowIndex).stock.toString();
                 case 1:
                     return gameState.getGood(tuple.get(rowIndex).ref).getName();
                 case 2:
