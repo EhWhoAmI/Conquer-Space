@@ -194,4 +194,14 @@ public class ResourceStockpileArea extends Area implements ResourceStockpile {
     public UniversePath getPath() {
         return path;
     }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
 }

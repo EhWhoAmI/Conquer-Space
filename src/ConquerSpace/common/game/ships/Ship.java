@@ -184,4 +184,14 @@ public class Ship extends SpaceShip implements Launchable, ResourceStockpile {
     public boolean hasResource(StoreableReference type) {
         return resources.containsKey(type);
     }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
 }

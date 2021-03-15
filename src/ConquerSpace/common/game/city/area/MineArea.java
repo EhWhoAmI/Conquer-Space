@@ -20,7 +20,6 @@ package ConquerSpace.common.game.city.area;
 import ConquerSpace.common.ConstantStarDate;
 import ConquerSpace.common.GameState;
 import ConquerSpace.common.ObjectReference;
-import ConquerSpace.common.StarDate;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
@@ -138,5 +137,15 @@ public class MineArea extends Area implements ResourceStockpile {
 
     public void setLastStarDateRemoved(ConstantStarDate lastStarDateRemoved) {
         this.lastStarDateRemoved = lastStarDateRemoved;
+    }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
     }
 }

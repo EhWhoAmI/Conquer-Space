@@ -141,9 +141,9 @@ public class AreaBehaviorDispatcher implements AreaDispatcher {
                 city.getPreviousQuarterProduction().addValue(key, val);
                 ResourceTransfer resourceTransferer = new ResourceTransfer(area, city, key, area.getResourceAmount(key));
                 resourceTransferer.doTransferResource();
+                //Sell the resources
             });
             //Producing next tick
-            
             area.setProducedLastTick(true);
         } else {
             area.setProducedLastTick(false);

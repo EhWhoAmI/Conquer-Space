@@ -65,17 +65,26 @@ public class ResourceTransfer {
             return ResourceTransferViability.NO_RESOURCES;
         }
         if (from.hasResource(what)) {
-            //Check if it's enough to transfer            
-            if (from.getResourceAmount(what) >= amount) {
-                from.removeResource(what, amount);
-                to.addResource(what, amount);
+            double resourcesTransferred = 0;
+            //Check if it's enough to transfer
 
+            if (from.getResourceAmount(what) >= amount) {
+                resourcesTransferred = amount;
             } else {
                 //Not enough resources
-                double resources = from.getResourceAmount(what);
-                from.removeResource(what, resources);
-                from.addResource(what, resources);
+                resourcesTransferred = from.getResourceAmount(what);
             }
+            
+            from.preResourceTransfer(what, -resourcesTransferred, to);
+            to.preResourceTransfer(what, resourcesTransferred, from);
+
+            from.removeResource(what, resourcesTransferred);
+            to.addResource(what, resourcesTransferred);
+            
+            //Triggers
+            from.postResourceTransfer(what, -resourcesTransferred, to);
+            to.postResourceTransfer(what, resourcesTransferred, from);
+            
             return ResourceTransferViability.TRANSFER_POSSIBLE;
         }
         return ResourceTransferViability.NO_RESOURCES;

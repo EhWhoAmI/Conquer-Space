@@ -31,6 +31,7 @@ import ConquerSpace.common.game.logistics.SupplyNode;
 import ConquerSpace.common.game.organizations.Administrable;
 import ConquerSpace.common.game.population.Population;
 import ConquerSpace.common.game.resources.ResourceStockpile;
+import ConquerSpace.common.game.resources.ResourceTransfer;
 import ConquerSpace.common.game.resources.StorageNeeds;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.universe.GeographicPoint;
@@ -230,29 +231,21 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
 
     @Override
     public void addResourceTypeStore(StoreableReference type) {
-        getResources().put(type, 0d);
+        resources.put(type, 0d);
     }
 
     @Override
     public Double getResourceAmount(StoreableReference type) {
-        return getResources().get(type);
+        return resources.get(type);
     }
 
     @Override
     public void addResource(StoreableReference type, Double amount) {
         if (!resources.containsKey(type)) {
-            getResources().put(type, 0d);
+            resources.put(type, 0d);
         }
-        getResources().put(type, getResources().get(type) + amount);
-        //Add to ledger
-        if (getResourceLedger().containsKey(type)) {
-            DoubleHashMap<String> resource = getResourceLedger().get(type);
-            resource.addValue("added", (amount));
-        } else {
-            DoubleHashMap<String> resource = new DoubleHashMap<>();
-            resource.put("added", amount);
-            getResourceLedger().put(type, resource);
-        }
+
+        resources.put(type, resources.get(type) + amount);
     }
 
     @Override
@@ -277,26 +270,12 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
     public boolean removeResource(StoreableReference type, Double amount) {
         //Get the amount in the place
         if (!resources.containsKey(type)) {
-            //Remove stuff for now
-            //resources.put(type, amount);
             return false;
         }
-        Double currentlyStored = getResources().get(type);
 
+        Double currentlyStored = getResources().get(type);
         if (amount > currentlyStored) {
             return false;
-        }
-
-        getResources().put(type, (currentlyStored - amount));
-        //Add to ledger
-        if (getResourceLedger().containsKey(type)) {
-            DoubleHashMap<String> resource = getResourceLedger().get(type);
-            resource.addValue("removed", -amount);
-            getResourceLedger().put(type, resource);
-        } else {
-            DoubleHashMap<String> resource = new DoubleHashMap<>();
-            resource.addValue("removed", -amount);
-            getResourceLedger().put(type, resource);
         }
         return true;
     }
@@ -524,5 +503,62 @@ public class City extends ConquerSpaceGameObject implements PersonEnterable,
         getResourceImports().clear();
         getPreviousQuarterProduction().clear();
         getPrimaryProduction().clear();
+    }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference resource, Double amount, ResourceStockpile toWhere) {
+        String transferType;
+        if (amount > 0) {
+            transferType = "added";
+        } else {
+            transferType = "removed";
+        }
+
+        //Add to ledger
+        DoubleHashMap<String> ledger;
+        if (resourceLedger.containsKey(resource)) {
+            ledger = resourceLedger.get(resource);
+            ledger.addValue(transferType, (amount));
+        } else {
+            ledger = new DoubleHashMap<>();
+            ledger.put(transferType, amount);
+        }
+        
+        resourceLedger.put(resource, ledger);
+
+        if (toWhere instanceof ConquerSpaceGameObject && areas.contains(((ConquerSpaceGameObject) toWhere).getReference())) {
+            return;
+        }
+
+        //Add imports and exports
+        DoubleHashMap<StoreableReference> map;
+        if (amount > 0) {
+            //Importing
+            if (resourceImports.containsKey(toWhere)) {
+                map = resourceImports.get(toWhere);
+            } else {
+                map = new DoubleHashMap<>();
+            }
+
+            //Do ledger
+            map.addValue(resource, amount);
+            resourceImports.put(toWhere, map);
+        } else {
+            //Exporting
+            if (resourceExports.containsKey(toWhere)) {
+                map = resourceExports.get(toWhere);
+            } else {
+                map = new DoubleHashMap<>();
+            }
+
+            //Do ledger
+            map.addValue(resource, amount);
+            resourceExports.put(toWhere, map);
+        }
     }
 }

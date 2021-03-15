@@ -70,7 +70,7 @@ public class Market extends ConquerSpaceGameObject implements ResourceStockpile 
 
     @Override
     public Double getResourceAmount(StoreableReference type) {
-       return 0d;
+       return Double.MAX_VALUE;
     }
 
     @Override
@@ -101,5 +101,15 @@ public class Market extends ConquerSpaceGameObject implements ResourceStockpile 
     @Override
     public String toString() {
         return "Market";
+    }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Leave empty
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Leave empty
     }
 }

@@ -122,4 +122,14 @@ public class ManufacturerArea extends Area implements ResourceStockpile {
         }
         return false;
     }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
 }

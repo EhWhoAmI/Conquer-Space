@@ -362,19 +362,12 @@ public class CityProcessor {
 
             //Buy from market
             market.buyResource(key, val);
-            //Add to city
-
-            //Add to ledger
-            DoubleHashMap<StoreableReference> map;
-            if (city.getResourceImports().containsKey(market)) {
-                map = city.getResourceImports().get(market);
-            } else {
-                map = new DoubleHashMap<>();
-            }
             
-            city.addResource(key, val);
-            map.addValue(key, val);
-            city.getResourceImports().put(market, map);
+            //Add to city
+            ResourceTransfer transfer = new ResourceTransfer(market, city, key, val);
+            if(transfer.doTransferResource() == ResourceTransfer.ResourceTransferViability.NO_RESOURCES) {
+                //No resource transfer :(
+            }
         }
     }
 }

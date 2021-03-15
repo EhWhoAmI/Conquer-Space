@@ -22,7 +22,7 @@ import ConquerSpace.common.game.resources.ResourceStockpile;
 import java.util.ArrayList;
 
 /**
- * Connects to supplysegment stuff
+ * Connects to supply segment stuff
  * @author EhWhoAmI
  */
 public interface SupplyNode extends ResourceStockpile{

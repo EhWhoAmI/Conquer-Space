@@ -155,4 +155,14 @@ public class PopulationSegment extends ConquerSpaceGameObject implements Trader,
     public boolean removeResource(StoreableReference type, Double amount) {
         return false;
     }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Nothing
+    }
 }

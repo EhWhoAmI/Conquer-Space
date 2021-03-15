@@ -21,13 +21,11 @@ import ConquerSpace.common.GameState;
 import ConquerSpace.common.game.population.jobs.JobType;
 import ConquerSpace.common.game.resources.ResourceStockpile;
 import ConquerSpace.common.game.resources.StoreableReference;
-import ConquerSpace.common.save.SerializeClassName;
 
 /**
  *
  * @author EhWhoAmI
  */
-@SerializeClassName("power-plant-area")
 public class PowerPlantArea extends ConsumerArea implements ResourceStockpile {
 
     //Needs the attribute 'energy'
@@ -139,5 +137,15 @@ public class PowerPlantArea extends ConsumerArea implements ResourceStockpile {
     @Override
     public boolean removeResource(StoreableReference type, Double amount) {
         return false;
+    }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do Nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
     }
 }

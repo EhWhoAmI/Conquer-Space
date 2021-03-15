@@ -179,4 +179,14 @@ public class TimedManufacturerArea extends Area implements ResourceStockpile {
     public JobType getJobClassification() {
         return (JobType.FactoryWorker);
     }
+
+    @Override
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
+
+    @Override
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere) {
+        //Do nothing
+    }
 }

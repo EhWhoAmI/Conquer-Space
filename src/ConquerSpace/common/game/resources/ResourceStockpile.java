@@ -31,4 +31,7 @@ public interface ResourceStockpile {
     public StoreableReference[] storedTypes();
     
     public boolean removeResource(StoreableReference type, Double amount);
+    
+    public void preResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere);
+    public void postResourceTransfer(StoreableReference type, Double amount, ResourceStockpile toWhere);
 }
