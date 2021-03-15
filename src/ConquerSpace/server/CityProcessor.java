@@ -115,8 +115,14 @@ public class CityProcessor {
         //Black hole resources, somehow
         ResourceTransfer raceEater = new ResourceTransfer(city, seg, race.getConsumableResource(), consume);
         boolean success = raceEater.doTransferResource() == ResourceTransfer.ResourceTransferViability.TRANSFER_POSSIBLE;
-        //Not enough food
+
         boolean starving = false;
+        
+        //Consume consumer goods
+        ResourceTransfer consumerGoodTransferer = new ResourceTransfer(city, seg, race.getConsumerGood(), consume);
+        boolean consumerGoodTransferSuccess = consumerGoodTransferer.doTransferResource() == ResourceTransfer.ResourceTransferViability.TRANSFER_POSSIBLE;
+
+        //Not enough food
         if (!success) {
             //can probably calculate other stuff, but who cares for now
             //Calculate ratio of food
@@ -127,9 +133,20 @@ public class CityProcessor {
                 city.getCityModifiers().add(new StarvationModifier(gameState.date));
             }
             starving = true;
+
+            //Subtract cash because they had enough food
+            seg.changeWealth((int) -consume);
+
+            //Supposed to get how much consumer goods cost, and buy everything they have, but we'll do wealth management later. 
+            //TODO
+            
+            //And then buy consumer goods because they're full, and don't want to be bored
+            city.resourceDemands.addValue(race.getConsumerGood(), consume);
         } else {
             city.getCityModifiers().remove(CityModifier.CityModifierEnum.STARVATION_MODIFIER);
         }
+
+        //Consume consumer goods
         return starving;
     }
 
@@ -362,12 +379,14 @@ public class CityProcessor {
 
             //Buy from market
             market.buyResource(key, val);
-            
+
             //Add to city
             ResourceTransfer transfer = new ResourceTransfer(market, city, key, val);
-            if(transfer.doTransferResource() == ResourceTransfer.ResourceTransferViability.NO_RESOURCES) {
+            if (transfer.doTransferResource() == ResourceTransfer.ResourceTransferViability.NO_RESOURCES) {
                 //No resource transfer :(
             }
         }
+        
+        //Sell extra resources or something...
     }
 }

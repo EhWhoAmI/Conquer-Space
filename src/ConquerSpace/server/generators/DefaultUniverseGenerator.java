@@ -26,6 +26,7 @@ import ConquerSpace.common.game.life.Species;
 import ConquerSpace.common.game.organizations.Civilization;
 import ConquerSpace.common.game.population.Race;
 import ConquerSpace.common.game.population.RacePreferredClimateType;
+import ConquerSpace.common.game.resources.GoodUtil;
 import ConquerSpace.common.game.resources.ResourceDistribution;
 import ConquerSpace.common.game.resources.StoreableReference;
 import ConquerSpace.common.game.resources.Stratum;
@@ -139,7 +140,7 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
 
         return universe;
     }
-    
+
     public int getStarSystemCount(Random rand, UniverseGenerationConfig.UniverseSize universeSize) {
         int starSystemCount = 0;
         switch (universeSize) {
@@ -172,6 +173,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         //Generate Species
         Race playerSpecies = new Race(gameState, 1, 0.01f, civilizationConfig.speciesName);
         playerSpecies.setUpkeep(0.05f);
+        playerSpecies.setConsumerGood(GoodUtil.findGoodByTag(gameState, "consumer"));
+        playerCiv.setFoundingSpecies(playerSpecies);
 
         gameState.addSpecies(playerSpecies);
 
@@ -182,7 +185,6 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
         playerCiv.setNationalCurrency(nationCurrency);
         nationCurrency.setController(playerCiv.getReference());
 
-        playerCiv.setFoundingSpecies(playerSpecies);
         gameState.playerCiv = playerCiv.getReference();
         gameState.addCivilization(playerCiv);
 
@@ -209,6 +211,8 @@ public class DefaultUniverseGenerator extends UniverseGenerator {
             UniversePath up1 = createSuitablePlanet(playerCiv, universe, rand, planetNameGenerator);
             civ.setStartingPlanet(up1);
             Race civSpecies = new Race(gameState, 1, 0.01f, "Race " + i);
+            civSpecies.setUpkeep(0.05f);
+            civSpecies.setConsumerGood(GoodUtil.findGoodByTag(gameState, "consumer"));
             gameState.addSpecies(civSpecies);
             civ.setFoundingSpecies(civSpecies);
 

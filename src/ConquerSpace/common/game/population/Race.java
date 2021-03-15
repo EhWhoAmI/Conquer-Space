@@ -32,29 +32,28 @@ import ConquerSpace.common.save.SerializeClassName;
  * @author EhWhoAmI
  */
 @SerializeClassName("race")
-public class Race extends Species{
-    @Serialize(value = "food-id", special = SaveStuff.Good)
+public class Race extends Species {
+
     private StoreableReference food;
-    
+
+    private StoreableReference consumerGood;
+
     //Usage of food per month
-    @Serialize("food")
     private int foodPerMonth;
     //Base increase in population per year. Will be incremented per every couple of ticks
-    
-    @Serialize("breeding-rate")
+
     private float breedingRate;
 
     //The amount of support a pop unit needs (as in pop)
-    @Serialize("upkeep")
     private float upkeep = 0;
 
     public Race(GameState state, int foodPerMonth, float breedingRate, String name) {
         super(state, name);
-        
+
         //Set id
         this.foodPerMonth = foodPerMonth;
         this.breedingRate = breedingRate;
-        
+
         //Set food good, need better name lol
         Good food = new Element(name + " food", 1, 1);
         gameState.addGood(food);
@@ -87,5 +86,13 @@ public class Race extends Species{
 
     public StoreableReference getConsumableResource() {
         return food;
+    }
+
+    public void setConsumerGood(StoreableReference consumerGood) {
+        this.consumerGood = consumerGood;
+    }
+
+    public StoreableReference getConsumerGood() {
+        return consumerGood;
     }
 }
