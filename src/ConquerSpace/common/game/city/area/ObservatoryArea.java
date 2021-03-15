@@ -53,7 +53,7 @@ public class ObservatoryArea extends Area implements VisionPoint {
     }
 
     @Override
-    public UniversePath getPosition() {
+    public UniversePath getUniversePath() {
         return position;
     }
 

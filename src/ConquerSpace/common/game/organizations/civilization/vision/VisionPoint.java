@@ -45,6 +45,6 @@ public interface VisionPoint {
 
     public ObjectReference getCivilization();
 
-    public UniversePath getPosition();
+    public UniversePath getUniversePath();
 
 }

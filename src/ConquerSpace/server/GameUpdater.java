@@ -201,45 +201,48 @@ public class GameUpdater extends GameTicker {
         for (ObjectReference p : universe.control.keySet()) {
             //Vision is always visible when you control it
             ObjectReference civReferene = universe.control.get(p);
-            if (civReferene == null) {
-                //Ignore, but rais error
-            } else if (civReferene != ObjectReference.INVALID_REFERENCE) {
-                Civilization civil = gameState.getObject(civReferene, Civilization.class);
-                //Deal with later...
-                Body bod = gameState.getObject(p, Body.class);
-                civil.getVision().put(bod.getUniversePath(), VisionTypes.KNOWS_ALL);
-            }
+
+            Civilization civil = gameState.getObject(civReferene, Civilization.class);
+            //Deal with later...
+            Body bod = gameState.getObject(p, Body.class);
+            civil.getVision().put(bod.getUniversePath(), VisionTypes.KNOWS_ALL);
         }
 
+        //Extra vision
         //Loop through all the vision points in the universe
         for (int civ = 0; civ < gameState.getCivilizationCount(); civ++) {
             ObjectReference civid = gameState.getCivilization(civ);
             Civilization civil = gameState.getObject(civid, Civilization.class);
+
             for (ObjectReference ptref : civil.getVisionPoints()) {
                 ConquerSpaceGameObject object = gameState.getObject(ptref);
-                if (object instanceof VisionPoint) {
-                    VisionPoint pt = (VisionPoint) object;
-                    int range = pt.getRange();
-                    //Distance between all star systems...
-                    UniversePath path = pt.getPosition();
-                    if (path.getSystemIndex() > -1) {
-                        //Get system position
-                        Body body = gameState.getObject(universe.getSpaceObject(new UniversePath(path.getSystemIndex())), Body.class);
-                        SpacePoint pos = body.point;
-                        for (int g = 0; g < universe.getStarSystemCount(); g++) {
-                            //check if in range
-                            double dist = Math.hypot(pos.getY() - universe.getStarSystemObject(g).getY(),
-                                    pos.getX() - universe.getStarSystemObject(g).getX());
+                if (!(object instanceof VisionPoint)) {
+                    continue;
+                }
 
-                            if (dist < (range * KM_IN_LTYR)) {
-                                //Its in!
-                                int amount = ((int) ((1 - (dist / (double) (range * KM_IN_LTYR))) * 100));
+                VisionPoint pt = (VisionPoint) object;
+                int range = pt.getRange();
+                //Distance between all star systems...
+                UniversePath path = pt.getUniversePath();
 
-                                civil.getVision().put(universe.getStarSystemObject(g).getUniversePath(),
-                                        (amount > 100) ? 100 : (amount));
-                            }
-                        }
+                //Get system position
+                Body body = gameState.getObject(universe.getSpaceObject(new UniversePath(path.getSystemIndex())), Body.class);
+
+                SpacePoint pos = body.point;
+                for (int g = 0; g < universe.getStarSystemCount(); g++) {
+                    Body systemObject = universe.getStarSystemObject(g);
+                    //check if in range
+                    double dist = Math.hypot(pos.getY() - systemObject.getY(),
+                            pos.getX() - systemObject.getX());
+
+                    if (dist >= (range * KM_IN_LTYR)) {
+                        continue;
                     }
+                    //Its visible
+                    int amount = ((int) ((1 - (dist / (double) (range * KM_IN_LTYR))) * 100));
+
+                    civil.getVision().put(systemObject.getUniversePath(),
+                            (amount > 100) ? 100 : (amount));
                 }
             }
         }
