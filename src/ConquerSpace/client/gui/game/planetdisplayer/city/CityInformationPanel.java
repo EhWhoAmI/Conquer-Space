@@ -185,6 +185,8 @@ public class CityInformationPanel extends JPanel {
 
         private final int height = 150;
 
+        private String isCapitalString;
+
         public CitySkylinePanel() {
             loadImage();
 
@@ -207,7 +209,6 @@ public class CityInformationPanel extends JPanel {
             } else if (!loaded) {
                 //Load image...
                 //Schedule a reload
-
                 loaded = true;
                 timer.start();
             }
@@ -215,6 +216,15 @@ public class CityInformationPanel extends JPanel {
         }
 
         private void loadImage() {
+            isCapitalString = "";
+            for (int i = 0; i < gameState.getCivilizationCount(); i++) {
+                Civilization civilization = gameState.getCivilizationObject(i);
+                if (civilization.getCapitalCity().equals(selectedCity.getReference())) {
+                    isCapitalString = LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName());
+                    break;
+                }
+            }
+
             if (imageCount > 0) {
                 int id = selectedCity.getReference().getId() % imageCount;
 
@@ -224,7 +234,12 @@ public class CityInformationPanel extends JPanel {
                 Graphics2D graphics = (Graphics2D) bg.getGraphics();
                 graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                 graphics.drawImage(citySkylineImageMap.get(id).getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, null);
-                GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 30, 0, 150 / 2);
+                GraphicsUtil.paintTextWithOutline(selectedCity.getName(), graphics, 40, 5, 150 / 3);
+
+                GraphicsUtil.paintTextWithOutline(isCapitalString, graphics, 20, 20, 150/5*3);
+                
+                //Done with image, repaint
+                repaint();
             }
         }
     }
@@ -233,16 +248,6 @@ public class CityInformationPanel extends JPanel {
 
         public CityOverviewPanel() {
             setLayout(new VerticalFlowLayout());
-            //Check if capital city
-            for (int i = 0; i < gameState.getCivilizationCount(); i++) {
-                Civilization civilization = gameState.getCivilizationObject(i);
-                if (civilization.getCapitalCity().equals(selectedCity.getReference())) {
-                    JLabel isCapital = new JLabel(
-                            LOCALE_MESSAGES.getMessage("game.planet.cities.capital", civilization.getName()));
-                    add(isCapital);
-                    break;
-                }
-            }
 
             //Population
             JLabel popCount = new JLabel(

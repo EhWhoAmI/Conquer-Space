@@ -34,6 +34,10 @@ import java.awt.geom.AffineTransform;
  */
 public class GraphicsUtil {
     public static void paintTextWithOutline(String text, Graphics g, float fontSize, double x, double y) {
+        //Empty string
+        if(text.trim().isEmpty()) {
+            return;
+        }
         Color outlineColor = Color.black;
         Color fillColor = Color.white;
         BasicStroke outlineStroke = new BasicStroke(fontSize / 10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
