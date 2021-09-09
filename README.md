@@ -1,3 +1,4 @@
+### Note: This project has been abandoned in favor of a C++ version which can be found here: <https://github.com/ehwhoami/cqsp>
 Conquer Space
 =======
 ![Java CI](https://github.com/EhWhoAmI/Conquer-Space/workflows/Java%20CI/badge.svg?branch=dev)
